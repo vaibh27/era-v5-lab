@@ -1,0 +1,3 @@
+# Laptop smoke test of the KE2 lab model. Proves the code runs; the numbers mean nothing.
+inherit: tiny_cpu.yaml
+model: {embedding: ke2}

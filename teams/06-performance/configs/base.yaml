@@ -23,7 +23,7 @@ model:                  # fields of models.config.ModelConfig, nothing else
   n_kv_head: null       # GQA key/value heads; null = n_head (plain multi-head)
   n_embd: 256
   mlp_ratio: 4
-  embedding: table      # table | ke1
+  embedding: table      # table | ke1 | ke2 (G4 raw table, teams/04-ke2)
   ke_max_pos: 32
   ke_mode: dynamic      # dynamic | cached
   ffn: mlp              # mlp | moe

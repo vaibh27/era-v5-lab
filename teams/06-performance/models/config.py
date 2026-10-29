@@ -30,7 +30,7 @@ class ModelConfig:
     n_kv_head: int | None = None     # GQA: key/value heads, divides n_head; None = n_head (plain multi-head)
     n_embd: int = 256                # d_model
     mlp_ratio: int = 4               # MLP / expert hidden = mlp_ratio * n_embd
-    embedding: str = "table"         # table (tied head) | ke1 (Kronecker v1, untied head)
+    embedding: str = "table"         # table (tied head) | ke1 (Kronecker v1, untied head) | ke2 (Kronecker v2, G4 raw table, untied head)
     ke_max_pos: int = 32             # KE v1 byte positions: codec dim = 256 * ke_max_pos
     ke_mode: str = "dynamic"         # KE v1: dynamic (codec every step) | cached (V x D table)
     ffn: str = "mlp"                 # mlp | moe
@@ -42,7 +42,7 @@ class ModelConfig:
     ce_chunks: int = 8
 
     def __post_init__(self):
-        assert self.embedding in ("table", "ke1"), f"embedding={self.embedding!r}"
+        assert self.embedding in ("table", "ke1", "ke2"), f"embedding={self.embedding!r}"
         assert self.ffn in ("mlp", "moe"), f"ffn={self.ffn!r}"
         assert self.n_embd % self.n_head == 0, "n_embd must be divisible by n_head"
         assert self.ce_impl in CE_IMPLS, f"ce_impl={self.ce_impl!r} not in {CE_IMPLS}"

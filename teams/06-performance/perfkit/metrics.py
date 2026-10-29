@@ -302,7 +302,7 @@ def flops_per_token(model, T: int, opt_flops_per_step: float = 0.0, tokens_per_s
     L, d = m.n_layer, m.n_embd
     model_fpt = 6 * active + 12 * L * d * T
     head = model.head.weight.numel()
-    ke = model.tok.proj.weight.numel() if m.embedding == "ke1" else 0
+    ke = model.tok.proj.weight.numel() if m.embedding in ("ke1", "ke2") else 0
     stack_fwd = 2 * (active - head - ke) + 4 * L * d * T
     hw = model_fpt + (2 * stack_fwd if m.reversible else 0) + (2 * head if m.ce_impl == "chunked" else 0)
     if opt_flops_per_step and tokens_per_step:

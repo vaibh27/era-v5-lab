@@ -158,6 +158,9 @@ class GPT(nn.Module):
                 raise ValueError("KE byte table must match model.vocab_size")
             from models.ke1 import KroneckerEmbedding
             self.tok = KroneckerEmbedding(token_bytes, d, cfg.ke_max_pos, cfg.ke_mode)
+        elif cfg.embedding == "ke2":
+            from models.ke2 import KE2Embedding
+            self.tok = KE2Embedding(cfg.vocab_size, d, cfg.ke_max_pos, token_bytes)   # G4's raw table by default
         else:
             self.tok = nn.Embedding(cfg.vocab_size, d)
             nn.init.normal_(self.tok.weight, mean=0.0, std=0.02)
@@ -213,7 +216,7 @@ class GPT(nn.Module):
         table and would otherwise drop out of the count."""
         total = sum(p.numel() for p in self.parameters())
         active = self.head.weight.numel()
-        if self.cfg.embedding == "ke1":
+        if self.cfg.embedding in ("ke1", "ke2"):
             active += self.tok.proj.weight.numel()
         for blk in self.blocks:
             active += blk.attn.c_attn.weight.numel() + blk.attn.c_proj.weight.numel()
