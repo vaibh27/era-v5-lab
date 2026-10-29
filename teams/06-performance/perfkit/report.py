@@ -8,11 +8,11 @@ Build it against perfkit.schema.example_run(); no need to wait for bench.
 MVP
   * render(run) -> Markdown: header (GPU, dtype, B x T, torch, commit), step stats, MFU, per-region table
     (ms, p90, % of step, level), "time by part type" (sum over layers), five slowest leaf parts.
-  * compare(a, b, tol_pct=5, gate_level=2, min_abs_ms=0.05) -> (rows, ok, problems): the whole step plus every
-    region with level <= gate_level must be within tol_pct. Every such part is checked, however small; a part
-    fails only if it is outside tol_pct AND the two medians differ by more than min_abs_ms (gate_verdict).
-    Below min_abs_ms a gap is timer noise: CUDA events around a part the GPU runs behind other queued work
-    (data in a GPU-bound step: 0.031 vs 0.035 ms, 11.8% apart, g5_v0 on A100) cannot hold 5%. Refuse runs on different
+  * compare(a, b, tol_pct=5, gate_level=2, min_abs_ms=0) -> (rows, ok, problems): the whole step plus every
+    region with level <= gate_level must be within tol_pct. Every such part is checked, however small.
+    min_abs_ms > 0 (off by default, proposed to TSAI, not agreed): a part outside tol_pct still passes when its
+    medians differ by at most min_abs_ms, for timer noise on tiny parts (data in a GPU-bound step: 0.031 vs
+    0.035 ms, 11.8% apart, g5_v0 on A100). Refuse runs on different
     GPUs or with different configs. Level-3 rows are listed as information only. Runs that differ only in
     an IMPL_SWITCHES entry are compared and labelled A/B (ab_note).
   * baseline_md(...): GPU name, commit, config, PASS/FAIL, the comparison table.
@@ -29,10 +29,12 @@ import re
 import sys
 from pathlib import Path
 
-MIN_ABS_MS = 0.05     # 50 us: about the jitter of CUDA events and kernel launches; report.min_abs_ms in the config
+MIN_ABS_MS = 0.0      # off: plain tol_pct until TSAI agrees to a floor (proposed 0.05 ms); report.min_abs_ms in the config
 
 
-# Config that changes the work a step does (aligned with bench.COMPARE_CONFIG).
+# Config that changes the work a step does: two runs that differ here are not compared (compare, bench.quick_compare),
+# except in IMPL_SWITCHES (an A/B of one implementation switch, labelled by ab_note). (section, key); key None = the
+# whole section.
 COMPARE_CONFIG = [
     ("model", None),
     ("optim", None),
@@ -108,8 +110,8 @@ def compare_lines(rows, ok: bool, problems: list, note: str | None, tol_pct: flo
                   this: str = "this run", other: str = "against", min_abs_ms: float = MIN_ABS_MS) -> list[str]:
     """The console table for bench --against and report --compare: gated rows, then one verdict line."""
     w = max([34] + [len(r[0]) + 2 for r in rows if r[4] != "info"])
-    lines = [f"5% check: step, step parts and whole blocks (level <= {gate_level}), tol {tol_pct:g}%, "
-             f"gaps under {min_abs_ms:g} ms pass"]
+    lines = [f"5% check: step, step parts and whole blocks (level <= {gate_level}), tol {tol_pct:g}%"
+             + (f", gaps under {min_abs_ms:g} ms pass" if min_abs_ms else "")]
     lines += [f"  REFUSED  {p}" for p in problems]
     if note:
         lines.append(f"  {note}")
@@ -191,14 +193,15 @@ def _seq_len(run: dict):
     return (run.get("config") or {}).get("model", {}).get("block_size")
 
 
-def _refuse(a: dict, b: dict) -> list[str]:
-    """Why two runs cannot be a baseline pair. Besides the work and the GPU, both runs must time the SAME
-    committed code: one commit, and a clean tree (dirty is False; None means it could not be checked)."""
+def refusals(a: dict, b: dict, same_commit: bool = True) -> list[str]:
+    """Why two runs cannot be compared: different work (GPU, vocabulary, dtype, shapes, COMPARE_CONFIG). A baseline
+    pair (same_commit) must also time the SAME committed code: one commit, and a clean tree (dirty is False; None
+    means it could not be checked). bench.quick_compare (--against, --repeat while developing) skips that part."""
     problems = []
-    for k in ("gpu", "vocab_size", "commit"):
+    for k in ("gpu", "vocab_size") + (("commit",) if same_commit else ()):
         if a.get("meta", {}).get(k) != b.get("meta", {}).get(k):
             problems.append(f"different {k}: {a.get('meta', {}).get(k)} vs {b.get('meta', {}).get(k)}")
-    for run in (a, b):
+    for run in (a, b) if same_commit else ():
         meta = run.get("meta", {})
         if meta.get("dirty") is not False:
             problems.append(f"run {meta.get('tag')}: dirty={meta.get('dirty')}: not a clean git checkout of the commit")
@@ -374,10 +377,12 @@ def render(run: dict) -> str:
     return "\n".join(lines)
 
 
-def compare(a: dict, b: dict, tol_pct: float = 5.0, gate_level: int = 2, min_abs_ms: float = MIN_ABS_MS):
-    problems = _refuse(a, b)
+def gate_rows(a: dict, b: dict, tol_pct: float = 5.0, gate_level: int = 2, min_abs_ms: float = MIN_ABS_MS):
+    """The gate itself, shared by compare and bench.quick_compare: the whole step and every part at level <=
+    gate_level in either run, plus checkpoint save and all-to-all when both runs have them (gate_verdict), then the
+    parts above gate_level as "info". A part only one run has is MISSING. Returns (rows, ok); refusals are separate."""
     rows = []
-    ok = not problems
+    ok = True
 
     pairs = [("step (clean)", _step_ms(a), _step_ms(b))]
     ra, rb = _regions(a), _regions(b)
@@ -419,7 +424,14 @@ def compare(a: dict, b: dict, tol_pct: float = 5.0, gate_level: int = 2, min_abs
         diff = _pct_delta(x, y) if x is not None and y is not None else None
         rows.append((name, x, y, diff, "info"))
 
-    return rows, ok, problems
+    return rows, ok
+
+
+def compare(a: dict, b: dict, tol_pct: float = 5.0, gate_level: int = 2, min_abs_ms: float = MIN_ABS_MS):
+    """A baseline pair: refused unless the work AND the commit are the same (refusals), then gate_rows."""
+    problems = refusals(a, b)
+    rows, ok = gate_rows(a, b, tol_pct, gate_level, min_abs_ms)
+    return rows, ok and not problems, problems
 
 
 def baseline_md(a: dict, b: dict, rows, ok, problems) -> str:
@@ -498,7 +510,7 @@ def main(argv=None) -> int:
     ap.add_argument("--tol-pct", type=float, default=5.0)
     ap.add_argument("--gate-level", type=int, default=2)
     ap.add_argument("--min-abs-ms", type=float, default=MIN_ABS_MS,
-                    help="a gated part fails only if its medians also differ by more than this (ms)")
+                    help="a gated part fails only if its medians also differ by more than this (ms); 0 = off")
     args = ap.parse_args(argv)
 
     run_path = Path(args.run)

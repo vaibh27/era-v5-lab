@@ -3,5 +3,6 @@ numpy
 pyyaml
 pytest
 tokenizers>=0.15
+kronecker-embeddings @ git+https://github.com/theschoolofai/kronecker-embeddings@d07cb543f03d7a72a7c35bc68cfb795bcb02e1ec   # G5 harness
 datasets        # raw FineWeb text only; tokenizer comes exclusively from GitHub
 pynvml          # optional: GPU telemetry

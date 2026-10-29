@@ -50,3 +50,14 @@ def test_sparse_ke_changes_hfu_not_mfu():
     D = 256 * P
     assert sparse["model_flops_per_token"] == dyn["model_flops_per_token"]
     assert dyn["hw_flops_per_token"] - sparse["hw_flops_per_token"] == 6 * (D - P) * D_MODEL
+
+
+def test_hfu_is_below_mfu_only_with_sparse_ke():
+    """docs/METRICS.md: sparse KE runs P * d of the D * d projection MFU counts, so HFU < MFU there (not the PaLM /
+    Megatron HFU >= MFU); every other option only adds to HFU."""
+    sparse = _flops(ke_mode="sparse")
+    assert sparse["hw_flops_per_token"] < sparse["model_flops_per_token"]
+    for kw in (dict(ke_mode="dynamic"), dict(ke_mode="cached"), dict(ce_impl="chunked"), dict(reversible=True),
+               dict(moe=dict(num_experts=8, top_k=2, num_shared=0, bias_gamma=0.01, dispatch="dense"))):
+        f = _flops(**kw)
+        assert f["hw_flops_per_token"] >= f["model_flops_per_token"], kw

@@ -4,25 +4,27 @@
     losses.txt their own run() writes, to the bit (same "%.8f" text).
   * The four parts (data, fwd, bwd, opt) add up to the step; MFU fields follow perfkit.metrics (mfu_reason off
     CUDA); --set changes a setting; main() writes a JSON.
-Skipped when G5's harness or the kronecker_embeddings package is not available.
+  * The G5 files match PINNED_SHA256 (main() warns otherwise); load_harness leaves sys.path and sys.modules clean.
+Never skipped (Gate 1 bar: 0 skip): a missing G5 harness fails, a missing kronecker_embeddings fails with an install hint.
 """
 from __future__ import annotations
 
 import json
+import sys
 
 import pytest
 import torch
 
 from perfkit import g5_harness as G
 
-pytestmark = pytest.mark.skipif(not G.HARNESS.is_file(), reason=f"G5 harness not found: {G.HARNESS}")
-
 
 @pytest.fixture(scope="module")
 def h():
-    pytest.importorskip("kronecker_embeddings")
-    pytest.importorskip("yaml")
-    return G.load_harness()
+    try:
+        import kronecker_embeddings  # noqa: F401  (G5's train.py imports it at the top)
+    except ImportError:
+        pytest.fail("kronecker_embeddings not installed: pip install -r perfkit/requirements.txt", pytrace=False)
+    return G.load_harness()                                           # FileNotFoundError if G5's harness is missing
 
 
 def test_timed_step_gives_the_losses_of_their_run(h, tmp_path):
@@ -56,4 +58,15 @@ def test_main_writes_json(h, tmp_path):
     out = tmp_path / "g5.json"
     assert G.main(["--device", "cpu", "--steps", "3", "--warmup", "1", "--out", str(out)]) == 0
     res = json.loads(out.read_text())
-    assert res["meta"]["harness_sha256"] and set(res["parts_ms"]) == set(G.PARTS)
+    assert res["meta"]["harness_sha256"].keys() == G.PINNED_SHA256.keys() and set(res["parts_ms"]) == set(G.PARTS)
+    assert "harness_pinned" in res["meta"]
+
+
+def test_harness_matches_the_pin():
+    assert G.harness_shas()["harness_pinned"], "G5 harness changed: re-check these tests, then update PINNED_SHA256"
+
+
+def test_load_leaves_sys_path_and_modules_clean(h):
+    before = list(sys.path), "check_config" in sys.modules
+    G.load_harness()
+    assert (list(sys.path), "check_config" in sys.modules) == before

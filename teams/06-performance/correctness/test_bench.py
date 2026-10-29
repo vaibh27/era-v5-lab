@@ -27,7 +27,7 @@ import torch
 
 from models.config import load_config
 from models.ke1 import token_bytes_random
-from perfkit import bench
+from perfkit import bench, report
 from perfkit.schema import example_run, validate_run
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -221,7 +221,7 @@ def test_quick_compare_identical_runs_pass():
     assert ok and not problems
     names = [r[0] for r in rows]
     assert "step (clean)" in names and "fwd:block0" in names
-    assert all(r[4] == "ok" for r in rows)
+    assert all(r[4] in ("ok", "info") for r in rows)
 
 
 def test_quick_compare_allows_muon_implementation_variant():
@@ -248,7 +248,7 @@ def test_quick_compare_only_gates_levels_up_to_gate_level():
     assert level3, "the example run must have a level-3 part"
     b["layer"]["regions"][level3[0]]["median"] *= 3          # inside a block: reported, not gated
     rows, ok, _ = bench.quick_compare(a, b, 5.0, 2)
-    assert ok and level3[0] not in [r[0] for r in rows]
+    assert ok and {r[0]: r[4] for r in rows}[level3[0]] == "info"
 
 
 def test_quick_compare_fails_a_part_that_moved_more_than_tol():
@@ -268,27 +268,34 @@ def test_quick_compare_5_percent_boundary():
     assert not bench.quick_compare(a, b, 5.0, 2)[1]
 
 
-def test_quick_compare_small_gap_is_timer_noise():
-    """g5_v0 on A100 (GPU-bound): data 0.031 vs 0.035 ms, 11.8% apart, is a 4 us gap: it passes as "small".
-    The same 11.8% on a part where the gap is above min_abs_ms still fails."""
+def test_quick_compare_small_gap_fails_by_default():
+    """The floor is off until TSAI agrees: data 0.031 vs 0.035 ms (11.8%, 4 us) fails the plain 5%."""
     a, b = _two_runs()
     a["layer"]["regions"]["data"] = {**a["layer"]["regions"].get("data", {}), "median": 0.031, "level": 1}
     b["layer"]["regions"]["data"] = {**b["layer"]["regions"].get("data", {}), "median": 0.035, "level": 1}
     rows, ok, _ = bench.quick_compare(a, b, 5.0, 2)
+    assert not ok and {r[0]: r[4] for r in rows}["data"] == "FAIL"
+    assert load_config(bench.ROOT / "configs" / "base.yaml")["report"]["min_abs_ms"] == 0
+
+
+def test_quick_compare_small_gap_is_timer_noise_with_a_floor():
+    """report.min_abs_ms=0.05 (proposed): the 4 us gap passes as "small"; 11.8% with a gap above 0.05 ms still fails."""
+    a, b = _two_runs()
+    a["layer"]["regions"]["data"] = {**a["layer"]["regions"].get("data", {}), "median": 0.031, "level": 1}
+    b["layer"]["regions"]["data"] = {**b["layer"]["regions"].get("data", {}), "median": 0.035, "level": 1}
+    rows, ok, _ = bench.quick_compare(a, b, 5.0, 2, min_abs_ms=0.05)
     assert ok and {r[0]: r[4] for r in rows}["data"] == "small"
     b["layer"]["regions"]["data"]["median"] = 0.031 + 0.0501          # gap just above 0.05 ms
-    rows, ok, _ = bench.quick_compare(a, b, 5.0, 2)
+    rows, ok, _ = bench.quick_compare(a, b, 5.0, 2, min_abs_ms=0.05)
     assert not ok and {r[0]: r[4] for r in rows}["data"] == "FAIL"
-    b["layer"]["regions"]["data"]["median"] = 0.035
-    assert not bench.quick_compare(a, b, 5.0, 2, min_abs_ms=0.0)[1]      # 0 = the old rule: any gap counts
 
 
 def test_compare_lines_say_why_a_small_gap_passes():
     a, b = _two_runs()
     a["layer"]["regions"]["data"] = {**a["layer"]["regions"].get("data", {}), "median": 0.031, "level": 1}
     b["layer"]["regions"]["data"] = {**b["layer"]["regions"].get("data", {}), "median": 0.035, "level": 1}
-    rows, ok, why = bench.quick_compare(a, b, 5.0, 2)
-    out = "\n".join(bench.compare_lines(rows, ok, why, None, 5.0, 2))
+    rows, ok, why = bench.quick_compare(a, b, 5.0, 2, min_abs_ms=0.05)
+    out = "\n".join(bench.compare_lines(rows, ok, why, None, 5.0, 2, min_abs_ms=0.05))
     assert "ok (gap < min)" in out and "PASS" in out and "timer noise" in out
 
 
@@ -332,6 +339,21 @@ def test_quick_compare_refuses_runs_that_do_different_work(section, key, value):
     b["config"].setdefault(section, {})[key] = value
     _, ok, problems = bench.quick_compare(a, b, 5.0, 2)
     assert not ok and any(section in p for p in problems)
+
+
+def test_quick_compare_does_not_refuse_a_dirty_tree_or_another_commit():
+    a, b = _two_runs()
+    a["meta"].update(commit="aaa", dirty=True)
+    b["meta"].update(commit="bbb", dirty=False)
+    rows, ok, problems = bench.quick_compare(a, b, 5.0, 2)
+    assert ok and not problems
+    assert report.compare(a, b)[2]                     # a baseline pair refuses both
+
+
+def test_quick_compare_and_report_compare_give_the_same_rows():
+    a, b = _two_runs()
+    b["layer"]["regions"]["fwd:block1"]["median"] *= 1.10
+    assert bench.quick_compare(a, b, 5.0, 2)[0] == report.compare(a, b, 5.0, 2)[0]
 
 
 def test_quick_compare_includes_checkpoint_and_all_to_all_when_both_have_them():
@@ -540,30 +562,60 @@ def _oom_above(monkeypatch, fits):
     return tried
 
 
+def _in_process_fallbacks(monkeypatch):
+    """Out-of-memory retries normally start a new Python process (bench.fallback_run), which would not see the fake
+    train_step. Here they run in this process, through the same arguments and environment fallback_run builds."""
+    calls = []
+
+    def run(argv, b, tried, notes):
+        calls.append(b)
+        with monkeypatch.context() as mp:
+            mp.setenv(bench.FALLBACK_ENV, json.dumps({"tried": tried, "notes": notes}))
+            return bench.main(bench.fallback_cmd(argv, b)[3:])
+    monkeypatch.setattr(bench, "fallback_run", run)
+    return calls
+
+
 def test_auto_batch_halves_on_out_of_memory_until_it_fits(tmp_path, monkeypatch, capsys):
     tried = _oom_above(monkeypatch, fits=2)
+    retries = _in_process_fallbacks(monkeypatch)
     code = _run_main(tmp_path / "runs", "fit", "--modes", "clean", "run.batch_size=auto")    # auto on CPU: B=8
-    assert code == 0 and tried == [8, 4, 2]
+    assert code == 0 and tried == [8, 4, 2] and retries == [4, 2]          # each retry in its own process
     run = json.loads((tmp_path / "runs" / "fit.json").read_text())
     assert run["meta"]["batch_size"] == 2 and run["config"]["run"]["batch_size"] == 2
+    assert run["meta"]["batch_fallback"] == {"tried": [8, 4], "ran": 2}
     notes = run["meta"]["notes"]
     assert any("B=8 ran out of GPU memory, fell back to B=4" in n for n in notes)
     assert any("B=4 ran out of GPU memory, fell back to B=2" in n for n in notes)
     assert "fell back to B=2" in capsys.readouterr().out
-    assert bench.AUTO_NOTES == [] and bench.LAST_OOM == {}          # nothing leaks into the next run
+    assert bench.AUTO_NOTES == [] and bench.LAST_OOM == {} and bench.BATCH_FALLBACK == {}   # nothing leaks
 
 
 def test_explicit_batch_is_never_changed_on_out_of_memory(tmp_path, monkeypatch):
     tried = _oom_above(monkeypatch, fits=2)
+    retries = _in_process_fallbacks(monkeypatch)
     code = _run_main(tmp_path / "runs", "fixed", "--modes", "clean", "run.batch_size=8")
-    assert code == 3 and tried == [8]
+    assert code == 3 and tried == [8] and retries == []
     assert not (tmp_path / "runs" / "fixed.json").exists() and bench.LAST_OOM == {}
 
 
 def test_auto_batch_stops_at_one(tmp_path, monkeypatch):
     tried = _oom_above(monkeypatch, fits=0)
+    retries = _in_process_fallbacks(monkeypatch)
     code = _run_main(tmp_path / "runs", "never", "--modes", "clean", "run.batch_size=auto")
-    assert code == 3 and tried == [8, 4, 2, 1] and bench.LAST_OOM == {}
+    assert code == 3 and tried == [8, 4, 2, 1] and retries == [4, 2, 1] and bench.LAST_OOM == {}
+
+
+def test_clean_auto_run_has_no_batch_fallback(tmp_path):
+    assert _run_main(tmp_path / "runs", "clean_auto", "--modes", "clean", "run.batch_size=auto") == 0
+    assert "batch_fallback" not in json.loads((tmp_path / "runs" / "clean_auto.json").read_text())["meta"]
+
+
+def test_fallback_cmd_is_one_run_at_the_new_batch():
+    cmd = bench.fallback_cmd(["--config", "c.yaml", "--repeat", "3", "run.batch_size=auto"], 4)
+    assert cmd[1:3] == ["-m", "perfkit.bench"]
+    a, ov = bench.parse(cmd[3:])
+    assert a.repeat == 1 and ov[-1] == "run.batch_size=4"           # the last override wins
 
 
 def test_repeat_cmd_is_one_run_with_a_new_tag_against_the_first():

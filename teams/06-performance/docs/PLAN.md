@@ -28,10 +28,11 @@ Gate 1 checks:
 1. `pytest teams/06-performance/correctness -q` gives 0 failures.
 2. The lead multiplies one fast output by 1.01, and a test fails.
 3. Two baseline runs agree within 5% for each part.
-   How we check it: every part at level <= 2 is compared; a part fails when it is more than 5% apart and its
-   medians are more than `report.min_abs_ms` (0.05 ms) apart. Below 50 us a gap is CUDA event / launch jitter:
-   in a GPU-bound step the `data` part is a 30 us copy queued behind other work (g5_v0 on A100: 0.031 vs
-   0.035 ms, 11.8% apart, every other part within 0.4%). Proposed 29 Oct; needs TSAI agreement.
+   How we check it: every part at level <= 2 is compared; a part fails when it is more than 5% apart.
+   Proposed to TSAI 29 Oct, not agreed, so off (`report.min_abs_ms: 0`): a part would also pass when its medians
+   are at most 0.05 ms apart. Below 50 us a gap is CUDA event / launch jitter: in a GPU-bound step the `data`
+   part is a 30 us copy queued behind other work (g5_v0 on A100: 0.031 vs 0.035 ms, 11.8% apart, every other
+   part within 0.4%).
 
 ---
 

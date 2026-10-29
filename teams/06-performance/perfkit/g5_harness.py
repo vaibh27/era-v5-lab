@@ -47,17 +47,34 @@ HARNESS = G5 / "harness" / "train.py"
 CONFIG = G5 / "configs" / "config_v0.yaml"
 TINY = G5 / "configs" / "small" / "tiny_moe.yaml"
 PARTS = ("data", "fwd", "bwd", "opt")
+PINNED_SHA256 = {                                                     # the G5 files these timings were checked on
+    "train.py": "705ce1ba6ca4a36243722de431ee5bf57a318271c7a093c55a108383aa850870",
+    "check_config.py": "dac6e4c562c6cd7ea859f8d3ea9f6d4e1cdf2d6b6f81191f0813082b215c25ea",
+}
 
 
 def load_harness(path: Path = HARNESS):
-    """G5's train.py as a module (its folder on sys.path for `from check_config import ...`)."""
+    """G5's train.py as a module. Its folder is on sys.path only while it loads (for `from check_config import ...`);
+    train.py binds those names at import, so the path entry and the bare `check_config` module are removed after."""
     if not path.is_file():
         raise FileNotFoundError(f"G5 harness not found: {path}")
-    sys.path.insert(0, str(path.parent))
-    spec = importlib.util.spec_from_file_location("g5_train", path)
-    mod = importlib.util.module_from_spec(spec)
-    spec.loader.exec_module(mod)
+    folder, had_check = str(path.parent), "check_config" in sys.modules
+    sys.path.insert(0, folder)
+    try:
+        spec = importlib.util.spec_from_file_location("g5_train", path)
+        mod = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(mod)
+    finally:
+        sys.path.remove(folder)
+        if not had_check:
+            sys.modules.pop("check_config", None)
     return mod
+
+
+def harness_shas(folder: Path = HARNESS.parent) -> dict:
+    """SHA-256 of each pinned G5 file, and whether all of them match PINNED_SHA256."""
+    shas = {f: hashlib.sha256((folder / f).read_bytes()).hexdigest() for f in PINNED_SHA256}
+    return {"harness_sha256": shas, "harness_pinned": shas == PINNED_SHA256}
 
 
 def settings(h, config: Path = CONFIG, tiny: Path = TINY, sets=()) -> dict:
@@ -184,11 +201,16 @@ def main(argv=None) -> int:
     ap.add_argument("--out", type=Path, default=ROOT / "results" / "runs" / "g5_harness.json")
     a = ap.parse_args(argv)
     h = load_harness()
+    pin = harness_shas()
+    if not pin["harness_pinned"]:
+        changed = [f for f, v in pin["harness_sha256"].items() if v != PINNED_SHA256[f]]
+        print(f"[warn] G5 harness changed since the pin ({', '.join(changed)}): not comparable to earlier runs;"
+              " re-check test_g5_harness.py and update PINNED_SHA256")
     cfg = settings(h, a.config, a.tiny, a.set)
     device = torch.device(a.device)
     res = run(cfg, device, h, a.steps, a.warmup)
     res["meta"] = {**M.run_metadata(device), "harness": str(HARNESS.relative_to(ROOT.parent.parent)),
-                   "harness_sha256": hashlib.sha256(HARNESS.read_bytes()).hexdigest(),
+                   **pin,
                    "config": str(a.config), "tiny": str(a.tiny), "sets": list(a.set)}
     a.out.parent.mkdir(parents=True, exist_ok=True)
     a.out.write_text(json.dumps(res, indent=1, default=str) + "\n")

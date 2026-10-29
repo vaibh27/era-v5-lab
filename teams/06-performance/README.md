@@ -83,7 +83,8 @@ cd era-v5-lab && git checkout g6/dev && cd teams/06-performance
 
 **2. Install.** Laptop (venv outside the repo): `python -m venv ~/.venvs/g6 && source ~/.venvs/g6/bin/activate`,
 then `pip install -r perfkit/requirements.txt`. Colab (torch is already installed, do not reinstall it):
-`pip install -q tokenizers datasets pyyaml pytest`.
+`pip install -q tokenizers datasets pyyaml pytest "git+https://github.com/theschoolofai/kronecker-embeddings@d07cb543f03d7a72a7c35bc68cfb795bcb02e1ec"`
+(the pinned kronecker-embeddings is what G5's harness imports; `test_g5_harness.py` fails without it).
 
 **3. Tests** (CPU is fine, ~5 s)
 
@@ -192,7 +193,7 @@ outside 5%.
 %cd /content/era-v5-lab
 !git checkout -q g6/dev
 %cd teams/06-performance
-!pip install -q tokenizers datasets pyyaml pytest
+!pip install -q tokenizers datasets pyyaml pytest "git+https://github.com/theschoolofai/kronecker-embeddings@d07cb543f03d7a72a7c35bc68cfb795bcb02e1ec"
 ```
 ```python
 !python -m dataio.prepare_fineweb

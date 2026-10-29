@@ -30,6 +30,11 @@ G5 logs), `loss_end_mtp` the t+2 loss and `loss_end_total` their sum (what backw
 it is a second LM head every token multiplies with. Dense dispatch and the sparse KE change only
 HFU: MFU always counts top_k experts and a dense KE projection, so the two runs stay comparable.
 
+**HFU can be below MFU** with `ke_mode=sparse`: MFU counts the dense `D * d` KE projection, HFU only the
+`P * d` columns that run (about 4% lower in the lab shape). This breaks the PaLM / Megatron rule HFU >= MFU,
+so a consumer must not assert `hfu >= mfu`. Every other option only adds to HFU, so HFU >= MFU without
+`ke_mode=sparse` (pinned in `correctness/test_flops.py`).
+
 ## MFU and HFU
 
 ```text

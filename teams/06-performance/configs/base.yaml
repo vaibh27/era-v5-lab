@@ -56,4 +56,5 @@ bench:
 report:
   gate_level: 2         # parts at this level or coarser must agree within tol_pct
   tol_pct: 5.0
-  min_abs_ms: 0.05      # a part outside tol_pct still passes when its medians differ by <= this (timer noise)
+  min_abs_ms: 0         # off. >0: a part outside tol_pct still passes when its medians differ by <= this (timer
+                        # noise). 0.05 is proposed to TSAI, not agreed: do not use it for Gate 1 until they do

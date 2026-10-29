@@ -16,8 +16,8 @@ on; any key of configs/base.yaml can be overridden as key=value. Every override 
 --repeat N (Task 2 of G6_Team_Task_Plan.md: "run the benchmark twice and fail if any part differs by more
 than 5%"): run the whole benchmark N times, each from scratch (new model, new loader), write one run JSON
 per run (<tag>.json, <tag>-run2.json, ...) and compare every later run with the first one, exactly as
---against does. The exit code is 2 when any gated part differs by more than report.tol_pct and by more than
-report.min_abs_ms (0.05 ms; a smaller gap is timer noise, perfkit/report.py gate_verdict). These are the
+--against does. The exit code is 2 when any gated part differs by more than report.tol_pct (and by more than
+report.min_abs_ms, which is 0 = off until TSAI agrees to a floor; perfkit/report.py gate_verdict). These are the
 two runs that baseline_v0.md needs. One GPU only (not under torchrun).
 Every run, the first one too, is a NEW Python process (repeat_run), and the process that starts them never
 touches the GPU. Measured on an A100: a second run in the same process, after the first run's profiler (trace
@@ -75,8 +75,10 @@ Instructor rules this follows (G6 group, 25 Oct)
 
 Exit codes: 0 ok, 1 run JSON incomplete, 2 --against found a part outside tol_pct, 3 out of memory,
 4 no data. Out of memory with run.batch_size=auto is retried first: B is halved (32 -> 16 -> 8 ...) until the run
-fits or B=1 fails; each fallback is a run note (meta.notes) and the JSON has the B that ran. An explicit
-run.batch_size is never changed: that run ends with 3. With --repeat: 2 when any later run is outside tol_pct; a run that ends with any other code, or is
+fits or B=1 fails. Each retry is a NEW Python process (fallback_run), for the reason above: a second run in
+the process that ran out of memory (maybe after its trace) is not comparable with a clean run. Each fallback is
+a run note (meta.notes), meta.batch_fallback = {"tried": [B, ...], "ran": B}, and the JSON has the B that ran. An
+explicit run.batch_size is never changed: that run ends with 3. With --repeat: 2 when any later run is outside tol_pct; a run that ends with any other code, or is
 killed by a signal (out-of-memory killer), stops the repeat with its code (1 for a signal), never a PASS.
 """
 from __future__ import annotations
@@ -111,17 +113,13 @@ from perfkit import metrics as M  # noqa: E402
 from perfkit import parts as P  # noqa: E402
 from perfkit import timer as T  # noqa: E402
 from perfkit.regions import phase, point, region, use_recorder  # noqa: E402
-from perfkit.report import MIN_ABS_MS, ab_note, compare_config_value, compare_lines, gate_verdict  # noqa: E402
+from perfkit.report import MIN_ABS_MS, ab_note, compare_lines, gate_rows, refusals  # noqa: E402
 from perfkit.schema import validate_run  # noqa: E402
 
 BENCH_VERSION = 1
 CACHE = Path(os.environ.get("ERA_PERF_CACHE", "~/.cache/era-perf")).expanduser()
 AMP = {"bf16": torch.bfloat16, "fp16": torch.float16, "fp32": None}
 MODES = ("clean", "layer", "trace", "checkpoint", "comm")
-# Config that changes the work a step does: two runs that differ here are not compared (quick_compare),
-# except in report.IMPL_SWITCHES (an A/B of one implementation switch, labelled by report.ab_note).
-# (section, key); key None = the whole section.
-COMPARE_CONFIG = [("model", None), ("optim", None), ("run", "compile"), ("run", "grad_clip"), ("data", "source")]
 
 
 # ------------------------------------------------------------------------------ build
@@ -193,6 +191,8 @@ def choose_dtype(want: str, device: torch.device, notes: list) -> str:
 AUTO_BATCH = {"native_bf16": 32, "other": 8}   # the rule perfkit.smoke uses
 AUTO_NOTES: list = []          # out-of-memory fallbacks of run.batch_size=auto, added to the next run's notes
 LAST_OOM = {}                  # {"batch": B} of the last run that ran out of GPU memory
+BATCH_FALLBACK = {}            # {"tried": [B, ...]} when this process is an out-of-memory retry (meta.batch_fallback)
+FALLBACK_ENV = "PERF_BATCH_FALLBACK"   # run_fitting -> its retry process: {"tried": [...], "notes": [...]} as JSON
 
 
 def resolve_batch(want, device: torch.device, notes: list | None = None) -> int:
@@ -571,6 +571,8 @@ def run_metadata(s: Setup, config_file: str, overrides: list, tag: str) -> dict:
         "bench_version": BENCH_VERSION,
         "timing": {"cuda": "cuda_events", "mps": "sync_per_boundary", "cpu": "perf_counter"}.get(s.device.type),
     })
+    if BATCH_FALLBACK:
+        meta["batch_fallback"] = {"tried": list(BATCH_FALLBACK["tried"]), "ran": s.loader.B}
     return meta
 
 
@@ -657,42 +659,13 @@ def summary(run: dict, gate_level: int) -> str:
 
 
 def quick_compare(a: dict, b: dict, tol_pct: float, gate_level: int, min_abs_ms: float = MIN_ABS_MS) -> tuple:
-    """This run (a) against an earlier one (b): the whole step and every part at level <= gate_level in
-    either run, plus checkpoint save and all-to-all when both runs have them. diff = slower / faster - 1.
-    A part outside tol_pct passes as "small" when its medians differ by at most min_abs_ms (report.gate_verdict).
-    Refused (problems) when the GPU, dtype, shapes or COMPARE_CONFIG differ. A part only one run has is
-    MISSING. A quick look on the console; the official check is perfkit.report.compare."""
-    problems = []
-    for k in ("gpu", "dtype", "batch_size", "seq_len", "vocab_size"):
-        if a["meta"].get(k) != b["meta"].get(k):
-            problems.append(f"different {k}: {a['meta'].get(k)} vs {b['meta'].get(k)}")
-    for section, key in COMPARE_CONFIG:                  # what changes the work a step does
-        va = compare_config_value(a["config"], section, key)
-        vb = compare_config_value(b["config"], section, key)
-        if va != vb:
-            problems.append(f"different {section} config" if key is None else
-                            f"different {section}.{key}: {va} vs {vb}")
-    pairs = [("step (clean)", a["clean"]["step_ms"]["median"], b["clean"]["step_ms"]["median"])]
-    ra, rb = (a.get("layer") or {}).get("regions", {}), (b.get("layer") or {}).get("regions", {})
-    gated = [n for n, r in ra.items() if r["level"] <= gate_level]
-    gated += [n for n, r in rb.items() if r["level"] <= gate_level and n not in ra]     # a part only b has
-    for name in gated:
-        pairs.append((name, ra[name]["median"] if name in ra else None, rb[name]["median"] if name in rb else None))
-    if a.get("checkpoint") and b.get("checkpoint"):
-        pairs.append(("checkpoint save", a["checkpoint"]["save_ms"]["median"], b["checkpoint"]["save_ms"]["median"]))
-    ca, cb = (a.get("comm") or {}).get("moe_a2a") or {}, (b.get("comm") or {}).get("moe_a2a") or {}
-    if ca.get("measured") and cb.get("measured"):
-        pairs.append(("moe all-to-all", ca["per_step_ms"], cb["per_step_ms"]))
-    rows, ok = [], not problems
-    for name, x, y in pairs:
-        if x is None or y is None:
-            rows.append((name, x, y, None, "MISSING"))
-            ok = False
-            continue
-        diff, verdict = gate_verdict(x, y, tol_pct, min_abs_ms)
-        ok &= verdict != "FAIL"
-        rows.append((name, x, y, diff, verdict))
-    return rows, ok, problems
+    """This run (a) against an earlier one (b): report.gate_rows, the same gate as report.compare. Refused
+    (problems) when the work differs (GPU, vocabulary, dtype, shapes, report.COMPARE_CONFIG); unlike a baseline
+    pair, a different commit or a dirty tree is not refused (rule_checks warns). A quick look on the console;
+    the official check is perfkit.report.compare."""
+    problems = refusals(a, b, same_commit=False)
+    rows, ok = gate_rows(a, b, tol_pct, gate_level, min_abs_ms)
+    return rows, ok and not problems, problems
 
 
 def free_path(out_dir: Path, tag: str) -> Path:
@@ -989,42 +962,68 @@ def repeat_cmd(argv, tag: str, against=None) -> list:
     return cmd + (["--against", str(against)] if against else [])
 
 
+def _child_env(**extra) -> dict:
+    return {**os.environ, "PYTHONPATH": os.pathsep.join(filter(None, [str(ROOT), os.environ.get("PYTHONPATH")])),
+            **extra}
+
+
 def repeat_run(argv, tag: str, against=None) -> int:
     """One --repeat run in a new Python process (module docstring: why). Returns its exit code."""
-    env = {**os.environ, "PYTHONPATH": os.pathsep.join(filter(None, [str(ROOT), os.environ.get("PYTHONPATH")]))}
     print(f"\n[bench] repeat: {tag} in a new process", flush=True)
-    return subprocess.run(repeat_cmd(argv, tag, against), env=env).returncode
+    return subprocess.run(repeat_cmd(argv, tag, against), env=_child_env()).returncode
 
 
-def run_fitting(a, overrides):
+def fallback_cmd(argv, b: int) -> list:
+    """The command line of one out-of-memory retry: the same arguments, one run, run.batch_size=b (the last
+    override wins)."""
+    argv = list(sys.argv[1:] if argv is None else argv)
+    return [sys.executable, "-m", "perfkit.bench", *argv, "--repeat", "1", f"run.batch_size={b}"]
+
+
+def fallback_run(argv, b: int, tried: list, notes: list) -> int:
+    """One out-of-memory retry at B=b in a new Python process; tried and notes go to its meta. Returns its exit code."""
+    print(f"[bench] retry at B={b} in a new process", flush=True)
+    env = _child_env(**{FALLBACK_ENV: json.dumps({"tried": tried, "notes": notes})})
+    return subprocess.run(fallback_cmd(argv, b), env=env).returncode
+
+
+def run_fitting(a, overrides, argv=None):
     """run_once; with run.batch_size=auto, an out-of-memory run is retried at half the batch until it fits.
 
     A smaller GPU (L4 24 GB, T4 16 GB) then gives a run at the largest power-of-2 B that fits instead of exit 3.
-    The retry runs in this process after the failed run's tensors are freed (gc + empty_cache)."""
+    Every retry is a new process (fallback_run) with an explicit run.batch_size, so it is a clean run; this
+    process only frees the failed run's tensors (gc + empty_cache) first. The path is None after a retry."""
     code, path = run_once(a, overrides)
     auto = load_config(a.config, overrides)["run"].get("batch_size") == "auto"
-    while code == 3 and auto and LAST_OOM.get("batch", 1) > 1:
-        tried = LAST_OOM.pop("batch")
-        b = tried // 2
-        note = f"run.batch_size=auto: B={tried} ran out of GPU memory, fell back to B={b}"
-        print(f"[bench] {note}")
-        AUTO_NOTES.append(note)
+    b, tried, notes = LAST_OOM.pop("batch", 1), [], []
+    if code == 3 and auto and b > 1:
         import gc
         gc.collect()
         if torch.cuda.is_available():
             torch.cuda.empty_cache()
             torch.cuda.reset_peak_memory_stats()
-        code, path = run_once(a, [*overrides, f"run.batch_size={b}"])
+        while code == 3 and b > 1:
+            tried.append(b)
+            notes.append(f"run.batch_size=auto: B={b} ran out of GPU memory, fell back to B={b // 2}")
+            print(f"[bench] {notes[-1]}")
+            b //= 2
+            code, path = fallback_run(argv, b, tried, notes), None
     AUTO_NOTES.clear()
     LAST_OOM.clear()
+    BATCH_FALLBACK.clear()
     return code, path
 
 
 def main(argv=None):
     """One run, or --repeat N runs compared with the first. Returns the exit code (see the module docstring)."""
     a, overrides = parse(argv)
+    fb = os.environ.get(FALLBACK_ENV)
+    if fb:                                                  # this process is an out-of-memory retry (fallback_run)
+        fb = json.loads(fb)
+        AUTO_NOTES[:] = fb["notes"]
+        BATCH_FALLBACK["tried"] = fb["tried"]
     if a.repeat <= 1 or int(os.environ.get("WORLD_SIZE", "1")) > 1:     # torchrun is for --modes comm only
-        return run_fitting(a, overrides)[0]
+        return run_fitting(a, overrides, argv)[0]
     # The parent only starts the runs and never touches the GPU, so every run has the whole GPU to itself. (A parent
     # that ran run 1 itself kept ~30 GB reserved on a 40 GB A100, and run 2 ran out of memory.)
     out_dir = ROOT / Path(load_config(a.config, overrides)["bench"]["out_dir"]).expanduser()

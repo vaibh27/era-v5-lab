@@ -103,7 +103,7 @@ def test_render_flags_inner_pool_allocation_when_timer_count_is_zero():
 def test_compare_gate_verdict_min_abs_ms():
     """report.compare uses the same rule as bench.quick_compare (report.gate_verdict)."""
     assert report.gate_verdict(10.0, 10.4, 5.0) == (report._pct_delta(10.0, 10.4), "ok")
-    assert report.gate_verdict(0.031, 0.035, 5.0)[1] == "small"              # 4 us: timer noise
-    assert report.gate_verdict(1.0, 1.06, 5.0)[1] == "FAIL"                  # 60 us and 6%
-    assert report.gate_verdict(0.031, 0.035, 5.0, min_abs_ms=0.0)[1] == "FAIL"
+    assert report.gate_verdict(0.031, 0.035, 5.0)[1] == "FAIL"               # default: no floor (TSAI not agreed)
+    assert report.gate_verdict(0.031, 0.035, 5.0, min_abs_ms=0.05)[1] == "small"     # 4 us under the proposed floor
+    assert report.gate_verdict(1.0, 1.06, 5.0, min_abs_ms=0.05)[1] == "FAIL"         # 60 us and 6%
     assert report.gate_verdict(0.0, 0.0, 5.0)[1] == "ok"
