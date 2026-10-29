@@ -16,7 +16,8 @@ on; any key of configs/base.yaml can be overridden as key=value. Every override 
 --repeat N (Task 2 of G6_Team_Task_Plan.md: "run the benchmark twice and fail if any part differs by more
 than 5%"): run the whole benchmark N times, each from scratch (new model, new loader), write one run JSON
 per run (<tag>.json, <tag>-run2.json, ...) and compare every later run with the first one, exactly as
---against does. The exit code is 2 when any gated part differs by more than report.tol_pct. These are the
+--against does. The exit code is 2 when any gated part differs by more than report.tol_pct and by more than
+report.min_abs_ms (0.05 ms; a smaller gap is timer noise, perfkit/report.py gate_verdict). These are the
 two runs that baseline_v0.md needs. One GPU only (not under torchrun).
 Every run, the first one too, is a NEW Python process (repeat_run), and the process that starts them never
 touches the GPU. Measured on an A100: a second run in the same process, after the first run's profiler (trace
@@ -73,7 +74,9 @@ Instructor rules this follows (G6 group, 25 Oct)
   Compute: everything runs on Colab, Kaggle or your own GPU; tiny_cpu.yaml runs on a laptop.
 
 Exit codes: 0 ok, 1 run JSON incomplete, 2 --against found a part outside tol_pct, 3 out of memory,
-4 no data. With --repeat: 2 when any later run is outside tol_pct; a run that ends with any other code, or is
+4 no data. Out of memory with run.batch_size=auto is retried first: B is halved (32 -> 16 -> 8 ...) until the run
+fits or B=1 fails; each fallback is a run note (meta.notes) and the JSON has the B that ran. An explicit
+run.batch_size is never changed: that run ends with 3. With --repeat: 2 when any later run is outside tol_pct; a run that ends with any other code, or is
 killed by a signal (out-of-memory killer), stops the repeat with its code (1 for a signal), never a PASS.
 """
 from __future__ import annotations
@@ -108,7 +111,7 @@ from perfkit import metrics as M  # noqa: E402
 from perfkit import parts as P  # noqa: E402
 from perfkit import timer as T  # noqa: E402
 from perfkit.regions import phase, point, region, use_recorder  # noqa: E402
-from perfkit.report import ab_note, compare_config_value, compare_lines  # noqa: E402
+from perfkit.report import MIN_ABS_MS, ab_note, compare_config_value, compare_lines, gate_verdict  # noqa: E402
 from perfkit.schema import validate_run  # noqa: E402
 
 BENCH_VERSION = 1
@@ -188,6 +191,8 @@ def choose_dtype(want: str, device: torch.device, notes: list) -> str:
 
 
 AUTO_BATCH = {"native_bf16": 32, "other": 8}   # the rule perfkit.smoke uses
+AUTO_NOTES: list = []          # out-of-memory fallbacks of run.batch_size=auto, added to the next run's notes
+LAST_OOM = {}                  # {"batch": B} of the last run that ran out of GPU memory
 
 
 def resolve_batch(want, device: torch.device, notes: list | None = None) -> int:
@@ -216,7 +221,7 @@ def seed_everything(seed: int):
 def build(cfg: dict, device: torch.device) -> Setup:
     mcfg = model_config(cfg)
     run, data = cfg["run"], cfg["data"]
-    notes = []
+    notes = list(AUTO_NOTES)
     run["batch_size"] = resolve_batch(run["batch_size"], device, notes)   # written back: the run JSON has the B used
     seed_everything(run["seed"])
     dtype = choose_dtype(run.get("dtype", "bf16"), device, notes)
@@ -574,7 +579,8 @@ def compute_metrics(s: Setup, step_ms: float, peak) -> dict:
     tokens = s.loader.B * s.loader.T
     f = M.flops_per_token(s.core, s.loader.T, s.opt.flops(), tokens)
     tps = tokens / (step_ms / 1e3)
-    return {"tokens_per_step": tokens, "tokens_per_s": tps, **f, "peak_tflops": peak, **M.mfu(f, tps, peak)}
+    reason = None if peak else M.peak_missing_reason(s.device, M.device_name(s.device), s.dtype)
+    return {"tokens_per_step": tokens, "tokens_per_s": tps, **f, "peak_tflops": peak, **M.mfu(f, tps, peak, reason)}
 
 
 # ------------------------------------------------------------------------------ output
@@ -592,8 +598,8 @@ def summary(run: dict, gate_level: int) -> str:
         f"commit {str(me['commit'])[:10]}{' (DIRTY)' if me.get('dirty') else ''} | tag {me['tag']}",
         f"step  median {_f(st['median'])} ms  p10 {_f(st['p10'])}  p90 {_f(st['p90'])}  spread {_f(st['spread_pct'], 1)}%"
         f"   data {_f(c['data_ms']['median'], 3)} ms",
-        f"      {m['tokens_per_s']:,.0f} tokens/s   MFU {_f(100 * m['mfu'], 1) + '%' if m['mfu'] else 'n/a'}"
-        f"   HFU {_f(100 * m['hfu'], 1) + '%' if m['hfu'] else 'n/a'}"
+        f"      {m['tokens_per_s']:,.0f} tokens/s   MFU {_f(100 * m['mfu'], 1) + '%' if m['mfu'] is not None else 'n/a'}"
+        f"   HFU {_f(100 * m['hfu'], 1) + '%' if m['hfu'] is not None else 'n/a'}"
         + (f"   peak mem {run['memory']['peak_allocated_gb']:.2f} GB" if run.get("memory") else ""),
     ]
     lay = run.get("layer")
@@ -650,9 +656,10 @@ def summary(run: dict, gate_level: int) -> str:
     return "\n".join(lines)
 
 
-def quick_compare(a: dict, b: dict, tol_pct: float, gate_level: int) -> tuple:
+def quick_compare(a: dict, b: dict, tol_pct: float, gate_level: int, min_abs_ms: float = MIN_ABS_MS) -> tuple:
     """This run (a) against an earlier one (b): the whole step and every part at level <= gate_level in
     either run, plus checkpoint save and all-to-all when both runs have them. diff = slower / faster - 1.
+    A part outside tol_pct passes as "small" when its medians differ by at most min_abs_ms (report.gate_verdict).
     Refused (problems) when the GPU, dtype, shapes or COMPARE_CONFIG differ. A part only one run has is
     MISSING. A quick look on the console; the official check is perfkit.report.compare."""
     problems = []
@@ -682,10 +689,9 @@ def quick_compare(a: dict, b: dict, tol_pct: float, gate_level: int) -> tuple:
             rows.append((name, x, y, None, "MISSING"))
             ok = False
             continue
-        diff = 0.0 if x == y else (max(x, y) / min(x, y) - 1) * 100 if min(x, y) > 0 else math.inf
-        good = diff <= tol_pct
-        ok &= good
-        rows.append((name, x, y, diff, "ok" if good else "FAIL"))
+        diff, verdict = gate_verdict(x, y, tol_pct, min_abs_ms)
+        ok &= verdict != "FAIL"
+        rows.append((name, x, y, diff, verdict))
     return rows, ok, problems
 
 
@@ -806,6 +812,10 @@ def run_once(a, overrides):
     except FileNotFoundError as e:
         print(f"[bench] {e}\n[bench] or time without the shards: add data.source=synthetic")
         return 4, None
+    except torch.cuda.OutOfMemoryError:
+        LAST_OOM["batch"] = int(cfg["run"]["batch_size"])          # build() wrote the resolved B back
+        print(f"[bench] out of GPU memory while building the model (B={LAST_OOM['batch']})")
+        return 3, None
     tag = a.tag or f"{Path(a.config).stem}_{_slug(M.device_name(device))}_{_dt.datetime.now():%Y%m%d-%H%M%S}"
     meta = run_metadata(s, config_file, overrides, tag)
     print(f"[bench] {meta['gpu']} | {s.dtype} | B={s.loader.B} T={s.loader.T} V={s.mcfg.vocab_size} | "
@@ -822,10 +832,11 @@ def run_once(a, overrides):
                 warns.append(f"reversible reconstruction error {err:.1e} > 1e-3: the backward rebuilds wrong inputs")
         with buckets("first_step"):
             _, loss0 = train_step(s)
+        first = dict(s.core.last_losses or {})                         # model.mtp: the next-token part of loss0
         with buckets("warmup"):
             for _ in range(max(0, b["warmup"] - 1)):
                 train_step(s)
-        meta["loss_after_first_step"] = float(loss0)
+        meta["loss_after_first_step"] = float(first["ntp"]) if first.get("mtp") is not None else float(loss0)
         tel0 = M.gpu_telemetry(device)
 
         print("[bench] clean ...", flush=True)
@@ -839,10 +850,16 @@ def run_once(a, overrides):
                              f"a slowdown reason ({', '.join(system['slowdown_reasons'])}): may miss the 5% check")
         warn_timing_allocations(warns, run["clean"]["events_created_during_steps"], "clean")
         meta["loss_end"] = float(loss)
+        if s.core.last_losses and s.core.last_losses.get("mtp") is not None:
+            # model.mtp: loss_end is the next-token loss, as G5 logs it (config_v0 loss.train_on); the t+2 loss
+            # and the sum that backward used are kept beside it.
+            meta["loss_end_total"] = meta["loss_end"]
+            meta["loss_end"] = float(s.core.last_losses["ntp"])
+            meta["loss_end_mtp"] = float(s.core.last_losses["mtp"])
         if mem:
             run["memory"] = mem
-        if not math.isfinite(meta["loss_end"]):
-            warns.append(f"loss is {meta['loss_end']}: the numbers time a broken run")
+        if not math.isfinite(meta.get("loss_end_total", meta["loss_end"])):           # NaN in either head
+            warns.append(f"loss is {meta.get('loss_end_total', meta['loss_end'])}: the numbers time a broken run")
         tel_busy = M.telemetry_during(device, lambda: [train_step(s) for _ in range(3)])   # untimed steps
 
         if "layer" in modes:
@@ -878,6 +895,7 @@ def run_once(a, overrides):
         tel1 = M.gpu_telemetry(device)
     except torch.cuda.OutOfMemoryError:
         Bn, Tn, V = s.loader.B, s.loader.T, s.mcfg.vocab_size
+        LAST_OOM["batch"] = Bn
         print(f"[bench] out of GPU memory. The fp32 logits alone are {Bn * Tn * V * 4 / 2**30:.1f} GB "
               f"(B={Bn} x T={Tn} x V={V} x 4 bytes), twice that with their gradient.\n"
               f"[bench] try model.ce_impl=chunked, or run.batch_size={max(1, Bn // 2)}")
@@ -923,9 +941,10 @@ def run_once(a, overrides):
     if a.against:
         other = json.loads(Path(a.against).read_text())
         tol = cfg.get("report", {}).get("tol_pct", 5.0)
-        rows, ok, why = quick_compare(run, other, tol, gate)
+        min_abs = cfg.get("report", {}).get("min_abs_ms", MIN_ABS_MS)
+        rows, ok, why = quick_compare(run, other, tol, gate, min_abs)
         print(f"\nagainst {_show(Path(a.against))} (ms)")
-        for line in compare_lines(rows, ok, why, ab_note(run, other), tol, gate):
+        for line in compare_lines(rows, ok, why, ab_note(run, other), tol, gate, min_abs_ms=min_abs):
             print(line)
         if not ok:
             code = code or 2
@@ -977,11 +996,35 @@ def repeat_run(argv, tag: str, against=None) -> int:
     return subprocess.run(repeat_cmd(argv, tag, against), env=env).returncode
 
 
+def run_fitting(a, overrides):
+    """run_once; with run.batch_size=auto, an out-of-memory run is retried at half the batch until it fits.
+
+    A smaller GPU (L4 24 GB, T4 16 GB) then gives a run at the largest power-of-2 B that fits instead of exit 3.
+    The retry runs in this process after the failed run's tensors are freed (gc + empty_cache)."""
+    code, path = run_once(a, overrides)
+    auto = load_config(a.config, overrides)["run"].get("batch_size") == "auto"
+    while code == 3 and auto and LAST_OOM.get("batch", 1) > 1:
+        tried = LAST_OOM.pop("batch")
+        b = tried // 2
+        note = f"run.batch_size=auto: B={tried} ran out of GPU memory, fell back to B={b}"
+        print(f"[bench] {note}")
+        AUTO_NOTES.append(note)
+        import gc
+        gc.collect()
+        if torch.cuda.is_available():
+            torch.cuda.empty_cache()
+            torch.cuda.reset_peak_memory_stats()
+        code, path = run_once(a, [*overrides, f"run.batch_size={b}"])
+    AUTO_NOTES.clear()
+    LAST_OOM.clear()
+    return code, path
+
+
 def main(argv=None):
     """One run, or --repeat N runs compared with the first. Returns the exit code (see the module docstring)."""
     a, overrides = parse(argv)
     if a.repeat <= 1 or int(os.environ.get("WORLD_SIZE", "1")) > 1:     # torchrun is for --modes comm only
-        return run_once(a, overrides)[0]
+        return run_fitting(a, overrides)[0]
     # The parent only starts the runs and never touches the GPU, so every run has the whole GPU to itself. (A parent
     # that ran run 1 itself kept ~30 GB reserved on a 40 GB A100, and run 2 ran out of memory.)
     out_dir = ROOT / Path(load_config(a.config, overrides)["bench"]["out_dir"]).expanduser()

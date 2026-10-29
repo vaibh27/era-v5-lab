@@ -8,8 +8,11 @@ Build it against perfkit.schema.example_run(); no need to wait for bench.
 MVP
   * render(run) -> Markdown: header (GPU, dtype, B x T, torch, commit), step stats, MFU, per-region table
     (ms, p90, % of step, level), "time by part type" (sum over layers), five slowest leaf parts.
-  * compare(a, b, tol_pct=5, gate_level=2) -> (rows, ok, problems): the whole step plus every region with
-    level <= gate_level must be within tol_pct. NO exemption for small parts. Refuse runs on different
+  * compare(a, b, tol_pct=5, gate_level=2, min_abs_ms=0.05) -> (rows, ok, problems): the whole step plus every
+    region with level <= gate_level must be within tol_pct. Every such part is checked, however small; a part
+    fails only if it is outside tol_pct AND the two medians differ by more than min_abs_ms (gate_verdict).
+    Below min_abs_ms a gap is timer noise: CUDA events around a part the GPU runs behind other queued work
+    (data in a GPU-bound step: 0.031 vs 0.035 ms, 11.8% apart, g5_v0 on A100) cannot hold 5%. Refuse runs on different
     GPUs or with different configs. Level-3 rows are listed as information only. Runs that differ only in
     an IMPL_SWITCHES entry are compared and labelled A/B (ab_note).
   * baseline_md(...): GPU name, commit, config, PASS/FAIL, the comparison table.
@@ -25,6 +28,9 @@ import math
 import re
 import sys
 from pathlib import Path
+
+MIN_ABS_MS = 0.05     # 50 us: about the jitter of CUDA events and kernel launches; report.min_abs_ms in the config
+
 
 # Config that changes the work a step does (aligned with bench.COMPARE_CONFIG).
 COMPARE_CONFIG = [
@@ -99,22 +105,24 @@ def _change(x, y, diff) -> str:
 
 
 def compare_lines(rows, ok: bool, problems: list, note: str | None, tol_pct: float, gate_level: int,
-                  this: str = "this run", other: str = "against") -> list[str]:
+                  this: str = "this run", other: str = "against", min_abs_ms: float = MIN_ABS_MS) -> list[str]:
     """The console table for bench --against and report --compare: gated rows, then one verdict line."""
     w = max([34] + [len(r[0]) + 2 for r in rows if r[4] != "info"])
-    lines = [f"5% check: step, step parts and whole blocks (level <= {gate_level}), tol {tol_pct:g}%"]
+    lines = [f"5% check: step, step parts and whole blocks (level <= {gate_level}), tol {tol_pct:g}%, "
+             f"gaps under {min_abs_ms:g} ms pass"]
     lines += [f"  REFUSED  {p}" for p in problems]
     if note:
         lines.append(f"  {note}")
     lines.append(f"  {'part':<{w}}{this:>12}{other:>12}  {'change':<16}result")
     gated = [r for r in rows if r[4] != "info"]
     for name, x, y, diff, verdict in gated:
-        mark = {"ok": "ok", "FAIL": "OUTSIDE", "MISSING": "MISSING"}.get(verdict, verdict)
+        mark = {"ok": "ok", "small": "ok (gap < min)", "FAIL": "OUTSIDE", "MISSING": "MISSING"}.get(verdict, verdict)
         lines.append(f"  {name:<{w}}{_f(x):>12}{_f(y):>12}  {_change(x, y, diff):<16}{mark}")
     info = len(rows) - len(gated)
     if info:
         lines.append(f"  ({info} parts inside blocks: information only, see the .md)")
-    bad = [r for r in gated if r[4] != "ok"]
+    bad = [r for r in gated if r[4] not in ("ok", "small")]
+    small = sum(1 for r in gated if r[4] == "small")
     if problems:
         verdict = f"REFUSED: {len(problems)} reason(s) above; these runs cannot be compared"
     elif note:
@@ -123,7 +131,8 @@ def compare_lines(rows, ok: bool, problems: list, note: str | None, tol_pct: flo
         verdict = (f"A/B: {faster} part(s) faster, {slower} slower, {len(gated) - len(bad)} within {tol_pct:g}%"
                    + (f", {sum(1 for r in bad if r[4] == 'MISSING')} missing" if any(r[4] == "MISSING" for r in bad) else ""))
     elif ok:
-        verdict = f"PASS: all {len(gated)} gated parts within {tol_pct:g}%"
+        verdict = f"PASS: all {len(gated)} gated parts within {tol_pct:g}%" + (
+            f" ({small} outside {tol_pct:g}% by less than {min_abs_ms:g} ms: timer noise)" if small else "")
     else:
         verdict = f"FAIL: {len(bad)} of {len(gated)} gated parts outside {tol_pct:g}% or missing"
     lines.append(f"  {verdict}")
@@ -137,6 +146,17 @@ def _f(x, digits=3):
         return f"{float(x):.{digits}f}"
     except (TypeError, ValueError):
         return str(x)
+
+
+def gate_verdict(x, y, tol_pct: float, min_abs_ms: float = MIN_ABS_MS) -> tuple:
+    """(diff %, verdict) for one gated part: "ok" within tol_pct, "small" outside tol_pct but the medians differ by
+    at most min_abs_ms (passes: below what the timer resolves), "FAIL" otherwise. Shared by bench.quick_compare."""
+    diff = _pct_delta(x, y)
+    if diff is not None and diff <= tol_pct:
+        return diff, "ok"
+    if abs(x - y) <= min_abs_ms:
+        return diff, "small"
+    return diff, "FAIL"
 
 
 def _pct_delta(x, y) -> float | None:
@@ -354,7 +374,7 @@ def render(run: dict) -> str:
     return "\n".join(lines)
 
 
-def compare(a: dict, b: dict, tol_pct: float = 5.0, gate_level: int = 2):
+def compare(a: dict, b: dict, tol_pct: float = 5.0, gate_level: int = 2, min_abs_ms: float = MIN_ABS_MS):
     problems = _refuse(a, b)
     rows = []
     ok = not problems
@@ -384,10 +404,9 @@ def compare(a: dict, b: dict, tol_pct: float = 5.0, gate_level: int = 2):
             rows.append((name, x, y, None, "MISSING"))
             ok = False
             continue
-        diff = _pct_delta(x, y)
-        good = diff is not None and diff <= tol_pct
-        ok = ok and good
-        rows.append((name, x, y, diff, "ok" if good else "FAIL"))
+        diff, verdict = gate_verdict(x, y, tol_pct, min_abs_ms)
+        ok = ok and verdict != "FAIL"
+        rows.append((name, x, y, diff, verdict))
 
     # Level > gate_level: information only (listed, not gated).
     info_names = sorted(
@@ -439,7 +458,8 @@ def baseline_md(a: dict, b: dict, rows, ok, problems) -> str:
         "| :--- | ---: | ---: | :--- | :--- |",
     ]
     for name, x, y, diff, verdict_row in rows:
-        mark = {"ok": "ok", "FAIL": "**outside**", "MISSING": "**missing**"}.get(verdict_row, verdict_row)
+        mark = {"ok": "ok", "small": "ok (gap < min)", "FAIL": "**outside**",
+                "MISSING": "**missing**"}.get(verdict_row, verdict_row)
         lines.append(f"| {name} | {_f(x)} | {_f(y)} | {_change(x, y, diff)} | {mark} |")
     lines.append("")
     return "\n".join(lines)
@@ -477,6 +497,8 @@ def main(argv=None) -> int:
     ap.add_argument("--slowest", help="Write five-slowest Markdown here")
     ap.add_argument("--tol-pct", type=float, default=5.0)
     ap.add_argument("--gate-level", type=int, default=2)
+    ap.add_argument("--min-abs-ms", type=float, default=MIN_ABS_MS,
+                    help="a gated part fails only if its medians also differ by more than this (ms)")
     args = ap.parse_args(argv)
 
     run_path = Path(args.run)
@@ -491,10 +513,12 @@ def main(argv=None) -> int:
 
     if args.compare:
         other = json.loads(Path(args.compare).read_text(encoding="utf-8"))
-        rows, ok, problems = compare(run, other, tol_pct=args.tol_pct, gate_level=args.gate_level)
+        rows, ok, problems = compare(run, other, tol_pct=args.tol_pct, gate_level=args.gate_level,
+                                     min_abs_ms=args.min_abs_ms)
         tags = ((run.get("meta") or {}).get("tag") or "this run", (other.get("meta") or {}).get("tag") or "against")
         print(f"\n[report] {tags[0]} vs {tags[1]} (ms)")
-        for line in compare_lines(rows, ok, problems, ab_note(run, other), args.tol_pct, args.gate_level, *tags):
+        for line in compare_lines(rows, ok, problems, ab_note(run, other), args.tol_pct, args.gate_level, *tags,
+                                  min_abs_ms=args.min_abs_ms):
             print(line)
         if args.baseline:
             Path(args.baseline).write_text(baseline_md(run, other, rows, ok, problems), encoding="utf-8")

@@ -26,7 +26,7 @@ Lab setting: 1 shared expert (always on) + top-2 routed of 8 (configs/lab_small.
     Without it a reconstructed input that differs by 1e-5 can flip a near-tie token to other experts,
     and the reversible backward rebuilds the wrong state (bf16: gradient errors up to 23%).
     Gates are always recomputed from the router scores, so the router still gets its gradient.
-  * DISPATCH = {"loop": dispatch_loop, "sorted": dispatch_sorted}. The loop path gathers per expert and is
+  * DISPATCH = {"loop": dispatch_loop, "sorted": dispatch_sorted, "dense": dispatch_dense}. The loop path gathers per expert and is
     the reference. The sorted path sorts token/expert assignments, packs them into a padded
     [experts, cap, dim] buffer and runs each expert MLP as one batched matmul. Every scatter and gather uses
     unique indices, so two runs give identical gradients on CUDA. It reads only the largest per-expert route
@@ -34,9 +34,13 @@ Lab setting: 1 shared expert (always on) + top-2 routed of 8 (configs/lab_small.
     Both paths compute token counts with a device-side compare-and-sum over topk_idx. Since sorted packs all
     expert parameters together, idle experts receive zero gradients rather than None; the loop remains default
     until the optimizer-state effect of that difference is resolved and server timings are collected.
+    The dense path runs every expert on every token and zeroes the gates of the experts not chosen: exact and
+    slow (num_experts / top_k times the expert FLOPs). It is how G5's week-1 harness (teams/05-architecture/
+    harness/train.py, TopKMoE) computes its MoE, so we can time what they run. MFU still counts top_k experts;
+    HFU counts all of them (perfkit/metrics.py).
   * Regions (level 3): f"{name}.router", f"{name}.dispatch", f"{name}.dispatch.expert{e}", f"{name}.shared".
 
-Extra: "dense" dispatch (every expert on every token, exact, slow), capacity factor, aux / z loss.
+Extra: capacity factor, aux / z loss.
 Done when: correctness/test_moe.py passes for every entry in DISPATCH.
 """
 from __future__ import annotations
@@ -123,7 +127,19 @@ def dispatch_sorted(moe, x, topk_idx, gates):
     return out, counts
 
 
-DISPATCH = {"loop": dispatch_loop, "sorted": dispatch_sorted}
+def dispatch_dense(moe, x, topk_idx, gates):
+    """Every expert on every token, weighted by its gate (0 for the experts not chosen). Same result as the loop."""
+    E = moe.num_experts
+    counts = (topk_idx.reshape(-1, 1) == torch.arange(E, device=x.device)).sum(0).float()
+    w = torch.zeros(x.shape[0], E, device=x.device, dtype=gates.dtype).scatter(1, topk_idx, gates)   # [N, E]
+    out = torch.zeros_like(x)
+    with region(f"{moe.name}.dispatch.dense", 3):
+        for e, expert in enumerate(moe.experts):
+            out = out + expert(x) * w[:, e:e + 1].to(x.dtype)
+    return out, counts
+
+
+DISPATCH = {"loop": dispatch_loop, "sorted": dispatch_sorted, "dense": dispatch_dense}
 
 
 @contextmanager

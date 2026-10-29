@@ -1,0 +1,28 @@
+# G5 config_v0 (teams/05-architecture/configs/config_v0.yaml, 29 Oct) and how their week-1 harness
+# (harness/train.py) computes it, so we time what G5 runs. Every key below is set in config_v0 or is how
+# the harness does it; the rest is still open there and keeps our lab defaults.
+#   Set in config_v0:   seed 1234, grad clip 1.0, AdamW, Kronecker embeddings with pos_dim 32, eager attention,
+#                       logged loss = next-token loss plus a second head trained on t+2.
+#   Set by us, empty in config_v0: vocab_size 131072 (G3 v0/special_slots.md, merged) and KE output dim
+#                       D = 256 * pos_dim = 8192 (G4 teams/04-ke2/output_shape.md, merged in #99).
+#   Harness choices:    KE "cached" (a [V, D] fp32 table, 4 GiB at V = 131072), every expert on every token then
+#                       top-k (dispatch: dense), no shared expert, no router bias, plain (not reversible) stack.
+#   Open (TSAI 31 Oct): n_layer, d_model, n_head, d_ff, n_expert, top_k, seq_len: lab_small sizes until then.
+#   Open in config_v0:  lr (ours is a timing value), attention type, norm, routing, batch, precision.
+# Memory: run.batch_size auto (B=32 on bf16 GPUs) halves itself on out of memory (perfkit/bench.py).
+# Differences we keep: LayerNorm (G5: RMSNorm), Linear biases (G5: none), learned positions (G5: none yet).
+inherit: base.yaml
+run: {seed: 1234, grad_clip: 1.0}
+model:
+  vocab_size: 131072
+  embedding: ke1
+  ke_max_pos: 32
+  ke_mode: cached
+  attn_impl: eager
+  ffn: moe
+  moe: {num_experts: 8, top_k: 2, num_shared: 0, bias_gamma: 0.0, dispatch: dense}
+  reversible: false
+  mtp: true
+  ce_impl: chunked      # ours, not G5's: two full-vocabulary heads with fp32 logits do not fit at B=32 on an
+                        # A100 40GB (out of memory). Chunked: B=16 peaks at 12.1 GiB (cached) / 8.0 GiB (sparse).
+optim: {name: adamw}

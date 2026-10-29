@@ -19,6 +19,7 @@ from __future__ import annotations
 
 import copy
 import json
+import math
 from pathlib import Path
 
 import pytest
@@ -267,6 +268,30 @@ def test_quick_compare_5_percent_boundary():
     assert not bench.quick_compare(a, b, 5.0, 2)[1]
 
 
+def test_quick_compare_small_gap_is_timer_noise():
+    """g5_v0 on A100 (GPU-bound): data 0.031 vs 0.035 ms, 11.8% apart, is a 4 us gap: it passes as "small".
+    The same 11.8% on a part where the gap is above min_abs_ms still fails."""
+    a, b = _two_runs()
+    a["layer"]["regions"]["data"] = {**a["layer"]["regions"].get("data", {}), "median": 0.031, "level": 1}
+    b["layer"]["regions"]["data"] = {**b["layer"]["regions"].get("data", {}), "median": 0.035, "level": 1}
+    rows, ok, _ = bench.quick_compare(a, b, 5.0, 2)
+    assert ok and {r[0]: r[4] for r in rows}["data"] == "small"
+    b["layer"]["regions"]["data"]["median"] = 0.031 + 0.0501          # gap just above 0.05 ms
+    rows, ok, _ = bench.quick_compare(a, b, 5.0, 2)
+    assert not ok and {r[0]: r[4] for r in rows}["data"] == "FAIL"
+    b["layer"]["regions"]["data"]["median"] = 0.035
+    assert not bench.quick_compare(a, b, 5.0, 2, min_abs_ms=0.0)[1]      # 0 = the old rule: any gap counts
+
+
+def test_compare_lines_say_why_a_small_gap_passes():
+    a, b = _two_runs()
+    a["layer"]["regions"]["data"] = {**a["layer"]["regions"].get("data", {}), "median": 0.031, "level": 1}
+    b["layer"]["regions"]["data"] = {**b["layer"]["regions"].get("data", {}), "median": 0.035, "level": 1}
+    rows, ok, why = bench.quick_compare(a, b, 5.0, 2)
+    out = "\n".join(bench.compare_lines(rows, ok, why, None, 5.0, 2))
+    assert "ok (gap < min)" in out and "PASS" in out and "timer noise" in out
+
+
 def test_quick_compare_refuses_different_gpu_and_vocab():
     a, b = _two_runs()
     b["meta"]["gpu"] = "OTHER-GPU"
@@ -490,6 +515,55 @@ def _in_process_repeats(monkeypatch):
         return bench.run_once(a, ov)[0]
     monkeypatch.setattr(bench, "repeat_run", run)
     return calls
+
+
+def test_mtp_run_logs_the_next_token_loss(tmp_path):
+    """model.mtp: loss_end is the next-token loss (G5's logged loss); the t+2 loss and the sum sit beside it."""
+    assert _run_main(tmp_path / "runs", "mtp", "--modes", "clean", "model.mtp=true") == 0
+    me = json.loads((tmp_path / "runs" / "mtp.json").read_text())["meta"]
+    assert {"loss_end", "loss_end_mtp", "loss_end_total"} <= set(me)
+    assert math.isclose(me["loss_end"] + me["loss_end_mtp"], me["loss_end_total"], rel_tol=1e-5)
+    assert me["loss_after_first_step"] < me["loss_end_total"]          # one head's loss, not the sum
+
+
+def _oom_above(monkeypatch, fits):
+    """train_step raises CUDA out of memory whenever the batch is larger than `fits` (a smaller GPU)."""
+    real, tried = bench.train_step, []
+
+    def step(s):
+        if not tried or tried[-1] != s.loader.B:
+            tried.append(s.loader.B)
+        if s.loader.B > fits:
+            raise torch.cuda.OutOfMemoryError("fake: CUDA out of memory")
+        return real(s)
+    monkeypatch.setattr(bench, "train_step", step)
+    return tried
+
+
+def test_auto_batch_halves_on_out_of_memory_until_it_fits(tmp_path, monkeypatch, capsys):
+    tried = _oom_above(monkeypatch, fits=2)
+    code = _run_main(tmp_path / "runs", "fit", "--modes", "clean", "run.batch_size=auto")    # auto on CPU: B=8
+    assert code == 0 and tried == [8, 4, 2]
+    run = json.loads((tmp_path / "runs" / "fit.json").read_text())
+    assert run["meta"]["batch_size"] == 2 and run["config"]["run"]["batch_size"] == 2
+    notes = run["meta"]["notes"]
+    assert any("B=8 ran out of GPU memory, fell back to B=4" in n for n in notes)
+    assert any("B=4 ran out of GPU memory, fell back to B=2" in n for n in notes)
+    assert "fell back to B=2" in capsys.readouterr().out
+    assert bench.AUTO_NOTES == [] and bench.LAST_OOM == {}          # nothing leaks into the next run
+
+
+def test_explicit_batch_is_never_changed_on_out_of_memory(tmp_path, monkeypatch):
+    tried = _oom_above(monkeypatch, fits=2)
+    code = _run_main(tmp_path / "runs", "fixed", "--modes", "clean", "run.batch_size=8")
+    assert code == 3 and tried == [8]
+    assert not (tmp_path / "runs" / "fixed.json").exists() and bench.LAST_OOM == {}
+
+
+def test_auto_batch_stops_at_one(tmp_path, monkeypatch):
+    tried = _oom_above(monkeypatch, fits=0)
+    code = _run_main(tmp_path / "runs", "never", "--modes", "clean", "run.batch_size=auto")
+    assert code == 3 and tried == [8, 4, 2, 1] and bench.LAST_OOM == {}
 
 
 def test_repeat_cmd_is_one_run_with_a_new_tag_against_the_first():

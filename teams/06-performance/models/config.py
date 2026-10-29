@@ -19,6 +19,8 @@ import yaml
 
 MOE_KEYS = {"num_experts", "top_k", "num_shared", "bias_gamma", "dispatch"}   # SparseMoE keyword arguments
 CE_IMPLS = ("torch", "chunked")
+ATTN_IMPLS = ("sdpa", "eager")
+KE_MODES = ("dynamic", "cached", "sparse")
 
 
 @dataclass
@@ -28,11 +30,12 @@ class ModelConfig:
     n_layer: int = 9
     n_head: int = 8                  # query heads
     n_kv_head: int | None = None     # GQA: key/value heads, divides n_head; None = n_head (plain multi-head)
+    attn_impl: str = "sdpa"          # sdpa (F.scaled_dot_product_attention) | eager (scores, mask, softmax: G5 harness)
     n_embd: int = 256                # d_model
     mlp_ratio: int = 4               # MLP / expert hidden = mlp_ratio * n_embd
     embedding: str = "table"         # table (tied head) | ke1 (Kronecker v1, untied head)
     ke_max_pos: int = 32             # KE v1 byte positions: codec dim = 256 * ke_max_pos
-    ke_mode: str = "dynamic"         # KE v1: dynamic (codec every step) | cached (V x D table)
+    ke_mode: str = "dynamic"         # KE v1: dynamic (codec every step) | cached (V x D table) | sparse (no codec)
     ffn: str = "mlp"                 # mlp | moe
     moe: dict = field(default_factory=lambda: dict(num_experts=8, top_k=2, num_shared=0,
                                                    bias_gamma=0.01, dispatch="loop"))
@@ -40,12 +43,17 @@ class ModelConfig:
     rev_h: float = 1.0               # midpoint step size
     ce_impl: str = "torch"           # torch: full fp32 logits (baseline) | chunked: ce_chunks pieces, checkpointed
     ce_chunks: int = 8
+    mtp: bool = False                # True: a second untied head predicts token t+2 (G5 config_v0 loss.train_on);
+                                     # the loss is ntp + mtp, GPT.last_losses keeps both (ntp is the logged loss)
 
     def __post_init__(self):
         assert self.embedding in ("table", "ke1"), f"embedding={self.embedding!r}"
         assert self.ffn in ("mlp", "moe"), f"ffn={self.ffn!r}"
         assert self.n_embd % self.n_head == 0, "n_embd must be divisible by n_head"
         assert self.ce_impl in CE_IMPLS, f"ce_impl={self.ce_impl!r} not in {CE_IMPLS}"
+        assert self.attn_impl in ATTN_IMPLS, f"attn_impl={self.attn_impl!r} not in {ATTN_IMPLS}"
+        assert self.ke_mode in KE_MODES, f"ke_mode={self.ke_mode!r} not in {KE_MODES}"
+        assert not (self.mtp and self.block_size < 3), "mtp needs block_size >= 3"
         unknown = sorted(set(self.moe) - MOE_KEYS)
         assert not unknown, f"unknown moe keys {unknown}; known: {sorted(MOE_KEYS)}"
         if self.n_kv_head is None:

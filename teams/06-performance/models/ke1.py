@@ -14,14 +14,18 @@ Definition:
 Token byte table (the data contract, used by tests too): a tuple
     (bytes [V, P] uint8, lens [V] int64); bytes past lens[t] are ignored; lens >= 1.
 
-Modes (upstream names):
+Modes (dynamic and cached are the upstream names):
     dynamic  keep only the [V, P] byte table, recompute the codec every forward (default)
     cached   precompute the [V, D] codec table once, forward is an index_select
-Both give the same output. Memory at B=32, T=512: dynamic builds a [16384, 8192] fp32 codec (512 MB,
+    sparse   never build the D-dim codec (closed form below); G5's harness uses upstream "cached"
+All three give the same output. Memory at B=32, T=512: dynamic builds a [16384, 8192] fp32 codec (512 MB,
 plus ~512 MB of z-norm temporaries; 256 MB bf16 saved for backward); cached keeps a [V, D] fp32 table
-(4 GiB for V = 131072). A sparse path (never building the D-dim codec) is a week-2 fast version:
-z-norm of a vector with L entries of 1/sqrt(L) has mean sqrt(L)/D and a closed-form std, so
-W @ z = (W[:, idx].sum / sqrt(L) - mean * W.sum(1)) / std.
+(4 GiB for V = 131072). sparse keeps only the byte table and gathers L <= P columns of W per token.
+
+Sparse closed form (G4's Lemma 1: every code has two values). kappa has n = min(L, P) entries of a = 1/sqrt(L) at
+idx_p = b_p * P + p and zeros elsewhere, so mean m = n * a / D, var = (n * a^2 - D * m^2) / (D - 1) (Bessel), and
+    W @ z = (a * sum_p W[:, idx_p] - m * W.sum(1)) / (std + eps)
+Per token that is 2 * P * d FLOPs forward instead of 2 * D * d (perfkit/metrics.py counts it in HFU).
 """
 from __future__ import annotations
 
@@ -29,11 +33,12 @@ import math
 
 import torch
 import torch.nn as nn
+import torch.nn.functional as F
 
 from perfkit.regions import region
 
 N_BYTES = 256
-MODES = ("dynamic", "cached")
+MODES = ("dynamic", "cached", "sparse")
 
 
 def token_bytes_random(vocab_size: int, max_pos: int = 32, seed: int = 0):
@@ -88,6 +93,26 @@ class KroneckerEmbedding(nn.Module):
                                   self.max_pos)
         return out.view(*idx.shape, self.D)
 
+    def sparse_embed(self, idx: torch.Tensor) -> torch.Tensor:
+        """idx [...] -> W @ kappa [..., d_model] without the D-dim codec (closed form in the module docstring)."""
+        flat = idx.reshape(-1)
+        P, W = self.max_pos, self.proj.weight
+        tb = self.byte_table.index_select(0, flat).long()
+        lens = self.lens.index_select(0, flat)
+        pos = torch.arange(P, device=flat.device)
+        cols = tb * P + pos                                             # [N, P] codec index of each byte
+        valid = (pos < lens.unsqueeze(1)).float()                       # bytes past lens[t] weigh 0
+        # embedding_bag sums the chosen rows of W^T without a [N, P, d] gather; its backward scatters into W.
+        s = F.embedding_bag(cols, W.t(), per_sample_weights=valid.to(W.dtype), mode="sum").float()
+        n = valid.sum(1)
+        a = torch.rsqrt(lens.clamp_min(1).float())                      # kronecker_codec normalises by lens
+        m = n * a / self.D
+        std = ((n * a * a - self.D * m * m) / (self.D - 1)).sqrt()
+        out = (a.unsqueeze(1) * s - m.unsqueeze(1) * W.float().sum(1)) / (std + 1e-6).unsqueeze(1)
+        return out.to(W.dtype).view(*idx.shape, -1)
+
     def forward(self, idx: torch.Tensor) -> torch.Tensor:
         with region("embed.ke", 3):
+            if self.mode == "sparse":
+                return self.sparse_embed(idx)
             return self.proj(self.codec(idx).to(self.proj.weight.dtype))

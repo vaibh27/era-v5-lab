@@ -7,19 +7,26 @@ The one place these numbers are computed: perfkit.bench calls it, and G8 gets th
     run_metadata(device)           the device, version and git fields of the run JSON "meta" (perfkit/schema.py)
     flops_per_token(model, T, opt_flops_per_step=0, tokens_per_step=None)
                                    model_flops_per_token, hw_flops_per_token, params_total, params_active
-    mfu(flops, tokens_per_s, peak_tflops)   {"mfu", "hfu", "model_tflops_per_s"}
+    mfu(flops, tokens_per_s, peak_tflops, reason=None)
+                                   {"mfu", "hfu", "model_tflops_per_s", "mfu_reason"}
+    peak_missing_reason(device, device_name, dtype)   why there is no peak: not_cuda | unknown_gpu | no_peak_for_dtype
     memory(device)                 peak allocated / reserved GB (None off CUDA)
     gpu_telemetry(device)          SM clock, temperature, power, throttle reasons from nvidia-smi (None off CUDA)
     telemetry_during(device, work) the same, sampled while work() keeps the GPU busy
     throttle_flags(tel)            slowdown reasons in a sample (power cap, thermal, ...), None if not reported
     GpuSampler(device)             GPU utilization, memory, clocks, power, temperature sampled through the clean
-                                   steps (run["system"], for G8)
+                                   steps (run["system"], for G8): the summary and every 1 s sample
 
 FLOPs per token (T = sequence length, L = layers, d = width, N_active from GPT.param_counts):
     model_flops_per_token = 6 * N_active + 12 * L * d * T      (PaLM; attention scores counted non-causal)
     hw_flops_per_token    = model + 2 forwards of the stack when reversible (invert + recompute)
-                            + 2 * head again when ce_impl=chunked (it recomputes the head)
+                            + 2 * heads again when ce_impl=chunked (it recomputes the head, and the MTP head)
+                            + 6 * (num_experts - top_k) * expert params per MoE layer when moe.dispatch=dense
+                              (every expert runs on every token; a reversible stack recomputes those too)
+                            - 6 * (D - P) * d when ke_mode=sparse (it gathers P columns of the KE projection,
+                              not a [D, d] matmul)
                             + optimizer FLOPs per step (Muon Newton-Schulz) / tokens per step
+N_active counts the MTP head when model.mtp is on (it is a second LM head every token multiplies with).
 MFU uses model FLOPs, HFU hardware FLOPs; both against the dense vendor peak for the dtype the run used.
 
 Extra, still to write: goodput (time and tokens, badput buckets), HBM GB/s per GPU for the roofline.
@@ -73,6 +80,17 @@ def peak_tflops(device_name: str, dtype: str):
     """(peak TFLOPS for this dtype or None, gpu_spec or None)."""
     p = gpu_peak(device_name)
     return p.get(dtype), p.get("spec")
+
+
+MFU_REASONS = ("not_cuda", "unknown_gpu", "no_peak_for_dtype", "no_peak")
+
+
+def peak_missing_reason(device, device_name: str, dtype: str) -> str:
+    """Why MFU is empty (MFU_REASONS): not a CUDA GPU, a GPU missing from PEAKS, or no peak for this dtype."""
+    if device.type != "cuda":
+        return "not_cuda"
+    p = gpu_peak(device_name)
+    return "unknown_gpu" if not p else "no_peak_for_dtype"
 
 
 def device_name(device) -> str:
@@ -198,13 +216,17 @@ class GpuSampler:
     One nvidia-smi child process in loop mode (--loop-ms) writes one sample per interval to a temp file. Nothing
     runs in this process, so the timed steps pay only the child's own CPU (one sample a second by default).
     summary(): min / median / max / mean of every SAMPLE_FIELDS metric, and how many samples had a slowdown
-    reason (SLOWDOWN) active, with their names.
+    reason (SLOWDOWN) active, with their names. "series" keeps every sample (one per interval, 1 s by default;
+    G8 rolls them up into its own windows): t_s = seconds since the first sample (nvidia-smi's timestamp, None
+    when it cannot be read), the SAMPLE_FIELDS keys (None for [N/A]) and "slowdown" (reason names, [] for
+    none, None when the driver gives no reasons). "start_time" is the first sample's nvidia-smi timestamp.
     """
 
     def __init__(self, device, interval_ms: int = 1000):
         self.device, self.interval_ms = device, interval_ms
         self.fields = list(SAMPLE_FIELDS)
         self.reason = None
+        self.ts_field = "timestamp"                  # first column of every sample line
         self.started = False
         self.rows = []
         self._proc = self._file = None
@@ -215,7 +237,7 @@ class GpuSampler:
         sel = _smi_select(self.device)
         self.reason = next((f for f in REASON_FIELDS
                             if _sh(["nvidia-smi", sel, f"--query-gpu={f}", "--format=csv,noheader"])), None)
-        query = self.fields + ([self.reason] if self.reason else [])
+        query = self._query()
         self._file = tempfile.TemporaryFile(mode="w+")
         self._proc = subprocess.Popen(["nvidia-smi", sel, f"--query-gpu={','.join(query)}",
                                        "--format=csv,noheader,nounits", f"--loop-ms={self.interval_ms}"],
@@ -238,19 +260,45 @@ class GpuSampler:
         self._proc = self._file = None
         return False
 
+    def _query(self) -> list:
+        return [self.ts_field] + self.fields + ([self.reason] if self.reason else [])
+
     def parse_line(self, line: str) -> dict | None:
-        """One CSV line -> {field: float, reason field: int}; None for a line with the wrong number of values."""
-        query = self.fields + ([self.reason] if self.reason else [])
+        """One CSV line -> {timestamp: str, field: float, reason field: int}; None for a line with the wrong
+        number of values."""
+        query = self._query()
         vals = [v.strip() for v in line.split(",")]
         if len(vals) != len(query):
             return None
         row = {}
         for f, v in zip(query, vals):
             try:
-                row[f] = int(v, 16) if f == self.reason else float(v)
+                row[f] = v if f == self.ts_field else int(v, 16) if f == self.reason else float(v)
             except ValueError:                        # [N/A], [Not Supported]
                 row[f] = None
         return row
+
+    @staticmethod
+    def _seconds(ts):
+        """nvidia-smi timestamp '2026/10/29 07:48:04.123' -> seconds since the epoch (local time), or None."""
+        from datetime import datetime
+        try:
+            return datetime.strptime(ts, "%Y/%m/%d %H:%M:%S.%f").timestamp()
+        except (TypeError, ValueError):
+            return None
+
+    def series(self) -> list:
+        t = [self._seconds(r.get(self.ts_field)) for r in self.rows]
+        t0 = next((v for v in t if v is not None), None)
+        out = []
+        for r, tv in zip(self.rows, t):
+            row = {"t_s": None if tv is None or t0 is None else round(tv - t0, 3)}
+            row.update({key: r.get(f) for f, key in SAMPLE_FIELDS.items()})
+            flags = throttle_flags({"throttle_reasons": r[self.reason]}) if self.reason and \
+                r.get(self.reason) is not None else None
+            row["slowdown"] = flags
+            out.append(row)
+        return out
 
     def summary(self) -> dict | None:
         if not self.started:
@@ -268,6 +316,8 @@ class GpuSampler:
                        and (f := throttle_flags({"throttle_reasons": r[self.reason]}))]
             out["slowdown_samples"] = len(flagged)
             out["slowdown_reasons"] = sorted({n for names in flagged for n in names})
+        out["start_time"] = self.rows[0].get(self.ts_field) if self.rows else None
+        out["series"] = self.series()
         return out
 
 
@@ -301,19 +351,28 @@ def flops_per_token(model, T: int, opt_flops_per_step: float = 0.0, tokens_per_s
     total, active = model.param_counts()
     L, d = m.n_layer, m.n_embd
     model_fpt = 6 * active + 12 * L * d * T
-    head = model.head.weight.numel()
+    head = model.head.weight.numel() + (model.mtp_head.weight.numel() if model.mtp_head is not None else 0)
     ke = model.tok.proj.weight.numel() if m.embedding == "ke1" else 0
-    stack_fwd = 2 * (active - head - ke) + 4 * L * d * T
-    hw = model_fpt + (2 * stack_fwd if m.reversible else 0) + (2 * head if m.ce_impl == "chunked" else 0)
+    idle = 0                                        # expert weights that run but are not counted as active
+    for moe in model.moe_layers():
+        if moe.dispatch == "dense":
+            per_expert = moe.experts[0].c_fc.weight.numel() + moe.experts[0].c_proj.weight.numel()
+            idle += per_expert * (moe.num_experts - moe.top_k)
+    stack_fwd = 2 * (active - head - ke + idle) + 4 * L * d * T
+    hw = model_fpt + 6 * idle + (2 * stack_fwd if m.reversible else 0) + (2 * head if m.ce_impl == "chunked" else 0)
+    if m.embedding == "ke1" and m.ke_mode == "sparse":
+        hw -= 6 * (ke - m.ke_max_pos * d)                    # ke = D * d; sparse runs P * d of it
     if opt_flops_per_step and tokens_per_step:
         hw += opt_flops_per_step / tokens_per_step
     return {"model_flops_per_token": model_fpt, "hw_flops_per_token": hw,
             "params_total": total, "params_active": active}
 
 
-def mfu(flops: dict, tokens_per_s: float, peak_tflops: float | None) -> dict:
-    """flops: from flops_per_token (hw_flops_per_token optional). mfu / hfu are None without a peak."""
-    out = {"model_tflops_per_s": flops["model_flops_per_token"] * tokens_per_s / 1e12, "mfu": None, "hfu": None}
+def mfu(flops: dict, tokens_per_s: float, peak_tflops: float | None, reason: str | None = None) -> dict:
+    """flops: from flops_per_token (hw_flops_per_token optional). mfu / hfu are None without a peak, and then
+    mfu_reason says why (reason, from peak_missing_reason; "no_peak" when not given). None means missing, not 0."""
+    out = {"model_tflops_per_s": flops["model_flops_per_token"] * tokens_per_s / 1e12, "mfu": None, "hfu": None,
+           "mfu_reason": None if peak_tflops else (reason or "no_peak")}
     if peak_tflops:
         out["mfu"] = flops["model_flops_per_token"] * tokens_per_s / (peak_tflops * 1e12)
         if flops.get("hw_flops_per_token") is not None:

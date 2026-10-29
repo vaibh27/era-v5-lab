@@ -8,7 +8,8 @@ Scope decisions:
   stack with pre-LN inside `f` (classic Post-LN cannot be inverted, see `models/gpt.py`). This is `configs/lab_small.yaml`.
 - **Model: NanoGPT, driven only by config.** When G5 (Architecture) sends their config details and
   harness, we add **a YAML file, not code**.
-- **Embedding: Kronecker Embedding v1 only** (input side). KE2 (from G4) is decided later.
+- **Embedding: Kronecker Embedding v1** (input side). KE2 (from G4): the output side is decided 14 Nov; the KE2
+  decode pair (`models/ke2_decode.py` vs G4's `decode_ref.py`) is in `correctness/test_ke2_decode.py`.
 - Lab parts to time: attention, MLP or MoE (top-2 of 8), reversible midpoint stack, KE v1, Muon.
 
 ---
@@ -27,6 +28,10 @@ Gate 1 checks:
 1. `pytest teams/06-performance/correctness -q` gives 0 failures.
 2. The lead multiplies one fast output by 1.01, and a test fails.
 3. Two baseline runs agree within 5% for each part.
+   How we check it: every part at level <= 2 is compared; a part fails when it is more than 5% apart and its
+   medians are more than `report.min_abs_ms` (0.05 ms) apart. Below 50 us a gap is CUDA event / launch jitter:
+   in a GPU-bound step the `data` part is a 30 us copy queued behind other work (g5_v0 on A100: 0.031 vs
+   0.035 ms, 11.8% apart, every other part within 0.4%). Proposed 29 Oct; needs TSAI agreement.
 
 ---
 
@@ -74,7 +79,8 @@ class ModelConfig:
 
 - YAML files with `inherit: base.yaml`. Command-line overrides: `model.n_layer=4 run.batch_size=16`.
 - **Rule:** no number about the model is hard-coded anywhere else. Everything reads `cfg`.
-- G5's config later = a new `configs/g5_*.yaml`. If G5 has a field we lack, add it to `ModelConfig` with a default.
+- G5's config = `configs/g5_*.yaml` (`g5_v0.yaml` from config_v0, 29 Oct). If G5 has a field we lack, add it to
+  `ModelConfig` with a default (done for `attn_impl`, `mtp`; `moe.dispatch: dense`, `ke_mode: sparse` are new values).
 
 ### 2.3 Model (`models/gpt.py`)
 

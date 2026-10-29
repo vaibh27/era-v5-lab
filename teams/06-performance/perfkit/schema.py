@@ -87,7 +87,7 @@ def example_run() -> dict:
         "clean": {"step_ms": _s(36.5), "data_ms": _s(0.4)},
         "layer": {"level": 3, "overhead_pct": 0.8, "step_ms": _s(36.8), "step_ms_recorder_off": _s(36.5),
                   "regions": regions},
-        "metrics": {"tokens_per_step": 16384, "tokens_per_s": 448876, "mfu": 0.031, "hfu": 0.052,
+        "metrics": {"tokens_per_step": 16384, "tokens_per_s": 448876, "mfu": 0.031, "hfu": 0.052, "mfu_reason": None,
                     "params_total": 53_200_000, "params_active": 24_900_000,
                     "model_flops_per_token": 1.6e8, "hw_flops_per_token": 2.7e8, "peak_tflops": 312},
     }

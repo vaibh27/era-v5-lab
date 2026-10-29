@@ -13,6 +13,9 @@ Pairs (fast fp32 vs reference fp64; outputs, the input gradient and all paramete
   attention.causal.fallback     n_kv_head = n_head / 2, repeat_interleave path (models.gpt._SDPA_GQA = False)
   attention.causal.mqa_fallback n_kv_head = 1, repeat_interleave path
   attention.causal.lab_fallback n_kv_head = n_head / 4, repeat_interleave path
+  attention.causal.eager        n_kv_head = n_head / 2, attn_impl="eager" (G5 harness: scores, mask, softmax)
+  attention.causal.eager_mha    n_kv_head = n_head,     attn_impl="eager"
+  attention.causal.eager_mqa    n_kv_head = 1,          attn_impl="eager"
 T = 37 is not a power of 2. Weights and biases are random and large enough that the softmax is not uniform, so
 the bias terms and the mask matter.
 
@@ -61,8 +64,8 @@ def naive_attention(x, w_attn, b_attn, w_proj, b_proj, n_head, n_kv_head):
     return torch.cat(heads, dim=-1) @ w_proj.T + b_proj
 
 
-def _module(n_kv_head, seed=0):
-    cfg = ModelConfig(n_head=N_HEAD, n_kv_head=n_kv_head, n_embd=N_EMBD)
+def _module(n_kv_head, seed=0, attn_impl="sdpa"):
+    cfg = ModelConfig(n_head=N_HEAD, n_kv_head=n_kv_head, n_embd=N_EMBD, attn_impl=attn_impl)
     mod = GQAttention(cfg, "attn")
     g = torch.Generator().manual_seed(seed)
     with torch.no_grad():
@@ -81,12 +84,12 @@ def _with_sdpa_gqa(flag, fn):
         gpt._SDPA_GQA = old
 
 
-def _register(name, n_kv_head, sdpa_gqa):
+def _register(name, n_kv_head, sdpa_gqa, attn_impl="sdpa"):
     @pair(name, tol=1e-5, grad_tol=1e-4)
     def build(device):
-        if sdpa_gqa and n_kv_head != N_HEAD and not gpt._SDPA_GQA:
+        if attn_impl == "sdpa" and sdpa_gqa and n_kv_head != N_HEAD and not gpt._SDPA_GQA:
             pytest.skip("SDPA enable_gqa needs torch >= 2.5")
-        fast_mod = _module(n_kv_head).to(device)
+        fast_mod = _module(n_kv_head, attn_impl=attn_impl).to(device)
         ref_mod = to64(fast_mod)
         x = torch.randn(B, T, N_EMBD, device=device,
                         generator=torch.Generator(device=device).manual_seed(1)).requires_grad_(True)
@@ -110,6 +113,9 @@ _register("attention.causal.lab", N_HEAD // 4, sdpa_gqa=True)
 _register("attention.causal.fallback", N_HEAD // 2, sdpa_gqa=False)
 _register("attention.causal.mqa_fallback", 1, sdpa_gqa=False)
 _register("attention.causal.lab_fallback", N_HEAD // 4, sdpa_gqa=False)
+_register("attention.causal.eager", N_HEAD // 2, sdpa_gqa=True, attn_impl="eager")
+_register("attention.causal.eager_mha", N_HEAD, sdpa_gqa=True, attn_impl="eager")
+_register("attention.causal.eager_mqa", 1, sdpa_gqa=True, attn_impl="eager")
 
 
 @pair("attention.causal.bf16", dtype=torch.bfloat16)

@@ -3,8 +3,8 @@
 What this file proves (G6_Team_Task_Plan.md, Task 4: "compare the reference against the fast version, forward and
 backward, using the framework; pytest passes, and fails under the 1.01x mutation"):
 
-  * One @pair per KE mode in models.ke1.MODES ("ke1.dynamic", "ke1.cached"; a future "ke1.sparse" is picked up
-    by the loop below with no change here). Each pair compares the fast module (fp32) with the reference (fp64)
+  * One @pair per KE mode in models.ke1.MODES ("ke1.dynamic", "ke1.cached", "ke1.sparse"; a new mode is picked
+    up by the loop below with no change here). Each pair compares the fast module (fp32) with the reference (fp64)
     on the outputs and on the gradient of the projection weight (grad_param[0]).
   * A second pair per mode, ".edge", on a hand-made byte table with the awkward tokens: one byte, exactly P bytes,
     all-zero bytes, all-255 bytes, repeated bytes.

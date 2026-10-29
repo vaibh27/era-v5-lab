@@ -16,6 +16,8 @@ Pairs (outputs logits and loss; every parameter gradient):
   model.lab_small        configs/lab_small.yaml, fp32. The reference routes by itself, so the router is checked too.
   model.base             configs/base.yaml (table embedding with tied head, dense MLP, plain stack), fp32.
   model.lab_small.chunked  lab_small with model.ce_impl=chunked, fp32: loss only (no logits), every gradient.
+  model.lab_small.mtp    lab_small with the t+2 head (model.mtp), fp32; .mtp.chunked the same with ce_impl=chunked.
+  model.g5_v0            configs/g5_v0.yaml (G5 config_v0 settings: eager attention, MTP, dense MoE, sparse KE), fp32.
   model.lab_small.bf16   lab_small under bf16 autocast, TOLERANCES[bfloat16]. In bf16 a few tokens go to other
                          experts than in fp64 (4 of 128 here), and a flipped token makes the expert gradients
                          noise (13-26%). So this reference REPLAYS the fast routing (the expert choice only, from
@@ -81,6 +83,8 @@ def _model(config, device, overrides=()):
     model = GPT(mcfg, tb).to(device).train()
     with torch.no_grad():
         model.head.weight.mul_(HEAD_SCALE)          # tied in base: the embedding table too
+        if model.mtp_head is not None:
+            model.mtp_head.weight.mul_(HEAD_SCALE)
     return model, mcfg
 
 
@@ -153,10 +157,17 @@ def ref_forward(rm, cfg, idx, targets, routes=None, margins=None):
     else:
         for i, blk in enumerate(rm.blocks):
             x = x + f(i, blk, x)
-    logits = ref_ln(x, rm.ln_f) @ rm.head.weight.T
-    lg = logits.reshape(-1, logits.shape[-1])
-    loss = (torch.logsumexp(lg, -1) - lg.gather(1, targets.reshape(-1, 1)).squeeze(1)).mean()
+    h = ref_ln(x, rm.ln_f)
+    logits = h @ rm.head.weight.T
+    loss = ref_ce(logits, targets)
+    if cfg.mtp:                                       # position t predicts token t+2 = targets[t + 1]
+        loss = loss + ref_ce(h[:, :-1] @ rm.mtp_head.weight.T, targets[:, 1:])
     return logits, loss
+
+
+def ref_ce(logits, targets):
+    lg = logits.reshape(-1, logits.shape[-1])
+    return (torch.logsumexp(lg, -1) - lg.gather(1, targets.reshape(-1, 1)).squeeze(1)).mean()
 
 
 def _params(m):
@@ -198,6 +209,14 @@ _fp32_pair("model.base", "base.yaml")
 # model.lab_small passes 5e-5 only because its 3-D head matmul takes a BLAS kernel that rounds differently.
 # Still 100x below the 1.01 drill (1e-2).
 _fp32_pair("model.lab_small.chunked", "lab_small.yaml", ["model.ce_impl=chunked"], grad_tol=1e-4)
+# G5 config_v0 pieces on the lab model: the t+2 head (plain and chunked loss), and G5's eager attention with
+# every expert run densely and the sparse KE path. Same reference (naive attention is what eager computes).
+_fp32_pair("model.lab_small.mtp", "lab_small.yaml", ["model.mtp=true"])
+_fp32_pair("model.lab_small.mtp.chunked", "lab_small.yaml", ["model.mtp=true", "model.ce_impl=chunked"],
+           grad_tol=1e-4)
+# g5_v0 runs KE in G5's "cached" mode (a 4 GiB [V, D] table); here the sparse mode, which test_ke.py ties to it.
+# g5_v0 uses ce_impl=chunked, so grad_tol 1e-4 as model.lab_small.chunked (ln_f gradient, measured 6.6e-5).
+_fp32_pair("model.g5_v0", "g5_v0.yaml", ["model.ke_mode=sparse"], grad_tol=1e-4)
 
 
 @pair("model.lab_small.bf16", dtype=torch.bfloat16)

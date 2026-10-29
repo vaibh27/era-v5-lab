@@ -22,18 +22,18 @@ Levels: 1 = phases, 2 = per layer and big parts (gated at 5%), 3 = inside a laye
 | Part | Region (level) | Switch: week-1 baseline → later | Likely bottleneck | Later optimization |
 |---|---|---|---|---|
 | Data: batch sampling + host-to-device copy | `data` (1) | `data.loader: simple → prefetch` | CPU, copy overlap | background prefetch thread, pinned buffers |
-| KE v1 codec + projection | `embed.ke` (3) | `model.ke_mode: dynamic → sparse` | memory (8192-dim codec) | gather + sum (`embedding_bag`), fuse the position add |
+| KE v1 codec + projection | `embed.ke` (3) | `model.ke_mode: dynamic / cached → sparse` (sparse done; G5 runs cached, a 4 GiB table) | memory (8192-dim codec) | sparse: gather + sum (`embedding_bag`), no codec; next: fuse the position add |
 | Position add | `embed` (2) | | memory | fuse into the KE kernel |
 | LayerNorm × 2 per block | `blockN.ln1`, `blockN.ln2` (3) | `model.norm_impl: torch → fused` | memory | fuse with the residual add or the next matmul |
 | QKV matmul + head split | `blockN.attn.qkv` (3) | | compute | tensor-core-friendly shapes, fused split |
-| Attention kernel | `blockN.attn.sdpa` (3) | `model.attn_impl: sdpa → flash3 / flex` | compute / memory | FlashAttention-3 (H100), FA4 / cuDNN (B200) |
+| Attention kernel | `blockN.attn.sdpa` (3) | `model.attn_impl: eager (G5) → sdpa → flash3 / flex` | compute / memory | FlashAttention-3 (H100), FA4 / cuDNN (B200) |
 | Output copy + projection | `blockN.attn.proj` (3) | | memory (the copy) | a layout that needs no copy |
 | Dense MLP | `blockN.mlp` (3) | | compute | fused GELU |
 | MoE router: matmul, softmax, top-k, gates | `blockN.moe.router` (3) | | launch | one fused router kernel |
-| MoE dispatch: gather, experts, combine | `blockN.moe.dispatch` (3), `.dispatch.expertE` (3); sorted path adds `.dispatch.grouped` | `model.moe.dispatch: loop → sorted` | **host syncs + launch** | sort routes, pack them per expert, run one batched matmul per projection (one host sync for the largest group) |
+| MoE dispatch: gather, experts, combine | `blockN.moe.dispatch` (3), `.dispatch.expertE` (3); sorted path adds `.dispatch.grouped`, dense `.dispatch.dense` | `model.moe.dispatch: dense (G5, every expert) → loop → sorted` | **host syncs + launch** | sort routes, pack them per expert, run one batched matmul per projection (one host sync for the largest group) |
 | Shared experts | `blockN.moe.shared` (3) | | compute | batch with the routed experts |
 | Residual / midpoint arithmetic | inside `blockN` (2) | | memory | fusion |
-| Final LN + LM head + cross-entropy | `head+loss` (2) | `model.ce_impl: torch → chunked → fused` | **memory (fp32 logits)** | fused linear + cross-entropy |
+| Final LN + LM head + cross-entropy (+ MTP head when `model.mtp`) | `head+loss` (2) | `model.ce_impl: torch → chunked → fused` | **memory (fp32 logits)** | fused linear + cross-entropy |
 | Backward of every part above | `bwd:<part>` | same switches | ~2× forward | follows the forward fixes |
 | Reversible: invert, recompute, local backward | `bwd.invert:blockN`, `bwd.recompute:blockN`, `bwd:blockN.grad` (3) | `model.reversible` | ~2× extra forward | fuse invert + recompute, cache cheap pieces |
 | fp16 grad unscale | `opt.unscale` (2) | | small | |

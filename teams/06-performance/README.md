@@ -54,8 +54,17 @@ docs/          PLAN.md (interfaces, what is done and left), PARTS.md (every part
 - **Baseline v0 (A100-SXM4-40GB, commit `f1f4986`):** 507 ms per step, MFU 3.3%; two runs agree within 3.6% on
   every gated part ([`results/baseline_v0.md`](results/baseline_v0.md)). The five slowest parts, each with a trace
   and a week-2 idea: [`results/slowest5_v0.md`](results/slowest5_v0.md).
-- **Left:** the KE2 pair (waits for G4's decode reference), the MoE all-to-all timed on 2 GPUs (`torchrun`),
-  `perfkit/roofline.py`.
+- **G4 / G5 alignment (29 Oct):** `configs/g5_v0.yaml` holds G5's config_v0 settings and how their harness runs
+  them (eager attention, a t+2 MTP head, every expert on every token, KE cached); sizes stay lab_small until TSAI
+  fills them on 31 Oct. New switches: `model.attn_impl: eager`, `model.mtp`, `model.moe.dispatch: dense`,
+  `model.ke_mode: sparse`. The KE2 pair: `models/ke2_decode.py` against G4's `decode_ref.py` on their
+  131072-row table (`correctness/test_ke2_decode.py`).
+- **G5's own harness timed:** `python -m perfkit.g5_harness` imports `teams/05-architecture/harness/train.py`
+  (unchanged) and times its four parts (data, forward, backward of both losses, AdamW step) with CUDA events;
+  same losses as their `run()` to the bit (`correctness/test_g5_harness.py`). `--set key=value` for sizes.
+- **Out of memory:** with `run.batch_size: auto` the bench halves B and retries until the run fits (the
+  fallback is a run note); an explicit `run.batch_size` ends with exit code 3 as before.
+- **Left:** the MoE all-to-all timed on 2 GPUs (`torchrun`), `perfkit/roofline.py`.
 
 **Distributed optimizer follow-up:** the current Muon/AdamW implementation is local-process only. A DDP integration is implementable follow-up work: make parameter selection robust to the DDP `module.` prefix (or build from the unwrapped module), handle MoE experts unused on a rank, and add a multi-process correctness/smoke test. The current optimizer should not be treated as tested for DDP or ZeRO-style sharding.
 

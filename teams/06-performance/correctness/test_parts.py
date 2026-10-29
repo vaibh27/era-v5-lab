@@ -167,15 +167,41 @@ def test_sampler_parses_lines_and_summarises():
     s = M.GpuSampler(torch.device("cpu"))
     s.reason, s.started = "clocks_event_reasons.active", True
     s.rows = [s.parse_line(line) for line in (
-        "90, 40, 30000, 1410, 1215, 300.0, 60, 0x0000000000000000",
-        "100, 50, 30100, 1200, 1215, 400.0, 70, 0x0000000000000004",      # SwPowerCap
-        "[N/A], 50, 30100, 1300, 1215, 350.0, 65, 0x0000000000000001")]   # GpuIdle is not a slowdown
+        "2026/10/29 07:48:04.100, 90, 40, 30000, 1410, 1215, 300.0, 60, 0x0000000000000000",
+        "2026/10/29 07:48:05.100, 100, 50, 30100, 1200, 1215, 400.0, 70, 0x0000000000000004",      # SwPowerCap
+        "2026/10/29 07:48:06.150, [N/A], 50, 30100, 1300, 1215, 350.0, 65, 0x0000000000000001")]   # GpuIdle: no
     assert s.parse_line("1, 2") is None
     out = s.summary()
     assert out["samples"] == 3 and out["metrics"]["gpu_util_pct"] == {"min": 90.0, "median": 95.0, "max": 100.0,
                                                                      "mean": 95.0}
     assert out["metrics"]["sm_clock_mhz"]["median"] == 1300.0
     assert out["slowdown_samples"] == 1 and out["slowdown_reasons"] == ["SwPowerCap"]
+    # every sample, for G8's own windows: seconds since the first, None for [N/A], slowdown names per sample
+    assert out["start_time"] == "2026/10/29 07:48:04.100"
+    assert [r["t_s"] for r in out["series"]] == [0.0, 1.0, 2.05]
+    assert [r["gpu_util_pct"] for r in out["series"]] == [90.0, 100.0, None]
+    assert [r["slowdown"] for r in out["series"]] == [[], ["SwPowerCap"], []]
+    assert out["series"][0]["mem_used_mib"] == 30000.0
+
+
+def test_sampler_series_without_reasons_or_a_readable_timestamp():
+    s = M.GpuSampler(torch.device("cpu"))
+    s.started = True
+    s.rows = [s.parse_line("[N/A], 90, 40, 30000, 1410, 1215, 300.0, 60")]
+    row = s.summary()["series"][0]
+    assert row["t_s"] is None and row["slowdown"] is None and row["gpu_util_pct"] == 90.0
+
+
+def test_mfu_reason():
+    f = {"model_flops_per_token": 1e8, "hw_flops_per_token": 2e8}
+    assert M.mfu(f, 1e5, 312)["mfu_reason"] is None
+    out = M.mfu(f, 1e5, None, "unknown_gpu")
+    assert out["mfu"] is None and out["hfu"] is None and out["mfu_reason"] == "unknown_gpu"
+    assert M.mfu(f, 1e5, None)["mfu_reason"] == "no_peak"
+    assert M.peak_missing_reason(torch.device("cpu"), "arm", "fp32") == "not_cuda"
+    assert M.peak_missing_reason(torch.device("cuda"), "Some New GPU", "bf16") == "unknown_gpu"
+    assert M.peak_missing_reason(torch.device("cuda"), "Tesla T4", "bf16") == "no_peak_for_dtype"
+    assert set(M.MFU_REASONS) >= {"not_cuda", "unknown_gpu", "no_peak_for_dtype", "no_peak"}
 
 
 FAKE_SMI = """#!{python}
@@ -184,7 +210,8 @@ if not any(a.startswith("--loop-ms") for a in sys.argv):
     print("0x0000000000000000")
     sys.exit(0)
 while True:
-    print("97, 40, 30000, 1410, 1215, 300.5, 60, 0x0000000000000000", flush=True)
+    print(time.strftime("%Y/%m/%d %H:%M:%S") + ".000, 97, 40, 30000, 1410, 1215, 300.5, 60, 0x0000000000000000",
+          flush=True)
     time.sleep(0.02)
 """
 
@@ -200,4 +227,6 @@ def test_sampler_end_to_end_with_a_fake_nvidia_smi(tmp_path, monkeypatch):
     out = s.summary()
     assert out["samples"] >= 3 and out["metrics"]["power_w"]["median"] == 300.5
     assert out["slowdown_samples"] == 0
+    assert len(out["series"]) == out["samples"] and out["series"][0]["t_s"] == 0.0
+    assert all(r["power_w"] == 300.5 and r["slowdown"] == [] for r in out["series"])
     assert s._proc is None                                                  # the child was stopped
