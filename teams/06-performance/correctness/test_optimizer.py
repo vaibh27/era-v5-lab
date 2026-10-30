@@ -1,5 +1,6 @@
 """Optimizer parameter assignment, numerical updates, state restore, and scaler checks."""
 import copy
+import socket
 import pytest
 import torch
 
@@ -340,3 +341,137 @@ def test_cosine_learning_rate_schedule():
     assert optimizers.named[0][1].param_groups[0]["lr"] == pytest.approx(0.2)
     optimizers.set_lr(4, 5, schedule="cosine", warmup_steps=2, min_lr_ratio=0.1)
     assert optimizers.named[0][1].param_groups[0]["lr"] == pytest.approx(0.02)
+
+
+class _DDPToy(torch.nn.Module):
+    """Small model with one Muon matrix and AdamW parameters, all used in forward."""
+    def __init__(self):
+        super().__init__()
+        self.blocks = torch.nn.ModuleList([torch.nn.Linear(3, 3)])
+        self.head = torch.nn.Linear(3, 2)
+
+    def forward(self, x):
+        return self.head(torch.tanh(self.blocks[0](x)))
+
+
+def _ddp_optimizer_worker(rank, world_size, port, optimizer_name):
+    import torch.distributed as dist
+    from torch.nn.parallel import DistributedDataParallel as DDP
+
+    dist.init_process_group("gloo", rank=rank, world_size=world_size,
+                            init_method=f"tcp://127.0.0.1:{port}?use_libuv=0")
+    try:
+        torch.manual_seed(123)
+        model = _DDPToy()
+        ddp = DDP(model)
+        optim_cfg = dict(name=optimizer_name, lr=0.001, muon_lr=0.02, weight_decay=0.01)
+        opt = build_optimizer(ddp, optim_cfg)
+        if optimizer_name == "muon":
+            groups = {name: {id(p) for group in optimizer.param_groups for p in group["params"]}
+                      for name, optimizer in opt.named}
+            muon_ids, adamw_ids = groups["opt.muon"], groups["opt.adamw"]
+        else:
+            combined = dict(opt.named)["opt.polar_muon_adamw"]
+            muon_ids = {id(p) for group in combined.param_groups if group["kind"] == "muon"
+                        for p in group["params"]}
+            adamw_ids = {id(p) for group in combined.param_groups if group["kind"] == "adamw"
+                         for p in group["params"]}
+        assert id(model.blocks[0].weight) in muon_ids
+        assert id(model.blocks[0].bias) in adamw_ids
+        assert id(model.head.weight) in adamw_ids
+
+        reference = copy.deepcopy(model)
+        xs = [torch.tensor([[0.2, -0.1, 0.4], [0.5, 0.3, -0.2]]),
+              torch.tensor([[-0.3, 0.6, 0.1], [0.7, -0.4, 0.2]])]
+        targets = [torch.tensor([[0.1, -0.2], [0.3, 0.4]]),
+                   torch.tensor([[-0.5, 0.2], [0.6, -0.1]])]
+
+        # DDP averages each rank's local mean gradient; this is the same as the
+        # gradient of the concatenated batch when local batch sizes match.
+        ref_opt = build_optimizer(reference, optim_cfg)
+        torch.nn.functional.mse_loss(reference(torch.cat(xs)), torch.cat(targets)).backward()
+        ref_opt.step()
+
+        torch.nn.functional.mse_loss(ddp(xs[rank]), targets[rank]).backward()
+        opt.step()
+        for actual, expected in zip(model.parameters(), reference.parameters()):
+            torch.testing.assert_close(actual, expected, rtol=2e-5, atol=2e-6)
+
+        # All replicas must remain bitwise aligned after the optimizer update.
+        for p in model.parameters():
+            lo, hi = p.detach().clone(), p.detach().clone()
+            dist.all_reduce(lo, op=dist.ReduceOp.MIN)
+            dist.all_reduce(hi, op=dist.ReduceOp.MAX)
+            torch.testing.assert_close(lo, hi, rtol=0, atol=0)
+
+        from models.moe import SparseMoE
+        moe = SparseMoE(2, num_experts=2, top_k=1, bias_gamma=0.1)
+        moe._counts = torch.tensor([2.0, 0.0]) if rank == 0 else torch.tensor([1.0, 1.0])
+        moe.update_bias()
+        torch.testing.assert_close(moe.router_bias, torch.tensor([-0.1, 0.1]))
+    finally:
+        dist.destroy_process_group()
+
+
+@pytest.mark.parametrize("optimizer_name", ["muon", "polar_muon_adamw"])
+def test_ddp_gradients_and_muon_adamw_step_match_global_batch(optimizer_name):
+    """Two Gloo ranks exercise DDP grouping, averaged gradients, and updates on CPU."""
+    import torch.multiprocessing as mp
+
+    with socket.socket() as sock:
+        sock.bind(("127.0.0.1", 0))
+        port = sock.getsockname()[1]
+    mp.spawn(_ddp_optimizer_worker, args=(2, port, optimizer_name), nprocs=2, join=True)
+
+
+class _DDPMoEToy(torch.nn.Module):
+    def __init__(self):
+        super().__init__()
+        from models.moe import SparseMoE
+        self.blocks = torch.nn.ModuleList([
+            SparseMoE(2, num_experts=2, top_k=1, num_shared=0, bias_gamma=0.1)
+        ])
+        self.head = torch.nn.Linear(2, 1)
+
+    def forward(self, x):
+        return self.head(self.blocks[0](x))
+
+
+def _ddp_moe_worker(rank, world_size, port):
+    import torch.distributed as dist
+    from torch.nn.parallel import DistributedDataParallel as DDP
+
+    dist.init_process_group("gloo", rank=rank, world_size=world_size,
+                            init_method=f"tcp://127.0.0.1:{port}?use_libuv=0")
+    try:
+        torch.manual_seed(456)
+        model = _DDPMoEToy()
+        ddp = DDP(model, find_unused_parameters=True)
+        opt = build_optimizer(ddp, dict(name="muon", lr=0.001, muon_lr=0.02, weight_decay=0.0))
+        x = torch.tensor([[0.2, -0.3], [0.5, 0.1]]) + rank * 0.05
+        # Each rank uses a different expert; this leaves one expert's local
+        # gradient absent on each rank and exercises DDP's unused-parameter path.
+        model.blocks[0]._forced = torch.full((x.shape[0], 1), rank, dtype=torch.long)
+        ddp(x).square().mean().backward()
+        model.blocks[0]._forced = None
+        opt.step()
+        model.blocks[0].update_bias()
+
+        for p in model.parameters():
+            lo, hi = p.detach().clone(), p.detach().clone()
+            dist.all_reduce(lo, op=dist.ReduceOp.MIN)
+            dist.all_reduce(hi, op=dist.ReduceOp.MAX)
+            torch.testing.assert_close(lo, hi, rtol=0, atol=0)
+        torch.testing.assert_close(model.blocks[0].router_bias, torch.zeros(2))
+    finally:
+        dist.destroy_process_group()
+
+
+def test_ddp_moe_with_rank_local_unused_experts_stays_synchronized():
+    """Per-rank routing may differ, but DDP parameters and global expert balance must agree."""
+    import torch.multiprocessing as mp
+
+    with socket.socket() as sock:
+        sock.bind(("127.0.0.1", 0))
+        port = sock.getsockname()[1]
+    mp.spawn(_ddp_moe_worker, args=(2, port), nprocs=2, join=True)

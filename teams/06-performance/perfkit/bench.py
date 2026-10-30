@@ -8,7 +8,8 @@ Examples
     python -m perfkit.bench --config configs/lab_small.yaml --level 3 --modes clean,layer,trace,checkpoint
     python -m perfkit.bench --config configs/lab_small.yaml --level 3 --against results/runs/<first>.json
     python -m perfkit.bench --config configs/lab_small.yaml --level 3 --repeat 2   # two runs, fail above 5%
-    torchrun --nproc_per_node 2 -m perfkit.bench --config configs/lab_small.yaml --modes comm   # 2+ GPUs
+    torchrun --nproc_per_node 2 -m perfkit.bench --config configs/lab_small.yaml --modes comm   # MoE all-to-all only
+    torchrun --standalone --nproc_per_node 2 -m perfkit.ddp_bench --config configs/lab_small.yaml # DDP train step
 
 Flags --modes, --level, --steps, --warmup are shortcuts for bench.modes=..., bench.level=..., and so
 on; any key of configs/base.yaml can be overridden as key=value. Every override is written to meta.
@@ -253,6 +254,19 @@ def train_step(s: Setup):
         if s.scaler is not None:
             with region("opt.unscale", 2):
                 s.opt.unscale(s.scaler)
+            # A rank with finite gradients must not step while another rank skips
+            # after overflow; all replicas need the same GradScaler decision.
+            if torch.distributed.is_available() and torch.distributed.is_initialized():
+                found_infs = []
+                for _, optimizer in s.opt.named:
+                    found_infs.extend(s.scaler._found_inf_per_device(optimizer).values())
+                if found_infs:
+                    # Synchronize one combined decision, so Muon and AdamW never
+                    # take different steps on different ranks.
+                    global_found_inf = torch.stack([v.reshape(()) for v in found_infs]).max()
+                    torch.distributed.all_reduce(global_found_inf, op=torch.distributed.ReduceOp.MAX)
+                    for found_inf in found_infs:
+                        found_inf.copy_(global_found_inf)
         if s.grad_clip:
             with region("opt.clip", 2):
                 torch.nn.utils.clip_grad_norm_(s.core.parameters(), s.grad_clip)

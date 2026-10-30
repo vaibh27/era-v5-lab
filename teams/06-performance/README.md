@@ -26,7 +26,7 @@ Everything is driven by config: a new model is a new YAML file in `configs/`, no
 `configs/base.yaml` on its own is the plain NanoGPT comparison model (table embedding, dense MLP, plain stack, AdamW).
 `configs/tiny_cpu.yaml` is the lab model shrunk for a laptop.
 
-`optim.name=polar_muon_adamw` selects an additional single-process combined optimizer using Polar Express Muon + AdamW updates (including row equilibration, Muon+ norm correction, variance reduction, and cautious Muon decay). It is a separate comparison path; it does not replace the current `muon` implementation. This first integration uses ordinary PyTorch ops; fused kernels, distributed collectives, and sharded optimizer state are not integrated.
+`optim.name=polar_muon_adamw` selects an additional combined optimizer using Polar Express Muon + AdamW updates (including row equilibration, Muon+ norm correction, variance reduction, and cautious Muon decay). It is a separate comparison path; it does not replace the current `muon` implementation. This integration uses ordinary PyTorch ops; optimizer-owned collectives and sharded optimizer state are not integrated. It can run under DDP, which synchronizes gradients outside the optimizer.
 
 ## Folder layout
 
@@ -53,7 +53,7 @@ docs/          PLAN.md (interfaces, what is done and left), PARTS.md (every part
 - **Left:** the KE2 pair (waits for G4's decode reference), the MoE all-to-all timed on 2 GPUs (`torchrun`),
   `perfkit/roofline.py`.
 
-**Distributed optimizer follow-up:** the current Muon/AdamW implementation is local-process only. A DDP integration is implementable follow-up work: make parameter selection robust to the DDP `module.` prefix (or build from the unwrapped module), handle MoE experts unused on a rank, and add a multi-process correctness/smoke test. The current optimizer should not be treated as tested for DDP or ZeRO-style sharding.
+**Distributed optimizer:** DDP synchronizes gradients while the existing Muon/AdamW optimizers keep replicated state on each rank. `build_optimizer` supports a DDP-wrapped model, and MoE expert-balance counts and GradScaler overflow decisions are synchronized across ranks. This path is covered by a two-rank CPU correctness test. ZeRO-style optimizer-state or parameter sharding is still a separate future backend.
 
 The full table is in [`docs/PLAN.md`](docs/PLAN.md) section 3. Every part we time is in [`docs/PARTS.md`](docs/PARTS.md).
 
@@ -140,6 +140,25 @@ python -m perfkit.bench --config configs/lab_small.yaml --level 3 --tag a       
 python -m perfkit.bench --config configs/lab_small.yaml --level 3 --tag b --against results/runs/a.json # 5% check
 torchrun --nproc_per_node 2 -m perfkit.bench --config configs/lab_small.yaml --modes comm               # 2+ GPUs
 ```
+
+**Distributed training (DDP)** uses the same model and Muon/AdamW updates on each rank, with DDP averaging
+gradients. It replicates model parameters and optimizer state, so use it when the full model fits on each GPU.
+`run.batch_size` is **per rank**; the run JSON records `world_size`, per-rank batch, global batch and slowest-rank
+step time. The existing `comm` mode above measures only MoE all-to-all communication; use `ddp_bench` to time
+forward, backward and optimizer steps together:
+
+```bash
+torchrun --standalone --nproc_per_node=2 -m perfkit.ddp_bench --config configs/lab_small.yaml --steps 20 --warmup 5 data.source=synthetic
+torchrun --standalone --nproc_per_node=4 -m perfkit.ddp_bench --config configs/lab_small.yaml --steps 20 --warmup 5 data.source=synthetic
+torchrun --standalone --nproc_per_node=8 -m perfkit.ddp_bench --config configs/lab_small.yaml --steps 20 --warmup 5 data.source=synthetic
+```
+
+`--nproc_per_node` can match any assigned GPU count. To use a subset, expose only those GPUs, for example
+`CUDA_VISIBLE_DEVICES=0,1 torchrun --standalone --nproc_per_node=2 ...`. For a fixed global batch comparison,
+set `run.batch_size` to `global_batch / world_size` in each run; leaving it fixed per rank instead measures scaling
+with a growing global batch. The benchmark currently requires `run.compile=false`. When the target model no longer
+fits on each GPU, evaluate FSDP or DeepSpeed ZeRO as a separate sharding backend; DDP alone does not shard model
+parameters or optimizer state.
 
 Defaults (`configs/base.yaml`, `bench:`): all modes (clean, layer, trace, checkpoint, comm), 150 measured steps
 after 10 warmup, 10 checkpoint saves after one warm save that is not counted. `run.batch_size: auto` uses the

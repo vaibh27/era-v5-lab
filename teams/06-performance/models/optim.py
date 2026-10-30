@@ -8,9 +8,12 @@
     Muon handles 2D block weights (including routers). AdamW handles embedding parameters
     (token table / KE projection / position table), output head, norm gains and biases. Decoupled
     weight decay applies to AdamW matrices, not 1D biases or norm gains.
-    A parameter with grad=None is skipped, matching AdamW's unused-expert behavior.
+    A parameter with grad=None is skipped, matching AdamW's unused-expert behavior. With DDP, build_optimizer
+    accepts either the base module or its DDP wrapper; DDP synchronizes gradients, and each rank keeps local,
+    replicated optimizer state. This is not optimizer-state sharding.
   * polar_muon_adamw: one torch optimizer combines AdamW with Polar Express Muon, row equilibration,
-    norm correction, factored variance reduction and cautious weight decay (single-process implementation).
+    norm correction, factored variance reduction and cautious weight decay. With DDP, gradients are synchronized
+    by DDP and optimizer state remains replicated; this implementation does not shard optimizer state.
   * Regions (level 2): "opt.muon", "opt.adamw"; (level 3): "opt.zero_grad".
   * flops(): Newton-Schulz FLOPs per step = sum over matrices of 5 * (4 m^2 n + 2 m^3), m <= n (for HFU).
 Cost to watch: one small matmul chain per matrix (8 experts x 2 x layers + attention + ...): likely
@@ -90,9 +93,9 @@ class MuonAdamW(torch.optim.Optimizer):
     https://github.com/karpathy/nanochat/blob/master/nanochat/optim.py
     (MIT, Copyright 2025 Andrej Karpathy).
     This port keeps the Polar Express, row equilibration, Muon+ norm correction, factored
-    variance reduction, and cautious decay update. Its collectives/sharded-state code is not
-    included, and these updates currently use ordinary PyTorch ops rather than its compiled
-    fused kernels; distributed use must go through a separately validated backend.
+    variance reduction, and cautious decay update. Under DDP, DDP synchronizes gradients before
+    this local update and each rank keeps replicated optimizer state. It does not implement
+    optimizer-state sharding, and uses ordinary PyTorch ops rather than compiled fused kernels.
     """
 
     def __init__(self, param_groups):
@@ -265,7 +268,13 @@ class Optimizers:
 
 
 def build_optimizer(model, ocfg: dict):
-    named_params = [(n, p) for n, p in model.named_parameters() if p.requires_grad]
+    # DDP adds a ``module.`` prefix to every parameter name. Classify using the
+    # underlying model's names while keeping the same Parameter objects so the
+    # returned optimizers work with either wrapped or unwrapped models.
+    named_model = model
+    while isinstance(getattr(named_model, "module", None), torch.nn.Module):
+        named_model = named_model.module
+    named_params = [(n, p) for n, p in named_model.named_parameters() if p.requires_grad]
     params = [p for _, p in named_params]
     fused = params[0].is_cuda
 

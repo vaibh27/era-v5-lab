@@ -143,5 +143,12 @@ class SparseMoE(nn.Module):
     @torch.no_grad()
     def update_bias(self):
         if self._counts is not None:
-            self.router_bias += self.gamma * torch.sign(self._counts.mean() - self._counts)
+            counts = self._counts
+            # Under DDP, balance experts over the global batch. Every rank calls
+            # this once per step, including ranks whose local routing skipped an
+            # expert, so the collective order is identical everywhere.
+            if torch.distributed.is_available() and torch.distributed.is_initialized():
+                counts = counts.clone()
+                torch.distributed.all_reduce(counts, op=torch.distributed.ReduceOp.SUM)
+            self.router_bias += self.gamma * torch.sign(counts.mean() - counts)
             self._counts = None
