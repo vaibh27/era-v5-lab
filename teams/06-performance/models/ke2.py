@@ -69,13 +69,15 @@ class KE2Embedding(nn.Module):
         assert int(lens.min()) >= 1 and int(lens.max()) <= max_pos, f"token lengths must be in 1..{max_pos}"
         self.max_pos, self.D = max_pos, N_BYTES * max_pos
         pos = torch.arange(max_pos)
-        # Column of W for each (token, byte slot); slots past L get weight 0 below, so their column does not matter.
-        self.register_buffer("cols", (tb.long() * max_pos + pos).to(torch.int32), persistent=False)
-        self.register_buffer("lens", lens.to(torch.int64), persistent=False)
         high, low = code_values(max_pos)
-        self.register_buffer("high", high, persistent=False)
-        self.register_buffer("low", low, persistent=False)
-        self.register_buffer("pos", pos, persistent=False)
+        lens = lens.to(torch.int64)
+        # Everything that depends only on the token is a table built once here, so forward is 3 lookups, one
+        # embedding_bag and one fused multiply-add (it runs first in the step, where every launch is on the clock).
+        # cols: column of W for each (token, byte slot); slots past L get weight 0, so their column does not matter.
+        self.register_buffer("cols", tb.long() * max_pos + pos, persistent=False)
+        self.register_buffer("w", (pos < lens.unsqueeze(1)).float() * (high - low)[lens].unsqueeze(1),
+                             persistent=False)                                     # [V, P]: high[L] - low[L] or 0
+        self.register_buffer("low_tok", low[lens], persistent=False)                # [V]: low[L]
         self.proj = nn.Linear(self.D, d_model, bias=False)
         nn.init.normal_(self.proj.weight, mean=0.0, std=1.0 / math.sqrt(self.D))
 
@@ -83,10 +85,8 @@ class KE2Embedding(nn.Module):
         """idx [...] -> [..., d_model] fp32."""
         with region("embed.ke", 3):
             flat = idx.reshape(-1)
-            L = self.lens.index_select(0, flat)
-            cols = self.cols.index_select(0, flat).long()
-            w = (self.pos < L.unsqueeze(1)).float() * (self.high - self.low).index_select(0, L).unsqueeze(1)
             W = self.proj.weight.float()
-            out = F.embedding_bag(cols, W.t(), per_sample_weights=w, mode="sum")
-            out = out + self.low.index_select(0, L).unsqueeze(1) * W.sum(1)
+            out = F.embedding_bag(self.cols.index_select(0, flat), W.t(),
+                                  per_sample_weights=self.w.index_select(0, flat), mode="sum")
+            out = torch.addcmul(out, self.low_tok.index_select(0, flat).unsqueeze(1), W.sum(1))
             return out.view(*idx.shape, -1)
