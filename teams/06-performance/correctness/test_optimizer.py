@@ -5,6 +5,7 @@ import pytest
 import torch
 from torch import nn
 
+from correctness.framework import PAIRS, Case, check, pair, pairs_in
 from models.config import ModelConfig
 from models.gpt import GPT
 from models.optim import (Muon, MuonAdamW, Optimizers, build_optimizer,
@@ -12,6 +13,33 @@ from models.optim import (Muon, MuonAdamW, Optimizers, build_optimizer,
 from dataio.tokenizer import BrahmicTokenizer
 from models.ke1 import KroneckerEmbedding
 
+
+
+@pair("optim.muon_ns.batched", tol=5e-3, grad_tol=5e-3)
+def _batched_muon_ns_case(device):
+    """Compare the same Newton-Schulz transform and input gradients, loop vs batched."""
+    if device.type == "cuda":
+        torch.cuda.init()
+    generator = torch.Generator(device=device).manual_seed(73)
+    wide = torch.randn(5, 4, 3, generator=generator, device=device).requires_grad_()
+    tall = torch.randn(5, 3, 4, generator=generator, device=device).requires_grad_()
+
+    def loop(wide_grad, tall_grad):
+        return (torch.stack([zeropower_via_newtonschulz5(g) for g in wide_grad]),
+                torch.stack([zeropower_via_newtonschulz5(g) for g in tall_grad]))
+
+    def batched(wide_grad, tall_grad):
+        return (zeropower_via_newtonschulz5_batched(wide_grad),
+                zeropower_via_newtonschulz5_batched(tall_grad))
+
+    return Case(ref=loop, fast=batched, inputs=[wide, tall])
+
+
+@pytest.mark.parametrize("name", pairs_in(__name__))
+def test_pair(name, device):
+    errors = check(PAIRS[name], device)
+    assert "out[0]" in errors and "out[1]" in errors
+    assert "grad_in[0]" in errors and "grad_in[1]" in errors
 
 
 @pytest.mark.parametrize("embedding", ["table", "ke1"])
