@@ -31,7 +31,8 @@ def test_flops_per_token_matches_documented_model_and_hardware_formulas():
 
 @pytest.mark.parametrize(
     ("overrides", "extra"),
-    [({"reversible": True}, "reversible"), ({"ce_impl": "chunked"}, "chunked")],
+    [({"reversible": True}, "reversible"), ({"ce_impl": "chunked"}, "chunked"),
+     ({"ce_impl": "fused"}, "fused")],
 )
 def test_flops_per_token_counts_extra_reversible_or_chunked_work(overrides, extra):
     model = _tiny_model(**overrides)

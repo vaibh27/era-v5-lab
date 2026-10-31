@@ -81,7 +81,7 @@ Levels: 1 = phases, 2 = per layer and big parts (gated at 5%), 3 = inside a laye
 |---|---|---|
 | `model.moe.dispatch` | `loop` \| `sorted` | `DISPATCH` in `models/moe.py`; implementation switch |
 | `optim.muon_impl` | `loop` \| `batched` | `batched` runs same-shaped matrices through `torch.bmm`; implementation switch |
-| `model.ce_impl` | `torch` \| `chunked` | `chunked` runs head + loss in `model.ce_chunks` checkpointed pieces |
+| `model.ce_impl` | `torch` \| `chunked` \| `fused` | `chunked` checkpoints position chunks; `fused` tiles vocabulary by `model.ce_vocab_chunk` and recomputes logits in backward |
 | `model.ke_mode` | `dynamic` \| `cached` | `cached` keeps a V x 8192 fp32 table (4 GiB at V = 131072) |
 | `optim.name` | `adamw` (base) / `muon` (lab) \| `polar_muon_adamw` | a different update, so a different config, not an A/B |
 | `run.compile` | `false` \| `true` | regions inside compiled code are not timed reliably |
