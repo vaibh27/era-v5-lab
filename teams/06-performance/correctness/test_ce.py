@@ -1,9 +1,8 @@
-"""Chunked cross-entropy against the plain path, and against a definition written here.
+"""Chunked and vocabulary-tiled cross-entropy against the plain path and a CE definition.
 
-GPT(ce_impl="chunked") must give the same loss and the same gradients as ce_impl="torch" for every target pattern the
-trainer can send: all positions counted, some positions masked with IGNORE_INDEX (SFT loss masks), a masked row, one
-position left, none left, and token counts that ce_chunks does not divide. A masked position counts in neither the sum nor
-the divisor. No tokenizer is needed: the model is tiny and uses a plain embedding table.
+GPT(ce_impl="chunked" or "fused") must match ce_impl="torch" for masked targets and MTP. Chunked loss tiles
+positions; fused loss tiles vocabulary and recomputes in backward. Fused checks always cover CPU and cover CUDA
+when available. No tokenizer is needed: the model is tiny and uses a plain embedding table.
 """
 from __future__ import annotations
 
@@ -13,18 +12,20 @@ import torch.nn.functional as F
 
 from models.config import ModelConfig
 from models.gpt import GPT, IGNORE_INDEX
+from models.linear_ce import linear_cross_entropy
 
 VOCAB = 97
 BLOCK = 16
 
 
-def _models(device, chunks):
+def _models(device, chunks, ce_impl="chunked", mtp=False):
     cfg = dict(vocab_size=VOCAB, block_size=BLOCK, n_layer=1, n_head=2, n_embd=32)
     torch.manual_seed(0)
-    plain = GPT(ModelConfig(**cfg, ce_impl="torch")).to(device).train()
-    chunked = GPT(ModelConfig(**cfg, ce_impl="chunked", ce_chunks=chunks)).to(device).train()
-    chunked.load_state_dict(plain.state_dict())
-    return plain, chunked
+    plain = GPT(ModelConfig(**cfg, ce_impl="torch", mtp=mtp)).to(device).train()
+    candidate = GPT(ModelConfig(**cfg, ce_impl=ce_impl, ce_chunks=chunks, ce_vocab_chunk=13,
+                                mtp=mtp)).to(device).train()
+    candidate.load_state_dict(plain.state_dict())
+    return plain, candidate
 
 
 def _data(device, B, T, masked=()):
@@ -101,3 +102,60 @@ def test_chunked_loss_is_zero_when_every_target_is_ignored(device):
     loss, grads = _loss_and_grads(chunked, idx, y)
     assert loss.item() == 0.0, "no target counts, so the loss is 0 (the plain path gives NaN here)"
     assert all(torch.isfinite(g).all() and not g.any() for g in grads.values()), "no target, so no gradient"
+
+
+def _available_test_devices():
+    devices = [torch.device("cpu")]
+    if torch.cuda.is_available():
+        devices.append(torch.device("cuda"))
+    return devices
+
+
+@pytest.mark.parametrize("device", _available_test_devices(), ids=lambda d: d.type)
+@pytest.mark.parametrize("mtp", [False, True], ids=["ntp", "mtp"])
+@pytest.mark.parametrize("mask", ["scattered", "one_left"])
+def test_fused_matches_plain_loss_and_all_gradients(device, mtp, mask):
+    plain, fused = _models(device, chunks=4, ce_impl="fused", mtp=mtp)
+    idx, y = _data(device, 2, 16, masked=MASKS[mask])
+
+    plain_logits, _ = plain(idx)
+    fused_logits, _ = fused(idx)
+    assert fused_logits.shape == plain_logits.shape
+    lp, gp = _loss_and_grads(plain, idx, y)
+    lf, gf = _loss_and_grads(fused, idx, y)
+
+    _same(lf, lp, f"fused loss ({device}, mtp={mtp}, mask={mask})")
+    assert gp.keys() == gf.keys()
+    for name in gp:
+        _same(gf[name], gp[name], f"fused gradient of {name} ({device}, mtp={mtp}, mask={mask})")
+
+
+@pytest.mark.parametrize("device", _available_test_devices(), ids=lambda d: d.type)
+def test_fused_returns_loss_without_logits_and_handles_all_ignored_targets(device):
+    _, fused = _models(device, chunks=4, ce_impl="fused")
+    idx, _ = _data(device, 2, 16)
+    y = torch.full((2, 16), IGNORE_INDEX, device=device)
+    logits, loss = fused(idx, y)
+    assert logits is None
+    assert loss.item() == 0.0
+    loss.backward()
+    assert all(p.grad is not None and torch.isfinite(p.grad).all() and not p.grad.any()
+               for p in fused.parameters() if p.requires_grad)
+
+
+@pytest.mark.parametrize("device", _available_test_devices(), ids=lambda d: d.type)
+def test_fused_linear_cross_entropy_supports_a_bias(device):
+    torch.manual_seed(4)
+    x = torch.randn(7, 11, device=device, requires_grad=True)
+    weight = torch.randn(37, 11, device=device, requires_grad=True)
+    bias = torch.randn(37, device=device, requires_grad=True)
+    targets = torch.randint(0, 37, (7,), device=device)
+
+    reference = F.cross_entropy(F.linear(x, weight, bias), targets)
+    actual = linear_cross_entropy(x, weight, targets, bias=bias, vocab_chunk=8)
+    reference_grads = torch.autograd.grad(reference, (x, weight, bias))
+    actual_grads = torch.autograd.grad(actual, (x, weight, bias))
+
+    _same(actual, reference, f"biased fused CE ({device})")
+    for name, got, expected in zip(("x", "weight", "bias"), actual_grads, reference_grads):
+        _same(got, expected, f"biased fused CE gradient {name} ({device})")

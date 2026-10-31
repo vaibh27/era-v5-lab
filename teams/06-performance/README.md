@@ -156,6 +156,7 @@ python -m perfkit.smoke                                      # configs/base.yaml
 python -m perfkit.smoke model.embedding=table model.reversible=false optim.name=adamw   # plain NanoGPT for comparison
 python -m perfkit.smoke --config configs/tiny_cpu.yaml       # laptop, seconds; numbers mean nothing
 python -m perfkit.smoke model.ce_impl=chunked                # if out of memory; then lower run.batch_size (8 on a T4)
+python -m perfkit.smoke model.ce_impl=fused                  # tiled linear CE, recomputes vocab tiles in backward
 python -m perfkit.smoke --steps 500 --warmup 0               # longer training run (every step is a real train step)
 ```
 
@@ -163,6 +164,12 @@ Device, precision, batch and step counts come from the config only (`run.device`
 `key=value` overrides work for any key of `configs/base.yaml`. A good run: reconstruction error below
 1e-3 (`OK`), loss starting at about ln(131072) = 11.78 and falling, p10 / p90 within a few % of the median,
 `all weights finite: True`.
+
+`model.ce_impl=fused` avoids retaining the full `[tokens, vocab]` logits by processing vocabulary tiles of
+`model.ce_vocab_chunk` classes and recomputing them during backward. It is a portable PyTorch custom-autograd
+implementation; it is a memory-saving correctness baseline, not yet a single-kernel Triton/CUDA optimization.
+For an A/B timing against the plain head, run `perfkit.bench` once with the default `model.ce_impl=torch`, then
+rerun with `--against results/runs/<torch-tag>.json model.ce_impl=fused`; the report labels this implementation A/B.
 
 **6. Training schedule:** timing runs use a constant learning rate by default. To inspect training
 loss with cosine decay and optional linear warmup, add optimizer overrides; schedule duration follows

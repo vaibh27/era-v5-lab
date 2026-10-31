@@ -101,7 +101,7 @@ def _test_needs(item):
     if file == "test_model.py" and fn == "test_mtp_loss_parts":
         return [("model.mtp", True)]
     if file == "test_ce.py":
-        return [("model.ce_impl", "chunked")]
+        return [("model.ce_impl", "fused" if fn.startswith("test_fused") else "chunked")]
     if file == "test_optimizer.py":
         if "polar" in fn:
             return [("optim.name", "polar_muon_adamw")]
