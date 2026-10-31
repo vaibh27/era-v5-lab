@@ -159,3 +159,22 @@ def test_fused_linear_cross_entropy_supports_a_bias(device):
     _same(actual, reference, f"biased fused CE ({device})")
     for name, got, expected in zip(("x", "weight", "bias"), actual_grads, reference_grads):
         _same(got, expected, f"biased fused CE gradient {name} ({device})")
+
+
+@pytest.mark.parametrize("device", _available_test_devices(), ids=lambda d: d.type)
+@pytest.mark.parametrize("vocab_chunk", [1, 2, 4, 8, 16, 32, 64, 128])
+def test_fused_linear_cross_entropy_power_of_two_vocab_chunks(device, vocab_chunk):
+    """Power-of-two tiles must match CE even when the final tile is partial or oversized."""
+    torch.manual_seed(9)
+    x = torch.randn(5, 11, device=device, requires_grad=True)
+    weight = torch.randn(37, 11, device=device, requires_grad=True)
+    targets = torch.tensor([0, 7, 19, 36, -100], device=device)
+
+    reference = F.cross_entropy(F.linear(x, weight), targets, ignore_index=-100)
+    actual = linear_cross_entropy(x, weight, targets, vocab_chunk=vocab_chunk)
+    reference_grads = torch.autograd.grad(reference, (x, weight))
+    actual_grads = torch.autograd.grad(actual, (x, weight))
+
+    _same(actual, reference, f"fused CE loss ({device}, vocab_chunk={vocab_chunk})")
+    for name, got, expected in zip(("x", "weight"), actual_grads, reference_grads):
+        _same(got, expected, f"fused CE gradient {name} ({device}, vocab_chunk={vocab_chunk})")
