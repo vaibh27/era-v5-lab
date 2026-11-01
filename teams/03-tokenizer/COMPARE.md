@@ -176,3 +176,101 @@ Every Indic language is better than BrahmicTokenizer-131K.
 - **Reproduce:**
   1. `fetch_corpus.py --mb 20` (all languages), then `fetch_corpus.py --mb 60 --langs Ta,Te,Kn,Ml` into the same directory.
   2. Run the build above. Corpus hashes are in the manifest.
+
+## v2: o200k pruning by usage, slots chosen on held-out text (#163)
+
+v2 removes o200k tokens that our text never uses from the base, and gives their ids to o200k tokens that English and code use. **FLORES is not used anywhere in v2**: not for choices, not for this report. Every choice was made on held-out **dev** text, and the numbers below include a held-out **check** split that no choice used. The text comes from FineWeb-2 `test` for the 11 Indic languages, FineWeb for English and codeparrot Python for code (`train/fetch_heldout.py`). Fertility is tokens per whitespace word; code is tokens per character. Spec: `train/v2_spec.md`.
+
+**dev**
+
+| Tokenizer | En | Code | Hi | Bn | Ta | Te | Kn | Ml | Mr | Gu | Pa | Or | As | Mean |
+|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|
+| BrahmicTokenizer-131K | 1.3103 | 0.2362 | 1.5744 | 2.3152 | 3.0593 | 3.0722 | 3.0813 | 3.3974 | 2.4801 | 2.1896 | 2.4937 | 3.9185 | 2.6459 | 2.7480 |
+| v1-c1 | 1.3343 | 0.2398 | 1.5602 | 2.1734 | 2.5376 | 2.5961 | 2.6140 | 2.8650 | 1.9963 | 2.1248 | 1.9060 | 2.3350 | 2.1892 | 2.2634 |
+| v2 | 1.3087 | 0.2358 | 1.5589 | 2.1736 | 2.5370 | 2.5948 | 2.6131 | 2.8638 | 1.9957 | 2.1240 | 1.9053 | 2.3340 | 2.1883 | 2.2626 |
+| v1-c1 vs baseline | +1.83% | +1.50% | -0.90% | -6.12% | -17.05% | -15.50% | -15.17% | -15.67% | -19.51% | -2.96% | -23.57% | -40.41% | -17.26% | -17.63% |
+| v2 vs baseline | -0.12% | -0.19% | -0.98% | -6.11% | -17.07% | -15.54% | -15.19% | -15.71% | -19.53% | -3.00% | -23.59% | -40.44% | -17.29% | -17.66% |
+| v2 vs v1-c1 | -1.92% | -1.67% | -0.08% | +0.01% | -0.03% | -0.05% | -0.03% | -0.04% | -0.03% | -0.04% | -0.04% | -0.04% | -0.04% | -0.04% |
+
+**check**
+
+| Tokenizer | En | Code | Hi | Bn | Ta | Te | Kn | Ml | Mr | Gu | Pa | Or | As | Mean |
+|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|
+| BrahmicTokenizer-131K | 1.2907 | 0.2456 | 1.5834 | 2.2785 | 3.0526 | 2.9790 | 3.0159 | 3.3596 | 2.5032 | 2.1481 | 2.4996 | 3.8723 | 2.6430 | 2.7214 |
+| v1-c1 | 1.3132 | 0.2491 | 1.5717 | 2.1697 | 2.5266 | 2.5249 | 2.5592 | 2.8572 | 2.0323 | 2.0846 | 1.9057 | 2.2957 | 2.1960 | 2.2476 |
+| v2 | 1.2895 | 0.2453 | 1.5704 | 2.1681 | 2.5256 | 2.5237 | 2.5581 | 2.8565 | 2.0313 | 2.0837 | 1.9047 | 2.2953 | 2.1950 | 2.2466 |
+| v1-c1 vs baseline | +1.74% | +1.41% | -0.74% | -4.78% | -17.23% | -15.24% | -15.14% | -14.95% | -18.81% | -2.96% | -23.76% | -40.71% | -16.91% | -17.41% |
+| v2 vs baseline | -0.10% | -0.13% | -0.82% | -4.85% | -17.27% | -15.28% | -15.18% | -14.97% | -18.85% | -3.00% | -23.80% | -40.73% | -16.95% | -17.45% |
+| v2 vs v1-c1 | -1.81% | -1.51% | -0.08% | -0.07% | -0.04% | -0.05% | -0.04% | -0.03% | -0.05% | -0.04% | -0.06% | -0.02% | -0.04% | -0.04% |
+
+- **English:** −1.8% vs v1-c1 on the check split. v2 is now level with or slightly better than BrahmicTokenizer-131K on English (−0.10%) and on code (−0.13%). v1-c1 was +1.74% and +1.41%.
+- **Indic and Dravidian not compromised:** every one of the 11 languages is equal or better than v1-c1. On the check split, all 11 are 0.02–0.08% better, because English words inside Indic pages now take fewer tokens. On dev, Bn is +0.01% (2.1736 vs 2.1734); every other language is better. The script blocks are byte-identical to v1-c1 (below).
+- **Ids:**
+  - All 356 special ids and all 16,739 ids from 114,333 up (every script block) hold exactly the same token as in v1-c1.
+  - 100,483 of the 114,333 base ids are unchanged.
+  - The 13,850 changed ids held o200k tokens that are never produced on 30 MB of held-out English, 20 MB of held-out code or the whole 380 MB Indic training corpus: Cyrillic 5,546, CJK 3,264, Arabic 2,751, Hebrew 1,029, Thai 679, Greek 517 and Sinhala 64. No Latin, Common or Brahmic token was pruned. `train/check_ids.py` checks all of this and PASSES.
+  - **Team decision needed:** the README says "never reuse an id a model was trained with". These 13,850 ids are reused. A model trained on v1-c1 text would almost never have seen their old tokens, but if G4/G5 have trained on v1-c1, the lead should confirm this is acceptable.
+- **How the tokens were chosen** (`train/prune_o200k.py`):
+  - **Prune list:** v1 base tokens used 0 times when the held-out English and code and the full Indic training corpus are encoded with the base. Multi-byte only, never a token with a Brahmic character, and only tokens that no kept base token is merged from (the base stays closed under its merges). The order is non-Latin scripts first, then Common, then Latin; within each group the rarest o200k rank goes first. 36,587 tokens qualify. v2 uses the first 13,850, all in non-Latin scripts.
+  - **New tokens:** o200k tokens past the v1 cut (rank 114,483), ranked separately for English and code by count × (base tokens saved − 1). Counts are capped at 4 per 20 KB chunk, with a minimum of 3 chunks, so that one generated file cannot dominate. The base ancestors of the new tokens are never pruned.
+  - **Swap size** (`train/slot_search.py`): the smallest code prefix and the smallest English prefix that reach parity with BrahmicTokenizer-131K on dev were 3,840 code and 10,240 English tokens (13,850 after duplicates).
+
+| New English tokens | Dev English vs baseline |
+|---|---|
+| 0 (v1-c1) | +1.83% |
+| 2,048 | +1.33% |
+| 4,096 | +0.90% |
+| 6,144 | +0.55% |
+| 8,192 | +0.23% |
+| **10,240 (v2)** | **−0.07%** |
+
+- **Slot split** (`train/slot_search.py`):
+  - Each script was trained once with up to 1,536 extra merges, which gives a dev fertility curve for every slot count.
+  - Rule: no language may be worse than with its v1 slot count. Every curve only goes down as slots are added, so with the same 16,384 script ids the only split that meets this rule is v1-c1's split. The held-out search therefore keeps it.
+  - The split that optimises only the dev mean (Devanagari 1,536, Bengali 2,944, Oriya 2,432, ...) would make Hi +6.0%, Mr +8.0%, Ml +2.0%, Ta +1.1% and Te +1.1% worse, so it was rejected.
+- **Build:**
+  - `train_bpe.py --slots train/slots_v2.json --special-layout v0 --v0-tokenizer <v0> --normalizer v1`
+  - sha256 `0862f6832229f16bf35acb211307d473b2eea8aa812eb2f3d2c1419191e5bc47`
+  - Manifest: `train/v2_manifest.json`. Its `o200k_swap.swapped_ids` lists every changed id.
+  - The three gating verify scripts PASS, and `check_ids.py --manifest` against v1-c1 PASSES.
+  - Without `o200k_swap`, `train_bpe.py` still rebuilds v1-c1 byte-identically (sha256 `7d2cff92…`).
+- **Reproduce:**
+  1. Fetch the v1 corpus (see the v1-c1 section).
+  2. `fetch_heldout.py --out <heldout> --train-corpus <corpus>`. Hashes: `train/heldout_manifest.json`.
+  3. `prune_o200k.py --heldout <heldout> --corpus <corpus> --out train/o200k_v2.json`
+  4. `slot_search.py --corpus <corpus> --heldout <heldout> --brahmic <BrahmicTokenizer-131K/tokenizer.json> --v1 <v1-c1 tokenizer.json> --work <dir>` (about 7 minutes). This writes `slots_v2.json` and the chosen `tokens`.
+  5. Run the build above.
+
+## Week 2 candidates C1, C2, C3 (v0.1 specials)
+
+Each candidate adds one change to the one before it. All are trained on the v1 corpus (`corpus60`; hashes in each manifest) and use the v0.1 special tokens (#173): G10's ChatML markers at ids 130822-130826, every id unchanged. Numbers are from the held-out **check** split (FineWeb-2 `test`, FineWeb, codeparrot; see the v2 section). FLORES is not used.
+
+| Candidate | Change | Build | sha256 | Manifest |
+|---|---|---|---|---|
+| C0 | reference: c0 slots, v0 specials | `--slots slots.json` | `53c1047f…` | not committed (reference only) |
+| **C1** | + o200k swap only | `--slots slots_c1.json` | `5d386e2e…` | `train/c1_manifest.json` |
+| **C2** | + slots_v1 split | `--slots slots_v2.json` | `84204d78…` | `train/c2_manifest.json` |
+| **C3** | + normalizer v1 (= v2) | `--slots slots_v2.json --normalizer v1` | `54f20825…` | `train/c3_manifest.json` |
+
+All builds use `train_bpe.py --special-layout v0 --v0-tokenizer <v0.1 tokenizer.json>` (C0: the v0 file).
+
+| Tokenizer | En | Code | Hi | Bn | Ta | Te | Kn | Ml | Mr | Gu | Pa | Or | As | Mean |
+|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|
+| BrahmicTokenizer-131K | 1.2907 | 0.2456 | 1.5834 | 2.2785 | 3.0526 | 2.9790 | 3.0159 | 3.3596 | 2.5032 | 2.1481 | 2.4996 | 3.8723 | 2.6430 | 2.7214 |
+| C0 (c0, v0 ids) | 1.3132 | 0.2491 | 1.5717 | 2.1760 | 2.5898 | 2.5521 | 2.5878 | 2.8572 | 2.0323 | 1.9893 | 1.8324 | 2.4021 | 2.1996 | 2.2536 |
+| C1 (+o200k swap) | 1.2895 | 0.2453 | 1.5704 | 2.1744 | 2.5888 | 2.5508 | 2.5867 | 2.8565 | 2.0313 | 1.9884 | 1.8313 | 2.4017 | 2.1987 | 2.2526 |
+| C2 (+slots_v1) | 1.2895 | 0.2453 | 1.5704 | 2.1744 | 2.5256 | 2.5237 | 2.5581 | 2.8565 | 2.0313 | 2.0837 | 1.9036 | 2.2953 | 2.1987 | 2.2474 |
+| C3 (+normalizer v1 = v2) | 1.2895 | 0.2453 | 1.5704 | 2.1681 | 2.5256 | 2.5237 | 2.5581 | 2.8565 | 2.0313 | 2.0837 | 1.9047 | 2.2953 | 2.1950 | 2.2466 |
+| C0 vs baseline | +1.74% | +1.41% | -0.74% | -4.50% | -15.16% | -14.33% | -14.20% | -14.95% | -18.81% | -7.39% | -26.69% | -37.97% | -16.77% | -17.19% |
+| C1 vs baseline | -0.10% | -0.13% | -0.82% | -4.57% | -15.20% | -14.37% | -14.23% | -14.97% | -18.85% | -7.43% | -26.74% | -37.98% | -16.81% | -17.22% |
+| C2 vs baseline | -0.10% | -0.13% | -0.82% | -4.57% | -17.27% | -15.28% | -15.18% | -14.97% | -18.85% | -3.00% | -23.84% | -40.73% | -16.81% | -17.42% |
+| C3 vs baseline | -0.10% | -0.13% | -0.82% | -4.85% | -17.27% | -15.28% | -15.18% | -14.97% | -18.85% | -3.00% | -23.80% | -40.73% | -16.95% | -17.45% |
+| C1 vs C0 | -1.81% | -1.51% | -0.08% | -0.07% | -0.04% | -0.05% | -0.04% | -0.03% | -0.05% | -0.04% | -0.06% | -0.02% | -0.04% | -0.04% |
+| C2 vs C1 | +0.00% | +0.00% | +0.00% | +0.00% | -2.44% | -1.06% | -1.11% | +0.00% | +0.00% | +4.79% | +3.95% | -4.43% | +0.00% | -0.23% |
+| C3 vs C2 | +0.00% | +0.00% | +0.00% | -0.29% | +0.00% | +0.00% | +0.00% | +0.00% | +0.00% | +0.00% | +0.06% | +0.00% | -0.17% | -0.04% |
+
+- **C1, the swap,** gives the whole English and code gain: −1.81% English and −1.51% code vs C0. That takes both from about +1.6% above the baseline to level with it. Every Indic language also gets 0.02–0.08% better.
+- **C2, the v1 slot split,** moves merges between scripts: Ta −2.44%, Te −1.06%, Kn −1.11% and Or −4.43%, paid for by Gu +4.79% and Pa +3.95%. Mean Indic is −0.23%. English and code don't change.
+- **C3, the normalizer,** gives Bn −0.29% and As −0.17% (nukta re-join). Pa is +0.06%. C3 is v2 with the v0.1 specials: its merges, vocab ids and normalizer are identical to v2, and only the 5 renamed special strings differ.
+- **Ids:** `check_ids.py` passes for C1 vs C0, C2 vs v1-c1 and C3 vs v2. It now accepts a reserved slot that is filled by renaming it with its id and flags kept (README rule) and fails any other special change. The three verify scripts pass for each candidate.
+- **C0 sha:** C0's sha differs from `c0_v0ids_manifest.json` (`7e9bb94c…`). That build used the older 20 MB Ta/Te/Kn/Ml corpus; the manifest hashes show the difference. The same slots on `corpus60` give `53c1047f…`, with both the current and the #137 `train_bpe.py`.

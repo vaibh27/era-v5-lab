@@ -10,12 +10,14 @@ pre-tokenizer, GPT-2 ByteLevel).
 Id layout (from slots.json)
 ---------------------------
     [0, base)                    o200k_base tokens in rank order (English, code, ...)
+                                 v2 (#163): unused ones swapped in place for o200k tokens
+                                 past the cut (o200k_v2.json); all other ids unchanged
     [base, base + slots_1)       new merges for script 1 (e.g. Devanagari)
     ...                          one contiguous block per script, in slots.json order
     [vocab - special_slots, vocab)  special tokens: named ones, then <|reserved_N|>
 
 With --special-layout v0 the special ids are tokenizer v0's instead (#107):
-all 356 special entries are copied verbatim from the v0 tokenizer.json, at
+all 356 special entries are copied verbatim from the v0 (or v0.1, #132) tokenizer.json, at
 their exact ids (including the 9 outside the top block, e.g. 36 and 128512).
 Normal tokens then fill the remaining 130,716 ids in order, skipping those
 ids, so a script block may contain a special id; the manifest lists them.
@@ -25,6 +27,10 @@ Method
 1. Base. Walk o200k_base in rank order. Keep a token only if it is <= 32 bytes,
    spans at most one script, and both halves of its merge were kept. Stop at
    `base` tokens. The kept set is closed under its merges, so it is a valid BPE.
+   With "o200k_swap" in slots.json (step 1b, v2): the unused base tokens listed
+   in o200k_v2.json are removed and o200k tokens past the cut take their ids,
+   each merged from its own o200k halves, in o200k rank order. Every other base
+   id stays the same; "base" in slots.json pins the base size.
 2. Per script. Pre-tokenize the script's corpus with the o200k regex, keep only
    pre-tokens whose non-Common characters are all in that script, encode them
    with the base, and continue BPE training on those words for exactly `slots`
@@ -53,6 +59,18 @@ Usage
     python train_bpe.py --corpus /path/to/corpus --out /path/to/out --slots slots_v1.json \\
         --special-layout v0 --v0-tokenizer /path/to/v0_tokenizer.json --normalizer v1 \\
         --brahmic-dir /path/to/BrahmicTokenizer-131K
+
+    # v2 (#163): o200k pruning by usage (unused base ids swapped in place), slots chosen on held-out text
+    python train_bpe.py --corpus /path/to/corpus --out /path/to/out --slots slots_v2.json \\
+        --special-layout v0 --v0-tokenizer /path/to/v0_tokenizer.json --normalizer v1 \\
+        --brahmic-dir /path/to/BrahmicTokenizer-131K
+    python check_ids.py /path/to/v1/tokenizer.json /path/to/out/tokenizer.json
+
+    # Week-2 candidates (C1 -> C2 -> C3 each add one change; v0.1 specials from v0/build_v0_1.py)
+    python train_bpe.py ... --slots slots_c1.json --special-layout v0 --v0-tokenizer v0_1_tokenizer.json   # C1: o200k swap only
+    python train_bpe.py ... --slots slots_v2.json --special-layout v0 --v0-tokenizer v0_1_tokenizer.json   # C2: + slots_v1
+    python train_bpe.py ... --slots slots_v2.json --special-layout v0 --v0-tokenizer v0_1_tokenizer.json \\
+        --normalizer v1                                                                                    # C3: + normalizer (v2)
 
 Writes <out>/tokenizer.json and <out>/manifest.json (sha256, slot table,
 corpus hashes, verify results). Exit 1 if a verify script fails.
@@ -172,6 +190,62 @@ def build_base(size):
     if len(vocab) != size or sum(len(t) == 1 for t in vocab) != 256:
         sys.exit(f"ERROR: base has {len(vocab)} tokens, wanted {size} including all 256 bytes.")
     return vocab, merges, dict(dropped)
+
+
+def load_swap(path):
+    """o200k_v2.json (prune_o200k.py + slot_search.py): the extension tokens and the prune list, as bytes."""
+    data = json.loads(Path(path).read_text())
+    for key in ("tokens", "prune"):
+        if hashlib.sha256("\n".join(data[key]).encode()).hexdigest() != data[f"{key}_sha256"]:
+            sys.exit(f"ERROR: {path}: {key} do not match {key}_sha256.")
+    return [bytes.fromhex(h) for h in data["tokens"]], [bytes.fromhex(h) for h in data["prune"]], data
+
+
+def choose_prune(vocab, prune, tokens):
+    """The first len(tokens) entries of `prune`, skipping base ancestors of the extension tokens
+    (an extension token is merged from its o200k halves, so those must stay)."""
+    import tiktoken
+    ranks = tiktoken.get_encoding("o200k_base")._mergeable_ranks
+    keep = set()
+    def protect(t):
+        if t in keep or len(t) == 1:
+            return
+        if t in vocab:
+            keep.add(t)
+        for part in o200k_split(ranks, t, ranks[t]):
+            protect(part)
+    for t in tokens:
+        protect(t)
+    out = [t for t in prune if t not in keep][:len(tokens)]
+    if len(out) < len(tokens):
+        sys.exit(f"ERROR: only {len(out)} prunable base tokens for {len(tokens)} extension tokens.")
+    return out
+
+
+def swap_base(vocab, merges, prune, tokens):
+    """Step 1b (v2, #163): o200k pruning by usage. Remove the `prune` tokens from the base and give
+    their ids to `tokens` (o200k tokens past the base cut), in o200k rank order. Every other base
+    token keeps its id. Each new token is merged from its own o200k halves, so merge priority stays
+    o200k's; its merges go after the base merges. Returns the new merges for the extension."""
+    import tiktoken
+    ranks = tiktoken.get_encoding("o200k_base")._mergeable_ranks
+    gone = set(prune)
+    if len(gone) != len(prune) or any(t not in vocab or len(t) == 1 for t in gone):
+        sys.exit("ERROR: prune list has repeats, single bytes or tokens outside the base.")
+    if any(a in gone or b in gone for a, b in merges if a + b not in gone):
+        sys.exit("ERROR: a kept base token is merged from a pruned one; the base would not be closed.")
+    free = sorted(vocab.pop(t) for t in prune)
+    merges[:] = [(a, b) for a, b in merges if a + b not in gone]
+    new = []
+    for token, i in zip(sorted(tokens, key=ranks.__getitem__), free):
+        if token in vocab or len(token) > MAX_BYTES or len(scripts_of(token)) > 1:
+            sys.exit(f"ERROR: o200k extension token {token!r} is a duplicate or not admissible.")
+        parts = o200k_split(ranks, token, ranks[token])
+        if len(parts) != 2 or parts[0] not in vocab or parts[1] not in vocab:
+            sys.exit(f"ERROR: o200k extension token {token!r}: merge parents {parts} missing.")
+        vocab[token] = i
+        new.append((parts[0], parts[1]))
+    return new
 
 
 def tokenizer_json(vocab, merges, specials, pattern, normalizer=None):
@@ -318,16 +392,19 @@ def run_verify(brahmic_dir, tok_path, compare_to):
 
 
 def load_v0_specials(path):
-    """Tokenizer v0's added_tokens, after checking the file against v0/SHA256SUMS (#107)."""
+    """Tokenizer v0's or v0.1's added_tokens, after checking the file against v0/SHA256SUMS (#107, #132)."""
     sha = sha256_file(path)
     sums = Path(__file__).resolve().parent.parent / "v0" / "SHA256SUMS"
-    want = [ln.split()[0] for ln in sums.read_text().splitlines() if ln.endswith("v0/tokenizer.json")] if sums.exists() else []
+    want = {ln.split()[1].split("/")[0]: ln.split()[0] for ln in sums.read_text().splitlines()
+            if ln.endswith(("v0/tokenizer.json", "v0.1/tokenizer.json"))} if sums.exists() else {}
     if not want:
         sys.exit(f"ERROR: no v0/tokenizer.json line in {sums}; cannot check the v0 file.")
-    if sha != want[0]:
-        sys.exit(f"ERROR: {path} sha256 {sha} is not tokenizer v0 ({want[0]}). Build it with v0/build_v0.py.")
+    version = next((v for v, s in want.items() if s == sha), None)
+    if version is None:
+        sys.exit(f"ERROR: {path} sha256 {sha} is not tokenizer v0 or v0.1 ({want}). "
+                 "Build it with v0/build_v0.py (then v0/build_v0_1.py).")
     t = json.loads(Path(path).read_text(encoding="utf-8"))
-    return t["added_tokens"], sha
+    return t["added_tokens"], sha, version
 
 
 def main():
@@ -359,7 +436,7 @@ def main():
     if args.special_layout == "v0":
         if not args.v0_tokenizer:
             sys.exit("ERROR: --special-layout v0 needs --v0-tokenizer.")
-        specials, v0_sha = load_v0_specials(args.v0_tokenizer)
+        specials, v0_sha, v0_version = load_v0_specials(args.v0_tokenizer)
         n_special = len(specials)
     else:
         names = cfg["named_specials"] + [f"<|reserved_{i}|>" for i in range(n_special - len(cfg["named_specials"]))]
@@ -368,6 +445,8 @@ def main():
     # The build works on dense ids 0..n_normal-1; real_id maps them past the special ids.
     real_id = [i for i in range(vocab_size) if i not in special_ids]
     base_size = len(real_id) - sum(s["slots"] for s in scripts.values())
+    if "base" in cfg and cfg["base"] != base_size:
+        sys.exit(f"ERROR: slots give base={base_size}, but {args.slots} fixes base={cfg['base']}.")
     print(f"layout: base={base_size}  scripts={sum(s['slots'] for s in scripts.values())}  "
           f"specials={n_special} ({args.special_layout})  total={vocab_size}", flush=True)
 
@@ -375,6 +454,15 @@ def main():
     base_vocab, base_merges, dropped = build_base(base_size)
     print(f"base: {len(base_vocab)} o200k tokens, {len(base_merges)} merges, dropped {dropped} "
           f"({time.time() - t0:.0f}s)", flush=True)
+    swap = None
+    if cfg.get("o200k_swap"):
+        ext_tokens, prune_list, swap_data = load_swap(Path(args.slots).parent / cfg["o200k_swap"])
+        pruned = choose_prune(base_vocab, prune_list, ext_tokens)
+        swapped_ids = sorted(base_vocab[t] for t in pruned)
+        base_merges += swap_base(base_vocab, base_merges, pruned, ext_tokens)
+        swap = {"file": cfg["o200k_swap"], "tokens_sha256": swap_data["tokens_sha256"],
+                "prune_sha256": swap_data["prune_sha256"], "swapped": len(pruned)}
+        print(f"o200k swap: {len(pruned)} unused base tokens replaced in place", flush=True)
 
     # Encoder for the base alone, used to segment each script's words before step 2.
     from tokenizers import Tokenizer
@@ -393,6 +481,8 @@ def main():
         return b + [{"special_ids_inside": inside}] if inside else b
 
     layout = {"base": block(0, base_size)}
+    if swap:
+        swap["swapped_ids"] = [real_id[i] for i in swapped_ids]
     last_count = {}
     corpus_manifest_path = corpus / "corpus_manifest.json"
     corpus_manifest = json.loads(corpus_manifest_path.read_text()) if corpus_manifest_path.exists() else {}
@@ -458,8 +548,10 @@ def main():
         "special_layout": args.special_layout,
         **({"special_tokens": names[:len(cfg["named_specials"])],
             "reserved_special_slots": n_special - len(cfg["named_specials"])}
-           if args.special_layout == "own" else {"v0_tokenizer_sha256": v0_sha, "special_tokens": n_special}),
+           if args.special_layout == "own" else {"v0_tokenizer": v0_version, "v0_tokenizer_sha256": v0_sha,
+                                                          "special_tokens": n_special}),
         "base": {"source": "tiktoken o200k_base", "kept": base_size, "dropped": dropped},
+        **({"o200k_swap": swap} if swap else {}),
         "corpus": {lang: corpus_manifest.get(lang) for spec in scripts.values() for lang in spec["langs"]},
         "normalizer": args.normalizer,
         "slots_json_sha256": sha256_file(args.slots),

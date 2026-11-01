@@ -1,0 +1,219 @@
+{
+  "Hi": {
+    "source": "HuggingFaceFW/fineweb-2 hin_Deva test",
+    "dropped_overlap_with_train": 2,
+    "files": {
+      "dev/Hi.txt": {
+        "docs": 301,
+        "bytes": 2003640,
+        "sha256": "fdcef2982b72e0fe723912666459d1b85d670d1f60dc667982c5988e1d1a7b9b"
+      },
+      "check/Hi.txt": {
+        "docs": 304,
+        "bytes": 2002749,
+        "sha256": "9587bc4aa99a607d166ed0cbafc6ba8073b51b1721d4094a2f7403f16ffcdef8"
+      }
+    }
+  },
+  "Bn": {
+    "source": "HuggingFaceFW/fineweb-2 ben_Beng test",
+    "dropped_overlap_with_train": 1,
+    "files": {
+      "dev/Bn.txt": {
+        "docs": 296,
+        "bytes": 2001376,
+        "sha256": "828be2d10b09421756653f280658f9e5877c2fe3f50b4cc3138c5fd4644b54fc"
+      },
+      "check/Bn.txt": {
+        "docs": 306,
+        "bytes": 2030959,
+        "sha256": "db6d60d86c0646c224942137ec24806f4ae587cdf194f1ef04c9efea707cac90"
+      }
+    }
+  },
+  "Ta": {
+    "source": "HuggingFaceFW/fineweb-2 tam_Taml test",
+    "dropped_overlap_with_train": 1,
+    "files": {
+      "dev/Ta.txt": {
+        "docs": 228,
+        "bytes": 2008244,
+        "sha256": "6093418072d6383d959676c77f3bd872aeb1928e7b96c26055b45a83847a59de"
+      },
+      "check/Ta.txt": {
+        "docs": 209,
+        "bytes": 2001620,
+        "sha256": "530f7d88e8f0acc9e8a198a9dc92a9f4e9a31082e24c46bd034a0c9e1a5fb741"
+      }
+    }
+  },
+  "Te": {
+    "source": "HuggingFaceFW/fineweb-2 tel_Telu test",
+    "dropped_overlap_with_train": 7,
+    "files": {
+      "dev/Te.txt": {
+        "docs": 238,
+        "bytes": 2004194,
+        "sha256": "942f5ae7f86a1ce7a2791beb6eb090fb5fca6af2182f996740f949825e709706"
+      },
+      "check/Te.txt": {
+        "docs": 189,
+        "bytes": 2003265,
+        "sha256": "077ed0fe2ccc51435cad8b7582441c2ce8789ded28a006567f1df09664d332de"
+      }
+    }
+  },
+  "Kn": {
+    "source": "HuggingFaceFW/fineweb-2 kan_Knda test",
+    "dropped_overlap_with_train": 8,
+    "files": {
+      "dev/Kn.txt": {
+        "docs": 312,
+        "bytes": 2001254,
+        "sha256": "cd757d8c88a3341e4c8eaac27cd25d1aebade7cc40d1af13176ed7f8d6705062"
+      },
+      "check/Kn.txt": {
+        "docs": 312,
+        "bytes": 2002696,
+        "sha256": "ba300067515da3b737bccaef37a6690e81637bab22f1d1f1eea3f89269ba5331"
+      }
+    }
+  },
+  "Ml": {
+    "source": "HuggingFaceFW/fineweb-2 mal_Mlym test",
+    "dropped_overlap_with_train": 9,
+    "files": {
+      "dev/Ml.txt": {
+        "docs": 218,
+        "bytes": 2030238,
+        "sha256": "d436400d5efc2068056ac14cdb00eafe43fd867e685837546a7bb3fed6872225"
+      },
+      "check/Ml.txt": {
+        "docs": 237,
+        "bytes": 2000698,
+        "sha256": "b0e15adcc6ad1d7e01ee3ea3fafdb08deb85778e154ffc4eef39ad2a17f28281"
+      }
+    }
+  },
+  "Mr": {
+    "source": "HuggingFaceFW/fineweb-2 mar_Deva test",
+    "dropped_overlap_with_train": 3,
+    "files": {
+      "dev/Mr.txt": {
+        "docs": 245,
+        "bytes": 2007403,
+        "sha256": "66a567ce58feb71b1deca25232d7e688045d08558e0949fffc3fb861b61e430b"
+      },
+      "check/Mr.txt": {
+        "docs": 324,
+        "bytes": 2009827,
+        "sha256": "357e847b55de1577e414f49f20b9d3e0ef1c56ab9a18a9f3bfb93af9811c2a00"
+      }
+    }
+  },
+  "Gu": {
+    "source": "HuggingFaceFW/fineweb-2 guj_Gujr test",
+    "dropped_overlap_with_train": 1,
+    "files": {
+      "dev/Gu.txt": {
+        "docs": 321,
+        "bytes": 2005065,
+        "sha256": "87f5bd1ad359ca46688436e10bb8fd05168b21ae329d0dc36e281e47e481a618"
+      },
+      "check/Gu.txt": {
+        "docs": 342,
+        "bytes": 2006676,
+        "sha256": "5c6af609186c470a0d44e83d11d3b6dbc7e789802217a766fa7f75118db0dd04"
+      }
+    }
+  },
+  "Pa": {
+    "source": "HuggingFaceFW/fineweb-2 pan_Guru test",
+    "dropped_overlap_with_train": 7,
+    "files": {
+      "dev/Pa.txt": {
+        "docs": 275,
+        "bytes": 2001026,
+        "sha256": "2e50c225be42ff388f88e5bae2b8cb2217d61f6d736d289b33246b40b255e99d"
+      },
+      "check/Pa.txt": {
+        "docs": 291,
+        "bytes": 2004137,
+        "sha256": "18c9fac37f21b37912c13cd2ec9777ada34af926caad7f8d5f1ce1a6c360931a"
+      }
+    }
+  },
+  "Or": {
+    "source": "HuggingFaceFW/fineweb-2 ory_Orya test",
+    "dropped_overlap_with_train": 2,
+    "files": {
+      "dev/Or.txt": {
+        "docs": 319,
+        "bytes": 2000805,
+        "sha256": "3ca261ae7541a3e1f8bfd2735972edc0c151e9e4b7e0b7ed5ad968e0dd46c011"
+      },
+      "check/Or.txt": {
+        "docs": 444,
+        "bytes": 2002376,
+        "sha256": "25896af0bebbf00d80ebe6d94d43adfbcccb34a4d068a3ab2219b64e96782226"
+      }
+    }
+  },
+  "As": {
+    "source": "HuggingFaceFW/fineweb-2 asm_Beng test",
+    "dropped_overlap_with_train": 1,
+    "files": {
+      "dev/As.txt": {
+        "docs": 296,
+        "bytes": 2000286,
+        "sha256": "6060b60d0164f29e7390e51e62cf84ec4ad95ef825d9d964642f4a544944c230"
+      },
+      "check/As.txt": {
+        "docs": 343,
+        "bytes": 2027536,
+        "sha256": "82ac209718a7688e860b05b53b9bcfaad681212cfe8e4f9132ad72558cad792a"
+      }
+    }
+  },
+  "En": {
+    "source": "HuggingFaceFW/fineweb sample-10BT train, in stream order",
+    "files": {
+      "usage/En.txt": {
+        "docs": 9755,
+        "bytes": 30001131,
+        "sha256": "32dd444500c195690cdceb8ecc6ea6cad164c161869b8701f3d209d65861876c"
+      },
+      "dev/En.txt": {
+        "docs": 1529,
+        "bytes": 5001468,
+        "sha256": "b44df078154499b4bf17ec38d50ea136e87f479786b01ebe05ef96eb24a526d3"
+      },
+      "check/En.txt": {
+        "docs": 1556,
+        "bytes": 5001475,
+        "sha256": "c084cbdf7bdeaf9e92f12292a299428b7c7b2074fcbb8d70bd9ea8fdd16aaf9f"
+      }
+    }
+  },
+  "Code": {
+    "source": "codeparrot/codeparrot-clean-valid (Python), in stream order",
+    "dropped_13gram_overlap_with_humaneval_mbpp": 0,
+    "files": {
+      "usage/Code.txt": {
+        "docs": 1999,
+        "bytes": 20004184,
+        "sha256": "d1e20714e17d3af07f7760f181aee96c1d2dc17f56d29b8ce24d0bff0018e882"
+      },
+      "dev/Code.txt": {
+        "docs": 306,
+        "bytes": 3001351,
+        "sha256": "3a2e8ff6d799e807b99552812f007cac6dd2c9545aebe0b782b43145ee50a6d1"
+      },
+      "check/Code.txt": {
+        "docs": 296,
+        "bytes": 3006189,
+        "sha256": "e9e52107039d20b8ba56a38f6f4791928e0854cc03d92b59fce276d422bf795e"
+      }
+    }
+  }
+}
