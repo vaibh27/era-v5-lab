@@ -1,0 +1,83 @@
+{
+  "_comment": "C1 (week 2): the c0 script slots (slots.json) with the v2 o200k swap only (o200k_v2.json, #163): v1 base (ids 0-114332) with 13,850 unused o200k tokens swapped in place for English / code o200k tokens. No normalizer. Use with --special-layout v0 --v0-tokenizer <v0.1>. Fixed id layout for train_bpe.py; base = vocab_size - sum(scripts) - special_slots.",
+  "vocab_size": 131072,
+  "special_slots": 256,
+  "named_specials": [
+    "<|begin_of_text|>",
+    "<|end_of_text|>",
+    "<|pad|>",
+    "<|unk|>",
+    "<|im_start|>",
+    "<|im_end|>",
+    "<|system|>",
+    "<|user|>",
+    "<|assistant|>",
+    "<|tool_call|>",
+    "<|tool_result|>",
+    "<|think|>",
+    "<|/think|>",
+    "<|fim_prefix|>",
+    "<|fim_middle|>",
+    "<|fim_suffix|>"
+  ],
+  "scripts": {
+    "Devanagari": {
+      "slots": 3072,
+      "langs": [
+        "Hi",
+        "Mr"
+      ]
+    },
+    "Bengali": {
+      "slots": 2048,
+      "langs": [
+        "Bn",
+        "As"
+      ]
+    },
+    "Tamil": {
+      "slots": 1536,
+      "langs": [
+        "Ta"
+      ]
+    },
+    "Telugu": {
+      "slots": 1792,
+      "langs": [
+        "Te"
+      ]
+    },
+    "Kannada": {
+      "slots": 1792,
+      "langs": [
+        "Kn"
+      ]
+    },
+    "Malayalam": {
+      "slots": 2048,
+      "langs": [
+        "Ml"
+      ]
+    },
+    "Gujarati": {
+      "slots": 1536,
+      "langs": [
+        "Gu"
+      ]
+    },
+    "Gurmukhi": {
+      "slots": 1280,
+      "langs": [
+        "Pa"
+      ]
+    },
+    "Oriya": {
+      "slots": 1280,
+      "langs": [
+        "Or"
+      ]
+    }
+  },
+  "base": 114332,
+  "o200k_swap": "o200k_v2.json"
+}

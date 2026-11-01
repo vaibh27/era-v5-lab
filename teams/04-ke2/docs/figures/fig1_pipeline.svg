@@ -1,0 +1,53 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1000" height="312" viewBox="0 0 1000 312" role="img" aria-label="The forward encode of token A and the part of proof.md that covers each step">
+<title>The forward encode of token A and the part of proof.md that covers each step</title>
+<defs><marker id="ah" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#3f5260"/></marker></defs>
+<rect x="0.5" y="0.5" width="999" height="311" rx="12" fill="#ffffff" stroke="#d8e0e4"/>
+<text x="24.0" y="34.0" font-family="'Segoe UI', 'Helvetica Neue', Arial, 'Nirmala UI', 'Noto Sans', sans-serif" font-size="18" font-weight="700" fill="#0f2230" text-anchor="start">From a token to its code, and back</text>
+<text x="24.0" y="56.0" font-family="'Segoe UI', 'Helvetica Neue', Arial, 'Nirmala UI', 'Noto Sans', sans-serif" font-size="13" font-weight="400" fill="#667884" text-anchor="start">Token A (id 2420) at P = 32. Each box is real code; the brackets name the part of proof.md that covers each step.</text>
+<rect x="24.0" y="76.0" width="140.0" height="96.0" rx="8" fill="#ffffff" stroke="#b7c4cb" stroke-width="1.2"/>
+<text x="94.0" y="96.0" font-family="'Segoe UI', 'Helvetica Neue', Arial, 'Nirmala UI', 'Noto Sans', sans-serif" font-size="10.5" font-weight="700" fill="#667884" text-anchor="middle">TOKEN ID</text>
+<text x="94.0" y="121.0" font-family="Consolas, Menlo, 'DejaVu Sans Mono', monospace" font-size="20" font-weight="700" fill="#0f2230" text-anchor="middle">2420</text>
+<text x="94.0" y="140.0" font-family="'Segoe UI', 'Helvetica Neue', Arial, 'Nirmala UI', 'Noto Sans', sans-serif" font-size="15" font-weight="400" fill="#0f2230" text-anchor="middle">&quot; एक&quot;</text>
+<line x1="166.0" y1="124.0" x2="186.0" y2="124.0" stroke="#3f5260" stroke-width="1.5" marker-end="url(#ah)"/>
+<rect x="188.0" y="76.0" width="140.0" height="96.0" rx="8" fill="#e2edfb" stroke="#2a78d6" stroke-width="1.2"/>
+<text x="258.0" y="96.0" font-family="'Segoe UI', 'Helvetica Neue', Arial, 'Nirmala UI', 'Noto Sans', sans-serif" font-size="10.5" font-weight="700" fill="#667884" text-anchor="middle">RAW BYTES</text>
+<text x="258.0" y="121.0" font-family="Consolas, Menlo, 'DejaVu Sans Mono', monospace" font-size="14" font-weight="700" fill="#0f2230" text-anchor="middle">20 e0 a4 8f</text>
+<text x="258.0" y="140.0" font-family="Consolas, Menlo, 'DejaVu Sans Mono', monospace" font-size="14" font-weight="400" fill="#0f2230" text-anchor="middle">e0 a4 95</text>
+<text x="258.0" y="159.0" font-family="'Segoe UI', 'Helvetica Neue', Arial, 'Nirmala UI', 'Noto Sans', sans-serif" font-size="12" font-weight="400" fill="#0f2230" text-anchor="middle">7 bytes</text>
+<line x1="330.0" y1="124.0" x2="350.0" y2="124.0" stroke="#3f5260" stroke-width="1.5" marker-end="url(#ah)"/>
+<rect x="352.0" y="76.0" width="140.0" height="96.0" rx="8" fill="#e2edfb" stroke="#2a78d6" stroke-width="1.2"/>
+<text x="422.0" y="96.0" font-family="'Segoe UI', 'Helvetica Neue', Arial, 'Nirmala UI', 'Noto Sans', sans-serif" font-size="10.5" font-weight="700" fill="#667884" text-anchor="middle">CUT STRING</text>
+<text x="422.0" y="121.0" font-family="'Segoe UI', 'Helvetica Neue', Arial, 'Nirmala UI', 'Noto Sans', sans-serif" font-size="14" font-weight="700" fill="#0f2230" text-anchor="middle">7 of 32 slots</text>
+<text x="422.0" y="140.0" font-family="'Segoe UI', 'Helvetica Neue', Arial, 'Nirmala UI', 'Noto Sans', sans-serif" font-size="12" font-weight="400" fill="#0f2230" text-anchor="middle">kept whole,</text>
+<text x="422.0" y="159.0" font-family="'Segoe UI', 'Helvetica Neue', Arial, 'Nirmala UI', 'Noto Sans', sans-serif" font-size="12" font-weight="400" fill="#0f2230" text-anchor="middle">since 7 ≤ 32</text>
+<line x1="494.0" y1="124.0" x2="514.0" y2="124.0" stroke="#3f5260" stroke-width="1.5" marker-end="url(#ah)"/>
+<rect x="516.0" y="76.0" width="140.0" height="96.0" rx="8" fill="#ffffff" stroke="#b7c4cb" stroke-width="1.2"/>
+<text x="586.0" y="96.0" font-family="'Segoe UI', 'Helvetica Neue', Arial, 'Nirmala UI', 'Noto Sans', sans-serif" font-size="10.5" font-weight="700" fill="#667884" text-anchor="middle">LIT CELLS</text>
+<text x="586.0" y="121.0" font-family="'Segoe UI', 'Helvetica Neue', Arial, 'Nirmala UI', 'Noto Sans', sans-serif" font-size="13" font-weight="700" fill="#0f2230" text-anchor="middle">7 entries of 0.378</text>
+<text x="586.0" y="140.0" font-family="'Segoe UI', 'Helvetica Neue', Arial, 'Nirmala UI', 'Noto Sans', sans-serif" font-size="13" font-weight="400" fill="#0f2230" text-anchor="middle">8,185 zeros</text>
+<line x1="658.0" y1="124.0" x2="678.0" y2="124.0" stroke="#3f5260" stroke-width="1.5" marker-end="url(#ah)"/>
+<rect x="680.0" y="76.0" width="140.0" height="96.0" rx="8" fill="#ffd675" stroke="#c98d0c" stroke-width="1.2"/>
+<text x="750.0" y="96.0" font-family="'Segoe UI', 'Helvetica Neue', Arial, 'Nirmala UI', 'Noto Sans', sans-serif" font-size="10.5" font-weight="700" fill="#667884" text-anchor="middle">CODE (NORMALIZED)</text>
+<text x="750.0" y="121.0" font-family="Consolas, Menlo, 'DejaVu Sans Mono', monospace" font-size="13" font-weight="700" fill="#0f2230" text-anchor="middle">7 × 34.19</text>
+<text x="750.0" y="140.0" font-family="Consolas, Menlo, 'DejaVu Sans Mono', monospace" font-size="13" font-weight="400" fill="#0f2230" text-anchor="middle">8,185 × −0.0292</text>
+<line x1="822.0" y1="124.0" x2="842.0" y2="124.0" stroke="#3f5260" stroke-width="1.5" marker-end="url(#ah)"/>
+<rect x="844.0" y="76.0" width="140.0" height="96.0" rx="8" fill="#e1f3e1" stroke="#0a8a0a" stroke-width="1.2"/>
+<text x="914.0" y="96.0" font-family="'Segoe UI', 'Helvetica Neue', Arial, 'Nirmala UI', 'Noto Sans', sans-serif" font-size="10.5" font-weight="700" fill="#667884" text-anchor="middle">READ BACK</text>
+<text x="914.0" y="121.0" font-family="'Segoe UI', 'Helvetica Neue', Arial, 'Nirmala UI', 'Noto Sans', sans-serif" font-size="13" font-weight="700" fill="#0f2230" text-anchor="middle">cells above the</text>
+<text x="914.0" y="140.0" font-family="'Segoe UI', 'Helvetica Neue', Arial, 'Nirmala UI', 'Noto Sans', sans-serif" font-size="12" font-weight="400" fill="#0f2230" text-anchor="middle">midpoint → 7 bytes</text>
+<text x="914.0" y="159.0" font-family="'Segoe UI', 'Helvetica Neue', Arial, 'Nirmala UI', 'Noto Sans', sans-serif" font-size="12" font-weight="400" fill="#0f2230" text-anchor="middle">→ token 2420</text>
+<path d="M914,172 V192 H422 V175" fill="none" stroke="#0a8a0a" stroke-width="1.8" marker-end="url(#ah)"/>
+<text x="668.0" y="210.0" font-family="'Segoe UI', 'Helvetica Neue', Arial, 'Nirmala UI', 'Noto Sans', sans-serif" font-size="12.5" font-weight="600" fill="#0a8a0a" text-anchor="middle">the code gives the cut string back exactly</text>
+<line x1="194.0" y1="228.0" x2="322.0" y2="228.0" stroke="#b7c4cb" stroke-width="1.5"/><line x1="194.0" y1="223.0" x2="194.0" y2="233.0" stroke="#b7c4cb" stroke-width="1.5"/><line x1="322.0" y1="223.0" x2="322.0" y2="233.0" stroke="#b7c4cb" stroke-width="1.5"/>
+<text x="258.0" y="248.0" font-family="'Segoe UI', 'Helvetica Neue', Arial, 'Nirmala UI', 'Noto Sans', sans-serif" font-size="12.5" font-weight="600" fill="#3f5260" text-anchor="middle">Tables: raw or decode</text>
+<line x1="358.0" y1="228.0" x2="486.0" y2="228.0" stroke="#b7c4cb" stroke-width="1.5"/><line x1="358.0" y1="223.0" x2="358.0" y2="233.0" stroke="#b7c4cb" stroke-width="1.5"/><line x1="486.0" y1="223.0" x2="486.0" y2="233.0" stroke="#b7c4cb" stroke-width="1.5"/>
+<text x="422.0" y="248.0" font-family="'Segoe UI', 'Helvetica Neue', Arial, 'Nirmala UI', 'Noto Sans', sans-serif" font-size="12.5" font-weight="600" fill="#3f5260" text-anchor="middle">Lemma 2: cut rule</text>
+<line x1="522.0" y1="228.0" x2="650.0" y2="228.0" stroke="#b7c4cb" stroke-width="1.5"/><line x1="522.0" y1="223.0" x2="522.0" y2="233.0" stroke="#b7c4cb" stroke-width="1.5"/><line x1="650.0" y1="223.0" x2="650.0" y2="233.0" stroke="#b7c4cb" stroke-width="1.5"/>
+<text x="586.0" y="248.0" font-family="'Segoe UI', 'Helvetica Neue', Arial, 'Nirmala UI', 'Noto Sans', sans-serif" font-size="12.5" font-weight="600" fill="#3f5260" text-anchor="middle">Lemma 1, step 1</text>
+<line x1="686.0" y1="228.0" x2="814.0" y2="228.0" stroke="#b7c4cb" stroke-width="1.5"/><line x1="686.0" y1="223.0" x2="686.0" y2="233.0" stroke="#b7c4cb" stroke-width="1.5"/><line x1="814.0" y1="223.0" x2="814.0" y2="233.0" stroke="#b7c4cb" stroke-width="1.5"/>
+<text x="750.0" y="248.0" font-family="'Segoe UI', 'Helvetica Neue', Arial, 'Nirmala UI', 'Noto Sans', sans-serif" font-size="12.5" font-weight="600" fill="#3f5260" text-anchor="middle">Lemma 1, steps 2–3</text>
+<line x1="850.0" y1="228.0" x2="978.0" y2="228.0" stroke="#b7c4cb" stroke-width="1.5"/><line x1="850.0" y1="223.0" x2="850.0" y2="233.0" stroke="#b7c4cb" stroke-width="1.5"/><line x1="978.0" y1="223.0" x2="978.0" y2="233.0" stroke="#b7c4cb" stroke-width="1.5"/>
+<text x="914.0" y="248.0" font-family="'Segoe UI', 'Helvetica Neue', Arial, 'Nirmala UI', 'Noto Sans', sans-serif" font-size="12.5" font-weight="600" fill="#3f5260" text-anchor="middle">Lemma 1, steps 4–5</text>
+<line x1="358.0" y1="268.0" x2="978.0" y2="268.0" stroke="#0f2230" stroke-width="1.8"/><line x1="358.0" y1="262.0" x2="358.0" y2="274.0" stroke="#0f2230" stroke-width="1.8"/><line x1="978.0" y1="262.0" x2="978.0" y2="274.0" stroke="#0f2230" stroke-width="1.8"/>
+<text x="668.0" y="292.0" font-family="'Segoe UI', 'Helvetica Neue', Arial, 'Nirmala UI', 'Noto Sans', sans-serif" font-size="13.5" font-weight="700" fill="#0f2230" text-anchor="middle">Theorem 1: two tokens get the same code exactly when they have the same cut string</text>
+</svg>

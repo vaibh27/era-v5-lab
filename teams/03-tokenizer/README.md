@@ -4,7 +4,7 @@ Put your work in a **topic folder**: `teams/03-tokenizer/<topic>/<file>`, for ex
 Team documents named in the week plan (for example `benchmarks_v1.md`) may sit directly in the team folder. The team lead decides the topic names. Do not make personal folders. Do not make new folders under `teams/`.
 Open a pull request; the lead reviews and merges it. The pr-guard check must pass.
 
-## Status (updated 28 Oct 2026)
+## Status (updated 31 Oct 2026)
 
 Each task is a GitHub issue titled `[G3] ...`. The issue is the source of truth; this table is the index.
 [All G3 issues](https://github.com/theschoolofai/era-v5-lab/issues?q=is%3Aissue+%5BG3%5D+in%3Atitle)
@@ -13,11 +13,7 @@ Each task is a GitHub issue titled `[G3] ...`. The issue is the source of truth;
 
 | Issue | Task | Owner | State |
 |---|---|---|---|
-| #127 | Rebase #126 (`train_bpe.py --special-layout v0`) on main | @sohamniyogi | waiting on rebase |
-| #128 | v1 idea 3: rebalance Dravidian merges in the retrain | @sohamniyogi | in progress |
-| #129 | v1 idea 2: NFC + Malayalam chillu normalizer | **open, claim it on the issue** | unclaimed |
-| #131 | COMPARE.md: v0 results table (TSAI follow-up to #107) | @HariniJasti | open |
-| #132 | Fill `g10_slot_00..63` with the G10 special-token list | @rjvim | waiting on G10 (31 Oct) |
+| - | FLORES harness on v2 | @riyaagrahari | open |
 
 ### Done
 
@@ -26,7 +22,13 @@ Each task is a GitHub issue titled `[G3] ...`. The issue is the source of truth;
 | #72 | Baseline reproduced: BrahmicTokenizer-131K, FLORES mean fertility 2.8355 (exact match) | @HariniJasti |
 | #107 | v0: reserved special slots named (G10, lang, ctrl blocks) | @rjvim |
 | #108 | Harness, `train_bpe.py` with fixed script slots, c0 build, COMPARE.md | @sohamniyogi |
+| #134 | v1 idea 2: Unicode normalizer (NFC + chillu + Bn/Pa nukta re-join), no id changes (closes #129) | @HariniJasti |
+| #137 | `train_bpe --special-layout v0` (closes #127) and v1-c1 retrain: mean Indic −16.97% vs v0 (closes #128) | @sohamniyogi |
+| #145 | COMPARE.md: v0 per-language results table (closes #131) | @HariniJasti |
 | #147 | Sarvam-m vs Tekken structural identity: same BPE table, 6 renamed specials, ids 10-19 shifted (closes #130) | @riyaagrahari |
+| #166 | v2: o200k pruning by usage (13,850 never-used base tokens swapped for English/code o200k tokens; specials and all script ids unchanged), slot split chosen on held-out FineWeb-2: held-out English +1.74% → −0.10% vs baseline, no Indic language worse than v1-c1; counts as C3, sha256 sent to G4 (closes #163) | @sohamniyogi |
+| #173 | v0.1: G10 ChatML v0 markers, `g10_slot_00..04` renamed in place to `<|endoftext|>`, `<|think|>`, `<|/think|>`, `<|/tool_call|>`, `<|/tool_result|>`; ids and `special: true` unchanged, sha256 `a33c9907…e578` (closes #132) | @sohamniyogi |
+| this PR | Week-2 candidates (closes #182) with v0.1 specials: C1 (o200k swap only), C2 (+slots_v1), C3 (+normalizer v1 = v2); manifests with corpus hashes in `train/` | @sohamniyogi |
 
 ### Areas
 
@@ -47,8 +49,9 @@ Each task is a GitHub issue titled `[G3] ...`. The issue is the source of truth;
 
 ### Dates (IST)
 
-- **Sat 31 Oct:** G10 sends the final special-token list (#132).
+- **Sat 31 Oct:** G10 special-token list received; v0.1 merged (#173, closes #132).
 - **Sat 31 Oct, 23:59:** diagnosis due for everyone (all rows + medicine sheet).
+- **Wed 4 Nov:** C1 and C2 due.
 
 ### Keeping this current
 
