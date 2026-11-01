@@ -103,6 +103,12 @@ def _test_needs(item):
     if file == "test_model.py" and fn == "test_mtp_loss_parts":
         return [("model.mtp", True)]
     if file == "test_ce.py":
+        if fn == "test_source_inspired_impls_match_plain_loss_and_all_gradients":
+            return []
+        if fn.startswith("test_fused_liger"):
+            return [("model.ce_impl", "fused_liger")]
+        if fn.startswith("test_fused_cce"):
+            return [("model.ce_impl", "fused_cce")]
         if fn.startswith("test_fused_cached"):
             return [("model.ce_impl", "fused_cached")]
         return [("model.ce_impl", "fused" if fn.startswith("test_fused") else "chunked")]

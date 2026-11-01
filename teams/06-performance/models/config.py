@@ -22,7 +22,7 @@ from pathlib import Path
 import yaml
 
 MOE_KEYS = {"num_experts", "top_k", "num_shared", "bias_gamma", "dispatch"}   # SparseMoE keyword arguments
-CE_IMPLS = ("torch", "chunked", "fused", "fused_cached")
+CE_IMPLS = ("torch", "chunked", "fused", "fused_cached", "fused_liger", "fused_cce")
 ATTN_IMPLS = ("sdpa", "eager")
 
 
@@ -44,10 +44,10 @@ class ModelConfig:
                                                    bias_gamma=0.01, dispatch="loop"))
     reversible: bool = False         # True: midpoint reversible stack
     rev_h: float = 1.0               # midpoint step size
-    ce_impl: str = "torch"           # torch | chunked | fused (vocab-tiled/recompute) | fused_cached (token-tiled/cached grads)
-    ce_chunks: int = 8
-    ce_vocab_chunk: int = 4096        # vocabulary tile size for fused (recompute) linear cross-entropy
-    ce_token_chunk: int = 16           # token tile size for fused_cached linear cross-entropy
+    ce_impl: str = "torch"           # torch | chunked | fused | fused_cached | fused_liger | fused_cce
+    ce_chunks: int = 8                # number of token chunks for chunked / fused
+    ce_vocab_chunk: int = 4096        # vocabulary tile size for fused_cce
+    ce_token_chunk: int = 16           # token tile size for fused_cached / fused_liger
     mtp: bool = False                # True: second untied head predicts token t+2 (G5 config_v0); loss = ntp + mtp
 
     def __post_init__(self):

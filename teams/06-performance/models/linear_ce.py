@@ -1,14 +1,26 @@
-"""Memory-bounded linear cross-entropy with a recomputing custom backward.
+"""Memory-bounded linear cross-entropy implementations.
 
-The vocabulary dimension is processed in tiles. Forward keeps only per-token log-sum-exp and
-target logits; backward recomputes one tile at a time, so an [tokens, vocabulary] logits tensor
-is never retained. This is a pure PyTorch implementation intended as a portable fused-op baseline,
-not a single custom CUDA kernel.
+``linear_cross_entropy_fused`` processes token chunks, computes loss and head gradients while
+each chunk is resident, and saves only dh/dW for backward. The vocabulary-streaming alternative
+keeps per-token log-sum-exp and target logits and recomputes tiles in backward. These are pure
+PyTorch custom-autograd implementations, not single custom CUDA kernels.
+
+The two source-inspired entry points below map the algorithms in the upstream projects onto
+portable PyTorch custom-autograd implementations:
+
+* ``linear_cross_entropy_cce`` follows Apple's Cut Cross-Entropy strategy: stream vocabulary
+  tiles, maintaining log-sum-exp and the target logit, then recompute tiles for backward.
+* ``linear_cross_entropy_liger`` follows Liger's chunked linear-CE strategy: materialize one
+  token chunk's logits, compute its loss and head gradients while resident, then save gradients.
+
+These are correctness/reference implementations, not copies of the upstream Triton kernels.
+See docs/LINEAR_CE.md for source links, algorithm mapping, and limitations.
 """
 from __future__ import annotations
 
 import torch
 import torch.nn.functional as F
+from torch.autograd.function import once_differentiable
 
 
 class _LinearCrossEntropy(torch.autograd.Function):
@@ -91,6 +103,12 @@ def linear_cross_entropy(x, weight, targets, *, bias=None, vocab_chunk=4096, ign
     return _LinearCrossEntropy.apply(x, weight, bias, targets, int(vocab_chunk), int(ignore_index))
 
 
+def linear_cross_entropy_cce(x, weight, targets, *, bias=None, vocab_chunk=4096, ignore_index=-100):
+    """Apple CCE-style streamed-vocabulary PyTorch reference implementation."""
+    return linear_cross_entropy(x, weight, targets, bias=bias, vocab_chunk=vocab_chunk,
+                                ignore_index=ignore_index)
+
+
 class _CachedGradientLinearCrossEntropy(torch.autograd.Function):
     """Token-chunked CE that computes the linear-head gradients while logits are resident.
 
@@ -107,32 +125,50 @@ class _CachedGradientLinearCrossEntropy(torch.autograd.Function):
             raise ValueError(f"hidden sizes differ: {x.shape[1]} vs {weight.shape[1]}")
         if token_chunk <= 0:
             raise ValueError("token_chunk must be positive")
-        targets = targets.reshape(-1).long()
+        if targets.dtype != torch.long:
+            raise TypeError("linear cross-entropy targets must have dtype torch.long")
+        if not x.is_floating_point() or not weight.is_floating_point():
+            raise TypeError("linear cross-entropy inputs and weights must be floating point")
+        targets = targets.reshape(-1)
         if targets.numel() != x.shape[0]:
             raise ValueError("target count must match the number of input rows")
 
-        x32, w32 = x.float(), weight.float()
-        y = targets
-        n, vocab = x.shape[0], weight.shape[0]
+        # Respect native bf16/fp16 tensors and the enclosing training autocast context. Only
+        # the head matmul uses this dtype; reductions and gradient accumulation stay fp32.
+        compute_dtype = (torch.get_autocast_dtype(x.device.type)
+                         if torch.is_autocast_enabled(x.device.type)
+                         else torch.promote_types(x.dtype, weight.dtype))
+        with torch.autocast(device_type=x.device.type, enabled=False):
+            return _CachedGradientLinearCrossEntropy._forward(
+                ctx, x, weight, bias, targets, token_chunk, ignore_index, compute_dtype)
+
+    @staticmethod
+    def _forward(ctx, x, weight, bias, y, token_chunk, ignore_index, compute_dtype):
+        xc_all, wc = x.to(compute_dtype), weight.to(compute_dtype)
+        bc = None if bias is None else bias.to(compute_dtype)
+        x32, w32 = xc_all.float(), wc.float()
+        n = x.shape[0]
         valid = y != ignore_index
         count = valid.sum().clamp_min(1)
         grad_x = torch.zeros_like(x32)
         grad_weight = torch.zeros_like(w32)
         grad_bias = None if bias is None else torch.zeros_like(bias, dtype=torch.float32)
         loss_sum = torch.zeros((), dtype=torch.float32, device=x.device)
-        rows = torch.arange(min(token_chunk, n), device=x.device)
 
         for start in range(0, n, token_chunk):
             end = min(start + token_chunk, n)
             xc, yc = x32[start:end], y[start:end]
             keep = valid[start:end]
-            logits = F.linear(xc, w32, None if bias is None else bias.float())
+            logits = F.linear(xc_all[start:end], wc, bc).float()
             log_z = torch.logsumexp(logits, dim=-1)
-            safe_y = yc.clamp(min=0, max=vocab - 1)
-            target_logit = logits[torch.arange(end - start, device=x.device), safe_y]
+            # Only ignored labels are replaced. Invalid non-ignored labels must raise
+            # rather than being silently clamped into the vocabulary.
+            safe_y = torch.where(keep, yc, 0)
+            target_logit = logits.gather(1, safe_y[:, None]).squeeze(1)
             loss_sum += torch.where(keep, log_z - target_logit, 0.0).sum()
 
-            probabilities = torch.softmax(logits, dim=-1)
+            # Reuse the logits storage for dlogits; no chunk logits survive this iteration.
+            probabilities = logits.sub_(log_z[:, None]).exp_()
             probabilities.mul_(keep[:, None])
             probabilities[torch.arange(end - start, device=x.device), safe_y] -= keep.to(probabilities.dtype)
             probabilities.div_(count)
@@ -140,21 +176,40 @@ class _CachedGradientLinearCrossEntropy(torch.autograd.Function):
             grad_weight.add_(probabilities.T @ xc)
             if grad_bias is not None:
                 grad_bias.add_(probabilities.sum(dim=0))
+            del logits, probabilities
 
-        saved_bias_grad = x.new_empty((0,)) if grad_bias is None else grad_bias
-        ctx.save_for_backward(grad_x, grad_weight, saved_bias_grad)
+        if grad_bias is None:
+            ctx.save_for_backward(grad_x, grad_weight)
+        else:
+            ctx.save_for_backward(grad_x, grad_weight, grad_bias)
         ctx.bias_is_none = bias is None
         ctx.x_dtype, ctx.weight_dtype = x.dtype, weight.dtype
         ctx.bias_dtype = None if bias is None else bias.dtype
         return loss_sum / count
 
     @staticmethod
+    @once_differentiable
     def backward(ctx, grad_output):
-        grad_x, grad_weight, grad_bias = ctx.saved_tensors
+        grad_x, grad_weight = ctx.saved_tensors[:2]
+        grad_bias = None if ctx.bias_is_none else ctx.saved_tensors[2]
         scale = grad_output.float()
         return (grad_x.mul(scale).to(ctx.x_dtype), grad_weight.mul(scale).to(ctx.weight_dtype),
                 None if ctx.bias_is_none else grad_bias.mul(scale).to(ctx.bias_dtype),
                 None, None, None)
+
+
+def linear_cross_entropy_fused(x, weight, targets, *, bias=None, chunks=8, ignore_index=-100):
+    """Task-5 fused CE: split tokens into at most ``chunks`` pieces and cache head gradients.
+
+    ``chunks`` need not divide the token count and may exceed it. Logits use the native input
+    dtype (or the enclosing autocast dtype); CE reductions and gradient buffers use fp32.
+    Only dh/dW (and db when a bias is supplied) are saved for the first-order backward.
+    """
+    if chunks <= 0:
+        raise ValueError("chunks must be positive")
+    token_chunk = max(1, (x.shape[0] + chunks - 1) // chunks)
+    return linear_cross_entropy_cached(x, weight, targets, bias=bias, token_chunk=token_chunk,
+                                       ignore_index=ignore_index)
 
 
 def linear_cross_entropy_cached(x, weight, targets, *, bias=None, token_chunk=16, ignore_index=-100):
@@ -167,3 +222,9 @@ def linear_cross_entropy_cached(x, weight, targets, *, bias=None, token_chunk=16
     return _CachedGradientLinearCrossEntropy.apply(
         x, weight, bias, targets, int(token_chunk), int(ignore_index)
     )
+
+
+def linear_cross_entropy_liger(x, weight, targets, *, bias=None, token_chunk=16, ignore_index=-100):
+    """Liger-style token-chunked PyTorch reference with gradients cached in forward."""
+    return linear_cross_entropy_cached(x, weight, targets, bias=bias, token_chunk=token_chunk,
+                                       ignore_index=ignore_index)
