@@ -80,9 +80,10 @@ class ModelConfig:
                                  # lab: num_shared 1; dispatch: loop | sorted; unknown keys fail
     reversible: bool = False     # True: midpoint stack
     rev_h: float = 1.0           # midpoint step size
-    ce_impl: str = "torch"       # torch (full logits) | chunked (checkpointed positions) | fused (vocabulary tiles)
+    ce_impl: str = "torch"       # torch | chunked (checkpointed tokens) | fused (vocab tiles/recompute) | fused_cached (token tiles/cached grads)
     ce_chunks: int = 8
     ce_vocab_chunk: int = 4096
+    ce_token_chunk: int = 16
     mtp: bool = False            # True: second untied head on token t+2; loss = ntp + mtp
 ```
 
@@ -259,7 +260,7 @@ Status "Stub": the file raises `NotImplementedError`. Its docstring has the full
 | `correctness/test_ke2.py` | KE2 vs G4's dense fp64 encoder: random, edge-case and G4's committed table, fp32 and bf16 | Implemented |
 | `correctness/test_moe.py` | Token-by-token fp64 MoE vs every entry in `DISPATCH`; routing replay (near-tie test); bias balancing; fp32 router; shared expert; init scale | Implemented |
 | `correctness/test_reversible.py` | Custom backward vs plain autograd (MLP and MoE); inversion; bf16 reconstruction (CUDA bf16 only) | Implemented |
-| `correctness/test_ce.py` | `ce_impl=chunked` and `fused` vs `torch`, loss definition, masked targets, MTP, and input/weight/bias gradients | Implemented |
+| `correctness/test_ce.py` | `torch`, `chunked`, vocabulary-tiled `fused`, and token-tiled `fused_cached`; masked targets, MTP, fp32/bf16 parity, and input/weight/bias gradients | Implemented; target-GPU timing remains to be recorded |
 | `correctness/test_model.py` | The whole GPT (lab_small, base; fp32 and bf16) vs an fp64 model from the definitions, real Brahmic tokens | Implemented; catches 6 injected model bugs |
 | `correctness/test_optimizer.py`, `test_tokenizer.py`, `test_metrics.py`, `test_report.py` | Optimizer assignment, updates, state restore and FLOPs; tokenizer contract; metric formulas and GPU peaks; report 5% gate and Markdown output; real-tokenizer + KE + optimizer integration is folded into `test_optimizer.py` | Implemented; CUDA bf16 loop/batched tolerance still needs validation on target GPU |
 

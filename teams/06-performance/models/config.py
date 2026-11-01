@@ -22,7 +22,7 @@ from pathlib import Path
 import yaml
 
 MOE_KEYS = {"num_experts", "top_k", "num_shared", "bias_gamma", "dispatch"}   # SparseMoE keyword arguments
-CE_IMPLS = ("torch", "chunked", "fused")
+CE_IMPLS = ("torch", "chunked", "fused", "fused_cached")
 ATTN_IMPLS = ("sdpa", "eager")
 
 
@@ -44,9 +44,10 @@ class ModelConfig:
                                                    bias_gamma=0.01, dispatch="loop"))
     reversible: bool = False         # True: midpoint reversible stack
     rev_h: float = 1.0               # midpoint step size
-    ce_impl: str = "torch"           # torch: full logits | chunked: checkpointed positions | fused: vocabulary-tiled autograd
+    ce_impl: str = "torch"           # torch | chunked | fused (vocab-tiled/recompute) | fused_cached (token-tiled/cached grads)
     ce_chunks: int = 8
-    ce_vocab_chunk: int = 4096        # vocabulary tile size for fused linear cross-entropy
+    ce_vocab_chunk: int = 4096        # vocabulary tile size for fused (recompute) linear cross-entropy
+    ce_token_chunk: int = 16           # token tile size for fused_cached linear cross-entropy
     mtp: bool = False                # True: second untied head predicts token t+2 (G5 config_v0); loss = ntp + mtp
 
     def __post_init__(self):
@@ -55,7 +56,8 @@ class ModelConfig:
         assert self.n_embd % self.n_head == 0, "n_embd must be divisible by n_head"
         assert self.attn_impl in ATTN_IMPLS, f"attn_impl={self.attn_impl!r} not in {ATTN_IMPLS}"
         assert self.ce_impl in CE_IMPLS, f"ce_impl={self.ce_impl!r} not in {CE_IMPLS}"
-        assert self.ce_chunks > 0 and self.ce_vocab_chunk > 0, "cross-entropy chunk sizes must be positive"
+        assert self.ce_chunks > 0 and self.ce_vocab_chunk > 0 and self.ce_token_chunk > 0, \
+            "cross-entropy chunk sizes must be positive"
         unknown = sorted(set(self.moe) - MOE_KEYS)
         assert not unknown, f"unknown moe keys {unknown}; known: {sorted(MOE_KEYS)}"
         if self.n_kv_head is None:

@@ -12,7 +12,8 @@ import torch.nn.functional as F
 
 from models.config import ModelConfig
 from models.gpt import GPT, IGNORE_INDEX
-from models.linear_ce import linear_cross_entropy
+from models.linear_ce import linear_cross_entropy, linear_cross_entropy_cached
+from correctness.framework import Case, PAIRS, check, pair, pairs_in
 
 VOCAB = 97
 BLOCK = 16
@@ -23,7 +24,7 @@ def _models(device, chunks, ce_impl="chunked", mtp=False):
     torch.manual_seed(0)
     plain = GPT(ModelConfig(**cfg, ce_impl="torch", mtp=mtp)).to(device).train()
     candidate = GPT(ModelConfig(**cfg, ce_impl=ce_impl, ce_chunks=chunks, ce_vocab_chunk=13,
-                                mtp=mtp)).to(device).train()
+                                ce_token_chunk=5, mtp=mtp)).to(device).train()
     candidate.load_state_dict(plain.state_dict())
     return plain, candidate
 
@@ -58,6 +59,44 @@ def _loss_and_grads(model, idx, y):
 
 def _same(a, b, what):
     torch.testing.assert_close(a, b, rtol=1e-5, atol=1e-6, msg=lambda m: f"{what}: {m}")
+
+
+def _linear_ce_pair(device, impl, dtype=torch.float32):
+    torch.manual_seed(140)
+    x = torch.randn(5, 7, device=device, dtype=dtype, requires_grad=True)
+    weight = torch.randn(23, 7, device=device, dtype=dtype, requires_grad=True)
+    targets = torch.tensor([2, -100, 21, -100, 0], device=device)
+
+    def reference(x, w, y):
+        return F.cross_entropy(F.linear(x, w), y, ignore_index=-100)
+
+    def fast(x, w, y):
+        if impl == "fused":
+            return linear_cross_entropy(x, w, y, vocab_chunk=8, ignore_index=-100)
+        return linear_cross_entropy_cached(x, w, y, token_chunk=2, ignore_index=-100)
+
+    return Case(ref=reference, fast=fast, inputs=[x, weight, targets])
+
+
+@pair("ce.fused", tol=1e-5, grad_tol=1e-4)
+def _fused_pair(device):
+    """The established vocabulary-tiled implementation remains a separately checked option."""
+    return _linear_ce_pair(device, "fused")
+
+
+@pair("ce.fused.bf16", dtype=torch.bfloat16)
+def _fused_bf16_pair(device):
+    return _linear_ce_pair(device, "fused", torch.bfloat16)
+
+
+@pair("ce.fused_cached", tol=1e-5, grad_tol=1e-4)
+def _fused_cached_pair(device):
+    return _linear_ce_pair(device, "fused_cached")
+
+
+@pair("ce.fused_cached.bf16", dtype=torch.bfloat16)
+def _fused_cached_bf16_pair(device):
+    return _linear_ce_pair(device, "fused_cached", torch.bfloat16)
 
 
 MASKS = {
@@ -113,7 +152,7 @@ def _available_test_devices():
 
 @pytest.mark.parametrize("device", _available_test_devices(), ids=lambda d: d.type)
 @pytest.mark.parametrize("mtp", [False, True], ids=["ntp", "mtp"])
-@pytest.mark.parametrize("mask", ["scattered", "one_left"])
+@pytest.mark.parametrize("mask", ["none", "scattered", "one_row", "one_left"])
 def test_fused_matches_plain_loss_and_all_gradients(device, mtp, mask):
     plain, fused = _models(device, chunks=4, ce_impl="fused", mtp=mtp)
     idx, y = _data(device, 2, 16, masked=MASKS[mask])
@@ -128,6 +167,49 @@ def test_fused_matches_plain_loss_and_all_gradients(device, mtp, mask):
     assert gp.keys() == gf.keys()
     for name in gp:
         _same(gf[name], gp[name], f"fused gradient of {name} ({device}, mtp={mtp}, mask={mask})")
+
+
+@pytest.mark.parametrize("device", _available_test_devices(), ids=lambda d: d.type)
+@pytest.mark.parametrize("mask", ["none", "scattered", "one_row", "one_left"])
+@pytest.mark.parametrize("mtp", [False, True], ids=["ntp", "mtp"])
+def test_fused_cached_matches_plain_loss_and_all_gradients(device, mask, mtp):
+    plain, cached = _models(device, chunks=4, ce_impl="fused_cached", mtp=mtp)
+    idx, y = _data(device, 2, 16, masked=MASKS[mask])
+    lp, gp = _loss_and_grads(plain, idx, y)
+    lc, gc = _loss_and_grads(cached, idx, y)
+    _same(lc, lp, f"fused_cached loss ({device}, mask={mask}, mtp={mtp})")
+    assert gp.keys() == gc.keys()
+    for name in gp:
+        _same(gc[name], gp[name], f"fused_cached gradient of {name} ({device}, mask={mask}, mtp={mtp})")
+
+
+@pytest.mark.parametrize("device", _available_test_devices(), ids=lambda d: d.type)
+@pytest.mark.parametrize("n, token_chunk", [(11, 4), (5, 8), (17, 6), (7, 1)])
+def test_fused_cached_token_chunks_need_not_divide_token_count(device, n, token_chunk):
+    torch.manual_seed(29)
+    x = torch.randn(n, 9, device=device, requires_grad=True)
+    weight = torch.randn(31, 9, device=device, requires_grad=True)
+    targets = torch.randint(0, 31, (n,), device=device)
+    targets[1::4] = IGNORE_INDEX
+    expected = F.cross_entropy(F.linear(x, weight), targets, ignore_index=IGNORE_INDEX)
+    actual = linear_cross_entropy_cached(x, weight, targets, token_chunk=token_chunk,
+                                         ignore_index=IGNORE_INDEX)
+    expected_grads = torch.autograd.grad(expected, (x, weight))
+    actual_grads = torch.autograd.grad(actual, (x, weight))
+    _same(actual, expected, f"cached token chunk loss n={n}, chunk={token_chunk} ({device})")
+    for name, got, want in zip(("x", "weight"), actual_grads, expected_grads):
+        _same(got, want, f"cached token chunk {name} gradient n={n}, chunk={token_chunk} ({device})")
+
+
+@pytest.mark.parametrize("device", _available_test_devices(), ids=lambda d: d.type)
+def test_fused_cached_all_targets_ignored_has_zero_loss_and_gradients(device):
+    x = torch.randn(5, 9, device=device, requires_grad=True)
+    weight = torch.randn(31, 9, device=device, requires_grad=True)
+    targets = torch.full((5,), IGNORE_INDEX, device=device)
+    loss = linear_cross_entropy_cached(x, weight, targets, token_chunk=2, ignore_index=IGNORE_INDEX)
+    grads = torch.autograd.grad(loss, (x, weight))
+    assert loss.item() == 0.0
+    assert all(torch.isfinite(g).all() and not g.any() for g in grads)
 
 
 @pytest.mark.parametrize("device", _available_test_devices(), ids=lambda d: d.type)
@@ -178,3 +260,9 @@ def test_fused_linear_cross_entropy_power_of_two_vocab_chunks(device, vocab_chun
     _same(actual, reference, f"fused CE loss ({device}, vocab_chunk={vocab_chunk})")
     for name, got, expected in zip(("x", "weight"), actual_grads, reference_grads):
         _same(got, expected, f"fused CE gradient {name} ({device}, vocab_chunk={vocab_chunk})")
+
+
+@pytest.mark.parametrize("name", pairs_in(__name__))
+@pytest.mark.parametrize("device", _available_test_devices(), ids=lambda d: d.type)
+def test_pair(name, device):
+    check(PAIRS[name], device)

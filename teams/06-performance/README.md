@@ -157,6 +157,7 @@ python -m perfkit.smoke model.embedding=table model.reversible=false optim.name=
 python -m perfkit.smoke --config configs/tiny_cpu.yaml       # laptop, seconds; numbers mean nothing
 python -m perfkit.smoke model.ce_impl=chunked                # if out of memory; then lower run.batch_size (8 on a T4)
 python -m perfkit.smoke model.ce_impl=fused                  # tiled linear CE, recomputes vocab tiles in backward
+python -m perfkit.smoke model.ce_impl=fused_cached           # token-tiled CE, caches head gradients (measure memory too)
 python -m perfkit.smoke --steps 500 --warmup 0               # longer training run (every step is a real train step)
 ```
 
@@ -168,6 +169,9 @@ Device, precision, batch and step counts come from the config only (`run.device`
 `model.ce_impl=fused` avoids retaining the full `[tokens, vocab]` logits by processing vocabulary tiles of
 `model.ce_vocab_chunk` classes and recomputing them during backward. It is a portable PyTorch custom-autograd
 implementation; it is a memory-saving correctness baseline, not yet a single-kernel Triton/CUDA optimization.
+`model.ce_impl=fused_cached` instead materializes logits for a small token tile, computes `dh` and `dW` while
+that tile is live, and saves those gradients for backward. This trades recomputation for a full head-gradient
+buffer; compare step time and peak memory before choosing it.
 For an A/B timing against the plain head, run `perfkit.bench` once with the default `model.ce_impl=torch`, then
 rerun with `--against results/runs/<torch-tag>.json model.ce_impl=fused`; the report labels this implementation A/B.
 

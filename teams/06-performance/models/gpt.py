@@ -26,8 +26,9 @@ Parts and where they come from:
     output and predicts token t+2 (targets shifted by one more; the last position has none). The returned loss is
     ntp + mtp, the sum G5 backpropagates; model.loss_parts holds both, detached, for logging (G5 logs ntp as loss).
   * Loss: cfg.ce_impl "torch" materialises logits [B*T, V]; "chunked" checkpoints position chunks;
-    "fused" tiles over the vocabulary and recomputes the linear operation in custom backward. The two
-    memory-bounded paths return logits=None when targets are given. Loss averages non-ignored targets.
+    "fused" tiles vocabulary and recomputes logits in custom backward; "fused_cached" tiles tokens and
+    saves the head gradients computed while each logits tile is resident. Memory-bounded paths return
+    logits=None when targets are given. Loss averages non-ignored targets.
 
 Timing markers (roofline and report read these names; keep them)
   region("embed", 2)                       around tok + pos embedding (KE adds "embed.ke" at level 3 inside)
@@ -56,7 +57,7 @@ import torch.nn as nn
 import torch.nn.functional as F
 
 from models.config import ModelConfig
-from models.linear_ce import linear_cross_entropy
+from models.linear_ce import linear_cross_entropy, linear_cross_entropy_cached
 from perfkit.regions import mark, region
 
 
@@ -216,7 +217,7 @@ class GPT(nn.Module):
         x = mark(x, "head+loss", 1)
         with region("head+loss", 2):
             x = self.ln_f(x)
-            if targets is not None and self.cfg.ce_impl in ("chunked", "fused"):
+            if targets is not None and self.cfg.ce_impl in ("chunked", "fused", "fused_cached"):
                 loss = self._head_ce(self.head, x.reshape(B * T, -1), targets.reshape(B * T))
                 return None, self._add_mtp(loss, x, targets)
             logits = self.head(x)
@@ -233,7 +234,7 @@ class GPT(nn.Module):
             return ntp
         with region("head+loss.mtp", 3):
             xm, ym = x[:, :-1].reshape(-1, x.shape[-1]), targets[:, 1:].reshape(-1)
-            if self.cfg.ce_impl in ("chunked", "fused"):
+            if self.cfg.ce_impl in ("chunked", "fused", "fused_cached"):
                 mtp = self._head_ce(self.mtp_head, xm, ym)
             else:
                 mtp = F.cross_entropy(self.mtp_head(xm).float(), ym, ignore_index=IGNORE_INDEX)
@@ -257,6 +258,11 @@ class GPT(nn.Module):
             return linear_cross_entropy(
                 x, head.weight, y, bias=head.bias,
                 vocab_chunk=self.cfg.ce_vocab_chunk, ignore_index=IGNORE_INDEX,
+            )
+        if self.cfg.ce_impl == "fused_cached":
+            return linear_cross_entropy_cached(
+                x, head.weight, y, bias=head.bias,
+                token_chunk=self.cfg.ce_token_chunk, ignore_index=IGNORE_INDEX,
             )
         return self._chunked_ce(head, x, y)
 

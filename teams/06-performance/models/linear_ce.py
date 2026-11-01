@@ -89,3 +89,81 @@ def linear_cross_entropy(x, weight, targets, *, bias=None, vocab_chunk=4096, ign
     zero with zero gradients, matching the existing chunked-loss behavior.
     """
     return _LinearCrossEntropy.apply(x, weight, bias, targets, int(vocab_chunk), int(ignore_index))
+
+
+class _CachedGradientLinearCrossEntropy(torch.autograd.Function):
+    """Token-chunked CE that computes the linear-head gradients while logits are resident.
+
+    This moves the head backward work into forward. The saved state is the resulting input/weight
+    gradients (plus bias gradient when needed), rather than inputs and logits for recomputation.
+    It is a memory/performance trade-off: the weight-gradient buffer is the size of the head.
+    """
+
+    @staticmethod
+    def forward(ctx, x, weight, bias, targets, token_chunk: int, ignore_index: int):
+        if x.ndim != 2 or weight.ndim != 2:
+            raise ValueError("linear cross-entropy expects x [tokens, hidden] and weight [vocab, hidden]")
+        if x.shape[1] != weight.shape[1]:
+            raise ValueError(f"hidden sizes differ: {x.shape[1]} vs {weight.shape[1]}")
+        if token_chunk <= 0:
+            raise ValueError("token_chunk must be positive")
+        targets = targets.reshape(-1).long()
+        if targets.numel() != x.shape[0]:
+            raise ValueError("target count must match the number of input rows")
+
+        x32, w32 = x.float(), weight.float()
+        y = targets
+        n, vocab = x.shape[0], weight.shape[0]
+        valid = y != ignore_index
+        count = valid.sum().clamp_min(1)
+        grad_x = torch.zeros_like(x32)
+        grad_weight = torch.zeros_like(w32)
+        grad_bias = None if bias is None else torch.zeros_like(bias, dtype=torch.float32)
+        loss_sum = torch.zeros((), dtype=torch.float32, device=x.device)
+        rows = torch.arange(min(token_chunk, n), device=x.device)
+
+        for start in range(0, n, token_chunk):
+            end = min(start + token_chunk, n)
+            xc, yc = x32[start:end], y[start:end]
+            keep = valid[start:end]
+            logits = F.linear(xc, w32, None if bias is None else bias.float())
+            log_z = torch.logsumexp(logits, dim=-1)
+            safe_y = yc.clamp(min=0, max=vocab - 1)
+            target_logit = logits[torch.arange(end - start, device=x.device), safe_y]
+            loss_sum += torch.where(keep, log_z - target_logit, 0.0).sum()
+
+            probabilities = torch.softmax(logits, dim=-1)
+            probabilities.mul_(keep[:, None])
+            probabilities[torch.arange(end - start, device=x.device), safe_y] -= keep.to(probabilities.dtype)
+            probabilities.div_(count)
+            grad_x[start:end] = probabilities @ w32
+            grad_weight.add_(probabilities.T @ xc)
+            if grad_bias is not None:
+                grad_bias.add_(probabilities.sum(dim=0))
+
+        saved_bias_grad = x.new_empty((0,)) if grad_bias is None else grad_bias
+        ctx.save_for_backward(grad_x, grad_weight, saved_bias_grad)
+        ctx.bias_is_none = bias is None
+        ctx.x_dtype, ctx.weight_dtype = x.dtype, weight.dtype
+        ctx.bias_dtype = None if bias is None else bias.dtype
+        return loss_sum / count
+
+    @staticmethod
+    def backward(ctx, grad_output):
+        grad_x, grad_weight, grad_bias = ctx.saved_tensors
+        scale = grad_output.float()
+        return (grad_x.mul(scale).to(ctx.x_dtype), grad_weight.mul(scale).to(ctx.weight_dtype),
+                None if ctx.bias_is_none else grad_bias.mul(scale).to(ctx.bias_dtype),
+                None, None, None)
+
+
+def linear_cross_entropy_cached(x, weight, targets, *, bias=None, token_chunk=16, ignore_index=-100):
+    """Token-chunked linear CE that caches head gradients to avoid recomputing logits in backward.
+
+    Unlike :func:`linear_cross_entropy`, this computes ``dh`` and ``dW`` in forward and saves them
+    for autograd's backward. ``token_chunk`` bounds the temporary ``[token_chunk, vocab]`` logits;
+    the cached ``dW`` is a full-size head-gradient buffer, so benchmark its memory cost as well as time.
+    """
+    return _CachedGradientLinearCrossEntropy.apply(
+        x, weight, bias, targets, int(token_chunk), int(ignore_index)
+    )
