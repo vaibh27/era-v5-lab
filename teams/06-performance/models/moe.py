@@ -3,11 +3,13 @@
 Lab setting (model.ffn=moe in configs/base.yaml): 1 shared expert (always on) + top-2 routed of 8.
 
   * SparseMoE(dim, num_experts=8, top_k=2, expert_hidden=None, num_shared=0, bias_gamma=0.01,
-              dispatch="loop", name="moe", router_init_std=0.02, proj_std=0.02)
+              dispatch="loop", name="moe", router_init_std=0.02, proj_std=0.02, activation="gelu")
   * Attributes the fp64 test reference reads (keep these names):
       router       nn.Linear(dim, num_experts), run in fp32 (cast x to router.weight.dtype, autocast off)
       router_bias  buffer [num_experts]: steers *selection* only, never the gate weights
-      experts      ModuleList of ExpertMLP (c_fc: Linear(dim, hidden), GELU, c_proj: Linear(hidden, dim))
+      experts      ModuleList of ExpertMLP. activation "gelu": c_fc = Linear(dim, hidden), GELU, c_proj =
+                   Linear(hidden, dim), with biases. "swiglu": c_proj(SiLU(c_gate(x)) * c_fc(x)), c_gate and c_fc
+                   Linear(dim, hidden), no biases (gpt.MLP has the same two forms).
       shared       ModuleList of ExpertMLP, always on, same hidden size as a routed expert
       top_k, num_experts
   * Init as the dense NanoGPT MLP: weights normal(0, 0.02), biases zero, c_proj normal(0, proj_std)
@@ -28,7 +30,8 @@ Lab setting (model.ffn=moe in configs/base.yaml): 1 shared expert (always on) + 
     Gates are always recomputed from the router scores, so the router still gets its gradient.
   * DISPATCH = {"loop": dispatch_loop, "sorted": dispatch_sorted}. The loop path gathers per expert and is
     the reference. The sorted path sorts token/expert assignments, packs them into a padded
-    [experts, cap, dim] buffer and runs each expert MLP as one batched matmul. Every scatter and gather uses
+    [experts, cap, dim] buffer and runs each expert MLP as one batched matmul (SwiGLU: gate and up together as
+    one [experts, cap, 2 * hidden] matmul, then the down projection). Every scatter and gather uses
     unique indices, so two runs give identical gradients on CUDA. It reads only the largest per-expert route
     count back to the host (one sync per call; the loop syncs twice per expert).
     Both paths compute token counts with a device-side compare-and-sum over topk_idx. Since sorted packs all
@@ -51,16 +54,29 @@ import torch.nn.functional as F
 from perfkit.regions import region
 
 
+ACTIVATIONS = ("gelu", "swiglu")
+
+
 class ExpertMLP(nn.Module):
-    def __init__(self, dim, hidden, std=0.02, proj_std=0.02):
+    def __init__(self, dim, hidden, std=0.02, proj_std=0.02, activation="gelu"):
         super().__init__()
-        self.c_fc = nn.Linear(dim, hidden)
-        self.c_proj = nn.Linear(hidden, dim)
-        for lin, s in ((self.c_fc, std), (self.c_proj, proj_std)):
+        assert activation in ACTIVATIONS, f"activation {activation!r} not in {ACTIVATIONS}"
+        self.swiglu = activation == "swiglu"
+        bias = not self.swiglu
+        self.c_fc = nn.Linear(dim, hidden, bias=bias)      # gelu: input projection; swiglu: the "up" branch
+        self.c_proj = nn.Linear(hidden, dim, bias=bias)
+        layers = [(self.c_fc, std), (self.c_proj, proj_std)]
+        if self.swiglu:                                    # made last, so the GELU experts draw the same init
+            self.c_gate = nn.Linear(dim, hidden, bias=False)
+            layers.append((self.c_gate, std))
+        for lin, s in layers:
             nn.init.normal_(lin.weight, mean=0.0, std=s)
-            nn.init.zeros_(lin.bias)
+            if lin.bias is not None:
+                nn.init.zeros_(lin.bias)
 
     def forward(self, x):
+        if self.swiglu:
+            return self.c_proj(F.silu(self.c_gate(x)) * self.c_fc(x))
         return self.c_proj(F.gelu(self.c_fc(x)))
 
 
@@ -109,13 +125,21 @@ def dispatch_sorted(moe, x, topk_idx, gates):
     routes_in = x.unsqueeze(1).expand(n_tokens, k, dim).reshape(-1, dim)     # backward: sum over k
     buf = x.new_zeros(E * cap, dim).index_copy(0, slot, routes_in[order])    # unique indices
 
-    w1 = torch.stack([e.c_fc.weight for e in moe.experts]).to(buf.dtype)     # [E, hidden, dim]
-    b1 = torch.stack([e.c_fc.bias for e in moe.experts]).to(buf.dtype)
     w2 = torch.stack([e.c_proj.weight for e in moe.experts]).to(buf.dtype)   # [E, dim, hidden]
-    b2 = torch.stack([e.c_proj.bias for e in moe.experts]).to(buf.dtype)
-    with region(f"{moe.name}.dispatch.grouped", 3):
-        h = torch.baddbmm(b1.unsqueeze(1), buf.view(E, cap, dim), w1.transpose(1, 2))
-        y = torch.baddbmm(b2.unsqueeze(1), F.gelu(h), w2.transpose(1, 2))    # [E, cap, dim]
+    if moe.swiglu:
+        # gate and up as one batched matmul: [E, 2 * hidden, dim]; no biases
+        w13 = torch.cat([torch.stack([e.c_gate.weight for e in moe.experts]),
+                         torch.stack([e.c_fc.weight for e in moe.experts])], dim=1).to(buf.dtype)
+        with region(f"{moe.name}.dispatch.grouped", 3):
+            gate, up = torch.bmm(buf.view(E, cap, dim), w13.transpose(1, 2)).chunk(2, dim=-1)
+            y = torch.bmm(F.silu(gate) * up, w2.transpose(1, 2))             # [E, cap, dim]
+    else:
+        w1 = torch.stack([e.c_fc.weight for e in moe.experts]).to(buf.dtype)     # [E, hidden, dim]
+        b1 = torch.stack([e.c_fc.bias for e in moe.experts]).to(buf.dtype)
+        b2 = torch.stack([e.c_proj.bias for e in moe.experts]).to(buf.dtype)
+        with region(f"{moe.name}.dispatch.grouped", 3):
+            h = torch.baddbmm(b1.unsqueeze(1), buf.view(E, cap, dim), w1.transpose(1, 2))
+            y = torch.baddbmm(b2.unsqueeze(1), F.gelu(h), w2.transpose(1, 2))    # [E, cap, dim]
 
     where = torch.empty_like(order)
     where[order] = slot                                                      # buffer row of route r, original order
@@ -147,7 +171,8 @@ def replay_routing(moe, topk_idx):
 
 class SparseMoE(nn.Module):
     def __init__(self, dim, num_experts=8, top_k=2, expert_hidden=None, num_shared=0,
-                 bias_gamma=0.01, dispatch="loop", name="moe", router_init_std=0.02, proj_std=0.02):
+                 bias_gamma=0.01, dispatch="loop", name="moe", router_init_std=0.02, proj_std=0.02,
+                 activation="gelu"):
         super().__init__()
         assert dispatch in DISPATCH, f"dispatch {dispatch!r} not in {list(DISPATCH)}"
         assert 0 < top_k <= num_experts
@@ -158,8 +183,10 @@ class SparseMoE(nn.Module):
         nn.init.normal_(self.router.weight, std=router_init_std)
         nn.init.zeros_(self.router.bias)
         self.register_buffer("router_bias", torch.zeros(num_experts))
-        self.experts = nn.ModuleList(ExpertMLP(dim, self.expert_hidden, proj_std=proj_std) for _ in range(num_experts))
-        self.shared = nn.ModuleList(ExpertMLP(dim, self.expert_hidden, proj_std=proj_std) for _ in range(num_shared))
+        self.activation, self.swiglu = activation, activation == "swiglu"
+        expert = dict(proj_std=proj_std, activation=activation)
+        self.experts = nn.ModuleList(ExpertMLP(dim, self.expert_hidden, **expert) for _ in range(num_experts))
+        self.shared = nn.ModuleList(ExpertMLP(dim, self.expert_hidden, **expert) for _ in range(num_shared))
         self._counts = self._record = self._forced = None
 
     def forward(self, x):
