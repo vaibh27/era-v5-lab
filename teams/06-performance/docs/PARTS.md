@@ -92,6 +92,7 @@ The "Likely bottleneck" column was written before the baseline. The v0 traces (`
 | `data.prefetch` | `true` \| `false` | next batch sampled and pinned after backward is queued; same batches; implementation switch |
 | `model.embedding` | `ke2` \| `ke1` \| `table` | a different model, not an A/B |
 | `model.attn_impl` | `eager` \| `sdpa` | a different kernel with the same maths; compared as a different config |
+| `model.position` | `learned` \| `rope` | `rope`: rotary q and k (`model.rope_theta`), no position table; a different model |
 | `model.mtp` | `false` \| `true` | a second head: a different model |
 | `model.ce_impl` | `torch` \| `chunked` | `chunked` runs head + loss in `model.ce_chunks` checkpointed pieces |
 | `model.ke_mode` | `dynamic` \| `cached` | `cached` keeps a V x 8192 fp32 table (4 GiB at V = 131072) |

@@ -9,6 +9,11 @@ Parts and where they come from:
     cfg.attn_impl "eager" (G5 config_v0: fast attention backward does not repeat, so two seeds would not match):
     repeat_interleave k, v to n_head heads, then softmax(q k^T / sqrt(hd) + causal mask) v by explicit matmuls.
     Same region names as SDPA (".sdpa" times the attention core either way).
+    cfg.position "rope": q and k are rotated before attention (RoFormer, half-split layout as in GPT-NeoX / LLaMA):
+    head dim hd, pair i = (x[i], x[i + hd/2]) for i < hd/2, angle t * rope_theta^(-2i / hd) at position t;
+        rope(x)[i] = x[i] cos - x[i + hd/2] sin,   rope(x)[i + hd/2] = x[i + hd/2] cos + x[i] sin.
+    Every dim of the head is rotated (no partial RoPE). cos / sin are non-persistent fp32 buffers [block_size, hd/2]
+    (not in the state_dict); under autocast the rotation runs in fp32 and is cast back to q's dtype. Inside ".qkv".
   * MLP: c_fc = Linear(d, mlp_ratio*d), GELU, c_proj = Linear(mlp_ratio*d, d).
   * Block i: pre-LN. ffn = MLP, or models.moe.SparseMoE when cfg.ffn == "moe".
         f(p) = a + FFN(LN2(p + a)),  a = Attn(LN1(p))
@@ -18,7 +23,8 @@ Parts and where they come from:
     For the reversible stack the block also has update() and invert() (models/reversible.py):
         update(prev, curr) = prev + 2h * f(curr)          invert(prev_out, curr_out) = curr_out - 2h * f(prev_out)
   * GPT: token embedding (nn.Embedding tied with the head, or models.ke1.KroneckerEmbedding with an
-    untied head: the codec dim is not d_model), learned position table, blocks (plain loop or
+    untied head: the codec dim is not d_model), learned position table (cfg.position "learned"; none with
+    "rope"), blocks (plain loop or
     models.reversible.ReversibleStack), ln_f, head, fp32 cross-entropy.
   * Init (NanoGPT): weights normal(0, 0.02), biases zero, residual projections (c_proj)
     normal(0, 0.02 / sqrt(2 * n_layer)); MoE experts get the same (proj_std). KE initialises its projection.
@@ -30,7 +36,7 @@ Parts and where they come from:
     returns logits=None when targets are given. Both paths average over the targets that are not IGNORE_INDEX.
 
 Timing markers (roofline and report read these names; keep them)
-  region("embed", 2)                       around tok + pos embedding (KE adds "embed.ke" at level 3 inside)
+  region("embed", 2)                       around tok (+ pos) embedding (KE adds "embed.ke" at level 3 inside)
   region("stack", 1)                       around all blocks
   region(f"block{i}", 2)                   around each block (plain stack; the reversible stack sets its own)
   region(f"block{i}.ln1" / ".ln2", 3)      each LayerNorm
@@ -73,12 +79,33 @@ def _residual_std(cfg: ModelConfig) -> float:
     return 0.02 / math.sqrt(2 * cfg.n_layer)
 
 
+def rope_tables(T: int, hd: int, theta: float, device=None):
+    """cos, sin [T, hd/2] fp32 of the RoPE angles t * theta^(-2i / hd), computed in fp64."""
+    inv_freq = theta ** (-torch.arange(0, hd, 2, dtype=torch.float64, device=device) / hd)
+    ang = torch.outer(torch.arange(T, dtype=torch.float64, device=device), inv_freq)
+    return ang.cos().float(), ang.sin().float()
+
+
+def apply_rope(x: torch.Tensor, cos: torch.Tensor, sin: torch.Tensor) -> torch.Tensor:
+    """x: [B, H, T, hd]; cos, sin: [T, hd/2]. Half-split rotation, in fp32 or wider, returned in x's dtype."""
+    T, half = x.size(-2), x.size(-1) // 2
+    xf = x if x.dtype in (torch.float32, torch.float64) else x.float()
+    cos, sin = cos[:T].to(xf.dtype), sin[:T].to(xf.dtype)
+    x1, x2 = xf[..., :half], xf[..., half:]
+    return torch.cat([x1 * cos - x2 * sin, x2 * cos + x1 * sin], dim=-1).to(x.dtype)
+
+
 class GQAttention(nn.Module):
     def __init__(self, cfg: ModelConfig, name: str):
         super().__init__()
         d = cfg.n_embd
         self.n_head, self.n_kv_head, self.name = cfg.n_head, cfg.n_kv_head, name
         self.eager = cfg.attn_impl == "eager"
+        self.rope = cfg.position == "rope"
+        if self.rope:
+            cos, sin = rope_tables(cfg.block_size, d // cfg.n_head, cfg.rope_theta)
+            self.register_buffer("rope_cos", cos, persistent=False)
+            self.register_buffer("rope_sin", sin, persistent=False)
         self.c_attn = nn.Linear(d, (cfg.n_head + 2 * cfg.n_kv_head) * (d // cfg.n_head))
         self.c_proj = nn.Linear(d, d)
         _init_linear(self.c_attn)
@@ -92,6 +119,9 @@ class GQAttention(nn.Module):
             q = q.view(B, T, self.n_head, hd).transpose(1, 2)
             k = k.view(B, T, kv, hd).transpose(1, 2)
             v = v.view(B, T, kv, hd).transpose(1, 2)
+            if self.rope:
+                q = apply_rope(q, self.rope_cos, self.rope_sin)
+                k = apply_rope(k, self.rope_cos, self.rope_sin)
             gqa = kv != self.n_head
             if gqa and (self.eager or not _SDPA_GQA):
                 k = k.repeat_interleave(self.n_head // kv, dim=1)
@@ -178,8 +208,10 @@ class GPT(nn.Module):
         else:
             self.tok = nn.Embedding(cfg.vocab_size, d)
             nn.init.normal_(self.tok.weight, mean=0.0, std=0.02)
-        self.pos = nn.Embedding(cfg.block_size, d)
-        nn.init.normal_(self.pos.weight, mean=0.0, std=0.02)
+        self.pos = None
+        if cfg.position == "learned":
+            self.pos = nn.Embedding(cfg.block_size, d)
+            nn.init.normal_(self.pos.weight, mean=0.0, std=0.02)
         self.blocks = nn.ModuleList(Block(cfg, i) for i in range(cfg.n_layer))
         self.ln_f = nn.LayerNorm(d)
         self.head = nn.Linear(d, cfg.vocab_size, bias=False)
@@ -200,7 +232,7 @@ class GPT(nn.Module):
         if self.cfg.mtp and targets is not None and T < 2:
             raise ValueError("mtp needs T >= 2: the t+2 target of the last position does not exist")
         with region("embed", 2):
-            x = self.tok(idx) + self.pos(torch.arange(T, device=idx.device))
+            x = self.embed(idx)
         x = mark(x, "stack", 1)
         with region("stack", 1):
             if self.cfg.reversible:
@@ -224,6 +256,13 @@ class GPT(nn.Module):
                                        ignore_index=IGNORE_INDEX)
                 loss = self._add_mtp(loss, x, targets)
         return logits, loss
+
+    def embed(self, idx: torch.Tensor) -> torch.Tensor:
+        """Stack input: token embedding, plus the position table when cfg.position == 'learned'."""
+        x = self.tok(idx)
+        if self.pos is not None:
+            x = x + self.pos(torch.arange(idx.shape[1], device=idx.device))
+        return x
 
     def _add_mtp(self, ntp, x, targets):
         """ntp + the t+2 loss of mtp_head (cfg.mtp); ntp unchanged otherwise. x: ln_f output [B, T, d]."""

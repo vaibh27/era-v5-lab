@@ -24,6 +24,8 @@ model:                  # fields of models.config.ModelConfig, nothing else
   n_kv_head: null       # GQA key/value heads; null = n_head (plain multi-head)
   n_embd: 256
   attn_impl: eager      # sdpa | eager (explicit softmax, G5 config_v0: two seeds match)
+  position: learned     # learned (position table) | rope (rotary q and k, full head dim)
+  rope_theta: 10000.0   # RoPE base (position: rope only)
   mlp_ratio: 4
   embedding: ke2        # table | ke1 | ke2 (G4 raw table, teams/04-ke2)
   ke_max_pos: 32

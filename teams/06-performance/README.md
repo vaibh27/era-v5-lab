@@ -18,6 +18,7 @@ Everything is driven by config: a new model is a new YAML file in `configs/`, no
 | Tokenizer | [BrahmicTokenizer-131K source repo](https://github.com/theschoolofai/BrahmicTokenizer-131K), exactly 131,072 IDs |
 | Embedding | Kronecker Embedding v2 (G4 raw byte table, `models/ke2.py`): fixed code (256 x 32 = 8192) + `Linear(8192 -> 256)`, computed as one `embedding_bag`; untied head |
 | Attention | 8 heads, width 256, eager (explicit softmax, `model.attn_impl`); GQA via `model.n_kv_head` |
+| Position | Learned position table (`model.position: learned`); `rope` rotates q and k over the full head dim, base `model.rope_theta` (10000) |
 | FFN | Dense MLP (256 -> 1024 -> 256). MoE (`model.ffn=moe`): 1 shared + top-2 of 8 routed experts, bias balancing, fp32 router |
 | Stack | Reversible midpoint, 6 layers, pre-LN inside `f`; the backward rebuilds each layer's input |
 | Optimizer | `polar_muon_adamw`: Polar Express Muon on 2D block weights (`muon_impl: batched`), AdamW on embedding parameters (including the KE projection), output head, norm gains and biases (`adamw_impl: foreach`) |
