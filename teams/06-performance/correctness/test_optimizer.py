@@ -454,11 +454,14 @@ def _(device):
     kwargs = dict(lr=0.025, momentum=0.8, ns_steps=5, weight_decay=0.03)
 
     def _run(impl, *init):
-        params = [nn.Parameter(p.float().clone()) for p in init]
+        # CPU-only: NS uses bf16 internally on CUDA (bmm vs mm accumulation differs
+        # ~4% on A100), already covered by test_batched_muon_matches_loop_on_cuda_bf16.
+        # This pair tests fp32 math correctness of batched vs loop.
+        params = [nn.Parameter(p.float().cpu().clone()) for p in init]
         opt = Muon(params, impl=impl, **kwargs)
         for s in range(3):
             for i, p in enumerate(params):
-                p.grad = None if (s == 1 and i == 1) else step_grads[s][i].float().clone()
+                p.grad = None if (s == 1 and i == 1) else step_grads[s][i].float().to(p.device).clone()
             opt.step()
         return torch.stack([p.detach() for p in params])
 
@@ -496,7 +499,7 @@ def _(device):
         opt = MuonAdamW(groups)
         for step in range(3):
             for p, g in zip(params, _grads(step)):
-                p.grad = g.float().clone()
+                p.grad = g.float().to(p.device).clone()
             opt.step()
         return torch.cat([p.detach().flatten() for p in params])
 
