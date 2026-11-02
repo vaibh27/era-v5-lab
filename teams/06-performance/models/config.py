@@ -24,6 +24,7 @@ import yaml
 MOE_KEYS = {"num_experts", "top_k", "num_shared", "bias_gamma", "dispatch"}   # SparseMoE keyword arguments
 CE_IMPLS = ("torch", "chunked")
 ATTN_IMPLS = ("sdpa", "eager")
+REV_IMPLS = ("two_pass", "one_pass")
 
 
 @dataclass
@@ -37,6 +38,7 @@ class ModelConfig:
     attn_impl: str = "sdpa"          # sdpa (F.scaled_dot_product_attention) | eager (explicit softmax; G5 config_v0)
     mlp_ratio: int = 4               # MLP / expert hidden = mlp_ratio * n_embd
     embedding: str = "table"         # table (tied head) | ke1 (Kronecker v1, untied head) | ke2 (Kronecker v2, G4 raw table, untied head)
+    tie_embeddings: bool | None = None  # None: tie iff embedding==table; True: require table; False: never tie
     ke_max_pos: int = 32             # KE v1 byte positions: codec dim = 256 * ke_max_pos
     ke_mode: str = "dynamic"         # KE v1: dynamic (codec every step) | cached (V x D table)
     ffn: str = "mlp"                 # mlp | moe
@@ -44,15 +46,22 @@ class ModelConfig:
                                                    bias_gamma=0.01, dispatch="loop"))
     reversible: bool = False         # True: midpoint reversible stack
     rev_h: float = 1.0               # midpoint step size
+    rev_impl: str = "two_pass"       # two_pass (invert + recompute) | one_pass (single f in backward)
     ce_impl: str = "torch"           # torch: full fp32 logits (baseline) | chunked: ce_chunks pieces, checkpointed
     ce_chunks: int = 8
     mtp: bool = False                # True: second untied head predicts token t+2 (G5 config_v0); loss = ntp + mtp
 
     def __post_init__(self):
         assert self.embedding in ("table", "ke1", "ke2"), f"embedding={self.embedding!r}"
+        assert self.tie_embeddings in (None, True, False), f"tie_embeddings={self.tie_embeddings!r}"
+        if self.tie_embeddings is True:
+            assert self.embedding == "table", (
+                "tie_embeddings=True requires model.embedding='table' (KE1/KE2 has no [V, d] table)"
+            )
         assert self.ffn in ("mlp", "moe"), f"ffn={self.ffn!r}"
         assert self.n_embd % self.n_head == 0, "n_embd must be divisible by n_head"
         assert self.attn_impl in ATTN_IMPLS, f"attn_impl={self.attn_impl!r} not in {ATTN_IMPLS}"
+        assert self.rev_impl in REV_IMPLS, f"rev_impl={self.rev_impl!r} not in {REV_IMPLS}"
         assert self.ce_impl in CE_IMPLS, f"ce_impl={self.ce_impl!r} not in {CE_IMPLS}"
         unknown = sorted(set(self.moe) - MOE_KEYS)
         assert not unknown, f"unknown moe keys {unknown}; known: {sorted(MOE_KEYS)}"

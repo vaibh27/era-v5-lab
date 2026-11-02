@@ -60,8 +60,13 @@ def _pair_needs(name):
     if name.startswith("moe."):
         return [("model.ffn", "moe"), ("model.moe.dispatch", name.split(".")[1])]
     if name.startswith("reversible."):
-        return [("model.reversible", True), ("model.ffn", name.split(".")[1])]
-    if re.match(r"model\.base\.(embedding|ffn|attn_impl|reversible)_", name):
+        parts = name.split(".")
+        ffn = parts[-1]
+        needs = [("model.reversible", True), ("model.ffn", ffn)]
+        if "one_pass" in parts:
+            needs.append(("model.rev_impl", "one_pass"))
+        return needs
+    if re.match(r"model\.base\.(embedding|ffn|attn_impl|reversible|tie_embeddings)_", name):
         return None                  # a choice base.yaml does not make (test_model.CHOICES)
     needs = []
     if name.endswith(".bf16"):
@@ -96,8 +101,14 @@ def _test_needs(item):
         return [("model.ffn", "moe")] + ([("model.moe.dispatch", param)] if param in ("loop", "sorted") else [])
     if file == "test_reversible.py":
         moe = "moe" in fn or param == "moe" or fn == "test_bf16_grad_agrees_with_plain"
-        return [("model.reversible", True)] + ([("model.ffn", "moe")] if moe else
-                                                [("model.ffn", "mlp")] if param == "mlp" else [])
+        needs = [("model.reversible", True)]
+        if moe:
+            needs.append(("model.ffn", "moe"))
+        elif param == "mlp" or "mlp" in fn:
+            needs.append(("model.ffn", "mlp"))
+        if "one_pass" in fn or "one_pass" in param:
+            needs.append(("model.rev_impl", "one_pass"))
+        return needs
     if file == "test_model.py" and fn == "test_mtp_loss_parts":
         return [("model.mtp", True)]
     if file == "test_ce.py":

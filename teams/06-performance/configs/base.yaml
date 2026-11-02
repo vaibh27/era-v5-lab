@@ -26,12 +26,14 @@ model:                  # fields of models.config.ModelConfig, nothing else
   attn_impl: eager      # sdpa | eager (explicit softmax, G5 config_v0: two seeds match)
   mlp_ratio: 4
   embedding: ke2        # table | ke1 | ke2 (G4 raw table, teams/04-ke2)
+  tie_embeddings: false # null: tie iff embedding=table; true: require table; false: never tie
   ke_max_pos: 32
   ke_mode: dynamic      # dynamic | cached
   ffn: mlp              # mlp | moe
   moe: {num_experts: 8, top_k: 2, num_shared: 1, bias_gamma: 0.01, dispatch: loop}
   reversible: true
   rev_h: 1.0
+  rev_impl: two_pass    # two_pass (invert + recompute) | one_pass (single f in backward)
   ce_impl: torch        # torch (full fp32 logits, the baseline) | chunked (ce_chunks pieces, checkpointed)
   ce_chunks: 8
   mtp: false            # true: second untied head on token t+2 (G5 config_v0); trained loss = ntp + mtp
