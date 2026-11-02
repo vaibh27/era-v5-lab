@@ -360,25 +360,32 @@ def test_fused_matmul_dtype_saved_state_and_no_backward_recompute(device, amp, d
     x = torch.randn(11, 9, device=device, dtype=dtype, requires_grad=True)
     weight = torch.randn(31, 9, device=device, dtype=dtype, requires_grad=True)
     targets = torch.randint(0, 31, (11,), device=device)
-    calls, saved = [], []
+    calls, products, saved = [], [], []
     original_linear = F.linear
+    original_matmul = torch.Tensor.__matmul__
 
     def record_linear(xc, wc, bias=None):
         out = original_linear(xc, wc, bias)
         calls.append((xc.dtype, wc.dtype, out.dtype, out.shape))
         return out
 
+    def record_matmul(left, right):
+        products.append((left.dtype, right.dtype))
+        return original_matmul(left, right)
+
     def pack(t):
         saved.append((t.shape, t.dtype))
         return t
 
     monkeypatch.setattr(F, "linear", record_linear)
+    monkeypatch.setattr(torch.Tensor, "__matmul__", record_matmul)
     with torch.autograd.graph.saved_tensors_hooks(pack, lambda t: t):
         with torch.autocast(device.type, dtype=torch.bfloat16, enabled=amp):
             loss = linear_cross_entropy_fused(x, weight, targets, chunks=3)
     expected_dtype = torch.bfloat16 if amp else dtype
     assert len(calls) == 3
     assert all(a == b == c == expected_dtype and shape[0] <= 4 for a, b, c, shape in calls)
+    assert products == [(expected_dtype, expected_dtype)] * 6
     assert saved == [(x.shape, torch.float32), (weight.shape, torch.float32)]
     loss.backward()
     assert len(calls) == 3, "backward must return cached gradients without another head matmul"

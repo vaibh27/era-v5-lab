@@ -146,18 +146,18 @@ class _CachedGradientLinearCrossEntropy(torch.autograd.Function):
     def _forward(ctx, x, weight, bias, y, token_chunk, ignore_index, compute_dtype):
         xc_all, wc = x.to(compute_dtype), weight.to(compute_dtype)
         bc = None if bias is None else bias.to(compute_dtype)
-        x32, w32 = xc_all.float(), wc.float()
+        w32 = None if compute_dtype == torch.bfloat16 else wc.float()
         n = x.shape[0]
         valid = y != ignore_index
         count = valid.sum().clamp_min(1)
-        grad_x = torch.zeros_like(x32)
-        grad_weight = torch.zeros_like(w32)
+        grad_x = torch.zeros(x.shape, dtype=torch.float32, device=x.device)
+        grad_weight = torch.zeros(weight.shape, dtype=torch.float32, device=weight.device)
         grad_bias = None if bias is None else torch.zeros_like(bias, dtype=torch.float32)
         loss_sum = torch.zeros((), dtype=torch.float32, device=x.device)
 
         for start in range(0, n, token_chunk):
             end = min(start + token_chunk, n)
-            xc, yc = x32[start:end], y[start:end]
+            xc, yc = xc_all[start:end], y[start:end]
             keep = valid[start:end]
             logits = F.linear(xc_all[start:end], wc, bc).float()
             log_z = torch.logsumexp(logits, dim=-1)
@@ -172,8 +172,18 @@ class _CachedGradientLinearCrossEntropy(torch.autograd.Function):
             probabilities.mul_(keep[:, None])
             probabilities[torch.arange(end - start, device=x.device), safe_y] -= keep.to(probabilities.dtype)
             probabilities.div_(count)
-            grad_x[start:end] = probabilities @ w32
-            grad_weight.add_(probabilities.T @ xc)
+            # A bf16 forward should also use bf16 matmuls for the two expensive
+            # gradient products (tensor cores on supported CUDA GPUs). Accumulate
+            # their results in fp32. fp16
+            # keeps fp32 products because its small softmax gradients can underflow
+            # before the external GradScaler multiplies the returned gradients.
+            if compute_dtype == torch.bfloat16:
+                grad_logits = probabilities.to(torch.bfloat16)
+                grad_x[start:end] = (grad_logits @ wc).float()
+                grad_weight.add_((grad_logits.T @ xc).float())
+            else:
+                grad_x[start:end] = probabilities @ w32
+                grad_weight.add_(probabilities.T @ xc.float())
             if grad_bias is not None:
                 grad_bias.add_(probabilities.sum(dim=0))
             del logits, probabilities

@@ -171,6 +171,7 @@ Device, precision, batch and step counts come from the config only (`run.device`
 `model.ce_impl=fused` splits tokens into up to `model.ce_chunks` pieces (tail chunks may be shorter), computes
 `dh` and `dW` while each chunk's logits are live, and saves only these gradients for backward. The head
 matmul uses fp32 or the active autocast/native bf16 dtype; loss reductions and gradient buffers use fp32.
+In bf16 mode the two head-gradient matrix products also use bf16, with fp32 accumulation.
 Both NTP and MTP use this path. This is a portable PyTorch custom-autograd implementation.
 `fused_cached` and `fused_liger` use the same cached-gradient algorithm with a fixed maximum token tile
 size, `model.ce_token_chunk`. `fused_cce` preserves the vocabulary-streaming/recomputing implementation,

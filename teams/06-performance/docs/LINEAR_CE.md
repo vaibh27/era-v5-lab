@@ -35,7 +35,9 @@ For each chunk the custom autograd function:
 2. Computes log-sum-exp and the target logit in fp32 and accumulates the loss sum.
 3. Reuses the chunk's logits buffer for `softmax - onehot(target)`, masks ignored positions, and divides
    by the global number of valid targets. All-ignored input returns zero loss and zero gradients.
-4. Accumulates `dh_chunk` and `dW` in fp32 and releases the chunk's logits.
+4. Uses bf16 matrix products for `dh_chunk` and `dW` when the head matmul is bf16, then accumulates
+   their results in fp32 and releases the chunk's logits. fp16 keeps fp32 gradient products to avoid
+   underflow of small probabilities before external loss scaling.
 
 Only `dh` and `dW` are saved for backward, with `db` also saved when using a biased head. Backward
 multiplies these cached derivatives by the incoming loss gradient and casts them to the input/parameter
