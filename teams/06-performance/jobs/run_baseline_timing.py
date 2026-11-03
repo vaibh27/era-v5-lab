@@ -1,22 +1,27 @@
 #!/usr/bin/env python3
-"""TSAI job wrapper: the G6 Gate 2 baseline on one GPU, with real FineWeb Brahmic data, ready to publish.
+"""TSAI job wrapper: the G6 Gate 2 baseline on one GPU, ready to publish.
 
 Usage (repo root):
-  python teams/06-performance/jobs/run_baseline_timing.py --out out
+  python teams/06-performance/jobs/run_baseline_timing.py --out out --synthetic      # lab node: no shards, no network
   python teams/06-performance/jobs/run_baseline_timing.py --out out --data-dir <shards> --tokenizer <tokenizer.json>
   python teams/06-performance/jobs/run_baseline_timing.py --out out --prepare-data    # Colab only: needs network
 
+--synthetic: data.source=synthetic (random token IDs over the real 131,072-token vocabulary, same B x T, same
+model). The step does the same work, so it times the same; only the host-side data part and the loss values
+differ. Every run JSON records data_source, and the job fails if a run used another source than asked for.
+
 The stages are the ones of the G6 Colab baseline, in this order:
   preflight     GPU visible, no other process on it, slowdown reasons at idle, packages, git commit and clean tree
-  inputs        FineWeb Brahmic shards (dataio.loader format: header, size, tokenizer manifest) and the pinned
-                BrahmicTokenizer-131K artifact (sha256). Never synthetic: missing data stops the job (exit 11).
+  inputs        the pinned BrahmicTokenizer-131K artifact (sha256; needed even with --synthetic: vocabulary and
+                KE2 table checks) and, without --synthetic, the FineWeb Brahmic shards (header, size, manifest).
+                Missing inputs stop the job (exit 11); it never switches to synthetic by itself.
   tests         python -m pytest correctness -q -rs
-  smoke         python -m perfkit.smoke (loss falls, weights finite, reversible reconstruction OK)
+  smoke         python -m perfkit.smoke (weights finite, reversible reconstruction OK; loss falls, FineWeb only)
   bench_normal  python -m perfkit.bench --level 3 --repeat 2 (base.yaml, all bench.modes)
   bench_mtp     the same with model.mtp=true
   tests_all     python -m pytest correctness -q --all-configs
 
-No network (JOB_REQUEST.md rule 1): the data and the tokenizer are inputs. Make them once on a machine with network:
+No network (JOB_REQUEST.md rule 1): the tokenizer (and, without --synthetic, the shards) are inputs. Shards:
   cd teams/06-performance && python -m dataio.prepare_fineweb --out <dir>     # val + 1 train shard, 1M tokens each
 and pass --data-dir <dir>; the tokenizer lands in ~/.cache/era-perf/BrahmicTokenizer-131K/tokenizer.json.
 
@@ -359,9 +364,11 @@ class Job:
         return not bad
 
     def inputs(self) -> bool:
-        info = {"data_dir": "<data>", "tokenizer": "<tokenizer>/tokenizer.json", "prepared_by_job": False}
+        info = {"data_source": self.data_source, "tokenizer": "<tokenizer>/tokenizer.json", "prepared_by_job": False}
         bad = []
-        if self.a.prepare_data and not (self.data_dir / "tokenizer.json.meta").exists():
+        if not self.a.synthetic:
+            info["data_dir"] = "<data>"
+        if self.a.prepare_data and not self.a.synthetic and not (self.data_dir / "tokenizer.json.meta").exists():
             st = self.run("prepare", [sys.executable, "-m", "dataio.prepare_fineweb", "--out", str(self.data_dir)],
                           minutes=STAGE_MINUTES["prepare"])
             info["prepared_by_job"] = st["status"] == "ok"
@@ -379,7 +386,9 @@ class Job:
             elif sha256(self.tokenizer) != SHA256:
                 bad.append("tokenizer.json sha256 differs from the pinned revision")
             meta = self.data_dir / "tokenizer.json.meta"
-            if not meta.exists():
+            if self.a.synthetic:
+                pass                                              # no shards needed
+            elif not meta.exists():
                 bad.append("no completed FineWeb Brahmic dataset (tokenizer.json.meta missing): stage it with "
                            "python -m dataio.prepare_fineweb --out <dir> and pass --data-dir <dir>")
             else:
@@ -426,7 +435,9 @@ class Job:
         checks = {"weights_finite": "all weights finite: True" in text,
                   "reconstruction_ok": "(OK)" in text or "reconstruction" not in text}
         m = re.search(r"loss ([\d.]+) -> ([\d.]+)", text)
-        checks["loss_falls"] = bool(m and float(m.group(2)) < float(m.group(1)))
+        st["loss_first_to_end"] = [float(m.group(1)), float(m.group(2))] if m else None
+        if not self.a.synthetic:                                  # random token IDs: the loss cannot fall much
+            checks["loss_falls"] = bool(m and float(m.group(2)) < float(m.group(1)))
         m = re.search(r"step median ([\d.]+) ms.*?([\d,]+) tokens/s", text)
         st["checks"] = checks
         st["step_ms_median"], st["tokens_per_s"] = (float(m.group(1)), int(m.group(2).replace(",", ""))) if m else (None, None)
@@ -455,6 +466,9 @@ class Job:
         self.result["repeat_check"][name] = rc
         for r in loaded:
             me = r.get("meta", {})
+            if me.get("data_source") != self.data_source:
+                self.problem(name, E_BENCH, "wrong data", f"run {me.get('tag')}: data_source={me.get('data_source')}, "
+                                                          f"asked for {self.data_source}")
             if me.get("dirty") is not False or not me.get("commit"):
                 self.problem(name, E_BENCH, "provenance", f"run {me.get('tag')}: commit={me.get('commit')} "
                                                           f"dirty={me.get('dirty')}")
@@ -479,8 +493,13 @@ class Job:
         return {"waited_s": round(time.monotonic() - t), "temp_c": g[0]["temp_c"] if g else None,
                 "slowdown_flags": g[0]["slowdown_flags"] if g else None}
 
+    @property
+    def data_source(self) -> str:
+        return "synthetic" if self.a.synthetic else "fineweb10b"
+
     def data_overrides(self) -> list[str]:
-        return [f"data.dir={self.data_dir.as_posix()}", f"data.tokenizer_path={self.tokenizer.as_posix()}"]
+        ov = [f"data.source={self.data_source}", f"data.tokenizer_path={self.tokenizer.as_posix()}"]
+        return ov if self.a.synthetic else ov + [f"data.dir={self.data_dir.as_posix()}"]
 
     # ---- publishing
     def publish(self):
@@ -627,7 +646,7 @@ def _r(x):
 def summary_md(res: dict) -> str:
     lines = [f"# G6 baseline timing: {res['verdict']} (exit {res['exit_code']})", "",
              f"commit `{res.get('commit')}` | config `{res['config']}` | GPU: {LAB_GPU} | "
-             f"data: FineWeb Brahmic shards ({len((res.get('inputs') or {}).get('shards') or {})})", "",
+             f"data: {(res.get('inputs') or {}).get('data_source')}", "",
              "| stage | status | exit | meaning | s |", "| :--- | :--- | ---: | :--- | ---: |"]
     for s in res["stages"]:
         lines.append(f"| {s['stage']} | {s['status']} | {s.get('exit_code')} | {s.get('meaning') or ''} | "
@@ -670,6 +689,8 @@ def main(argv: list[str] | None = None) -> int:
                     help="FineWeb Brahmic shards from dataio.prepare_fineweb (default: data.dir of base.yaml)")
     ap.add_argument("--tokenizer", default=os.environ.get("ERA_PERF_TOKENIZER"),
                     help="BrahmicTokenizer-131K tokenizer.json (default: ~/.cache/era-perf/BrahmicTokenizer-131K/)")
+    ap.add_argument("--synthetic", action="store_true",
+                    help="data.source=synthetic: no shards needed (the lab node has none and no network)")
     ap.add_argument("--prepare-data", action="store_true",
                     help="run dataio.prepare_fineweb into --data-dir when it is empty (needs network: Colab only)")
     ap.add_argument("--max-minutes", type=float, default=60, help="whole job; later stages are skipped near it")
