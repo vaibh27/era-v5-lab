@@ -8,6 +8,7 @@ from __future__ import annotations
 
 import hashlib
 import json
+import os
 from pathlib import Path
 from urllib.request import urlopen
 
@@ -15,7 +16,8 @@ REVISION = "7dfcf398172c825c6689ad578e8b484ca5f57bc9"
 SHA256 = "01d968a7970b029c071b29f060abf6104b66168dedf2ff3b1a0290a545739fff"
 URL = f"https://raw.githubusercontent.com/theschoolofai/BrahmicTokenizer-131K/{REVISION}/tokenizer.json"
 VOCAB_SIZE = 131072
-DEFAULT_PATH = "~/.cache/era-perf/BrahmicTokenizer-131K/tokenizer.json"
+# ERA_PERF_TOKENIZER: a staged copy (a lab job has no network); the checksum below is checked either way.
+DEFAULT_PATH = os.environ.get("ERA_PERF_TOKENIZER", "~/.cache/era-perf/BrahmicTokenizer-131K/tokenizer.json")
 
 
 class BrahmicTokenizer:
