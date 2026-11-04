@@ -26,6 +26,8 @@ model is a new YAML file in `configs/`, not new code.
 `model.embedding=table model.reversible=false optim.name=adamw`. Every switch and the region it changes is in
 [`docs/PARTS.md`](docs/PARTS.md); the `ce_impl` variants are in [`docs/LINEAR_CE.md`](docs/LINEAR_CE.md).
 
+`model.ce_impl=triton_ce` selects the in-repo Triton CE reduction kernel. Existing `torch`, `chunked`, `fused`, `fused_cached`, `fused_liger`, and `fused_cce` values remain available for comparison; the last two are PyTorch references inspired by upstream algorithms. See [`docs/LINEAR_CE.md`](docs/LINEAR_CE.md) for A100/H100 correctness checks and matched benchmark commands.
+
 ## Folder layout
 
 ```

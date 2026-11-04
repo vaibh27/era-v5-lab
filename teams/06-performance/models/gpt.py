@@ -16,7 +16,8 @@
     Init (NanoGPT): normal(0, 0.02), biases zero, residual projections normal(0, 0.02 / sqrt(2 * n_layer)).
   * mtp: a second untied head on the same ln_f output predicts token t+2; loss = ntp + mtp, model.loss_parts
     holds both, detached.
-  * ce_impl: "torch" materialises the logits; the others bound memory (docs/LINEAR_CE.md) and return logits=None
+  * ce_impl: "torch" materialises the logits; the others bound memory (docs/LINEAR_CE.md; "triton_ce" is the
+    in-repo Triton kernel, kernels/linear_ce_fused.py) and return logits=None
     when targets are given. Every path averages over non-ignored targets.
 
 Timing markers (roofline and report read these names; keep them):
@@ -38,6 +39,7 @@ import torch.nn.functional as F
 from models.config import ModelConfig
 from models.linear_ce import (linear_cross_entropy_fused, linear_cross_entropy_cached,
                               linear_cross_entropy_cce, linear_cross_entropy_liger)
+from kernels.linear_ce_fused import linear_cross_entropy_fused_triton
 from perfkit.regions import mark, region
 
 
@@ -46,7 +48,8 @@ _SDPA_GQA = tuple(int(v) for v in torch.__version__.split(".")[:2]) >= (2, 5)
 
 IGNORE_INDEX = -100              # a target with this value is left out of the loss and of its divisor (loss masks)
 # never build the full [B*T, V] logits, so forward returns logits=None with targets
-MEMORY_BOUNDED_CE_IMPLS = ("chunked", "fused", "fused_cached", "fused_liger", "fused_cce")
+MEMORY_BOUNDED_CE_IMPLS = ("chunked", "fused", "fused_cached", "fused_liger", "fused_cce",
+                           "triton_ce")
 
 
 def _init_linear(lin: nn.Linear, std: float = 0.02):
@@ -326,6 +329,10 @@ class GPT(nn.Module):
 
     def _head_ce(self, head, x, y):
         """Mean CE of head(x) by the memory-bounded cfg.ce_impl; chunked when it is none of the fused ones."""
+        if self.cfg.ce_impl == "triton_ce":
+            return linear_cross_entropy_fused_triton(x.reshape(-1, x.shape[-1]), head.weight,
+                                                      y.reshape(-1), bias=head.bias,
+                                                      ignore_index=IGNORE_INDEX)
         if self.cfg.ce_impl == "fused":
             return linear_cross_entropy_fused(
                 x, head.weight, y, bias=head.bias,
