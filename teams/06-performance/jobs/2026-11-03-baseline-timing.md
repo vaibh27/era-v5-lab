@@ -63,5 +63,7 @@ shows which stage was running. Exit 0 means every stage passed.
 
 ## Notes
 
+- Earlier TSAI working baseline (PR 239, `48af4ce`, class main code, synthetic by hand, `--modes clean,layer`): step
+  ~104–106 ms, ~39k tokens/s, `opt:opt.muon` 5.7% outside 5%, power-cap warnings. Working, not final.
 - Writes only under `./out/`. Traces, checkpoints and caches go to `out/.work/`, which is deleted at the end.
 - No network, no keys. `--prepare-data` exists for Colab only; do not use it on the lab node.
