@@ -22,11 +22,13 @@ from pathlib import Path
 import yaml
 
 MOE_KEYS = {"num_experts", "top_k", "num_shared", "bias_gamma", "dispatch", "ffn_hidden"}   # SparseMoE keyword arguments
-CE_IMPLS = ("torch", "chunked", "fused", "fused_cached", "fused_liger", "fused_cce")
+CE_IMPLS = ("torch", "chunked", "fused", "fused_cached", "fused_liger", "fused_cce",
+            "triton_ce")
 ATTN_IMPLS = ("sdpa", "eager")
 ACTIVATIONS = ("gelu", "swiglu")
 REV_IMPLS = ("two_pass", "one_pass")
 POSITIONS = ("learned", "rope")
+LN_IMPLS = ("torch_ln", "triton_ln")
 
 
 @dataclass
@@ -37,6 +39,7 @@ class ModelConfig:
     n_head: int = 8                  # query heads
     n_kv_head: int | None = None     # GQA: key/value heads, divides n_head; None = n_head (plain multi-head)
     n_embd: int = 256                # d_model
+    ln_impl: str = "torch_ln"        # torch_ln | triton_ln (CUDA/Triton)
     attn_impl: str = "sdpa"          # sdpa (F.scaled_dot_product_attention) | eager (explicit softmax; G5 config_v0)
     position: str = "learned"        # learned (block_size x d table added to the embedding) | rope (rotary q, k)
     rope_theta: float | None = None  # RoPE base: pair i of a head turns by t * rope_theta^(-2i / head_dim);
@@ -54,7 +57,7 @@ class ModelConfig:
     reversible: bool = False         # True: midpoint reversible stack
     rev_h: float = 1.0               # midpoint step size
     rev_impl: str = "two_pass"       # two_pass (invert + recompute) | one_pass (single f in backward)
-    ce_impl: str = "torch"           # torch | chunked | fused | fused_cached | fused_liger | fused_cce
+    ce_impl: str = "torch"           # torch | chunked | fused | fused_cached | fused_liger | fused_cce | triton_ce
     ce_chunks: int = 8                # number of token chunks for chunked / fused
     ce_vocab_chunk: int = 4096        # vocabulary tile size for fused_cce
     ce_token_chunk: int = 16           # token tile size for fused_cached / fused_liger
@@ -71,6 +74,7 @@ class ModelConfig:
         assert self.n_embd % self.n_head == 0, "n_embd must be divisible by n_head"
         assert self.attn_impl in ATTN_IMPLS, f"attn_impl={self.attn_impl!r} not in {ATTN_IMPLS}"
         assert self.activation in ACTIVATIONS, f"activation={self.activation!r} not in {ACTIVATIONS}"
+        assert self.ln_impl in LN_IMPLS, f"ln_impl={self.ln_impl!r} not in {LN_IMPLS}"
         assert self.rev_impl in REV_IMPLS, f"rev_impl={self.rev_impl!r} not in {REV_IMPLS}"
         assert self.position in POSITIONS, f"position={self.position!r} not in {POSITIONS}"
         if self.position == "rope":
