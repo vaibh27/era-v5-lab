@@ -23,7 +23,7 @@
 Timing markers (roofline and report read these names; keep them):
   region("embed", 2), region("stack", 1), region(f"block{i}", 2), region(f"block{i}.ln1" / ".ln2", 3),
   region(f"block{i}.attn.qkv" / ".attn.sdpa" / ".attn.proj", 3), region(f"block{i}.mlp", 3),
-  region("head+loss", 2), region("head+loss.mtp", 3)
+  region("head+loss", 2), region("head+loss.ln_f", 3), region("head+loss.mtp", 3)
   mark(x, "stack", 1) on the embedding output, mark(x, f"block{i}", 2) on each plain block input,
   mark(x, "head+loss", 1) on the stack output
 """
@@ -37,6 +37,7 @@ import torch.nn as nn
 import torch.nn.functional as F
 
 from models.config import ModelConfig
+from kernels.layer_norm import TritonLayerNorm
 from models.linear_ce import (linear_cross_entropy_fused, linear_cross_entropy_cached,
                               linear_cross_entropy_cce, linear_cross_entropy_liger)
 from kernels.linear_ce_fused import linear_cross_entropy_fused_triton
@@ -60,6 +61,10 @@ def _init_linear(lin: nn.Linear, std: float = 0.02):
 
 def _residual_std(cfg: ModelConfig) -> float:
     return 0.02 / math.sqrt(2 * cfg.n_layer)
+
+
+def _layer_norm(cfg: ModelConfig) -> nn.Module:
+    return TritonLayerNorm(cfg.n_embd) if cfg.ln_impl == "triton_ln" else nn.LayerNorm(cfg.n_embd)
 
 
 def _matmul_weights(module: nn.Module) -> int:
@@ -187,9 +192,9 @@ class Block(nn.Module):
         super().__init__()
         d = cfg.n_embd
         self.name, self.h = f"block{i}", cfg.rev_h
-        self.ln1 = nn.LayerNorm(d)
+        self.ln1 = _layer_norm(cfg)
         self.attn = GQAttention(cfg, f"{self.name}.attn")
-        self.ln2 = nn.LayerNorm(d)
+        self.ln2 = _layer_norm(cfg)
         if cfg.ffn == "moe":
             from models.moe import SparseMoE
             hidden = cfg.moe.get("ffn_hidden")
@@ -251,7 +256,7 @@ class GPT(nn.Module):
             self.pos = nn.Embedding(cfg.block_size, d)
             nn.init.normal_(self.pos.weight, mean=0.0, std=0.02)
         self.blocks = nn.ModuleList(Block(cfg, i) for i in range(cfg.n_layer))
-        self.ln_f = nn.LayerNorm(d)
+        self.ln_f = _layer_norm(cfg)
         self.head = nn.Linear(d, cfg.vocab_size, bias=False)
         # Tie when embedding=table and tie_embeddings is not False (None keeps the legacy table-tied default).
         if cfg.embedding == "table" and cfg.tie_embeddings is not False:
@@ -285,7 +290,8 @@ class GPT(nn.Module):
                         x = blk(x)
         x = mark(x, "head+loss", 1)
         with region("head+loss", 2):
-            x = self.ln_f(x)
+            with region("head+loss.ln_f", 3):
+                x = self.ln_f(x)
             if targets is not None and self.cfg.ce_impl in MEMORY_BOUNDED_CE_IMPLS:
                 loss = self._head_ce(self.head, x.reshape(B * T, -1), targets.reshape(B * T))
                 return None, self._add_mtp(loss, x, targets)
