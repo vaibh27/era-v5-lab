@@ -144,6 +144,8 @@ class Setup:
     notes: list = field(default_factory=list)
     sample_step_callback: object = None
     step_timing_callback: object = None
+    last_x: object = None                 # input ids of the last train_step (for the KE2 support length)
+    ke2_mean_support_len: float | None = None   # measured by run_clean on a KE2 model, None otherwise
 
     def autocast(self):
         amp = AMP[self.dtype]
@@ -251,6 +253,7 @@ def train_step(s: Setup):
     t0 = time.perf_counter()
     with region("data", 1):
         x, y = s.loader.next_batch()
+    s.last_x = x
     data_ms = (time.perf_counter() - t0) * 1e3
     with region("fwd", 1), phase("fwd"), s.autocast():
         loss = s.model(x, y)[1]          # with ce_impl=chunked the logits are None: use only [1]
@@ -297,6 +300,10 @@ def reversible_check(s: Setup) -> float:
 def run_clean(s: Setup, n: int):
     st = T.StepTimer(s.device, expected_steps=n)
     data, loss = [], None
+    # g6-v2 charges KE2 by its mean support length (bytes per token) over the batches these clean steps used. The sum
+    # is queued after st.stop(), so it is outside the timed span, and read once after the loop (no sync per step).
+    lens = s.core.tok.lens if s.mcfg.embedding == "ke2" else None
+    support_sum, support_tokens = None, 0
     if s.device.type == "cuda":
         torch.cuda.reset_peak_memory_stats(s.device)
     for step in range(n):
@@ -305,10 +312,16 @@ def run_clean(s: Setup, n: int):
         st.start()
         d, loss = train_step(s)
         pair = st.stop()
+        if lens is not None:
+            x = s.last_x.reshape(-1)
+            part = lens.index_select(0, x).sum()
+            support_sum = part if support_sum is None else support_sum + part
+            support_tokens += x.numel()
         data.append(d)
         if s.step_timing_callback is not None:
             s.step_timing_callback(step + 1, d, st.kind, pair)
     times = st.times_ms()
+    s.ke2_mean_support_len = float(support_sum) / support_tokens if support_tokens else None
     clean = {"step_ms": T.stats(times), "data_ms": T.stats(data),
              "raw_step_ms": [round(t, 4) for t in times],
              "events_created_during_steps": st.events_created_during_steps}
@@ -614,10 +627,13 @@ def memory_with_identity(memory: dict | None, meta: dict) -> dict | None:
 def compute_metrics(s: Setup, step_ms: float, peak, peak_reason: str | None = None) -> dict:
     """Tokens/s from the clean step time; MFU and HFU from perfkit.metrics (formulas in its docstring)."""
     tokens = s.loader.B * s.loader.T
-    f = M.flops_per_token(s.core, s.loader.T, s.opt.flops(), tokens)
+    support = getattr(s, "ke2_mean_support_len", None)
+    f = M.flops_per_token(s.core, s.loader.T, s.opt.flops(), tokens, method=M.DEFAULT_METHOD,
+                          ke2_mean_support_len=support)
     tps = tokens / (step_ms / 1e3)
     return {"tokens_per_step": tokens, "tokens_per_s": tps, **f, "peak_tflops": peak,
             "mfu_method": M.DEFAULT_METHOD, "mfu_scope": "selected_gpu",   # local tokens/s over this GPU's peak
+            "ke2_mean_support_len": support,   # bytes per token over the clean-step batches; None when not KE2
             **M.mfu(f, tps, peak, peak_reason)}
 
 

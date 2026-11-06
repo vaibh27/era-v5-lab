@@ -33,10 +33,11 @@ hw_flops_per_token    = model_flops_per_token
   `model.position` does not change these numbers. `perfkit/roofline.py` does count the rotation, because it is a cost
   model: about 18 KFLOP per token at `base.yaml`, or 0.0075% of the count (by hand).
 
-**Method id:** the formulas above are `g6-v1`, the method of every run so far and still the default. Section 2.1
-proposes `g6-v2`. Approval alone changes nothing: moving to it means changing `metrics.DEFAULT_METHOD` and having
-`bench` pass `ke2_mean_support_len`. New runs are then labelled `g6-v2`; old run files keep their numbers, and a file
-with no `mfu_method` counts as `g6-v1`.
+**Method id:** the formulas above are `g6-v1`, the method of every run before the switch. The default is now `g6-v2`
+(section 2.1). `bench` measures `ke2_mean_support_len` on the batches of its clean steps and writes it as
+`metrics.ke2_mean_support_len` (null when the model is not KE2). New runs are labelled `g6-v2`; old run files keep
+their numbers, and a file with no `mfu_method` counts as `g6-v1`. `flops_per_token(..., method="g6-v1")` reproduces a
+legacy number.
 
 ## 2. MFU and HFU
 
@@ -56,7 +57,7 @@ HFU                = tokens_per_s * hw_flops_per_token / 1e12 / peak_tflops
 is 23.6 TFLOPS, so MFU = 7.6%. `hw_flops_per_token` is 276 MFLOP, so HFU = 8.4%. With `model.mtp=true`
 (74.0M parameters): 448 / 477 MFLOP per token, 59,691 tokens/s, MFU 8.6%, HFU 9.1%.
 
-### 2.1 Proposed method `g6-v2` (pending G6 and G8 approval)
+### 2.1 Method `g6-v2` (the default; approved by G8, `G8_HANDOFF.md` section 6)
 
 `flops_per_token(..., method="g6-v2", ke2_mean_support_len=L)` changes two terms:
 
