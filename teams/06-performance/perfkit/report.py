@@ -40,6 +40,10 @@ IMPL_SWITCHES = [
     ("model", "ce_triton_grad_precision"),
     ("model", "ce_triton_validate_targets"),
     ("model", "ln_impl"),
+    ("model", "attn_impl"),          # sdpa | eager | triton: the same causal softmax attention
+    ("model", "rope_impl"),
+    ("model", "swiglu_impl"),
+    ("model", "moe", "router_impl"),
     ("model", "rev_impl"),  # two_pass vs one_pass: same update, different backward
     ("optim", "muon_impl"),
     ("optim", "adamw_impl"),
