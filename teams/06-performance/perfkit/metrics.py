@@ -362,21 +362,21 @@ def run_metadata(device) -> dict:
 # ------------------------------------------------------------------------------ FLOPs, MFU, memory
 
 # How model FLOPs are counted. A run file records its method in metrics.mfu_method.
-#   g6-v1: today's count, used by every run so far and by the baselines G8 has ingested:
+#   g6-v1: the legacy count, used by every run before the switch and by the baselines G8 has ingested:
 #          6 * N_active + 12 * L * d * T.
-#   g6-v2: proposed. The KE2 projection is counted by its real lookup cost and the MTP head on T-1 positions.
+#   g6-v2: the default. The KE2 projection is counted by its real lookup cost and the MTP head on T-1 positions.
 METHODS = MFU_METHODS
-# Approval of g6-v2 does not switch anything by itself. To move to it: change DEFAULT_METHOD, have perfkit.bench pass
-# ke2_mean_support_len in the same change (g6-v2 raises an error on a KE2 model without it, and base.yaml uses KE2), and
-# update the tests that pin the default and METRICS.md. New runs are then labelled g6-v2; old run files keep their
-# numbers, and a file with no mfu_method counts as g6-v1. mfu_run needs no switch.
-DEFAULT_METHOD = "g6-v1"
+# g6-v2 is the default (G8_HANDOFF.md section 6, approved by G8; G6 merge review pending). perfkit.bench measures ke2_mean_support_len
+# on its clean-step batches and passes it, since g6-v2 raises an error on a KE2 model without it (base.yaml uses KE2).
+# New runs are labelled g6-v2; old run files keep their numbers, and a file with no mfu_method counts as g6-v1.
+# Pass method="g6-v1" to reproduce a legacy number. mfu_run needs no switch.
+DEFAULT_METHOD = "g6-v2"
 KE2_FLOPS_PER_SUPPORT_CELL_PER_CHANNEL = 4   # embedding_bag: 2 FLOP forward + 2 FLOP backward per support cell per channel
 
 
 def flops_per_token(model, T: int, opt_flops_per_step: float = 0.0, tokens_per_step: int | None = None,
                     method: str = DEFAULT_METHOD, ke2_mean_support_len: float | None = None) -> dict:
-    """model: a models.gpt.GPT. Formulas and the methods g6-v1 (default) and g6-v2 (proposed): docs/METRICS.md.
+    """model: a models.gpt.GPT. Formulas and the methods g6-v1 (legacy) and g6-v2 (default): docs/METRICS.md.
     ke2_mean_support_len is required for g6-v2 on a ke2 model."""
     if method not in METHODS:
         raise ValueError(f"method {method!r} not in {METHODS}")

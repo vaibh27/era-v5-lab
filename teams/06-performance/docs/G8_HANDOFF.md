@@ -104,9 +104,10 @@ When `mfu` or `hfu` is `null`, its reason field (`mfu_unavailable_reason`, `hfu_
 
 The reason is `null` when the metric is present.
 
-**New, additive:** `metrics.mfu_method` (`g6-v1` today) and `metrics.mfu_scope` (`selected_gpu` from `bench`). A file
-without them means `g6-v1` / `selected_gpu`, so the ingested baselines stay valid. `bench`'s values stay per GPU. The
-proposed `g6-v2` method and the run-level formula, with `run` scope, are in `METRICS.md` sections 2.1 and 2.2.
+**New, additive:** `metrics.mfu_method` (`g6-v2` from `bench` since the switch, `g6-v1` before) and
+`metrics.mfu_scope` (`selected_gpu` from `bench`). A file without them means `g6-v1` / `selected_gpu`, so the ingested
+baselines stay valid. `bench`'s values stay per GPU. The `g6-v2` method and the run-level formula, with `run` scope,
+are in `METRICS.md` sections 2.1 and 2.2.
 
 ## 4. Run identity and scope
 
@@ -143,17 +144,23 @@ Other runs:
 4. G8 owns the N-second rollups and the MiB-to-bytes conversion.
 5. All 8 final baseline files load with no missing fields. The format stays the run JSON and JSONL.
 
-**Proposed, waiting for G6 and G8 lead approval:**
+**MFU method decisions.** G8 approved all seven rows unchanged (Sandeep Kunkunuru, G8 lead, on PR #50 and #250,
+5 Nov 2026: "You are completely unblocked from G8's side to mark all 7 rows `approved` for G8 ... and proceed with
+the `g6-v2` default PR whenever G6 is ready"). He also confirmed that `tokens_per_s` in G8's run-level formula is
+global. The G6 column is decided in the review of the `g6-v2` default PR.
 
 | # | Decision | Proposal | G6 | G8 |
 |---|---|---|---|---|
-| 1 | KE2 in N | Projection out of `6 * N`, real lookup cost in; about 5% lower MFU (`METRICS.md` 2.1) | pending | pending |
-| 2 | MTP | Head counted on T-1 positions (`METRICS.md` 2.1) | pending | pending |
-| 3 | RoPE | The rotation is elementwise, so it is not counted (`METRICS.md` 2) | pending | pending |
-| 4 | Scope | `mfu` stays per GPU; run level is a separate value, global tokens/s over the sum of peaks. G8's message calls `metrics.mfu` run-level; it is not (`METRICS.md` 2.2) | pending | pending |
-| 5 | Combining | Never average percentages (`METRICS.md` 2.2) | pending | pending |
-| 6 | New fields and codes | `mfu_method`, `mfu_scope`, `participants`, `global_tokens_per_s`, 4 reason codes | pending | pending |
-| 7 | Above 1 | Stored, not clipped; `report` warns. G8 describes the range as `[0, 1]` | pending | pending |
+| 1 | KE2 in N | Projection out of `6 * N`, real lookup cost in; about 5% lower MFU (`METRICS.md` 2.1) | pending | approved |
+| 2 | MTP | Head counted on T-1 positions (`METRICS.md` 2.1) | pending | approved |
+| 3 | RoPE | The rotation is elementwise, so it is not counted (`METRICS.md` 2) | pending | approved |
+| 4 | Scope | `mfu` stays per GPU; run level is a separate value, global tokens/s over the sum of peaks. G8's message calls `metrics.mfu` run-level; it is not (`METRICS.md` 2.2) | pending | approved |
+| 5 | Combining | Never average percentages (`METRICS.md` 2.2) | pending | approved |
+| 6 | New fields and codes | `mfu_method`, `mfu_scope`, `participants`, `global_tokens_per_s`, 4 reason codes | pending | approved |
+| 7 | Above 1 | Stored, not clipped; `report` warns. G8 describes the range as `[0, 1]` | pending | approved |
+
+Open with G8: `load_jsonl.py` (#250) skips `mfu_method` and `mfu_scope`, so a `g6-v1` and a `g6-v2` row look the same
+in ClickHouse. Runs from the switch on also carry `metrics.ke2_mean_support_len`.
 
 Still to confirm: the shared `run_id` + one collector per node convention (pending G5 adopting `--run-id`).
 

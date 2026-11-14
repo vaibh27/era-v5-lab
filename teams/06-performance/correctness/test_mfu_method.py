@@ -130,7 +130,7 @@ def test_c2_mtp_head_counts_t_minus_1_positions_v2(T):   # [NEW]
 def test_c2_mtp_v1_keeps_counting_all_positions():   # [GUARD]
     # Why: the legacy method must stay as documented so already-ingested baselines can be reproduced.
     T = 4
-    out = flops_per_token(_tiny(mtp=True), T)      # today's call, no `method` argument
+    out = flops_per_token(_tiny(mtp=True), T, method="g6-v1")
     assert out["model_flops_per_token"] == 6 * (ACTIVE + HEAD_W) + _attn_flops(T) == 6528
 
 
@@ -149,7 +149,7 @@ KE2_FLOPS_PER_SUPPORT_CELL_PER_CHANNEL = 4
 
 def test_c3_ke2_v1_charges_the_projection_as_a_dense_matmul():   # [GUARD]
     # legacy: 6 * 4992 + 384 = 29952 + 384 = 30336
-    out = flops_per_token(_tiny_ke2(), 4)
+    out = flops_per_token(_tiny_ke2(), 4, method="g6-v1")
     assert out["params_active"] == 4992
     assert out["model_flops_per_token"] == 30336
 
@@ -158,7 +158,7 @@ def test_c3_ke2_v2_replaces_projection_matmul_with_lookup_cost():   # [NEW]
     model = _tiny_ke2()
     T, Lbar = 4, 5.0                              # Lbar = mean number of support columns per token
     ke_w = 8 * 512
-    v1 = flops_per_token(model, T)["model_flops_per_token"]
+    v1 = flops_per_token(model, T, method="g6-v1")["model_flops_per_token"]
     v2 = flops_per_token(model, T, method="g6-v2", ke2_mean_support_len=Lbar)["model_flops_per_token"]
     # new: remove 6*4096 = 24576, add 4 * 5 * 8 = 160  =>  30336 - 24576 + 160 = 5920
     assert v2 == v1 - 6 * ke_w + KE2_FLOPS_PER_SUPPORT_CELL_PER_CHANNEL * Lbar * 8 == 5920
@@ -173,7 +173,7 @@ def test_c3_ke2_v2_without_a_support_length_is_an_error():   # [NEW]
 def test_c3_ke2_v2_does_not_change_raw_parameter_counts():   # [NEW]
     # Why: the convention changes the FLOP ledger, not the model. G8 reads params_total / params_active.
     model = _tiny_ke2()
-    a = flops_per_token(model, 4)
+    a = flops_per_token(model, 4, method="g6-v1")
     b = flops_per_token(model, 4, method="g6-v2", ke2_mean_support_len=5.0)
     assert (a["params_total"], a["params_active"]) == (b["params_total"], b["params_active"])
 
@@ -206,14 +206,16 @@ def test_c4_documented_a100_mtp_example_still_reproduces():   # [GUARD]
     assert round(out["hfu"], 3) == 0.091
 
 
-def test_c4_default_method_equals_explicit_legacy_method():   # [NEW]
-    # Why: until both leads approve g6-v2, the default must stay g6-v1, so calling without `method` is unchanged.
-    # Approval does not switch anything by itself. Moving to g6-v2 means changing metrics.DEFAULT_METHOD, having bench
-    # pass ke2_mean_support_len, and updating this test and test_c14_bench_writes_the_method_and_scope.
-    # Old run files keep their numbers: a file with no mfu_method counts as g6-v1.
+def test_c4_default_method_is_g6_v2():   # [NEW]
+    # Why: G8 approved g6-v2; this draft proposes the G6 default switch (G8_HANDOFF.md section 6), so calling without `method` now gives g6-v2.
+    # Old run files keep their numbers: a file with no mfu_method counts as g6-v1, and method="g6-v1" reproduces them.
+    assert metrics.DEFAULT_METHOD == "g6-v2"
     for kw in ({}, {"mtp": True}, {"reversible": True}, {"ce_impl": "chunked"}):
         m = _tiny(**kw)
-        assert flops_per_token(m, 4) == flops_per_token(m, 4, method="g6-v1")
+        assert flops_per_token(m, 4) == flops_per_token(m, 4, method="g6-v2")
+    m = _tiny_ke2()
+    assert flops_per_token(m, 4, ke2_mean_support_len=1.5) == flops_per_token(m, 4, method="g6-v2",
+                                                                              ke2_mean_support_len=1.5)
 
 
 # =================================================================================================== C5
@@ -267,7 +269,7 @@ def test_c6_flop_counter_shows_the_mtp_over_count_and_v2_fixes_it():   # [NEW]
     model = _tiny(attn_impl="eager", mtp=True)
     counted = _counted_flops(model, B, T)
     # the MTP head runs on B*(T-1) positions, not B*T: counted = 50,688 (legacy method says 52,224)
-    v1 = flops_per_token(model, T)["model_flops_per_token"] * B * T
+    v1 = flops_per_token(model, T, method="g6-v1")["model_flops_per_token"] * B * T
     assert v1 - counted == 6 * HEAD_W * B          # over-count = 6 * 128 * (one missing position per sequence) = 1536
     v2 = flops_per_token(model, T, method="g6-v2")["model_flops_per_token"] * B * T
     assert v2 == pytest.approx(counted)
@@ -280,7 +282,7 @@ def test_c6_flop_counter_sees_no_dense_matmul_for_the_ke2_projection():   # [NEW
     model = _tiny_ke2(attn_impl="eager")
     counted = _counted_flops(model, B, T)
     assert counted == 5760 * B * T == 46080
-    assert flops_per_token(model, T)["model_flops_per_token"] * B * T - counted == 6 * 4096 * B * T
+    assert flops_per_token(model, T, method="g6-v1")["model_flops_per_token"] * B * T - counted == 6 * 4096 * B * T
     v2 = flops_per_token(model, T, method="g6-v2", ke2_mean_support_len=Lbar)["model_flops_per_token"] * B * T
     assert v2 - counted == 4 * Lbar * 8 * B * T    # only the lookup cost, which the counter cannot see
 
@@ -478,7 +480,42 @@ def test_c14_bench_writes_the_method_and_scope():   # [NEW]
     from perfkit.bench import compute_metrics
     s = SimpleNamespace(core=_tiny(), loader=SimpleNamespace(B=2, T=4), opt=SimpleNamespace(flops=lambda: 0.0))
     out = compute_metrics(s, 10.0, 312.0)
-    assert out["mfu_method"] == "g6-v1" and out["mfu_scope"] == "selected_gpu"
+    assert out["mfu_method"] == "g6-v2" and out["mfu_scope"] == "selected_gpu"
+    assert out["ke2_mean_support_len"] is None                  # not a KE2 model
+
+
+def _ke2_setup():
+    core = _tiny_ke2()
+    return SimpleNamespace(core=core, mcfg=core.cfg, device=torch.device("cpu"), loader=SimpleNamespace(B=2, T=4),
+                           opt=SimpleNamespace(flops=lambda: 0.0), sample_step_callback=None,
+                           step_timing_callback=None, last_x=None, ke2_mean_support_len=None)
+
+
+def test_c14_bench_measures_the_ke2_support_length_on_its_clean_batches(monkeypatch):   # [NEW]
+    # Why: g6-v2 charges KE2 by the mean support length of the tokens the run used, and raises without it. Bench
+    # measures it on the clean-step batches, so a KE2 run under the default method does not raise.
+    # _tiny_ke2: even token ids have 1 byte, odd ids 2. Step 1 is all even (mean 1), step 2 all odd (mean 2) => 1.5.
+    from perfkit import bench
+    batches = iter([torch.zeros(2, 4, dtype=torch.long), torch.ones(2, 4, dtype=torch.long)])
+
+    def fake_step(s):
+        s.last_x = next(batches)
+        return 0.0, torch.tensor(1.0)
+    monkeypatch.setattr(bench, "train_step", fake_step)
+    s = _ke2_setup()
+    bench.run_clean(s, 2)
+    assert s.ke2_mean_support_len == pytest.approx(1.5)
+    out = bench.compute_metrics(s, 10.0, 312.0)
+    assert out["mfu_method"] == "g6-v2" and out["ke2_mean_support_len"] == pytest.approx(1.5)
+    expected = flops_per_token(s.core, 4, method="g6-v2", ke2_mean_support_len=1.5)
+    assert out["model_flops_per_token"] == expected["model_flops_per_token"]
+
+
+def test_c14_bench_on_ke2_without_a_measured_support_length_is_an_error():   # [NEW]
+    # Why: no silent default. compute_metrics before run_clean has no support length to charge.
+    from perfkit.bench import compute_metrics
+    with pytest.raises(ValueError):
+        compute_metrics(_ke2_setup(), 10.0, 312.0)
 
 
 def test_c14_schema_rejects_an_unknown_method():   # [NEW]

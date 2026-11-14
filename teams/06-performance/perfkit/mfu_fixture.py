@@ -128,7 +128,7 @@ def measure(a) -> dict | None:
         return None
 
     peaks = [a.peak_tflops if a.peak_tflops else peak_tflops(n, dtype)[0] for n, _ in all_names]
-    f1 = flops_per_token(model, T)
+    f1 = flops_per_token(model, T, method="g6-v1")
     f2 = flops_per_token(model, T, method="g6-v2", ke2_mean_support_len=mean_support)
     global_tps = tokens * world / max(seconds)                # all tokens over the slowest rank's time
     run = mfu_run(f1, global_tps, peaks, ranks=ranks)
