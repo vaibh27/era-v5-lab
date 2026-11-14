@@ -37,6 +37,13 @@ def allowed_row():
     return dict(g10.licence_row(SET_ID), decision="allowed")
 
 
+RESERVED = "TSAI reserves"
+
+
+def reserved_row():
+    return dict(g10.licence_row(SET_ID), decision=RESERVED)
+
+
 @module_fixture
 def kit(tmp_path_factory):
     root = tmp_path_factory.mktemp("kit")
@@ -45,9 +52,13 @@ def kit(tmp_path_factory):
 
 @module_fixture
 def diagnostic(tmp_path_factory, kit):
+    """A diagnostic run under a pinned reserve ruling (policy and licence table), whatever the real table says."""
     root = tmp_path_factory.mktemp("diagnostic")
-    world = World(root / "w", {0: ROWS}, n_shards=1, verified=ALL_TRAIN, **kit)
-    coverage = run_ocr2.run(world.manifest_path, world.policy_path, "0", 1, root / "run")
+    world = World(root / "w", {0: ROWS}, n_shards=1, verified=ALL_TRAIN, policy={"set_decision": RESERVED}, **kit)
+    with pytest.MonkeyPatch.context() as patch:
+        row = reserved_row()
+        patch.setattr(g10, "licence_row", lambda set_id, table=None: row)
+        coverage = run_ocr2.run(world.manifest_path, world.policy_path, "0", 1, root / "run")
     return world, coverage, root / "run" / "shards" / "shard-00000"
 
 
@@ -195,7 +206,16 @@ def test_one_missing_approval_closes_the_gate(admission, tmp_path, monkeypatch, 
 
 def test_the_licence_table_is_read_and_decides(admission, tmp_path, monkeypatch):
     _, manifest, _ = real_pack_manifest(tmp_path, admission, monkeypatch)
-    monkeypatch.undo()  # the real table again: TSAI reserves
+    monkeypatch.undo()  # the real table reader again, on a copy of the table whose OCR-2 row reserves the set
+    real = g10.licence_row(SET_ID)
+    table = tmp_path / "licence_table.md"
+    text = g10.LICENCE_TABLE.read_text(encoding="utf-8")
+    old_row = f"| {real['licence']} | {real['decision']} |"
+    assert text.count(old_row) == 1
+    table.write_text(text.replace(old_row, f"| {real['licence']} | {RESERVED} |"), encoding="utf-8")
+    read = g10.licence_row
+    monkeypatch.setattr(g10, "licence_row", lambda set_id, table_=None: read(set_id, table))
+    assert g10.licence_row(SET_ID)["decision"] == RESERVED
     report = pack.evaluate(manifest, "training", tmp_path / "pack.jsonl")
     assert {"set_not_allowed_in_licence_table", "policy_and_licence_table_disagree"} <= set(report["blockers"])
     assert not (tmp_path / "pack.jsonl").exists()

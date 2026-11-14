@@ -39,8 +39,12 @@ python swe-envs/verify.py --check-all --runs 5 --platform linux/amd64 --write re
 # build a new env from an upstream PR (needs `gh` logged in, Docker, network)
 python swe-envs/make_env.py --repo pallets/click --pr 1934
 
-# list more candidates from an open pool (default nebius/SWE-rebench) with the same filters
-python swe-envs/import_pool.py --out pool_manifest.json
+# list more candidates from an open pool (default nebius/SWE-rebench, read at a pinned Hub commit) with the same filters
+python swe-envs/import_pool.py --out pool_manifest.json [--revision SHA] [--local-dir DIR]
+
+# SWE-rebench pilot: admission checks and evidence (rebench-pilot/<id>/admission.json, results/swe_rebench_pilot.md)
+python swe-envs/make_env.py --repo keis/base58 --pr 46 --out-dir swe-envs/rebench-pilot
+python swe-envs/rebench_pilot.py --source-dir DIR --runs 5 --platforms native linux/amd64
 
 # harness tests (offline, no Docker)
 python -m pytest swe-envs/test_verify.py -q
@@ -71,6 +75,34 @@ python -m pytest swe-envs/test_verify.py -q
 ## Scaling with SWE-rebench (TSAI, 4 Nov)
 
 TSAI allows pre-2023 rows from `nebius/SWE-rebench` (CC-BY-4.0) on two conditions: use only the human parts (issue, patch, tests), and rebuild and gold-check every env ourselves. The Qwen2.5-72B install recipes and quality labels are not used, because that model's licence is outside the generator rule. `import_pool.py` lists candidates; `make_env.py` rebuilds each one from the upstream PR; `verify.py --check` decides. The attribution is in `licences/licence_table.md`.
+
+## SWE-rebench pilot (11 Nov): 5 environments in `rebench-pilot/`
+
+The first five SWE-rebench environments, kept apart from the 21 above (`verify.py --check-all` does not read
+`rebench-pilot/`). Results: `../results/swe_rebench_pilot.md`. Evidence per env: `rebench-pilot/<id>/admission.json`.
+
+- **Pinned source.** `nebius/SWE-rebench` at Hub commit `89cdfbab4ab1bd8f5a658bb212d1b63624f4f881`, split `test`,
+  both parquet files checked against the sha256 the Hub records (`rebench-pilot/source_manifest.json`).
+  `import_pool.py` now refuses an unpinned revision, a file whose hash differs, and a row whose date is missing or
+  unreadable. Its output is a discovery list only.
+- **Dates.** SWE-rebench's `created_at` is the PR's date. `make_env.py` now also checks the linked issue's own
+  creation date and the merge date from GitHub, and refuses a missing, unreadable or 2023+ date.
+- **Human parts only.** Issue text, fix and tests come from GitHub (the upstream issue and PR), not from the
+  release. The release's install recipes, `requirements`, `environment` and quality labels are not read. From the
+  row we read only the id, repo, dates, licence name, base commit and test lists, to compare with the rebuild.
+- **Protected sets.** Every repo named in G9's fingerprints v2 for SWE-bench Verified, Live and Pro (181 repos) is
+  in `benchmark_repos.txt`; no pilot repo is. Issue, test and fix text of all five passed G9's
+  `decontam_check.py` and `canary_scan.py` on the full v2 set (`set_sha256 2826a3b8…`): 15 documents, 0 flagged,
+  0 canaries (`rebench-pilot/decontam_record.json`). The gold patch stays a private verifier reference; it is
+  never put in a prompt.
+- **Admission** (`rebench_pilot.py`): per platform, 5 runs with no patch (every FAIL_TO_PASS test reported and
+  failing) and 5 with the gold patch (every listed test reported and passing), each in a fresh container with no
+  network; no collection errors; verify.py's report-integrity checks; a comment-only negative control gets reward
+  0 and the gold patch reward 1; an isolation probe (only `lo` up, no route, TCP and DNS fail, one commit,
+  non-root); no container left behind.
+- **Platforms.** This Mac's Docker runs a linux/arm64 VM: arm64 runs are native to that VM; linux/amd64 runs are
+  emulated. A native linux/amd64 host has not run these yet.
+- **Rejected candidates** and why: `source_manifest.json` (`rejected`) and the results file.
 
 ## Known limits
 

@@ -10,13 +10,19 @@ Per language it reports
 
 The tokenizer is a stand-in until the project tokenizer is final: BrahmicTokenizer-131K, the baseline team
 03-tokenizer measures its candidates against (github.com/theschoolofai/BrahmicTokenizer-131K, commit 7dfcf398,
-tokenizer.json). Pass --tokenizer to use another tokenizer.json.
+tokenizer.json, sha256 01d968a7...). Pass --tokenizer to use another tokenizer.json.
+
+Before counting, the script checks its inputs and stops on a mismatch: every pack against packs_SHA256SUMS (the 22
+ind-* sample packs, which must all be present), and the tokenizer against --tokenizer-sha256 when it is given.
 
 Usage
   python token_share.py --packs-dir packs --tokenizer tokenizer/tokenizer.json --out romanised_token_share_v1.csv
+  python token_share.py --tokenizer <frozen tokenizer.json> --tokenizer-sha256 <its sha256> \
+                        --out romanised_token_share_v2.csv
 """
 import argparse
 import csv
+import hashlib
 from collections import defaultdict
 from pathlib import Path
 
@@ -25,14 +31,44 @@ from tokenizers import Tokenizer
 
 import doc_detector
 
+HERE = Path(__file__).resolve().parent
+
+
+def sha256(path):
+    h = hashlib.sha256()
+    with open(path, "rb") as f:
+        for chunk in iter(lambda: f.read(1 << 20), b""):
+            h.update(chunk)
+    return h.hexdigest()
+
+
+def check_inputs(packs_dir, sums, tokenizer, tokenizer_sha):
+    """Stop unless every pack in sums is in packs_dir with its sha256, no other pack is there, and the tokenizer
+    matches tokenizer_sha (when given). Returns the tokenizer's sha256."""
+    want = dict(reversed(line.split()) for line in sums.read_text().splitlines() if line.strip())
+    have = {p.name for p in packs_dir.glob("ind-*.parquet")}
+    errors = [f"missing pack {n}" for n in sorted(set(want) - have)]
+    errors += [f"pack not in {sums.name}: {n}" for n in sorted(have - set(want))]
+    errors += [f"sha256 mismatch: {n}" for n in sorted(set(want) & have) if sha256(packs_dir / n) != want[n]]
+    tok_sha = sha256(tokenizer)
+    if tokenizer_sha and tok_sha != tokenizer_sha:
+        errors.append(f"tokenizer sha256 is {tok_sha}, expected {tokenizer_sha}")
+    if errors:
+        raise SystemExit("input check failed:\n  " + "\n  ".join(errors))
+    print(f"inputs ok: {len(want)} packs match {sums.name}; tokenizer {tokenizer} sha256 {tok_sha}")
+    return tok_sha
+
 
 def main(argv=None):
     ap = argparse.ArgumentParser(description="Romanised Indic share in tokens, per language.")
     ap.add_argument("--packs-dir", default="packs", type=Path)
+    ap.add_argument("--packs-sums", default=HERE / "packs_SHA256SUMS", type=Path)
     ap.add_argument("--tokenizer", default="tokenizer/tokenizer.json", type=Path)
+    ap.add_argument("--tokenizer-sha256", default=None, help="expected sha256 of the tokenizer.json (checked)")
     ap.add_argument("--out", default="romanised_token_share_v1.csv", type=Path)
     a = ap.parse_args(argv)
 
+    check_inputs(a.packs_dir, a.packs_sums, a.tokenizer, a.tokenizer_sha256)
     tok = Tokenizer.from_file(str(a.tokenizer))
     n = lambda texts: sum(len(e.ids) for e in tok.encode_batch(texts, add_special_tokens=False)) if texts else 0
     agg = defaultdict(lambda: defaultdict(int))

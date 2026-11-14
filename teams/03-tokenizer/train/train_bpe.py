@@ -16,6 +16,10 @@ Id layout (from slots.json)
     ...                          one contiguous block per script, in slots.json order
     [vocab - special_slots, vocab)  special tokens: named ones, then <|reserved_N|>
 
+A script with "extra" in slots.json also gets that many base ids: the next unused base tokens after the
+o200k swap are removed (same prune list and order) and the script's last merges take their ids, in
+ascending id order, scripts in slots.json order. Its ids are then its block plus these ranges.
+
 With --special-layout v0 the special ids are tokenizer v0's instead (#107):
 all 356 special entries are copied verbatim from the v0 (or v0.1, #132) tokenizer.json, at
 their exact ids (including the 9 outside the top block, e.g. 36 and 128512).
@@ -75,6 +79,10 @@ Usage
     # The same candidates retrained with the week-2 sample v0 (sample_to_corpus.py, mix_search.py); run from the
     # directory that holds corpus60/ and corpus_s0/, because the paths in mix_s0.json are relative
     python train_bpe.py --corpus corpus60 --mix mix_s0.json ... (same flags as the C1, C2, C3 lines above)
+
+    # C3 sample-v0 plus extra Indic merges on more pruned base ids (v2_spec idea 1; slots from extra_search.py)
+    python train_bpe.py --corpus corpus60 --mix mix_s0.json --slots slots_p1536.json --special-layout v0 \\
+        --v0-tokenizer v0_1_tokenizer.json --normalizer v1 --brahmic-dir /path/to/BrahmicTokenizer-131K
 
 Writes <out>/tokenizer.json and <out>/manifest.json (sha256, slot table,
 corpus hashes, verify results). Exit 1 if a verify script fails.
@@ -205,8 +213,8 @@ def load_swap(path):
     return [bytes.fromhex(h) for h in data["tokens"]], [bytes.fromhex(h) for h in data["prune"]], data
 
 
-def choose_prune(vocab, prune, tokens):
-    """The first len(tokens) entries of `prune`, skipping base ancestors of the extension tokens
+def choose_prune(vocab, prune, tokens, n=None):
+    """The first len(tokens) (or n) entries of `prune`, skipping base ancestors of the extension tokens
     (an extension token is merged from its o200k halves, so those must stay)."""
     import tiktoken
     ranks = tiktoken.get_encoding("o200k_base")._mergeable_ranks
@@ -220,10 +228,23 @@ def choose_prune(vocab, prune, tokens):
             protect(part)
     for t in tokens:
         protect(t)
-    out = [t for t in prune if t not in keep][:len(tokens)]
-    if len(out) < len(tokens):
-        sys.exit(f"ERROR: only {len(out)} prunable base tokens for {len(tokens)} extension tokens.")
+    n = len(tokens) if n is None else n
+    out = [t for t in prune if t not in keep][:n]
+    if len(out) < n:
+        sys.exit(f"ERROR: only {len(out)} prunable base tokens for {n} ids.")
     return out
+
+
+def free_base(vocab, merges, prune):
+    """Remove the `prune` tokens and their merges from the base; return their ids, ascending."""
+    gone = set(prune)
+    if len(gone) != len(prune) or any(t not in vocab or len(t) == 1 for t in gone):
+        sys.exit("ERROR: prune list has repeats, single bytes or tokens outside the base.")
+    if any(a in gone or b in gone for a, b in merges if a + b not in gone):
+        sys.exit("ERROR: a kept base token is merged from a pruned one; the base would not be closed.")
+    free = sorted(vocab.pop(t) for t in prune)
+    merges[:] = [(a, b) for a, b in merges if a + b not in gone]
+    return free
 
 
 def swap_base(vocab, merges, prune, tokens):
@@ -233,13 +254,7 @@ def swap_base(vocab, merges, prune, tokens):
     o200k's; its merges go after the base merges. Returns the new merges for the extension."""
     import tiktoken
     ranks = tiktoken.get_encoding("o200k_base")._mergeable_ranks
-    gone = set(prune)
-    if len(gone) != len(prune) or any(t not in vocab or len(t) == 1 for t in gone):
-        sys.exit("ERROR: prune list has repeats, single bytes or tokens outside the base.")
-    if any(a in gone or b in gone for a, b in merges if a + b not in gone):
-        sys.exit("ERROR: a kept base token is merged from a pruned one; the base would not be closed.")
-    free = sorted(vocab.pop(t) for t in prune)
-    merges[:] = [(a, b) for a, b in merges if a + b not in gone]
+    free = free_base(vocab, merges, prune)
     new = []
     for token, i in zip(sorted(tokens, key=ranks.__getitem__), free):
         if token in vocab or len(token) > MAX_BYTES or len(scripts_of(token)) > 1:
@@ -318,8 +333,10 @@ def mixed_counts(units, script, pattern, norm=None):
     return Counter({piece: n for piece, c in total.items() if (n := round(c)) > 0})
 
 
-def learn_merges(words, freqs, id_bytes, vocab_bytes, script, n_merges, first_id):
-    """Step 2: continue BPE on `words` (lists of ids) for exactly n_merges new tokens."""
+def learn_merges(words, freqs, id_bytes, vocab_bytes, script, n_merges, first_id, extra_ids=()):
+    """Step 2: continue BPE on `words` (lists of ids) for exactly n_merges new tokens. The ids are
+    first_id, first_id + 1, ... and then extra_ids for the last len(extra_ids) merges."""
+    new_ids = iter([*range(first_id, first_id + n_merges - len(extra_ids)), *extra_ids])
     pair_count = defaultdict(int)
     pair_words = defaultdict(set)
     for wi, w in enumerate(words):
@@ -330,7 +347,6 @@ def learn_merges(words, freqs, id_bytes, vocab_bytes, script, n_merges, first_id
     heapq.heapify(heap)
     banned = set()
     merges = []
-    next_id = first_id
     while len(merges) < n_merges:
         if not heap:
             sys.exit(f"ERROR: {script} ran out of pairs after {len(merges)} merges; "
@@ -342,8 +358,7 @@ def learn_merges(words, freqs, id_bytes, vocab_bytes, script, n_merges, first_id
         if len(new) > MAX_BYTES or new in vocab_bytes or scripts_of(new) - {script}:
             banned.add((a, b))
             continue
-        nid = next_id
-        next_id += 1
+        nid = next(new_ids)
         id_bytes[nid] = new
         vocab_bytes.add(new)
         merges.append((a, b, nid, -negc))           # count = corpus frequency when merged
@@ -473,12 +488,25 @@ def main():
     swap = None
     if cfg.get("o200k_swap"):
         ext_tokens, prune_list, swap_data = load_swap(Path(args.slots).parent / cfg["o200k_swap"])
-        pruned = choose_prune(base_vocab, prune_list, ext_tokens)
+        n_extra = sum(s.get("extra", 0) for s in scripts.values())
+        chosen = choose_prune(base_vocab, prune_list, ext_tokens, len(ext_tokens) + n_extra)
+        pruned, extra_pruned = chosen[:len(ext_tokens)], chosen[len(ext_tokens):]
         swapped_ids = sorted(base_vocab[t] for t in pruned)
         base_merges += swap_base(base_vocab, base_merges, pruned, ext_tokens)
         swap = {"file": cfg["o200k_swap"], "tokens_sha256": swap_data["tokens_sha256"],
                 "prune_sha256": swap_data["prune_sha256"], "swapped": len(pruned)}
         print(f"o200k swap: {len(pruned)} unused base tokens replaced in place", flush=True)
+    elif any(s.get("extra") for s in scripts.values()):
+        sys.exit("ERROR: \"extra\" needs \"o200k_swap\" (the prune list) in the slots json.")
+    extra_ids = {}
+    if swap and n_extra:
+        free = iter(free_base(base_vocab, base_merges, extra_pruned))
+        extra_ids = {s: [next(free) for _ in range(spec.get("extra", 0))] for s, spec in scripts.items()}
+        swap["extra_pruned"] = {"count": n_extra, "sha256": hashlib.sha256(
+            "\n".join(t.hex() for t in extra_pruned).encode()).hexdigest(),
+            "by_script": dict(Counter(next(iter(scripts_of(t)), "Common") for t in extra_pruned).most_common())}
+        print(f"extra: {n_extra} more unused base tokens removed, ids go to script merges "
+              f"{swap['extra_pruned']['by_script']}", flush=True)
 
     # Encoder for the base alone, used to segment each script's words before step 2.
     from tokenizers import Tokenizer
@@ -519,12 +547,22 @@ def main():
         encs = base_tok.encode_batch([b.decode("utf-8") for b, _ in items], add_special_tokens=False)
         words = [e.ids for e in encs]
         freqs = [c for _, c in items]
-        merges = learn_merges(words, freqs, id_bytes, vocab_bytes, script, spec["slots"], next_id)
+        extra = extra_ids.get(script, [])
+        merges = learn_merges(words, freqs, id_bytes, vocab_bytes, script, spec["slots"] + len(extra), next_id, extra)
         all_merges.extend((a, b) for a, b, *_ in merges)
         last_count[script] = {"last_merge_count": merges[-1][3], "words": sum(freqs)}
         layout[script] = block(next_id, next_id + spec["slots"])
+        if extra:
+            ranges = []
+            for i in (real_id[d] for d in extra):
+                if ranges and ranges[-1][1] == i:
+                    ranges[-1][1] += 1
+                else:
+                    ranges.append([i, i + 1])
+            layout[script] = layout[script] + [{"extra_merges": len(extra), "extra_id_ranges": ranges}]
         print(f"{script}: {len(items)} unique words, {sum(freqs)} occurrences -> ids "
-              f"[{layout[script][0]}, {layout[script][1]})  ({time.time() - t0:.0f}s)", flush=True)
+              f"[{layout[script][0]}, {layout[script][1]})" + (f" + {len(extra)} base ids" if extra else "")
+              + f"  ({time.time() - t0:.0f}s)", flush=True)
         next_id += spec["slots"]
 
     assert next_id == len(real_id)
@@ -566,6 +604,7 @@ def main():
         "merges": len(merges_u),
         "layout": layout,
         "slots": {s: v["slots"] for s, v in scripts.items()},
+        **({"extra": {s: len(v) for s, v in extra_ids.items()}} if extra_ids else {}),
         "special_layout": args.special_layout,
         **({"special_tokens": names[:len(cfg["named_specials"])],
             "reserved_special_slots": n_special - len(cfg["named_specials"])}

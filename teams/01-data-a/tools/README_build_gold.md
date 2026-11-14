@@ -6,8 +6,9 @@ private information, medicine text, or diagnosis evidence.
 
 ## Install and run
 
-Copy `tools/build_gold.py` and `tests/test_build_gold.py` into the corresponding
-`teams/01-data-a/` paths in a local checkout of the lab repo.
+The builder is [build_gold.py](build_gold.py), with tests in
+[../tests/tools/test_build_gold.py](../tests/tools/test_build_gold.py). Run the commands below
+from a local checkout's repository root.
 
 Requires Python 3.9+ (standard library only for the main task).
 
@@ -122,7 +123,7 @@ builds gold CSVs only; `harm_test.py` is a separate deliverable.
 ## Tests
 
 ```bash
-python -m unittest discover -s teams/01-data-a/tests -v
+python -m unittest discover -s teams/01-data-a/tests/tools -v
 ```
 
 ## Sharing / PR
@@ -133,7 +134,7 @@ repository. Do not commit downloaded raw Parquet packs or other sensitive data.
 ```bash
 git checkout -b g1-gold-sets
 git add teams/01-data-a/tools/build_gold.py \
-        teams/01-data-a/tests/test_build_gold.py \
+        teams/01-data-a/tests/tools/test_build_gold.py \
         teams/01-data-a/tools/README_build_gold.md \
         teams/01-data-a/gold/
 git commit -m "G1: build audited Data A gold sets"

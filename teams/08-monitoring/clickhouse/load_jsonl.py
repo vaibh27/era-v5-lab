@@ -301,30 +301,60 @@ def _parse_jsonl_content(text: str, default_run_id: str, run_id_override: str | 
                     null_rows += 1
             continue
 
-        # 4. Standard wide per-step JSONL line (Team 5 `train.py` or `MetricsWriter`)
+        # 4. Standard wide per-step JSONL line (Team 5 `train.py`, `MetricsWriter`, or Team 6 `mfu_fixture.py`)
         skip_keys = {
             "step", "time", "timestamp", "run_id", "node_id", "rank", "local_rank",
             "schema_version", "event", "mfu_unavailable_reason", "hfu_unavailable_reason",
             "mfu_method", "mfu_scope",
         }
         line_metrics = 0
+        for tag_key in ("mfu_method", "mfu_scope"):
+            tag_val = rec.get(tag_key)
+            if isinstance(tag_val, str) and tag_val.strip():
+                rows.append({
+                    "run_id": resolved_run_id,
+                    "step": step,
+                    "time": time_str,
+                    "name": f"{tag_key}.{tag_val.strip()}",
+                    "value": 1.0,
+                    "rank": rank,
+                })
+                line_metrics += 1
+
         for k, v in rec.items():
             if k in skip_keys:
                 continue
+            if k == "ke2_mean_support_len" and v is None:
+                continue
             if isinstance(v, (list, tuple)):
                 for sub_i, sub_v in enumerate(v):
-                    val = _to_nullable_float(sub_v)
-                    if val is None:
-                        null_rows += 1
-                    rows.append({
-                        "run_id": resolved_run_id,
-                        "step": step,
-                        "time": time_str,
-                        "name": f"{k}.{sub_i}",
-                        "value": val,
-                        "rank": rank,
-                    })
-                    line_metrics += 1
+                    if isinstance(sub_v, (list, tuple)):
+                        for sub_j, item_v in enumerate(sub_v):
+                            val = _to_nullable_float(item_v)
+                            if val is None:
+                                null_rows += 1
+                            rows.append({
+                                "run_id": resolved_run_id,
+                                "step": step,
+                                "time": time_str,
+                                "name": f"{k}.{sub_i}.{sub_j}",
+                                "value": val,
+                                "rank": rank,
+                            })
+                            line_metrics += 1
+                    else:
+                        val = _to_nullable_float(sub_v)
+                        if val is None:
+                            null_rows += 1
+                        rows.append({
+                            "run_id": resolved_run_id,
+                            "step": step,
+                            "time": time_str,
+                            "name": f"{k}.{sub_i}",
+                            "value": val,
+                            "rank": rank,
+                        })
+                        line_metrics += 1
             elif isinstance(v, dict):
                 for sub_k, sub_v in v.items():
                     if isinstance(sub_v, (list, tuple)):
@@ -440,10 +470,22 @@ def _parse_team6_run_json(text: str, default_run_id: str, run_id_override: str |
     ):
         if k in metrics_sec:
             add(summary_step, summary_dt, k, metrics_sec[k])
+    if metrics_sec.get("ke2_mean_support_len") is not None:
+        add(summary_step, summary_dt, "ke2_mean_support_len", metrics_sec["ke2_mean_support_len"])
     if "mfu" in metrics_sec:
         add(summary_step, summary_dt, "model_flops_utilization", metrics_sec["mfu"])
     if "tokens_per_s" in metrics_sec:
         add(summary_step, summary_dt, "tokens_per_second", metrics_sec["tokens_per_s"])
+
+    # MFU method & scope indicator rows (`METRICS.md` / `G8_HANDOFF.md`: missing keys mean `g6-v1` / `selected_gpu`)
+    raw_method = metrics_sec.get("mfu_method")
+    method_val = raw_method.strip() if isinstance(raw_method, str) and raw_method.strip() else "g6-v1"
+    add(summary_step, summary_dt, f"mfu_method.{method_val}", 1.0)
+
+    raw_scope = metrics_sec.get("mfu_scope")
+    scope_val = raw_scope.strip() if isinstance(raw_scope, str) and raw_scope.strip() else "selected_gpu"
+    add(summary_step, summary_dt, f"mfu_scope.{scope_val}", 1.0)
+
     parts = metrics_sec.get("participants")
     if isinstance(parts, dict):
         for pk in ("world_size", "peak_tflops_sum"):

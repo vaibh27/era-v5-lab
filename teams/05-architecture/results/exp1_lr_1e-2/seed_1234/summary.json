@@ -1,0 +1,10 @@
+{
+  "status": "NOT_ELIGIBLE_FOR_QUALITY_COMPARISON",
+  "steps": 245,
+  "wall_seconds": 411.121413625,
+  "timed_out": false,
+  "first_ce": 11.963246420025826,
+  "last_ce": 7.520585060119629,
+  "final_model_sha256": "15701d752a5c397307bc01366062f3901e1ce872fcfc316757221b50a43a71c0",
+  "eligible_for_quality_comparison": false
+}

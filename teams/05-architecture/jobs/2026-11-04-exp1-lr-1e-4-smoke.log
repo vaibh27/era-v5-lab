@@ -1,0 +1,26 @@
+G5 EXP-1 lr=1e-4 local CPU smoke, 2026-11-04 IST
+
+This is execution evidence only. It is not a quality run and none of its BPB values are EXP-1 results.
+
+Environment:
+  Python 3.14.9
+  torch 2.14.0
+  device cpu, fp32 smoke mode
+
+Common command (SEED and OUT changed for each run):
+  python teams/05-architecture/harness/train_week2.py --config teams/05-architecture/configs/arms/exp1/lr_1e-4.yaml --tokenizer /local/input/tokenizer_v0.json --byte-table /local/input/raw_table_P32.npz --train-data teams/05-architecture/jobs/fixtures/exp1_smoke_train.jsonl --heldout-data teams/05-architecture/jobs/fixtures/exp1_smoke_heldout.jsonl --device cpu --seed SEED --smoke --smoke-steps 1 --smoke-seq-len 8 --smoke-batch-size 1 --no-checkpoint --out OUT
+
+Verified input identities:
+  tokenizer file sha256: 2de039f20d17afd17615095c406c43087359673b767ed0fe2c480b995f2af8e5
+  raw table file sha256: 5e99508660799f43508a0df0060590e96fa253dd1bb69e2575d8e0f302fdd77f
+  raw table content sha256: 47d411a9c6cae6fa2075935567243e51f4efbc377ccef3eef42c32fce66f869f
+
+Results:
+  seed 1234: status=SMOKE steps=1 timed_out=false lr=0.0001 first_ce=11.497118949890137 final_model_sha256=33ea0d5bb64c80356ec205f418473561bd601d3f0a535f557b420fc0f4cfdcb8
+  seed 1235: status=SMOKE steps=1 timed_out=false lr=0.0001 first_ce=11.906807899475098 final_model_sha256=6674f7b92431bdebda184b4ab80f32d5d1d97daa8ec0d5be40ad71025bb4efbf
+  seed 1236: status=SMOKE steps=1 timed_out=false lr=0.0001 first_ce=11.958683013916016 final_model_sha256=76ba7aafce3facd6cf6fc9fbb42ad0cb6868c9300fb88370fe42f39bab5a08c2
+
+Harness unit-test gate:
+  python -m unittest discover -s teams/05-architecture/tests -p 'test_week2*.py' -v
+  Ran 61 tests in 3.879s
+  OK

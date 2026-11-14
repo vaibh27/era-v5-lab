@@ -1,0 +1,19 @@
+doc_id,read,verdict,diseases,evidence,hex,note
+5a34df03774ff1e8,full,clean,,,,
+a9b50e4a22b7943e,full,clean,,,,
+f6e21e76e2a789b0,full,fix,D4,"""విటమిన్ సి అధికంగా పండ్లు"" at 655 + ""జబ్బుల పెరగడానికి ముఖ్య కారణం."" at 1380 + ""అవయవ వ్యవస్థలు అమలు చేయడానికి"" at 1576",,Translated health article; grammar and meaning break thrice
+67f4f373f37ed959,full,clean,,,,
+ed10c2a944c1dab3,full,clean,,,,
+cca46f4776f5b607,full,clean,,,,
+a1a061b0acc3d8d6,full,clean,,,,
+b8ea4c807e2cd0f8,full,clean,,,,
+ca72a12f5656640f,full,clean,,,,
+ce5d37fd95493d93,full,clean,,,,
+44be00c2218e4ccb,full,clean,,,,
+49626812304d5150,full,clean,,,,
+d847afa42c9df584,full,clean,,,,Bulletin register; 'Gangetic' rendered as గాంగ్టక్
+4b0b3187bbdf731b,full,clean,,,,
+655f1ee7a1855455,full,clean,,,,
+f9bec068836e0051,full,clean,,,,
+16f09c1071f5ad38,full,clean,,,,
+c70552094ff4779f,full,clean,,,,

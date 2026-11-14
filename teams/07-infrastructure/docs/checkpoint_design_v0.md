@@ -259,11 +259,51 @@ initialised model of the final shape. You don't need a trained model to measure 
 
 ## 13. Save time (Team 6 input)
 
-Section D of the week-2 plan. Team 6 gives the measured save time on Fri 13 Nov; it goes here with the command,
-the checkpoint size and the machine, and is compared with the stall budget in section 11 (stall ≤ 2% of the
+Section D of the week-2 plan. The save time is compared with the stall budget in section 11 (stall ≤ 2% of the
 interval) and the interval in section 7.
+
+**Status: provisional.** The numbers below are from Team 6's week-1 baseline. Team 6 confirmed on 12 Nov that
+they are the right numbers to use for now and that the 30 min interval is fine
+([reply on PR #239](https://github.com/theschoolofai/era-v5-lab/pull/239#issuecomment-6828432703)); their week-2
+runs did not measure checkpoint save. They are replaced by a separate Team 6 checkpoint job (after their Gate-2
+pack, same stall / write / size split) and scaled to the real per-rank size once config v1 is out (Sat 14 Nov).
+
+### Measured save time
+
+Source: [`teams/06-performance/results/baseline_v0.md`](../../06-performance/results/baseline_v0.md), section
+"Also measured" (bench commit `f1ed7f2`, runs of 2026-10-31). One GPU, `configs/base.yaml`, model plus optimizer
+state, median of 10 saves, two runs per mode.
+
+| Mode | Checkpoint size | Whole save | Copy to CPU (the stall) | Write and fsync (background) |
+|---|---:|---:|---:|---:|
+| normal | 445 MB | 1914 / 1893 ms | 37 / 37 ms | 1878 / 1856 ms |
+| MTP | 829 MB | 3576 / 3564 ms | 67 / 67 ms | 3509 / 3497 ms |
+
+Rates from these runs: copy to CPU about 12 GB/s, write and fsync about 0.24 GB/s, both linear in size.
+
+### What it means for the interval
+
+Only the copy to CPU (section 5, step 3) stops training; the write (step 4) runs in the background. At the 30 min interval:
+
+| Check | Budget | Measured | Result |
+|---|---|---|---|
+| Stall per save | ≤ 2% of 30 min = 36 s | 0.04 to 0.07 s | about 500× under |
+| Background write | shorter than the interval, or saves queue up | 1.9 to 3.5 s | far under |
+| Training time lost to saves | | 0.07 s per 30 min, under 0.01% | negligible |
+
+Time lost per save is tiny next to the work lost per crash (up to 30 min, about 15 min on average), so save cost
+does not push the interval up. At the rates above, both budgets hold up to roughly 400 GB per rank. The write
+rate here is to local disk only; the upload and commit (section 5, steps 6 and 7) are not measured
+yet.
+
+### Decision
+
+**The 30 min interval stays.** It is set by the eval cadence and the most work we accept losing (section 7),
+not by save cost. Revisit only if the Team 6 checkpoint job or the config v1 per-rank size moves the stall above 36 s
+or the background pipeline above 30 min.
 
 | Input | Value | Source |
 |---|---|---|
-| Save time (stall, then background commit) | _pending, Fri 13 Nov_ | Team 6 |
+| Save time (stall, then background write) | 37 ms / 1.9 s (normal), 67 ms / 3.5 s (MTP); provisional | Team 6 week-1 baseline, [baseline_v0.md](../../06-performance/results/baseline_v0.md) |
+| Save time, week-2 checkpoint job | _pending, after the Team 6 Gate-2 pack_ | Team 6, to be posted on [PR #239](https://github.com/theschoolofai/era-v5-lab/pull/239) |
 | Checkpoint size per rank | _pending, config v1 (Sat 14 Nov)_ | Team 5 config v1, [parallel_layout_v0.md](parallel_layout_v0.md) |

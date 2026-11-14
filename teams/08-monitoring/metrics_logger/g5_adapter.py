@@ -17,10 +17,11 @@ with "w", so the two must not share a file). Load the G8 file into ClickHouse wi
 What happens to G5's row:
 - `loss_ntp`, `loss_mtp`, `tokens_per_second` are written as they are; `gpu_alloc_gb` becomes `gpu_alloc_gib`.
 - `gradient_clipping_applied` (a bool in G5's row) is stored as 0 / 1.
-- On validation steps, `val/nll_nats` / `val/scored_tokens` give `validation_loss` (MetricsWriter does this).
+- On validation steps, `val/nll_nats` / `val/scored_tokens` give `validation_loss`, and `val/nll_nats` /
+  (ln(2) x `val/utf8_bytes`) gives `validation_bpb` (G5's `val/bpb`). MetricsWriter does both.
 - `tokens_per_byte` is worked out as `train/scored_tokens / train/utf8_bytes` (the whole batch), unless the
   row already has it.
-- G5-only names that have no G8 metric (`train/ce_loss`, `loss_total`, `perf/step_ms`, `val/bpb`, ...) are
+- G5-only names that have no G8 metric (`train/ce_loss`, `loss_total`, `perf/step_ms`, `val/perplexity`, ...) are
   dropped without a warning. Any other unknown name still gets MetricsWriter's one-time warning, so a new G5
   field is noticed.
 """
@@ -32,7 +33,7 @@ from metrics_writer import FLUSH_EVERY, MetricsWriter
 # Fields in G5's row that have no G8 metric. Dropped quietly (MetricsWriter would warn once for each).
 G5_ONLY = frozenset({
     "train/ce_loss", "loss_total", "train/scored_tokens", "train/input_positions", "train/utf8_bytes",
-    "perf/step_ms", "val/bpb", "val/perplexity",
+    "perf/step_ms", "val/perplexity",
 })
 
 

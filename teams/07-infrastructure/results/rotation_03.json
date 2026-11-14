@@ -1,0 +1,482 @@
+{
+  "schema": "g7-rotation-evidence/1",
+  "source_commit": "ddfe977ea8f771ba6fa9137c1e9f46aade0125d1",
+  "measured_date_ist": "2026-11-04",
+  "execution_env": {
+    "OMP_NUM_THREADS": "1",
+    "MKL_NUM_THREADS": "1",
+    "CUDA_VISIBLE_DEVICES": ""
+  },
+  "environment": {
+    "platform": "macOS-15.7.4-arm64-arm-64bit",
+    "architecture": "arm64",
+    "python": "3.12.14",
+    "cpu": "Apple M4",
+    "memory_bytes": 17179869184,
+    "os_version": "15.7.4",
+    "packages": {
+      "shellingham": "1.5.4",
+      "s3transfer": "0.19.3",
+      "moto": "5.1.10",
+      "setuptools": "84.2.1",
+      "kronecker-embeddings": "0.1.1",
+      "numpy": "2.2.6",
+      "click": "8.5.0",
+      "torch": "2.14.1",
+      "packaging": "26.3",
+      "networkx": "3.7",
+      "tokenizers": "0.23.3",
+      "Pygments": "2.21.0",
+      "requests": "2.34.2",
+      "rich": "15.0.0",
+      "certifi": "2026.10.23",
+      "py-partiql-parser": "0.6.1",
+      "filelock": "4.2.8",
+      "iniconfig": "2.3.1",
+      "cryptography": "50.0.2",
+      "pycparser": "3.12",
+      "ruff": "0.14.2",
+      "jmespath": "1.1.0",
+      "sympy": "1.14.0",
+      "pluggy": "1.7.0",
+      "safetensors": "0.8.0",
+      "tqdm": "4.70.1",
+      "pip": "25.0.1",
+      "pytest": "9.1.1",
+      "urllib3": "2.8.0",
+      "h11": "0.16.0",
+      "mdurl": "0.1.2",
+      "python-dateutil": "2.9.0.post0",
+      "mpmath": "1.3.0",
+      "PyYAML": "6.0.3",
+      "httpcore2": "2.16.0",
+      "fsspec": "2026.9.0",
+      "truststore": "0.10.5",
+      "cffi": "2.1.1",
+      "httpx2": "2.16.0",
+      "typer": "0.27.3",
+      "boto3": "1.43.123",
+      "Jinja2": "3.1.6",
+      "regex": "2026.9.29",
+      "markdown-it-py": "4.2.0",
+      "annotated-doc": "0.0.5",
+      "transformers": "5.22.1",
+      "anyio": "4.16.0",
+      "responses": "0.26.3",
+      "typing_extensions": "4.16.0",
+      "MarkupSafe": "3.0.4",
+      "hf-xet": "1.8.0",
+      "botocore": "1.43.123",
+      "huggingface_hub": "2.4.0",
+      "charset-normalizer": "3.5.2",
+      "xmltodict": "1.0.4",
+      "six": "1.17.0",
+      "idna": "3.20",
+      "Werkzeug": "3.1.9"
+    },
+    "codec_direct_url": {
+      "url": "https://github.com/theschoolofai/kronecker-embeddings",
+      "vcs_info": {
+        "commit_id": "d07cb543f03d7a72a7c35bc68cfb795bcb02e1ec",
+        "requested_revision": "d07cb543f03d7a72a7c35bc68cfb795bcb02e1ec",
+        "vcs": "git"
+      }
+    }
+  },
+  "restore_timing": {
+    "1p": {
+      "repetitions": 3,
+      "wall_s": {
+        "median": 5.086259208001138,
+        "min": 4.993042500000229,
+        "max": 6.675464957999793,
+        "samples": [
+          6.675464957999793,
+          4.993042500000229,
+          5.086259208001138
+        ]
+      },
+      "checkpoint_bytes": [
+        1526402,
+        1526482,
+        1526494
+      ],
+      "verify_s": {
+        "median": 0.0007,
+        "min": 0.0006,
+        "max": 0.0007,
+        "samples": [
+          0.0007,
+          0.0006,
+          0.0007
+        ]
+      },
+      "download_s": {
+        "median": 0.0018,
+        "min": 0.0016,
+        "max": 0.0018,
+        "samples": [
+          0.0018,
+          0.0018,
+          0.0016
+        ]
+      },
+      "load_s": {
+        "median": 0.0151,
+        "min": 0.0148,
+        "max": 0.0154,
+        "samples": [
+          0.0154,
+          0.0148,
+          0.0151
+        ]
+      },
+      "checks_s": {
+        "median": 0.0087,
+        "min": 0.0083,
+        "max": 0.0093,
+        "samples": [
+          0.0093,
+          0.0083,
+          0.0087
+        ]
+      },
+      "restore_s": {
+        "median": 0.0345,
+        "min": 0.0335,
+        "max": 0.0357,
+        "samples": [
+          0.0357,
+          0.0335,
+          0.0345
+        ]
+      }
+    },
+    "2p": {
+      "repetitions": 3,
+      "wall_s": {
+        "median": 6.026267040999301,
+        "min": 5.984552833000635,
+        "max": 6.059610749998683,
+        "samples": [
+          6.059610749998683,
+          6.026267040999301,
+          5.984552833000635
+        ]
+      },
+      "checkpoint_bytes": [
+        1547214,
+        1547226,
+        1547286
+      ],
+      "verify_s": {
+        "median": 0.0009,
+        "min": 0.0009,
+        "max": 0.001,
+        "samples": [
+          0.0009,
+          0.001,
+          0.0009
+        ]
+      },
+      "download_s": {
+        "median": 0.0067,
+        "min": 0.0066,
+        "max": 0.0073,
+        "samples": [
+          0.0073,
+          0.0066,
+          0.0067
+        ]
+      },
+      "load_s": {
+        "median": 0.019,
+        "min": 0.0189,
+        "max": 0.019,
+        "samples": [
+          0.019,
+          0.0189,
+          0.019
+        ]
+      },
+      "checks_s": {
+        "median": 0.0092,
+        "min": 0.0089,
+        "max": 0.0095,
+        "samples": [
+          0.0092,
+          0.0095,
+          0.0089
+        ]
+      },
+      "restore_s": {
+        "median": 0.038,
+        "min": 0.0376,
+        "max": 0.0384,
+        "samples": [
+          0.0384,
+          0.038,
+          0.0376
+        ]
+      }
+    }
+  },
+  "pytest": {
+    "total": 129,
+    "passed": 119,
+    "skipped": 10,
+    "failed": 0,
+    "skips": [
+      {
+        "name": "test_t16_fsdp_save_and_reshard",
+        "suite": "teams.07-infrastructure.support.tests.test_ckpt",
+        "reason": "FSDP2 needs 2 CUDA GPUs (runs on Kaggle (2 GPUs))"
+      },
+      {
+        "name": "test_t18_deepspeed_bit_equal_resume[1]",
+        "suite": "teams.07-infrastructure.support.tests.test_ckpt",
+        "reason": "needs deepspeed and 2 ranks"
+      },
+      {
+        "name": "test_t18_deepspeed_bit_equal_resume[2]",
+        "suite": "teams.07-infrastructure.support.tests.test_ckpt",
+        "reason": "needs deepspeed and 2 ranks"
+      },
+      {
+        "name": "test_t18_deepspeed_bit_equal_resume[3]",
+        "suite": "teams.07-infrastructure.support.tests.test_ckpt",
+        "reason": "needs deepspeed and 2 ranks"
+      },
+      {
+        "name": "test_t19_deepspeed_load_none_falls_back_not_fresh",
+        "suite": "teams.07-infrastructure.support.tests.test_ckpt",
+        "reason": "needs deepspeed and 2 ranks"
+      },
+      {
+        "name": "test_t20_deepspeed_world_change_holds",
+        "suite": "teams.07-infrastructure.support.tests.test_ckpt",
+        "reason": "needs deepspeed and 2 ranks"
+      },
+      {
+        "name": "test_t21_zero3_pieces_fingerprint_as_full_weights",
+        "suite": "teams.07-infrastructure.support.tests.test_ckpt",
+        "reason": "needs deepspeed and 2 ranks"
+      },
+      {
+        "name": "test_t22_deepspeed_export_safetensors[1]",
+        "suite": "teams.07-infrastructure.support.tests.test_ckpt",
+        "reason": "needs deepspeed and 2 ranks"
+      },
+      {
+        "name": "test_t22_deepspeed_export_safetensors[3]",
+        "suite": "teams.07-infrastructure.support.tests.test_ckpt",
+        "reason": "needs deepspeed and 2 ranks"
+      },
+      {
+        "name": "test_t23_deepspeed_fp16_bit_equal_resume_on_gpu",
+        "suite": "teams.07-infrastructure.support.tests.test_ckpt",
+        "reason": "DeepSpeed fp16 needs 2 CUDA GPUs (Kaggle (2 GPUs))"
+      }
+    ],
+    "wall_s": 63.141395208000176,
+    "console_summary": "119 passed, 10 skipped, 9 warnings in 62.67s (0:01:02)"
+  },
+  "checkpoint_totals": {
+    "stores": 20,
+    "checkpoints": 76,
+    "files": 240,
+    "bad": []
+  },
+  "row_comparison": {
+    "fields": [
+      "loss_ntp_bits",
+      "loss_mtp_bits",
+      "batch_id"
+    ],
+    "rows": 1400,
+    "all_equal": true,
+    "selection": "Restore: steps101-200. Restart: steps1-200, latest B attempt wins for duplicate steps.",
+    "file": "out/rotation_03/rotation_03_steps.jsonl",
+    "sha256": "27172392d7992b9aa0af117fdee70d5a2a5c78e5c039dec8fa5a8376747b630d",
+    "location": "Local scratch relative to repository root; not committed or publicly hosted"
+  },
+  "rotation_slot": "rotation_03 (provisional; team confirmation pending)",
+  "restore": [
+    {
+      "run": "restore_1p_1",
+      "pass": true,
+      "first_diff": null,
+      "equal_steps": 100,
+      "world": 1,
+      "wall_s": 6.675464957999793,
+      "checkpoint_bytes_b": 1526402,
+      "run_a_loss_ntp": {
+        "1": 4.31079626083374,
+        "100": 0.033667732030153275,
+        "200": 0.010667925700545311
+      }
+    },
+    {
+      "run": "restore_1p_2",
+      "pass": true,
+      "first_diff": null,
+      "equal_steps": 100,
+      "world": 1,
+      "wall_s": 4.993042500000229,
+      "checkpoint_bytes_b": 1526482,
+      "run_a_loss_ntp": {
+        "1": 4.31079626083374,
+        "100": 0.033667732030153275,
+        "200": 0.010667925700545311
+      }
+    },
+    {
+      "run": "restore_1p_3",
+      "pass": true,
+      "first_diff": null,
+      "equal_steps": 100,
+      "world": 1,
+      "wall_s": 5.086259208001138,
+      "checkpoint_bytes_b": 1526494,
+      "run_a_loss_ntp": {
+        "1": 4.31079626083374,
+        "100": 0.033667732030153275,
+        "200": 0.010667925700545311
+      }
+    },
+    {
+      "run": "restore_2p_1",
+      "pass": true,
+      "first_diff": null,
+      "equal_steps": 100,
+      "world": 2,
+      "wall_s": 6.059610749998683,
+      "checkpoint_bytes_b": 1547226,
+      "run_a_loss_ntp": {
+        "1": 4.310795783996582,
+        "100": 0.033667728304862976,
+        "200": 0.010667925700545311
+      }
+    },
+    {
+      "run": "restore_2p_2",
+      "pass": true,
+      "first_diff": null,
+      "equal_steps": 100,
+      "world": 2,
+      "wall_s": 6.026267040999301,
+      "checkpoint_bytes_b": 1547286,
+      "run_a_loss_ntp": {
+        "1": 4.310795783996582,
+        "100": 0.033667728304862976,
+        "200": 0.010667925700545311
+      }
+    },
+    {
+      "run": "restore_2p_3",
+      "pass": true,
+      "first_diff": null,
+      "equal_steps": 100,
+      "world": 2,
+      "wall_s": 5.984552833000635,
+      "checkpoint_bytes_b": 1547214,
+      "run_a_loss_ntp": {
+        "1": 4.310795783996582,
+        "100": 0.033667728304862976,
+        "200": 0.010667925700545311
+      }
+    }
+  ],
+  "restart": [
+    {
+      "run": "restart",
+      "requested_kill_at": 140,
+      "status": "pass",
+      "numbers": {
+        "bit_equal_steps": 200,
+        "compared_steps": 200,
+        "killed_after_step": 141,
+        "restarted_from_step": 125,
+        "pointer_step": 125,
+        "redone_steps": 16,
+        "restarts": 1,
+        "run_a_s": 1.7,
+        "run_b_s": 2.6,
+        "torch": "2.14.1",
+        "first_diff": null,
+        "pruned_step_folders": []
+      }
+    },
+    {
+      "run": "restart_kill31",
+      "requested_kill_at": 31,
+      "status": "pass",
+      "numbers": {
+        "bit_equal_steps": 200,
+        "compared_steps": 200,
+        "killed_after_step": 33,
+        "restarted_from_step": 25,
+        "pointer_step": 25,
+        "redone_steps": 8,
+        "restarts": 1,
+        "run_a_s": 1.8,
+        "run_b_s": 2.5,
+        "torch": "2.14.1",
+        "first_diff": null,
+        "pruned_step_folders": []
+      }
+    },
+    {
+      "run": "restart_kill99",
+      "requested_kill_at": 99,
+      "status": "pass",
+      "numbers": {
+        "bit_equal_steps": 200,
+        "compared_steps": 200,
+        "killed_after_step": 99,
+        "restarted_from_step": 75,
+        "pointer_step": 75,
+        "redone_steps": 24,
+        "restarts": 1,
+        "run_a_s": 1.7,
+        "run_b_s": 2.6,
+        "torch": "2.14.1",
+        "first_diff": null,
+        "pruned_step_folders": []
+      }
+    },
+    {
+      "run": "restart_kill164",
+      "requested_kill_at": 164,
+      "status": "pass",
+      "numbers": {
+        "bit_equal_steps": 200,
+        "compared_steps": 200,
+        "killed_after_step": 166,
+        "restarted_from_step": 150,
+        "pointer_step": 150,
+        "redone_steps": 16,
+        "restarts": 1,
+        "run_a_s": 1.7,
+        "run_b_s": 2.6,
+        "torch": "2.14.1",
+        "first_diff": null,
+        "pruned_step_folders": []
+      }
+    }
+  ],
+  "proofs": {
+    "probe_recorded": true,
+    "frozen_entry_count": 0,
+    "manifest_git_sha": "unknown",
+    "checkpoint_bad_files": []
+  },
+  "limitations": [
+    "CPU, local filesystem, tiny Team 05 model; no GPU/NCCL, remote object-store throughput, multi-node or real config-v1 benchmark.",
+    "Three repetitions per process count; local OS page-cache state was not controlled. No synthetic checkpoint-size sweep was run.",
+    "Restore phase timing excludes epoch claim, interpreter/process startup and model construction; it is not job-start-to-first-step CK-13 time.",
+    "The tiny MoE checkpoint frozen map is empty; its frozen proof is vacuous. The full checkpoint suite separately tests frozen-change refusal.",
+    "Manifests record git_sha=unknown; source provenance is the checkout SHA above, not a populated manifest field.",
+    "queue/queue_rules.py is absent at this commit, so no check-out validation is claimed."
+  ]
+}

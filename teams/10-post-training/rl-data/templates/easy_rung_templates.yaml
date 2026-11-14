@@ -1,0 +1,4 @@
+# Easy-rung task templates. Written by people on the team only, never by a model (TSAI 3 Nov rule):
+# these statements become RL training text. See easy_rung.py for the format.
+# Empty on purpose until TSAI answers whether this design is allowed.
+[]

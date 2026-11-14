@@ -1,6 +1,6 @@
 # SFT decontamination report
 
-Run for G10 on 2026-11-06 to 2026-11-09. Every set was checked against Team 9's benchmark fingerprints **v2** with the **full set** (no `--benchmarks`, `--tags` or `--exclude`), and scanned for canaries.
+Run for G10 on 2026-11-06 to 2026-11-10. Every set was checked against Team 9's benchmark fingerprints **v2** with the **full set** (no `--benchmarks`, `--tags` or `--exclude`), and scanned for canaries.
 
 - **set_sha256:** `2826a3b883210c653979103c09ce1c79e40fc4f7034b54027f2836482370d22a`
 - **Tools:** `teams/09-evaluation/decontam/decontam_check.py` and `canary_scan.py`, lab main `c6b0ce0961028020b3e3eaf86fe0c5873fca3bc0`. sha256 of the files used:
@@ -10,7 +10,7 @@ Run for G10 on 2026-11-06 to 2026-11-09. Every set was checked against Team 9's 
   - `lab_canary.py`: `373536a777c9f16367cf6affcc2cc6243755ac23e75850a2624eadf65918ea09`
   - `normalize.py`: `570dcb820ac2ae6c667b1abc5ea1d781a6795aa42a7735aa94377e756d7d70e9`
 - **Runner and reconciliation:** `sft/decontam_run.py`; this file is written by `sft/decontam_report.py`.
-- **Sets run:** 34. **Rows in:** 17,438,781. **Removed (flagged or canary):** 460,409 (2.64%). **Kept:** 16,978,372.
+- **Sets run:** 34. **Rows in:** 18,376,709. **Removed (flagged or canary):** 464,365 (2.53%). **Kept:** 17,912,344.
 - No benchmark item text is in this file or in the run records: only set names, counts, document ids, benchmark item ids, offsets and sha256 values.
 
 ## 1. Result per set
@@ -23,7 +23,7 @@ Run for G10 on 2026-11-06 to 2026-11-09. Every set was checked against Team 9's 
 | `sft-chat-nemotron-if-v1` | full set | 4,963 | 1 | 0 | 1 (0.02%) | 4,962 | `38e757a1a7f8…` |
 | `sft-chat-nemotron-if-v2` | full set | 929,130 | 5,820 | 0 | 5,820 (0.63%) | 923,310 | `d275e5fc036a…`, `129921cf9708…`, `fa59bf8e5412…`, `7cfc5eac47ec…`, `9f434f177f06…`, `84b302f24bc3…`, `1de7ab5945bf…`, `95ee581fa4b7…`, `8786b14b2153…`, `2db777df7567…`, `dfe1154ba357…`, `8ee148c1f184…`, `2f9ddc83eca2…`, `ca5c6a4d63bd…`, `58fc17fa19c0…`, `ae4ba4a2e852…`, `a6440d349208…`, `528a1c30fcf2…`, `d5b1a0a38e99…`, `4ab4d078274d…`, `2201fd1dca64…`, `5a792d0c4f3b…`, `a8a7284e9979…`, `da409765b5e0…`, `dd1c17be5e1e…`, `5fde6e9c38f1…`, `a17c0ff681ce…`, `624b556ba607…`, `64edd9dd9c9f…`, `c67e1d319c41…`, `e9ac4479954e…`, `b17bd1527fd8…`, `b0ac423bf558…`, `2de5563c2e80…` |
 | `sft-code-codeforces-cots` | full set | 45,734 | 20,796 | 0 | 20,796 (45.47%) | 24,938 | `b5df0cfbc19b…` |
-| `sft-code-commitpackft` | full set | 56,025 | 15 | 0 | 15 (0.03%) | 56,010 | `e34bda519e71…` |
+| `sft-code-commitpackft` | full set | 702,062 | 1,001 | 0 | 1,001 (0.14%) | 701,061 | `0cb076d440c8…`, `6c53baddfea0…`, `2f4e4a9a8490…`, `c55fc845d21d…`, `582ef092cade…`, `824ef3101d1d…`, `1704fd6d2d7a…`, `5923b0bec1e4…`, `ff63c77d24b1…`, `aa4b64497454…`, `40c119c75363…`, `f13c00bbd8b6…`, `4ff2ebf906e6…`, `9ef6d216c301…`, `7a31484fc327…`, `eeca4384d015…`, `1f086d989401…`, `5d651cf9634d…`, `0c8bdc7d1ec7…`, `33da9f02f6e5…`, `f1def38cebab…`, `14f87fe9bf1c…`, `a87df647f5f3…`, `872f9a2e206e…`, `0dd9e0afe7de…`, `f600ce1c1f6e…`, `e9e2cb03899a…`, `bbc9ba09b076…`, `5d27c00a1dea…`, `7480d3ee1a7a…`, `b7289bf77e04…`, `5c454409cd88…`, `6403f4954dd4…`, `5bced3cfd16b…`, `c4389736a907…`, `19547d0f2b8b…`, `23422eb9b3e2…`, `cd81e5869bb9…`, `f3d8ef50e967…`, `d70d67cc4d52…`, `5b2f5de6c9a1…`, `c5b6724ef0c9…`, `4fcac9e266a8…`, `224c21d27d99…`, `78d474cb16fa…`, `f033aafd0b9b…`, `00ba90b485dc…`, `eaf6b63b65a5…`, `93d2235fe426…`, `a0114f2f5582…`, `4ccf781501df…`, `e5c995f3182d…`, `92d78063cb5f…`, `90bcbafbd793…`, `5d67d06d1d32…`, `d81ba3c7b274…`, `31048ffc6eca…`, `a3089e8b5c7a…`, `92af64de9e87…`, `d13baa8bc9f5…`, `455c5e4a3f2d…`, `db1e607107fd…`, `bb2badb84db6…`, `d7e464a0e399…`, `167828eccdb2…`, `867239868d29…`, `503e5df24d79…`, `9c6f872e75f1…`, `fb0ae256803e…`, `e7ed73afc924…`, `606a22df3d6d…`, `47e2d842e0ce…`, `fc5eab862eeb…`, `2f0a31eea6f2…`, `bc12ef9d7cb4…`, `e24f63abfef3…`, `cc268fbb9121…`, `792509ce060d…`, `5de97c2c6d04…`, `7350543a543b…`, `7daa5caad761…`, `d27989261380…`, `ab5334414302…`, `0199728565c0…`, `96eee3b4a895…`, `3014efbf4254…`, `e819c3048928…`, `c702064448b1…`, `ada99646f389…`, `9265eee70957…`, `d1bb92cf7976…`, `0e958d03e48f…`, `f82f718a58c4…`, `2e1bf58324dd…`, `61cccc81fd91…`, `ab3b74579d16…`, `6f9e934930c1…`, `468401480c75…`, `a1321a4e0dbf…`, `d1eff7915f8d…`, `e350b756c83a…`, `2823f04f49b0…`, `cfbdfec59fb8…`, `bdbc7243a2bf…`, `d8389168613b…`, `8d8ded0bcb61…`, `ab3630923ca2…`, `c42a2fe026ad…`, `b8efd302adb8…`, `663ef6d6f8ef…`, `f34c191c8c3d…`, `0605a43894ce…`, `ef70a40dabec…`, `3f6777a1e7bf…`, `7e9ff294afdc…`, `39649d061bd2…`, `74d25a4c020c…`, `601099a07a92…`, `198af62a27f1…`, `eb591fcca408…`, `88b5c5c23a4c…`, `f0ab4d03cf41…`, `cbd019a44095…`, `2116e0c49adc…`, `ce9bb531aa09…`, `8c617d8f6cc3…`, `83cf439d3418…`, `fa922e4a3380…`, `35315d1e5dd5…`, `32257dabf85d…`, `3c524a7fe4c0…`, `08c58b9015bd…`, `f69849b7f39c…`, `54fe9be675ef…`, `c6863055d00a…`, `5c60caea433f…`, `6529b000030b…`, `7cb6b9711437…`, `a2aa73c78d0a…`, `1964fca0b901…`, `de9777f3c89f…`, `7ac359a36655…`, `26000337b7fc…`, `486078c3e3aa…`, `0f834658f073…`, `7c707e7f3b9e…`, `cd28e24725a9…`, `13429189cb70…`, `57f7ea55306d…`, `d9bd944cae94…`, `d8b5c5e7d124…`, `d4841999edad…`, `5410bee92869…`, `c2ec5e89e8f4…`, `fa981853a9f2…`, `20af1f33e772…`, `6b9d53e10bf2…`, `77eafeae3b02…`, `ce4ee095a0f4…`, `950943b569fe…`, `d1b16aaa070b…`, `b90db74fd240…`, `d1164d80169f…`, `c9eefc45f2c0…`, `fa28e58c6787…`, `fb5e8c7288cc…`, `746168aa48f0…`, `a234e057a5d3…`, `1d512da86f7b…`, `5ba37d31235a…`, `3f57f049ed32…`, `fe7e9787cd24…`, `4827b83ade81…`, `b9dbd0570113…`, `2ef3e4de038f…`, `f018720bc24e…`, `75172edd869b…`, `a7ba80fc4e1e…`, `f161c3a9dd63…`, `833596862b16…`, `878cbe113665…`, `bbaf0c308b44…`, `1cc2463edc6c…`, `50c193286ee0…`, `58500ab9f67d…`, `d44180252913…`, `0f0aca004eaf…`, `469ec8786a6c…`, `59bf3edc68b8…`, `e9d29e2f4c95…`, `5cd2190006dc…`, `55fe40769e54…`, `5c175bf8080a…`, `3da63cf12aff…`, `0a618b85130a…`, `3756c096beb0…`, `68d60c64fee2…`, `086f62edc849…`, `4e9e87ec227f…`, `ef296ae1dcce…`, `cd96bcebd5c7…`, `c00ba643b8b1…`, `f3adf2d28360…`, `78176d2a8de4…`, `856a3dd4fada…`, `b1d45c2a3173…`, `4a2e2edcf6a0…`, `f29b2ad7d826…`, `4faa97908d23…`, `d574486aa4d9…`, `838c77b3083d…`, `6a5dc1749006…`, `fbe3f309341a…`, `748b7b2be8a9…`, `440c7960392c…`, `e5813a8b9aa2…`, `ee85cdc0da79…`, `27add7196549…`, `29ec4fa1810e…`, `fc890af103c3…`, `0d8451151d41…`, `1a94e6636c01…`, `866ba569a55f…`, `e6cbdb3c7150…`, `6afe3ca9ecc4…`, `9aa284f27f50…`, `ecf24c69d593…`, `530d2fe20982…`, `1d93efa02c6f…`, `93ecd6949ece…`, `8e7d2de18799…`, `9e86be835b5a…`, `d34afd2ba3d7…`, `4f0bd1e415ed…`, `628fa755aacf…`, `2c22525b7dec…`, `ed441c995b7f…`, `224d8a9ec45f…`, `fad31309687b…`, `dc07c0f8d9e8…`, `e46a0c4d301f…`, `f19adab651bd…`, `eff332bd9f2f…`, `045da7751b93…`, `54b0c439b823…`, `1d8992baaf20…`, `edba64af4396…`, `ad01854c6e1a…`, `c8d4a31405d9…`, `611cefc0777f…`, `324be4caf6c1…`, `77d8a5947302…`, `ee1af6fe5ffd…`, `ddffe3339bc9…`, `012e669a6646…`, `22ff06ff4762…`, `45d485c56636…`, `e395af1f7cfd…`, `8244476dede6…`, `f91ce37adace…`, `c8920a8713c7…`, `d4473023b607…`, `d6dc4e936eff…`, `8978c95a5222…`, `bd9c0f8f5c53…`, `8875e4925ada…`, `364e395b9a31…`, `2d934a43c547…`, `86568c0eece0…`, `233a5ef7aaad…`, `e7b6781db505…`, `22c2c4e38042…`, `b7754e3030ed…`, `8633ea7ef86c…`, `e471de4abc27…`, `38bd8bf60acd…`, `b3e4c0030e70…` |
 | `sft-code-nemotron-cascade-swe` | full set | 210,582 | 18,248 | 0 | 18,248 (8.67%) | 192,334 | `ec7e6a4e58e8…`, `b9aaf1093062…`, `f1524e849126…`, `b7e3ebb5dc8f…`, `c4700d5da8c7…`, `91de7b00189f…`, `058cccb5229b…`, `3f56e742de15…`, `0fca44d358a8…`, `0b501560491e…`, `7d1e2ef8c7bf…`, `f82da2a04c2f…`, `7618789a1f73…`, `94b8ed89df74…`, `020a4a1c7882…`, `acc3d8f4ef93…`, `f98976abc534…`, `21f6b684fa80…`, `dfac7970bfa9…`, `ff3c3bcbc331…`, `dad9eca584aa…`, `d7c97dad7b3a…`, `356f34dfb865…`, `6bb300fb1545…` |
 | `sft-code-nemotron-cuda` | full set | 2,273 | 2 | 0 | 2 (0.09%) | 2,271 | `f451b673db79…` |
 | `sft-code-nemotron-opencode` | full set | 67,086 | 332 | 0 | 332 (0.49%) | 66,754 | `dc562d0cc443…`, `3576800758a9…`, `52b89bc87e69…`, `203bfab03d84…`, `79c4877ed535…`, `f51db030cd1b…`, `1b83bfbd73c4…`, `c2dbcd0e59fa…`, `908d315b0121…`, `c74074761b8b…`, `0ae8c0e47d8e…`, `6c1b81f80ad8…`, `97de60f12503…`, `44dea49aa7e2…`, `319e3bec33bd…`, `eecfa70e05a2…`, `ae13045008f6…`, `7b9ae04c4554…`, `90944e688cf0…`, `e9afa04e9c57…`, `ef96eb70bb11…` |
@@ -39,7 +39,7 @@ Run for G10 on 2026-11-06 to 2026-11-09. Every set was checked against Team 9's 
 | `sft-indic-indic-align-oasst-t` | full set | 19,909 | 9 | 0 | 9 (0.05%) | 19,900 | `219d0a5fcb3c…` |
 | `sft-math-nemotron-math-v2` | full set | 7,079,896 | 60,665 | 0 | 60,665 (0.86%) | 7,019,231 | `27c65cac950e…`, `f19b10b9d206…`, `84e1ddcb3def…`, `6a957902a3a4…`, `10d3918d7c30…`, `f585f501e3d6…`, `fed5fe3fa8e5…`, `a8b090f46bab…`, `49133eb89ec0…`, `65d80fefa97e…`, `4a7b8aa4d16f…`, `522201078ae1…`, `b4feaebe4742…`, `1d957aca4f7d…`, `5f07ec5b5b31…`, `17f1bcb8d232…`, `dc33b0613b07…`, `f15a012d93d4…`, `8f5ebb8ea566…`, `2f1ab4423cea…`, `802a50b9e4eb…`, `849481e57408…`, `7f4e7d84a2d1…`, `4446e824a5dd…`, `63658a614a0d…`, `92ec346667da…`, `65ce89e71ceb…`, `d42d704c3c3e…`, `d2c7e56ea7e6…`, `d1252729f69b…`, `6f0683ce1633…`, `7c260fd3c33c…`, `6f29a9ee0b26…`, `85ba981f3363…`, `f314229d4d5e…`, `3f5d25fe8cda…`, `af5c3a5621da…`, `b03820fda2ab…`, `b1bf8a343aec…`, `68186e1aae2d…`, `482e17c7a49d…`, `c59580a1a47a…`, `12a575bc883f…`, `306798c60d31…`, `f17208f0a10d…`, `f9211fb7f101…`, `2ffa0c31740c…`, `bde4a48f05de…`, `4cf9472d34f0…`, `24a192b3f7cc…`, `413962c30845…`, `cf67025ee601…`, `8522b3b249ed…`, `6fb93be82b43…`, `b34a7737d816…`, `4f4184890d61…`, `91897e613729…`, `0e9148d086e6…`, `9237011e0819…`, `4f5a6e13c605…`, `19499a2da095…`, `1a0cc5a057b7…`, `fa2852bc0169…`, `33293c78381d…`, `78d875859a33…`, `bac430d5d08d…`, `ed0774060ab2…`, `81f0766a92f9…`, `e13c6501fb4c…`, `8bb42a2a57cf…`, `dbaee3b8d085…`, `5936ec5e3f91…`, `649297836036…`, `9809fb830a3a…`, `cc2e1f47379e…`, `b7c899679cf6…`, `ceca4bbcfea8…`, `781072b80c8c…`, `fcd9e6ea5a1c…`, `914a508ea4b2…`, `0d0bef9aecdd…`, `de8ca4c029f0…`, `c21c809bf274…`, `003746006cb4…`, `b4af14c08162…`, `b2fb07b7cede…`, `890c11ead088…`, `49a66538a51e…`, `8f6fc125866a…`, `bd3b500640a5…`, `b427ddcde93e…`, `4cd4b01d2f39…`, `fb7f1c24a5c9…`, `a021b726107d…`, `2fda528c8e42…`, `34be18f48761…`, `17d0c727344c…`, `2a120e261795…`, `62f689c673e3…`, `72889b66102a…`, `6d536631e234…`, `a234ce89912b…`, `bfc25d2ecc46…`, `242af4a05ea8…`, `6a2c06667807…`, `d444728f24c7…`, `b2e38ddeff09…`, `9129eb87ca30…`, `ddbfcae672bc…`, `297d9b0b7441…`, `19f822e66bb4…`, `e2262d7b899c…`, `c9475138dd01…`, `a0619b5bc059…`, `2a383ba67dff…`, `7d0a97975c0e…`, `f59526a71b4d…`, `6e187410eb65…`, `54a1e2785d3b…`, `5697ab18e5b3…`, `c4620e46ffaf…`, `8c767892c298…`, `a75d94307968…`, `ca53b78ed919…`, `6cc7eed6b59b…`, `73b9e9da033e…`, `e2aca007ec85…`, `5ef31c363c10…`, `da9b1d9ddd1c…`, `1f1c689ce1d0…`, `8173ee3dd79d…`, `6bd159fe144c…`, `4ca1bad936e4…`, `023ef17d3bcf…`, `ec34ddf7bc52…`, `fae813aae341…`, `95011762a9d7…`, `870677dc03f3…`, `ca9258d85599…`, `a7e116d2c3a3…`, `a51e45ff4a65…`, `8d221cf43d78…`, `5eaf39d8b158…`, `99d22e4af60a…`, `4ef10fa8f5ed…`, `054f1424243f…`, `d6512f9d8c3a…`, `2924aba43448…`, `edbc3b574b9c…`, `0d93375576e9…`, `582f7b7b9e4f…`, `675afa91298c…`, `3273429e3e16…`, `4b7e6722156f…`, `2079d22b9e80…`, `0a299bbd742b…`, `70ea508e1231…`, `9dfdc10bdeb0…`, `c3b89577fb5b…`, `01b83e3faf7f…`, `4d1da1390d5f…`, `6d32b2b66a57…`, `825c9f9e2c3e…`, `53015c296114…`, `14315ffbef05…`, `6d6aea6ddf2c…`, `4065610efd48…`, `3fab004702a4…`, `c18421aca1a3…`, `e9f2df097147…`, `68299fa54052…`, `65d87bd522d0…`, `d9d4b63dddb8…`, `29cb25560380…`, `51aa4d51d11b…`, `52b11b397824…`, `268ea247c196…`, `64b76d7eca7c…`, `f5606d18aeef…`, `6d3440e3c823…`, `2b4c3c493e86…`, `e98900cdf426…`, `b39e7c74bb02…`, `46f12d6ec567…`, `51c30586f0fb…`, `497a751ea3cf…`, `f18177d0b5c9…`, `19db1eabee7a…`, `b552fa1e1599…`, `8161f6caaca9…`, `ddb0708f912b…`, `2d083d7d89e4…`, `3c45379036ed…`, `6e0e0c9cfde1…`, `b9e89de76759…`, `61b318527c99…`, `2581646d8cd9…`, `520e59ed7325…`, `57476bc1356f…`, `1ab843e4e046…`, `9da9807c0aa2…`, `0b4e8e8f5104…`, `4bec9074bb99…`, `543e4c97b4b6…`, `1e11b229ee37…`, `8e6b8dd04fe9…`, `3fa3476da098…`, `5096c30dbf7e…`, `39fd53e1b98d…`, `8812deb12b2d…`, `d83cc18e15fc…`, `2b9076820e50…`, `2e2afb7701cf…`, `2913175e74c5…`, `cdd0d19e0cc0…`, `bdbcf313230e…`, `14ac4f535f6b…`, `5e4868cc0585…`, `9d2db08f7e1a…`, `c2fbe737d364…`, `b7ae083ccad9…`, `fed168176d72…`, `c47a689322a2…`, `44049e2aace7…`, `35b8bb742727…`, `dbfde3b707dd…`, `54825c63368f…`, `2c8a86d63c3b…`, `315e344a2a20…`, `6f25bb9f83fe…`, `93b0c6284b89…`, `38ab941e6a72…`, `ac16debea5ff…`, `cdc410dd150e…`, `b1ccd4c61a63…`, `dea421dd9003…`, `732df5779588…`, `11270317e6d1…`, `d0898ffd2e82…`, `f0b6168bc28a…`, `fffbd1e700a9…`, `5eb0e6aae43d…`, `72ab350a75e6…`, `fbdb8984b52e…`, `6ca45c096225…`, `b1384b8c3dbd…`, `c3b1aa34f62d…`, `b91dfd50d7c9…`, `73244539c3da…`, `c955c0b1cddd…`, `7c8758dcdc57…`, `cf6fa1de43ca…`, `1c91fc2724e0…`, `054abe1b5fe0…`, `27a8d3479ee2…`, `a6676b9b82cd…`, `2c6dfc61d3aa…`, `8741c631af3e…`, `2afccb815229…`, `25e2d33da2f6…`, `fa5137b405b7…`, `2b2b0c8d5740…`, `ed31e5707fa8…`, `8bbcd2ed367d…`, `71f3ccbf548c…`, `cac0f2e078b6…`, `d3fb55913184…`, `04c1f9088fde…`, `9b58b65f0cb4…`, `64f0c38fe8f4…`, `cf0f682a98c2…`, `734e89af9298…`, `85f26be41bc9…`, `1012c6aa0829…`, `5fffc2ba91a1…`, `26722f3db3b3…`, `f246a682fe18…`, `a3d8f89a50f7…`, `4e81d66eb543…`, `65192f4af950…`, `7748860b7722…`, `1cef530901ae…`, `ae43feeb0bf2…`, `daecf4d7314a…`, `44f09425772e…`, `dc56b3c0b52c…`, `05a39fae2804…`, `a8268bfdaa70…`, `70fb22540709…`, `740d85141ad0…`, `5194b6c89e85…`, `56976d0f1c87…`, `a25c32bdc9bc…`, `c4e2c6dbe9f5…`, `17ff859f9ccc…`, `c4d9fdf73bbe…`, `4fd1395dfc3d…`, `5f24acf38456…`, `cfcfe6439958…`, `293c96afc924…`, `fc231d502c7d…`, `5a196c23f693…`, `e2915f0f5b1b…`, `169fd5df3f92…`, `55415db654c3…`, `28470f70d240…`, `c01da91a8add…`, `563964bd6bd1…`, `4e2063ae947f…`, `8b23d68f76c0…`, `b57a2b778a48…`, `691cf84cf093…`, `0d4c8596a74f…`, `af44ee569a58…`, `376f0ff20209…`, `dc95c67f2a79…`, `0d6cae72bcea…`, `f11b04e990ea…`, `023a80a15e35…`, `f061fe5c1797…`, `da655710835c…`, `8247cdb28ee9…`, `c899e8c48a76…`, `09ed23650d6b…`, `55ce45a6d3ae…`, `7628f0c9dfd9…`, `e77a802f9329…`, `30d7a1fad985…`, `5baefba041c9…`, `b9ee986c63db…`, `54f005e873c0…`, `85a1706041a3…`, `5641e84bda30…`, `4867b3e99182…`, `d4490516b817…`, `eaca515140c5…`, `df69454705fd…`, `9c58896dd05f…`, `973a2060c454…`, `2fb1fa63d66b…`, `5d30950c0518…`, `2e7031f08f08…`, `bd214bff958b…`, `6407b1b5b815…`, `0c4b8a7fc9f6…`, `2d8371b5add0…`, `c8a6810a1a27…`, `b0733f1273c9…`, `eb466653e19e…`, `62276a78e00d…`, `e28c95fd3f77…`, `a41a524dc1ef…`, `ac232eedea56…`, `1ccdac076686…`, `a0aa8c180617…`, `4b8eacc00e04…`, `bd44c0371434…`, `9d6fe7765ef8…`, `c4840a8341fa…`, `ef4522d1d2c1…`, `196cffe0272a…`, `e98903d9acb7…`, `b37ba0936f01…`, `a46589ad75bf…`, `4a1235cd56f2…`, `3a88d35aa4fb…`, `f222e5e9c325…`, `135d98c38610…`, `38e33b6110e8…`, `d296186a0bfc…`, `e8b7188a6fd4…`, `64c50511cde4…`, `f7a8b66a279e…`, `6ed9dd9ff509…`, `fb0e7d35b595…`, `0f7568473e08…`, `fe004409ee18…`, `f97fdb8ab54d…`, `2841045e96cf…`, `84a4b356f6af…`, `48740b0003c4…`, `0bfbd18e7a11…`, `6aec3da4b09a…`, `f14ebbabbc10…`, `f7295bfc8b62…`, `c6db7b7d16f1…`, `c38ec83be850…`, `cbd891e96e74…`, `7de8c32152a1…`, `aa04767a7715…`, `6db0f05d6912…`, `49c366c20462…`, `01bfc158874f…`, `6d0b28ef1c7c…`, `488526ffc145…`, `5155a396b945…`, `56067ea39bbd…`, `cd2f89b2d080…`, `0af903e4cea0…`, `d2e95dd12285…`, `663eb505e54e…`, `5edfc5c6b920…`, `9568fb415f8e…`, `aec723894e42…`, `a0a364b57a51…`, `b157b4be35d1…`, `fd35f824a539…`, `116473610a1f…`, `aedda3d22a88…`, `7c134048dd4e…`, `7f873f50eaa9…`, `c49c404af084…`, `d8938c2d8153…`, `e67ca1f74b25…`, `02cb0586aab9…`, `c3b0dbe3f99c…`, `177d57106ab5…`, `36a750c35117…`, `d5c5eaeeaa15…`, `ce3b3bf8c612…`, `67760a18b0ed…`, `380009336cb5…`, `a972bee93eb1…`, `1616ef5fcba4…`, `905006edf5d9…`, `a57d04ffbb09…`, `ac16adeb6b67…`, `22bd3d759631…`, `ca3fdd0d53b0…`, `92fcda30ec54…`, `03e1f09b7c1d…`, `183d5e630ffb…`, `15f8cdee21cd…`, `cbc1dabbea30…`, `a05098861293…`, `9d46f08ceb5d…`, `8eefa8ee9e3f…`, `ee88f782b67f…`, `3ab20fa5e46f…`, `570edeb9b955…`, `0e40e1ab106b…`, `f7b20e7b9900…`, `f56b04585e1e…`, `4d6242aff42c…`, `5c5c74c9cbe0…`, `8c521895fd03…`, `877da1f7e8ab…`, `24a5f3871400…`, `796c3d33651d…`, `a8b3eb95c333…`, `7eb1f0d63a4c…`, `0f7433341594…`, `a93c7565f7f5…`, `b35d36145d91…`, `326db86dbc5b…`, `4ae9b7d09e1e…`, `6f886901453e…`, `569036880f78…`, `084acf483597…`, `2069e3286041…`, `15c78f2f21ce…`, `521a86cc239e…`, `9d0a50ee706f…`, `9089836bdb82…`, `2b4cb61352ad…`, `7fe63356953e…`, `544ee475f587…`, `99542fe37c07…`, `0515fed44c2e…`, `152c0cc19ce3…`, `270a8f2cbcb8…`, `63a8cfcb02aa…`, `48564350974f…`, `93feddbe2851…`, `019e8dabd717…`, `779e141bb949…`, `7c413966db7b…`, `b08ae4629c0c…`, `316091a1ccf6…`, `2c89f140a212…`, `9d0d58f25eb1…`, `a17259944c33…` |
 | `sft-math-nemotron-proofs` | full set | 920,831 | 2,357 | 0 | 2,357 (0.26%) | 918,474 | `8898ae62ec5f…`, `04278dc9f3b5…`, `5a3256975ea6…`, `6210fa7fe8e0…`, `ea29a8869ed9…`, `dbd243b4a5ff…`, `b4795373d8af…`, `e0a60a7898f8…`, `c8e4df68c4fd…`, `6ea94ca2be26…`, `77aa012fcd6f…`, `7b4c528f5e42…`, `3cc573e4855e…`, `0308e7083727…`, `a1d8983dda04…`, `fb6424330498…`, `97730b1883c6…`, `a242cee2e064…`, `01570e9708f8…`, `4e4e6ad06518…`, `ee2698da6f93…`, `7c84375b79df…`, `826c9d1121ca…`, `a5413c0de14a…`, `767d35724877…`, `eb9a61d81180…`, `01a89b0d1bf6…`, `517017ba5163…`, `5de3c8a07ac7…`, `92dbba4bf6da…`, `f2dec3ffa46e…`, `9b549cb94ee7…`, `bed5941de885…`, `82d9db7ceeaf…`, `6e56299965a9…`, `acb6dcbb481e…`, `07e3664d2e7c…`, `87328b3781ed…`, `129fd7ad4e78…`, `9022a80da5ef…`, `4345adaf21a2…`, `3c032567c973…`, `fca9db63afd1…`, `2e26ad5f6362…`, `f5b544402f5d…`, `c3e3a974088b…`, `14464c824150…`, `27b28626566f…`, `48261764d6fd…`, `f009cd1047f0…`, `06e38e930b8f…`, `fd3c8991f3e3…`, `6e5818264428…`, `4e9bf2ae2fe1…`, `88acd4e2c9e7…`, `5f796dcff93d…`, `0cc2cd6cca3a…`, `60866f25712e…`, `1abc1f2b181f…`, `86bc20161e7a…`, `7befa00aa956…`, `c335461b2418…`, `89e431f8b389…`, `ca6e0c0232e1…`, `84670f9a3bf5…`, `ec21d89617f1…`, `5661beb70b35…`, `45995c46b302…`, `24940f031f4e…`, `2a653bb30dea…`, `d0a7d361c72b…`, `4e17af345314…`, `008d588aaa70…`, `94669a276ddf…`, `68432fdc543a…`, `06d904b3baf9…`, `0ca5c94583be…`, `afc1865a0c26…`, `bf119d4abd05…`, `261480aff1ce…`, `9ee438f946b6…`, `22618b863f50…`, `ad0527a04d0e…`, `d0b1434d9e82…`, `6ef8614ee9d5…`, `3bd6692a0323…`, `8eb682915447…`, `0257af4bc126…`, `fba5b2ca3361…`, `8b869f72a4e1…`, `8a3c3e4f34fc…`, `d3500995cca3…`, `3c212eae7b64…`, `3f8867ebf2ff…`, `7e458d07acd8…` |
-| `sft-math-nemotron-proofs-v3-sft` | first part, rows within 64k | 1,757 | 42 | 0 | 42 (2.39%) | 1,715 | `77608c18f9ea…` |
+| `sft-math-nemotron-proofs-v3-sft` | full set (293,648 of 414,890 source rows; the other 121,242 are over the 64k budget and were not converted) | 293,648 | 3,012 | 0 | 3,012 (1.03%) | 290,636 | `34fd4f51b789…`, `3092223d16b4…`, `26ccc120fb4c…`, `b637670bad84…`, `e9b56c9e2ecf…`, `515b1138f36f…`, `61c6eefad48a…`, `891e4876cd62…`, `af57fb6f5f21…`, `b88558bc2120…`, `cc3c8f5c84e4…`, `03dab3031e5c…`, `7ab91d925044…`, `d022b88576d8…`, `b50b0832891e…`, `79852831c4c1…`, `4df867be85c0…`, `0d3602e50d1f…`, `2d6b137824b3…`, `faa1e174eae7…`, `7d894571d424…`, `eaea8fa87703…`, `37958d03691e…`, `bffeeb020c5d…`, `492997cd92ae…`, `6e37aa9cbfb4…`, `1ec945f08044…`, `26e76d0574ab…`, `871a5fecb52a…`, `ba8386a4dcc3…`, `e6fbeb28a1e8…`, `7b0b664f9062…`, `0cdf433835c4…`, `0db0fc73fdf3…`, `dbb928e29312…`, `f7d581189b36…`, `7fc976e34d56…`, `630d235e9991…`, `7959cfc57c2e…`, `fe4e800bd5f7…`, `615a45fd9379…`, `ccd952c20fa4…`, `fcdc3623e2eb…`, `a5d8142e4662…`, `d955f7283de2…`, `9c32690f5162…`, `8443531c4562…`, `24e83e82808f…`, `083d01a9cba2…`, `3ef80261a788…`, `9cc8c48ce1e2…`, `0421facce15e…`, `6e9a4a543a11…`, `6737e2733cd2…`, `94c4b3143582…`, `4568ef289939…`, `9e7dbc920895…`, `5c20d7691a3c…`, `b3b842b7c414…`, `a19b8c0e4e34…`, `ca646ea93916…`, `3296fae474a3…`, `fd23bd96a946…`, `e9952a8a9883…`, `71c246b336c1…`, `a9d2bbcd41b0…`, `02f2953c5bd7…`, `5ecaca80e8eb…`, `ec0d26b2d7df…`, `0a9fff25f16e…`, `5eab84819f4a…`, `0c1140b5df4b…`, `bfd62b46e362…`, `6812af28f2a0…`, `414ac3796f5c…`, `e91b71fa273f…`, `a3f27fb7be00…`, `de6237cfee95…`, `29c39f8a3c65…`, `9870f3781dc9…`, `6f20325cce35…`, `5ccd77f195b3…`, `f58c7b81a1b1…`, `b57860918114…`, `299919fe0258…`, `98547390c3e7…`, `24e1db234c33…`, `45f5f4aa4e3c…`, `e7ebd46bc749…`, `30825f47ead6…`, `e7b77d435156…`, `74882c766395…`, `3ab3fa2e489d…`, `62d7a228c33c…`, `4fa64d2c7f53…`, `0fc69bb2dfc9…`, `892fb7483dd5…`, `cd41c12fc99a…`, `3201ed994da7…`, `23b3a87b87de…`, `bef5703cdeab…`, `fffec18a9561…`, `b52ed5964a0c…`, `37d1954f00db…`, `2edd880f7c09…`, `34cfc1731b3e…`, `19261400c45e…`, `c61b6248d702…`, `48c45a8d22ab…`, `499f56dd81c2…`, `022ecd16360b…`, `31e1ceb63d61…`, `4262e107a428…`, `53598dc3825c…`, `aab347f919b4…`, `7dedc74d6143…`, `94d3febd04a7…`, `e445762360ac…`, `9ff168c6421a…`, `a8e846231aea…`, `96d67f1fd094…`, `a297df969708…`, `91a5efe24c0e…`, `2e2b42bfde34…`, `4b874ace5bb4…`, `7b49b39378b3…`, `0dca703704a9…`, `530163e5dbb3…`, `8ef3c6b11b1f…`, `71e7f087a96c…`, `03595917dbbf…`, `1002da40ca98…`, `d9eb4018e7b0…`, `441afa9eb1f8…`, `b26de2dd7e1d…`, `61829ae9bfd8…`, `71cae0dc0d4d…`, `ef4de08442f0…`, `1864c26f928b…`, `bac78c3c8c06…`, `786b2675e3fd…`, `6a967d2801ef…`, `17d369b8708f…`, `1bd5a283000a…`, `073a0d57c24a…`, `c71ae1d858a6…`, `04431268ee0d…`, `5cb5d59ae46e…`, `e42325490f6e…`, `065b5af781ab…`, `c6f7c9ea50ce…` |
 | `sft-math-nemotron-sft-math-v4` | full set | 542,117 | 4,776 | 0 | 4,776 (0.88%) | 537,341 | `20c00f0cd256…` |
 | `sft-math-openr1-math-raw` | full set | 321,100 | 2,494 | 0 | 2,494 (0.78%) | 318,606 | `299c9de1dc91…`, `355f0aea6e69…`, `cb1e7fc1a9d6…`, `9c05f245cadd…`, `19bf1cf578a6…`, `a82189572d24…`, `9f6a98aab885…`, `0e8bd325f985…`, `16613e4d5645…`, `c7780d5ca16e…`, `8e6b1327e587…`, `80e01c3c678f…`, `83b138c4f432…`, `ae5faab539b5…`, `4c757b6a6b3a…`, `f95fb27d8798…`, `ba4d49fdb526…`, `a6b8b887a03c…`, `301085696e10…`, `c7d25478204a…`, `94f11dd9a4b0…`, `beb29383f0d4…`, `e72f726b2852…`, `cf1e9710273d…`, `f8babf1e849d…`, `f3c8d66ee3f5…`, `74fa3c1bfff3…`, `2daec71002dc…`, `feec0e65c1b8…`, `c32f8e8f0974…`, `5b5f5fced930…`, `e62b8de9eba1…`, `564c556381c7…`, `de6f8bbc4854…`, `130695e6521c…`, `3b909d785c05…`, `a4addf83f0ca…`, `1e585e4081ac…`, `804739d9ba57…` |
 | `sft-math-openr1-math` | full set | 224,882 | 1,803 | 0 | 1,803 (0.80%) | 223,079 | `682344d24ba3…`, `cbc8bcb171c9…`, `d7736b348d63…`, `a33ff5ac1edc…`, `2155e5e92cac…`, `0d8c2e5c3de9…`, `75552335c648…`, `36f998d5f8fb…`, `832b5c5c3dc3…`, `bc563c89f1fa…`, `c4b606aaf3ab…`, `35933e6d4603…`, `995b8e6cf0f8…`, `7d869556febb…`, `252ac9a8d858…`, `d241ab7ff755…`, `4aaba5193b88…`, `81500d615610…`, `d027135dc548…`, `733924cab8a8…` |
@@ -51,15 +51,17 @@ Run for G10 on 2026-11-06 to 2026-11-09. Every set was checked against Team 9's 
 | `sft-science-nemotron-science` | full set | 174,155 | 369 | 0 | 369 (0.21%) | 173,786 | `6f9ac4dc35a0…` |
 | `sft-stem-code-openthoughts3` | full set | 450,599 | 7,457 | 0 | 7,457 (1.65%) | 443,142 | `79f4ff26c091…`, `ade7c9a57a9a…`, `339d8d7a2365…`, `6cd690ad6162…`, `bfc8889fd947…`, `bbf06c20198f…`, `c0b69a521656…`, `050dc50cc113…`, `78b37d9adaaf…`, `45112561996b…`, `df2a24c8ffb1…`, `035b09e8392d…`, `e91b9317cf4f…`, `79c54c847f81…`, `f1fd1a47c906…`, `fb0dc7686647…`, `6f98a681965c…`, `3b9ce3d515f8…`, `06de3c49caa6…`, `7b5c21530b81…`, `b68890d2f196…`, `e96250c2c5dd…`, `47ffd65a22c6…`, `f97a16876b62…`, `b2eda5876be9…`, `784f6476778e…`, `9ee3aeb836ee…`, `4f9a39e0d2b6…`, `82a3e0878dfc…`, `8e49fff488bb…`, `24eab6e1e40f…`, `a0a74c9b6662…`, `6db44fc142f7…`, `b49184e84ecb…`, `08ef9e409887…`, `759d62dea723…`, `4aa6cd514c76…`, `16315ac38c30…`, `a14c07d455d4…`, `ac423827f18d…`, `2b150183b97b…`, `28c038ede56f…`, `17a8a8b4699f…`, `d25d0d3cb5c8…`, `3bfa28c90937…`, `c8535b6b24c3…`, `7170551799f6…`, `980940982da2…`, `0cfbbf6fe7ff…`, `6278731204e0…`, `f46e39ba4445…`, `a008b84b3403…`, `b75cec629a02…`, `180233fa0a0d…`, `f4ddf86d1768…`, `176a98edadd0…`, `c8fd43f1ca01…`, `0490573de419…`, `7d1a10cca633…`, `c5451affbdb0…`, `ad0ee9308e89…`, `5ac1e4c7b8ae…`, `2d06beeec41a…`, `c562fc524337…`, `60e57ff96219…`, `90f37ab833e4…`, `ac39bc75d9e3…`, `2e5bcc6805e3…`, `ab93ee9ddac1…`, `89b9caa7b479…`, `9b24af20c6fa…`, `85eb8b58180d…`, `86b2cb843c66…`, `8aa42a3c0b7e…`, `0d92bbe5c35d…`, `96ff98da4576…`, `2f57f6cdd449…`, `e4ca30295e37…`, `a97bfbbb54de…`, `e7ac6d81e8bb…`, `5b5d250c2b15…`, `a48fdf3f83fb…`, `622db5de91b8…`, `14fd7d1bcb25…`, `fc679955203f…`, `41d40a253c48…`, `2995815864d7…`, `697f08fa7820…`, `b418bdfc940c…`, `6f6683ebeeac…`, `5e654702115f…`, `6aa5102da92c…`, `a07c687c112b…`, `37bae8c93b88…`, `1ad5a7501c96…`, `eab3dc4bb945…`, `f813e452f827…`, `2e749834981f…`, `6e843ee19136…`, `4ffba978fc49…`, `144580db0fe3…`, `976ee17bcc51…`, `1dc640b953af…`, `248755862922…`, `ad4367db46ce…`, `0e0ae3cf1233…`, `6331f959579d…`, `b4e65d14ef97…`, `b470a1881d98…`, `23029aeec603…`, `087a9770b759…`, `80865aa19021…`, `af50e4d4dcf2…`, `d99412775cec…`, `fa8706efcf46…`, `38a251e43b1b…`, `d6f01e3864e4…`, `6252a408aa3b…`, `124f8b845375…`, `f6eb39dfe732…` |
 | `sft-safety-aegis-v1` | text column, train and test, not chat | 11,997 | 2 | 0 | 2 (0.02%) | 11,995 | `e545b24def6c…` |
-| **Total** | | **17,438,781** | **460,409** | **0** | **460,409** (2.64%) | **16,978,372** | |
+| **Total** | | **18,376,709** | **464,365** | **0** | **464,365** (2.53%) | **17,912,344** | |
 
 `sft-code-opencodereasoning-2` raw input is 1,398,166 rows. Before the scan, 268,752 are upstream test splits, 3,629 are protected family, 513,809 fail the quality proposal, and 69,690 are held because the `open-r1/codeforces` revision is not established. The other 542,286 join; 67 are rejected by the converter, so 542,219 reach the scan.
 
-**Run on** says what was checked: *full set* is every row the converter produced from the whole source (30 sets); *sample* is the first rows of a split only (0 sets), and is not cleared as a whole.
+**Run on** says what was checked: *full set* is every row the converter produced from the whole source (32 sets; `sft-code-opencodereasoning-2` and `sft-safety-aegis-v1` are the other two rows and are labelled on their rows); *sample* is the first rows of a split only (0 sets), and is not cleared as a whole.
 
 A row that is both flagged and carries a canary counts once in Removed.
 
 ## 2. Flagged documents by benchmark
+
+The `sft-code-opencodereasoning-2` row is the full run: 70 python shards, 542,219 rows scanned, 115,067 flagged. Documents can hit more than one benchmark, so these columns do not sum to 115,067. Flagged documents per benchmark were rebuilt from the shard summaries and cross-checked against the scan records of shards 0 to 3. Coverage bands (section 3) and the largest-overlap items (section 4) cover only shards 0 to 3: per-document records for shards 4 to 69 were not retained after the scan. Section 6 holds the input hashes.
 
 | Set | `aime_2024` | `aime_2025` | `bfcl_v3` | `codeforces` | `flores200` | `gaia` | `gpqa_diamond` | `gsm8k` | `heldout_g5_v1` | `hle` | `in22_conv` | `in22_gen` | `livecodebench` | `longbench_v2` | `milu` | `mmlu` | `swe_bench_live` | `swe_bench_pro` | `swe_bench_verified` | `terminal_bench_2` |
 |---|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|
@@ -69,13 +71,13 @@ A row that is both flagged and carries a canary counts once in Removed.
 | `sft-chat-nemotron-if-v1` | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 0 |
 | `sft-chat-nemotron-if-v2` | 322 | 287 | 540 | 61 | 2 | 14 | 2 | 240 | 3 | 559 | 38 | 2 | 461 | 4 | 176 | 1425 | 1916 | 15 | 29 | 31 |
 | `sft-code-codeforces-cots` | 0 | 0 | 0 | 19253 | 0 | 5 | 0 | 0 | 6 | 1738 | 0 | 0 | 10720 | 0 | 1 | 1 | 0 | 0 | 0 | 0 |
-| `sft-code-commitpackft` | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 4 | 4 | 7 | 0 |
+| `sft-code-commitpackft` | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 5 | 1 | 0 | 0 | 3 | 1 | 0 | 0 | 524 | 96 | 515 | 3 |
 | `sft-code-nemotron-cascade-swe` | 0 | 0 | 2 | 5 | 0 | 0 | 0 | 0 | 1 | 30 | 68 | 0 | 2 | 0 | 0 | 5 | 14799 | 2613 | 4375 | 4 |
 | `sft-code-nemotron-cuda` | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 | `sft-code-nemotron-opencode` | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 332 | 0 | 0 | 0 |
 | `sft-code-nemotron-terminal` | 0 | 0 | 0 | 7812 | 0 | 2 | 0 | 0 | 3 | 183 | 0 | 0 | 5743 | 0 | 2 | 0 | 9 | 2 | 0 | 0 |
 | `sft-code-opencodereasoning` | 0 | 1 | 0 | 73195 | 0 | 45 | 0 | 0 | 41 | 2573 | 1 | 0 | 65305 | 0 | 3 | 6 | 0 | 7 | 0 | 0 |
-| `sft-code-opencodereasoning-2` | 0 | 0 | 0 | 2231 | 0 | 0 | 0 | 0 | 0 | 71 | 0 | 0 | 2662 | 0 | 0 | 0 | 0 | 1 | 0 | 0 |
+| `sft-code-opencodereasoning-2` | 0 | 1 | 0 | 84155 | 0 | 3 | 0 | 0 | 47 | 2046 | 0 | 0 | 68079 | 0 | 93 | 3 | 7 | 3 | 0 | 0 |
 | `sft-code-swe-rebench-openhands` | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 8 | 0 | 0 | 1 | 0 | 0 | 0 | 4474 | 21 | 1058 | 0 |
 | `sft-code-swe-zero-openhands` | 0 | 0 | 16 | 23 | 0 | 0 | 0 | 0 | 0 | 111 | 22 | 0 | 3 | 1 | 5 | 16 | 19751 | 255 | 6051 | 2 |
 | `sft-dolly-15k` | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 2 | 2 | 0 | 0 | 0 | 0 |
@@ -85,7 +87,7 @@ A row that is both flagged and carries a canary counts once in Removed.
 | `sft-indic-indic-align-oasst-t` | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 5 | 4 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 | `sft-math-nemotron-math-v2` | 11104 | 10767 | 21 | 2232 | 0 | 3 | 395 | 0 | 161 | 24253 | 0 | 0 | 6861 | 9 | 18 | 2287 | 11227 | 20 | 792 | 0 |
 | `sft-math-nemotron-proofs` | 84 | 9 | 1 | 326 | 0 | 12 | 32 | 0 | 32 | 1438 | 0 | 0 | 359 | 0 | 1 | 166 | 0 | 0 | 0 | 0 |
-| `sft-math-nemotron-proofs-v3-sft` | 5 | 0 | 0 | 4 | 0 | 0 | 0 | 0 | 0 | 32 | 0 | 0 | 4 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| `sft-math-nemotron-proofs-v3-sft` | 380 | 113 | 0 | 402 | 0 | 0 | 0 | 0 | 2 | 1442 | 1 | 0 | 842 | 0 | 4 | 1 | 0 | 0 | 0 | 0 |
 | `sft-math-nemotron-sft-math-v4` | 225 | 308 | 1 | 199 | 0 | 1 | 65 | 0 | 52 | 3070 | 0 | 0 | 574 | 1 | 6 | 228 | 299 | 10 | 66 | 0 |
 | `sft-math-openr1-math-raw` | 321 | 121 | 11 | 327 | 0 | 1 | 31 | 0 | 13 | 1480 | 0 | 0 | 318 | 0 | 42 | 71 | 0 | 0 | 0 | 0 |
 | `sft-math-openr1-math` | 354 | 279 | 14 | 99 | 0 | 0 | 30 | 0 | 7 | 1053 | 0 | 0 | 132 | 0 | 38 | 72 | 0 | 0 | 0 | 0 |
@@ -112,11 +114,13 @@ Coverage is the share of one benchmark item's runs that the document contains (t
 | `sft-chat-nemotron-if-v1` | 1 | 0 | 1 | 0 |
 | `sft-chat-nemotron-if-v2` | 5820 | 669 | 1011 | 4140 |
 | `sft-code-codeforces-cots` | 20796 | 45 | 1563 | 19188 |
+| `sft-code-commitpackft` | 1001 | 1 | 32 | 968 |
 | `sft-code-nemotron-cascade-swe` | 18248 | 211 | 1620 | 16417 |
 | `sft-code-nemotron-cuda` | 2 | 0 | 0 | 2 |
 | `sft-code-nemotron-opencode` | 332 | 0 | 0 | 332 |
 | `sft-code-nemotron-terminal` | 9901 | 321 | 454 | 9126 |
 | `sft-code-opencodereasoning` | 112753 | 0 | 1311 | 111442 |
+| `sft-code-opencodereasoning-2` | 115067 | 0* | 40* | 9113* |
 | `sft-code-swe-rebench-openhands` | 4864 | 147 | 263 | 4454 |
 | `sft-code-swe-zero-openhands` | 22167 | 222 | 2230 | 19715 |
 | `sft-dolly-15k` | 4 | 0 | 1 | 3 |
@@ -125,6 +129,7 @@ Coverage is the share of one benchmark item's runs that the document contains (t
 | `sft-indic-indic-align-dolly-t` | 0 | 0 | 0 | 0 |
 | `sft-indic-indic-align-oasst-t` | 9 | 0 | 3 | 6 |
 | `sft-math-nemotron-math-v2` | 60665 | 1 | 827 | 59837 |
+| `sft-math-nemotron-proofs-v3-sft` | 3012 | 0 | 2 | 3010 |
 | `sft-math-nemotron-proofs` | 2357 | 0 | 8 | 2349 |
 | `sft-math-nemotron-sft-math-v4` | 4776 | 0 | 42 | 4734 |
 | `sft-math-openr1-math-raw` | 2494 | 0 | 39 | 2455 |
@@ -137,7 +142,11 @@ Coverage is the share of one benchmark item's runs that the document contains (t
 | `sft-science-nemotron-science` | 369 | 0 | 3 | 366 |
 | `sft-stem-code-openthoughts3` | 7457 | 0 | 40 | 7417 |
 
+`sft-safety-aegis-v1` (2 flagged) is in section 1 only. `sft-code-opencodereasoning-2` (115,067 flagged) is listed here; its bands cover shards 0 to 3 only (9,153 flagged; shards 4 to 69 per-document records were not retained): no document reached 0.5, 40 reached 0.1 to 0.5 (all hle) and 9,113 are below 0.1. Every flagged document is removed whatever its band.
+
 ## 4. Benchmark items with the largest overlap
+
+Sections 4, 5 and 6 cover the 32 sets run with the records of this report, plus `sft-code-opencodereasoning-2`. Its coverage bands (section 3) and largest-overlap items here cover only shards 0 to 3. `sft-safety-aegis-v1` (2 flagged) is in sections 1 and 2 only; `sft-indic-indic-align-dolly-t` has no flagged document, so it has no entry here. Document ids are not listed for the OCR-2 rows.
 
 **`sft-agentic-nemotron-agentic-v1`**: at least 44 different benchmark items found in 432 documents (top 15 by coverage; the checker lists the best 5 items per document, so this is a lower bound)
 
@@ -244,6 +253,26 @@ Coverage is the share of one benchmark item's runs that the document contains (t
 | `codeforces:test:2060/D` | 2117 | 0.248 | 53 / 214 | `sft-code-codeforces-cots/1095` | 1479 |
 | `hle:test:672f72e3609b665328565e6b` | 5 | 0.213 | 112 / 526 | `sft-code-codeforces-cots/37475` | 806 |
 | `codeforces:test:2018/A` | 139 | 0.209 | 83 / 398 | `sft-code-codeforces-cots/4730` | 462 |
+
+**`sft-code-commitpackft`**: at least 70 different benchmark items found in 1001 documents (top 15 by coverage; the checker lists the best 5 items per document, so this is a lower bound)
+
+| Benchmark item | Documents | Highest coverage | Shared runs / item runs | Example document | Offset |
+|---|---:|---:|---:|---|---:|
+| `heldout_g5_v1:heldout:vault-js-test-000022` | 1 | 0.563 | 40 / 71 | `sft-code-commitpackft/11400008097` | 662 |
+| `heldout_g5_v1:heldout:vault-go-test-000007` | 1 | 0.184 | 9 / 49 | `sft-code-commitpackft/8200004011` | 309 |
+| `swe_bench_live:test:sphinx-doc__sphinx-11879` | 40 | 0.124 | 20 / 161 | `sft-code-commitpackft/14500006325` | 459 |
+| `swe_bench_verified:test:sphinx-doc__sphinx-10449` | 175 | 0.084 | 48 / 570 | `sft-code-commitpackft/19400018545` | 162 |
+| `swe_bench_live:test:vacanza__holidays-2780` | 42 | 0.075 | 27 / 359 | `sft-code-commitpackft/14500006325` | 200 |
+| `swe_bench_live:test:instructlab__instructlab-3060` | 110 | 0.057 | 45 / 786 | `sft-code-commitpackft/14500057139` | 239 |
+| `swe_bench_verified:test:pytest-dev__pytest-10356` | 4 | 0.054 | 37 / 684 | `sft-code-commitpackft/14500032005` | 137 |
+| `swe_bench_live:test:kedro-org__kedro-3944` | 2 | 0.048 | 9 / 189 | `sft-code-commitpackft/14500018099` | 358 |
+| `swe_bench_live:test:instructlab__instructlab-3125` | 40 | 0.038 | 20 / 528 | `sft-code-commitpackft/14500006325` | 200 |
+| `swe_bench_live:test:deepset-ai__haystack-9322` | 40 | 0.032 | 20 / 629 | `sft-code-commitpackft/14500006325` | 459 |
+| `swe_bench_live:test:google__adk-python-1305` | 100 | 0.030 | 26 / 869 | `sft-code-commitpackft/14500006241` | 245 |
+| `swe_bench_live:test:tox-dev__tox-3409` | 1 | 0.023 | 34 / 1506 | `sft-code-commitpackft/14500009465` | 343 |
+| `swe_bench_verified:test:django__django-13112` | 1 | 0.021 | 7 / 329 | `sft-code-commitpackft/19400051384` | 875 |
+| `swe_bench_verified:test:pylint-dev__pylint-4661` | 1 | 0.020 | 4 / 196 | `sft-code-commitpackft/27300088204` | 908 |
+| `swe_bench_live:test:conan-io__conan-16362` | 2 | 0.019 | 9 / 463 | `sft-code-commitpackft/22000026990` | 871 |
 
 **`sft-code-nemotron-cascade-swe`**: at least 630 different benchmark items found in 18248 documents (top 15 by coverage; the checker lists the best 5 items per document, so this is a lower bound)
 
@@ -419,6 +448,26 @@ Coverage is the share of one benchmark item's runs that the document contains (t
 | `aime_2025:test:8` | 612 | 0.128 | 6 / 47 | `sft-math-nemotron-math-v2/400041248` | 436 |
 | `aime_2025:test:14` | 201 | 0.125 | 4 / 32 | `sft-math-nemotron-math-v2/100097697` | 845 |
 | `aime_2025:test:4` | 95 | 0.121 | 4 / 33 | `sft-math-nemotron-math-v2/100082527` | 19930 |
+
+**`sft-math-nemotron-proofs-v3-sft`**: at least 141 different benchmark items found in 3012 documents (top 15 by coverage; the checker lists the best 5 items per document, so this is a lower bound)
+
+| Benchmark item | Documents | Highest coverage | Shared runs / item runs | Example document | Offset |
+|---|---:|---:|---:|---|---:|
+| `in22_conv:test:6-2` | 1 | 0.143 | 1 / 7 | `sft-math-nemotron-proofs-v3-sft/400047841` | 157819 |
+| `mmlu:test:4258` | 1 | 0.130 | 3 / 23 | `sft-math-nemotron-proofs-v3-sft/500001194` | 57352 |
+| `aime_2025:test:7` | 15 | 0.087 | 4 / 46 | `sft-math-nemotron-proofs-v3-sft/800016665` | 6077 |
+| `milu:test:14412` | 1 | 0.067 | 3 / 45 | `sft-math-nemotron-proofs-v3-sft/400075148` | 47265 |
+| `aime_2025:test:21` | 15 | 0.065 | 3 / 46 | `sft-math-nemotron-proofs-v3-sft/800016665` | 6083 |
+| `aime_2025:test:18` | 15 | 0.045 | 3 / 66 | `sft-math-nemotron-proofs-v3-sft/800016665` | 6083 |
+| `milu:test:11411` | 1 | 0.042 | 1 / 24 | `sft-math-nemotron-proofs-v3-sft/900034109` | 40243 |
+| `aime_2025:test:6` | 15 | 0.038 | 3 / 78 | `sft-math-nemotron-proofs-v3-sft/800016665` | 6083 |
+| `livecodebench:release_v6:abc390_g` | 4 | 0.038 | 8 / 213 | `sft-math-nemotron-proofs-v3-sft/400045830` | 13224 |
+| `hle:test:672e72082d0c14a2e7969dd5` | 5 | 0.034 | 5 / 145 | `sft-math-nemotron-proofs-v3-sft/800018483` | 5814 |
+| `aime_2025:test:20` | 15 | 0.029 | 3 / 104 | `sft-math-nemotron-proofs-v3-sft/800016665` | 6083 |
+| `livecodebench:release_v6:arc184_d` | 2 | 0.026 | 5 / 196 | `sft-math-nemotron-proofs-v3-sft/900008473` | 62049 |
+| `hle:test:671f3a628a33df76faeb71eb` | 5 | 0.025 | 4 / 163 | `sft-math-nemotron-proofs-v3-sft/400062308` | 87557 |
+| `aime_2025:test:28` | 98 | 0.024 | 1 / 41 | `sft-math-nemotron-proofs-v3-sft/300027325` | 5785 |
+| `livecodebench:release_v6:abc384_g` | 123 | 0.024 | 7 / 291 | `sft-math-nemotron-proofs-v3-sft/900044443` | 2164 |
 
 **`sft-math-nemotron-proofs`**: at least 161 different benchmark items found in 2357 documents (top 15 by coverage; the checker lists the best 5 items per document, so this is a lower bound)
 
@@ -629,26 +678,80 @@ Coverage is the share of one benchmark item's runs that the document contains (t
 
 Coverage is the share of the item's runs found in the document. A value near 1.0 is a full copy; a low value is a short shared passage, for example a common problem statement. The ids above are enough to find the document in the set; the item text stays in Team 9's restricted folder.
 
+**`sft-code-opencodereasoning-2`**: at least 285 different codeforces items, 461 livecodebench items and 21 hle items found in the 9,153 flagged documents of shards 0 to 3 (the shards whose per-document records were retained; 115,067 were flagged in all 70 shards). Counts below are lower bounds: the checker lists the best 5 items per document. Document ids and offsets are not listed, by request.
+
+**codeforces**
+
+| Benchmark item | Documents | Highest coverage |
+|---|---:|---:|
+| `codeforces:test:2018/B` | 659 | 0.086 |
+| `codeforces:test:2060/D` | 431 | 0.079 |
+| `codeforces:test:1998/B` | 389 | 0.043 |
+| `codeforces:test:2038/B` | 378 | 0.051 |
+| `codeforces:test:2009/D` | 348 | 0.044 |
+| `codeforces:test:2056/D` | 290 | 0.073 |
+| `codeforces:test:1993/B` | 264 | 0.036 |
+| `codeforces:test:2009/F` | 239 | 0.034 |
+| `codeforces:test:2018/C` | 229 | 0.063 |
+| `codeforces:test:2030/E` | 229 | 0.048 |
+
+**livecodebench**
+
+| Benchmark item | Documents | Highest coverage |
+|---|---:|---:|
+| `livecodebench:release_v6:abc365_b` | 580 | 0.071 |
+| `livecodebench:release_v6:abc346_a` | 576 | 0.063 |
+| `livecodebench:release_v6:abc324_a` | 521 | 0.062 |
+| `livecodebench:release_v6:abc383_d` | 507 | 0.083 |
+| `livecodebench:release_v6:abc329_b` | 489 | 0.066 |
+| `livecodebench:release_v6:abc333_a` | 474 | 0.074 |
+| `livecodebench:release_v6:abc341_a` | 413 | 0.068 |
+| `livecodebench:release_v6:abc373_c` | 410 | 0.038 |
+| `livecodebench:release_v6:abc398_a` | 383 | 0.071 |
+| `livecodebench:release_v6:1873_B` | 324 | 0.050 |
+
+**hle**
+
+| Benchmark item | Documents | Highest coverage |
+|---|---:|---:|
+| `hle:test:66eeea0187ec4a6a04092e78` | 61 | 0.163 |
+| `hle:test:670c2d61886695e43e7c18b3` | 50 | 0.023 |
+| `hle:test:672bb2bbe5bc491689003908` | 11 | 0.002 |
+| `hle:test:66f28a89f1256af80477e15d` | 9 | 0.136 |
+| `hle:test:66ea3ba5444b8f31ef575799` | 9 | 0.004 |
+| `hle:test:672f6cfd609b665328565e5c` | 8 | 0.421 |
+| `hle:test:672e24f117ed86a6ef9def55` | 8 | 0.183 |
+| `hle:test:673627bc10ec0a5f859365ce` | 7 | 0.188 |
+| `hle:test:67373220a4d09488d430f640` | 7 | 0.185 |
+| `hle:test:674d5d4980a9a6adc4f86bc6` | 6 | 0.008 |
+
+
 ## 5. Checks
+
+Counts are out of the 32 sets of section 6; `sft-code-opencodereasoning-2` and `sft-safety-aegis-v1` are not counted here.
 
 | Check | Sets passed |
 |---|---:|
-| `all_source_files_converted` | 15 of 30 |
-| `canary_ids_in_input` | 30 of 30 |
-| `canary_scan_complete` | 30 of 30 |
-| `clean_file_flags_0` | 30 of 30 |
-| `docs_match_checker` | 30 of 30 |
-| `every_removed_row_is_hit` | 1 of 30 |
-| `flagged_count_matches` | 30 of 30 |
-| `flagged_ids_in_input` | 30 of 30 |
-| `ids_disjoint_across_units` | 15 of 30 |
-| `ids_unique` | 30 of 30 |
-| `parts_cover_all_converted_rows` | 15 of 30 |
-| `rows_in_eq_kept_plus_removed` | 30 of 30 |
+| `all_source_files_converted` | 17 of 32 |
+| `canary_ids_in_input` | 32 of 32 |
+| `canary_scan_complete` | 32 of 32 |
+| `clean_file_flags_0` | 32 of 32 |
+| `docs_match_checker` | 32 of 32 |
+| `every_removed_row_is_hit` | 1 of 32 |
+| `flagged_count_matches` | 32 of 32 |
+| `flagged_ids_in_input` | 32 of 32 |
+| `ids_disjoint_across_units` | 17 of 32 |
+| `ids_unique` | 32 of 32 |
+| `parts_cover_all_converted_rows` | 17 of 32 |
+| `rows_in_eq_kept_plus_removed` | 32 of 32 |
+
+`every_removed_row_is_hit` is a check of `decontam_run.py` only (removed rows = flagged + canary rows); the sets run through `decontam_pipeline.py` do not write it, so the count is the one set with the key, not 31 failures. All 32 records have `ok` true.
 
 `rows_in_eq_kept_plus_removed`: rows in = rows kept + rows removed. `clean_file_flags_0`: the checker, run again on the clean file, flags 0 of the kept rows. `canary_scan_complete`: `canary_scan.py` read every file (exit 0 or 1). A set with a failed check or a canary is not in this report (the script stops).
 
 ## 6. Inputs (to reproduce a run)
+
+The 33 sets of sections 1 to 4. `sft-safety-aegis-v1` (stored `text` column) has no row here. For `sft-code-opencodereasoning-2`, the 70 joined shards are listed inline below (scan input, `rendered.jsonl`); the hashes of every pipeline file for every shard, plus the 70 input shards, are in `results/ocr2_full_run_inputs.tsv`.
 
 | Set | Input file | Bytes | sha256 |
 |---|---|---:|---|
@@ -715,6 +818,283 @@ Coverage is the share of the item's runs found in the document. A value near 1.0
 | `sft-chat-nemotron-if-v2` | `u000.part0032.jsonl` | 300,007,472 | `d6b32d5c1ef0ab9bf3f97cfa51bdc472ab64357e5de390d7f1c5191de88aee4d` |
 | `sft-chat-nemotron-if-v2` | `u000.part0033.jsonl` | 240,681,203 | `678489bb8031b72549e4ff2c211b3335c7f729c70f32bf366e9acbef0e265a40` |
 | `sft-code-codeforces-cots` | `code-codeforces-cots.jsonl` | 2,287,612,938 | `d3ef4f33f43f1d22c2912fe2de97951d3c44843e20994b9b24b711f635c0e2fa` |
+| `sft-code-commitpackft` | `u194.part0000.jsonl` | 115,655,713 | `a5cfc0d3e920a03b6a8173195a0a4ca9d6dac4b3b7076d211335c69e7115fd64` |
+| `sft-code-commitpackft` | `u243.part0000.jsonl` | 56,994,091 | `759fe2b38037b69b89f2cb53cc04d87428f5e7a67504b01a91b11976ac322ffa` |
+| `sft-code-commitpackft` | `u209.part0000.jsonl` | 134,098,428 | `7c00a11b9b4107652b373eeebd423ce4ed54f3521d2f8acb6a91205bb54cf1e5` |
+| `sft-code-commitpackft` | `u114.part0000.jsonl` | 112,886,313 | `46ec69bc8d6872f5664544be4cf2755418e3938f23155eb019d361e929d35d54` |
+| `sft-code-commitpackft` | `u145.part0000.jsonl` | 116,392,850 | `fef4d533b7bf6c475271fdf6da818770dbcd505d3308da44f6e479be9747e674` |
+| `sft-code-commitpackft` | `u099.part0000.jsonl` | 39,299,377 | `8c536b97a06b2135dcccbccfac0be38af38d2681e4851a0a3606499377451860` |
+| `sft-code-commitpackft` | `u113.part0000.jsonl` | 47,967,496 | `1704fd6d2d7a22e8059e2506eb7ff66a1c4a7c95c1c9955002574037e23596a5` |
+| `sft-code-commitpackft` | `u026.part0000.jsonl` | 24,260,448 | `2bfa903321a25d399769747d1704ec0cfec928c609b1120bb828d803fab94117` |
+| `sft-code-commitpackft` | `u265.part0000.jsonl` | 19,448,779 | `ff63c77d24b1637f7f5bdc77bf7a17043ec149549becc2d8735b8dbe3e4161c5` |
+| `sft-code-commitpackft` | `u097.part0000.jsonl` | 19,386,164 | `e084bd8a99b48f5d33c557504c1b80d4c6441302cddc25c55aa9d20977b9b0d9` |
+| `sft-code-commitpackft` | `u220.part0000.jsonl` | 49,093,476 | `c835c2bf3871c6fb6e42a30174bec80ced7222c64d865f9a568bcd422f26a8ff` |
+| `sft-code-commitpackft` | `u105.part0000.jsonl` | 16,944,270 | `f13c00bbd8b69507ba09455089733c4bb1f28aa319e00fed944fbede12a108c8` |
+| `sft-code-commitpackft` | `u037.part0000.jsonl` | 11,559,344 | `23d5b24447a98500024f24e2f9cb379aebf2603dd1ff07b6e8c37fffce01f13c` |
+| `sft-code-commitpackft` | `u028.part0000.jsonl` | 15,842,393 | `474ea28fa88454157f606fab31f1f9de45445e753c9eb5610b51d5c66720e902` |
+| `sft-code-commitpackft` | `u249.part0000.jsonl` | 12,824,460 | `1c786d03823d8733d3e89e31fa439810079ed9642e487c55ed567ae776180f0f` |
+| `sft-code-commitpackft` | `u238.part0000.jsonl` | 9,903,942 | `eeca4384d0150445a770fe5d2f2fb49b01a1782a9e864d9d7b25e5b7d0616fbe` |
+| `sft-code-commitpackft` | `u205.part0000.jsonl` | 13,283,819 | `9e6864e557c301a7f849806ac82c0424ad2f52cdbd68122a49f62efd083f22b3` |
+| `sft-code-commitpackft` | `u180.part0000.jsonl` | 54,014,859 | `a972805462b39386d22c9bd236196a508342eaec6f90a0032a1d19fd58407e3b` |
+| `sft-code-commitpackft` | `u116.part0000.jsonl` | 77,123,300 | `f2d85ad202531bda46c00e09b7810caf71a4ddd4fb791ebcb0d1420a5b966571` |
+| `sft-code-commitpackft` | `u027.part0000.jsonl` | 9,923,872 | `33da9f02f6e5f2ff0c244efbe91416eea961172342a62a99f7a17647d6f7aa92` |
+| `sft-code-commitpackft` | `u082.part0000.jsonl` | 9,897,081 | `d60aa96daeb6e45db99499d0e6aefe4559802035aac0f99fb07bfc3a69609e05` |
+| `sft-code-commitpackft` | `u219.part0000.jsonl` | 11,579,180 | `972e838736a70efb61a6cf788ba855a9779adc326418f8bf10f45783c24a768a` |
+| `sft-code-commitpackft` | `u215.part0000.jsonl` | 10,018,223 | `1b36e8cbba39e74a78ee153b61ebf8004e192d93be3f99271f3e275641e5f6aa` |
+| `sft-code-commitpackft` | `u273.part0000.jsonl` | 169,832,320 | `0f6b65b69b05d2b6ea088354de0c81c6c09dfeb80c2dd2928c8dcbf71cb8635c` |
+| `sft-code-commitpackft` | `u088.part0000.jsonl` | 7,952,653 | `93e44716daacba35bc16d101190d33a0a5df36c39c1cdd56f0e832e55024a093` |
+| `sft-code-commitpackft` | `u044.part0000.jsonl` | 7,649,790 | `f600ce1c1f6e6f24ae56e5a180428edca115bf6b8430aba03a1e54133e66b4ea` |
+| `sft-code-commitpackft` | `u210.part0000.jsonl` | 5,504,376 | `e9e2cb03899a4b4a527c01e8437b4784c0640269460aa3e41a755829a39108f5` |
+| `sft-code-commitpackft` | `u246.part0000.jsonl` | 5,357,840 | `bbc9ba09b07618b531c1e21139c9b34c59301c47008b9d74ed4baa61d63216f7` |
+| `sft-code-commitpackft` | `u120.part0000.jsonl` | 5,142,912 | `f0f3873d783a71e0facc310a7e56b869afe6d4da6d5f8de90025b2a7db2a34a6` |
+| `sft-code-commitpackft` | `u123.part0000.jsonl` | 4,976,124 | `7480d3ee1a7a220f125705ace9ceac2f70416aba51ba19c715db885b8d8fd673` |
+| `sft-code-commitpackft` | `u035.part0000.jsonl` | 4,893,376 | `b7289bf77e046b761e941c6203758f5c62406b2227010543c8ad7d2e0093c597` |
+| `sft-code-commitpackft` | `u178.part0000.jsonl` | 3,977,853 | `193cd10568224db1afd4bab45aa6a0d052b0c962c4a1b1c3e07ab7a5d9d3eea4` |
+| `sft-code-commitpackft` | `u020.part0000.jsonl` | 2,034,610 | `6403f4954dd46479abe5d70e2186f663b6f9c3573247208dd40cd1af3944ca93` |
+| `sft-code-commitpackft` | `u087.part0000.jsonl` | 3,447,693 | `5bced3cfd16bee3a4510579fbf0321fe55721c1f8885bb10d158cf2a3473f890` |
+| `sft-code-commitpackft` | `u248.part0000.jsonl` | 3,207,121 | `b2e9548fe5eae2e0ec55a89622e6e02fac47016f3342bdb94ce7cefca2be7e4f` |
+| `sft-code-commitpackft` | `u127.part0000.jsonl` | 2,327,075 | `19547d0f2b8b6fdc83ec5c2e3e0241ccc72487e9c6626daf0c54f7950e129948` |
+| `sft-code-commitpackft` | `u163.part0000.jsonl` | 3,164,408 | `23422eb9b3e216dcc107fafc2400540ebaeb59c676619caf81afed1a38db4cda` |
+| `sft-code-commitpackft` | `u230.part0000.jsonl` | 3,091,491 | `cd81e5869bb99ab4d347ba3011dfce60b93f8f6d5ff3c47f41d9d18f9a8d36bd` |
+| `sft-code-commitpackft` | `u091.part0000.jsonl` | 3,138,327 | `f3d8ef50e967229a0b5ffe7cdf5c20a0be31e6d5fb3bb5b2f1077321e4ff1728` |
+| `sft-code-commitpackft` | `u089.part0000.jsonl` | 2,633,256 | `7263a892fb6944f064c5e366ab90e0388edbcf0451b34abe8da3ec5716b1e814` |
+| `sft-code-commitpackft` | `u251.part0000.jsonl` | 2,643,693 | `5b2f5de6c9a10a500dc2d53abb74b290b2b7eb1c4ba3090c9a750aa12b5d7c9d` |
+| `sft-code-commitpackft` | `u019.part0000.jsonl` | 2,072,056 | `c5b6724ef0c93049f2efa56473b387ab28ee2e3c818940da5e48be200e634ae9` |
+| `sft-code-commitpackft` | `u046.part0000.jsonl` | 2,109,823 | `4fcac9e266a877cef094fc8c1fc1b6844c2dac6f413492849d7811e551c5aab8` |
+| `sft-code-commitpackft` | `u142.part0000.jsonl` | 1,661,616 | `224c21d27d99a4ad3c71a5dd84060bee68778b393936ffa119ab758957b1cc31` |
+| `sft-code-commitpackft` | `u110.part0000.jsonl` | 2,132,868 | `3bfa334aaa6d647fa720037407f2fa351514ad92c9ee55cbdd71da32235c7f5f` |
+| `sft-code-commitpackft` | `u061.part0000.jsonl` | 2,218,696 | `f033aafd0b9bc4ddb2e444694b88affb2d2d5e52b2d9e84e4876a4e2fb76659d` |
+| `sft-code-commitpackft` | `u036.part0000.jsonl` | 1,705,537 | `25914a13d4c1521d59a1fb52cbf2a8aacb3e291060d8ef1bee44a66c2c308d40` |
+| `sft-code-commitpackft` | `u187.part0000.jsonl` | 1,816,201 | `eaf6b63b65a581f89d0b7a3406fac4fabc13b218bc9caa635809d71bb1c72758` |
+| `sft-code-commitpackft` | `u222.part0000.jsonl` | 1,925,760 | `200629cbe1b61400dac75f57843319e2eb5d858f002a543def8b67fb680554f4` |
+| `sft-code-commitpackft` | `u063.part0000.jsonl` | 1,795,932 | `a0114f2f55826ac7082531dbe48cb744fae9564893e06cef0b652537c87bdfda` |
+| `sft-code-commitpackft` | `u049.part0000.jsonl` | 1,651,754 | `4ccf781501df06e23f57a9cd53db819201fa825d77bad2c8ee5379490e397c23` |
+| `sft-code-commitpackft` | `u258.part0000.jsonl` | 1,700,949 | `e5c995f3182d8e594636adfa3ac81c726862252ecbf9e5aadcb0360fcb4c34b7` |
+| `sft-code-commitpackft` | `u011.part0000.jsonl` | 1,107,431 | `92d78063cb5fc293448d48a7b10cd10c469f7500f0e15bc50a84f520293c1e3e` |
+| `sft-code-commitpackft` | `u140.part0000.jsonl` | 1,702,222 | `90bcbafbd793b6d9745c62b6ff0503ba1f1306aa38c5f2f710c4f540cd14bf15` |
+| `sft-code-commitpackft` | `u136.part0000.jsonl` | 1,041,686 | `5d67d06d1d32b1f281e64f42e3cef07537c78e14b94345de666d0340eb682196` |
+| `sft-code-commitpackft` | `u224.part0000.jsonl` | 1,346,918 | `370e4b3941817907dabf50e0fdcf94c69c85500e563cefbb49f37216645e1828` |
+| `sft-code-commitpackft` | `u051.part0000.jsonl` | 1,032,497 | `31048ffc6ecab5478cddfe4542f4ad462001b454e038f1ce342443d37b995e32` |
+| `sft-code-commitpackft` | `u040.part0000.jsonl` | 1,406,476 | `a3089e8b5c7aabb54c4f55d821b764388aff3949048bd55aa82c839b4cec9d5a` |
+| `sft-code-commitpackft` | `u212.part0000.jsonl` | 1,065,506 | `92af64de9e87bdfc74689399ca16dba1c4f3c2a542797bf5462fccfe90f63a7b` |
+| `sft-code-commitpackft` | `u261.part0000.jsonl` | 1,328,058 | `d13baa8bc9f56324bbf547603f71934b19247361ae97c0301e9a8f58130b61fc` |
+| `sft-code-commitpackft` | `u214.part0000.jsonl` | 1,203,115 | `455c5e4a3f2d45bea4297f7e2eff35fec98ce69b1ee74f75b8f620c6c8c02520` |
+| `sft-code-commitpackft` | `u069.part0000.jsonl` | 1,243,323 | `db1e607107fdfc1df0daa9a11d15dd670fd00b519dc63f6889a8ba3644799f3e` |
+| `sft-code-commitpackft` | `u065.part0000.jsonl` | 968,343 | `bb2badb84db68b26773e17c1ac041747c84c38ec218e15e1b5cd64e045071a92` |
+| `sft-code-commitpackft` | `u073.part0000.jsonl` | 857,635 | `d7e464a0e399e989d953a526a43082a7ca33919021cf859b247c3576cc78ad54` |
+| `sft-code-commitpackft` | `u235.part0000.jsonl` | 856,851 | `167828eccdb290cd23b85d6af40a80f7b620557c1ab49f58cb8d6ec743881e0b` |
+| `sft-code-commitpackft` | `u196.part0000.jsonl` | 859,034 | `867239868d295f6211d28ec03c875ec9abd750d76cf43703b4f04d4bbd4f064e` |
+| `sft-code-commitpackft` | `u093.part0000.jsonl` | 827,362 | `503e5df24d7941ecc93884afbc78c55c64b18a35a3e95dbf95a70d8150d212f2` |
+| `sft-code-commitpackft` | `u095.part0000.jsonl` | 719,951 | `899dd757f1e3d8779b161a989abf399eb5660cb4ed62f5028ecf527a9762b339` |
+| `sft-code-commitpackft` | `u143.part0000.jsonl` | 331,307 | `c6d29a58563176ec8c37252c1dba8d652f1ee4d0b467aae2839f595cb7488d27` |
+| `sft-code-commitpackft` | `u002.part0000.jsonl` | 721,612 | `e7ed73afc9246ad3949480ac8bfe4c261a08315b698c1b894381653e0ae2d67e` |
+| `sft-code-commitpackft` | `u167.part0000.jsonl` | 632,683 | `606a22df3d6d2d10df70dbbdf984e8befcada6e79a35674ee3b65bedee5abf44` |
+| `sft-code-commitpackft` | `u066.part0000.jsonl` | 591,111 | `47e2d842e0ce76526b11fa2a02a0dd3a4b65e7e0b3bd5c17734f68bd4294524b` |
+| `sft-code-commitpackft` | `u062.part0000.jsonl` | 599,621 | `fc5eab862eebf90d996b8e29ad65513d8ba2cda74444770546cee478abcce92c` |
+| `sft-code-commitpackft` | `u242.part0000.jsonl` | 522,986 | `2f0a31eea6f263278aadbb2d95ac494af03ab2458059709d3620e8ead7f4f8e4` |
+| `sft-code-commitpackft` | `u201.part0000.jsonl` | 524,570 | `bc12ef9d7cb4a30d11cc593b23ce9c6b7a92c8342cab754fa71fdb51c3b18433` |
+| `sft-code-commitpackft` | `u045.part0000.jsonl` | 433,330 | `e24f63abfef389be31c52210786567707556c63d5c659e22a6e8f9ba1ccede4d` |
+| `sft-code-commitpackft` | `u190.part0000.jsonl` | 370,058 | `cc268fbb9121ee11de8c7d999c8ccc971478af41c21a373620af07e4f9841092` |
+| `sft-code-commitpackft` | `u223.part0000.jsonl` | 427,912 | `792509ce060d9290a3cf365c6543632048c00e25e090e2446ca0b2ee2d49c0db` |
+| `sft-code-commitpackft` | `u010.part0000.jsonl` | 408,542 | `5de97c2c6d04a60895d5898641303332ae1b611584ce228bf7956380a8fe7fe4` |
+| `sft-code-commitpackft` | `u112.part0000.jsonl` | 354,602 | `f69e40e8e71e8670945414e382634f74fa96a30b2f100900d7550fe4172fcc49` |
+| `sft-code-commitpackft` | `u217.part0000.jsonl` | 362,352 | `e56ff4e8dde6a900206fdbc6bc830db02cffbd0b2eead458edf08d4b3a86ae85` |
+| `sft-code-commitpackft` | `u085.part0000.jsonl` | 330,604 | `d27989261380d2842b9f1498c553189caa2fee5592cf708e4e63993f98e21fb6` |
+| `sft-code-commitpackft` | `u166.part0000.jsonl` | 182,924 | `ab5334414302eb4f5148b4a7c8a591112431f2e36b9f3e20803dc1840c957f19` |
+| `sft-code-commitpackft` | `u050.part0000.jsonl` | 183,192 | `0199728565c0c425f28b6ace3d26a72c4f0fcfb92d5797de8594da7f0eff6967` |
+| `sft-code-commitpackft` | `u067.part0000.jsonl` | 201,503 | `96eee3b4a895ded05bf71b6bb3a526353c69c5f96512eef548ef056f9eb97229` |
+| `sft-code-commitpackft` | `u042.part0000.jsonl` | 345,800 | `3014efbf42547096cbe65bdd704e56c7b2563327c15f0e8651df369fa1e53dce` |
+| `sft-code-commitpackft` | `u206.part0000.jsonl` | 221,582 | `e819c30489284131586c91b3dd455fb0caae6e09e01592888ac95360dabd1dcd` |
+| `sft-code-commitpackft` | `u092.part0000.jsonl` | 320,622 | `c702064448b1e9a6b93351486e6c743888bae6136dd1f7822fbaeb677e13e5be` |
+| `sft-code-commitpackft` | `u080.part0000.jsonl` | 280,536 | `ada99646f389d3d375106456b9fc4e37f76a7bbb13e334aedb3f84cc50580f92` |
+| `sft-code-commitpackft` | `u075.part0000.jsonl` | 268,944 | `9265eee70957526caf664ec753fb7a73fe132643be5ace36f74671744ed38c65` |
+| `sft-code-commitpackft` | `u098.part0000.jsonl` | 297,744 | `54fb701b8a414b9cd1d12db7f89c17c11624aedd6ab213f4ced9b61f379e7abf` |
+| `sft-code-commitpackft` | `u121.part0000.jsonl` | 293,982 | `0e958d03e48fdd370c9efe0be8052fedd49c45301cf2ea5f110e6467e350123d` |
+| `sft-code-commitpackft` | `u195.part0000.jsonl` | 221,471 | `f82f718a58c463a32f30347714f9d242c1c4bf0d1744f728c2014cfad336c17c` |
+| `sft-code-commitpackft` | `u048.part0000.jsonl` | 226,993 | `2e1bf58324dda5acabcde1266b0cd79d949931cec3efe535675029a0c598778f` |
+| `sft-code-commitpackft` | `u096.part0000.jsonl` | 266,834 | `fdc2a692a6c7c9a3be98922bbb4014ad019ed64cb57269651eac7726ca454b5c` |
+| `sft-code-commitpackft` | `u240.part0000.jsonl` | 194,896 | `ab3b74579d16f2a832f50eaec8172db6b4ae8b4d8c5a8a5fe6f79388ac25255d` |
+| `sft-code-commitpackft` | `u171.part0000.jsonl` | 260,585 | `6f9e934930c18f641f0feb8637e8f212614d0b19e428913c2d12bab98c90f504` |
+| `sft-code-commitpackft` | `u179.part0000.jsonl` | 217,733 | `468401480c75de5d3796c628c798d04a26334ee2ac9dd10907b230e8a2cdf436` |
+| `sft-code-commitpackft` | `u141.part0000.jsonl` | 191,789 | `a1321a4e0dbfdacc77d9be5a0773ed360c758473c5f2be5369bf2cf3d687c4dc` |
+| `sft-code-commitpackft` | `u270.part0000.jsonl` | 206,104 | `d1eff7915f8dd7c0ae4373888911de84c38541fa6654688ef766266cdf26c2e0` |
+| `sft-code-commitpackft` | `u237.part0000.jsonl` | 217,157 | `7397599129c20d7ac5cbfcb21647b791a64028bb2b3212cdc9bb178b778d7720` |
+| `sft-code-commitpackft` | `u160.part0000.jsonl` | 119,755 | `2823f04f49b0cbdd495e5ee95573b9f8d63ef89069098e952d321c182cc87ebd` |
+| `sft-code-commitpackft` | `u197.part0000.jsonl` | 216,351 | `cfbdfec59fb8cb2d3513dc9dfe996c3ebe33a22ab07699962a1a238fecd8a5ac` |
+| `sft-code-commitpackft` | `u207.part0000.jsonl` | 189,903 | `bdbc7243a2bfff3f077ed0f58354cfec450a0e4b871a2c61c5c162d7f8228bee` |
+| `sft-code-commitpackft` | `u198.part0000.jsonl` | 171,586 | `d8389168613bfcc938c1d056296f41d7d7b1239d6c9db7bf261fde24e3d4f66c` |
+| `sft-code-commitpackft` | `u244.part0000.jsonl` | 107,793 | `8d8ded0bcb613651012446275d92d0ada3a45c272a6456702fe36e935432231d` |
+| `sft-code-commitpackft` | `u014.part0000.jsonl` | 159,520 | `ab3630923ca21421c63d08ce4a6a11726c1bbf30f7248fa81c8a2699c81f2340` |
+| `sft-code-commitpackft` | `u193.part0000.jsonl` | 162,417 | `c42a2fe026ad4753cbfca5e25468d7682c9af705750040b9461595639b9cd241` |
+| `sft-code-commitpackft` | `u250.part0000.jsonl` | 141,499 | `b8efd302adb80394c776a29ca3d304ca9a4ee246e55c04f827e3f70871b79575` |
+| `sft-code-commitpackft` | `u259.part0000.jsonl` | 117,820 | `663ef6d6f8ef7d266cf6db753faedf1321d8621fa43723b6bfc8664534947f70` |
+| `sft-code-commitpackft` | `u053.part0000.jsonl` | 26,339 | `f34c191c8c3d4328945cfdecab130062470ad9905ba1a5b950e7c8850a008090` |
+| `sft-code-commitpackft` | `u232.part0000.jsonl` | 124,903 | `0605a43894cecb9c0156b4d27f42f315310c775f94a32cf8431a2bede52fb75d` |
+| `sft-code-commitpackft` | `u183.part0000.jsonl` | 111,645 | `ef70a40dabec62453bb504bfd256924d23bdbff329a3686a809df8135bb48b62` |
+| `sft-code-commitpackft` | `u072.part0000.jsonl` | 122,524 | `3f6777a1e7bfb1af9ebe995e2a0dcecb0f9c4974d4c823b0da1bedddf9a96a48` |
+| `sft-code-commitpackft` | `u102.part0000.jsonl` | 77,157 | `7e9ff294afdcb2c6f82416e0c0bf633dbdb4025092e14ab559dc9a342a00cff8` |
+| `sft-code-commitpackft` | `u079.part0000.jsonl` | 114,078 | `39649d061bd2fc9c0db729bdfccfda297112c026b15726a1d193d6b0442c75cb` |
+| `sft-code-commitpackft` | `u271.part0000.jsonl` | 112,310 | `74d25a4c020cfa368e79e2237271fa23bce08844c16b09cce52b390b4750ca98` |
+| `sft-code-commitpackft` | `u135.part0000.jsonl` | 122,466 | `601099a07a92429b2fb3ee0b9d2a229232f2226b7d79f019a974a4c13c069711` |
+| `sft-code-commitpackft` | `u001.part0000.jsonl` | 106,326 | `198af62a27f14123f883fd1c6d8b2ebc8064b9a8baf5f1bb22bc99c57115f5c7` |
+| `sft-code-commitpackft` | `u255.part0000.jsonl` | 105,748 | `eb591fcca408bc3efe5b499f2f6727eb309ec9f13737f000b611a51a570fcea2` |
+| `sft-code-commitpackft` | `u018.part0000.jsonl` | 76,368 | `88b5c5c23a4c72bbe2cfae262fdfa9fe192d8b36d23d74efaaad0bfe4189e093` |
+| `sft-code-commitpackft` | `u122.part0000.jsonl` | 92,345 | `9f92c19bb2dd22411ee81b26a3cee8ef808f96b9f5ab35fe6fce7025914c0a52` |
+| `sft-code-commitpackft` | `u032.part0000.jsonl` | 90,674 | `cbd019a440950ffafe5c35a3739f1e1e1521fb9afc742dd7fe9e4a4795d603bd` |
+| `sft-code-commitpackft` | `u055.part0000.jsonl` | 80,674 | `2116e0c49adc86e7eb248504b44d42d0bd4f60fc4fa02649f7c589efd3c29be9` |
+| `sft-code-commitpackft` | `u208.part0000.jsonl` | 76,292 | `ce9bb531aa091945fb7af880dbe9217abcd669e7f51e76102ce1bb44d1b31dd3` |
+| `sft-code-commitpackft` | `u229.part0000.jsonl` | 83,581 | `8c617d8f6cc3a14edfce35f065e82e4fba9a859344708c9995aebeab0d8a2ab6` |
+| `sft-code-commitpackft` | `u012.part0000.jsonl` | 45,499 | `2e925ce3543b52e5ba0e867d96a4e8fe11db6ab253cc18bdcf94b17242a9e0a6` |
+| `sft-code-commitpackft` | `u059.part0000.jsonl` | 82,289 | `fa922e4a338026133c41ef310e10ac2a48e4905702de9f7a0b56220db937e106` |
+| `sft-code-commitpackft` | `u131.part0000.jsonl` | 56,353 | `c6aa33a3f9c481b556a9ece714b3a067d3fc2e5e3c37ee2dae491df30fd61c54` |
+| `sft-code-commitpackft` | `u268.part0000.jsonl` | 72,385 | `32257dabf85d30d6c6b513db4754d744fead84691ceed6a831a0d5e58d4089dc` |
+| `sft-code-commitpackft` | `u175.part0000.jsonl` | 44,358 | `3c524a7fe4c0860c94b45d152321b24c82f5290b0da0b82a8de610096355d1b7` |
+| `sft-code-commitpackft` | `u130.part0000.jsonl` | 56,522 | `08c58b9015bd8a63302dc23c6d8696e0a3a4a57a38ff912e01e366ba95dcda68` |
+| `sft-code-commitpackft` | `u148.part0000.jsonl` | 66,788 | `53c350efa4b4bc2af53c2e94c551913619a3c9b017db05965df9ef20d8e2324a` |
+| `sft-code-commitpackft` | `u226.part0000.jsonl` | 70,681 | `54fe9be675ef414d222d9e621365c0d22f8b68cefb5cf9b730b471e52aa28fe0` |
+| `sft-code-commitpackft` | `u239.part0000.jsonl` | 64,080 | `c6863055d00a9d45bc8282df6fa6920c013e2b74234e1d5e05a4d5c07b7164b2` |
+| `sft-code-commitpackft` | `u245.part0000.jsonl` | 54,838 | `5c60caea433fe1ce9b2f2f76366a0c2d79bf5472166994e6766b16140fc7b252` |
+| `sft-code-commitpackft` | `u117.part0000.jsonl` | 62,096 | `6529b000030b9264630fa2c3b15c044ed1c96a46708646192393364becc91738` |
+| `sft-code-commitpackft` | `u086.part0000.jsonl` | 58,921 | `ab2b328df2a4d8fc9cf356221513cae8991677a80a98481142dac8db21409354` |
+| `sft-code-commitpackft` | `u188.part0000.jsonl` | 59,927 | `a2aa73c78d0a72d9d6aa745571cda21f6a557e166937494bfbfd119ac63e89ae` |
+| `sft-code-commitpackft` | `u047.part0000.jsonl` | 51,660 | `1964fca0b9016f36b08e8355dcd1cbec7bfa786212f788a7b188cda506a1d31e` |
+| `sft-code-commitpackft` | `u084.part0000.jsonl` | 51,166 | `de9777f3c89fb0ac765212835d1477ba71cd43d41e1a2a25fbce1ef0b34e725d` |
+| `sft-code-commitpackft` | `u106.part0000.jsonl` | 37,564 | `7ac359a36655d867a6df9763f64b3bc08aaf0162f6edcb562a76ba16e9cbeb5b` |
+| `sft-code-commitpackft` | `u006.part0000.jsonl` | 55,762 | `26000337b7fcdcc42bb8404625f53ecdc7bbcb4b6c584bed0e184c567dd597ce` |
+| `sft-code-commitpackft` | `u164.part0000.jsonl` | 29,468 | `486078c3e3aa71e7218d76dd4a45a5a04b7ebe3b63c5375a0bd3875af95e7d4a` |
+| `sft-code-commitpackft` | `u138.part0000.jsonl` | 47,407 | `0f834658f073348ac170854b5e196ce3abaa9c4407f5725bcfd6171810df5362` |
+| `sft-code-commitpackft` | `u078.part0000.jsonl` | 26,596 | `7c707e7f3b9ed84aa2de51aaf91a1d7a5e46b1a4734791eebb636d8d7ca88392` |
+| `sft-code-commitpackft` | `u262.part0000.jsonl` | 12,518 | `cd28e24725a942c709df0a1418fdd8a54b9a82518e95f3f4a65612b2e17655ae` |
+| `sft-code-commitpackft` | `u111.part0000.jsonl` | 23,623 | `13429189cb706a692227cfabdbf35f5ca6f5b7266b0306cf043593f1431e11ba` |
+| `sft-code-commitpackft` | `u133.part0000.jsonl` | 39,990 | `57f7ea55306dcd81f740ab65f951f2e9696819ec8971a161cda7ec55032086ee` |
+| `sft-code-commitpackft` | `u173.part0000.jsonl` | 41,347 | `d9bd944cae94307c954db55fe14cfce16f53f8fdeab79c907bd9636c30ef0d5d` |
+| `sft-code-commitpackft` | `u169.part0000.jsonl` | 34,406 | `d8b5c5e7d124198c26d448fc8167850b24d32325d4230ce53f38764497f49a01` |
+| `sft-code-commitpackft` | `u038.part0000.jsonl` | 42,577 | `d4841999edade55b42b48afc649e3ca72a0d91b6eb10a041320d931c4ffc0179` |
+| `sft-code-commitpackft` | `u247.part0000.jsonl` | 37,027 | `5410bee9286959e4daf9b1e1f51b26ad7a4c1799e6cd3d33e239d334d9719ee2` |
+| `sft-code-commitpackft` | `u176.part0000.jsonl` | 38,828 | `c2ec5e89e8f4a814bbeb1eb29cf60ca8573ecf64edc80b1d79f37f656f126911` |
+| `sft-code-commitpackft` | `u170.part0000.jsonl` | 39,362 | `fa981853a9f21318d4ac7ff7367f37a05d028f28d54952accc999b93488eac7c` |
+| `sft-code-commitpackft` | `u184.part0000.jsonl` | 33,894 | `20af1f33e772a1506149dfb80461b3628e9432f29a290350caed99765d977967` |
+| `sft-code-commitpackft` | `u228.part0000.jsonl` | 37,006 | `6b9d53e10bf2c6352f90e17bf216761f0afc50d60dc526eb9ea9b3f53dd4ac7d` |
+| `sft-code-commitpackft` | `u168.part0000.jsonl` | 33,282 | `77eafeae3b020bc4b89d285c2b95a18ba0b7ace0bf2dacf8ad2607af4be34876` |
+| `sft-code-commitpackft` | `u033.part0000.jsonl` | 26,703 | `ce4ee095a0f4c3849627b8f9c7d3d2dc1bba746fdf90d49e492212a71f3e57ec` |
+| `sft-code-commitpackft` | `u108.part0000.jsonl` | 34,698 | `950943b569febf6ffcf22776b199aa41bb230f6b4633fa0133e340af3d35e720` |
+| `sft-code-commitpackft` | `u150.part0000.jsonl` | 28,636 | `d1b16aaa070be1edad4b5af05bd49b237621dfffa6c8eba3ca2ef18cf9c5aa4c` |
+| `sft-code-commitpackft` | `u008.part0000.jsonl` | 34,534 | `b90db74fd2402ef1d056de4a2ead87c90175151a159467c69df4e3707e873ec1` |
+| `sft-code-commitpackft` | `u074.part0000.jsonl` | 11,452 | `d1164d80169fb239610de0552074664b6d4cb6095121d0eb670db3f9dfa18af8` |
+| `sft-code-commitpackft` | `u016.part0000.jsonl` | 22,150 | `c9eefc45f2c07b02857825b685b050ee33327468965b9252623c47d4cdf8d2be` |
+| `sft-code-commitpackft` | `u137.part0000.jsonl` | 25,229 | `fa28e58c6787c2a94e894c7da20f4d8446121d76cd8c82e47ba7a2f187f44b08` |
+| `sft-code-commitpackft` | `u052.part0000.jsonl` | 29,191 | `fb5e8c7288cc6438a16b0079941ce7388530fd2f2a9ea8d723a6c9cb0eda6f23` |
+| `sft-code-commitpackft` | `u151.part0000.jsonl` | 30,655 | `746168aa48f03599005e872a2486410a931bd85e2fcebe305e70ec6a45246e31` |
+| `sft-code-commitpackft` | `u030.part0000.jsonl` | 16,244 | `a234e057a5d3043fd9e5bcb4d4b197f2483235128af2d590295562f2bd6966e7` |
+| `sft-code-commitpackft` | `u101.part0000.jsonl` | 21,248 | `1d512da86f7bb8b8d99c0cdd5ec02800b9bf19aab6794537b6bd926ccaa7bdef` |
+| `sft-code-commitpackft` | `u256.part0000.jsonl` | 24,558 | `5ba37d31235a8cd2f0dc2d317a4300088777a2c5dce3447d425ed74ddfdbd354` |
+| `sft-code-commitpackft` | `u004.part0000.jsonl` | 26,593 | `3f57f049ed32a7d748b6195e5ab44639bae06f170b30c5486f1b418dd758bfc6` |
+| `sft-code-commitpackft` | `u094.part0000.jsonl` | 21,925 | `fe7e9787cd24f1da66cc79e912130280d0dac69d52387534266b4ae9392acfdb` |
+| `sft-code-commitpackft` | `u076.part0000.jsonl` | 19,576 | `4827b83ade8181e4efacb1bcdec449559d76e402c17d3a807a62bbbdd0a957f5` |
+| `sft-code-commitpackft` | `u083.part0000.jsonl` | 22,447 | `b9dbd05701134549ae68d7c31ee2c8406664fb542168da10da404106914bc75e` |
+| `sft-code-commitpackft` | `u081.part0000.jsonl` | 21,958 | `2ef3e4de038f09ee1d75b7fcb63fcf24ef21c98bdda78c13bf1dfe490751de3a` |
+| `sft-code-commitpackft` | `u161.part0000.jsonl` | 20,981 | `f018720bc24e599e0760db030385328408659cdea0007acf0d122658f45a5c56` |
+| `sft-code-commitpackft` | `u200.part0000.jsonl` | 21,109 | `75172edd869b98c2b61538acf0aa5c1ff5f5d4516f798d256e4adc4968489b76` |
+| `sft-code-commitpackft` | `u100.part0000.jsonl` | 20,983 | `a7ba80fc4e1e65a314e42efd8b086bb5e537f7c7ba5cfde3201251690fd859d5` |
+| `sft-code-commitpackft` | `u172.part0000.jsonl` | 17,554 | `f161c3a9dd636c65952c8e58ec3bc9affd537c6d4f19603c7615fbe6f93ee476` |
+| `sft-code-commitpackft` | `u181.part0000.jsonl` | 17,733 | `833596862b164d6578c0c44a47fd297eda4fed0ecc1280e202610ccc0d418ac1` |
+| `sft-code-commitpackft` | `u013.part0000.jsonl` | 16,144 | `878cbe11366510bbad84a654bd79f721a58577695cd4720c902d24b534b84086` |
+| `sft-code-commitpackft` | `u017.part0000.jsonl` | 18,743 | `bbaf0c308b447be4499d4ce4de9d383f39fa2ed9d067bd6a2cb44ae258d0658e` |
+| `sft-code-commitpackft` | `u274.part0000.jsonl` | 15,993 | `1cc2463edc6c2f79cd0cff892fcd08cd3c9d77f790d3bad6eeb5dfc569709473` |
+| `sft-code-commitpackft` | `u269.part0000.jsonl` | 11,823 | `50c193286ee01713f50b7a1c6c4e40222399741caf1298fec4081273575276d6` |
+| `sft-code-commitpackft` | `u154.part0000.jsonl` | 17,793 | `58500ab9f67da1d431c3f039630af0c5d6306fa5e977117946f68ffedb1d01af` |
+| `sft-code-commitpackft` | `u068.part0000.jsonl` | 17,574 | `d44180252913a53471205b551e496bab1f20c0ee8ff6e14c7a94c394235c1aef` |
+| `sft-code-commitpackft` | `u254.part0000.jsonl` | 17,384 | `0f0aca004eaf0d0cdced0d09787f703e913bb01ba15d80b575082b73992d160e` |
+| `sft-code-commitpackft` | `u233.part0000.jsonl` | 15,047 | `469ec8786a6cb56e2a43c45b96a61d54cd118ca85e226a46414b7ab9fba17902` |
+| `sft-code-commitpackft` | `u039.part0000.jsonl` | 15,635 | `59bf3edc68b853fc459dfac61ad95c28a094411531e85e9b98ca140d2a7adc40` |
+| `sft-code-commitpackft` | `u134.part0000.jsonl` | 10,085 | `e9d29e2f4c95922b204a5ccc8defe5834fdf47479b39241c695e77b0d2fadcb6` |
+| `sft-code-commitpackft` | `u260.part0000.jsonl` | 15,343 | `08bbb25959261162d049e710a32c2649c4f1f1297f53dc7172a523b14a1284c9` |
+| `sft-code-commitpackft` | `u185.part0000.jsonl` | 15,035 | `55fe40769e54fe2ee621e10c0f444f27f479497b043cb9f43dafd272bf5e62ae` |
+| `sft-code-commitpackft` | `u218.part0000.jsonl` | 15,001 | `5c175bf8080a82bb3e0264e17b200bc487f297b3e44d3b80b6d37dd1186f21da` |
+| `sft-code-commitpackft` | `u241.part0000.jsonl` | 13,233 | `3da63cf12affe0cb85b1009b4f9040ed0c8106d5e87bcfae279e9e68db3f4f65` |
+| `sft-code-commitpackft` | `u003.part0000.jsonl` | 13,934 | `0a618b85130aa56c2292a0f6f587af171b30342a01d39f01f98cf737aa4daee6` |
+| `sft-code-commitpackft` | `u064.part0000.jsonl` | 10,796 | `3756c096beb0c051cb234be9870930e32ce818e0f4646fb6f026b36a4b30a7e5` |
+| `sft-code-commitpackft` | `u125.part0000.jsonl` | 11,683 | `68d60c64fee255093a92b4f2f36afc2b83447c2c1bb715dc46e72de1cf6ed186` |
+| `sft-code-commitpackft` | `u007.part0000.jsonl` | 11,161 | `086f62edc8496363730c4dde4339f53f656261dfa969486c264deeb933b993f7` |
+| `sft-code-commitpackft` | `u128.part0000.jsonl` | 11,225 | `4e9e87ec227f3c51bcc8a03adeb9185c9b9b0a6f227e916fb88c9d8a911867ba` |
+| `sft-code-commitpackft` | `u153.part0000.jsonl` | 10,882 | `ef296ae1dccecd0982369c3a0598a3f278175ecb4dd61c0fb306d06da7a7092b` |
+| `sft-code-commitpackft` | `u192.part0000.jsonl` | 9,279 | `cd96bcebd5c74364130bd7be34d75f51f47163ff8581edfe858942b8cac3d420` |
+| `sft-code-commitpackft` | `u257.part0000.jsonl` | 10,741 | `c00ba643b8b1b3b56562e944667ae633104e53f4dd86f01d8e19fc2c731d2ed3` |
+| `sft-code-commitpackft` | `u156.part0000.jsonl` | 10,150 | `f3adf2d2836075486f86cc694d57daeb5a28b06dfef68ccfc2a26e4e09da26f6` |
+| `sft-code-commitpackft` | `u182.part0000.jsonl` | 10,494 | `78176d2a8de46d3f4cb536d439a77c6ca281b8be9e52406f2493bc285113587e` |
+| `sft-code-commitpackft` | `u124.part0000.jsonl` | 9,701 | `856a3dd4fada0519630d3e083fedabf88d3653742cd00c88f2c107aabc74aa5b` |
+| `sft-code-commitpackft` | `u119.part0000.jsonl` | 9,008 | `b1d45c2a31730d02d963ab72cecf59c13198c921dcd2caefc17cce0b1860b638` |
+| `sft-code-commitpackft` | `u204.part0000.jsonl` | 9,285 | `4a2e2edcf6a0693546f5c91c3e256a760abc3e832ee31f6ceca4ea791a4280af` |
+| `sft-code-commitpackft` | `u126.part0000.jsonl` | 2,355 | `f29b2ad7d826ccb8ebacedc2375d8e4549d4290241dd1843664c164ce1466b26` |
+| `sft-code-commitpackft` | `u275.part0000.jsonl` | 6,731 | `4faa97908d235d7e0aa6bd99bcd545337efe835d2307f897c079583a43aff8c5` |
+| `sft-code-commitpackft` | `u267.part0000.jsonl` | 7,540 | `d574486aa4d9a23644549f161644cacb6e20a54729d3012bda1ce5da4cb5a2a5` |
+| `sft-code-commitpackft` | `u149.part0000.jsonl` | 8,125 | `838c77b3083d98f1da2effffa5852e8eb157c1415226e978c20df6f3e926ef21` |
+| `sft-code-commitpackft` | `u077.part0000.jsonl` | 8,063 | `6a5dc1749006253b4d24214c5d0baab08dde2dd19a49e3bff56b2a2870f2dc5c` |
+| `sft-code-commitpackft` | `u157.part0000.jsonl` | 7,966 | `fbe3f309341a4244a4ac3cce0fa70576db406a28e14511474cf3c39ff1f56936` |
+| `sft-code-commitpackft` | `u162.part0000.jsonl` | 5,539 | `748b7b2be8a990ddb4f4b6839721123e34e5f3db7cfa8d667948a7ca9aa5ba5b` |
+| `sft-code-commitpackft` | `u146.part0000.jsonl` | 4,413 | `440c7960392ce0b20dd6d6e701db8071b4784bbd7dd89f05f3915b57ec591635` |
+| `sft-code-commitpackft` | `u252.part0000.jsonl` | 5,632 | `e5813a8b9aa22f47513072b7590b3bb781819a5946027ca5da8eb7ec6bf7d1ec` |
+| `sft-code-commitpackft` | `u276.part0000.jsonl` | 7,025 | `ee85cdc0da7993ca0518c86b3c99af01d379f60bdce8f503a16df52d1bacc8e8` |
+| `sft-code-commitpackft` | `u199.part0000.jsonl` | 7,329 | `27add7196549e5efa14673b93bf79f0a1b41c606bc0fa65fda340d412ae4aa03` |
+| `sft-code-commitpackft` | `u234.part0000.jsonl` | 6,743 | `29ec4fa1810e6009de1335d327c7476e675752a55a67c132e53303ed538b65a2` |
+| `sft-code-commitpackft` | `u118.part0000.jsonl` | 6,839 | `fc890af103c3b46dc14be186b7a7b60291f6ae115347c9e484ccd9f53ab5be44` |
+| `sft-code-commitpackft` | `u031.part0000.jsonl` | 7,131 | `0d8451151d41ef6726bf17868732b74bb91385f249164721585aa6ad0b91b46f` |
+| `sft-code-commitpackft` | `u129.part0000.jsonl` | 6,710 | `1a94e6636c01a1e831e7c76a6b601fe2bfb1354bb8994eae4f0d3f5af1f96de0` |
+| `sft-code-commitpackft` | `u023.part0000.jsonl` | 6,649 | `866ba569a55f3d1c5416ee39c8713b52a5786be9881badce894c0c4fa9019229` |
+| `sft-code-commitpackft` | `u272.part0000.jsonl` | 6,683 | `e6cbdb3c7150afd61a6e266dd2e8fc29fdd9783b4a7581d0cabe8c771eec079f` |
+| `sft-code-commitpackft` | `u024.part0000.jsonl` | 6,408 | `6afe3ca9ecc445e40929c46483246a70ea7262c3106bb4218cb8bc3d7ce25dc1` |
+| `sft-code-commitpackft` | `u058.part0000.jsonl` | 5,407 | `9aa284f27f505984b9d7fbf08e420111e86272a8d1d938ee4ad8b58be575f9d2` |
+| `sft-code-commitpackft` | `u231.part0000.jsonl` | 6,218 | `ecf24c69d593b1145f6dfbfc30f6df721849f824f99b184b99557dfded7f1929` |
+| `sft-code-commitpackft` | `u264.part0000.jsonl` | 6,096 | `530d2fe209825e449fe09b9b83242fbe0ed920f5e3c1edfafa37144981712b97` |
+| `sft-code-commitpackft` | `u139.part0000.jsonl` | 5,766 | `1d93efa02c6f008ed17400c81c71952ba9c05248e7a9b77760333416c1efcaf1` |
+| `sft-code-commitpackft` | `u060.part0000.jsonl` | 6,200 | `93ecd6949ece6b4c44406d26474a481fa2ab2068a27a122b26057f67477f5542` |
+| `sft-code-commitpackft` | `u056.part0000.jsonl` | 6,146 | `8e7d2de1879997a35196ca297ce697aa8dfec4bd6295efaa71bc99507c9083dd` |
+| `sft-code-commitpackft` | `u186.part0000.jsonl` | 5,779 | `9e86be835b5af61fa126a5d5f4cd57ad31d66980c643d9967107c18faef2cfac` |
+| `sft-code-commitpackft` | `u263.part0000.jsonl` | 5,759 | `d34afd2ba3d778780b246617e55da076acce24301acf4bc1e11bc8d1d10ea99d` |
+| `sft-code-commitpackft` | `u165.part0000.jsonl` | 4,720 | `4f0bd1e415eda8f1c5bc8945e6c7dab241362037477133a3918e5269ca94a8ff` |
+| `sft-code-commitpackft` | `u041.part0000.jsonl` | 4,859 | `628fa755aacf7f3b93293cc58f9f1e720bdcc202bfd8f780922a5e94e44601e3` |
+| `sft-code-commitpackft` | `u107.part0000.jsonl` | 5,129 | `2c22525b7dec6eead3adc0ac4207b43acd3fb9728da22ab076600d002fc43406` |
+| `sft-code-commitpackft` | `u227.part0000.jsonl` | 5,300 | `ed441c995b7f8f51c63a5d7319ca78d6e4ed656909938255b2404090455843ce` |
+| `sft-code-commitpackft` | `u221.part0000.jsonl` | 4,855 | `224d8a9ec45f21927c7a01cb77ef996a4bfd22ea8bb1579df99cd58ab7b5da65` |
+| `sft-code-commitpackft` | `u070.part0000.jsonl` | 3,675 | `fad31309687bb70efc8c9885df05014a78eeac85a7efd9d2a31acc1bd31c8bc6` |
+| `sft-code-commitpackft` | `u043.part0000.jsonl` | 3,322 | `dc07c0f8d9e8bc5c76b95e6c3d276ce6a34e23d96981e309249f5e42cdb7f33c` |
+| `sft-code-commitpackft` | `u005.part0000.jsonl` | 4,900 | `e46a0c4d301f6e5e8a7a7e3bca0f378b6e314ffb4912c5fe6fb79e20afd82640` |
+| `sft-code-commitpackft` | `u057.part0000.jsonl` | 3,595 | `f19adab651bd64cbd96b8545ef602fefee90c0afc0df47e70751116f04b7fe7b` |
+| `sft-code-commitpackft` | `u025.part0000.jsonl` | 4,607 | `eff332bd9f2f0fb4b87590448ef5e4f21f2e5aa4dee9a4bac7d5928bcc1a3aed` |
+| `sft-code-commitpackft` | `u159.part0000.jsonl` | 4,049 | `045da7751b9327163a2c4f07d7d09829e5126aef5cf24b74e1875c7a136c10bf` |
+| `sft-code-commitpackft` | `u029.part0000.jsonl` | 3,875 | `54b0c439b8231d1588374cccaf5abee53083496c10ec5cfcf2418a4eca10df31` |
+| `sft-code-commitpackft` | `u177.part0000.jsonl` | 3,880 | `1d8992baaf2066c49d3fd3f2043acfd97dcffdec88cafae4d81577e9da11fa2e` |
+| `sft-code-commitpackft` | `u155.part0000.jsonl` | 3,711 | `edba64af4396f819c6a6d2726f0cbdf4938e5dfaffe336ba64164b81b23f17ea` |
+| `sft-code-commitpackft` | `u236.part0000.jsonl` | 3,480 | `ad01854c6e1a79815f82e711276e7392f2b69b0043499a346476995515160a91` |
+| `sft-code-commitpackft` | `u071.part0000.jsonl` | 3,245 | `c8d4a31405d9d373bc1a383f5b01c83a4f5b17991566c235d3d078fede3f7059` |
+| `sft-code-commitpackft` | `u202.part0000.jsonl` | 3,254 | `611cefc0777f72d8f4e3e8401836e3407de8cf300ed2c1b4c48f6c431a9d6af7` |
+| `sft-code-commitpackft` | `u022.part0000.jsonl` | 3,229 | `324be4caf6c18da5cac83f8fc9ed6fa1236fd38ec19349ddaf61ca9406a551c1` |
+| `sft-code-commitpackft` | `u253.part0000.jsonl` | 2,915 | `77d8a59473026aba56e796af4732dc824f95cfce6e22ded7d1f724235ff31d5d` |
+| `sft-code-commitpackft` | `u109.part0000.jsonl` | 2,887 | `ee1af6fe5ffda72977fcc7b0d36795f191d0ba438080fdf4f7f9211fcb9138a9` |
+| `sft-code-commitpackft` | `u144.part0000.jsonl` | 3,032 | `ddffe3339bc9aa478faf1a9bac7acde8323cb84817e44d3d0340e67325ea31cf` |
+| `sft-code-commitpackft` | `u203.part0000.jsonl` | 3,035 | `012e669a6646d02c0cd3c9509e0ef713eed562af495fc31ae5c7f4b063606f5d` |
+| `sft-code-commitpackft` | `u000.part0000.jsonl` | 3,069 | `22ff06ff47626113e9be285d6e4aee051d6da944886134297b314b16ba165b83` |
+| `sft-code-commitpackft` | `u266.part0000.jsonl` | 2,711 | `45d485c566364e9a6979f49fc5d71f448de66d151beddad227128bbb2c928650` |
+| `sft-code-commitpackft` | `u103.part0000.jsonl` | 2,649 | `e395af1f7cfd9c60d23faafc02f9430554f580ecf59968c589eca1bae5e157e0` |
+| `sft-code-commitpackft` | `u211.part0000.jsonl` | 2,707 | `8244476dede6cb68dda702a10aadacbba6fd76b3d2fafb5be66580060a155b6b` |
+| `sft-code-commitpackft` | `u225.part0000.jsonl` | 2,375 | `f91ce37adaceebcf77adaccb274bac676c1ee227e21fa2595198cc607ec8ee83` |
+| `sft-code-commitpackft` | `u174.part0000.jsonl` | 1,294 | `c8920a8713c745778b7292e4deacc6b947d064ad05c0fe9f1a32acc9bf77598c` |
+| `sft-code-commitpackft` | `u189.part0000.jsonl` | 2,491 | `d4473023b607fba3fcc04c4c56689f399187afe88ec85dcb41f9858a59db84d8` |
+| `sft-code-commitpackft` | `u104.part0000.jsonl` | 2,561 | `d6dc4e936eff200314ee0f088c6162fb594c0fd888b2ede5f9479655ecccebd0` |
+| `sft-code-commitpackft` | `u132.part0000.jsonl` | 2,547 | `8978c95a5222fe71fc7a4689cb8abae7d905ea72143018f79619c654d276720a` |
+| `sft-code-commitpackft` | `u054.part0000.jsonl` | 2,104 | `bd9c0f8f5c535ee0ecfd8beac8ba1f00f8ef4acf6e639f8a038903d7b8e85d73` |
+| `sft-code-commitpackft` | `u115.part0000.jsonl` | 2,458 | `8875e4925ada3735affa488a5dd7f4accc99b4adec6211edd8adde012fc57cf2` |
+| `sft-code-commitpackft` | `u015.part0000.jsonl` | 1,922 | `364e395b9a317b49c653ac008b7a354cffdab572e94fb59cee84a1d3bf777a2d` |
+| `sft-code-commitpackft` | `u009.part0000.jsonl` | 1,939 | `2d934a43c5478d001989158c6c54cd6fb5b0edfb0234dfd73f2f7688c226827d` |
+| `sft-code-commitpackft` | `u034.part0000.jsonl` | 1,665 | `86568c0eece0f9b0d242fb204c4bafb751b01858e8715af84e49c727612da534` |
+| `sft-code-commitpackft` | `u213.part0000.jsonl` | 1,872 | `233a5ef7aaaddf4ddd7ffc0bb914a165935eed0b20d22fae14618c24659a884a` |
+| `sft-code-commitpackft` | `u147.part0000.jsonl` | 1,207 | `e7b6781db5052c70f8401c7a5cfc85a87712856053aff0e47f38158ffa40c37f` |
+| `sft-code-commitpackft` | `u021.part0000.jsonl` | 1,581 | `22c2c4e380424a54ee96ecf43060a9df64f40f35ad8cae358644768c8453bfba` |
+| `sft-code-commitpackft` | `u152.part0000.jsonl` | 1,013 | `b7754e3030ed1ba39578739a88e3415bb959cf8e8649f234a437dfb0e4e05afe` |
+| `sft-code-commitpackft` | `u216.part0000.jsonl` | 699 | `8633ea7ef86c6382f63c15998f29db7a9a3ba97ad3d780b7771986b149f88ccd` |
+| `sft-code-commitpackft` | `u158.part0000.jsonl` | 1,072 | `e471de4abc2782b00ca38c1047e032f87052eb88415fb49a40d0c7c9a8fd8415` |
+| `sft-code-commitpackft` | `u090.part0000.jsonl` | 723 | `38bd8bf60acda289740040cd80a5879b6708a629428bb5390ee6c55def1fc53e` |
+| `sft-code-commitpackft` | `u191.part0000.jsonl` | 521 | `b3e4c0030e706baf40c530cd7d0554cb7404a2ac1ebcbf76f12f99a491fbf597` |
 | `sft-code-nemotron-cascade-swe` | `u001.part0000.jsonl` | 300,031,511 | `4a9b2c58c49b9f59cd1c5e90f4022f889eebdd352a5e0d91dbacbcd0666235f6` |
 | `sft-code-nemotron-cascade-swe` | `u000.part0000.jsonl` | 300,009,446 | `23468d927ee37b0bad463264a1f7b5fd99c90398c776b62f749399dc98267b13` |
 | `sft-code-nemotron-cascade-swe` | `u001.part0001.jsonl` | 300,043,968 | `e7e94b9acec08c3d985ff40f042fafd7ea7671e4ace532611bcd635dfc24f244` |
@@ -762,6 +1142,76 @@ Coverage is the share of the item's runs found in the document. A value near 1.0
 | `sft-code-nemotron-opencode` | `u000.part0019.jsonl` | 300,084,880 | `860ae3a0df4a3ecf64eb720e45e4f7927a1f07e9ee62d3f1321f20e01ea97e53` |
 | `sft-code-nemotron-opencode` | `u000.part0020.jsonl` | 247,859,056 | `f402b34105e68b9bcfa5e12edee42f4f3f1cc16cde12f975493852e5a224b067` |
 | `sft-code-nemotron-terminal` | `code-nemotron-terminal.jsonl` | 2,231,536,740 | `445c53c776d693214ab7fdf73e8ebdc1e17430a95584f1d3d8a57631226056f5` |
+| `sft-code-opencodereasoning-2` | `shard-00000/rendered.jsonl` | 767,093,546 | `357524debf577452fe84a2a5d3bf4b0653f8fa4180884c9cbbd3fe3f6d2dda7c` |
+| `sft-code-opencodereasoning-2` | `shard-00001/rendered.jsonl` | 755,964,980 | `f0aa09975d945e606dc4933ef026c4da9db15a6fb369044b204e165737536465` |
+| `sft-code-opencodereasoning-2` | `shard-00002/rendered.jsonl` | 748,873,945 | `8169f045ba23e8502d8dabdd081c81bf6d08e1984998cb7e6830b2f0662812cd` |
+| `sft-code-opencodereasoning-2` | `shard-00003/rendered.jsonl` | 764,396,607 | `e0bf4492fa84a65a8cbf812c68bda5f5433d96f3a694698d154858b7ffcf8b02` |
+| `sft-code-opencodereasoning-2` | `shard-00004/rendered.jsonl` | 764,729,454 | `e31fc4b13e957ba1f027ae818b2e2b99dfb5193c99f4a89b2e80286b1e6a917a` |
+| `sft-code-opencodereasoning-2` | `shard-00005/rendered.jsonl` | 761,563,979 | `520c6ccb65697d6e1585ae8d0a2f0d497ddd3d4fbb5927a867c912bc24e4e0eb` |
+| `sft-code-opencodereasoning-2` | `shard-00006/rendered.jsonl` | 763,313,393 | `798988d047b7487a68e1fe7b1f687e2af16814e1b31a54561b7ded72a1a72222` |
+| `sft-code-opencodereasoning-2` | `shard-00007/rendered.jsonl` | 755,820,860 | `e008a485cdf20ecb9db8d140600cfa7598474cfb61134b9377bb52fdd7182828` |
+| `sft-code-opencodereasoning-2` | `shard-00008/rendered.jsonl` | 767,709,601 | `ba971ffc914b870fe0fd107d08b8771063051149a880bcae22beaa3201c8da1f` |
+| `sft-code-opencodereasoning-2` | `shard-00009/rendered.jsonl` | 759,012,418 | `2705686bc6b814c36d9501be76dcaea356023f3f2e2f81c4dbd5bb85dd868da3` |
+| `sft-code-opencodereasoning-2` | `shard-00010/rendered.jsonl` | 761,774,749 | `7c2fa984747aec6d7936ad24ca9af211618dfc6dfe7e9675e56ccd6f281d4387` |
+| `sft-code-opencodereasoning-2` | `shard-00011/rendered.jsonl` | 756,445,995 | `c5caf74a4ecc22f6da448da8ab139301bc4878902fcae383883a050260e335ed` |
+| `sft-code-opencodereasoning-2` | `shard-00012/rendered.jsonl` | 715,146,698 | `7811500b46bed281b578246dcec7ff383cdfa34964143a1878a7534595fc5ef4` |
+| `sft-code-opencodereasoning-2` | `shard-00013/rendered.jsonl` | 648,324,663 | `f4891c2f231e5a45547c76ff7c5de0eff0ec03be118105d4b8f3c35508253c1e` |
+| `sft-code-opencodereasoning-2` | `shard-00014/rendered.jsonl` | 693,187,240 | `78009ed560fc7856b2303534a213914bab3bc185f90fa3a86ab131b7d43647dc` |
+| `sft-code-opencodereasoning-2` | `shard-00015/rendered.jsonl` | 666,341,331 | `546621af93c77309c6cd7b1741486778d7cffc7b867195687dbc686699de6985` |
+| `sft-code-opencodereasoning-2` | `shard-00016/rendered.jsonl` | 812,766,561 | `d0df388ab0af6b0bde4f5cc101c947286e7f58bf678f943d86e2cf6a4b35ecbf` |
+| `sft-code-opencodereasoning-2` | `shard-00017/rendered.jsonl` | 834,255,422 | `d27960fb2ee300a9c239daa1548c59449bd7bdbcf4a875bc226b5b84e636b370` |
+| `sft-code-opencodereasoning-2` | `shard-00018/rendered.jsonl` | 702,101,380 | `62f40c0ae970c54f2c3c4e34fc7c819b92a5030f3ecbe02ea20e57e9e742ec78` |
+| `sft-code-opencodereasoning-2` | `shard-00019/rendered.jsonl` | 865,515,491 | `fb2afca4ab60e09dc24348f0c4b7d2e9ce2823474e7546dcc2c8cc2dcd6c625e` |
+| `sft-code-opencodereasoning-2` | `shard-00020/rendered.jsonl` | 699,299,548 | `9aeccab042273a01f251c321a071107cc18d16a0ebe76d12b4f18b50bf986fdc` |
+| `sft-code-opencodereasoning-2` | `shard-00021/rendered.jsonl` | 855,308,022 | `4c3a6b375a3da552c497b659dc6018a416015bb17aca8eadf0cee4ba68fdd98d` |
+| `sft-code-opencodereasoning-2` | `shard-00022/rendered.jsonl` | 763,599,959 | `1a2b50009b05fd8eecb211770dadf59836de6ec1b210be89e97405962af6b8c4` |
+| `sft-code-opencodereasoning-2` | `shard-00023/rendered.jsonl` | 758,486,946 | `009c57c30947cf20fa4eb2c1463db4f5fdab5bc77e99d6e4d0b466865791cec3` |
+| `sft-code-opencodereasoning-2` | `shard-00024/rendered.jsonl` | 775,018,591 | `8a721bd5fa3f60c59050eb04f80b395f073f34b3fa0684f3696dea4ebddb9558` |
+| `sft-code-opencodereasoning-2` | `shard-00025/rendered.jsonl` | 750,368,692 | `66af289f4de5c1ce11376ab2d39d16c10070a2e47fa37f2c6c845ad37320a75f` |
+| `sft-code-opencodereasoning-2` | `shard-00026/rendered.jsonl` | 789,848,158 | `8d74c3845ba5aaa19526739c93efe1c0a4bb020a20e934242143f1a77d13769b` |
+| `sft-code-opencodereasoning-2` | `shard-00027/rendered.jsonl` | 653,171,715 | `3e3a59115a7f2baa2a80bff64c08874c492b33f514a3583dae1a3bc4414854ef` |
+| `sft-code-opencodereasoning-2` | `shard-00028/rendered.jsonl` | 660,634,750 | `d3eeb39c5baa7fe163683c75f23cf301d0b11df5380e4466134ed9a478b865b8` |
+| `sft-code-opencodereasoning-2` | `shard-00029/rendered.jsonl` | 717,712,874 | `3da93b3d93746ec4d6415092e70ff161a0c621b1ebf410e8c87237479e6fdd63` |
+| `sft-code-opencodereasoning-2` | `shard-00030/rendered.jsonl` | 151,042,648 | `7cd6477b4f9b8cb293b1c2c70bcf573a614173c79c9a846c0d7804fdaeb065e5` |
+| `sft-code-opencodereasoning-2` | `shard-00031/rendered.jsonl` | 531,075,796 | `b7316e80be2a345665a3d3cf4b145a3d9b3ec5c4be17f50168b81778ce67b0b5` |
+| `sft-code-opencodereasoning-2` | `shard-00032/rendered.jsonl` | 325,810,646 | `75d879e3878b7260631bb3edbbc9b1fd3069b1e100b3ac2fa4059a1f4ede33ce` |
+| `sft-code-opencodereasoning-2` | `shard-00033/rendered.jsonl` | 874,799,005 | `3137f45d8ab8793bc2beee8fdb66377436ad85b62b5810be31de2fba4bd67e3c` |
+| `sft-code-opencodereasoning-2` | `shard-00034/rendered.jsonl` | 853,456,268 | `a88249ff7d3e1d3ff1b93d1e65a8d3817f43531eb4cab655ab47696a822acdad` |
+| `sft-code-opencodereasoning-2` | `shard-00035/rendered.jsonl` | 878,488,344 | `d673d76e9753c5840c60524bcdb07df40fdc8097567a92d2953d75eba3e73668` |
+| `sft-code-opencodereasoning-2` | `shard-00036/rendered.jsonl` | 814,906,462 | `f6312897bae816aae0af901fbbaf6d3a87d47d8c70bab933595a44093aa431cf` |
+| `sft-code-opencodereasoning-2` | `shard-00037/rendered.jsonl` | 900,621,153 | `36dbee832e788a6f2dff7c833995663f5af56d6bf075945d6bf733fc4fe3df63` |
+| `sft-code-opencodereasoning-2` | `shard-00038/rendered.jsonl` | 879,976,273 | `0da35261401b3b66dc89515c1967bc86289102a2cf09b0c3635621f9c023601c` |
+| `sft-code-opencodereasoning-2` | `shard-00039/rendered.jsonl` | 817,522,389 | `37c3d2acc3eb544131a614da339e392bb815b1c7f1f4b0261c3eaa23300bbe3e` |
+| `sft-code-opencodereasoning-2` | `shard-00040/rendered.jsonl` | 890,162,886 | `c2f88824b32e83858f8709ce069fba6e75bc0da74f5810da389048b020947af7` |
+| `sft-code-opencodereasoning-2` | `shard-00041/rendered.jsonl` | 554,736,034 | `da3f2bead1a906f6ac4bff63b35f66cee999f0d907a029288aa9b727d00b7640` |
+| `sft-code-opencodereasoning-2` | `shard-00042/rendered.jsonl` | 743,667,625 | `698bfcb41907444a2297d512652580ebfd6279744a0a79ab78360c9cffa83ecd` |
+| `sft-code-opencodereasoning-2` | `shard-00043/rendered.jsonl` | 754,651,747 | `e2ceaf1aabf47cd0eed9aba11de2e03bbc5c42751d9bf4d64be4d2509227810d` |
+| `sft-code-opencodereasoning-2` | `shard-00044/rendered.jsonl` | 824,431,573 | `5e3c8e006202fbe6d72c20a59890e1cd56e9516437eb4a6c620dd912ca428372` |
+| `sft-code-opencodereasoning-2` | `shard-00045/rendered.jsonl` | 881,066,011 | `281b20c025aa01be56c715e7665f86213500f3f2c94584f48fe584c2834c7084` |
+| `sft-code-opencodereasoning-2` | `shard-00046/rendered.jsonl` | 801,211,830 | `42caab055286f6d50cef08fa000c40c26110392b1db0c9a5ae7c4d16b7196705` |
+| `sft-code-opencodereasoning-2` | `shard-00047/rendered.jsonl` | 835,289,169 | `2961923542785a4be5f1f15441b695310599f7c5a1bd906c7dd036b159b6740c` |
+| `sft-code-opencodereasoning-2` | `shard-00048/rendered.jsonl` | 880,424,266 | `13739b4f407efd8eab92a1e3ced16103d308442521c87dec6e76ac7aa5c788de` |
+| `sft-code-opencodereasoning-2` | `shard-00049/rendered.jsonl` | 810,849,035 | `a1d318c9a4679cab54ebcac5281d1ec89c28aa2724ab51bda8eab475e73268e1` |
+| `sft-code-opencodereasoning-2` | `shard-00050/rendered.jsonl` | 755,150,322 | `18c45d4e8ff8877d8a72034ce32b5398cb3b5a411ead92cc4882155008a434a8` |
+| `sft-code-opencodereasoning-2` | `shard-00051/rendered.jsonl` | 508,564,522 | `b3c854feebb36d50c5b1f9a25a7d2e24348b0ec8cc3f75539e5d3b756d505c15` |
+| `sft-code-opencodereasoning-2` | `shard-00052/rendered.jsonl` | 165,204,617 | `ff61dd4a739075d93684a5f7883b435c8876a1408718633a9fe2a8dab241075f` |
+| `sft-code-opencodereasoning-2` | `shard-00053/rendered.jsonl` | 149,397,089 | `895a08b9f09d9d12ee8b438385b1d7d9c5beb38969fa7cb4ff3de5efd906bcc3` |
+| `sft-code-opencodereasoning-2` | `shard-00054/rendered.jsonl` | 154,633,693 | `fe0ff39a0665abff91008996f95cec4ada49aec46f93bc89fcaa6558c390909e` |
+| `sft-code-opencodereasoning-2` | `shard-00055/rendered.jsonl` | 156,343,150 | `b8e71c98d00984dbf419293e1a083cbfa306518cd93cafe1522d7877d6a86969` |
+| `sft-code-opencodereasoning-2` | `shard-00056/rendered.jsonl` | 147,686,447 | `39becb0a077c712b3cda636e33d762ea2481768a35bc72bccf9d713e0d3aa9d3` |
+| `sft-code-opencodereasoning-2` | `shard-00057/rendered.jsonl` | 159,390,707 | `8181a2d4ac40d70f58b83bcf2be8bc5994d02f6ebcf0ab463215356cdc0a3a10` |
+| `sft-code-opencodereasoning-2` | `shard-00058/rendered.jsonl` | 154,109,067 | `49770cf443bef7eaf279da881ddb176371b4b21802eeff746eb78bd2bfd2b28d` |
+| `sft-code-opencodereasoning-2` | `shard-00059/rendered.jsonl` | 148,703,583 | `f05e69ab9026d8b3a0a35a22b142b7e617291a4f76b555dd4b26fe91354eb6e1` |
+| `sft-code-opencodereasoning-2` | `shard-00060/rendered.jsonl` | 160,335,656 | `a93fb32b824351e864eab5272932eee0f0595780570913b476a5de8717836580` |
+| `sft-code-opencodereasoning-2` | `shard-00061/rendered.jsonl` | 151,244,973 | `24bdaa348c01bb3061faa2b8eae41cddb6fcc256dc96a949966feb78f2e70655` |
+| `sft-code-opencodereasoning-2` | `shard-00062/rendered.jsonl` | 154,659,435 | `11e5f443c6cda76b0ab371c2bec8a4dfdfcdde3f2738bba766759739c7d5d752` |
+| `sft-code-opencodereasoning-2` | `shard-00063/rendered.jsonl` | 158,330,889 | `482d67b972290bdf6cdd90f28710637ae8aa374b52ccac99c1941e73f90c6b20` |
+| `sft-code-opencodereasoning-2` | `shard-00064/rendered.jsonl` | 153,571,092 | `65cb902ec0388580d2dbb4f94e5c89d4dde351bd072b1bd8c89ab8208d501fca` |
+| `sft-code-opencodereasoning-2` | `shard-00065/rendered.jsonl` | 158,728,420 | `c7623e2c5a61ce3e2293350442cc67a55bcf357fa1d31d901ce70ac97fa04d71` |
+| `sft-code-opencodereasoning-2` | `shard-00066/rendered.jsonl` | 155,387,580 | `efd2c28d390c448056a9e34c9e19991614299a8b584243c36b2d74b3e877b571` |
+| `sft-code-opencodereasoning-2` | `shard-00067/rendered.jsonl` | 149,707,750 | `5dede94537a11435d3b9c947134b2a68fb64a223db82cbba8dae53715233fe7a` |
+| `sft-code-opencodereasoning-2` | `shard-00068/rendered.jsonl` | 151,861,588 | `0225070d2601c37bf11cd24249ca2193cda0775c21b8de4b24dd1fa4dff773c2` |
+| `sft-code-opencodereasoning-2` | `shard-00069/rendered.jsonl` | 140,626,086 | `609070c6060d757a395912ad807d0e6f9e70f0b1544f9db432e166a42c556ca3` |
 | `sft-code-opencodereasoning` | `u027.part0000.jsonl` | 300,012,540 | `0e4a528b6e975384362e7baf31e47f1ddebdf0d94979f70021ca49930a3810e8` |
 | `sft-code-opencodereasoning` | `u027.part0001.jsonl` | 300,001,966 | `0acd4bb64538aeb61894f7055325189a3947f788977d68f3621908c25273ef9d` |
 | `sft-code-opencodereasoning` | `u027.part0002.jsonl` | 300,004,178 | `cf5c1f4d2251c47c9be833e9898296b4475a28b6e9997958ef4481da67766fc7` |
@@ -1462,6 +1912,157 @@ Coverage is the share of the item's runs found in the document. A value near 1.0
 | `sft-math-nemotron-math-v2` | `u002.part0120.jsonl` | 117,223,766 | `7840a1e478938d1d5d9903947d1a9b014a99d41ace4fff0b115301745e2dded2` |
 | `sft-math-nemotron-math-v2` | `u001.part0119.jsonl` | 300,083,416 | `613a28ffda52ce8f5fe2a6218d15741a158ba36f3efe0841d6d78c57b498301a` |
 | `sft-math-nemotron-math-v2` | `u001.part0120.jsonl` | 127,337,285 | `4836a879dfb38d91650ab03f33c1a084913f5112ac71406e719939b83b81a337` |
+| `sft-math-nemotron-proofs-v3-sft` | `u003.part0000.jsonl` | 300,007,086 | `c2e03b05f9b6f433bafcf4e1c92255bfbfc60ac1f6dd696e34391ae1fd728b0e` |
+| `sft-math-nemotron-proofs-v3-sft` | `u003.part0001.jsonl` | 300,093,561 | `72e428e1a9a7016a3a37a2fbc689c758a74a239175170a80522176aad4e8c437` |
+| `sft-math-nemotron-proofs-v3-sft` | `u003.part0002.jsonl` | 300,025,975 | `7f703759ace40915d2621e89387366a46610ebe700254f9ea546aed251e327bc` |
+| `sft-math-nemotron-proofs-v3-sft` | `u003.part0003.jsonl` | 300,092,049 | `2f3755043f467ea8821b80efa8c804ca075a68422deaab0e39102021a974a85c` |
+| `sft-math-nemotron-proofs-v3-sft` | `u003.part0004.jsonl` | 300,548,577 | `0149da0ce23a13a2c335116a3335eeb6672db4ab5a917affc5a219d5ef60f35b` |
+| `sft-math-nemotron-proofs-v3-sft` | `u003.part0005.jsonl` | 300,082,168 | `cf21d22f7042978d2cf277cf27c348807eedb098f97703c799f91dfa37f7f782` |
+| `sft-math-nemotron-proofs-v3-sft` | `u003.part0006.jsonl` | 300,001,631 | `ac89b4470d191ef91c3339241118547dd906ad03e080bc0ecc4eb81f5e75074c` |
+| `sft-math-nemotron-proofs-v3-sft` | `u003.part0007.jsonl` | 300,102,524 | `ec933b62abdafffa186ec0be24f2503599cb66b0412a5dfbcb7d7df52df72e2e` |
+| `sft-math-nemotron-proofs-v3-sft` | `u003.part0008.jsonl` | 300,015,746 | `d1a174fdea6955e4c6c569d70513c94d77593e06e5d8e4ba80f8843725c008e6` |
+| `sft-math-nemotron-proofs-v3-sft` | `u003.part0009.jsonl` | 300,132,420 | `e671ee5dd11bc29f4f821eced49d42a2de1c1d875280b1ebf6107c68fcb6aa91` |
+| `sft-math-nemotron-proofs-v3-sft` | `u003.part0010.jsonl` | 300,003,919 | `99ada61f999269ca7b804f7413b026d4a4ab764ee80df3ab76be8611c469b1f7` |
+| `sft-math-nemotron-proofs-v3-sft` | `u003.part0011.jsonl` | 300,097,069 | `e4bc0acae8b5c126e527e6ec0753075dfb07948dd9fc24a5a45ea881a9f08023` |
+| `sft-math-nemotron-proofs-v3-sft` | `u003.part0012.jsonl` | 300,005,215 | `7369cf971e52de1b90703bae1dda5ea3bfb29b7c8c3730c053ba8db8b39b183f` |
+| `sft-math-nemotron-proofs-v3-sft` | `u003.part0013.jsonl` | 300,093,591 | `eb72e12140f077e233413e31b6a48f46a4654c306d1254ea971d74462b137c09` |
+| `sft-math-nemotron-proofs-v3-sft` | `u003.part0014.jsonl` | 300,027,998 | `b7beea817ec4e605f59fda04f5150d73a77bcb6935e16f09004fbfa6dc536664` |
+| `sft-math-nemotron-proofs-v3-sft` | `u003.part0015.jsonl` | 300,110,088 | `9be5b8b7cbaeafc025cbe6bdc6fa1bc15e326d8aa2840e01ef27ab2df69f7e5f` |
+| `sft-math-nemotron-proofs-v3-sft` | `u003.part0016.jsonl` | 300,100,469 | `fc21c2a2ef2add719db817333be4a70e92f3977c5e5785ac1f1a15c7c1d8b601` |
+| `sft-math-nemotron-proofs-v3-sft` | `u003.part0017.jsonl` | 300,026,492 | `0e45afe38e1d82635f11355199b7cea942a0c80de591ae3a3cd84ee70bf5e900` |
+| `sft-math-nemotron-proofs-v3-sft` | `u003.part0018.jsonl` | 300,103,730 | `44f84296afb9a39679370ee8e236b7a8252e7918c0aee26bb216db99e87095a7` |
+| `sft-math-nemotron-proofs-v3-sft` | `u003.part0019.jsonl` | 300,046,669 | `6e489b043387914895eef1410f0192d987f8f6603383baf3361424450bd8aeb9` |
+| `sft-math-nemotron-proofs-v3-sft` | `u003.part0020.jsonl` | 300,015,511 | `55ac647dbb2ef241513a83e982848aa74042f9792cb0f84a88cbf10d38f5fa4d` |
+| `sft-math-nemotron-proofs-v3-sft` | `u003.part0021.jsonl` | 300,067,593 | `b3dbfde4d7463927478641ebf9ce4c22dc223af182a82c5162168dc64d36cd4d` |
+| `sft-math-nemotron-proofs-v3-sft` | `u003.part0022.jsonl` | 300,161,202 | `bed6a38cdb70fe50c15b542ca14b5453cfa280b953b28b525c66096b26c49c73` |
+| `sft-math-nemotron-proofs-v3-sft` | `u003.part0023.jsonl` | 300,026,312 | `18713619a6d9de5f5bd764bd1bf2716f9a817913939abb603f2ab07b27a1d791` |
+| `sft-math-nemotron-proofs-v3-sft` | `u003.part0024.jsonl` | 300,078,879 | `b4a611939910676c737d946ca21eecf6fa832132430516124cb93f2a87bcb176` |
+| `sft-math-nemotron-proofs-v3-sft` | `u003.part0025.jsonl` | 300,169,762 | `40998fe22a0633b8ea1af69dab3e217ec69bb2e7d863aaa27f55f22b015bb8ea` |
+| `sft-math-nemotron-proofs-v3-sft` | `u003.part0026.jsonl` | 277,734,419 | `3532629250a6f47613a03ebe6e586eaa887aaa964e2129a40eb8debab2f4da32` |
+| `sft-math-nemotron-proofs-v3-sft` | `u000.part0000.jsonl` | 300,116,799 | `6b013b5291067de3ca2e84cf4cf8c72b8e30ea80a230e5b03efc872094fbe449` |
+| `sft-math-nemotron-proofs-v3-sft` | `u000.part0001.jsonl` | 89,931,748 | `e83a00edfab69f9bdb7e25cdb6df27b2291db73d5b9ce9455f989d56605a45fa` |
+| `sft-math-nemotron-proofs-v3-sft` | `u001.part0000.jsonl` | 211,589,367 | `76b8fa5eb591e18fbb825a7f250d415a674e323074a42086806234db62c49a73` |
+| `sft-math-nemotron-proofs-v3-sft` | `u006.part0000.jsonl` | 300,042,647 | `9a3fa9944b02949513685858550669c0346da1e3b9a9bc1f8698d728c8119d14` |
+| `sft-math-nemotron-proofs-v3-sft` | `u006.part0001.jsonl` | 47,295,650 | `15f71907dd5deada4597c6d6f7fd6c118d71a1115c100f83597ed201c42cd021` |
+| `sft-math-nemotron-proofs-v3-sft` | `u002.part0000.jsonl` | 30,478,804 | `83c419858b98dce29ad68ce797d9d8372f90cb977e779c3078faa7fa6d40cf2b` |
+| `sft-math-nemotron-proofs-v3-sft` | `u005.part0000.jsonl` | 300,136,431 | `ef72d795f7686a297502f4a5591165964131613f2143d3909b7a0707f2c456a8` |
+| `sft-math-nemotron-proofs-v3-sft` | `u005.part0001.jsonl` | 300,046,172 | `bb871a9ba9825cb9e3aa4865ad1f26cc7276af2d30a3243f1fdf3883e6dd8e12` |
+| `sft-math-nemotron-proofs-v3-sft` | `u005.part0002.jsonl` | 300,004,150 | `f65e77cc93640a70a82daa802de03377ff9d928cf17fd2dba75b7d1ae1a7f9d6` |
+| `sft-math-nemotron-proofs-v3-sft` | `u005.part0003.jsonl` | 300,000,569 | `eb3fdfc10e3d7e4fc659cb16cde6447c2410f6f2bcfb8faf34c9cb6a6d9a425d` |
+| `sft-math-nemotron-proofs-v3-sft` | `u005.part0004.jsonl` | 300,061,994 | `e159c1a4b668c453046994614ccac196dd3140ff66294c11ebe522f49249d0e2` |
+| `sft-math-nemotron-proofs-v3-sft` | `u005.part0005.jsonl` | 300,019,657 | `b3f0e4dfc1004dbbac81c1f358e3bade94c7221c580d8a9b39f6299de738b18a` |
+| `sft-math-nemotron-proofs-v3-sft` | `u005.part0006.jsonl` | 300,045,956 | `3424eaeac0e9135f9ec41e8ea00c344fd7e9c392e3d8b82e3a71e4ddf81589ef` |
+| `sft-math-nemotron-proofs-v3-sft` | `u004.part0000.jsonl` | 300,094,370 | `a72ca1927957e55abca868dff01e72ab9c30397e61540562e8aac2331c5fd0f0` |
+| `sft-math-nemotron-proofs-v3-sft` | `u005.part0007.jsonl` | 300,100,158 | `7afac955eb269f3be80e48da5b067079cc7b743243f6f37ff6886db59ec5b9cb` |
+| `sft-math-nemotron-proofs-v3-sft` | `u004.part0001.jsonl` | 300,051,259 | `f654362b83e47c75fe5c63c4e35b8787b706a7b130856514546d7a5d5c00ac75` |
+| `sft-math-nemotron-proofs-v3-sft` | `u005.part0008.jsonl` | 300,029,062 | `650bd319d80d2338ffafccfff72bb0775924cb988438bd32f9a95c83cc1f1bc6` |
+| `sft-math-nemotron-proofs-v3-sft` | `u004.part0002.jsonl` | 300,133,225 | `6fee1e7c17f758cff3133f54fa07afd0ac070701ed346700d27ed85bb251276c` |
+| `sft-math-nemotron-proofs-v3-sft` | `u005.part0009.jsonl` | 300,019,506 | `b404f6c68b94d0e9f1eaaba88f550595696c67a0c81527e98022e1bb7c1bc768` |
+| `sft-math-nemotron-proofs-v3-sft` | `u004.part0003.jsonl` | 300,137,962 | `3ce493f3c352199012be43524fab595253c2ed0288040fe0bcff990a52bfc170` |
+| `sft-math-nemotron-proofs-v3-sft` | `u005.part0010.jsonl` | 300,013,668 | `690b2e8f485295eedddb30ff1db242e18c16545938f759025227bd88da2328d5` |
+| `sft-math-nemotron-proofs-v3-sft` | `u004.part0004.jsonl` | 300,103,977 | `3ce4a37a4042d17c3732a138c22d35d1cfa9fe81df60a841db60dbe7a6397747` |
+| `sft-math-nemotron-proofs-v3-sft` | `u005.part0011.jsonl` | 300,054,224 | `20df4994261dbfc431429cdc0d69e199e1de43cce4efb03b44abde658ea9c06a` |
+| `sft-math-nemotron-proofs-v3-sft` | `u004.part0005.jsonl` | 300,132,303 | `614fd3095356a4fb822bdebf9a033373b0fc88e279db8e85fb4a7139a7382263` |
+| `sft-math-nemotron-proofs-v3-sft` | `u005.part0012.jsonl` | 300,025,608 | `43ed87288dc12c6a7d74cb18241524ec47c86b23046a1f956fde5a2aa5e6380c` |
+| `sft-math-nemotron-proofs-v3-sft` | `u004.part0006.jsonl` | 300,034,551 | `3440f5aad02276b98eaa6c9e6b8d17dc8922e3ff04833c2936648b2384831321` |
+| `sft-math-nemotron-proofs-v3-sft` | `u005.part0013.jsonl` | 300,182,015 | `a8ea6a6a8d48063da3db7629594707cfe99bc6132714d54be7d14055665b51be` |
+| `sft-math-nemotron-proofs-v3-sft` | `u004.part0007.jsonl` | 300,011,640 | `ec6d56d8a2f12bfa60a1a39017bb8a797aeef6e09b7b24344a06a24f6ca3db05` |
+| `sft-math-nemotron-proofs-v3-sft` | `u007.part0000.jsonl` | 31,872,516 | `4568ef2899392fe30380c7da643b88ca6b5035a877dda6e48ef3d00945e338b5` |
+| `sft-math-nemotron-proofs-v3-sft` | `u005.part0014.jsonl` | 300,054,723 | `63652fa56c6585eb995d0ea445a838994982bc21a15f0189fd44fc1396867e2f` |
+| `sft-math-nemotron-proofs-v3-sft` | `u004.part0008.jsonl` | 300,177,255 | `fe41ce2ee3067c5f37126bd623f243e3c5a2880ddb0f749171e7489625384e29` |
+| `sft-math-nemotron-proofs-v3-sft` | `u008.part0000.jsonl` | 300,194,966 | `d14b55676f2b9976d69e9b675935f165211022cec2053e5908e3382a41d6e853` |
+| `sft-math-nemotron-proofs-v3-sft` | `u005.part0015.jsonl` | 300,025,502 | `e40f231f8fc7e15a717a8712248c5bd6420502007408ff95ce1317c2282757cc` |
+| `sft-math-nemotron-proofs-v3-sft` | `u008.part0001.jsonl` | 300,136,072 | `c59b9c8a08d3939d18bda53c8dd5dc97048d6da4db54276d45697f26b2b27f16` |
+| `sft-math-nemotron-proofs-v3-sft` | `u004.part0009.jsonl` | 300,117,942 | `fa9d8a3d3cfb6ff9969415c1d5f924db47cbedc98aa1dcbd26292eaf5214d686` |
+| `sft-math-nemotron-proofs-v3-sft` | `u005.part0016.jsonl` | 300,195,798 | `800831ea1905abb13190eee6c91cc8b6b3ddafe03a6dc4fba01785cdd0a87f5e` |
+| `sft-math-nemotron-proofs-v3-sft` | `u008.part0002.jsonl` | 300,055,242 | `bdaff801fe999d6a30c6ee45e749ee575d263c6eb8195e880966633128191169` |
+| `sft-math-nemotron-proofs-v3-sft` | `u004.part0010.jsonl` | 300,165,183 | `2394c443d6a79f70d5af3cc39b547a02fba6cfbe966791da5afe6e9c92ed287f` |
+| `sft-math-nemotron-proofs-v3-sft` | `u005.part0017.jsonl` | 300,218,125 | `17da680280566de1bf510d26788dd8b6f846dc58ac17b079aab91876474e2513` |
+| `sft-math-nemotron-proofs-v3-sft` | `u008.part0003.jsonl` | 300,055,688 | `c41d85fe9772c8527ff7ad438bf9b08fba6d985079027c762125b1dfdd81aebb` |
+| `sft-math-nemotron-proofs-v3-sft` | `u004.part0011.jsonl` | 300,127,422 | `1a00db63d3b43ab0ff7fa1a34bbcee207422817a6d65643374ed4ca9d4b1f9ef` |
+| `sft-math-nemotron-proofs-v3-sft` | `u005.part0018.jsonl` | 300,010,846 | `43fe6dedca381886470d6799b87ce35c6d86ea34eb2bf167f871f473b26f196f` |
+| `sft-math-nemotron-proofs-v3-sft` | `u008.part0004.jsonl` | 300,048,446 | `6da0ab846b6fee721acdd9554150fb220a4b1b74c98d2758cc1b493d192ef5ae` |
+| `sft-math-nemotron-proofs-v3-sft` | `u004.part0012.jsonl` | 300,173,799 | `f9cc40709bce30d91c23be5ff508d7898684967f90b2ebe0cc2a82bc9e28d5fa` |
+| `sft-math-nemotron-proofs-v3-sft` | `u008.part0005.jsonl` | 300,374,666 | `742082c44b66f013666f1c674031bd7aab5447e90564271cdcf62f727f3a8835` |
+| `sft-math-nemotron-proofs-v3-sft` | `u004.part0013.jsonl` | 300,016,980 | `b671f196d87ba69bea78df0443d3d33466c83f513e5224825bdbd3f52be1821a` |
+| `sft-math-nemotron-proofs-v3-sft` | `u008.part0006.jsonl` | 300,068,962 | `eb6fa423956b590ceac52a2f6d96ed20d82dc6871172508d599992f9bf5e4743` |
+| `sft-math-nemotron-proofs-v3-sft` | `u004.part0014.jsonl` | 300,138,087 | `9bbe40dfe27bc9f54650b3f6b88ab966420861e8f2e1f63474a5fcb6abc6bc95` |
+| `sft-math-nemotron-proofs-v3-sft` | `u008.part0007.jsonl` | 300,163,786 | `781f0f60c4cc517e336a4b45139511f1be3c7b7de94af0d38a517114eed2beb4` |
+| `sft-math-nemotron-proofs-v3-sft` | `u004.part0015.jsonl` | 300,011,274 | `0569a077a89548d046dd26284e21e504eee2316d9ee5298d0b32febb93b64fa2` |
+| `sft-math-nemotron-proofs-v3-sft` | `u008.part0008.jsonl` | 300,038,542 | `07429607ff595df23f5c1f5aa8eae2be64691ba7ca75bfdbcc1304e73d32bf59` |
+| `sft-math-nemotron-proofs-v3-sft` | `u004.part0016.jsonl` | 300,070,382 | `07fa338bb2623eff907dce4a40ce783a1f125e933603db9f08b1526fa74ca21c` |
+| `sft-math-nemotron-proofs-v3-sft` | `u008.part0009.jsonl` | 300,021,798 | `1171346fb3913d506a2beeb2005909cadea3da45897ffb54e0b45f52bb640483` |
+| `sft-math-nemotron-proofs-v3-sft` | `u004.part0017.jsonl` | 300,204,075 | `8de9e63c99e1ce6c191b687f2b9dfd0c9d70bc17770f84f81715d3d2338b9192` |
+| `sft-math-nemotron-proofs-v3-sft` | `u008.part0010.jsonl` | 235,646,323 | `ec7aaad1af6cc7c05299cdce5edfda41ab350a87a7f07068720a3866db472e68` |
+| `sft-math-nemotron-proofs-v3-sft` | `u004.part0018.jsonl` | 300,144,336 | `bb06c48ad14654f799c748703711cbb7bb20ad89ab08807c1d994c20134e3b80` |
+| `sft-math-nemotron-proofs-v3-sft` | `u009.part0000.jsonl` | 300,072,857 | `301d535d91241e7dabf7106f7b936183131134f95c0a4c9132ddae20bdcc3495` |
+| `sft-math-nemotron-proofs-v3-sft` | `u004.part0019.jsonl` | 300,074,599 | `2b17eb39341aba7b93e5e3b74162e632c6b30490eb9a52c262d94bc125fa346a` |
+| `sft-math-nemotron-proofs-v3-sft` | `u005.part0019.jsonl` | 240,702,703 | `27ec0af0346e725ac826bbae7383bdb020e97d05403d359a5eaa68364348debc` |
+| `sft-math-nemotron-proofs-v3-sft` | `u009.part0001.jsonl` | 300,039,136 | `84e1433c0f04acbcdf1650a7b9f0a608334e5265067cbda23047c269c1a787c1` |
+| `sft-math-nemotron-proofs-v3-sft` | `u004.part0020.jsonl` | 300,074,796 | `ea457fff34c1f758d938564bdb987e3c5573cfe2c6563abfc1ae69ed5b1dc80e` |
+| `sft-math-nemotron-proofs-v3-sft` | `u009.part0002.jsonl` | 300,041,032 | `a5f990c9246e98d780a4aa682ae7d6d1790f617c7d986c37eddc22d08c826b72` |
+| `sft-math-nemotron-proofs-v3-sft` | `u004.part0021.jsonl` | 300,043,847 | `b253e835e277135aa8d33be0722d04aa1dcb23df15c7037c7b6ff36ef224cb6d` |
+| `sft-math-nemotron-proofs-v3-sft` | `u009.part0003.jsonl` | 300,147,140 | `1ebb72d7d350fa60d3769cb1ffc9a5e7fee28a14f6f79de023186a613d24f30c` |
+| `sft-math-nemotron-proofs-v3-sft` | `u004.part0022.jsonl` | 300,108,552 | `0197be967e3eb668a190c497d0c4038ac2107d474591fd5109cbfbdeeb859b45` |
+| `sft-math-nemotron-proofs-v3-sft` | `u009.part0004.jsonl` | 300,140,434 | `13e8068483b52da8a837189a84c099caec30d4cc0ab8bc1a06c79c1fc59a4272` |
+| `sft-math-nemotron-proofs-v3-sft` | `u004.part0023.jsonl` | 300,042,912 | `bd1a7711661aa857f36a70c5e6fb76e2a99a95a4bbe98103de7633812bb7f776` |
+| `sft-math-nemotron-proofs-v3-sft` | `u009.part0005.jsonl` | 300,004,926 | `2ecd1a3d30f4eade3d9084778b922df8ef92ac8d45cb8d8b1188d5e0893e0e52` |
+| `sft-math-nemotron-proofs-v3-sft` | `u004.part0024.jsonl` | 300,037,142 | `a0a1a051be3e5d3b18be447bbf6cce45efa6935576e90eda01a59493e833b23c` |
+| `sft-math-nemotron-proofs-v3-sft` | `u009.part0006.jsonl` | 300,075,121 | `0ad121f094e3a2cb24e16583876545fe3475994c2de53dd940fadb8dceeb9796` |
+| `sft-math-nemotron-proofs-v3-sft` | `u004.part0025.jsonl` | 300,084,958 | `75f57924f2d31f53157b7c197f3671903f7871df53128764e28dd5e430ecfd95` |
+| `sft-math-nemotron-proofs-v3-sft` | `u009.part0007.jsonl` | 300,065,083 | `f67bcea927cc86fcabb9ececa2238bc60e1ed6e7004df45056b4768e8193b2c1` |
+| `sft-math-nemotron-proofs-v3-sft` | `u004.part0026.jsonl` | 300,028,803 | `e8ea4e2c03666f1c16219943b16d21b0e03ee05c641c71bd2ed3c931fb445044` |
+| `sft-math-nemotron-proofs-v3-sft` | `u009.part0008.jsonl` | 300,069,598 | `f4f06c28e3afd5e62744297f2627d794492a762085264d6b7f7316c8fe36a993` |
+| `sft-math-nemotron-proofs-v3-sft` | `u004.part0027.jsonl` | 300,206,477 | `89899a4123adda36466f853c24f9e3f9490fd8c7b3e86b430fcb4df4df086ab4` |
+| `sft-math-nemotron-proofs-v3-sft` | `u009.part0009.jsonl` | 300,029,129 | `bd61c0f3ea93b69de3ecd735ee7870ca5f3fd2d20e4c5e5e8a7d9e86d7b6ab37` |
+| `sft-math-nemotron-proofs-v3-sft` | `u004.part0028.jsonl` | 300,087,323 | `cdbb901c77b5c53ad0cd967cc68713f3440f47d870dc53fabaf0c6b3e2388a77` |
+| `sft-math-nemotron-proofs-v3-sft` | `u009.part0010.jsonl` | 300,117,872 | `366b49e05b8072b7ffd9e74725b14dea3eb294482bae47e4baeee5797786bb51` |
+| `sft-math-nemotron-proofs-v3-sft` | `u004.part0029.jsonl` | 300,045,541 | `592ccf57779c2a58e5a16bdb3fced9f58c4a9f0fc959e20abbf91f41764c1fad` |
+| `sft-math-nemotron-proofs-v3-sft` | `u009.part0011.jsonl` | 300,141,715 | `14474415af41eacddeb8a7e50c41e42ba322ea9a4c727961d7347650d42ff329` |
+| `sft-math-nemotron-proofs-v3-sft` | `u004.part0030.jsonl` | 300,012,075 | `4bfdb51573f0d059e8484f6f974ed55b84ed09059906565f9b7c312fd0e86160` |
+| `sft-math-nemotron-proofs-v3-sft` | `u009.part0012.jsonl` | 300,177,079 | `9bdc8d2836b7531900193f84f5cab7128f280459f571ba88279f51668ff32db5` |
+| `sft-math-nemotron-proofs-v3-sft` | `u004.part0031.jsonl` | 300,115,817 | `5f1f5002e741447dae7252cd3646e13eeafbb3343451efd3395fe1e2a1217794` |
+| `sft-math-nemotron-proofs-v3-sft` | `u009.part0013.jsonl` | 300,128,563 | `4ee689b95fb28a2413ec2e04e9917ddc590113e9b32f3abf9b4bad8bd965d79f` |
+| `sft-math-nemotron-proofs-v3-sft` | `u004.part0032.jsonl` | 300,069,457 | `b662d64c5e82ef8ee99e98da41b51fc8eebed94f59d2b1e651bdcb14c7f7a071` |
+| `sft-math-nemotron-proofs-v3-sft` | `u009.part0014.jsonl` | 300,045,043 | `ee09f8d75afe496b4e4eb81fe20b7338280f3011a6630fe3ffc0a63004d8414b` |
+| `sft-math-nemotron-proofs-v3-sft` | `u004.part0033.jsonl` | 300,136,443 | `c5bde3adcff4258116dfdbf4f1913dbc95cb3a0ae2c050dedaec0ac2113f2602` |
+| `sft-math-nemotron-proofs-v3-sft` | `u009.part0015.jsonl` | 300,061,054 | `5240c4803664adc9cef2333a8dd4411371a5e1c821b2537eb2e465f6ad2d5e7a` |
+| `sft-math-nemotron-proofs-v3-sft` | `u004.part0034.jsonl` | 300,120,131 | `03e315b0a0fc663a84a2f04f0b6d6c489dc5e0e0fdb7e2139dc9cb22a70bffa4` |
+| `sft-math-nemotron-proofs-v3-sft` | `u009.part0016.jsonl` | 300,176,204 | `2ebc7ce8650b819062704cf078b004b63c92cc94c043b23d02e42265f37d7c44` |
+| `sft-math-nemotron-proofs-v3-sft` | `u004.part0035.jsonl` | 300,073,655 | `932f9886481749ce3580f16c86fe64f9c24850db8e0f28aed185583e7184371d` |
+| `sft-math-nemotron-proofs-v3-sft` | `u009.part0017.jsonl` | 300,146,277 | `0431a7b7f1d63c9931eff88aadb5f479f515c8338b74c879cd359663858b2534` |
+| `sft-math-nemotron-proofs-v3-sft` | `u004.part0036.jsonl` | 300,048,514 | `1632884039826f90cd195e805c3bbd496533c8a22e888900cec4a2cfce3a4dad` |
+| `sft-math-nemotron-proofs-v3-sft` | `u009.part0018.jsonl` | 300,174,401 | `435acb0ab40ec82b06d1d968ef8169b33ea96e7802c176c84b0f7f2e87c74851` |
+| `sft-math-nemotron-proofs-v3-sft` | `u004.part0037.jsonl` | 300,134,293 | `31aea4e881e070b0ca7f9fff02c90e6d94ce349f27391633be0f5fcb4a67476d` |
+| `sft-math-nemotron-proofs-v3-sft` | `u009.part0019.jsonl` | 300,136,824 | `ed86ecb98c80758e5d9b59766b99eb15d624b7a000e0f9c9450fa0ef15ca9234` |
+| `sft-math-nemotron-proofs-v3-sft` | `u004.part0038.jsonl` | 300,157,363 | `2bac477e2e77b67a83b561c066172c6a4cb782d6e1329767339f0d40249057e5` |
+| `sft-math-nemotron-proofs-v3-sft` | `u009.part0020.jsonl` | 300,028,586 | `4bceec72f95431b3ed1da788e483afd8920cd7dc345901400fd24bb678bc66b4` |
+| `sft-math-nemotron-proofs-v3-sft` | `u004.part0039.jsonl` | 300,065,074 | `8a4f2670938e3f0a8649295f4df87bc954136435b580550ccef832b74700a807` |
+| `sft-math-nemotron-proofs-v3-sft` | `u009.part0021.jsonl` | 300,102,888 | `d414dec6ad1960f7f3a71ec6c7a69aa32dcb7fa1748e589fbcc4b1a4e0ddec89` |
+| `sft-math-nemotron-proofs-v3-sft` | `u004.part0040.jsonl` | 300,129,673 | `bba696c5e1fbd33a96149e03350aac74f557c4124125c631685716c099d1bd1d` |
+| `sft-math-nemotron-proofs-v3-sft` | `u009.part0022.jsonl` | 300,038,643 | `c8c88f448485d8d16dfd379eddf42134c00de27a572e8724e79942fc17fcdccb` |
+| `sft-math-nemotron-proofs-v3-sft` | `u004.part0041.jsonl` | 300,059,534 | `4fb5d1a62c7741afdf33a6c1061898717d6054c16e21662de4b3fbb237a64c3a` |
+| `sft-math-nemotron-proofs-v3-sft` | `u009.part0023.jsonl` | 300,080,759 | `a9e9b888d5df8bf97ac86d120af320e84306bf6fcbdf8a1972f8d2d31a9c4dc2` |
+| `sft-math-nemotron-proofs-v3-sft` | `u004.part0042.jsonl` | 300,028,421 | `b38cd94d4d4afb13196ae63b9233fa8548294bb111f9b3d5ac5a41955abdbda1` |
+| `sft-math-nemotron-proofs-v3-sft` | `u004.part0043.jsonl` | 163,064,406 | `a24ca8164bdf425876942a8cab1442d12789614a1f0c9a87174f69d4756d8daf` |
+| `sft-math-nemotron-proofs-v3-sft` | `u009.part0024.jsonl` | 300,059,772 | `0638afa0cd73f02e46f8c074e360f51dacfaf97ed004db8abba2cc8aa8b5a01e` |
+| `sft-math-nemotron-proofs-v3-sft` | `u009.part0025.jsonl` | 300,091,270 | `19c27958d5f6a12408906ce2b42889c658ce0caa5c57ba2b70c879145f09e2bf` |
+| `sft-math-nemotron-proofs-v3-sft` | `u009.part0026.jsonl` | 300,175,481 | `cf14c628f066581a80dec6a2e1eb7eb61f73420a77e85d7b7a9ec15171b83237` |
+| `sft-math-nemotron-proofs-v3-sft` | `u009.part0027.jsonl` | 300,081,122 | `6f1f1bdd83b9e44d0192c2331a0b6428978691c128e49051dbbc7cf9ead3102d` |
+| `sft-math-nemotron-proofs-v3-sft` | `u009.part0028.jsonl` | 300,052,326 | `cd57bee6ee44229bd74651c2b21cb183aad55b662aa3434050b8111a12ec06af` |
+| `sft-math-nemotron-proofs-v3-sft` | `u009.part0029.jsonl` | 300,043,461 | `1a4ad1e2024d24dd9e90e5c5f718a569e9b56040f4d1e04c4d9f016be26de4a4` |
+| `sft-math-nemotron-proofs-v3-sft` | `u009.part0030.jsonl` | 300,049,295 | `cbe8fdc59a514197c3e254e9dc300cfabdfe7da7c26a4ab791c77ba3ec8bfd2f` |
+| `sft-math-nemotron-proofs-v3-sft` | `u009.part0031.jsonl` | 300,180,456 | `0195a43b33ecf50dcf62c07d1d33923708940a119048e79ac3a5f2b722e93c6e` |
+| `sft-math-nemotron-proofs-v3-sft` | `u009.part0032.jsonl` | 300,041,237 | `8e300e9a061486c16b81a44a7e534aece73d21397affb75616075133e5910618` |
+| `sft-math-nemotron-proofs-v3-sft` | `u009.part0033.jsonl` | 300,156,918 | `d64b7549c46e1637429892dfe2f4ebeb6731247241aafea53cf5599450f4d765` |
+| `sft-math-nemotron-proofs-v3-sft` | `u009.part0034.jsonl` | 300,001,544 | `6dc8d73ee116ec4aca433dfb50a13a57f3bc6d3e5c9fa3ed66e7310ff8fc0fd0` |
+| `sft-math-nemotron-proofs-v3-sft` | `u009.part0035.jsonl` | 300,057,676 | `95e4f3eb8e57249d08e38ff2a0f2c1590059906161f935112faa25485788a947` |
+| `sft-math-nemotron-proofs-v3-sft` | `u009.part0036.jsonl` | 300,138,549 | `2b5aed70ca240ef7b7293179e674d1e3ab887439ce27637fc498a520ad2e3a80` |
+| `sft-math-nemotron-proofs-v3-sft` | `u009.part0037.jsonl` | 300,037,850 | `3a1b3a90313d33ea69f068794069df840aea9fd961ed7d4006ab7ae6aa2d074f` |
+| `sft-math-nemotron-proofs-v3-sft` | `u009.part0038.jsonl` | 300,148,504 | `253877f51eaa900903dfafc39e46440c11fd23d8cb06d1dac3a1b52b43620486` |
+| `sft-math-nemotron-proofs-v3-sft` | `u009.part0039.jsonl` | 300,010,564 | `f1717900f8bce705f15062d9fd4260af4074b36dd4bdd12ba29b869be7c454a3` |
+| `sft-math-nemotron-proofs-v3-sft` | `u009.part0040.jsonl` | 300,084,779 | `4181597a80395d91b346cad39a71ff3da1e2a25be94a7ca197aac52673fe5bcd` |
+| `sft-math-nemotron-proofs-v3-sft` | `u009.part0041.jsonl` | 112,568,749 | `e35e53d6502cc0446281aa727c754eb51ffeb9ab78ee93c9452902535c587cc6` |
 | `sft-math-nemotron-proofs` | `u000.part0000.jsonl` | 300,005,219 | `dd82a8577038899c92d3405a4484730f70501a048a8e6570d4037b621eb4c153` |
 | `sft-math-nemotron-proofs` | `u000.part0001.jsonl` | 300,009,979 | `d6e8ba94c6145adce57e621ded58e98cb07b5f539780f88c44753c67aa944b63` |
 | `sft-math-nemotron-proofs` | `u000.part0002.jsonl` | 300,009,946 | `203fad8a8b543c38b4d364830b7ad0f3c1c52ebedd79703aac3fea79aed7dd52` |
@@ -2033,16 +2634,15 @@ Coverage is the share of the item's runs found in the document. A value near 1.0
 
 ```
 python teams/10-post-training/sft/decontam_run.py --set <set-id> --input <set>.jsonl --out-dir decontam_out
-python teams/10-post-training/sft/decontam_report.py --records decontam_out --out decontam_report_30.md --sets <set-id> ...
+python teams/10-post-training/sft/decontam_report.py --records decontam_out --out decontam_report_32b.md --sets <set-id> ...
 ```
 
-## 7. Sets not in section 1 (9 Nov)
+## 7. Sets not run (excluded)
 
-`sft-code-commitpackft` is the python split (56,025 rows, 15 removed). `sft-code-opencodereasoning-2` is all 70 python shards, converted, after joining questions from TACO, APPS, and code_contests by `dataset` + `index` (542,219 rows scanned, 115,067 removed). `sft-math-nemotron-proofs-v3-sft` is the first of 10 parts: 20,023 source rows, 18,266 skipped by `convert.py` because the trace is over the 64k budget, 1,757 checked, 42 removed. An `excluded` set is out of training.
+An `excluded` set is out of training, so it was not run.
 
 | Set | Status | Why |
 |---|---|---|
-| `sft-safety-aegis-v1` | text only | Checked 9 Nov on the stored `text` column (11,997 train+test rows, 2 removed). It is not chat: there is no assistant turn, so it is not in the SFT mix as training text. 339 source ids were repeated; the check used one id per row. |
 | `sft-safety-indicguard` | excluded | Google Translate and an unnamed generator. |
 | `sft-safety-nemotron-guard-v3` | excluded | Google Translate and a Llama jury. |
 | `sft-safety-wildjailbreak` | excluded | GPT-4 and GPT-3.5. |

@@ -1225,6 +1225,124 @@
         "type": "grafana-clickhouse-datasource",
         "uid": "${ds}"
       },
+      "description": "expert_load_imbalance per optimizer step: busiest expert / average expert, max(load) / mean(load) (= max(shares) x number of experts) in the worst MoE layer. 1.0 = perfectly balanced; 2.0 = the busiest expert gets twice the average share; the number of experts = every pick goes to one expert. Equals router_max_vio + 1 (panel 21). Computed from expert_load by metrics_writer.py.",
+      "fieldConfig": {
+        "defaults": {
+          "custom": {
+            "lineWidth": 2,
+            "showPoints": "auto",
+            "thresholdsStyle": {
+              "mode": "line"
+            }
+          },
+          "unit": "short",
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "orange",
+                "value": 1.5
+              },
+              {
+                "color": "red",
+                "value": 2.0
+              }
+            ]
+          }
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "step"
+            },
+            "properties": [
+              {
+                "id": "custom.axisLabel",
+                "value": "step"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byRegexp",
+              "options": "^value.*"
+            },
+            "properties": [
+              {
+                "id": "custom.axisLabel",
+                "value": "busiest / average"
+              },
+              {
+                "id": "min",
+                "value": 1
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 12,
+        "y": 60
+      },
+      "id": 27,
+      "options": {
+        "legend": {
+          "displayMode": "list",
+          "placement": "bottom"
+        },
+        "tooltip": {
+          "mode": "multi"
+        },
+        "xField": "step"
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "grafana-clickhouse-datasource",
+            "uid": "${ds}"
+          },
+          "editorType": "sql",
+          "format": 1,
+          "queryType": "table",
+          "rawSql": "SELECT step, run_id, value FROM metrics_raw WHERE name = 'expert_load_imbalance' AND run_id IN ($run) AND value IS NOT NULL ORDER BY step",
+          "refId": "A"
+        }
+      ],
+      "title": "MoE Expert Load Imbalance (expert_load_imbalance)",
+      "transformations": [
+        {
+          "id": "partitionByValues",
+          "options": {
+            "fields": [
+              "run_id"
+            ],
+            "naming": {
+              "asLabels": true
+            }
+          }
+        },
+        {
+          "id": "joinByField",
+          "options": {
+            "byField": "step",
+            "mode": "outer"
+          }
+        }
+      ],
+      "type": "trend"
+    },
+    {
+      "datasource": {
+        "type": "grafana-clickhouse-datasource",
+        "uid": "${ds}"
+      },
       "description": "gpu_temp_c per optimizer step (degrees C, rank 0's GPU, from NVML) with gpu_thermal_throttle next to it: 1 when NVML reports HW (0x40) or SW (0x20) thermal slowdown, so the GPU lowered its clocks because of heat. Colours: green below 75 C, yellow from 75 C, red from 85 C. Slower steps with throttle 1 mean heat, not the code. Every GPU at 1 s is in panel 12 (gpu_telemetry_1s).",
       "fieldConfig": {
         "defaults": {
@@ -1874,6 +1992,151 @@
         }
       ],
       "type": "trend"
+    },
+    {
+      "datasource": {
+        "type": "grafana-clickhouse-datasource",
+        "uid": "${ds}"
+      },
+      "description": "Held-out bits per UTF-8 byte (validation_bpb) at each validation run, one line of points per run. It counts bytes, not tokens, so runs with different G3 tokenizers can be compared on this axis (validation_loss, panel 20, cannot). Lower is better. Read from validation_bpb rows (written by metrics_writer.py); for G5 train_week2.py's own metrics.jsonl, from val/bpb, or worked out in the query as val/nll_nats / (log(2) * val/utf8_bytes). One value per run and step, in that order.",
+      "fieldConfig": {
+        "defaults": {
+          "custom": {
+            "axisLabel": "bits per byte",
+            "lineWidth": 2,
+            "showPoints": "always",
+            "spanNulls": true,
+            "pointSize": 7
+          },
+          "decimals": 3,
+          "unit": "none",
+          "displayName": "${__field.labels.series}"
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "step"
+            },
+            "properties": [
+              {
+                "id": "unit",
+                "value": "short"
+              },
+              {
+                "id": "decimals",
+                "value": 0
+              },
+              {
+                "id": "custom.axisLabel",
+                "value": "step"
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 24,
+        "x": 0,
+        "y": 100
+      },
+      "id": 25,
+      "options": {
+        "legend": {
+          "displayMode": "list",
+          "placement": "bottom"
+        },
+        "tooltip": {
+          "mode": "multi"
+        },
+        "xField": "step"
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "grafana-clickhouse-datasource",
+            "uid": "${ds}"
+          },
+          "editorType": "sql",
+          "format": 1,
+          "queryType": "table",
+          "rawSql": "SELECT x AS step, series, y AS value FROM (SELECT step AS x, concat(run_id, ' validation_bpb') AS series, multiIf(countIf(name = 'validation_bpb') > 0, anyIf(value, name = 'validation_bpb'), countIf(name = 'val/bpb') > 0, anyIf(value, name = 'val/bpb'), countIf(name = 'val/nll_nats') = 1 AND countIf(name = 'val/utf8_bytes') = 1 AND sumIf(value, name = 'val/utf8_bytes') > 0, sumIf(value, name = 'val/nll_nats') / (log(2) * sumIf(value, name = 'val/utf8_bytes')), NULL) AS y FROM metrics_raw WHERE name IN ('validation_bpb', 'val/bpb', 'val/nll_nats', 'val/utf8_bytes') AND run_id IN ($run) AND value IS NOT NULL GROUP BY run_id, step) WHERE y IS NOT NULL ORDER BY step, series",
+          "refId": "A"
+        }
+      ],
+      "title": "Validation bits per byte (validation_bpb)",
+      "transformations": [
+        {
+          "id": "partitionByValues",
+          "options": {
+            "fields": [
+              "series"
+            ],
+            "naming": {
+              "asLabels": true
+            }
+          }
+        },
+        {
+          "id": "joinByField",
+          "options": {
+            "byField": "step",
+            "mode": "outer"
+          }
+        }
+      ],
+      "type": "trend"
+    },
+    {
+      "datasource": {
+        "type": "grafana-clickhouse-datasource",
+        "uid": "${ds}"
+      },
+      "description": "gpu_memory_used: memory in use on the whole GPU by all processes (nvidia-smi memory.used), in bytes, shown as GiB. One line per run and GPU, the largest value in each 10-second window (metric_list_v1.yaml). G6's GpuSampler sends mem_used_mib about once a second; clickhouse/load_jsonl.py and metrics_logger/metrics_writer.py (gpu_memory_used) multiply it by 1,048,576. Panel 6 (gpu_alloc_gib) counts only PyTorch's allocations, so this line is higher: the gap is PyTorch's cache, the CUDA context and other processes. Close to the GPU's total memory means close to out-of-memory.",
+      "fieldConfig": {
+        "defaults": {
+          "custom": {
+            "axisLabel": "GPU memory used",
+            "lineWidth": 2
+          },
+          "decimals": 1,
+          "min": 0,
+          "unit": "bytes"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 24,
+        "x": 0,
+        "y": 108
+      },
+      "id": 26,
+      "options": {
+        "legend": {
+          "displayMode": "list",
+          "placement": "bottom"
+        },
+        "tooltip": {
+          "mode": "multi"
+        }
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "grafana-clickhouse-datasource",
+            "uid": "${ds}"
+          },
+          "editorType": "sql",
+          "format": 0,
+          "queryType": "timeseries",
+          "rawSql": "SELECT toStartOfInterval(time_1s, INTERVAL 10 second) AS time, concat(run_id, ' gpu', toString(rank)) AS series, max(max) AS value FROM gpu_telemetry_1s WHERE name = 'gpu_memory_used' AND run_id IN ($run) AND $__timeFilter(time_1s) GROUP BY time, series ORDER BY time",
+          "refId": "A"
+        }
+      ],
+      "title": "GPU memory used (gpu_memory_used)",
+      "type": "timeseries"
     }
   ],
   "refresh": "",

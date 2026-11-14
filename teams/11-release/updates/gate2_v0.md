@@ -11,7 +11,8 @@
 |---|---|---|
 | Freeze the tokenizer | Tokenizer | [waiting for TSAI] |
 | KE2 | KE2 | [waiting for TSAI] |
-| First model configuration: attention type, number of experts and optimizer | Architecture | [waiting for TSAI] |
+| First model configuration: attention type, number of experts, optimizer and learning rate | Architecture | [waiting for TSAI] |
+| Evaluation scores for the configuration freeze, and the first evaluation schedule | Evaluation | [waiting for TSAI] |
 | Share of Indic text in its own script, and the limit on Indic text in Latin script | Data B | [waiting for TSAI] |
 | Duplicate removal, source priority list and the updated data spec | Data A | [waiting for TSAI] |
 | Data mix for supervised fine-tuning | Post-training | [waiting for TSAI] |
@@ -42,6 +43,7 @@ How to fill it:
 | Tokenizer | | no |
 | KE2 | | no |
 | Architecture | | no |
+| Evaluation | [#357](https://github.com/theschoolofai/era-v5-lab/pull/357) | no |
 | Data B | | no |
 | Data A | | no |
 | Post-training | | no |

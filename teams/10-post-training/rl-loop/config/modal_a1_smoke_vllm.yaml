@@ -1,0 +1,13 @@
+# A1 smoke on L40S: same as modal_a1_smoke_hf but rollouts from a colocated vLLM engine, weight sync each step, TIS on.
+seed: 1234
+device: cuda
+model:
+  kind: hf
+  path: /vol/hf/allenai/OLMoE-1B-7B-0125-Instruct
+  dtype: bfloat16
+  stop_at_eos: true
+task: {kind: toy, rule: parity, vocab: 50304, prompt_len: 8, n_train: 64, n_heldout: 8}
+train: {algo: grpo, steps: 3, prompts_per_step: 4, k: 4, max_new: 32, temperature: 1.0, lr: 1.0e-6, clip_eps: 0.2,
+        ppo_epochs: 1, kl_coef: 0.0, trainable: ['\.self_attn\.'], eval_every: 3, eval_k: 2, sampler: vllm,
+        vllm: {gpu_memory_utilization: 0.35, max_model_len: 1024}, tis_clip: 2.0,
+        routing_log: true, routing_probe: 4, kl_to_start: true}

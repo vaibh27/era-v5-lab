@@ -56,3 +56,20 @@ with reward._pool().CodePool(workers=8) as cp:                        # warm poo
 - **SWE envs are not pooled.** Their tests write into the repository, so a reused container could carry a planted change into the next rollout. Pre-started single-use containers measured slower than plain parallel `docker run --rm` (see the bench). So each SWE rollout gets a fresh container, and the trainer runs them in parallel. `swe-envs/verify.py` accepts an `executor`, so a safe reusable design can plug in later.
 - Throughput: `results/reward_pool_bench.md` (`python rl/bench_pool.py --write results/reward_pool_bench.md`).
 - Every reference solution and gold patch scores 1, and every wrong answer scores 0: `python rl/reward.py --check-all [--pool]`.
+
+## Files in this folder
+
+| File | What it is |
+|---|---|
+| `verifier.py`, `_sandbox_child.py`, `test_verifier.py` | The verifier: binary reward for one task, expected answers kept outside the sandbox. |
+| `tasks/` | The original coding tasks (see "Writing a task"). |
+| `reward.py`, `test_reward.py` | The one `reward(env_id, output)` entry point for code and SWE environments. |
+| `pool.py`, `bench_pool.py` | The warm container pool for code tasks, and the rollouts-per-second benchmark. |
+| `design_note.md` | Design, the cheating cases and open questions. |
+| `decontam_report.md` | Benchmark-overlap check of the RL sets (see below). |
+
+## Decontamination of the RL sets
+
+`decontam_report.md` is the result of checking the RL sets TSAI allowed on 6 Nov against Team 9's benchmark fingerprints v2 (full set, with a canary scan). It lists, per set, the rows in, flagged and kept, the benchmarks hit, the benchmark items with the largest overlap and the input file hashes. Section 6 gives the commands to reproduce a run, and section 8 says what the check does not cover.
+
+The report is written by the SFT tools, not by hand: `sft/decontam_run.py` checks one set and `sft/decontam_report.py` builds the report (`--title "RL decontamination report"`). How to run them is in `sft/README.md`. Do not put benchmark text in this file or in the run records: only set names, counts, document ids, benchmark item ids, offsets and sha256 values.

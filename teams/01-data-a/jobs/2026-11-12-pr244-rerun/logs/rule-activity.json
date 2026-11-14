@@ -1,0 +1,2278 @@
+{
+  "scope": "current two-part smoke only; not a full-sample activity inventory",
+  "active_rule_ids": 223,
+  "rules_with_fix_or_drop": [
+    "DB-A6-017",
+    "DB-A6-013",
+    "DB-G1-016",
+    "DB-G1-010",
+    "DB-B2-001",
+    "DB-B2-004",
+    "DB-C3-002",
+    "DB-C4-006",
+    "DB-C5-006",
+    "DB-D4-013",
+    "DB-D4-012",
+    "DB-F3-004",
+    "DB-F3-003",
+    "DB-G3-003",
+    "DB-C1-005",
+    "DB-C1-016",
+    "DB-C2-014",
+    "DB-C2-013",
+    "DB-D2-003",
+    "f1_rule.py"
+  ],
+  "invoked_without_fix_or_drop": [
+    "DB-A1-002",
+    "DB-G4-007",
+    "DB-B4-008",
+    "DB-C3-020",
+    "DB-C4-002",
+    "DB-C5-016",
+    "DB-D5-004",
+    "DB-D3-005",
+    "DB-D3-014",
+    "DB-D5-002",
+    "DB-B4-006"
+  ],
+  "not_invoked": [
+    "DA-A1-001",
+    "DA-A2-007",
+    "DA-A6-001",
+    "DA-A4-002",
+    "DA-A4-003",
+    "DA-B3-001",
+    "DA-E1-001",
+    "DA-E1-004",
+    "DA-E1-008",
+    "DA-E1-006",
+    "DA-E1-005",
+    "DA-E1-007",
+    "DA-E2-001",
+    "DA-C3-002",
+    "DA-C4-002",
+    "DA-E4-005",
+    "DA-E4-010",
+    "DA-E4-009",
+    "DA-E4-007",
+    "DA-C1-004",
+    "DA-C1-005",
+    "DA-B4-009",
+    "DA-E3-003",
+    "DA-E3-004",
+    "DA-A1-004",
+    "DA-A2-008",
+    "DA-A5-001",
+    "DA-A3-002",
+    "DA-B1-002",
+    "DA-B2-002",
+    "DA-C3-001",
+    "DA-C3-003",
+    "DA-C5-002",
+    "DA-D4-001",
+    "DA-C1-006",
+    "DA-C2-003",
+    "DA-C5-005",
+    "DA-D3-003",
+    "DA-B4-007",
+    "DA-B4-008",
+    "DA-B4-012",
+    "DA-B4-010",
+    "DA-B4-011",
+    "DA-F1-005",
+    "DA-A3-001",
+    "DA-A1-005",
+    "DA-A6-003",
+    "DA-A5-002",
+    "DA-B2-001",
+    "DA-B4-001",
+    "DA-B5-001",
+    "DA-C5-001",
+    "DA-D3-005",
+    "DA-C3-004",
+    "DA-C1-001",
+    "DA-C2-001",
+    "DA-C5-006",
+    "DA-C3-005",
+    "DA-B4-013",
+    "DA-B2-003",
+    "DA-B5-002",
+    "DA-A1-006",
+    "DA-A6-002",
+    "DA-C1-007",
+    "DA-C2-004",
+    "DA-C3-006",
+    "DA-C4-003",
+    "DA-D1-001",
+    "DA-F1-006",
+    "DA-D3-004",
+    "DB-A1-001",
+    "DB-A2-001",
+    "DB-A3-001",
+    "DB-A3-007",
+    "DB-A3-002",
+    "DB-A3-005",
+    "DB-A3-006",
+    "DB-A5-001",
+    "DB-A5-003",
+    "DB-A5-009",
+    "DB-A5-006",
+    "DB-A5-007",
+    "DB-A6-001",
+    "DB-A6-020",
+    "DB-A6-003",
+    "DB-A6-006",
+    "DB-A6-007",
+    "DB-A6-008",
+    "DB-A6-021",
+    "DB-G1-001",
+    "DB-G1-015",
+    "DB-G1-003",
+    "DB-G1-006",
+    "DB-G1-007",
+    "DB-G1-013",
+    "DB-G1-014",
+    "DB-G2-003",
+    "DB-G4-006",
+    "DB-G4-002",
+    "DB-G4-003",
+    "DB-G4-004",
+    "DB-B2-002",
+    "DB-B2-008",
+    "DB-B2-003",
+    "DB-B2-007",
+    "DB-B3-001",
+    "DB-A3-004",
+    "DB-A4-001",
+    "DB-A6-019",
+    "DB-C3-001",
+    "DB-C3-025",
+    "DB-C3-004",
+    "DB-C4-001",
+    "DB-C4-003",
+    "DB-C4-005",
+    "DB-C5-021",
+    "DB-C5-001",
+    "DB-C5-003",
+    "DB-C5-004",
+    "DB-C5-017",
+    "DB-C5-018",
+    "DB-D4-001",
+    "DB-D4-003",
+    "DB-D4-005",
+    "DB-D4-018",
+    "DB-D4-007",
+    "DB-D4-008",
+    "DB-D4-009",
+    "DB-D4-016",
+    "DB-D5-001",
+    "DB-F3-001",
+    "DB-F3-005",
+    "DB-G1-012",
+    "DB-G1-011",
+    "DB-C1-001",
+    "DB-C1-003",
+    "DB-C1-006",
+    "DB-C1-018",
+    "DB-C1-010",
+    "DB-C1-019",
+    "DB-C1-012",
+    "DB-C1-013",
+    "DB-C1-021",
+    "DB-C1-022",
+    "DB-C2-001",
+    "DB-C2-023",
+    "DB-C2-003",
+    "DB-C2-021",
+    "DB-C2-008",
+    "DB-C2-015",
+    "DB-C2-010",
+    "DB-C2-016",
+    "DB-C2-017",
+    "DB-C2-018",
+    "DB-C3-006",
+    "DB-C3-023",
+    "DB-C3-017",
+    "DB-C3-024",
+    "DB-C3-010",
+    "DB-C3-021",
+    "DB-C4-015",
+    "DB-C4-007",
+    "DB-C4-009",
+    "DB-C4-010",
+    "DB-C4-013",
+    "DB-C4-014",
+    "DB-C5-007",
+    "DB-C5-009",
+    "DB-C5-014",
+    "DB-D2-002",
+    "DB-D3-001",
+    "DB-D3-021",
+    "DB-D3-003",
+    "DB-D3-020",
+    "DB-D3-008",
+    "DB-D3-016",
+    "DB-D3-017",
+    "DB-D3-022",
+    "DB-D3-012",
+    "DB-D3-018",
+    "DB-D3-019",
+    "DB-D4-014",
+    "DB-D4-017",
+    "DB-D5-003",
+    "DB-H3-001",
+    "DB-B4-009",
+    "DB-B4-001",
+    "DB-B4-002",
+    "DB-B4-011",
+    "DB-B4-003",
+    "DB-B4-004",
+    "DB-B4-007"
+  ],
+  "counts": {
+    "DA-A1-001": {
+      "eligible_by_pack": 0,
+      "invocations": 0,
+      "keep": 0,
+      "fix": 0,
+      "drop": 0,
+      "error": 0,
+      "not_reached": 0
+    },
+    "DA-A2-007": {
+      "eligible_by_pack": 0,
+      "invocations": 0,
+      "keep": 0,
+      "fix": 0,
+      "drop": 0,
+      "error": 0,
+      "not_reached": 0
+    },
+    "DA-A6-001": {
+      "eligible_by_pack": 0,
+      "invocations": 0,
+      "keep": 0,
+      "fix": 0,
+      "drop": 0,
+      "error": 0,
+      "not_reached": 0
+    },
+    "DA-A4-002": {
+      "eligible_by_pack": 0,
+      "invocations": 0,
+      "keep": 0,
+      "fix": 0,
+      "drop": 0,
+      "error": 0,
+      "not_reached": 0
+    },
+    "DA-A4-003": {
+      "eligible_by_pack": 0,
+      "invocations": 0,
+      "keep": 0,
+      "fix": 0,
+      "drop": 0,
+      "error": 0,
+      "not_reached": 0
+    },
+    "DA-B3-001": {
+      "eligible_by_pack": 0,
+      "invocations": 0,
+      "keep": 0,
+      "fix": 0,
+      "drop": 0,
+      "error": 0,
+      "not_reached": 0
+    },
+    "DA-E1-001": {
+      "eligible_by_pack": 0,
+      "invocations": 0,
+      "keep": 0,
+      "fix": 0,
+      "drop": 0,
+      "error": 0,
+      "not_reached": 0
+    },
+    "DA-E1-004": {
+      "eligible_by_pack": 0,
+      "invocations": 0,
+      "keep": 0,
+      "fix": 0,
+      "drop": 0,
+      "error": 0,
+      "not_reached": 0
+    },
+    "DA-E1-008": {
+      "eligible_by_pack": 0,
+      "invocations": 0,
+      "keep": 0,
+      "fix": 0,
+      "drop": 0,
+      "error": 0,
+      "not_reached": 0
+    },
+    "DA-E1-006": {
+      "eligible_by_pack": 0,
+      "invocations": 0,
+      "keep": 0,
+      "fix": 0,
+      "drop": 0,
+      "error": 0,
+      "not_reached": 0
+    },
+    "DA-E1-005": {
+      "eligible_by_pack": 0,
+      "invocations": 0,
+      "keep": 0,
+      "fix": 0,
+      "drop": 0,
+      "error": 0,
+      "not_reached": 0
+    },
+    "DA-E1-007": {
+      "eligible_by_pack": 0,
+      "invocations": 0,
+      "keep": 0,
+      "fix": 0,
+      "drop": 0,
+      "error": 0,
+      "not_reached": 0
+    },
+    "DA-E2-001": {
+      "eligible_by_pack": 0,
+      "invocations": 0,
+      "keep": 0,
+      "fix": 0,
+      "drop": 0,
+      "error": 0,
+      "not_reached": 0
+    },
+    "DA-C3-002": {
+      "eligible_by_pack": 0,
+      "invocations": 0,
+      "keep": 0,
+      "fix": 0,
+      "drop": 0,
+      "error": 0,
+      "not_reached": 0
+    },
+    "DA-C4-002": {
+      "eligible_by_pack": 0,
+      "invocations": 0,
+      "keep": 0,
+      "fix": 0,
+      "drop": 0,
+      "error": 0,
+      "not_reached": 0
+    },
+    "DA-E4-005": {
+      "eligible_by_pack": 0,
+      "invocations": 0,
+      "keep": 0,
+      "fix": 0,
+      "drop": 0,
+      "error": 0,
+      "not_reached": 0
+    },
+    "DA-E4-010": {
+      "eligible_by_pack": 0,
+      "invocations": 0,
+      "keep": 0,
+      "fix": 0,
+      "drop": 0,
+      "error": 0,
+      "not_reached": 0
+    },
+    "DA-E4-009": {
+      "eligible_by_pack": 0,
+      "invocations": 0,
+      "keep": 0,
+      "fix": 0,
+      "drop": 0,
+      "error": 0,
+      "not_reached": 0
+    },
+    "DA-E4-007": {
+      "eligible_by_pack": 0,
+      "invocations": 0,
+      "keep": 0,
+      "fix": 0,
+      "drop": 0,
+      "error": 0,
+      "not_reached": 0
+    },
+    "DA-C1-004": {
+      "eligible_by_pack": 0,
+      "invocations": 0,
+      "keep": 0,
+      "fix": 0,
+      "drop": 0,
+      "error": 0,
+      "not_reached": 0
+    },
+    "DA-C1-005": {
+      "eligible_by_pack": 0,
+      "invocations": 0,
+      "keep": 0,
+      "fix": 0,
+      "drop": 0,
+      "error": 0,
+      "not_reached": 0
+    },
+    "DA-B4-009": {
+      "eligible_by_pack": 0,
+      "invocations": 0,
+      "keep": 0,
+      "fix": 0,
+      "drop": 0,
+      "error": 0,
+      "not_reached": 0
+    },
+    "DA-E3-003": {
+      "eligible_by_pack": 0,
+      "invocations": 0,
+      "keep": 0,
+      "fix": 0,
+      "drop": 0,
+      "error": 0,
+      "not_reached": 0
+    },
+    "DA-E3-004": {
+      "eligible_by_pack": 0,
+      "invocations": 0,
+      "keep": 0,
+      "fix": 0,
+      "drop": 0,
+      "error": 0,
+      "not_reached": 0
+    },
+    "DA-A1-004": {
+      "eligible_by_pack": 0,
+      "invocations": 0,
+      "keep": 0,
+      "fix": 0,
+      "drop": 0,
+      "error": 0,
+      "not_reached": 0
+    },
+    "DA-A2-008": {
+      "eligible_by_pack": 0,
+      "invocations": 0,
+      "keep": 0,
+      "fix": 0,
+      "drop": 0,
+      "error": 0,
+      "not_reached": 0
+    },
+    "DA-A5-001": {
+      "eligible_by_pack": 0,
+      "invocations": 0,
+      "keep": 0,
+      "fix": 0,
+      "drop": 0,
+      "error": 0,
+      "not_reached": 0
+    },
+    "DA-A3-002": {
+      "eligible_by_pack": 0,
+      "invocations": 0,
+      "keep": 0,
+      "fix": 0,
+      "drop": 0,
+      "error": 0,
+      "not_reached": 0
+    },
+    "DA-B1-002": {
+      "eligible_by_pack": 0,
+      "invocations": 0,
+      "keep": 0,
+      "fix": 0,
+      "drop": 0,
+      "error": 0,
+      "not_reached": 0
+    },
+    "DA-B2-002": {
+      "eligible_by_pack": 0,
+      "invocations": 0,
+      "keep": 0,
+      "fix": 0,
+      "drop": 0,
+      "error": 0,
+      "not_reached": 0
+    },
+    "DA-C3-001": {
+      "eligible_by_pack": 0,
+      "invocations": 0,
+      "keep": 0,
+      "fix": 0,
+      "drop": 0,
+      "error": 0,
+      "not_reached": 0
+    },
+    "DA-C3-003": {
+      "eligible_by_pack": 0,
+      "invocations": 0,
+      "keep": 0,
+      "fix": 0,
+      "drop": 0,
+      "error": 0,
+      "not_reached": 0
+    },
+    "DA-C5-002": {
+      "eligible_by_pack": 0,
+      "invocations": 0,
+      "keep": 0,
+      "fix": 0,
+      "drop": 0,
+      "error": 0,
+      "not_reached": 0
+    },
+    "DA-D4-001": {
+      "eligible_by_pack": 0,
+      "invocations": 0,
+      "keep": 0,
+      "fix": 0,
+      "drop": 0,
+      "error": 0,
+      "not_reached": 0
+    },
+    "DA-C1-006": {
+      "eligible_by_pack": 0,
+      "invocations": 0,
+      "keep": 0,
+      "fix": 0,
+      "drop": 0,
+      "error": 0,
+      "not_reached": 0
+    },
+    "DA-C2-003": {
+      "eligible_by_pack": 0,
+      "invocations": 0,
+      "keep": 0,
+      "fix": 0,
+      "drop": 0,
+      "error": 0,
+      "not_reached": 0
+    },
+    "DA-C5-005": {
+      "eligible_by_pack": 0,
+      "invocations": 0,
+      "keep": 0,
+      "fix": 0,
+      "drop": 0,
+      "error": 0,
+      "not_reached": 0
+    },
+    "DA-D3-003": {
+      "eligible_by_pack": 0,
+      "invocations": 0,
+      "keep": 0,
+      "fix": 0,
+      "drop": 0,
+      "error": 0,
+      "not_reached": 0
+    },
+    "DA-B4-007": {
+      "eligible_by_pack": 0,
+      "invocations": 0,
+      "keep": 0,
+      "fix": 0,
+      "drop": 0,
+      "error": 0,
+      "not_reached": 0
+    },
+    "DA-B4-008": {
+      "eligible_by_pack": 0,
+      "invocations": 0,
+      "keep": 0,
+      "fix": 0,
+      "drop": 0,
+      "error": 0,
+      "not_reached": 0
+    },
+    "DA-B4-012": {
+      "eligible_by_pack": 0,
+      "invocations": 0,
+      "keep": 0,
+      "fix": 0,
+      "drop": 0,
+      "error": 0,
+      "not_reached": 0
+    },
+    "DA-B4-010": {
+      "eligible_by_pack": 0,
+      "invocations": 0,
+      "keep": 0,
+      "fix": 0,
+      "drop": 0,
+      "error": 0,
+      "not_reached": 0
+    },
+    "DA-B4-011": {
+      "eligible_by_pack": 0,
+      "invocations": 0,
+      "keep": 0,
+      "fix": 0,
+      "drop": 0,
+      "error": 0,
+      "not_reached": 0
+    },
+    "DA-F1-005": {
+      "eligible_by_pack": 0,
+      "invocations": 0,
+      "keep": 0,
+      "fix": 0,
+      "drop": 0,
+      "error": 0,
+      "not_reached": 0
+    },
+    "DA-A3-001": {
+      "eligible_by_pack": 0,
+      "invocations": 0,
+      "keep": 0,
+      "fix": 0,
+      "drop": 0,
+      "error": 0,
+      "not_reached": 0
+    },
+    "DA-A1-005": {
+      "eligible_by_pack": 0,
+      "invocations": 0,
+      "keep": 0,
+      "fix": 0,
+      "drop": 0,
+      "error": 0,
+      "not_reached": 0
+    },
+    "DA-A6-003": {
+      "eligible_by_pack": 0,
+      "invocations": 0,
+      "keep": 0,
+      "fix": 0,
+      "drop": 0,
+      "error": 0,
+      "not_reached": 0
+    },
+    "DA-A5-002": {
+      "eligible_by_pack": 0,
+      "invocations": 0,
+      "keep": 0,
+      "fix": 0,
+      "drop": 0,
+      "error": 0,
+      "not_reached": 0
+    },
+    "DA-B2-001": {
+      "eligible_by_pack": 0,
+      "invocations": 0,
+      "keep": 0,
+      "fix": 0,
+      "drop": 0,
+      "error": 0,
+      "not_reached": 0
+    },
+    "DA-B4-001": {
+      "eligible_by_pack": 0,
+      "invocations": 0,
+      "keep": 0,
+      "fix": 0,
+      "drop": 0,
+      "error": 0,
+      "not_reached": 0
+    },
+    "DA-B5-001": {
+      "eligible_by_pack": 0,
+      "invocations": 0,
+      "keep": 0,
+      "fix": 0,
+      "drop": 0,
+      "error": 0,
+      "not_reached": 0
+    },
+    "DA-C5-001": {
+      "eligible_by_pack": 0,
+      "invocations": 0,
+      "keep": 0,
+      "fix": 0,
+      "drop": 0,
+      "error": 0,
+      "not_reached": 0
+    },
+    "DA-D3-005": {
+      "eligible_by_pack": 0,
+      "invocations": 0,
+      "keep": 0,
+      "fix": 0,
+      "drop": 0,
+      "error": 0,
+      "not_reached": 0
+    },
+    "DA-C3-004": {
+      "eligible_by_pack": 0,
+      "invocations": 0,
+      "keep": 0,
+      "fix": 0,
+      "drop": 0,
+      "error": 0,
+      "not_reached": 0
+    },
+    "DA-C1-001": {
+      "eligible_by_pack": 0,
+      "invocations": 0,
+      "keep": 0,
+      "fix": 0,
+      "drop": 0,
+      "error": 0,
+      "not_reached": 0
+    },
+    "DA-C2-001": {
+      "eligible_by_pack": 0,
+      "invocations": 0,
+      "keep": 0,
+      "fix": 0,
+      "drop": 0,
+      "error": 0,
+      "not_reached": 0
+    },
+    "DA-C5-006": {
+      "eligible_by_pack": 0,
+      "invocations": 0,
+      "keep": 0,
+      "fix": 0,
+      "drop": 0,
+      "error": 0,
+      "not_reached": 0
+    },
+    "DA-C3-005": {
+      "eligible_by_pack": 0,
+      "invocations": 0,
+      "keep": 0,
+      "fix": 0,
+      "drop": 0,
+      "error": 0,
+      "not_reached": 0
+    },
+    "DA-B4-013": {
+      "eligible_by_pack": 0,
+      "invocations": 0,
+      "keep": 0,
+      "fix": 0,
+      "drop": 0,
+      "error": 0,
+      "not_reached": 0
+    },
+    "DA-B2-003": {
+      "eligible_by_pack": 0,
+      "invocations": 0,
+      "keep": 0,
+      "fix": 0,
+      "drop": 0,
+      "error": 0,
+      "not_reached": 0
+    },
+    "DA-B5-002": {
+      "eligible_by_pack": 0,
+      "invocations": 0,
+      "keep": 0,
+      "fix": 0,
+      "drop": 0,
+      "error": 0,
+      "not_reached": 0
+    },
+    "DA-A1-006": {
+      "eligible_by_pack": 0,
+      "invocations": 0,
+      "keep": 0,
+      "fix": 0,
+      "drop": 0,
+      "error": 0,
+      "not_reached": 0
+    },
+    "DA-A6-002": {
+      "eligible_by_pack": 0,
+      "invocations": 0,
+      "keep": 0,
+      "fix": 0,
+      "drop": 0,
+      "error": 0,
+      "not_reached": 0
+    },
+    "DA-C1-007": {
+      "eligible_by_pack": 0,
+      "invocations": 0,
+      "keep": 0,
+      "fix": 0,
+      "drop": 0,
+      "error": 0,
+      "not_reached": 0
+    },
+    "DA-C2-004": {
+      "eligible_by_pack": 0,
+      "invocations": 0,
+      "keep": 0,
+      "fix": 0,
+      "drop": 0,
+      "error": 0,
+      "not_reached": 0
+    },
+    "DA-C3-006": {
+      "eligible_by_pack": 0,
+      "invocations": 0,
+      "keep": 0,
+      "fix": 0,
+      "drop": 0,
+      "error": 0,
+      "not_reached": 0
+    },
+    "DA-C4-003": {
+      "eligible_by_pack": 0,
+      "invocations": 0,
+      "keep": 0,
+      "fix": 0,
+      "drop": 0,
+      "error": 0,
+      "not_reached": 0
+    },
+    "DA-D1-001": {
+      "eligible_by_pack": 0,
+      "invocations": 0,
+      "keep": 0,
+      "fix": 0,
+      "drop": 0,
+      "error": 0,
+      "not_reached": 0
+    },
+    "DA-F1-006": {
+      "eligible_by_pack": 0,
+      "invocations": 0,
+      "keep": 0,
+      "fix": 0,
+      "drop": 0,
+      "error": 0,
+      "not_reached": 0
+    },
+    "DA-D3-004": {
+      "eligible_by_pack": 0,
+      "invocations": 0,
+      "keep": 0,
+      "fix": 0,
+      "drop": 0,
+      "error": 0,
+      "not_reached": 0
+    },
+    "DB-A1-001": {
+      "eligible_by_pack": 0,
+      "invocations": 0,
+      "keep": 0,
+      "fix": 0,
+      "drop": 0,
+      "error": 0,
+      "not_reached": 0
+    },
+    "DB-A1-002": {
+      "eligible_by_pack": 5997,
+      "invocations": 5997,
+      "keep": 5997,
+      "fix": 0,
+      "drop": 0,
+      "error": 0,
+      "not_reached": 0
+    },
+    "DB-A2-001": {
+      "eligible_by_pack": 0,
+      "invocations": 0,
+      "keep": 0,
+      "fix": 0,
+      "drop": 0,
+      "error": 0,
+      "not_reached": 0
+    },
+    "DB-A3-001": {
+      "eligible_by_pack": 0,
+      "invocations": 0,
+      "keep": 0,
+      "fix": 0,
+      "drop": 0,
+      "error": 0,
+      "not_reached": 0
+    },
+    "DB-A3-007": {
+      "eligible_by_pack": 0,
+      "invocations": 0,
+      "keep": 0,
+      "fix": 0,
+      "drop": 0,
+      "error": 0,
+      "not_reached": 0
+    },
+    "DB-A3-002": {
+      "eligible_by_pack": 0,
+      "invocations": 0,
+      "keep": 0,
+      "fix": 0,
+      "drop": 0,
+      "error": 0,
+      "not_reached": 0
+    },
+    "DB-A3-005": {
+      "eligible_by_pack": 0,
+      "invocations": 0,
+      "keep": 0,
+      "fix": 0,
+      "drop": 0,
+      "error": 0,
+      "not_reached": 0
+    },
+    "DB-A3-006": {
+      "eligible_by_pack": 0,
+      "invocations": 0,
+      "keep": 0,
+      "fix": 0,
+      "drop": 0,
+      "error": 0,
+      "not_reached": 0
+    },
+    "DB-A5-001": {
+      "eligible_by_pack": 0,
+      "invocations": 0,
+      "keep": 0,
+      "fix": 0,
+      "drop": 0,
+      "error": 0,
+      "not_reached": 0
+    },
+    "DB-A5-003": {
+      "eligible_by_pack": 0,
+      "invocations": 0,
+      "keep": 0,
+      "fix": 0,
+      "drop": 0,
+      "error": 0,
+      "not_reached": 0
+    },
+    "DB-A5-009": {
+      "eligible_by_pack": 0,
+      "invocations": 0,
+      "keep": 0,
+      "fix": 0,
+      "drop": 0,
+      "error": 0,
+      "not_reached": 0
+    },
+    "DB-A5-006": {
+      "eligible_by_pack": 0,
+      "invocations": 0,
+      "keep": 0,
+      "fix": 0,
+      "drop": 0,
+      "error": 0,
+      "not_reached": 0
+    },
+    "DB-A5-007": {
+      "eligible_by_pack": 0,
+      "invocations": 0,
+      "keep": 0,
+      "fix": 0,
+      "drop": 0,
+      "error": 0,
+      "not_reached": 0
+    },
+    "DB-A6-001": {
+      "eligible_by_pack": 0,
+      "invocations": 0,
+      "keep": 0,
+      "fix": 0,
+      "drop": 0,
+      "error": 0,
+      "not_reached": 0
+    },
+    "DB-A6-020": {
+      "eligible_by_pack": 0,
+      "invocations": 0,
+      "keep": 0,
+      "fix": 0,
+      "drop": 0,
+      "error": 0,
+      "not_reached": 0
+    },
+    "DB-A6-003": {
+      "eligible_by_pack": 0,
+      "invocations": 0,
+      "keep": 0,
+      "fix": 0,
+      "drop": 0,
+      "error": 0,
+      "not_reached": 0
+    },
+    "DB-A6-017": {
+      "eligible_by_pack": 14709,
+      "invocations": 14709,
+      "keep": 14517,
+      "fix": 192,
+      "drop": 0,
+      "error": 0,
+      "not_reached": 0
+    },
+    "DB-A6-006": {
+      "eligible_by_pack": 0,
+      "invocations": 0,
+      "keep": 0,
+      "fix": 0,
+      "drop": 0,
+      "error": 0,
+      "not_reached": 0
+    },
+    "DB-A6-007": {
+      "eligible_by_pack": 0,
+      "invocations": 0,
+      "keep": 0,
+      "fix": 0,
+      "drop": 0,
+      "error": 0,
+      "not_reached": 0
+    },
+    "DB-A6-008": {
+      "eligible_by_pack": 0,
+      "invocations": 0,
+      "keep": 0,
+      "fix": 0,
+      "drop": 0,
+      "error": 0,
+      "not_reached": 0
+    },
+    "DB-A6-021": {
+      "eligible_by_pack": 0,
+      "invocations": 0,
+      "keep": 0,
+      "fix": 0,
+      "drop": 0,
+      "error": 0,
+      "not_reached": 0
+    },
+    "DB-A6-013": {
+      "eligible_by_pack": 5997,
+      "invocations": 5997,
+      "keep": 5947,
+      "fix": 50,
+      "drop": 0,
+      "error": 0,
+      "not_reached": 0
+    },
+    "DB-G1-001": {
+      "eligible_by_pack": 0,
+      "invocations": 0,
+      "keep": 0,
+      "fix": 0,
+      "drop": 0,
+      "error": 0,
+      "not_reached": 0
+    },
+    "DB-G1-015": {
+      "eligible_by_pack": 0,
+      "invocations": 0,
+      "keep": 0,
+      "fix": 0,
+      "drop": 0,
+      "error": 0,
+      "not_reached": 0
+    },
+    "DB-G1-003": {
+      "eligible_by_pack": 0,
+      "invocations": 0,
+      "keep": 0,
+      "fix": 0,
+      "drop": 0,
+      "error": 0,
+      "not_reached": 0
+    },
+    "DB-G1-016": {
+      "eligible_by_pack": 14709,
+      "invocations": 14709,
+      "keep": 14706,
+      "fix": 3,
+      "drop": 0,
+      "error": 0,
+      "not_reached": 0
+    },
+    "DB-G1-006": {
+      "eligible_by_pack": 0,
+      "invocations": 0,
+      "keep": 0,
+      "fix": 0,
+      "drop": 0,
+      "error": 0,
+      "not_reached": 0
+    },
+    "DB-G1-007": {
+      "eligible_by_pack": 0,
+      "invocations": 0,
+      "keep": 0,
+      "fix": 0,
+      "drop": 0,
+      "error": 0,
+      "not_reached": 0
+    },
+    "DB-G1-013": {
+      "eligible_by_pack": 0,
+      "invocations": 0,
+      "keep": 0,
+      "fix": 0,
+      "drop": 0,
+      "error": 0,
+      "not_reached": 0
+    },
+    "DB-G1-010": {
+      "eligible_by_pack": 5997,
+      "invocations": 5997,
+      "keep": 5952,
+      "fix": 45,
+      "drop": 0,
+      "error": 0,
+      "not_reached": 0
+    },
+    "DB-G1-014": {
+      "eligible_by_pack": 0,
+      "invocations": 0,
+      "keep": 0,
+      "fix": 0,
+      "drop": 0,
+      "error": 0,
+      "not_reached": 0
+    },
+    "DB-G2-003": {
+      "eligible_by_pack": 0,
+      "invocations": 0,
+      "keep": 0,
+      "fix": 0,
+      "drop": 0,
+      "error": 0,
+      "not_reached": 0
+    },
+    "DB-G4-006": {
+      "eligible_by_pack": 0,
+      "invocations": 0,
+      "keep": 0,
+      "fix": 0,
+      "drop": 0,
+      "error": 0,
+      "not_reached": 0
+    },
+    "DB-G4-007": {
+      "eligible_by_pack": 14709,
+      "invocations": 14709,
+      "keep": 14709,
+      "fix": 0,
+      "drop": 0,
+      "error": 0,
+      "not_reached": 0
+    },
+    "DB-G4-002": {
+      "eligible_by_pack": 0,
+      "invocations": 0,
+      "keep": 0,
+      "fix": 0,
+      "drop": 0,
+      "error": 0,
+      "not_reached": 0
+    },
+    "DB-G4-003": {
+      "eligible_by_pack": 0,
+      "invocations": 0,
+      "keep": 0,
+      "fix": 0,
+      "drop": 0,
+      "error": 0,
+      "not_reached": 0
+    },
+    "DB-G4-004": {
+      "eligible_by_pack": 0,
+      "invocations": 0,
+      "keep": 0,
+      "fix": 0,
+      "drop": 0,
+      "error": 0,
+      "not_reached": 0
+    },
+    "DB-B2-001": {
+      "eligible_by_pack": 14709,
+      "invocations": 14709,
+      "keep": 14705,
+      "fix": 4,
+      "drop": 0,
+      "error": 0,
+      "not_reached": 0
+    },
+    "DB-B2-002": {
+      "eligible_by_pack": 0,
+      "invocations": 0,
+      "keep": 0,
+      "fix": 0,
+      "drop": 0,
+      "error": 0,
+      "not_reached": 0
+    },
+    "DB-B2-008": {
+      "eligible_by_pack": 0,
+      "invocations": 0,
+      "keep": 0,
+      "fix": 0,
+      "drop": 0,
+      "error": 0,
+      "not_reached": 0
+    },
+    "DB-B2-003": {
+      "eligible_by_pack": 0,
+      "invocations": 0,
+      "keep": 0,
+      "fix": 0,
+      "drop": 0,
+      "error": 0,
+      "not_reached": 0
+    },
+    "DB-B2-004": {
+      "eligible_by_pack": 5997,
+      "invocations": 5997,
+      "keep": 5991,
+      "fix": 6,
+      "drop": 0,
+      "error": 0,
+      "not_reached": 0
+    },
+    "DB-B2-007": {
+      "eligible_by_pack": 0,
+      "invocations": 0,
+      "keep": 0,
+      "fix": 0,
+      "drop": 0,
+      "error": 0,
+      "not_reached": 0
+    },
+    "DB-B3-001": {
+      "eligible_by_pack": 0,
+      "invocations": 0,
+      "keep": 0,
+      "fix": 0,
+      "drop": 0,
+      "error": 0,
+      "not_reached": 0
+    },
+    "DB-A3-004": {
+      "eligible_by_pack": 0,
+      "invocations": 0,
+      "keep": 0,
+      "fix": 0,
+      "drop": 0,
+      "error": 0,
+      "not_reached": 0
+    },
+    "DB-A4-001": {
+      "eligible_by_pack": 0,
+      "invocations": 0,
+      "keep": 0,
+      "fix": 0,
+      "drop": 0,
+      "error": 0,
+      "not_reached": 0
+    },
+    "DB-A6-019": {
+      "eligible_by_pack": 0,
+      "invocations": 0,
+      "keep": 0,
+      "fix": 0,
+      "drop": 0,
+      "error": 0,
+      "not_reached": 0
+    },
+    "DB-B4-008": {
+      "eligible_by_pack": 14709,
+      "invocations": 14709,
+      "keep": 14709,
+      "fix": 0,
+      "drop": 0,
+      "error": 0,
+      "not_reached": 0
+    },
+    "DB-C3-001": {
+      "eligible_by_pack": 0,
+      "invocations": 0,
+      "keep": 0,
+      "fix": 0,
+      "drop": 0,
+      "error": 0,
+      "not_reached": 0
+    },
+    "DB-C3-002": {
+      "eligible_by_pack": 14709,
+      "invocations": 14709,
+      "keep": 14707,
+      "fix": 0,
+      "drop": 2,
+      "error": 0,
+      "not_reached": 0
+    },
+    "DB-C3-025": {
+      "eligible_by_pack": 0,
+      "invocations": 0,
+      "keep": 0,
+      "fix": 0,
+      "drop": 0,
+      "error": 0,
+      "not_reached": 0
+    },
+    "DB-C3-004": {
+      "eligible_by_pack": 0,
+      "invocations": 0,
+      "keep": 0,
+      "fix": 0,
+      "drop": 0,
+      "error": 0,
+      "not_reached": 0
+    },
+    "DB-C3-020": {
+      "eligible_by_pack": 5997,
+      "invocations": 5997,
+      "keep": 5997,
+      "fix": 0,
+      "drop": 0,
+      "error": 0,
+      "not_reached": 0
+    },
+    "DB-C4-001": {
+      "eligible_by_pack": 0,
+      "invocations": 0,
+      "keep": 0,
+      "fix": 0,
+      "drop": 0,
+      "error": 0,
+      "not_reached": 0
+    },
+    "DB-C4-002": {
+      "eligible_by_pack": 14709,
+      "invocations": 14707,
+      "keep": 14707,
+      "fix": 0,
+      "drop": 0,
+      "error": 0,
+      "not_reached": 2
+    },
+    "DB-C4-003": {
+      "eligible_by_pack": 0,
+      "invocations": 0,
+      "keep": 0,
+      "fix": 0,
+      "drop": 0,
+      "error": 0,
+      "not_reached": 0
+    },
+    "DB-C4-005": {
+      "eligible_by_pack": 0,
+      "invocations": 0,
+      "keep": 0,
+      "fix": 0,
+      "drop": 0,
+      "error": 0,
+      "not_reached": 0
+    },
+    "DB-C4-006": {
+      "eligible_by_pack": 5997,
+      "invocations": 5997,
+      "keep": 5958,
+      "fix": 0,
+      "drop": 39,
+      "error": 0,
+      "not_reached": 0
+    },
+    "DB-C5-021": {
+      "eligible_by_pack": 0,
+      "invocations": 0,
+      "keep": 0,
+      "fix": 0,
+      "drop": 0,
+      "error": 0,
+      "not_reached": 0
+    },
+    "DB-C5-016": {
+      "eligible_by_pack": 14709,
+      "invocations": 14707,
+      "keep": 14707,
+      "fix": 0,
+      "drop": 0,
+      "error": 0,
+      "not_reached": 2
+    },
+    "DB-C5-001": {
+      "eligible_by_pack": 0,
+      "invocations": 0,
+      "keep": 0,
+      "fix": 0,
+      "drop": 0,
+      "error": 0,
+      "not_reached": 0
+    },
+    "DB-C5-003": {
+      "eligible_by_pack": 0,
+      "invocations": 0,
+      "keep": 0,
+      "fix": 0,
+      "drop": 0,
+      "error": 0,
+      "not_reached": 0
+    },
+    "DB-C5-004": {
+      "eligible_by_pack": 0,
+      "invocations": 0,
+      "keep": 0,
+      "fix": 0,
+      "drop": 0,
+      "error": 0,
+      "not_reached": 0
+    },
+    "DB-C5-017": {
+      "eligible_by_pack": 0,
+      "invocations": 0,
+      "keep": 0,
+      "fix": 0,
+      "drop": 0,
+      "error": 0,
+      "not_reached": 0
+    },
+    "DB-C5-006": {
+      "eligible_by_pack": 5997,
+      "invocations": 5958,
+      "keep": 5735,
+      "fix": 0,
+      "drop": 223,
+      "error": 0,
+      "not_reached": 39
+    },
+    "DB-C5-018": {
+      "eligible_by_pack": 0,
+      "invocations": 0,
+      "keep": 0,
+      "fix": 0,
+      "drop": 0,
+      "error": 0,
+      "not_reached": 0
+    },
+    "DB-D4-001": {
+      "eligible_by_pack": 0,
+      "invocations": 0,
+      "keep": 0,
+      "fix": 0,
+      "drop": 0,
+      "error": 0,
+      "not_reached": 0
+    },
+    "DB-D4-003": {
+      "eligible_by_pack": 0,
+      "invocations": 0,
+      "keep": 0,
+      "fix": 0,
+      "drop": 0,
+      "error": 0,
+      "not_reached": 0
+    },
+    "DB-D4-013": {
+      "eligible_by_pack": 14709,
+      "invocations": 14707,
+      "keep": 14651,
+      "fix": 0,
+      "drop": 56,
+      "error": 0,
+      "not_reached": 2
+    },
+    "DB-D4-005": {
+      "eligible_by_pack": 0,
+      "invocations": 0,
+      "keep": 0,
+      "fix": 0,
+      "drop": 0,
+      "error": 0,
+      "not_reached": 0
+    },
+    "DB-D4-018": {
+      "eligible_by_pack": 0,
+      "invocations": 0,
+      "keep": 0,
+      "fix": 0,
+      "drop": 0,
+      "error": 0,
+      "not_reached": 0
+    },
+    "DB-D4-007": {
+      "eligible_by_pack": 0,
+      "invocations": 0,
+      "keep": 0,
+      "fix": 0,
+      "drop": 0,
+      "error": 0,
+      "not_reached": 0
+    },
+    "DB-D4-008": {
+      "eligible_by_pack": 0,
+      "invocations": 0,
+      "keep": 0,
+      "fix": 0,
+      "drop": 0,
+      "error": 0,
+      "not_reached": 0
+    },
+    "DB-D4-009": {
+      "eligible_by_pack": 0,
+      "invocations": 0,
+      "keep": 0,
+      "fix": 0,
+      "drop": 0,
+      "error": 0,
+      "not_reached": 0
+    },
+    "DB-D4-012": {
+      "eligible_by_pack": 5997,
+      "invocations": 5735,
+      "keep": 5733,
+      "fix": 0,
+      "drop": 2,
+      "error": 0,
+      "not_reached": 262
+    },
+    "DB-D4-016": {
+      "eligible_by_pack": 0,
+      "invocations": 0,
+      "keep": 0,
+      "fix": 0,
+      "drop": 0,
+      "error": 0,
+      "not_reached": 0
+    },
+    "DB-D5-001": {
+      "eligible_by_pack": 0,
+      "invocations": 0,
+      "keep": 0,
+      "fix": 0,
+      "drop": 0,
+      "error": 0,
+      "not_reached": 0
+    },
+    "DB-D5-004": {
+      "eligible_by_pack": 5997,
+      "invocations": 5733,
+      "keep": 5733,
+      "fix": 0,
+      "drop": 0,
+      "error": 0,
+      "not_reached": 264
+    },
+    "DB-F3-001": {
+      "eligible_by_pack": 0,
+      "invocations": 0,
+      "keep": 0,
+      "fix": 0,
+      "drop": 0,
+      "error": 0,
+      "not_reached": 0
+    },
+    "DB-F3-004": {
+      "eligible_by_pack": 14709,
+      "invocations": 14651,
+      "keep": 14596,
+      "fix": 0,
+      "drop": 55,
+      "error": 0,
+      "not_reached": 58
+    },
+    "DB-F3-005": {
+      "eligible_by_pack": 0,
+      "invocations": 0,
+      "keep": 0,
+      "fix": 0,
+      "drop": 0,
+      "error": 0,
+      "not_reached": 0
+    },
+    "DB-F3-003": {
+      "eligible_by_pack": 5997,
+      "invocations": 5733,
+      "keep": 5706,
+      "fix": 0,
+      "drop": 27,
+      "error": 0,
+      "not_reached": 264
+    },
+    "DB-G1-012": {
+      "eligible_by_pack": 0,
+      "invocations": 0,
+      "keep": 0,
+      "fix": 0,
+      "drop": 0,
+      "error": 0,
+      "not_reached": 0
+    },
+    "DB-G1-011": {
+      "eligible_by_pack": 0,
+      "invocations": 0,
+      "keep": 0,
+      "fix": 0,
+      "drop": 0,
+      "error": 0,
+      "not_reached": 0
+    },
+    "DB-G3-003": {
+      "eligible_by_pack": 14709,
+      "invocations": 14596,
+      "keep": 14494,
+      "fix": 0,
+      "drop": 102,
+      "error": 0,
+      "not_reached": 113
+    },
+    "DB-C1-001": {
+      "eligible_by_pack": 0,
+      "invocations": 0,
+      "keep": 0,
+      "fix": 0,
+      "drop": 0,
+      "error": 0,
+      "not_reached": 0
+    },
+    "DB-C1-003": {
+      "eligible_by_pack": 0,
+      "invocations": 0,
+      "keep": 0,
+      "fix": 0,
+      "drop": 0,
+      "error": 0,
+      "not_reached": 0
+    },
+    "DB-C1-005": {
+      "eligible_by_pack": 14709,
+      "invocations": 14494,
+      "keep": 14189,
+      "fix": 304,
+      "drop": 1,
+      "error": 0,
+      "not_reached": 215
+    },
+    "DB-C1-006": {
+      "eligible_by_pack": 0,
+      "invocations": 0,
+      "keep": 0,
+      "fix": 0,
+      "drop": 0,
+      "error": 0,
+      "not_reached": 0
+    },
+    "DB-C1-018": {
+      "eligible_by_pack": 0,
+      "invocations": 0,
+      "keep": 0,
+      "fix": 0,
+      "drop": 0,
+      "error": 0,
+      "not_reached": 0
+    },
+    "DB-C1-010": {
+      "eligible_by_pack": 0,
+      "invocations": 0,
+      "keep": 0,
+      "fix": 0,
+      "drop": 0,
+      "error": 0,
+      "not_reached": 0
+    },
+    "DB-C1-019": {
+      "eligible_by_pack": 0,
+      "invocations": 0,
+      "keep": 0,
+      "fix": 0,
+      "drop": 0,
+      "error": 0,
+      "not_reached": 0
+    },
+    "DB-C1-012": {
+      "eligible_by_pack": 0,
+      "invocations": 0,
+      "keep": 0,
+      "fix": 0,
+      "drop": 0,
+      "error": 0,
+      "not_reached": 0
+    },
+    "DB-C1-013": {
+      "eligible_by_pack": 0,
+      "invocations": 0,
+      "keep": 0,
+      "fix": 0,
+      "drop": 0,
+      "error": 0,
+      "not_reached": 0
+    },
+    "DB-C1-021": {
+      "eligible_by_pack": 0,
+      "invocations": 0,
+      "keep": 0,
+      "fix": 0,
+      "drop": 0,
+      "error": 0,
+      "not_reached": 0
+    },
+    "DB-C1-016": {
+      "eligible_by_pack": 5997,
+      "invocations": 5706,
+      "keep": 4869,
+      "fix": 837,
+      "drop": 0,
+      "error": 0,
+      "not_reached": 291
+    },
+    "DB-C1-022": {
+      "eligible_by_pack": 0,
+      "invocations": 0,
+      "keep": 0,
+      "fix": 0,
+      "drop": 0,
+      "error": 0,
+      "not_reached": 0
+    },
+    "DB-C2-001": {
+      "eligible_by_pack": 0,
+      "invocations": 0,
+      "keep": 0,
+      "fix": 0,
+      "drop": 0,
+      "error": 0,
+      "not_reached": 0
+    },
+    "DB-C2-023": {
+      "eligible_by_pack": 0,
+      "invocations": 0,
+      "keep": 0,
+      "fix": 0,
+      "drop": 0,
+      "error": 0,
+      "not_reached": 0
+    },
+    "DB-C2-003": {
+      "eligible_by_pack": 0,
+      "invocations": 0,
+      "keep": 0,
+      "fix": 0,
+      "drop": 0,
+      "error": 0,
+      "not_reached": 0
+    },
+    "DB-C2-014": {
+      "eligible_by_pack": 14709,
+      "invocations": 14493,
+      "keep": 14045,
+      "fix": 448,
+      "drop": 0,
+      "error": 0,
+      "not_reached": 216
+    },
+    "DB-C2-021": {
+      "eligible_by_pack": 0,
+      "invocations": 0,
+      "keep": 0,
+      "fix": 0,
+      "drop": 0,
+      "error": 0,
+      "not_reached": 0
+    },
+    "DB-C2-008": {
+      "eligible_by_pack": 0,
+      "invocations": 0,
+      "keep": 0,
+      "fix": 0,
+      "drop": 0,
+      "error": 0,
+      "not_reached": 0
+    },
+    "DB-C2-015": {
+      "eligible_by_pack": 0,
+      "invocations": 0,
+      "keep": 0,
+      "fix": 0,
+      "drop": 0,
+      "error": 0,
+      "not_reached": 0
+    },
+    "DB-C2-010": {
+      "eligible_by_pack": 0,
+      "invocations": 0,
+      "keep": 0,
+      "fix": 0,
+      "drop": 0,
+      "error": 0,
+      "not_reached": 0
+    },
+    "DB-C2-016": {
+      "eligible_by_pack": 0,
+      "invocations": 0,
+      "keep": 0,
+      "fix": 0,
+      "drop": 0,
+      "error": 0,
+      "not_reached": 0
+    },
+    "DB-C2-013": {
+      "eligible_by_pack": 5997,
+      "invocations": 5706,
+      "keep": 5458,
+      "fix": 248,
+      "drop": 0,
+      "error": 0,
+      "not_reached": 291
+    },
+    "DB-C2-017": {
+      "eligible_by_pack": 0,
+      "invocations": 0,
+      "keep": 0,
+      "fix": 0,
+      "drop": 0,
+      "error": 0,
+      "not_reached": 0
+    },
+    "DB-C2-018": {
+      "eligible_by_pack": 0,
+      "invocations": 0,
+      "keep": 0,
+      "fix": 0,
+      "drop": 0,
+      "error": 0,
+      "not_reached": 0
+    },
+    "DB-C3-006": {
+      "eligible_by_pack": 0,
+      "invocations": 0,
+      "keep": 0,
+      "fix": 0,
+      "drop": 0,
+      "error": 0,
+      "not_reached": 0
+    },
+    "DB-C3-023": {
+      "eligible_by_pack": 0,
+      "invocations": 0,
+      "keep": 0,
+      "fix": 0,
+      "drop": 0,
+      "error": 0,
+      "not_reached": 0
+    },
+    "DB-C3-017": {
+      "eligible_by_pack": 0,
+      "invocations": 0,
+      "keep": 0,
+      "fix": 0,
+      "drop": 0,
+      "error": 0,
+      "not_reached": 0
+    },
+    "DB-C3-024": {
+      "eligible_by_pack": 0,
+      "invocations": 0,
+      "keep": 0,
+      "fix": 0,
+      "drop": 0,
+      "error": 0,
+      "not_reached": 0
+    },
+    "DB-C3-010": {
+      "eligible_by_pack": 0,
+      "invocations": 0,
+      "keep": 0,
+      "fix": 0,
+      "drop": 0,
+      "error": 0,
+      "not_reached": 0
+    },
+    "DB-C3-021": {
+      "eligible_by_pack": 0,
+      "invocations": 0,
+      "keep": 0,
+      "fix": 0,
+      "drop": 0,
+      "error": 0,
+      "not_reached": 0
+    },
+    "DB-C4-015": {
+      "eligible_by_pack": 0,
+      "invocations": 0,
+      "keep": 0,
+      "fix": 0,
+      "drop": 0,
+      "error": 0,
+      "not_reached": 0
+    },
+    "DB-C4-007": {
+      "eligible_by_pack": 0,
+      "invocations": 0,
+      "keep": 0,
+      "fix": 0,
+      "drop": 0,
+      "error": 0,
+      "not_reached": 0
+    },
+    "DB-C4-009": {
+      "eligible_by_pack": 0,
+      "invocations": 0,
+      "keep": 0,
+      "fix": 0,
+      "drop": 0,
+      "error": 0,
+      "not_reached": 0
+    },
+    "DB-C4-010": {
+      "eligible_by_pack": 0,
+      "invocations": 0,
+      "keep": 0,
+      "fix": 0,
+      "drop": 0,
+      "error": 0,
+      "not_reached": 0
+    },
+    "DB-C4-013": {
+      "eligible_by_pack": 0,
+      "invocations": 0,
+      "keep": 0,
+      "fix": 0,
+      "drop": 0,
+      "error": 0,
+      "not_reached": 0
+    },
+    "DB-C4-014": {
+      "eligible_by_pack": 0,
+      "invocations": 0,
+      "keep": 0,
+      "fix": 0,
+      "drop": 0,
+      "error": 0,
+      "not_reached": 0
+    },
+    "DB-C5-007": {
+      "eligible_by_pack": 0,
+      "invocations": 0,
+      "keep": 0,
+      "fix": 0,
+      "drop": 0,
+      "error": 0,
+      "not_reached": 0
+    },
+    "DB-C5-009": {
+      "eligible_by_pack": 0,
+      "invocations": 0,
+      "keep": 0,
+      "fix": 0,
+      "drop": 0,
+      "error": 0,
+      "not_reached": 0
+    },
+    "DB-C5-014": {
+      "eligible_by_pack": 0,
+      "invocations": 0,
+      "keep": 0,
+      "fix": 0,
+      "drop": 0,
+      "error": 0,
+      "not_reached": 0
+    },
+    "DB-D2-003": {
+      "eligible_by_pack": 14709,
+      "invocations": 14493,
+      "keep": 14486,
+      "fix": 7,
+      "drop": 0,
+      "error": 0,
+      "not_reached": 216
+    },
+    "DB-D2-002": {
+      "eligible_by_pack": 0,
+      "invocations": 0,
+      "keep": 0,
+      "fix": 0,
+      "drop": 0,
+      "error": 0,
+      "not_reached": 0
+    },
+    "DB-D3-001": {
+      "eligible_by_pack": 0,
+      "invocations": 0,
+      "keep": 0,
+      "fix": 0,
+      "drop": 0,
+      "error": 0,
+      "not_reached": 0
+    },
+    "DB-D3-021": {
+      "eligible_by_pack": 0,
+      "invocations": 0,
+      "keep": 0,
+      "fix": 0,
+      "drop": 0,
+      "error": 0,
+      "not_reached": 0
+    },
+    "DB-D3-003": {
+      "eligible_by_pack": 0,
+      "invocations": 0,
+      "keep": 0,
+      "fix": 0,
+      "drop": 0,
+      "error": 0,
+      "not_reached": 0
+    },
+    "DB-D3-005": {
+      "eligible_by_pack": 14709,
+      "invocations": 14493,
+      "keep": 14493,
+      "fix": 0,
+      "drop": 0,
+      "error": 0,
+      "not_reached": 216
+    },
+    "DB-D3-020": {
+      "eligible_by_pack": 0,
+      "invocations": 0,
+      "keep": 0,
+      "fix": 0,
+      "drop": 0,
+      "error": 0,
+      "not_reached": 0
+    },
+    "DB-D3-008": {
+      "eligible_by_pack": 0,
+      "invocations": 0,
+      "keep": 0,
+      "fix": 0,
+      "drop": 0,
+      "error": 0,
+      "not_reached": 0
+    },
+    "DB-D3-016": {
+      "eligible_by_pack": 0,
+      "invocations": 0,
+      "keep": 0,
+      "fix": 0,
+      "drop": 0,
+      "error": 0,
+      "not_reached": 0
+    },
+    "DB-D3-017": {
+      "eligible_by_pack": 0,
+      "invocations": 0,
+      "keep": 0,
+      "fix": 0,
+      "drop": 0,
+      "error": 0,
+      "not_reached": 0
+    },
+    "DB-D3-022": {
+      "eligible_by_pack": 0,
+      "invocations": 0,
+      "keep": 0,
+      "fix": 0,
+      "drop": 0,
+      "error": 0,
+      "not_reached": 0
+    },
+    "DB-D3-012": {
+      "eligible_by_pack": 0,
+      "invocations": 0,
+      "keep": 0,
+      "fix": 0,
+      "drop": 0,
+      "error": 0,
+      "not_reached": 0
+    },
+    "DB-D3-018": {
+      "eligible_by_pack": 0,
+      "invocations": 0,
+      "keep": 0,
+      "fix": 0,
+      "drop": 0,
+      "error": 0,
+      "not_reached": 0
+    },
+    "DB-D3-014": {
+      "eligible_by_pack": 5997,
+      "invocations": 5706,
+      "keep": 5706,
+      "fix": 0,
+      "drop": 0,
+      "error": 0,
+      "not_reached": 291
+    },
+    "DB-D3-019": {
+      "eligible_by_pack": 0,
+      "invocations": 0,
+      "keep": 0,
+      "fix": 0,
+      "drop": 0,
+      "error": 0,
+      "not_reached": 0
+    },
+    "DB-D4-014": {
+      "eligible_by_pack": 0,
+      "invocations": 0,
+      "keep": 0,
+      "fix": 0,
+      "drop": 0,
+      "error": 0,
+      "not_reached": 0
+    },
+    "DB-D4-017": {
+      "eligible_by_pack": 0,
+      "invocations": 0,
+      "keep": 0,
+      "fix": 0,
+      "drop": 0,
+      "error": 0,
+      "not_reached": 0
+    },
+    "DB-D5-003": {
+      "eligible_by_pack": 0,
+      "invocations": 0,
+      "keep": 0,
+      "fix": 0,
+      "drop": 0,
+      "error": 0,
+      "not_reached": 0
+    },
+    "DB-D5-002": {
+      "eligible_by_pack": 14709,
+      "invocations": 14493,
+      "keep": 14493,
+      "fix": 0,
+      "drop": 0,
+      "error": 0,
+      "not_reached": 216
+    },
+    "DB-H3-001": {
+      "eligible_by_pack": 0,
+      "invocations": 0,
+      "keep": 0,
+      "fix": 0,
+      "drop": 0,
+      "error": 0,
+      "not_reached": 0
+    },
+    "DB-B4-009": {
+      "eligible_by_pack": 0,
+      "invocations": 0,
+      "keep": 0,
+      "fix": 0,
+      "drop": 0,
+      "error": 0,
+      "not_reached": 0
+    },
+    "DB-B4-001": {
+      "eligible_by_pack": 0,
+      "invocations": 0,
+      "keep": 0,
+      "fix": 0,
+      "drop": 0,
+      "error": 0,
+      "not_reached": 0
+    },
+    "DB-B4-002": {
+      "eligible_by_pack": 0,
+      "invocations": 0,
+      "keep": 0,
+      "fix": 0,
+      "drop": 0,
+      "error": 0,
+      "not_reached": 0
+    },
+    "DB-B4-011": {
+      "eligible_by_pack": 0,
+      "invocations": 0,
+      "keep": 0,
+      "fix": 0,
+      "drop": 0,
+      "error": 0,
+      "not_reached": 0
+    },
+    "DB-B4-003": {
+      "eligible_by_pack": 0,
+      "invocations": 0,
+      "keep": 0,
+      "fix": 0,
+      "drop": 0,
+      "error": 0,
+      "not_reached": 0
+    },
+    "DB-B4-004": {
+      "eligible_by_pack": 0,
+      "invocations": 0,
+      "keep": 0,
+      "fix": 0,
+      "drop": 0,
+      "error": 0,
+      "not_reached": 0
+    },
+    "DB-B4-007": {
+      "eligible_by_pack": 0,
+      "invocations": 0,
+      "keep": 0,
+      "fix": 0,
+      "drop": 0,
+      "error": 0,
+      "not_reached": 0
+    },
+    "DB-B4-006": {
+      "eligible_by_pack": 5997,
+      "invocations": 5706,
+      "keep": 5706,
+      "fix": 0,
+      "drop": 0,
+      "error": 0,
+      "not_reached": 291
+    },
+    "f1_rule.py": {
+      "eligible_by_pack": 20706,
+      "invocations": 20199,
+      "keep": 20134,
+      "fix": 65,
+      "drop": 0,
+      "error": 0,
+      "not_reached": 507
+    }
+  },
+  "historical_full_sample": {
+    "scope": "TSAI's completed 3 November sample run; historical 179-rule cleaner, not current candidate",
+    "source_url": "https://github.com/theschoolofai/era-v5-lab/pull/244#issuecomment-6596323992",
+    "source_head": "8da2ac4",
+    "active_rule_ids": 179,
+    "no_fix_or_drop": [
+      "DA-B4-011",
+      "DA-B4-013",
+      "DA-B2-003",
+      "DA-B5-002",
+      "DA-A6-002",
+      "DA-C3-006",
+      "DA-C4-003",
+      "DA-D1-001",
+      "DA-F1-006",
+      "DA-D3-004",
+      "DB-G2-003",
+      "DB-B2-002",
+      "DB-B3-001",
+      "DB-C4-003",
+      "DB-D4-003",
+      "DB-D4-008",
+      "DB-C3-006",
+      "DB-C3-010",
+      "DB-C4-009",
+      "DB-D3-003",
+      "DB-D3-005",
+      "DB-D3-006",
+      "DB-D3-008",
+      "DB-D3-009",
+      "DB-D3-011",
+      "DB-D3-014",
+      "DB-D5-002"
+    ],
+    "never_invoked": []
+  }
+}

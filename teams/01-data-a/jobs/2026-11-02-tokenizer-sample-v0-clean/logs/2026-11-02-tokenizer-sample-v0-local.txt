@@ -1,0 +1,22 @@
+Week-2 tokenizer sample v0: local execution log
+Date: 2026-11-02 (America/New_York)
+Owner: Vijay Patil (patilvijay23)
+Scope: two complete train parts, not a truncated row sample.
+Runtime: Linux/WSL, CPython 3.12.12; exact pinned requirements installed before execution.
+Candidate: rebuilt after Indic F1 PR #28 and local privacy/placeholder fixes.
+Command (temporary venv's Python executable):
+python -u teams/01-data-a/spec_v1/tools/run_tokenizer_sample.py --config teams/01-data-a/spec_v1/jobs/tokenizer_sample_v0_clean.json --input-root ../erav5-lab-other-files/tokernizer_sample --out out/tsai_tokenizer_sample_smoke_2026-11-02_indic_f1_fixed --only train/code-cpp/part-00001.parquet --only train/ind-bn-sangraha-v/part-00000.parquet
+Exit code: 0
+Network: the runner performs no downloads/API calls; inputs are local and checksummed.
+Optional F2: disabled, as the request is for clean.py.
+Dependency versions: {"ftfy": "6.3.1", "pyarrow": "23.0.1", "tree-sitter": "0.26.0", "tree-sitter-language-pack": "1.22.1"}
+Manifest sha256: 7fd647c8d4662d17e2310efbcc20981d70656fdad2fabb7663c266a2153a1b7e
+Config sha256: 56e59b8b739de80e0bc927c7e2aa01eec20d624e10e73648bf361e0d5f0e3a98
+Runner sha256: 52707c438058fd885e618e2c57a1e6234d98869685b94c34a9b499624091f6d7
+clean.py sha256: 97c1a55b89f4a15ef4985928ef124f29f04a37c21038eb0ea4977598767ae58f
+
+Captured runner output (no source text):
+{"clean_sha256": "97c1a55b89f4a15ef4985928ef124f29f04a37c21038eb0ea4977598767ae58f", "event": "start", "manifest_parts": 86, "runner_sha256": "52707c438058fd885e618e2c57a1e6234d98869685b94c34a9b499624091f6d7", "sample_rows": 1444766, "scope": "partial smoke test", "selected_parts": 2}
+{"actions": {"drop": 259, "fix": 9828, "keep": 4342}, "errors": 0, "input_rows": 14429, "output_rows": 14170, "part": "train/code-cpp/part-00001.parquet", "seconds": 22.777, "status": "cleaned"}
+{"actions": {"drop": 215, "fix": 954, "keep": 9159}, "errors": 0, "input_rows": 10328, "output_rows": 10113, "part": "train/ind-bn-sangraha-v/part-00000.parquet", "seconds": 10.974, "status": "cleaned"}
+{"actions": {"drop": 474, "fix": 10782, "keep": 13501}, "completed_parts": 2, "errors": 0, "event": "complete", "input_rows": 24757, "output_rows": 24283, "peak_rss_mib": 182.891, "wall_seconds": 33.793}

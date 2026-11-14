@@ -87,8 +87,9 @@ No setting reaches 0 gold flags, and the one closest to it finds fewer D2 docume
   English), while the word list gives 10% because common words in it (naku, nannu, ani, andi, tanu) are not on the
   list. It stays under 50%, and both readers drop it (F3), so it changes nothing here.
 - **Tokenizer: stand-in.** Tokens are counted with BrahmicTokenizer-131K (`github.com/theschoolofai/BrahmicTokenizer-131K`,
-  commit `7dfcf398`), the baseline team 03-tokenizer measures its candidates against. When the project tokenizer is
-  final, re-run `python token_share.py --tokenizer <its tokenizer.json>` and update this table.
+  commit `7dfcf398`, sha256 `01d968a7…`, the same file team 03-tokenizer pins as its baseline), the baseline team
+  03-tokenizer measures its candidates against. When the project tokenizer is final, re-run as in
+  [Re-run with the frozen tokenizer](#re-run-with-the-frozen-tokenizer) and update this table.
 
 ## Cap options for Gate 2
 
@@ -126,6 +127,44 @@ documents with a little romanised text, which the cap must not drop. The other s
 The gold check above uses the 1,957 gold documents on main. After the gold rebuild (#229) merges, gold will have 2,081
 documents in 18 packs, including ind-hi-sangraha-v; the gold check (`eval_v2.py`) will be re-run then.
 
+## Re-run with the frozen tokenizer
+
+The token share above uses a stand-in tokenizer. When TSAI freezes the project tokenizer, re-run it as below; it takes
+about one minute on a laptop CPU. Nothing else changes: same packs, same detector, same rules.
+
+**Inputs**
+
+| input | where | check |
+|---|---|---|
+| 22 `ind-*` sample packs (500 documents each) | `teams/02-data-b/romanised/packs/<pack_id>.parquet` (not committed; the pack links expired on 6 Nov, so copy them from a Data B member who has them) | sha256 of each in `packs_SHA256SUMS`, checked by the script |
+| frozen tokenizer | `tokenizer.json` from team 03-tokenizer. Proposed in `teams/03-tokenizer/freeze_report.md`: C3 sample-v0, built by `teams/03-tokenizer/train/rebuild_c3_s0.py` as `out/c3_s0/tokenizer.json` | the sha256 TSAI freezes at Gate 2 (C3 sample-v0: `15468e66457b43af79f695cbe585c0d03e3cfe7a4a5d04d189dd3c6b9f02ddc3`), checked by the script |
+| code | `token_share.py` and `doc_detector.py`, with the word list in `detector.py`, at the commit that has this section | - |
+| Python | `tokenizers==0.23.3` (team 03's version), `pyarrow`, `numpy`; checked with Python 3.12.11, pyarrow 26.0.1, numpy 2.5.4 | - |
+
+**Command**
+
+```bash
+cd teams/02-data-b/romanised
+uv run --no-project --with 'numpy>=2' --with pyarrow --with 'tokenizers==0.23.3' python token_share.py \
+    --packs-dir packs \
+    --tokenizer <path to the frozen tokenizer.json> \
+    --tokenizer-sha256 <sha256 frozen at Gate 2> \
+    --out romanised_token_share_v2.csv
+```
+
+The script stops before counting if a pack is missing, an extra pack is present, or a pack or the tokenizer does not
+match its sha256. It prints the tokenizer's sha256 and the table. Then:
+
+1. Commit `romanised_token_share_v2.csv` next to v1 (v1 stays as the stand-in record).
+2. Update the table in [Measurement on the sample packs](#measurement-on-the-sample-packs), with the tokenizer name
+   and sha256.
+3. What to expect: token counts change with the tokenizer; the number of romanised documents (0) and the cap share
+   (0%) do not, since they come from the detector, not the tokenizer.
+
+Check that the command is right: with the stand-in (`--tokenizer tokenizer/tokenizer.json --tokenizer-sha256
+01d968a7970b029c071b29f060abf6104b66168dedf2ff3b1a0290a545739fff --out romanised_token_share_v1.csv`) it reproduces
+`romanised_token_share_v1.csv` byte for byte.
+
 ## Limits
 
 - Measured on 22 sample packs of 500 documents, not the full corpus. The full run may find romanised documents the
@@ -143,4 +182,5 @@ documents in 18 packs, including ind-hi-sangraha-v; the gold check (`eval_v2.py`
 | `indiclid_segments.py` | IndicLID as a segment classifier, labels cached in `indiclid/` (not committed) |
 | `eval_v2.py`, `eval_v2.md` | word list against IndicLID, precision, recall and gold check |
 | `indiclid_variants.py`, `eval_v2_indiclid_variants.md` | IndicLID with length and score thresholds |
-| `token_share.py`, `romanised_token_share_v1.csv` | token share per language |
+| `token_share.py`, `romanised_token_share_v1.csv` | token share per language (v1: stand-in tokenizer) |
+| `packs_SHA256SUMS` | sha256 of the 22 sample packs, checked by `token_share.py` |

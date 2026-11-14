@@ -1,0 +1,613 @@
+{
+  "set_sha256": "11e290a44d1467875fdf8bebc55eab21f0a6367f411aab98a4a027a546fd372e",
+  "clean_sha256": "22d818c72c9f30bf338de344a0fcda230e2d1de30a1aaec5d92bc525bae99179",
+  "f2_sha256": "0f6968be84b136574ffb5c6f566088baa1b7b4dfd3b2c74cd0eab153d52ab402",
+  "scope": "full pinned G9 set; Itihasa is not covered",
+  "packs": {
+    "ind-bn-fw2": {
+      "gold_n": 227,
+      "pack_sha256": "b5f91af826c982b548f7fc06404a2d53623b1393d511049f2e004b0353847913",
+      "gold_sha256": "fb5538fa063daedf1dfbd2c1fcdf8e43267217de93794206bda8398e5877b7ff",
+      "f2_alone": {
+        "rule": "F2 alone",
+        "changed": 0,
+        "dropped": 0,
+        "affected_unique": 0,
+        "errors": 0,
+        "error_types": [],
+        "percent": "0.000000",
+        "result": "PASS",
+        "changed_ids": [],
+        "dropped_ids": [],
+        "affected_ids": []
+      },
+      "combined": {
+        "rule": "clean then F2",
+        "changed": 1,
+        "dropped": 1,
+        "affected_unique": 2,
+        "errors": 0,
+        "error_types": [],
+        "percent": "0.881057",
+        "result": "PASS",
+        "changed_ids": [
+          "7c0457dedb71f333"
+        ],
+        "dropped_ids": [
+          "016f4687d4a36ce9"
+        ],
+        "affected_ids": [
+          "7c0457dedb71f333",
+          "016f4687d4a36ce9"
+        ]
+      }
+    },
+    "ind-bn-sangraha-v": {
+      "gold_n": 137,
+      "pack_sha256": "e64c471dd6391dac861e039c2ad1d3c3732b21b97f29efd4b9bcaf0bf54baf81",
+      "gold_sha256": "a3858b50eaed2fdfcd865ad5be92e1457b39fd75b960f1bbcee9ca2ac6570982",
+      "f2_alone": {
+        "rule": "F2 alone",
+        "changed": 0,
+        "dropped": 0,
+        "affected_unique": 0,
+        "errors": 0,
+        "error_types": [],
+        "percent": "0.000000",
+        "result": "PASS",
+        "changed_ids": [],
+        "dropped_ids": [],
+        "affected_ids": []
+      },
+      "combined": {
+        "rule": "clean then F2",
+        "changed": 1,
+        "dropped": 0,
+        "affected_unique": 1,
+        "errors": 0,
+        "error_types": [],
+        "percent": "0.729927",
+        "result": "PASS",
+        "changed_ids": [
+          "fa5d153e743890ce"
+        ],
+        "dropped_ids": [],
+        "affected_ids": [
+          "fa5d153e743890ce"
+        ]
+      }
+    },
+    "ind-gu-fw2": {
+      "gold_n": 80,
+      "pack_sha256": "9f58ad695beac877b7f71f9773328c141e5f19385b9f292ebc9c2b21b19daa6a",
+      "gold_sha256": "1a1592f183e6c8a153b5d6a3573848f73bee05d553d66d106437208301616a14",
+      "f2_alone": {
+        "rule": "F2 alone",
+        "changed": 0,
+        "dropped": 0,
+        "affected_unique": 0,
+        "errors": 0,
+        "error_types": [],
+        "percent": "0.000000",
+        "result": "PASS",
+        "changed_ids": [],
+        "dropped_ids": [],
+        "affected_ids": []
+      },
+      "combined": {
+        "rule": "clean then F2",
+        "changed": 0,
+        "dropped": 0,
+        "affected_unique": 0,
+        "errors": 0,
+        "error_types": [],
+        "percent": "0.000000",
+        "result": "PASS",
+        "changed_ids": [],
+        "dropped_ids": [],
+        "affected_ids": []
+      }
+    },
+    "ind-hi-fw2": {
+      "gold_n": 218,
+      "pack_sha256": "f9e1a898c982fcdfb788a931910f79f2204c177e530709df71a2d3b8223f5169",
+      "gold_sha256": "f164fd765388e20a2bbf859fa744802d325fd6f952e25badabdb8e5e4d71663f",
+      "f2_alone": {
+        "rule": "F2 alone",
+        "changed": 0,
+        "dropped": 0,
+        "affected_unique": 0,
+        "errors": 0,
+        "error_types": [],
+        "percent": "0.000000",
+        "result": "PASS",
+        "changed_ids": [],
+        "dropped_ids": [],
+        "affected_ids": []
+      },
+      "combined": {
+        "rule": "clean then F2",
+        "changed": 1,
+        "dropped": 1,
+        "affected_unique": 2,
+        "errors": 0,
+        "error_types": [],
+        "percent": "0.917431",
+        "result": "PASS",
+        "changed_ids": [
+          "277fa2fd630f90fd"
+        ],
+        "dropped_ids": [
+          "8296566eea7d3680"
+        ],
+        "affected_ids": [
+          "277fa2fd630f90fd",
+          "8296566eea7d3680"
+        ]
+      }
+    },
+    "ind-hi-hplt": {
+      "gold_n": 37,
+      "pack_sha256": "497533fc4d6407b1ef2e83f7304d65ab7f9fe7892fee09ab6d10f45c913eadc6",
+      "gold_sha256": "53b7cbdbed01a111b70454d4e241f0ca7bba83932fbe54b225fefa73fff0d9a3",
+      "f2_alone": {
+        "rule": "F2 alone",
+        "changed": 0,
+        "dropped": 0,
+        "affected_unique": 0,
+        "errors": 0,
+        "error_types": [],
+        "percent": "0.000000",
+        "result": "PASS",
+        "changed_ids": [],
+        "dropped_ids": [],
+        "affected_ids": []
+      },
+      "combined": {
+        "rule": "clean then F2",
+        "changed": 0,
+        "dropped": 0,
+        "affected_unique": 0,
+        "errors": 0,
+        "error_types": [],
+        "percent": "0.000000",
+        "result": "PASS",
+        "changed_ids": [],
+        "dropped_ids": [],
+        "affected_ids": []
+      }
+    },
+    "ind-hi-indiccorp": {
+      "gold_n": 425,
+      "pack_sha256": "c55b80d3d5c820fb34cab3b0bf8ccaabd2e73496cea42267c08d05cc34ecd612",
+      "gold_sha256": "a0b3f7021b6a168666eacb60c3d517feb403f302d8afa791bf176a6920d5718a",
+      "f2_alone": {
+        "rule": "F2 alone",
+        "changed": 0,
+        "dropped": 0,
+        "affected_unique": 0,
+        "errors": 0,
+        "error_types": [],
+        "percent": "0.000000",
+        "result": "PASS",
+        "changed_ids": [],
+        "dropped_ids": [],
+        "affected_ids": []
+      },
+      "combined": {
+        "rule": "clean then F2",
+        "changed": 1,
+        "dropped": 1,
+        "affected_unique": 2,
+        "errors": 0,
+        "error_types": [],
+        "percent": "0.470588",
+        "result": "PASS",
+        "changed_ids": [
+          "3dff830fcad18cef"
+        ],
+        "dropped_ids": [
+          "c1403c97611401f8"
+        ],
+        "affected_ids": [
+          "3dff830fcad18cef",
+          "c1403c97611401f8"
+        ]
+      }
+    },
+    "ind-hi-sangraha-s": {
+      "gold_n": 24,
+      "pack_sha256": "7fd34f97729659a7c0c7f6bed0190e7f4eda29ed8a0f9b9eacbfe4a607a3ff6d",
+      "gold_sha256": "f3943ff76a96e9e67896a88130bb41ee3b08b2025c010381d8e052807e10ea80",
+      "f2_alone": {
+        "rule": "F2 alone",
+        "changed": 0,
+        "dropped": 0,
+        "affected_unique": 0,
+        "errors": 0,
+        "error_types": [],
+        "percent": "0.000000",
+        "result": "PASS",
+        "changed_ids": [],
+        "dropped_ids": [],
+        "affected_ids": []
+      },
+      "combined": {
+        "rule": "clean then F2",
+        "changed": 0,
+        "dropped": 0,
+        "affected_unique": 0,
+        "errors": 0,
+        "error_types": [],
+        "percent": "0.000000",
+        "result": "PASS",
+        "changed_ids": [],
+        "dropped_ids": [],
+        "affected_ids": []
+      }
+    },
+    "ind-hi-sangraha-v": {
+      "gold_n": 219,
+      "pack_sha256": "b0fb32f2327aa39badc9a55110c992303ce273b02711e0973f877d465a00557e",
+      "gold_sha256": "5f1992d87749bed3d71655168905076538a45849666bb67c0d4ecc3baba1e1a9",
+      "f2_alone": {
+        "rule": "F2 alone",
+        "changed": 0,
+        "dropped": 0,
+        "affected_unique": 0,
+        "errors": 0,
+        "error_types": [],
+        "percent": "0.000000",
+        "result": "PASS",
+        "changed_ids": [],
+        "dropped_ids": [],
+        "affected_ids": []
+      },
+      "combined": {
+        "rule": "clean then F2",
+        "changed": 2,
+        "dropped": 0,
+        "affected_unique": 2,
+        "errors": 0,
+        "error_types": [],
+        "percent": "0.913242",
+        "result": "PASS",
+        "changed_ids": [
+          "8db11a691069d11f",
+          "ca34db0194d6b70e"
+        ],
+        "dropped_ids": [],
+        "affected_ids": [
+          "8db11a691069d11f",
+          "ca34db0194d6b70e"
+        ]
+      }
+    },
+    "ind-kn-fw2": {
+      "gold_n": 115,
+      "pack_sha256": "3859c21e3f715ff7c0fbe978dcd0719b48ead11cff58fe215afa23f1175fd3ee",
+      "gold_sha256": "3f8661f313b07d8e5f8aa598d32db591d6cd46ba939d22afe7d417ddeabbb381",
+      "f2_alone": {
+        "rule": "F2 alone",
+        "changed": 0,
+        "dropped": 0,
+        "affected_unique": 0,
+        "errors": 0,
+        "error_types": [],
+        "percent": "0.000000",
+        "result": "PASS",
+        "changed_ids": [],
+        "dropped_ids": [],
+        "affected_ids": []
+      },
+      "combined": {
+        "rule": "clean then F2",
+        "changed": 1,
+        "dropped": 0,
+        "affected_unique": 1,
+        "errors": 0,
+        "error_types": [],
+        "percent": "0.869565",
+        "result": "PASS",
+        "changed_ids": [
+          "51f68b9da172f3ae"
+        ],
+        "dropped_ids": [],
+        "affected_ids": [
+          "51f68b9da172f3ae"
+        ]
+      }
+    },
+    "ind-kn-sangraha-s": {
+      "gold_n": 22,
+      "pack_sha256": "a161966005c037a1bdb70245c2b6135520967c57c5fc618cba5f29d9e248f427",
+      "gold_sha256": "4aacabee4d5ab012f3041d63cd91310a7188cf68877692c644d7bc080c055556",
+      "f2_alone": {
+        "rule": "F2 alone",
+        "changed": 0,
+        "dropped": 0,
+        "affected_unique": 0,
+        "errors": 0,
+        "error_types": [],
+        "percent": "0.000000",
+        "result": "PASS",
+        "changed_ids": [],
+        "dropped_ids": [],
+        "affected_ids": []
+      },
+      "combined": {
+        "rule": "clean then F2",
+        "changed": 0,
+        "dropped": 0,
+        "affected_unique": 0,
+        "errors": 0,
+        "error_types": [],
+        "percent": "0.000000",
+        "result": "PASS",
+        "changed_ids": [],
+        "dropped_ids": [],
+        "affected_ids": []
+      }
+    },
+    "ind-kn-sangraha-v": {
+      "gold_n": 99,
+      "pack_sha256": "39d2bce100b2b2016fbe44d0f58ccbf5d2df8df24d8b3418051e691115d877fc",
+      "gold_sha256": "42b45e25c85f3c793a0e0de0740ed6d3352e74d81bb8e10f1d6af10684305645",
+      "f2_alone": {
+        "rule": "F2 alone",
+        "changed": 0,
+        "dropped": 0,
+        "affected_unique": 0,
+        "errors": 0,
+        "error_types": [],
+        "percent": "0.000000",
+        "result": "PASS",
+        "changed_ids": [],
+        "dropped_ids": [],
+        "affected_ids": []
+      },
+      "combined": {
+        "rule": "clean then F2",
+        "changed": 0,
+        "dropped": 0,
+        "affected_unique": 0,
+        "errors": 0,
+        "error_types": [],
+        "percent": "0.000000",
+        "result": "PASS",
+        "changed_ids": [],
+        "dropped_ids": [],
+        "affected_ids": []
+      }
+    },
+    "ind-mr-fw2": {
+      "gold_n": 158,
+      "pack_sha256": "94a1d14caa9a46f40c2212c6d2c436b9ebb03093ac60ec04658023adeb2d3e2b",
+      "gold_sha256": "401a155d5768b1e44cacdd6f5e813365bff625828a1ee7ebfbbed565512f65d0",
+      "f2_alone": {
+        "rule": "F2 alone",
+        "changed": 0,
+        "dropped": 0,
+        "affected_unique": 0,
+        "errors": 0,
+        "error_types": [],
+        "percent": "0.000000",
+        "result": "PASS",
+        "changed_ids": [],
+        "dropped_ids": [],
+        "affected_ids": []
+      },
+      "combined": {
+        "rule": "clean then F2",
+        "changed": 1,
+        "dropped": 0,
+        "affected_unique": 1,
+        "errors": 0,
+        "error_types": [],
+        "percent": "0.632911",
+        "result": "PASS",
+        "changed_ids": [
+          "c85acdaeebe64599"
+        ],
+        "dropped_ids": [],
+        "affected_ids": [
+          "c85acdaeebe64599"
+        ]
+      }
+    },
+    "ind-mr-sangraha-v": {
+      "gold_n": 99,
+      "pack_sha256": "ad598b6ac2330c00b423b26f826f6d120d8940f0eb7f5412fca2fcd045b4ef30",
+      "gold_sha256": "a38541f77304d18871b7fc30c275969452e5c74eea2a9f13ae4bbb0b4a6c3f61",
+      "f2_alone": {
+        "rule": "F2 alone",
+        "changed": 0,
+        "dropped": 0,
+        "affected_unique": 0,
+        "errors": 0,
+        "error_types": [],
+        "percent": "0.000000",
+        "result": "PASS",
+        "changed_ids": [],
+        "dropped_ids": [],
+        "affected_ids": []
+      },
+      "combined": {
+        "rule": "clean then F2",
+        "changed": 0,
+        "dropped": 0,
+        "affected_unique": 0,
+        "errors": 0,
+        "error_types": [],
+        "percent": "0.000000",
+        "result": "PASS",
+        "changed_ids": [],
+        "dropped_ids": [],
+        "affected_ids": []
+      }
+    },
+    "ind-sa-fw2": {
+      "gold_n": 71,
+      "pack_sha256": "95e08d6b9ef1c3baf2d98c7f6bef3a0d12236d6b7c54583e5d4565884b3108e0",
+      "gold_sha256": "bfa93e597a4ab341f2c597388ce8b7c8e3912e728283e867fca8fa5970046865",
+      "f2_alone": {
+        "rule": "F2 alone",
+        "changed": 0,
+        "dropped": 0,
+        "affected_unique": 0,
+        "errors": 0,
+        "error_types": [],
+        "percent": "0.000000",
+        "result": "PASS",
+        "changed_ids": [],
+        "dropped_ids": [],
+        "affected_ids": []
+      },
+      "combined": {
+        "rule": "clean then F2",
+        "changed": 1,
+        "dropped": 0,
+        "affected_unique": 1,
+        "errors": 0,
+        "error_types": [],
+        "percent": "1.408451",
+        "result": "PASS",
+        "changed_ids": [
+          "1ece1474b414d6fe"
+        ],
+        "dropped_ids": [],
+        "affected_ids": [
+          "1ece1474b414d6fe"
+        ]
+      }
+    },
+    "ind-ta-sangraha-v": {
+      "gold_n": 141,
+      "pack_sha256": "1df8e92c0f6a18d510ec8af5bf97d41aacf4834746fb9f24dc97821018057d78",
+      "gold_sha256": "da9e3ff4db5df66b3886dc957ea7db35828083d2c78ed8a7fc8760a386af6948",
+      "f2_alone": {
+        "rule": "F2 alone",
+        "changed": 0,
+        "dropped": 0,
+        "affected_unique": 0,
+        "errors": 0,
+        "error_types": [],
+        "percent": "0.000000",
+        "result": "PASS",
+        "changed_ids": [],
+        "dropped_ids": [],
+        "affected_ids": []
+      },
+      "combined": {
+        "rule": "clean then F2",
+        "changed": 1,
+        "dropped": 0,
+        "affected_unique": 1,
+        "errors": 0,
+        "error_types": [],
+        "percent": "0.709220",
+        "result": "PASS",
+        "changed_ids": [
+          "2134d8e197faedf0"
+        ],
+        "dropped_ids": [],
+        "affected_ids": [
+          "2134d8e197faedf0"
+        ]
+      }
+    },
+    "ind-te-fw2": {
+      "gold_n": 17,
+      "pack_sha256": "f893df548895804bd63f47b5d6405b51393d79f0647e4389665956198cdaf5bb",
+      "gold_sha256": "25c25c78467ce64f812582f46f2e27e2b15a2c78dc97fe7eaeb5167f3c25da3d",
+      "f2_alone": {
+        "rule": "F2 alone",
+        "changed": 0,
+        "dropped": 0,
+        "affected_unique": 0,
+        "errors": 0,
+        "error_types": [],
+        "percent": "0.000000",
+        "result": "PASS",
+        "changed_ids": [],
+        "dropped_ids": [],
+        "affected_ids": []
+      },
+      "combined": {
+        "rule": "clean then F2",
+        "changed": 0,
+        "dropped": 0,
+        "affected_unique": 0,
+        "errors": 0,
+        "error_types": [],
+        "percent": "0.000000",
+        "result": "PASS",
+        "changed_ids": [],
+        "dropped_ids": [],
+        "affected_ids": []
+      }
+    },
+    "ind-te-sangraha-s": {
+      "gold_n": 24,
+      "pack_sha256": "feeb676e76dee102d132846c1af2a92c3ea4d1018e0fd5239f50fc0da0fb6069",
+      "gold_sha256": "410ce1d6483c56086e8c9f6d1f23265278246999520e2f6f20845010ebc0f3e3",
+      "f2_alone": {
+        "rule": "F2 alone",
+        "changed": 0,
+        "dropped": 0,
+        "affected_unique": 0,
+        "errors": 0,
+        "error_types": [],
+        "percent": "0.000000",
+        "result": "PASS",
+        "changed_ids": [],
+        "dropped_ids": [],
+        "affected_ids": []
+      },
+      "combined": {
+        "rule": "clean then F2",
+        "changed": 0,
+        "dropped": 0,
+        "affected_unique": 0,
+        "errors": 0,
+        "error_types": [],
+        "percent": "0.000000",
+        "result": "PASS",
+        "changed_ids": [],
+        "dropped_ids": [],
+        "affected_ids": []
+      }
+    },
+    "ind-te-sangraha-v": {
+      "gold_n": 80,
+      "pack_sha256": "d3d928606d1fd0a7a81fcbce10db3e3d8f4b7df74486bc51c9a9d30299812817",
+      "gold_sha256": "f73858bf14d7d4d37537644f573b5d492c681a7a2f07644e7760202793ade075",
+      "f2_alone": {
+        "rule": "F2 alone",
+        "changed": 0,
+        "dropped": 0,
+        "affected_unique": 0,
+        "errors": 0,
+        "error_types": [],
+        "percent": "0.000000",
+        "result": "PASS",
+        "changed_ids": [],
+        "dropped_ids": [],
+        "affected_ids": []
+      },
+      "combined": {
+        "rule": "clean then F2",
+        "changed": 0,
+        "dropped": 0,
+        "affected_unique": 0,
+        "errors": 0,
+        "error_types": [],
+        "percent": "0.000000",
+        "result": "PASS",
+        "changed_ids": [],
+        "dropped_ids": [],
+        "affected_ids": []
+      }
+    }
+  }
+}

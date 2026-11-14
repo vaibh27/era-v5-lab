@@ -1,0 +1,28 @@
+{
+  "pack": "code-rust.parquet",
+  "pack_sha256": "c5822b7df0e76a6bbca95ea6d73a94f19970fe8a71e5645e9205195193a227e5",
+  "gold": "code-rust_gold.csv",
+  "gold_sha256": "89855018827c2f6c185b50ed35225798552d64283bd54becd6b41e1ba9661dc5",
+  "gold_count": 234,
+  "rules": "teams/01-data-a/spec_v1/tools/f2_rule.py",
+  "rules_file_sha256": "0f6968be84b136574ffb5c6f566088baa1b7b4dfd3b2c74cd0eab153d52ab402",
+  "code_sha256": "0f6968be84b136574ffb5c6f566088baa1b7b4dfd3b2c74cd0eab153d52ab402",
+  "limit_percent": "1",
+  "limit_documents": 2,
+  "status": "PASS",
+  "results": [
+    {
+      "rule": "F2",
+      "changed": 0,
+      "dropped": 0,
+      "affected_unique": 0,
+      "errors": 0,
+      "error_types": [],
+      "percent": "0.000000",
+      "result": "PASS",
+      "changed_ids": [],
+      "dropped_ids": [],
+      "affected_ids": []
+    }
+  ]
+}

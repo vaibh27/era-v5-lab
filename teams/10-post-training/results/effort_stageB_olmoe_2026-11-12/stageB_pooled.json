@@ -1,0 +1,137 @@
+{
+ "artifact": "g10-effort-eval-output",
+ "do_not_train": true,
+ "stage": "B",
+ "manifest_sha256": "d6190b2d7b013222e767cdb7c50f66231769385ce1dfb729eaa9530b9ebf9226",
+ "samples": 2,
+ "model_id": "allenai/OLMoE-1B-7B-0924-Instruct@7f1c97f440f06ce36705e4f2b843edb5925f4498",
+ "temperature": 0.7,
+ "sample_base_seeds": [
+  1234,
+  1235
+ ],
+ "cap": 1024,
+ "per_label": {
+  "1k": {
+   "ran": 110,
+   "parse": 110,
+   "malformed": 0,
+   "empty": 0,
+   "limit": 103,
+   "censored": 7,
+   "obey_budget": 110,
+   "correct": 5,
+   "checked": 110,
+   "unchecked": 0,
+   "correct_by_category": {
+    "code": {
+     "correct": 0,
+     "checked": 60
+    },
+    "math": {
+     "correct": 5,
+     "checked": 50
+    }
+   },
+   "prompts_solved_in_either_sample": 4,
+   "prompts": 55,
+   "generated_tokens_median": 427,
+   "lama": {
+    "format_obeyed": "PASS",
+    "cap_respected": "FAIL",
+    "answer_correct": "PASS"
+   }
+  },
+  "4k": {
+   "ran": 110,
+   "parse": 110,
+   "malformed": 0,
+   "empty": 0,
+   "limit": 103,
+   "censored": 7,
+   "obey_budget": 110,
+   "correct": 5,
+   "checked": 110,
+   "unchecked": 0,
+   "correct_by_category": {
+    "code": {
+     "correct": 0,
+     "checked": 60
+    },
+    "math": {
+     "correct": 5,
+     "checked": 50
+    }
+   },
+   "prompts_solved_in_either_sample": 4,
+   "prompts": 55,
+   "generated_tokens_median": 426,
+   "lama": {
+    "format_obeyed": "PASS",
+    "cap_respected": "FAIL",
+    "answer_correct": "PASS"
+   }
+  },
+  "16k": {
+   "ran": 110,
+   "parse": 110,
+   "malformed": 0,
+   "empty": 0,
+   "limit": 104,
+   "censored": 6,
+   "obey_budget": 110,
+   "correct": 5,
+   "checked": 110,
+   "unchecked": 0,
+   "correct_by_category": {
+    "code": {
+     "correct": 1,
+     "checked": 60
+    },
+    "math": {
+     "correct": 4,
+     "checked": 50
+    }
+   },
+   "prompts_solved_in_either_sample": 3,
+   "prompts": 55,
+   "generated_tokens_median": 411,
+   "lama": {
+    "format_obeyed": "PASS",
+    "cap_respected": "FAIL",
+    "answer_correct": "PASS"
+   }
+  },
+  "64k": {
+   "ran": 110,
+   "parse": 110,
+   "malformed": 0,
+   "empty": 0,
+   "limit": 102,
+   "censored": 8,
+   "obey_budget": 110,
+   "correct": 7,
+   "checked": 110,
+   "unchecked": 0,
+   "correct_by_category": {
+    "code": {
+     "correct": 1,
+     "checked": 60
+    },
+    "math": {
+     "correct": 6,
+     "checked": 50
+    }
+   },
+   "prompts_solved_in_either_sample": 4,
+   "prompts": 55,
+   "generated_tokens_median": 419,
+   "lama": {
+    "format_obeyed": "PASS",
+    "cap_respected": "FAIL",
+    "answer_correct": "PASS"
+   }
+  }
+ },
+ "note": "OLMoE-1B-7B-0924-Instruct native template, Stage B only: an optimization diagnostic, not the capstone model. No comparison is implied."
+}

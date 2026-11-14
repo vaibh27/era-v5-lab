@@ -1,0 +1,114 @@
+{
+  "pack": "sci-finepdfs.parquet",
+  "pack_sha256": "5a3228b797f57234ad252fb89bf9a78c66084069540c6ac8564d062c313ea249",
+  "gold": "sci-finepdfs_gold.csv",
+  "gold_sha256": "0aa12af6cd0a2a52435111621dac7e65766554e57da58643bdfb14b57d0648d8",
+  "gold_count": 202,
+  "rules": "teams/01-data-a/spec_v1_1/sheets/medicine_sci.md",
+  "rules_file_sha256": "c46f53c24715a657620ac0eaf08621232d06a7b976156682cc3ffd6d81b3fe5b",
+  "code_sha256": "3efa627d461c3155f8d00140fcf832ebb60d24597ad50d1d0185498c14f3c2d9",
+  "limit_percent": "1",
+  "limit_documents": 2,
+  "status": "PASS",
+  "results": [
+    {
+      "rule": "DA-A7-001",
+      "changed": 1,
+      "dropped": 0,
+      "affected_unique": 1,
+      "errors": 0,
+      "error_types": [],
+      "percent": "0.495050",
+      "result": "PASS",
+      "changed_ids": [
+        "920855df51f37db8"
+      ],
+      "dropped_ids": [],
+      "affected_ids": [
+        "920855df51f37db8"
+      ]
+    },
+    {
+      "rule": "DA-C9-002",
+      "changed": 0,
+      "dropped": 0,
+      "affected_unique": 0,
+      "errors": 0,
+      "error_types": [],
+      "percent": "0.000000",
+      "result": "PASS",
+      "changed_ids": [],
+      "dropped_ids": [],
+      "affected_ids": []
+    },
+    {
+      "rule": "DA-B6-001",
+      "changed": 0,
+      "dropped": 0,
+      "affected_unique": 0,
+      "errors": 0,
+      "error_types": [],
+      "percent": "0.000000",
+      "result": "PASS",
+      "changed_ids": [],
+      "dropped_ids": [],
+      "affected_ids": []
+    },
+    {
+      "rule": "DA-C7-003",
+      "changed": 0,
+      "dropped": 0,
+      "affected_unique": 0,
+      "errors": 0,
+      "error_types": [],
+      "percent": "0.000000",
+      "result": "PASS",
+      "changed_ids": [],
+      "dropped_ids": [],
+      "affected_ids": []
+    },
+    {
+      "rule": "DA-C8-004",
+      "changed": 0,
+      "dropped": 0,
+      "affected_unique": 0,
+      "errors": 0,
+      "error_types": [],
+      "percent": "0.000000",
+      "result": "PASS",
+      "changed_ids": [],
+      "dropped_ids": [],
+      "affected_ids": []
+    },
+    {
+      "rule": "DA-C8-003",
+      "changed": 0,
+      "dropped": 0,
+      "affected_unique": 0,
+      "errors": 0,
+      "error_types": [],
+      "percent": "0.000000",
+      "result": "PASS",
+      "changed_ids": [],
+      "dropped_ids": [],
+      "affected_ids": []
+    },
+    {
+      "rule": "ALL IN ORDER",
+      "changed": 1,
+      "dropped": 0,
+      "affected_unique": 1,
+      "errors": 0,
+      "error_types": [],
+      "percent": "0.495050",
+      "result": "PASS",
+      "changed_ids": [
+        "920855df51f37db8"
+      ],
+      "dropped_ids": [],
+      "affected_ids": [
+        "920855df51f37db8"
+      ]
+    }
+  ]
+}

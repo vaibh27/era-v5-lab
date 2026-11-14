@@ -1,0 +1,28 @@
+doc_id,read,verdict,diseases,evidence,hex,note
+0bf5c7545be53534,full,clean,,,,
+1b0eab31c6e19e40,full,fix,D4,ಜೀವಮಾನದ ಒಪ್ಪಂದವನ್ನು ಪಡೆದರು at offset 323,,Bad machine translation
+1d09e7232d5a9e58,full,clean,,,,Relaxed D5 passes this.
+22cd5d17094fbb49,full,clean,,,,Machine-translated shell description; English terms left untranslated
+4538a0eab672d96f,full,clean,,,,
+4a61a2840739d273,full,clean,,,,Relaxed rules pass this
+6fe7955f9dcca08d,full,clean,,,,Relaxed from D5 (overlooked):
+7413f9ef1f35a6a9,full,clean,,,,Relaxed from D5 (overlooked):
+79519b0dcca1226c,full,clean,,,,
+7c72b29fe1159297,full,fix,D4,"ಜೊತೆಗೆ ವಾಯುಪಡೆಯ ಮುಖ್ಯಸ್ಥರು, at offset 151",,Machine-translated
+7d9b03e1a823b03a,full,clean,,,,Relaxed from D5 
+7fd9125541575408,full,fix,D4,"ಲಗತ್ತಿಸಲಾಗಿದೆ, ಉದಾಹರಣೆಗೆ 1401  at offset 483",,"Half translation. ಲಗತ್ತಿಸಲಾಗಿದೆ, ಉದಾಹರಣೆಗೆ 1401 "
+80ec26e5644e6569,full,clean,,,,
+825761868c5dd386,full,drop,D4,ಚಿಕಿತ್ಸಕ ಅವಕಾಶ at offset 559  + ಮನಶ್ಶಾಸ್ತ್ರಜ್ಞನನ್ನು ನೇಮಿಸಿಕೊಳ್ಳುತ್ತದೆ at offset 644 +  ಇದು ವಿದ್ಯಾರ್ಥಿಗಳಿಗೆ at offset 769,,"Machine-translated; provision as ಅವಕಾಶ, masculine noun for a woman, she becomes ಇದು; school name spelt three ways"
+8a8dc27b4a86d5b9,full,clean,,,,
+94552b481a3cf4fd,full,clean,,,,Relaxed D5 passes this.
+96d43ee81a0e801c,full,clean,,,,Relaxed from D4 (overlooked):
+a31508215ac74ccd,full,clean,,,,Relaxed from D5 (overlooked):
+b607c6ffc2ce50dc,full,clean,,,,
+c65b2eb0c2754e06,full,clean,,,,
+c9c71a193c8817c4,full,clean,,,,
+cd729466137551e1,full,clean,,,,Relaxed from D5 
+df939b576048ab70,full,clean,,,,Relaxed from D5 
+e70b7b40d6d9332d,full,clean,,,,(overlooked): literal phrasing; 
+e7b59fdbff9ec346,full,fix,D4,ಸ್ಮಿತ್ಸ್ ಫಾಲ್ಸ್ಗೆ ಉದ್ಘಾಟಿಸಲಾಯಿತು at offset 786,,Machine-translated; railway name Canadian Northern read as north of Canada; last sentence garbled
+ebfe9c51c247aebf,full,clean,,,,Machine-translated; literal phrasing; 
+ef8b3f6622d5c7ab,full,clean,,,,Relaxed from D5 (

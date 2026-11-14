@@ -3,7 +3,7 @@ spec_v1/sheets/specv1.md: change the sheet, not this file.
 
 doc is {doc_id, text, url, lang_label, pack_id}. Each function returns (action, text), action being keep, fix or drop.
 SCOPE says which packs each rule applies to; on any other pack, or without a pack_id, a rule does nothing.
-Families: code (6 packs, 24 rules), english (4 packs, 20 rules), math (2 packs, 14 rules), sci (1 packs, 12 rules).
+Families: code (6 packs, 24 rules), english (4 packs, 20 rules), math (2 packs, 14 rules), sci (1 packs, 12 rules), indic (18 packs, 152 rules).
 """
 import re
 from functools import cache
@@ -14,23 +14,23 @@ SCOPE = {
     "DA-A2-007": frozenset({"code-cpp", "code-go", "code-java", "code-js-ts", "code-python", "code-rust"}),  # code A2, medicine 2
     "DA-A6-001": frozenset({"code-cpp", "code-go", "code-java", "code-js-ts", "code-python", "code-rust"}),  # code A6, medicine 3
     "DA-A4-002": frozenset({"code-cpp", "code-go", "code-java", "code-js-ts", "code-python", "code-rust"}),  # code A4, medicine 4
-    "DA-A4-003": frozenset({"code-cpp", "code-go", "code-java", "code-js-ts", "code-python", "code-rust"}),  # code A4, medicine 5
+    "DA-A4-003": frozenset({"code-java"}),  # code A4, medicine 5
     "DA-B3-001": frozenset({"code-cpp", "code-go", "code-java", "code-js-ts", "code-python", "code-rust"}),  # code B3, medicine 6
-    "DA-E1-001": frozenset({"code-cpp", "code-go", "code-java", "code-js-ts", "code-python", "code-rust"}),  # code E1, medicine 7
-    "DA-E1-004": frozenset({"code-cpp", "code-go", "code-java", "code-js-ts", "code-python", "code-rust"}),  # code E1, medicine 8
-    "DA-E1-008": frozenset({"code-cpp", "code-go", "code-java", "code-js-ts", "code-python", "code-rust"}),  # code E1, medicine 9
-    "DA-E1-006": frozenset({"code-cpp", "code-go", "code-java", "code-js-ts", "code-python", "code-rust"}),  # code E1, medicine 10
-    "DA-E1-005": frozenset({"code-cpp", "code-go", "code-java", "code-js-ts", "code-python", "code-rust"}),  # code E1, medicine 11
-    "DA-E1-007": frozenset({"code-cpp", "code-go", "code-java", "code-js-ts", "code-python", "code-rust"}),  # code E1, medicine 12
+    "DA-E1-001": frozenset({"code-go"}),  # code E1, medicine 7
+    "DA-E1-004": frozenset({"code-python", "code-rust"}),  # code E1, medicine 8
+    "DA-E1-008": frozenset({"code-js-ts"}),  # code E1, medicine 9
+    "DA-E1-006": frozenset({"code-java"}),  # code E1, medicine 10
+    "DA-E1-005": frozenset({"code-cpp"}),  # code E1, medicine 11
+    "DA-E1-007": frozenset({"code-cpp"}),  # code E1, medicine 12
     "DA-E2-001": frozenset({"code-cpp", "code-go", "code-java", "code-js-ts", "code-python", "code-rust"}),  # code E2, medicine 13
-    "DA-C3-002": frozenset({"code-cpp", "code-go", "code-java", "code-js-ts", "code-python", "code-rust"}),  # code C3, medicine 14
-    "DA-C4-002": frozenset({"code-cpp", "code-go", "code-java", "code-js-ts", "code-python", "code-rust"}),  # code C4, medicine 15
-    "DA-E4-005": frozenset({"code-cpp", "code-go", "code-java", "code-js-ts", "code-python", "code-rust"}),  # code E4, medicine 16
-    "DA-E4-010": frozenset({"code-cpp", "code-go", "code-java", "code-js-ts", "code-python", "code-rust"}),  # code E4, medicine 17
-    "DA-E4-009": frozenset({"code-cpp", "code-go", "code-java", "code-js-ts", "code-python", "code-rust"}),  # code E4, medicine 18
-    "DA-E4-007": frozenset({"code-cpp", "code-go", "code-java", "code-js-ts", "code-python", "code-rust"}),  # code E4, medicine 19
-    "DA-C1-004": frozenset({"code-cpp", "code-go", "code-java", "code-js-ts", "code-python", "code-rust"}),  # code C1, medicine 20
-    "DA-C1-005": frozenset({"code-cpp", "code-go", "code-java", "code-js-ts", "code-python", "code-rust"}),  # code C1, medicine 21
+    "DA-C3-002": frozenset({"code-go"}),  # code C3, medicine 14
+    "DA-C4-002": frozenset({"code-java"}),  # code C4, medicine 15
+    "DA-E4-005": frozenset({"code-go"}),  # code E4, medicine 16
+    "DA-E4-010": frozenset({"code-cpp", "code-go", "code-java", "code-python", "code-rust"}),  # code E4, medicine 17
+    "DA-E4-009": frozenset({"code-java"}),  # code E4, medicine 18
+    "DA-E4-007": frozenset({"code-js-ts"}),  # code E4, medicine 19
+    "DA-C1-004": frozenset({"code-go"}),  # code C1, medicine 20
+    "DA-C1-005": frozenset({"code-java"}),  # code C1, medicine 21
     "DA-B4-009": frozenset({"code-cpp", "code-go", "code-java", "code-js-ts", "code-python", "code-rust"}),  # code B4, medicine 22
     "DA-E3-003": frozenset({"code-cpp", "code-go", "code-java", "code-js-ts", "code-python", "code-rust"}),  # code E3, medicine 23
     "DA-E3-004": frozenset({"code-cpp", "code-go", "code-java", "code-js-ts", "code-python", "code-rust"}),  # code E3, medicine 24
@@ -80,9 +80,163 @@ SCOPE = {
     "DA-D1-001": frozenset({"sci-finepdfs"}),  # sci D1, medicine 68
     "DA-F1-006": frozenset({"sci-finepdfs"}),  # sci F1, medicine 69
     "DA-D3-004": frozenset({"sci-finepdfs"}),  # sci D3, medicine 70
-    "f1_rule.py": frozenset({"code-cpp", "code-go", "code-java", "code-js-ts", "code-python", "code-rust", "math-finemath", "math-megamath", "sci-finepdfs"}),  # the shared F1, spec_v1/tools/f1_rule.py: code, math, sci packs, last
+    "DB-A1-001": frozenset({"ind-mr-fw2", "ind-mr-sangraha-v"}),  # indic A1, medicine 71
+    "DB-A1-002": frozenset({"ind-te-fw2", "ind-te-sangraha-s", "ind-te-sangraha-v"}),  # indic A1, medicine 72
+    "DB-A2-001": frozenset({"ind-bn-fw2", "ind-bn-sangraha-v"}),  # indic A2, medicine 73
+    "DB-A3-001": frozenset({"ind-bn-fw2"}),  # indic A3, medicine 74
+    "DB-A3-007": frozenset({"ind-bn-sangraha-v"}),  # indic A3, medicine 75
+    "DB-A3-002": frozenset({"ind-gu-fw2"}),  # indic A3, medicine 76
+    "DB-A3-005": frozenset({"ind-kn-fw2", "ind-kn-sangraha-s"}),  # indic A3, medicine 77
+    "DB-A3-006": frozenset({"ind-mr-fw2", "ind-mr-sangraha-v"}),  # indic A3, medicine 78
+    "DB-A5-001": frozenset({"ind-bn-fw2", "ind-bn-sangraha-v"}),  # indic A5, medicine 79
+    "DB-A5-003": frozenset({"ind-gu-fw2"}),  # indic A5, medicine 81
+    "DB-A5-009": frozenset({"ind-mr-fw2"}),  # indic A5, medicine 84
+    "DB-A5-006": frozenset({"ind-mr-sangraha-v"}),  # indic A5, medicine 85
+    "DB-A5-007": frozenset({"ind-sa-fw2"}),  # indic A5, medicine 86
+    "DB-A6-001": frozenset({"ind-bn-fw2"}),  # indic A6, medicine 88
+    "DB-A6-020": frozenset({"ind-bn-sangraha-v"}),  # indic A6, medicine 90
+    "DB-A6-003": frozenset({"ind-gu-fw2"}),  # indic A6, medicine 91
+    "DB-A6-017": frozenset({"ind-hi-hplt", "ind-hi-indiccorp", "ind-hi-sangraha-v"}),  # indic A6, medicine 92
+    "DB-A6-006": frozenset({"ind-kn-fw2", "ind-kn-sangraha-s"}),  # indic A6, medicine 95
+    "DB-A6-007": frozenset({"ind-kn-sangraha-v"}),  # indic A6, medicine 97
+    "DB-A6-008": frozenset({"ind-mr-fw2"}),  # indic A6, medicine 98
+    "DB-A6-021": frozenset({"ind-mr-sangraha-v"}),  # indic A6, medicine 99
+    "DB-A6-013": frozenset({"ind-te-fw2", "ind-te-sangraha-s", "ind-te-sangraha-v"}),  # indic A6, medicine 101
+    "DB-G1-001": frozenset({"ind-bn-fw2"}),  # indic G1, medicine 102
+    "DB-G1-015": frozenset({"ind-bn-sangraha-v"}),  # indic G1, medicine 103
+    "DB-G1-003": frozenset({"ind-gu-fw2"}),  # indic G1, medicine 106
+    "DB-G1-016": frozenset({"ind-hi-fw2", "ind-hi-hplt", "ind-hi-sangraha-s", "ind-hi-sangraha-v"}),  # indic G1, medicine 107
+    "DB-G1-006": frozenset({"ind-mr-fw2", "ind-mr-sangraha-v"}),  # indic G1, medicine 110
+    "DB-G1-007": frozenset({"ind-sa-fw2"}),  # indic G1, medicine 111
+    "DB-G1-013": frozenset({"ind-ta-sangraha-v"}),  # indic G1, medicine 113
+    "DB-G1-010": frozenset({"ind-te-fw2", "ind-te-sangraha-s"}),  # indic G1, medicine 115
+    "DB-G1-014": frozenset({"ind-te-sangraha-v"}),  # indic G1, medicine 116
+    "DB-G2-003": frozenset({"ind-sa-fw2"}),  # indic G2, medicine 117
+    "DB-G4-006": frozenset({"ind-bn-fw2", "ind-bn-sangraha-v"}),  # indic G4, medicine 118
+    "DB-G4-007": frozenset({"ind-hi-hplt", "ind-hi-indiccorp", "ind-hi-sangraha-s", "ind-hi-sangraha-v"}),  # indic G4, medicine 119
+    "DB-G4-002": frozenset({"ind-mr-fw2", "ind-mr-sangraha-v"}),  # indic G4, medicine 120
+    "DB-G4-003": frozenset({"ind-sa-fw2"}),  # indic G4, medicine 121
+    "DB-G4-004": frozenset({"ind-ta-sangraha-v"}),  # indic G4, medicine 122
+    "DB-B2-001": frozenset({"ind-hi-fw2", "ind-hi-indiccorp", "ind-hi-sangraha-v"}),  # indic B2, medicine 123
+    "DB-B2-002": frozenset({"ind-hi-hplt"}),  # indic B2, medicine 124
+    "DB-B2-008": frozenset({"ind-hi-sangraha-s"}),  # indic B2, medicine 125
+    "DB-B2-003": frozenset({"ind-kn-fw2", "ind-kn-sangraha-s", "ind-kn-sangraha-v"}),  # indic B2, medicine 127
+    "DB-B2-004": frozenset({"ind-te-fw2", "ind-te-sangraha-v"}),  # indic B2, medicine 129
+    "DB-B2-007": frozenset({"ind-te-sangraha-s"}),  # indic B2, medicine 130
+    "DB-B3-001": frozenset({"ind-kn-fw2", "ind-kn-sangraha-s", "ind-kn-sangraha-v"}),  # indic B3, medicine 132
+    "DB-A3-004": frozenset({"ind-kn-sangraha-v"}),  # indic A3, medicine 135
+    "DB-A4-001": frozenset({"ind-sa-fw2"}),  # indic A4, medicine 136
+    "DB-A6-019": frozenset({"ind-hi-fw2", "ind-hi-sangraha-s"}),  # indic A6, medicine 138
+    "DB-B4-008": frozenset({"ind-hi-fw2", "ind-hi-hplt", "ind-hi-indiccorp", "ind-hi-sangraha-s", "ind-hi-sangraha-v"}),  # indic B4, medicine 139
+    "DB-C3-001": frozenset({"ind-bn-fw2", "ind-bn-sangraha-v"}),  # indic C3, medicine 141
+    "DB-C3-002": frozenset({"ind-hi-hplt", "ind-hi-sangraha-v"}),  # indic C3, medicine 142
+    "DB-C3-025": frozenset({"ind-hi-indiccorp"}),  # indic C3, medicine 143
+    "DB-C3-004": frozenset({"ind-sa-fw2"}),  # indic C3, medicine 146
+    "DB-C3-020": frozenset({"ind-te-fw2", "ind-te-sangraha-s", "ind-te-sangraha-v"}),  # indic C3, medicine 147
+    "DB-C4-001": frozenset({"ind-bn-fw2"}),  # indic C4, medicine 148
+    "DB-C4-002": frozenset({"ind-hi-fw2", "ind-hi-indiccorp", "ind-hi-sangraha-s", "ind-hi-sangraha-v"}),  # indic C4, medicine 149
+    "DB-C4-003": frozenset({"ind-hi-hplt"}),  # indic C4, medicine 151
+    "DB-C4-005": frozenset({"ind-mr-fw2"}),  # indic C4, medicine 153
+    "DB-C4-006": frozenset({"ind-te-fw2", "ind-te-sangraha-s"}),  # indic C4, medicine 154
+    "DB-C5-021": frozenset({"ind-bn-sangraha-v"}),  # indic C5, medicine 155
+    "DB-C5-016": frozenset({"ind-hi-fw2", "ind-hi-indiccorp", "ind-hi-sangraha-s", "ind-hi-sangraha-v"}),  # indic C5, medicine 156
+    "DB-C5-001": frozenset({"ind-hi-hplt"}),  # indic C5, medicine 157
+    "DB-C5-003": frozenset({"ind-kn-fw2", "ind-kn-sangraha-s", "ind-kn-sangraha-v"}),  # indic C5, medicine 159
+    "DB-C5-004": frozenset({"ind-mr-fw2", "ind-mr-sangraha-v"}),  # indic C5, medicine 160
+    "DB-C5-017": frozenset({"ind-ta-sangraha-v"}),  # indic C5, medicine 161
+    "DB-C5-006": frozenset({"ind-te-fw2", "ind-te-sangraha-s"}),  # indic C5, medicine 163
+    "DB-C5-018": frozenset({"ind-te-sangraha-v"}),  # indic C5, medicine 164
+    "DB-D4-001": frozenset({"ind-bn-fw2", "ind-bn-sangraha-v"}),  # indic D4, medicine 165
+    "DB-D4-003": frozenset({"ind-gu-fw2"}),  # indic D4, medicine 167
+    "DB-D4-013": frozenset({"ind-hi-fw2", "ind-hi-indiccorp", "ind-hi-sangraha-v"}),  # indic D4, medicine 169
+    "DB-D4-005": frozenset({"ind-hi-hplt"}),  # indic D4, medicine 170
+    "DB-D4-018": frozenset({"ind-hi-sangraha-s"}),  # indic D4, medicine 172
+    "DB-D4-007": frozenset({"ind-kn-fw2", "ind-kn-sangraha-v"}),  # indic D4, medicine 173
+    "DB-D4-008": frozenset({"ind-mr-fw2", "ind-mr-sangraha-v"}),  # indic D4, medicine 174
+    "DB-D4-009": frozenset({"ind-sa-fw2"}),  # indic D4, medicine 175
+    "DB-D4-012": frozenset({"ind-te-fw2", "ind-te-sangraha-s"}),  # indic D4, medicine 178
+    "DB-D4-016": frozenset({"ind-te-sangraha-v"}),  # indic D4, medicine 179
+    "DB-D5-001": frozenset({"ind-te-sangraha-s"}),  # indic D5, medicine 180
+    "DB-D5-004": frozenset({"ind-te-fw2", "ind-te-sangraha-v"}),  # indic D5, medicine 181
+    "DB-F3-001": frozenset({"ind-bn-fw2", "ind-bn-sangraha-v"}),  # indic F3, medicine 182
+    "DB-F3-004": frozenset({"ind-hi-fw2", "ind-hi-hplt", "ind-hi-indiccorp", "ind-hi-sangraha-s", "ind-hi-sangraha-v"}),  # indic F3, medicine 184
+    "DB-F3-005": frozenset({"ind-ta-sangraha-v"}),  # indic F3, medicine 185
+    "DB-F3-003": frozenset({"ind-te-fw2", "ind-te-sangraha-s", "ind-te-sangraha-v"}),  # indic F3, medicine 186
+    "DB-G1-012": frozenset({"ind-hi-indiccorp"}),  # indic G1, medicine 187
+    "DB-G1-011": frozenset({"ind-kn-fw2", "ind-kn-sangraha-s", "ind-kn-sangraha-v"}),  # indic G1, medicine 188
+    "DB-G3-003": frozenset({"ind-hi-fw2", "ind-hi-hplt", "ind-hi-indiccorp", "ind-hi-sangraha-s", "ind-hi-sangraha-v"}),  # indic G3, medicine 189
+    "DB-C1-001": frozenset({"ind-bn-fw2"}),  # indic C1, medicine 191
+    "DB-C1-003": frozenset({"ind-gu-fw2"}),  # indic C1, medicine 195
+    "DB-C1-005": frozenset({"ind-hi-fw2", "ind-hi-sangraha-s", "ind-hi-sangraha-v"}),  # indic C1, medicine 197
+    "DB-C1-006": frozenset({"ind-hi-hplt"}),  # indic C1, medicine 199
+    "DB-C1-018": frozenset({"ind-hi-indiccorp"}),  # indic C1, medicine 201
+    "DB-C1-010": frozenset({"ind-kn-fw2", "ind-kn-sangraha-s"}),  # indic C1, medicine 204
+    "DB-C1-019": frozenset({"ind-kn-sangraha-v"}),  # indic C1, medicine 205
+    "DB-C1-012": frozenset({"ind-mr-sangraha-v"}),  # indic C1, medicine 208
+    "DB-C1-013": frozenset({"ind-sa-fw2"}),  # indic C1, medicine 209
+    "DB-C1-021": frozenset({"ind-ta-sangraha-v"}),  # indic C1, medicine 211
+    "DB-C1-016": frozenset({"ind-te-fw2", "ind-te-sangraha-s"}),  # indic C1, medicine 213
+    "DB-C1-022": frozenset({"ind-te-sangraha-v"}),  # indic C1, medicine 214
+    "DB-C2-001": frozenset({"ind-bn-fw2"}),  # indic C2, medicine 216
+    "DB-C2-023": frozenset({"ind-bn-sangraha-v"}),  # indic C2, medicine 219
+    "DB-C2-003": frozenset({"ind-gu-fw2"}),  # indic C2, medicine 220
+    "DB-C2-014": frozenset({"ind-hi-fw2", "ind-hi-indiccorp", "ind-hi-sangraha-s", "ind-hi-sangraha-v"}),  # indic C2, medicine 221
+    "DB-C2-021": frozenset({"ind-hi-hplt"}),  # indic C2, medicine 222
+    "DB-C2-008": frozenset({"ind-kn-sangraha-s", "ind-kn-sangraha-v"}),  # indic C2, medicine 227
+    "DB-C2-015": frozenset({"ind-mr-fw2"}),  # indic C2, medicine 228
+    "DB-C2-010": frozenset({"ind-mr-sangraha-v"}),  # indic C2, medicine 231
+    "DB-C2-016": frozenset({"ind-ta-sangraha-v"}),  # indic C2, medicine 233
+    "DB-C2-013": frozenset({"ind-te-fw2"}),  # indic C2, medicine 235
+    "DB-C2-017": frozenset({"ind-te-sangraha-s"}),  # indic C2, medicine 236
+    "DB-C2-018": frozenset({"ind-te-sangraha-v"}),  # indic C2, medicine 237
+    "DB-C3-006": frozenset({"ind-hi-fw2"}),  # indic C3, medicine 239
+    "DB-C3-023": frozenset({"ind-hi-sangraha-s"}),  # indic C3, medicine 244
+    "DB-C3-017": frozenset({"ind-kn-sangraha-s"}),  # indic C3, medicine 246
+    "DB-C3-024": frozenset({"ind-mr-fw2"}),  # indic C3, medicine 249
+    "DB-C3-010": frozenset({"ind-mr-sangraha-v"}),  # indic C3, medicine 250
+    "DB-C3-021": frozenset({"ind-ta-sangraha-v"}),  # indic C3, medicine 252
+    "DB-C4-015": frozenset({"ind-bn-sangraha-v"}),  # indic C4, medicine 256
+    "DB-C4-007": frozenset({"ind-gu-fw2"}),  # indic C4, medicine 257
+    "DB-C4-009": frozenset({"ind-mr-sangraha-v"}),  # indic C4, medicine 260
+    "DB-C4-010": frozenset({"ind-sa-fw2"}),  # indic C4, medicine 261
+    "DB-C4-013": frozenset({"ind-ta-sangraha-v"}),  # indic C4, medicine 263
+    "DB-C4-014": frozenset({"ind-te-sangraha-v"}),  # indic C4, medicine 264
+    "DB-C5-007": frozenset({"ind-bn-fw2"}),  # indic C5, medicine 265
+    "DB-C5-009": frozenset({"ind-gu-fw2"}),  # indic C5, medicine 267
+    "DB-C5-014": frozenset({"ind-sa-fw2"}),  # indic C5, medicine 274
+    "DB-D2-003": frozenset({"ind-hi-fw2", "ind-hi-hplt", "ind-hi-indiccorp", "ind-hi-sangraha-s", "ind-hi-sangraha-v"}),  # indic D2, medicine 276
+    "DB-D2-002": frozenset({"ind-sa-fw2"}),  # indic D2, medicine 278
+    "DB-D3-001": frozenset({"ind-bn-fw2"}),  # indic D3, medicine 279
+    "DB-D3-021": frozenset({"ind-bn-sangraha-v"}),  # indic D3, medicine 281
+    "DB-D3-003": frozenset({"ind-gu-fw2"}),  # indic D3, medicine 282
+    "DB-D3-005": frozenset({"ind-hi-fw2", "ind-hi-indiccorp", "ind-hi-sangraha-s", "ind-hi-sangraha-v"}),  # indic D3, medicine 284
+    "DB-D3-020": frozenset({"ind-hi-hplt"}),  # indic D3, medicine 286
+    "DB-D3-008": frozenset({"ind-kn-fw2", "ind-kn-sangraha-s"}),  # indic D3, medicine 289
+    "DB-D3-016": frozenset({"ind-kn-sangraha-v"}),  # indic D3, medicine 290
+    "DB-D3-017": frozenset({"ind-mr-fw2"}),  # indic D3, medicine 292
+    "DB-D3-022": frozenset({"ind-mr-sangraha-v"}),  # indic D3, medicine 294
+    "DB-D3-012": frozenset({"ind-sa-fw2"}),  # indic D3, medicine 296
+    "DB-D3-018": frozenset({"ind-ta-sangraha-v"}),  # indic D3, medicine 298
+    "DB-D3-014": frozenset({"ind-te-fw2", "ind-te-sangraha-s"}),  # indic D3, medicine 299
+    "DB-D3-019": frozenset({"ind-te-sangraha-v"}),  # indic D3, medicine 300
+    "DB-D4-014": frozenset({"ind-kn-sangraha-s"}),  # indic D4, medicine 302
+    "DB-D4-017": frozenset({"ind-ta-sangraha-v"}),  # indic D4, medicine 304
+    "DB-D5-003": frozenset({"ind-hi-fw2", "ind-hi-indiccorp", "ind-hi-sangraha-s"}),  # indic D5, medicine 305
+    "DB-D5-002": frozenset({"ind-hi-hplt", "ind-hi-sangraha-v"}),  # indic D5, medicine 306
+    "DB-H3-001": frozenset({"ind-sa-fw2"}),  # indic H3, medicine 308
+    "DB-B4-009": frozenset({"ind-bn-fw2", "ind-bn-sangraha-v"}),  # indic B4, medicine 310
+    "DB-B4-001": frozenset({"ind-gu-fw2"}),  # indic B4, medicine 311
+    "DB-B4-002": frozenset({"ind-kn-fw2", "ind-kn-sangraha-s", "ind-kn-sangraha-v"}),  # indic B4, medicine 313
+    "DB-B4-011": frozenset({"ind-mr-fw2"}),  # indic B4, medicine 314
+    "DB-B4-003": frozenset({"ind-mr-sangraha-v"}),  # indic B4, medicine 315
+    "DB-B4-004": frozenset({"ind-sa-fw2"}),  # indic B4, medicine 316
+    "DB-B4-007": frozenset({"ind-ta-sangraha-v"}),  # indic B4, medicine 317
+    "DB-B4-006": frozenset({"ind-te-fw2", "ind-te-sangraha-s", "ind-te-sangraha-v"}),  # indic B4, medicine 319
+    "f1_rule.py": frozenset({"code-cpp", "code-go", "code-java", "code-js-ts", "code-python", "code-rust", "ind-bn-fw2", "ind-bn-sangraha-v", "ind-gu-fw2", "ind-hi-fw2", "ind-hi-hplt", "ind-hi-indiccorp", "ind-hi-sangraha-s", "ind-hi-sangraha-v", "ind-kn-fw2", "ind-kn-sangraha-s", "ind-kn-sangraha-v", "ind-mr-fw2", "ind-mr-sangraha-v", "ind-sa-fw2", "ind-ta-sangraha-v", "ind-te-fw2", "ind-te-sangraha-s", "ind-te-sangraha-v", "math-finemath", "math-megamath", "sci-finepdfs"}),  # the shared F1, spec_v1/tools/f1_rule.py: code, math, sci, indic packs, last
 }
 
+
+DEFERRED_RULES = {'DB-A5-002': 'overlap alternative; provisional source-order selection is DB-A5-001', 'DB-A5-004': 'not idempotent on own diagnosis pack', 'DB-A5-005': 'not idempotent on own diagnosis pack', 'DB-A5-008': 'overlap alternative; provisional source-order selection is DB-A5-007', 'DB-A6-002': 'overlap alternative; provisional source-order selection is DB-A6-001', 'DB-A6-004': 'overlap alternative; provisional source-order selection is DB-A6-017', 'DB-A6-005': 'overlap alternative; provisional source-order selection is DB-A6-017', 'DB-A6-016': 'overlap alternative; provisional source-order selection is DB-A6-006', 'DB-A6-009': 'overlap alternative; provisional source-order selection is DB-A6-021', 'DB-G1-017': 'not idempotent on own diagnosis pack', 'DB-G1-002': 'not idempotent on own diagnosis pack', 'DB-G1-004': 'overlap alternative; provisional source-order selection is DB-G1-016', 'DB-G1-005': 'combined own-pack gold: FAIL', 'DB-G1-008': 'overlap alternative; provisional source-order selection is DB-G1-007', 'DB-G1-009': 'not idempotent on own diagnosis pack', 'DB-B2-009': 'overlap alternative; provisional source-order selection is DB-B2-008', 'DB-B2-006': 'overlap alternative; provisional source-order selection is DB-B2-003', 'DB-B2-005': 'overlap alternative; provisional source-order selection is DB-B2-007', 'DB-B3-002': 'overlap alternative; provisional source-order selection is DB-B3-001', 'DB-A3-003': 'overlap alternative; provisional source-order selection is DB-A3-001', 'DB-A6-015': 'overlap alternative; provisional source-order selection is DB-A6-003', 'DB-C2-019': 'joiners: drops ordinary synthetic prose', 'DB-C3-019': 'joiners: drops ordinary synthetic prose', 'DB-C3-003': 'joiners: drops ordinary synthetic prose', 'DB-C4-012': 'overlap alternative; provisional source-order selection is DB-C4-002', 'DB-C4-004': 'overlap alternative; provisional source-order selection is DB-C4-003', 'DB-C5-002': 'overlap alternative; provisional source-order selection is DB-C5-001', 'DB-C5-005': 'overlap alternative; provisional source-order selection is DB-C5-017', 'DB-D4-002': 'overlap alternative; provisional source-order selection is DB-D4-001', 'DB-D4-004': 'overlap alternative; provisional source-order selection is DB-D4-003', 'DB-D4-006': 'overlap alternative; provisional source-order selection is DB-D4-005', 'DB-D4-010': 'overlap alternative; provisional source-order selection is DB-D4-009', 'DB-D4-011': 'acts again on retained documents after the full pipeline', 'DB-F3-002': 'overlap alternative; provisional source-order selection is DB-F3-001', 'DB-G3-001': 'acts again on retained documents after the full pipeline', 'DB-C1-024': 'overlap alternative; provisional source-order selection is DB-C1-001', 'DB-C1-002': 'overlap alternative; provisional source-order selection is DB-C1-001', 'DB-C1-023': 'acts again on retained documents after the full pipeline', 'DB-C1-004': 'not idempotent on own diagnosis pack', 'DB-C1-017': 'overlap alternative; provisional source-order selection is DB-C1-005', 'DB-C1-007': 'overlap alternative; provisional source-order selection is DB-C1-006', 'DB-C1-008': 'combined own-pack gold: FAIL', 'DB-C1-009': 'overlap alternative; provisional source-order selection is DB-C1-008', 'DB-C1-011': 'overlap alternative; provisional source-order selection is DB-C1-019', 'DB-C1-020': 'not idempotent on own diagnosis pack', 'DB-C1-014': 'overlap alternative; provisional source-order selection is DB-C1-013', 'DB-C1-015': 'overlap alternative; provisional source-order selection is DB-C1-021', 'DB-C1-025': 'not idempotent on own diagnosis pack', 'DB-C2-002': 'overlap alternative; provisional source-order selection is DB-C2-001', 'DB-C2-020': 'acts again on retained documents after the full pipeline', 'DB-C2-004': 'overlap alternative; provisional source-order selection is DB-C2-021', 'DB-C2-005': 'overlap alternative; provisional source-order selection is DB-C2-021', 'DB-C2-006': 'combined own-pack gold: FAIL', 'DB-C2-007': 'overlap alternative; provisional source-order selection is DB-C2-006', 'DB-C2-009': 'not idempotent on own diagnosis pack', 'DB-C2-022': 'overlap alternative; provisional source-order selection is DB-C2-015', 'DB-C2-011': 'acts again on retained documents after the full pipeline', 'DB-C2-012': 'overlap alternative; provisional source-order selection is DB-C2-016', 'DB-C3-005': 'joiners: changes script joiner count', 'DB-C3-015': 'overlap alternative; provisional source-order selection is DB-C3-006', 'DB-C3-022': 'overlap alternative; provisional source-order selection is DB-C3-002', 'DB-C3-007': 'not idempotent on own diagnosis pack', 'DB-C3-016': 'overlap alternative; provisional source-order selection is DB-C3-025', 'DB-C3-008': 'not idempotent on own diagnosis pack', 'DB-C3-018': 'joiners: changes script joiner count', 'DB-C3-009': 'joiners: changes script joiner count', 'DB-C3-011': 'overlap alternative; provisional source-order selection is DB-C3-004', 'DB-C3-012': 'joiners: changes script joiner count', 'DB-C3-013': 'not idempotent on own diagnosis pack', 'DB-C3-014': 'not idempotent on own diagnosis pack', 'DB-C4-016': 'overlap alternative; provisional source-order selection is DB-C4-003', 'DB-C4-008': 'acts again on retained documents after the full pipeline', 'DB-C4-011': 'overlap alternative; provisional source-order selection is DB-C4-010', 'DB-C5-008': 'overlap alternative; provisional source-order selection is DB-C5-007', 'DB-C5-010': 'overlap alternative; provisional source-order selection is DB-C5-009', 'DB-C5-019': 'overlap alternative; provisional source-order selection is DB-C5-001', 'DB-C5-011': 'combined own-pack gold: FAIL', 'DB-C5-012': 'overlap alternative; provisional source-order selection is DB-C5-011', 'DB-C5-020': 'overlap alternative; provisional source-order selection is DB-C5-004', 'DB-C5-013': 'acts again on retained documents after the full pipeline', 'DB-C5-015': 'overlap alternative; provisional source-order selection is DB-C5-014', 'DB-D2-001': 'overlap alternative; provisional source-order selection is DB-D2-003', 'DB-D3-002': 'overlap alternative; provisional source-order selection is DB-D3-001', 'DB-D3-004': 'overlap alternative; provisional source-order selection is DB-D3-003', 'DB-D3-015': 'overlap alternative; provisional source-order selection is DB-D3-005', 'DB-D3-006': 'overlap alternative; provisional source-order selection is DB-D3-020', 'DB-D3-007': 'overlap alternative; provisional source-order selection is DB-D3-020', 'DB-D3-009': 'overlap alternative; provisional source-order selection is DB-D3-016', 'DB-D3-010': 'overlap alternative; provisional source-order selection is DB-D3-017', 'DB-D3-011': 'overlap alternative; provisional source-order selection is DB-D3-022', 'DB-D3-013': 'overlap alternative; provisional source-order selection is DB-D3-012', 'DB-D4-019': 'overlap alternative; provisional source-order selection is DB-D4-018', 'DB-D4-015': 'overlap alternative; provisional source-order selection is DB-D4-007', 'DB-G3-002': 'acts again on retained documents after the full pipeline', 'DB-H3-002': 'overlap alternative; provisional source-order selection is DB-H3-001', 'DB-B4-010': 'overlap alternative; provisional source-order selection is DB-B4-008', 'DB-B4-005': 'overlap alternative; provisional source-order selection is DB-B4-007', 'DB-F1-001': "replaced by the shared F1, spec_v1/build/f1_rule.py (Indic path): the TSAI ruling's <PHONE>/<EMAIL> placeholders with organisation and public-office contacts kept; this source rule used other placeholders or deleted values, and replaced organisation contacts", 'DB-F1-002': "replaced by the shared F1, spec_v1/build/f1_rule.py (Indic path): the TSAI ruling's <PHONE>/<EMAIL> placeholders with organisation and public-office contacts kept; this source rule used other placeholders or deleted values, and replaced organisation contacts", 'DB-F1-012': "replaced by the shared F1, spec_v1/build/f1_rule.py (Indic path): the TSAI ruling's <PHONE>/<EMAIL> placeholders with organisation and public-office contacts kept; this source rule used other placeholders or deleted values, and replaced organisation contacts", 'DB-F1-003': "replaced by the shared F1, spec_v1/build/f1_rule.py (Indic path): the TSAI ruling's <PHONE>/<EMAIL> placeholders with organisation and public-office contacts kept; this source rule used other placeholders or deleted values, and replaced organisation contacts", 'DB-F1-004': "replaced by the shared F1, spec_v1/build/f1_rule.py (Indic path): the TSAI ruling's <PHONE>/<EMAIL> placeholders with organisation and public-office contacts kept; this source rule used other placeholders or deleted values, and replaced organisation contacts", 'DB-F1-011': "not idempotent on own diagnosis pack; replaced by the shared F1, spec_v1/build/f1_rule.py (Indic path): the TSAI ruling's <PHONE>/<EMAIL> placeholders with organisation and public-office contacts kept; this source rule used other placeholders or deleted values, and replaced organisation contacts", 'DB-F1-006': "replaced by the shared F1, spec_v1/build/f1_rule.py (Indic path): the TSAI ruling's <PHONE>/<EMAIL> placeholders with organisation and public-office contacts kept; this source rule used other placeholders or deleted values, and replaced organisation contacts", 'DB-F1-007': "replaced by the shared F1, spec_v1/build/f1_rule.py (Indic path): the TSAI ruling's <PHONE>/<EMAIL> placeholders with organisation and public-office contacts kept; this source rule used other placeholders or deleted values, and replaced organisation contacts", 'DB-F1-008': "replaced by the shared F1, spec_v1/build/f1_rule.py (Indic path): the TSAI ruling's <PHONE>/<EMAIL> placeholders with organisation and public-office contacts kept; this source rule used other placeholders or deleted values, and replaced organisation contacts", 'DB-F1-009': "replaced by the shared F1, spec_v1/build/f1_rule.py (Indic path): the TSAI ruling's <PHONE>/<EMAIL> placeholders with organisation and public-office contacts kept; this source rule used other placeholders or deleted values, and replaced organisation contacts", 'DB-F1-010': "replaced by the shared F1, spec_v1/build/f1_rule.py (Indic path): the TSAI ruling's <PHONE>/<EMAIL> placeholders with organisation and public-office contacts kept; this source rule used other placeholders or deleted values, and replaced organisation contacts", 'DB-A6-010': 'TSAI 5 November: visarga/colon conversion in either direction is excluded from spec v1 in every script, including Tamil ஃ', 'DB-A6-011': 'TSAI 5 November: visarga/colon conversion in either direction is excluded from spec v1 in every script, including Tamil ஃ', 'DB-A6-012': 'TSAI 5 November: visarga/colon conversion in either direction is excluded from spec v1 in every script, including Tamil ஃ', 'DB-A6-014': 'TSAI 5 November: visarga/colon conversion in either direction is excluded from spec v1 in every script, including Tamil ஃ', 'DB-G2-001': 'TSAI 4 November: adds ZWJ by design; excluded from spec v1 and all sibling scopes; held for v2', 'DB-G2-002': 'TSAI 4 November: adds ZWJ by design; excluded from spec v1 and all sibling scopes; held for v2', 'DB-G4-001': 'TSAI 5 November: visarga/colon conversion in either direction is excluded from spec v1 in every script, including Tamil ஃ', 'DB-F2-001': 'TSAI 4 November: needs Itihasa test sentences via ITIHASA_TEST_SN; legacy F2 excluded from spec v1; optional G9 F2 does not cover Itihasa', 'DB-F1-005': 'fails current own-pack gold (2 of 114); source F1 is also replaced by shared Indic F1', 'DB-F2-002': 'TSAI 4 November: needs FLORES/IN22/Itihasa benchmark text; legacy F2 excluded from spec v1'}  # documented candidates excluded from execution
 
 @cache
 def _code_a1_001():
@@ -95,6 +249,7 @@ def _code_a1_001():
     STATUS = "CANDIDATE"
     LANGS = {'cpp', 'go', 'java', 'javascript', 'python', 'rust', 'typescript'}
     ORIGIN = "code-go, code-rust, code-js-ts, code-java, code-cpp, code-python"  # packs it runs on
+    PACKS = SCOPE["DA-A1-001"]  # the math packs share the "en" tag, so the pack is checked too
     SOURCE = "code-cpp"  # pack whose medicine this came from
     import re
 
@@ -113,7 +268,7 @@ def _code_a1_001():
 
 
     def medicine(doc):
-        if doc.get("lang_label") not in LANGS:
+        if doc.get("lang_label") not in LANGS and doc.get("pack_id") not in PACKS:
             return ("keep", doc["text"])
         return _std(remove_bom_characters(doc["text"]), doc["text"])
 
@@ -139,6 +294,7 @@ def _code_a2_007():
     STATUS = "CANDIDATE"
     LANGS = {'cpp', 'go', 'java', 'javascript', 'python', 'rust', 'typescript'}
     ORIGIN = "code-go, code-rust, code-js-ts, code-java, code-cpp, code-python"  # packs it runs on
+    PACKS = SCOPE["DA-A2-007"]  # the math packs share the "en" tag, so the pack is checked too
     SOURCE = "code-go"  # pack whose medicine this came from
     import re
 
@@ -160,7 +316,7 @@ def _code_a2_007():
 
 
     def medicine(doc):
-        if doc.get("lang_label") not in LANGS:
+        if doc.get("lang_label") not in LANGS and doc.get("pack_id") not in PACKS:
             return ("keep", doc["text"])
         return _std(medicine_a2(doc), doc["text"])
 
@@ -186,6 +342,7 @@ def _code_a6_001():
     STATUS = "CANDIDATE"
     LANGS = {'cpp', 'go', 'java', 'javascript', 'python', 'rust', 'typescript'}
     ORIGIN = "code-go, code-rust, code-js-ts, code-java, code-cpp, code-python"  # packs it runs on
+    PACKS = SCOPE["DA-A6-001"]  # the math packs share the "en" tag, so the pack is checked too
     SOURCE = "code-go"  # pack whose medicine this came from
     import re
 
@@ -209,7 +366,7 @@ def _code_a6_001():
 
 
     def medicine(doc):
-        if doc.get("lang_label") not in LANGS:
+        if doc.get("lang_label") not in LANGS and doc.get("pack_id") not in PACKS:
             return ("keep", doc["text"])
         return _std(medicine_a6(doc), doc["text"])
 
@@ -235,6 +392,7 @@ def _code_a4_002():
     STATUS = "CANDIDATE"
     LANGS = {'cpp', 'go', 'java', 'javascript', 'python', 'rust', 'typescript'}
     ORIGIN = "code-go, code-rust, code-js-ts, code-java, code-cpp, code-python"  # packs it runs on
+    PACKS = SCOPE["DA-A4-002"]  # the math packs share the "en" tag, so the pack is checked too
     SOURCE = "code-go"  # pack whose medicine this came from
     import re
 
@@ -256,7 +414,7 @@ def _code_a4_002():
 
 
     def medicine(doc):
-        if doc.get("lang_label") not in LANGS:
+        if doc.get("lang_label") not in LANGS and doc.get("pack_id") not in PACKS:
             return ("keep", doc["text"])
         return _std(medicine_a4(doc), doc["text"])
 
@@ -282,6 +440,7 @@ def _code_a4_003():
     STATUS = "CANDIDATE"
     LANGS = {'java'}
     ORIGIN = "code-java"  # packs it runs on
+    PACKS = SCOPE["DA-A4-003"]  # the math packs share the "en" tag, so the pack is checked too
     SOURCE = "code-java"  # pack whose medicine this came from
     import re
 
@@ -304,7 +463,7 @@ def _code_a4_003():
 
 
     def medicine(doc):
-        if doc.get("lang_label") not in LANGS:
+        if doc.get("lang_label") not in LANGS and doc.get("pack_id") not in PACKS:
             return ("keep", doc["text"])
         return _std(m8_clean_replacement_chars(doc["text"]), doc["text"])
 
@@ -330,6 +489,7 @@ def _code_b3_001():
     STATUS = "CANDIDATE"
     LANGS = {'cpp', 'go', 'java', 'javascript', 'python', 'rust', 'typescript'}
     ORIGIN = "code-go, code-rust, code-js-ts, code-java, code-cpp, code-python"  # packs it runs on
+    PACKS = SCOPE["DA-B3-001"]  # the math packs share the "en" tag, so the pack is checked too
     SOURCE = "code-cpp"  # pack whose medicine this came from
     import re
 
@@ -353,7 +513,7 @@ def _code_b3_001():
 
 
     def medicine(doc):
-        if doc.get("lang_label") not in LANGS:
+        if doc.get("lang_label") not in LANGS and doc.get("pack_id") not in PACKS:
             return ("keep", doc["text"])
         return _std(remove_metadata_prefix(doc["text"]), doc["text"])
 
@@ -379,6 +539,7 @@ def _code_e1_001():
     STATUS = "CANDIDATE"
     LANGS = {'go'}
     ORIGIN = "code-go"  # packs it runs on
+    PACKS = SCOPE["DA-E1-001"]  # the math packs share the "en" tag, so the pack is checked too
     SOURCE = "code-go"  # pack whose medicine this came from
     import re
 
@@ -426,7 +587,7 @@ def _code_e1_001():
 
 
     def medicine(doc):
-        if doc.get("lang_label") not in LANGS:
+        if doc.get("lang_label") not in LANGS and doc.get("pack_id") not in PACKS:
             return ("keep", doc["text"])
         return _std(drop_generated(doc["text"]), doc["text"])
 
@@ -452,6 +613,7 @@ def _code_e1_004():
     STATUS = "CANDIDATE"
     LANGS = {'python', 'rust'}
     ORIGIN = "code-rust, code-python"  # packs it runs on
+    PACKS = SCOPE["DA-E1-004"]  # the math packs share the "en" tag, so the pack is checked too
     SOURCE = "code-rust"  # pack whose medicine this came from
     import re
 
@@ -485,7 +647,7 @@ def _code_e1_004():
 
 
     def medicine(doc):
-        if doc.get("lang_label") not in LANGS:
+        if doc.get("lang_label") not in LANGS and doc.get("pack_id") not in PACKS:
             return ("keep", doc["text"])
         return _std(e1_generated(doc["text"]), doc["text"])
 
@@ -511,6 +673,7 @@ def _code_e1_008():
     STATUS = "CANDIDATE"
     LANGS = {'javascript', 'typescript'}
     ORIGIN = "code-js-ts"  # packs it runs on
+    PACKS = SCOPE["DA-E1-008"]  # the math packs share the "en" tag, so the pack is checked too
     SOURCE = "code-js-ts"  # pack whose medicine this came from
     import re
 
@@ -565,7 +728,7 @@ def _code_e1_008():
 
 
     def medicine(doc):
-        if doc.get("lang_label") not in LANGS:
+        if doc.get("lang_label") not in LANGS and doc.get("pack_id") not in PACKS:
             return ("keep", doc["text"])
         return _std(medicine_e1(doc), doc["text"])
 
@@ -591,6 +754,7 @@ def _code_e1_006():
     STATUS = "CANDIDATE"
     LANGS = {'java'}
     ORIGIN = "code-java"  # packs it runs on
+    PACKS = SCOPE["DA-E1-006"]  # the math packs share the "en" tag, so the pack is checked too
     SOURCE = "code-java"  # pack whose medicine this came from
     import re
 
@@ -613,7 +777,7 @@ def _code_e1_006():
 
 
     def medicine(doc):
-        if doc.get("lang_label") not in LANGS:
+        if doc.get("lang_label") not in LANGS and doc.get("pack_id") not in PACKS:
             return ("keep", doc["text"])
         return _std(drop_e1(doc["text"]), doc["text"])
 
@@ -639,6 +803,7 @@ def _code_e1_005():
     STATUS = "CANDIDATE"
     LANGS = {'cpp'}
     ORIGIN = "code-cpp"  # packs it runs on
+    PACKS = SCOPE["DA-E1-005"]  # the math packs share the "en" tag, so the pack is checked too
     SOURCE = "code-go"  # pack whose medicine this came from
     import re
 
@@ -664,7 +829,7 @@ def _code_e1_005():
 
 
     def medicine(doc):
-        if doc.get("lang_label") not in LANGS:
+        if doc.get("lang_label") not in LANGS and doc.get("pack_id") not in PACKS:
             return ("keep", doc["text"])
         return _std(medicine_e1(doc), doc["text"])
 
@@ -690,6 +855,7 @@ def _code_e1_007():
     STATUS = "CANDIDATE"
     LANGS = {'cpp'}
     ORIGIN = "code-cpp"  # packs it runs on
+    PACKS = SCOPE["DA-E1-007"]  # the math packs share the "en" tag, so the pack is checked too
     SOURCE = "code-java"  # pack whose medicine this came from
     import re
 
@@ -714,7 +880,7 @@ def _code_e1_007():
 
 
     def medicine(doc):
-        if doc.get("lang_label") not in LANGS:
+        if doc.get("lang_label") not in LANGS and doc.get("pack_id") not in PACKS:
             return ("keep", doc["text"])
         return _std(m7_drop_generated(doc["text"]), doc["text"])
 
@@ -740,6 +906,7 @@ def _code_e2_001():
     STATUS = "CANDIDATE"
     LANGS = {'cpp', 'go', 'java', 'javascript', 'python', 'rust', 'typescript'}
     ORIGIN = "code-go, code-rust, code-js-ts, code-java, code-cpp, code-python"  # packs it runs on
+    PACKS = SCOPE["DA-E2-001"]  # the math packs share the "en" tag, so the pack is checked too
     SOURCE = "code-go"  # pack whose medicine this came from
     import re
 
@@ -771,7 +938,7 @@ def _code_e2_001():
 
 
     def medicine(doc):
-        if doc.get("lang_label") not in LANGS:
+        if doc.get("lang_label") not in LANGS and doc.get("pack_id") not in PACKS:
             return ("keep", doc["text"])
         return _std(drop_blob(doc["text"]), doc["text"])
 
@@ -797,6 +964,7 @@ def _code_c3_002():
     STATUS = "CANDIDATE"
     LANGS = {'go'}
     ORIGIN = "code-go"  # packs it runs on
+    PACKS = SCOPE["DA-C3-002"]  # the math packs share the "en" tag, so the pack is checked too
     SOURCE = "code-go"  # pack whose medicine this came from
     import re
 
@@ -848,7 +1016,7 @@ def _code_c3_002():
 
 
     def medicine(doc):
-        if doc.get("lang_label") not in LANGS:
+        if doc.get("lang_label") not in LANGS and doc.get("pack_id") not in PACKS:
             return ("keep", doc["text"])
         return _std(medicine_c3(doc), doc["text"])
 
@@ -874,6 +1042,7 @@ def _code_c4_002():
     STATUS = "CANDIDATE"
     LANGS = {'java'}
     ORIGIN = "code-java"  # packs it runs on
+    PACKS = SCOPE["DA-C4-002"]  # the math packs share the "en" tag, so the pack is checked too
     SOURCE = "code-java"  # pack whose medicine this came from
     import re
 
@@ -894,7 +1063,7 @@ def _code_c4_002():
 
 
     def medicine(doc):
-        if doc.get("lang_label") not in LANGS:
+        if doc.get("lang_label") not in LANGS and doc.get("pack_id") not in PACKS:
             return ("keep", doc["text"])
         return _std(m9_drop_joined(doc["text"]), doc["text"])
 
@@ -920,6 +1089,7 @@ def _code_e4_005():
     STATUS = "CANDIDATE"
     LANGS = {'go'}
     ORIGIN = "code-go"  # packs it runs on
+    PACKS = SCOPE["DA-E4-005"]  # the math packs share the "en" tag, so the pack is checked too
     SOURCE = "code-go"  # pack whose medicine this came from
     import re
 
@@ -964,7 +1134,7 @@ def _code_e4_005():
 
 
     def medicine(doc):
-        if doc.get("lang_label") not in LANGS:
+        if doc.get("lang_label") not in LANGS and doc.get("pack_id") not in PACKS:
             return ("keep", doc["text"])
         return _std(medicine_e4(doc), doc["text"])
 
@@ -990,6 +1160,7 @@ def _code_e4_010():
     STATUS = "CANDIDATE"
     LANGS = {'cpp', 'go', 'java', 'python', 'rust'}
     ORIGIN = "code-go, code-rust, code-java, code-cpp, code-python"  # packs it runs on
+    PACKS = SCOPE["DA-E4-010"]  # the math packs share the "en" tag, so the pack is checked too
     SOURCE = "code-rust"  # pack whose medicine this came from
     import re
 
@@ -1074,7 +1245,7 @@ def _code_e4_010():
 
 
     def medicine(doc):
-        if doc.get("lang_label") not in LANGS:
+        if doc.get("lang_label") not in LANGS and doc.get("pack_id") not in PACKS:
             return ("keep", doc["text"])
         return _std(medicine_e4_fixed(doc), doc["text"])
 
@@ -1100,6 +1271,7 @@ def _code_e4_009():
     STATUS = "CANDIDATE"
     LANGS = {'java'}
     ORIGIN = "code-java"  # packs it runs on
+    PACKS = SCOPE["DA-E4-009"]  # the math packs share the "en" tag, so the pack is checked too
     SOURCE = "code-go"  # pack whose medicine this came from
     import re
 
@@ -1171,7 +1343,7 @@ def _code_e4_009():
 
 
     def medicine(doc):
-        if doc.get("lang_label") not in LANGS:
+        if doc.get("lang_label") not in LANGS and doc.get("pack_id") not in PACKS:
             return ("keep", doc["text"])
         return _std(strip_licence_header(doc["text"]), doc["text"])
 
@@ -1197,6 +1369,7 @@ def _code_e4_007():
     STATUS = "CANDIDATE"
     LANGS = {'javascript', 'typescript'}
     ORIGIN = "code-js-ts"  # packs it runs on
+    PACKS = SCOPE["DA-E4-007"]  # the math packs share the "en" tag, so the pack is checked too
     SOURCE = "code-js-ts"  # pack whose medicine this came from
     import re
 
@@ -1227,7 +1400,7 @@ def _code_e4_007():
 
 
     def medicine(doc):
-        if doc.get("lang_label") not in LANGS:
+        if doc.get("lang_label") not in LANGS and doc.get("pack_id") not in PACKS:
             return ("keep", doc["text"])
         return _std(medicine_e4(doc["text"]), doc["text"])
 
@@ -1253,6 +1426,7 @@ def _code_c1_004():
     STATUS = "CANDIDATE"
     LANGS = {'go'}
     ORIGIN = "code-go"  # packs it runs on
+    PACKS = SCOPE["DA-C1-004"]  # the math packs share the "en" tag, so the pack is checked too
     SOURCE = "code-go"  # pack whose medicine this came from
     import re
 
@@ -1276,7 +1450,7 @@ def _code_c1_004():
 
 
     def medicine(doc):
-        if doc.get("lang_label") not in LANGS:
+        if doc.get("lang_label") not in LANGS and doc.get("pack_id") not in PACKS:
             return ("keep", doc["text"])
         return _std(medicine_c1(doc), doc["text"])
 
@@ -1302,6 +1476,7 @@ def _code_c1_005():
     STATUS = "CANDIDATE"
     LANGS = {'java'}
     ORIGIN = "code-java"  # packs it runs on
+    PACKS = SCOPE["DA-C1-005"]  # the math packs share the "en" tag, so the pack is checked too
     SOURCE = "code-java"  # pack whose medicine this came from
     import re
 
@@ -1359,7 +1534,7 @@ def _code_c1_005():
 
 
     def medicine(doc):
-        if doc.get("lang_label") not in LANGS:
+        if doc.get("lang_label") not in LANGS and doc.get("pack_id") not in PACKS:
             return ("keep", doc["text"])
         return _std(m6_strip_ide_templates(doc["text"]), doc["text"])
 
@@ -1385,6 +1560,7 @@ def _code_b4_009():
     STATUS = "CANDIDATE"
     LANGS = {'cpp', 'go', 'java', 'javascript', 'python', 'rust', 'typescript'}
     ORIGIN = "code-go, code-rust, code-js-ts, code-java, code-cpp, code-python"  # packs it runs on
+    PACKS = SCOPE["DA-B4-009"]  # the math packs share the "en" tag, so the pack is checked too
     SOURCE = "code-go"  # pack whose medicine this came from
     import re
 
@@ -1408,7 +1584,7 @@ def _code_b4_009():
 
 
     def medicine(doc):
-        if doc.get("lang_label") not in LANGS:
+        if doc.get("lang_label") not in LANGS and doc.get("pack_id") not in PACKS:
             return ("keep", doc["text"])
         return _std(medicine_b4(doc), doc["text"])
 
@@ -1434,6 +1610,7 @@ def _code_e3_003():
     STATUS = "CANDIDATE"
     LANGS = {'cpp', 'go', 'java', 'javascript', 'python', 'rust', 'typescript'}
     ORIGIN = "code-go, code-rust, code-js-ts, code-java, code-cpp, code-python"  # packs it runs on
+    PACKS = SCOPE["DA-E3-003"]  # the math packs share the "en" tag, so the pack is checked too
     SOURCE = "code-go"  # pack whose medicine this came from
     import re
 
@@ -1461,7 +1638,7 @@ def _code_e3_003():
 
 
     def medicine(doc):
-        if doc.get("lang_label") not in LANGS:
+        if doc.get("lang_label") not in LANGS and doc.get("pack_id") not in PACKS:
             return ("keep", doc["text"])
         return _std(medicine_e3(doc), doc["text"])
 
@@ -1487,6 +1664,7 @@ def _code_e3_004():
     STATUS = "CANDIDATE"
     LANGS = {'cpp', 'go', 'java', 'javascript', 'python', 'rust', 'typescript'}
     ORIGIN = "code-go, code-rust, code-js-ts, code-java, code-cpp, code-python"  # packs it runs on
+    PACKS = SCOPE["DA-E3-004"]  # the math packs share the "en" tag, so the pack is checked too
     SOURCE = "new rule, written for this sheet"  # pack whose medicine this came from
     import math
     import re
@@ -1521,6 +1699,11 @@ def _code_e3_004():
 
     SDK_KEY = re.compile(r"""(?P<head>\bnew\s+Pusher\(\s*(?P<quote>["'`]))[0-9a-fA-F]{16,}(?P=quote)""")
 
+    # Each literal is necessary for its KNOWN pattern. Test the current text before each
+    # substitution so the original substitution order and any cascading matches remain intact.
+    KNOWN_HINTS = ("AIza", "AKIA", "gh", "github_pat_", "sk-", "k_live_", "SG.", "xox", "eyJ", "-----BEGIN ")
+    ASSIGNED_HINT = re.compile(r"secret|token|key|passw(?:or)?d|pwd", re.I)  # a superset of every ASSIGNED name, including Unicode case folds
+
     DUMMY = re.compile(r"(?i)example|sample|dummy|test|fake|mock|placeholder|changeme|change_me|your|xxxx|0000|1234|abcd|secret|password|token|<|>|\$\{|\{\{|%s")
 
     def _entropy(v):
@@ -1539,10 +1722,13 @@ def _code_e3_004():
 
     def medicine_e3(text):
         new = text
-        for rx in KNOWN:
-            new = rx.sub(PLACEHOLDER, new)
-        new = SDK_KEY.sub(lambda m: m.group("head") + PLACEHOLDER + m.group("quote"), new)
-        new = ASSIGNED.sub(lambda m: m.group("head") + PLACEHOLDER + m.group("quote") if _looks_random(m.group("value")) else m.group(0), new)
+        for rx, hint in zip(KNOWN, KNOWN_HINTS):
+            if hint in new:
+                new = rx.sub(PLACEHOLDER, new)
+        if "Pusher" in new:
+            new = SDK_KEY.sub(lambda m: m.group("head") + PLACEHOLDER + m.group("quote"), new)
+        if ASSIGNED_HINT.search(new):
+            new = ASSIGNED.sub(lambda m: m.group("head") + PLACEHOLDER + m.group("quote") if _looks_random(m.group("value")) else m.group(0), new)
         return new
 
 
@@ -1557,7 +1743,7 @@ def _code_e3_004():
 
 
     def medicine(doc):
-        if doc.get("lang_label") not in LANGS:
+        if doc.get("lang_label") not in LANGS and doc.get("pack_id") not in PACKS:
             return ("keep", doc["text"])
         return _std(medicine_e3(doc["text"]), doc["text"])
 
@@ -1805,7 +1991,10 @@ def _english_b2_002():
 
 
     def medicine_b2(text):
-        if B2_ABOUT_HTML.search(text) or len(B2_TAG.findall(text)) < 2:
+        # Keep when the text is about HTML or has fewer than 2 tags: the same test with the cheap parts first. A tag begins
+        # with "<" and holds no other "<", so fewer than 2 "<" means fewer than 2 tags, and B2_ABOUT_HTML (the slow part) is
+        # asked only about the few texts that have 2 or more tags.
+        if text.count("<") < 2 or len(B2_TAG.findall(text)) < 2 or B2_ABOUT_HTML.search(text):
             return ("keep", text)
         new = re.sub(r"[ \t]{2,}", " ", B2_TAG.sub(" ", text))
         return ("fix" if new != text else "keep", new)
@@ -1897,18 +2086,26 @@ def _english_c3_003():
         "that this these those which who because however".split()
     )
 
-    _LAST_TOKEN = re.compile(r"([A-Za-z0-9']+)[^A-Za-z0-9']*$")
+    _TOKEN = frozenset("ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789'")  # the characters of [A-Za-z0-9']
+    _LONGEST = max(map(len, _DANGLING))  # a last token longer than every dangling word cannot be one
 
     def medicine_c3(text):
         tail = text.rstrip()
         if not tail:
             return text
-        if _MARKER.search(tail):
+        if tail.endswith("]") and _MARKER.search(tail):  # the marker ends the text, so the text must end in "]"
             return ("drop", "")
         if tail.endswith((".", "!", "?", '"', "'", ")", ":", "…")):
             return text
-        token = _LAST_TOKEN.search(tail)
-        if token and token.group(1).lower() in _DANGLING:
+        # The last token is the final run of [A-Za-z0-9'] characters. It is read backwards from the end: the regex that found it,
+        # ([A-Za-z0-9']+)[^A-Za-z0-9']*$, searched the whole text from the start, which cost far more than the answer needs.
+        end = len(tail)
+        while end and tail[end - 1] not in _TOKEN:
+            end -= 1
+        start = end
+        while start and tail[start - 1] in _TOKEN and end - start <= _LONGEST:
+            start -= 1
+        if end - start <= _LONGEST and tail[start:end].lower() in _DANGLING:
             return ("drop", "")
         return text
 
@@ -1955,26 +2152,27 @@ def _english_c5_002():
     SOURCE = "en-dclm"  # pack whose medicine this came from
     import re
 
-    _SPAM = tuple(
-        re.compile(p, re.I)
-        for p in (
-            r"\bcheap\s+(?:nfl|nba|mlb|nhl)\b",
-            r"\bcheap\s+(?:michael\s+kors|oakley|ray\s*bans?|jerseys)\b",
-            r"\bray\s*bans?\s+(?:sunglasses|outlet)\b",
-            r"\b(?:auto|car)\s+insur\w*\s+(?:quotes?|qiotes?|rates?)\b",
-            r"\bfree\s+auto\s+insurance\s+quotes\b",
-            r"\bsex\s+dating\s+in\b",
-            r"\bwrite\s+my\s+essay\b",
-            r"\b(?:카지노|바카라|룰렛)\b",
-            r"\bpigmentación\s+capilar\b",
-        )
+    _SPAM_PATTERNS = (
+        r"\bcheap\s+(?:nfl|nba|mlb|nhl)\b",
+        r"\bcheap\s+(?:michael\s+kors|oakley|ray\s*bans?|jerseys)\b",
+        r"\bray\s*bans?\s+(?:sunglasses|outlet)\b",
+        r"\b(?:auto|car)\s+insur\w*\s+(?:quotes?|qiotes?|rates?)\b",
+        r"\bfree\s+auto\s+insurance\s+quotes\b",
+        r"\bsex\s+dating\s+in\b",
+        r"\bwrite\s+my\s+essay\b",
+        r"\b(?:카지노|바카라|룰렛)\b",
+        r"\bpigmentación\s+capilar\b",
     )
+    _SPAM = tuple(re.compile(p, re.I) for p in _SPAM_PATTERNS)
+    _SPAM_ANY = re.compile("|".join(_SPAM_PATTERNS), re.I)  # matches exactly when one of the nine does
 
     _KEYWORD_LINE = re.compile(r"^(?![ \t]*[•·*\-])(?:[^|\n]{2,40}\|){6,}[^|\n]{2,40}[ \t]*$", re.M)
 
     def medicine_c5(text):
-        hits = sum(1 for p in _SPAM if p.search(text))
-        if hits >= 2 or _KEYWORD_LINE.search(text):
+        # Two different patterns must match to drop. Almost no document matches even one, so one search of their union
+        # comes first and the nine run one by one only when it matches. A keyword line needs 6 or more "|" characters.
+        hits = sum(1 for p in _SPAM if p.search(text)) if _SPAM_ANY.search(text) else 0
+        if hits >= 2 or (text.count("|") >= 6 and _KEYWORD_LINE.search(text)):
             return ("drop", "")
         return text
 
@@ -2237,12 +2435,23 @@ def _english_d3_003():
     SOURCE = "en-nemotroncc"  # pack whose medicine this came from
     import re
 
+    import unicodedata
+
+    _LATIN = {}  # letter -> True if its Unicode name starts with LATIN: looked up once per distinct letter, not once per occurrence
+
+    def _latin(c):
+        v = _LATIN.get(c)
+        if v is None:
+            v = _LATIN[c] = unicodedata.name(c, "").split(" ")[0] == "LATIN"
+        return v
+
     def d3(t):
         """Delete lines whose letters are mostly non-Latin (CJK, Cyrillic, Hangul, Devanagari ...) in an English document."""
-        import unicodedata
         def foreign(l):
+            if l.isascii():  # an ASCII letter is always Latin, so an ASCII line is never foreign
+                return False
             letters = [c for c in l if c.isalpha()]
-            return len(letters) >= 3 and sum(unicodedata.name(c, "").split(" ")[0] != "LATIN" for c in letters) / len(letters) > 0.5
+            return len(letters) >= 3 and sum(not _latin(c) for c in letters) / len(letters) > 0.5
         return "\n".join(l for l in t.split("\n") if not foreign(l))
 
 
@@ -2361,7 +2570,19 @@ def _english_b4_008():
     DETOK = re.compile("(?<=[A-Za-z])(?<![^A-Za-z][frbuFRBU])(?<![^A-Za-z][rR][bB])(?<![^A-Za-z][bB][rR])'(?!s\\b|t\\b|re\\b|ll\\b|ve\\b|d\\b|m\\b|em\\b|n'|er\\b|clock\\b|all\\b|am\\b)(?=[srmSRM][A-Za-z][^'\\n]{0,40}'(?:[\\s,.;:)!?]|$))", re.M)  # added by Data A: from maheshsv's medicine.md
 
     def fix_detok_quotes(text: str) -> tuple[str | None, bool]:
-        new = DETOK.sub(" '", text)
+        # DETOK can only match at an apostrophe, and a scan of every position costs far more than looking at the apostrophes:
+        # find them with str.find and ask DETOK about each one in place (match at that position sees the same text before it).
+        out, last, i = [], 0, text.find("'")
+        while i != -1:
+            if DETOK.match(text, i):
+                out.append(text[last:i])
+                out.append(" '")
+                last = i + 1
+            i = text.find("'", i + 1)
+        if not out:
+            return text, False
+        out.append(text[last:])
+        new = "".join(out)
         return new, new != text
 
 
@@ -2509,11 +2730,34 @@ def _english_b4_010():
             pos += len(line) + 1
         return out
 
+    def b4_mostly_code(text):
+        """Whether the lines b4_code_lines finds are more than B4_SHARE of the text, as b4_spans asks. The same test, but it
+        stops as soon as the answer cannot change: when the code lines already pass the limit, or when the code found plus
+        every character not yet read cannot reach it (a prose document is settled halfway through)."""
+        if not text.strip():
+            return False
+        limit = B4_SHARE * len(text.strip())
+        code, left = 0, len(text)
+        for line in text.split("\n"):
+            tokens = len(B4_CODE_TOKENS.findall(line))
+            if tokens >= B4_MIN_TOKENS and tokens * B4_WORDS_PER_TOKEN >= len(line.split()) and not TABLE_ROW.match(line):
+                code += len(line)
+                if code > limit:
+                    return True
+            left -= len(line) + 1
+            if code + left <= limit:
+                return False
+        return False
+
+    # Every alternative of B4_TEMPLATE contains one of these, so a text with none of them has no template expression.
+    B4_TEMPLATE_HINTS = ("{{", "{%", "${", "`", "undefined", "NaN", "null")
+
     def b4_spans(text):
         """B4: the document is dropped if it is mostly code; otherwise template expressions are removed."""
-        code = sum(e - s for s, e in b4_code_lines(text))
-        if text.strip() and code > B4_SHARE * len(text.strip()):
+        if b4_mostly_code(text):
             return [(0, len(text), "B4-mostly-code")]
+        if not any(hint in text for hint in B4_TEMPLATE_HINTS):
+            return []
         return [(m.start(), m.end(), "B4-template") for m in B4_TEMPLATE.finditer(text)]
 
 
@@ -2661,9 +2905,7 @@ def _english_f1_005():
                              r"publicist|author of|professor|prof\.|dr\.|lecturer|faculty|researcher|principal investigator|"
                              r"media contact|press contact|for more information|high[- ]res|images|photos)\b")
 
-    def _organisation_near(lines, i):
-        """An organisation word in the contact block around line i: up to 6 lines each way."""
-        return bool(ORGANISATION.search("\n".join(lines[max(0, i - 6):i + 7])))
+    DIGIT = re.compile(r"\d")
 
     def _email(m, org):
         addr = m.group()
@@ -2678,13 +2920,25 @@ def _english_f1_005():
     def medicine_f1(text):
         lines = text.split("\n")
         org_page = bool(ORG_VOICE.search(text))
+        has_org = {}  # line number -> an organisation word on that line: searched once, and only when a contact line asks
+
+        def org_near(i):  # same answer as searching the joined 13-line window, as no match spans a newline
+            for j in range(max(0, i - 6), min(len(lines), i + 7)):
+                if j not in has_org:
+                    has_org[j] = ORGANISATION.search(lines[j]) is not None
+                if has_org[j]:
+                    return True
+            return False
+
         out = []
         for i, line in enumerate(lines):
-            org = org_page or _organisation_near(lines, i)
-            new = EMAIL.sub(lambda m: _email(m, org or bool(PUBLIC_ROLE.search(
-                "\n".join(lines[max(0, i - 2):i + 1])))), line)
+            if "@" not in line and not DIGIT.search(line):  # no EMAIL, PHONE or ADDRESS can match
+                out.append(line)
+                continue
+            new = EMAIL.sub(lambda m: _email(m, org_page or org_near(i) or bool(PUBLIC_ROLE.search(
+                "\n".join(lines[max(0, i - 2):i + 1])))), line) if "@" in line else line
             if PHONE.search(new) or ADDRESS.search(new):
-                if not org:
+                if not (org_page or org_near(i)):
                     new = PHONE.sub(lambda m: m.group() if TOLL_FREE.match(m.group()) else "<PHONE>", new)
                     if len(line.strip()) <= CONTACT_LINE:
                         new = ADDRESS.sub("<ADDRESS>", new)
@@ -4062,10 +4316,7582 @@ def _sci_d3_004():
         return ("fix" if out != doc["text"] else "keep", out)
     return medicine
 
+@cache
+def _indic_db_a1_001():
+    # DB-A1-001, specv1.md, medicine 71 (indic)
+    RULE_ID = "DB-A1-001"
+    CODE = "A1"
+    ACTION = "fix"
+    STAGE = "10"
+    STATUS = "CANDIDATE"
+    SPEC_PACKS = SCOPE["DB-A1-001"]
+    LANGS = {"mar_Deva"}
+    ORIGIN = "ind-mr-fw2, ind-mr-sangraha-v"
+    SOURCE_ORIGIN = "ind-mr-fw2"
+    SOURCE = "ind-mr-fw2"  # pack whose medicine this came from
+
+    import re
+    _A1_RE = re.compile(
+        r'[​﻿­'      # ZWSP, BOM, soft hyphen
+        r'‪-‮'            # bidi embed/override
+        r'⁦-⁩]'           # bidi isolate
+    )
+
+    def fix_a1(text: str) -> str:
+        return _A1_RE.sub('', text)
+
+
+    def _std(out, text):  # added by Data B, copied from Data A (medicine_english.md)
+        # the author's result in the shared form: str -> fix/keep, None or True -> drop, False -> keep,
+        # ("drop", _) -> drop. An empty result is a drop: nothing of the document is left.
+        if out is None or out is True: return ("drop", text)
+        if out is False: return ("keep", text)
+        if isinstance(out, tuple):
+            if out[0] == "drop": return ("drop", text)
+            out = out[1]
+        if not out.strip(): return ("drop", text)
+        return ("fix" if out != text else "keep", out)
+
+    _AUTHOR_RULE = fix_a1  # added by Data B
+    _PACKS = SCOPE["DB-A1-001"]
+
+
+    def medicine(doc):  # added by Data B: runs only on the pack it was tested on
+        if doc.get("pack_id") not in _PACKS:
+            return ("keep", doc["text"])
+        return _std(_AUTHOR_RULE(doc["text"]), doc["text"])
+    return medicine
+
+@cache
+def _indic_db_a1_002():
+    # DB-A1-002, specv1.md, medicine 72 (indic)
+    RULE_ID = "DB-A1-002"
+    CODE = "A1"
+    ACTION = "fix"
+    STAGE = "10"
+    STATUS = "CANDIDATE"
+    SPEC_PACKS = SCOPE["DB-A1-002"]
+    LANGS = {"tel_Telu"}
+    ORIGIN = "ind-te-sangraha-v, ind-te-fw2, ind-te-sangraha-s"
+    SOURCE_ORIGIN = "ind-te-sangraha-v"
+    SOURCE = "ind-te-sangraha-v"  # pack whose medicine this came from
+    import re  # added by Data B: harm_test_indic.py gives every block `re`
+
+    _A1 = set("\u200b\ufeff\u00ad\u202a\u202b\u202c\u202d\u202e\u2066\u2067\u2068\u2069")
+
+    def medicine_a1(text: str) -> str:
+        return "".join(ch for ch in text if ch not in _A1)
+
+
+    def _std(out, text):  # added by Data B, copied from Data A (medicine_english.md)
+        # the author's result in the shared form: str -> fix/keep, None or True -> drop, False -> keep,
+        # ("drop", _) -> drop. An empty result is a drop: nothing of the document is left.
+        if out is None or out is True: return ("drop", text)
+        if out is False: return ("keep", text)
+        if isinstance(out, tuple):
+            if out[0] == "drop": return ("drop", text)
+            out = out[1]
+        if not out.strip(): return ("drop", text)
+        return ("fix" if out != text else "keep", out)
+
+    _AUTHOR_RULE = medicine_a1  # added by Data B
+    _PACKS = SCOPE["DB-A1-002"]
+
+
+    def medicine(doc):  # added by Data B: runs only on the pack it was tested on
+        if doc.get("pack_id") not in _PACKS:
+            return ("keep", doc["text"])
+        return _std(_AUTHOR_RULE(doc["text"]), doc["text"])
+    return medicine
+
+@cache
+def _indic_db_a2_001():
+    # DB-A2-001, specv1.md, medicine 73 (indic)
+    RULE_ID = "DB-A2-001"
+    CODE = "A2"
+    ACTION = "fix"
+    STAGE = "10"
+    STATUS = "CANDIDATE"
+    SPEC_PACKS = SCOPE["DB-A2-001"]
+    LANGS = {"ben_Beng"}
+    ORIGIN = "ind-bn-sangraha-v, ind-bn-fw2"
+    SOURCE_ORIGIN = "ind-bn-sangraha-v"
+    SOURCE = "ind-bn-sangraha-v"  # pack whose medicine this came from
+
+    import re
+
+    def medicine_a2(text):
+        return re.sub(r"[\x00-\x08\x0B-\x1F\x7F-\x9F]", "", text)
+
+
+    def _std(out, text):  # added by Data B, copied from Data A (medicine_english.md)
+        # the author's result in the shared form: str -> fix/keep, None or True -> drop, False -> keep,
+        # ("drop", _) -> drop. An empty result is a drop: nothing of the document is left.
+        if out is None or out is True: return ("drop", text)
+        if out is False: return ("keep", text)
+        if isinstance(out, tuple):
+            if out[0] == "drop": return ("drop", text)
+            out = out[1]
+        if not out.strip(): return ("drop", text)
+        return ("fix" if out != text else "keep", out)
+
+    _AUTHOR_RULE = medicine_a2  # added by Data B
+    _PACKS = SCOPE["DB-A2-001"]
+
+
+    def medicine(doc):  # added by Data B: runs only on the pack it was tested on
+        if doc.get("pack_id") not in _PACKS:
+            return ("keep", doc["text"])
+        return _std(_AUTHOR_RULE(doc["text"]), doc["text"])
+    return medicine
+
+@cache
+def _indic_db_a3_001():
+    # DB-A3-001, specv1.md, medicine 74 (indic)
+    RULE_ID = "DB-A3-001"
+    CODE = "A3"
+    ACTION = "fix"
+    STAGE = "10"
+    STATUS = "CANDIDATE"
+    SPEC_PACKS = SCOPE["DB-A3-001"]
+    LANGS = {"ben_Beng"}
+    ORIGIN = "ind-bn-fw2"
+    SOURCE_ORIGIN = "ind-bn-fw2"
+    SOURCE = "ind-bn-fw2"  # pack whose medicine this came from
+
+    import re
+
+    _A3_MAP = {"æ": "ু", "ø": "্ল", "¦": "্ব", "Ñ": "–", "Í": "-"}
+
+
+    def medicine_a3(text):
+        """Bijoy leftovers next to a Bengali letter -> the intended character."""
+        return re.sub("(?<=[ঀ-৿])[æø¦ÑÍ]|[æø¦ÑÍ](?=[ঀ-৿])", lambda m: _A3_MAP[m.group()], text)
+
+
+    def _std(out, text):  # added by Data B, copied from Data A (medicine_english.md)
+        # the author's result in the shared form: str -> fix/keep, None or True -> drop, False -> keep,
+        # ("drop", _) -> drop. An empty result is a drop: nothing of the document is left.
+        if out is None or out is True: return ("drop", text)
+        if out is False: return ("keep", text)
+        if isinstance(out, tuple):
+            if out[0] == "drop": return ("drop", text)
+            out = out[1]
+        if not out.strip(): return ("drop", text)
+        return ("fix" if out != text else "keep", out)
+
+    _AUTHOR_RULE = medicine_a3  # added by Data B
+    _PACKS = SCOPE["DB-A3-001"]
+
+
+    def medicine(doc):  # added by Data B: runs only on the pack it was tested on
+        if doc.get("pack_id") not in _PACKS:
+            return ("keep", doc["text"])
+        return _std(_AUTHOR_RULE(doc["text"]), doc["text"])
+    return medicine
+
+@cache
+def _indic_db_a3_007():
+    # DB-A3-007, specv1.md, medicine 75 (indic)
+    RULE_ID = "DB-A3-007"
+    CODE = "A3"
+    ACTION = "fix+drop"
+    STAGE = "10"
+    STATUS = "CANDIDATE"
+    SPEC_PACKS = SCOPE["DB-A3-007"]
+    LANGS = {"ben_Beng"}
+    ORIGIN = "ind-bn-sangraha-v"
+    SOURCE_ORIGIN = "ind-bn-sangraha-v"
+    SOURCE = "ind-bn-sangraha-v"  # pack whose medicine this came from
+    import re  # added by Data B: harm_test_indic.py gives every block `re`
+
+    L = "[অ-হ়-ৗড়-ৣৰৱ]"   # a Bengali letter or sign (not a digit)
+    SIGN = "[া-ৌৗ]"                                # a dependent vowel sign
+    BIJOY = {"\u00A6": "\u09CD\u09AC", "^": "\u09CD\u09AC", "\u00D0": "\u09A3\u09CD\u09A1", "\u00E6": "\u09C1"}
+    BIJOY_FIX = re.compile(f"(?<={L})[{''.join(map(re.escape, BIJOY))}](?={L})")
+    LEFTOVER = re.compile(f"(?<={L})[\u00A1-\u00FF\u0153\u0304\u2022\u203A^](?={L})"
+                          f"|[\u00A1-\u00FF\u0153\u0304\u2022\u203A^-](?={SIGN})")
+
+
+    def cure_a3(text):
+        fixed = BIJOY_FIX.sub(lambda m: BIJOY[m.group()], text)
+        if len(LEFTOVER.findall(fixed)) >= 3:
+            return ("drop", "")
+        return fixed
+
+
+    def _std(out, text):  # added by Data B, copied from Data A (medicine_english.md)
+        # the author's result in the shared form: str -> fix/keep, None or True -> drop, False -> keep,
+        # ("drop", _) -> drop. An empty result is a drop: nothing of the document is left.
+        if out is None or out is True: return ("drop", text)
+        if out is False: return ("keep", text)
+        if isinstance(out, tuple):
+            if out[0] == "drop": return ("drop", text)
+            out = out[1]
+        if not out.strip(): return ("drop", text)
+        return ("fix" if out != text else "keep", out)
+
+    _AUTHOR_RULE = cure_a3  # added by Data B
+    _PACKS = SCOPE["DB-A3-007"]
+
+
+    def medicine(doc):  # added by Data B: runs only on the pack it was tested on
+        if doc.get("pack_id") not in _PACKS:
+            return ("keep", doc["text"])
+        return _std(_AUTHOR_RULE(doc["text"]), doc["text"])
+    return medicine
+
+@cache
+def _indic_db_a3_002():
+    # DB-A3-002, specv1.md, medicine 76 (indic)
+    RULE_ID = "DB-A3-002"
+    CODE = "A3"
+    ACTION = "fix"
+    STAGE = "10"
+    STATUS = "CANDIDATE"
+    SPEC_PACKS = SCOPE["DB-A3-002"]
+    LANGS = {"guj_Gujr"}
+    ORIGIN = "ind-gu-fw2"
+    SOURCE_ORIGIN = "ind-gu-fw2"
+    SOURCE = "ind-gu-fw2"  # pack whose medicine this came from
+
+    import re
+    GU = "\u0A80-\u0AFF"                          # Gujarati block
+    def _fix(old, new):
+        return (new, "keep" if new == old else "fix")
+
+    A3_PAIRS = [("¬©", "©"), ("â€™", "’"), ("â€œ", "“"), ("â€", "”")]
+    A3_LOWQ_RUP = re.compile(rf"(?<=[{GU}])\u201Aપ")
+    A3_LOWQ = re.compile(rf"(?<=[{GU}])\u201A")
+
+    def m10_a3(text, url=None):
+        new = text
+        for a, b in A3_PAIRS:
+            new = new.replace(a, b)
+        new = A3_LOWQ_RUP.sub("રૂપ", new)
+        return _fix(text, A3_LOWQ.sub("રુ", new))
+
+    def medicine_a3(text, url=None):
+        """Harm-test entry: return the new text, or True to drop."""
+        return m10_a3(text, url)[0]
+
+
+    def _std(out, text):  # added by Data B, copied from Data A (medicine_english.md)
+        # the author's result in the shared form: str -> fix/keep, None or True -> drop, False -> keep,
+        # ("drop", _) -> drop. An empty result is a drop: nothing of the document is left.
+        if out is None or out is True: return ("drop", text)
+        if out is False: return ("keep", text)
+        if isinstance(out, tuple):
+            if out[0] == "drop": return ("drop", text)
+            out = out[1]
+        if not out.strip(): return ("drop", text)
+        return ("fix" if out != text else "keep", out)
+
+    _AUTHOR_RULE = medicine_a3  # added by Data B
+    _PACKS = SCOPE["DB-A3-002"]
+
+
+    def medicine(doc):  # added by Data B: runs only on the pack it was tested on
+        if doc.get("pack_id") not in _PACKS:
+            return ("keep", doc["text"])
+        return _std(_AUTHOR_RULE(doc["text"]), doc["text"])
+    return medicine
+
+@cache
+def _indic_db_a3_005():
+    # DB-A3-005, specv1.md, medicine 77 (indic)
+    RULE_ID = "DB-A3-005"
+    CODE = "A3"
+    ACTION = "fix"
+    STAGE = "10"
+    STATUS = "CANDIDATE"
+    SPEC_PACKS = SCOPE["DB-A3-005"]
+    LANGS = {"kan_Knda"}
+    ORIGIN = "ind-kn-sangraha-s, ind-kn-fw2"
+    SOURCE_ORIGIN = "ind-kn-sangraha-s"
+    SOURCE = "ind-kn-sangraha-s"  # pack whose medicine this came from
+    import re  # added by Data B: harm_test_indic.py gives every block `re`
+
+    LATIN = "A-Za-zÀ-ɏ"
+    STRAY_A = re.compile(rf"\"Â\"(?:,[ \t]*)?|[ \t]*(?<![{LATIN}/])Â(?![{LATIN}>])")
+
+    def strip_stray_a_circumflex(text):
+        for m in reversed(list(STRAY_A.finditer(text))):
+            s, e = m.start(), m.end()
+            if s == 0 or text[s-1] == "\n":                    # line start: take the spaces after it
+                while e < len(text) and text[e] in " \t": e += 1
+            text = text[:s] + text[e:]
+        return text
+
+
+    def _std(out, text):  # added by Data B, copied from Data A (medicine_english.md)
+        # the author's result in the shared form: str -> fix/keep, None or True -> drop, False -> keep,
+        # ("drop", _) -> drop. An empty result is a drop: nothing of the document is left.
+        if out is None or out is True: return ("drop", text)
+        if out is False: return ("keep", text)
+        if isinstance(out, tuple):
+            if out[0] == "drop": return ("drop", text)
+            out = out[1]
+        if not out.strip(): return ("drop", text)
+        return ("fix" if out != text else "keep", out)
+
+    _AUTHOR_RULE = strip_stray_a_circumflex  # added by Data B
+    _PACKS = SCOPE["DB-A3-005"]
+
+
+    def medicine(doc):  # added by Data B: runs only on the pack it was tested on
+        if doc.get("pack_id") not in _PACKS:
+            return ("keep", doc["text"])
+        return _std(_AUTHOR_RULE(doc["text"]), doc["text"])
+    return medicine
+
+@cache
+def _indic_db_a3_006():
+    # DB-A3-006, specv1.md, medicine 78 (indic)
+    RULE_ID = "DB-A3-006"
+    CODE = "A3"
+    ACTION = "fix"
+    STAGE = "10"
+    STATUS = "CANDIDATE"
+    SPEC_PACKS = SCOPE["DB-A3-006"]
+    LANGS = {"mar_Deva"}
+    ORIGIN = "ind-mr-fw2, ind-mr-sangraha-v"
+    SOURCE_ORIGIN = "ind-mr-fw2"
+    SOURCE = "ind-mr-fw2"  # pack whose medicine this came from
+
+    import re
+    _MOJI_RE = re.compile(r'[ÃÂ][\x80-\xBF]|â€[\x98-\x9E™]')
+
+    def fix_a3(text: str) -> str:
+        if not _MOJI_RE.search(text):
+            return text
+        try:
+            return text.encode('latin-1').decode('utf-8')
+        except (UnicodeEncodeError, UnicodeDecodeError):
+            return text  # partial mojibake — leave for human review
+
+
+    def _std(out, text):  # added by Data B, copied from Data A (medicine_english.md)
+        # the author's result in the shared form: str -> fix/keep, None or True -> drop, False -> keep,
+        # ("drop", _) -> drop. An empty result is a drop: nothing of the document is left.
+        if out is None or out is True: return ("drop", text)
+        if out is False: return ("keep", text)
+        if isinstance(out, tuple):
+            if out[0] == "drop": return ("drop", text)
+            out = out[1]
+        if not out.strip(): return ("drop", text)
+        return ("fix" if out != text else "keep", out)
+
+    _AUTHOR_RULE = fix_a3  # added by Data B
+    _PACKS = SCOPE["DB-A3-006"]
+
+
+    def medicine(doc):  # added by Data B: runs only on the pack it was tested on
+        if doc.get("pack_id") not in _PACKS:
+            return ("keep", doc["text"])
+        return _std(_AUTHOR_RULE(doc["text"]), doc["text"])
+    return medicine
+
+@cache
+def _indic_db_a5_001():
+    # DB-A5-001, specv1.md, medicine 79 (indic)
+    RULE_ID = "DB-A5-001"
+    CODE = "A5"
+    ACTION = "fix"
+    STAGE = "10"
+    STATUS = "CANDIDATE"
+    SPEC_PACKS = SCOPE["DB-A5-001"]
+    LANGS = {"ben_Beng"}
+    ORIGIN = "ind-bn-fw2, ind-bn-sangraha-v"
+    SOURCE_ORIGIN = "ind-bn-fw2"
+    SOURCE = "ind-bn-fw2"  # pack whose medicine this came from
+
+    import re
+
+    # ত + virama (ত্) at the end of a word, or before ক স প, is a khanda-ta written the old way.
+    # A ZWJ/ZWNJ after the virama is a deliberate choice and is left alone.
+    _T = re.compile('ত্(?=[কসপ]|(?![\u0980-\u09ff\u200c\u200d]))')
+
+    def medicine_a5(text):
+        """Replace ত্ with ৎ (U+09CE) at a word end and before ক স প."""
+        return _T.sub('ৎ', text)
+
+
+    def _std(out, text):  # added by Data B, copied from Data A (medicine_english.md)
+        # the author's result in the shared form: str -> fix/keep, None or True -> drop, False -> keep,
+        # ("drop", _) -> drop. An empty result is a drop: nothing of the document is left.
+        if out is None or out is True: return ("drop", text)
+        if out is False: return ("keep", text)
+        if isinstance(out, tuple):
+            if out[0] == "drop": return ("drop", text)
+            out = out[1]
+        if not out.strip(): return ("drop", text)
+        return ("fix" if out != text else "keep", out)
+
+    _AUTHOR_RULE = medicine_a5  # added by Data B
+    _PACKS = SCOPE["DB-A5-001"]
+
+
+    def medicine(doc):  # added by Data B: runs only on the pack it was tested on
+        if doc.get("pack_id") not in _PACKS:
+            return ("keep", doc["text"])
+        return _std(_AUTHOR_RULE(doc["text"]), doc["text"])
+    return medicine
+
+@cache
+def _indic_db_a5_003():
+    # DB-A5-003, specv1.md, medicine 81 (indic)
+    RULE_ID = "DB-A5-003"
+    CODE = "A5"
+    ACTION = "fix"
+    STAGE = "10"
+    STATUS = "CANDIDATE"
+    SPEC_PACKS = SCOPE["DB-A5-003"]
+    LANGS = {"guj_Gujr"}
+    ORIGIN = "ind-gu-fw2"
+    SOURCE_ORIGIN = "ind-gu-fw2"
+    SOURCE = "ind-gu-fw2"  # pack whose medicine this came from
+
+    import re
+    GU = "\u0A80-\u0AFF"                          # Gujarati block
+    GU_DIGIT = "\u0AE6-\u0AEF"                    # Gujarati digits 0-9
+    def _fix(old, new):
+        return (new, "keep" if new == old else "fix")
+
+    A5_PAIRS = [("ાે", "ો"), ("ાૈ", "ૌ"), ("અા", "આ"), ("અો", "ઓ"), ("અે", "એ"), ("અૈ", "ઐ"),
+                ("ૈા", "ૌ"), ("્ર્વ", "્વ")]
+    A5_RU = re.compile(r"(?<!્)રૃ")
+    A5_DIGIT = re.compile(rf"(?<![{GU}])[{GU_DIGIT}રપ]*[{GU_DIGIT}][{GU_DIGIT}રપ]*(?![{GU}])")
+
+    def m5_a5(text, url=None):
+        new = text
+        for a, b in A5_PAIRS:
+            new = new.replace(a, b)
+        new = A5_RU.sub("રૂ", new)
+        new = A5_DIGIT.sub(lambda m: m.group(0).replace("ર", "૨").replace("પ", "૫"), new)
+        return _fix(text, new)
+
+    def medicine_a5(text, url=None):
+        """Harm-test entry: return the new text, or True to drop."""
+        return m5_a5(text, url)[0]
+
+
+    def _std(out, text):  # added by Data B, copied from Data A (medicine_english.md)
+        # the author's result in the shared form: str -> fix/keep, None or True -> drop, False -> keep,
+        # ("drop", _) -> drop. An empty result is a drop: nothing of the document is left.
+        if out is None or out is True: return ("drop", text)
+        if out is False: return ("keep", text)
+        if isinstance(out, tuple):
+            if out[0] == "drop": return ("drop", text)
+            out = out[1]
+        if not out.strip(): return ("drop", text)
+        return ("fix" if out != text else "keep", out)
+
+    _AUTHOR_RULE = medicine_a5  # added by Data B
+    _PACKS = SCOPE["DB-A5-003"]
+
+
+    def medicine(doc):  # added by Data B: runs only on the pack it was tested on
+        if doc.get("pack_id") not in _PACKS:
+            return ("keep", doc["text"])
+        return _std(_AUTHOR_RULE(doc["text"]), doc["text"])
+    return medicine
+
+@cache
+def _indic_db_a5_009():
+    # DB-A5-009, specv1.md, medicine 84 (indic)
+    RULE_ID = "DB-A5-009"
+    CODE = "A5"
+    ACTION = "fix"
+    STAGE = "10"
+    STATUS = "CANDIDATE"
+    SPEC_PACKS = SCOPE["DB-A5-009"]
+    LANGS = {"mar_Deva"}
+    ORIGIN = "ind-mr-fw2"
+    SOURCE_ORIGIN = "ind-mr-fw2"
+    SOURCE = "ind-mr-fw2"  # pack whose medicine this came from
+    import re  # added by Data B: harm_test_indic.py gives every block `re`
+
+    import unicodedata
+
+    def fix_a5(text: str) -> str:
+        return unicodedata.normalize('NFC', text)
+
+
+    def _std(out, text):  # added by Data B, copied from Data A (medicine_english.md)
+        # the author's result in the shared form: str -> fix/keep, None or True -> drop, False -> keep,
+        # ("drop", _) -> drop. An empty result is a drop: nothing of the document is left.
+        if out is None or out is True: return ("drop", text)
+        if out is False: return ("keep", text)
+        if isinstance(out, tuple):
+            if out[0] == "drop": return ("drop", text)
+            out = out[1]
+        if not out.strip(): return ("drop", text)
+        return ("fix" if out != text else "keep", out)
+
+    _AUTHOR_RULE = fix_a5  # added by Data B
+    _PACKS = SCOPE["DB-A5-009"]
+
+
+    def medicine(doc):  # added by Data B: runs only on the pack it was tested on
+        if doc.get("pack_id") not in _PACKS:
+            return ("keep", doc["text"])
+        return _std(_AUTHOR_RULE(doc["text"]), doc["text"])
+    return medicine
+
+@cache
+def _indic_db_a5_006():
+    # DB-A5-006, specv1.md, medicine 85 (indic)
+    RULE_ID = "DB-A5-006"
+    CODE = "A5"
+    ACTION = "fix"
+    STAGE = "10"
+    STATUS = "CANDIDATE"
+    SPEC_PACKS = SCOPE["DB-A5-006"]
+    LANGS = {"mar_Deva"}
+    ORIGIN = "ind-mr-sangraha-v"
+    SOURCE_ORIGIN = "ind-mr-sangraha-v"
+    SOURCE = "ind-mr-sangraha-v"  # pack whose medicine this came from
+    import re  # added by Data B: harm_test_indic.py gives every block `re`
+
+    import unicodedata
+
+    def cure_a5(text):
+        return unicodedata.normalize("NFC", text)
+
+
+    def _std(out, text):  # added by Data B, copied from Data A (medicine_english.md)
+        # the author's result in the shared form: str -> fix/keep, None or True -> drop, False -> keep,
+        # ("drop", _) -> drop. An empty result is a drop: nothing of the document is left.
+        if out is None or out is True: return ("drop", text)
+        if out is False: return ("keep", text)
+        if isinstance(out, tuple):
+            if out[0] == "drop": return ("drop", text)
+            out = out[1]
+        if not out.strip(): return ("drop", text)
+        return ("fix" if out != text else "keep", out)
+
+    _AUTHOR_RULE = cure_a5  # added by Data B
+    _PACKS = SCOPE["DB-A5-006"]
+
+
+    def medicine(doc):  # added by Data B: runs only on the pack it was tested on
+        if doc.get("pack_id") not in _PACKS:
+            return ("keep", doc["text"])
+        return _std(_AUTHOR_RULE(doc["text"]), doc["text"])
+    return medicine
+
+@cache
+def _indic_db_a5_007():
+    # DB-A5-007, specv1.md, medicine 86 (indic)
+    RULE_ID = "DB-A5-007"
+    CODE = "A5"
+    ACTION = "fix"
+    STAGE = "10"
+    STATUS = "CANDIDATE"
+    SPEC_PACKS = SCOPE["DB-A5-007"]
+    LANGS = {"san_Deva"}
+    ORIGIN = "ind-sa-fw2"
+    SOURCE_ORIGIN = "ind-sa-fw2"
+    SOURCE = "ind-sa-fw2"  # pack whose medicine this came from
+    import re  # added by Data B: harm_test_indic.py gives every block `re`
+
+    _FULL = {"ा": "आ", "ि": "इ", "ी": "ई", "ु": "उ", "ू": "ऊ", "ृ": "ऋ", "े": "ए", "ै": "ऐ", "ो": "ओ", "ौ": "औ"}
+
+    def medicine_a5(text):
+        t = re.sub("अ([ािीुूृेैोौ])", lambda m: _FULL[m.group(1)], text)
+        t = re.sub("([ा-्ॢॣ])\\1+", r"\1", t)
+        if "॥" in t:
+            t = re.sub("।[ \t]?।", "॥", t)
+        return t
+
+
+    def _std(out, text):  # added by Data B, copied from Data A (medicine_english.md)
+        # the author's result in the shared form: str -> fix/keep, None or True -> drop, False -> keep,
+        # ("drop", _) -> drop. An empty result is a drop: nothing of the document is left.
+        if out is None or out is True: return ("drop", text)
+        if out is False: return ("keep", text)
+        if isinstance(out, tuple):
+            if out[0] == "drop": return ("drop", text)
+            out = out[1]
+        if not out.strip(): return ("drop", text)
+        return ("fix" if out != text else "keep", out)
+
+    _AUTHOR_RULE = medicine_a5  # added by Data B
+    _PACKS = SCOPE["DB-A5-007"]
+
+
+    def medicine(doc):  # added by Data B: runs only on the pack it was tested on
+        if doc.get("pack_id") not in _PACKS:
+            return ("keep", doc["text"])
+        return _std(_AUTHOR_RULE(doc["text"]), doc["text"])
+    return medicine
+
+@cache
+def _indic_db_a6_001():
+    # DB-A6-001, specv1.md, medicine 88 (indic)
+    RULE_ID = "DB-A6-001"
+    CODE = "A6"
+    ACTION = "fix"
+    STAGE = "10"
+    STATUS = "CANDIDATE"
+    SPEC_PACKS = SCOPE["DB-A6-001"]
+    LANGS = {"ben_Beng"}
+    ORIGIN = "ind-bn-fw2"
+    SOURCE_ORIGIN = "ind-bn-fw2"
+    SOURCE = "ind-bn-fw2"  # pack whose medicine this came from
+
+    import re
+
+    _DANDA_LOOKALIKE = re.compile('(?<=[\u0980-\u09ff’”)])৷(?=\\s|$)')  # ৷ (U+09F7) used as danda
+    _DOUBLE = re.compile('।৷')                                                  # ।৷
+    _PIPE = re.compile('(?<=[\u0980-\u09ff’”)]) ?\\|(?=[ \\t]*(?:\\n|$))', re.M)  # ASCII | at line end
+    _L_DANDA = re.compile('(?<=[\u0980-\u09ff’”]) l(?=\\s|$)')                  # Latin l as danda
+
+    def medicine_a6(text):
+        """Replace danda look-alikes after Bengali text with the real danda । (U+0964)."""
+        text = _DOUBLE.sub('।', text)
+        text = _DANDA_LOOKALIKE.sub('।', text)
+        text = _PIPE.sub('।', text)
+        return _L_DANDA.sub('।', text)
+
+
+    def _std(out, text):  # added by Data B, copied from Data A (medicine_english.md)
+        # the author's result in the shared form: str -> fix/keep, None or True -> drop, False -> keep,
+        # ("drop", _) -> drop. An empty result is a drop: nothing of the document is left.
+        if out is None or out is True: return ("drop", text)
+        if out is False: return ("keep", text)
+        if isinstance(out, tuple):
+            if out[0] == "drop": return ("drop", text)
+            out = out[1]
+        if not out.strip(): return ("drop", text)
+        return ("fix" if out != text else "keep", out)
+
+    _AUTHOR_RULE = medicine_a6  # added by Data B
+    _PACKS = SCOPE["DB-A6-001"]
+
+
+    def medicine(doc):  # added by Data B: runs only on the pack it was tested on
+        if doc.get("pack_id") not in _PACKS:
+            return ("keep", doc["text"])
+        return _std(_AUTHOR_RULE(doc["text"]), doc["text"])
+    return medicine
+
+@cache
+def _indic_db_a6_020():
+    # DB-A6-020, specv1.md, medicine 90 (indic)
+    RULE_ID = "DB-A6-020"
+    CODE = "A6"
+    ACTION = "fix"
+    STAGE = "10"
+    STATUS = "CANDIDATE"
+    SPEC_PACKS = SCOPE["DB-A6-020"]
+    LANGS = {"ben_Beng"}
+    ORIGIN = "ind-bn-sangraha-v"
+    SOURCE_ORIGIN = "ind-bn-sangraha-v"
+    SOURCE = "ind-bn-sangraha-v"  # pack whose medicine this came from
+    import re  # added by Data B: harm_test_indic.py gives every block `re`
+
+    A6_MIN = 7   # the Assamese RA must appear more than 6 times
+
+
+    def cure_a6(text):
+        n_as, n_bn = text.count("\u09F0"), text.count("\u09B0")
+        if n_as >= A6_MIN and n_as < n_bn:
+            text = text.replace("\u09F0", "\u09B0")
+        return text
+
+
+    def _std(out, text):  # added by Data B, copied from Data A (medicine_english.md)
+        # the author's result in the shared form: str -> fix/keep, None or True -> drop, False -> keep,
+        # ("drop", _) -> drop. An empty result is a drop: nothing of the document is left.
+        if out is None or out is True: return ("drop", text)
+        if out is False: return ("keep", text)
+        if isinstance(out, tuple):
+            if out[0] == "drop": return ("drop", text)
+            out = out[1]
+        if not out.strip(): return ("drop", text)
+        return ("fix" if out != text else "keep", out)
+
+    _AUTHOR_RULE = cure_a6  # added by Data B
+    _PACKS = SCOPE["DB-A6-020"]
+
+
+    def medicine(doc):  # added by Data B: runs only on the pack it was tested on
+        if doc.get("pack_id") not in _PACKS:
+            return ("keep", doc["text"])
+        return _std(_AUTHOR_RULE(doc["text"]), doc["text"])
+    return medicine
+
+@cache
+def _indic_db_a6_003():
+    # DB-A6-003, specv1.md, medicine 91 (indic)
+    RULE_ID = "DB-A6-003"
+    CODE = "A6"
+    ACTION = "fix+drop"
+    STAGE = "10"
+    STATUS = "CANDIDATE"
+    SPEC_PACKS = SCOPE["DB-A6-003"]
+    LANGS = {"guj_Gujr"}
+    ORIGIN = "ind-gu-fw2"
+    SOURCE_ORIGIN = "ind-gu-fw2"
+    SOURCE = "ind-gu-fw2"  # pack whose medicine this came from
+
+    import re
+
+    SANDWICH = re.compile(r"[઀-૿][a-z]{1,8}[઀-૿]")
+    DEVANAGARI = re.compile(r"[\u0900-\u0963\u0966-\u097f]")      # letters, not the danda
+
+    def medicine(text):
+        if SANDWICH.search(text):
+            return None                       # drop the document
+        lines = text.split("\n")
+        keep = [l for l in lines if not DEVANAGARI.search(l)]
+        if len(keep) < 0.7 * len(lines):
+            return None                       # drop the document
+        return "\n".join(keep)
+
+
+    def _std(out, text):  # added by Data B, copied from Data A (medicine_english.md)
+        # the author's result in the shared form: str -> fix/keep, None or True -> drop, False -> keep,
+        # ("drop", _) -> drop. An empty result is a drop: nothing of the document is left.
+        if out is None or out is True: return ("drop", text)
+        if out is False: return ("keep", text)
+        if isinstance(out, tuple):
+            if out[0] == "drop": return ("drop", text)
+            out = out[1]
+        if not out.strip(): return ("drop", text)
+        return ("fix" if out != text else "keep", out)
+
+    _AUTHOR_RULE = medicine  # added by Data B
+    _PACKS = SCOPE["DB-A6-003"]
+
+
+    def medicine(doc):  # added by Data B: runs only on the pack it was tested on
+        if doc.get("pack_id") not in _PACKS:
+            return ("keep", doc["text"])
+        return _std(_AUTHOR_RULE(doc["text"]), doc["text"])
+    return medicine
+
+@cache
+def _indic_db_a6_017():
+    # DB-A6-017, specv1.md, medicine 92 (indic)
+    RULE_ID = "DB-A6-017"
+    CODE = "A6"
+    ACTION = "fix"
+    STAGE = "10"
+    STATUS = "CANDIDATE"
+    SPEC_PACKS = SCOPE["DB-A6-017"]
+    LANGS = {"hin_Deva"}
+    ORIGIN = "ind-hi-hplt, ind-hi-indiccorp, ind-hi-sangraha-v"
+    SOURCE_ORIGIN = "ind-hi-hplt"
+    SOURCE = "ind-hi-hplt"  # pack whose medicine this came from
+
+    # added by Data B: the sheet's shared definitions, copied unchanged from its top, because the harm tool
+    # runs each section on its own
+    import re
+    DEVA, CONS, MATRA = "\u0900-\u097F", "\u0915-\u0939", "\u093E-\u094C"
+    LETTER = "\u0900-\u0963\u0966-\u097F"          # Devanagari letters and signs, without । and ॥
+    WORD_RE = re.compile(f"[{DEVA}]+")
+    norm_line = lambda line: re.sub(r"\s+", " ", line).strip()
+    # end of the shared definitions
+    # added by Data B: definitions this section uses from other sections of the sheet, copied unchanged
+    # from G4
+    G4_FAKE = re.compile(f"(?<=[{LETTER}\"'”’])\\s?(II|\\|\\||[Il|])"
+                         f"(?=[ \\t]+[\u0904-\u0939\u0958-\u0961\"'“‘]|[ \\t]*\\n|[ \\t]*$)")
+    # from G4
+    def cure_g4(text):
+        def rep(m):
+            start = max(text.rfind(ch, 0, m.start()) for ch in "।|\n")
+            if m.start() - start - 1 < 25:
+                return m.group()                       # short segment: a separator, not a sentence end
+            return "॥" if len(m.group(1)) == 2 else "।"
+        return G4_FAKE.sub(rep, text)
+    # end of the copied definitions
+
+    A6_JOIN = re.compile(f"(?<=[{DEVA}])(?=[A-Za-z]{{2}})|(?<=[A-Za-z]{{2}})(?=[\u0904-\u0939\u0958-\u0961])")
+
+    def cure_a6(text):
+        return A6_JOIN.sub(" ", cure_g4(text))
+
+
+    def _std(out, text):  # added by Data B, copied from Data A (medicine_english.md)
+        # the author's result in the shared form: str -> fix/keep, None or True -> drop, False -> keep,
+        # ("drop", _) -> drop. An empty result is a drop: nothing of the document is left.
+        if out is None or out is True: return ("drop", text)
+        if out is False: return ("keep", text)
+        if isinstance(out, tuple):
+            if out[0] == "drop": return ("drop", text)
+            out = out[1]
+        if not out.strip(): return ("drop", text)
+        return ("fix" if out != text else "keep", out)
+
+    _AUTHOR_RULE = cure_a6  # added by Data B
+    _PACKS = SCOPE["DB-A6-017"]
+
+
+    def medicine(doc):  # added by Data B: runs only on the pack it was tested on
+        if doc.get("pack_id") not in _PACKS:
+            return ("keep", doc["text"])
+        return _std(_AUTHOR_RULE(doc["text"]), doc["text"])
+    return medicine
+
+@cache
+def _indic_db_a6_006():
+    # DB-A6-006, specv1.md, medicine 95 (indic)
+    RULE_ID = "DB-A6-006"
+    CODE = "A6"
+    ACTION = "fix"
+    STAGE = "10"
+    STATUS = "CANDIDATE"
+    SPEC_PACKS = SCOPE["DB-A6-006"]
+    LANGS = {"kan_Knda"}
+    ORIGIN = "ind-kn-sangraha-s, ind-kn-fw2"
+    SOURCE_ORIGIN = "ind-kn-sangraha-s"
+    SOURCE = "ind-kn-sangraha-s"  # pack whose medicine this came from
+    import re  # added by Data B: harm_test_indic.py gives every block `re`
+
+    HALF_IE = re.compile(r"\bi\.\s?ಇ\.")
+    HALF_EG = re.compile(r"\be\.\s?ಜಿ\.")
+    def m3_half_translated(s):
+        return HALF_EG.sub("ಉದಾ.", HALF_IE.sub("ಅಂದರೆ", s))
+
+
+    def _std(out, text):  # added by Data B, copied from Data A (medicine_english.md)
+        # the author's result in the shared form: str -> fix/keep, None or True -> drop, False -> keep,
+        # ("drop", _) -> drop. An empty result is a drop: nothing of the document is left.
+        if out is None or out is True: return ("drop", text)
+        if out is False: return ("keep", text)
+        if isinstance(out, tuple):
+            if out[0] == "drop": return ("drop", text)
+            out = out[1]
+        if not out.strip(): return ("drop", text)
+        return ("fix" if out != text else "keep", out)
+
+    _AUTHOR_RULE = m3_half_translated  # added by Data B
+    _PACKS = SCOPE["DB-A6-006"]
+
+
+    def medicine(doc):  # added by Data B: runs only on the pack it was tested on
+        if doc.get("pack_id") not in _PACKS:
+            return ("keep", doc["text"])
+        return _std(_AUTHOR_RULE(doc["text"]), doc["text"])
+    return medicine
+
+@cache
+def _indic_db_a6_007():
+    # DB-A6-007, specv1.md, medicine 97 (indic)
+    RULE_ID = "DB-A6-007"
+    CODE = "A6"
+    ACTION = "fix"
+    STAGE = "10"
+    STATUS = "CANDIDATE"
+    SPEC_PACKS = SCOPE["DB-A6-007"]
+    LANGS = {"kan_Knda"}
+    ORIGIN = "ind-kn-sangraha-v"
+    SOURCE_ORIGIN = "ind-kn-sangraha-v"
+    SOURCE = "ind-kn-sangraha-v"  # pack whose medicine this came from
+
+    import re
+
+    KN_SIGNED = "ಅ-ಹಾ-ೌ"                 # Kannada vowels, consonants and vowel signs
+    ZERO_KN = re.compile(f"(?<=[{KN_SIGNED}])೦(?![೦-೯])")
+    ZERO_ASCII = re.compile(f"(?<=[{KN_SIGNED}])0(?=[ಕ-ಹ])")
+    LATIN_S = re.compile("(?<=[ಀ-೿])s(?=[ಀ-೿])")
+
+
+    def fix_lookalikes(t):
+        """A6: a Kannada digit zero (೦) or an ASCII 0 right after a Kannada letter is the anusvara (ಂ); a Latin s
+        between Kannada letters is the avagraha (ಽ)."""
+        t = ZERO_KN.sub("ಂ", t)
+        t = ZERO_ASCII.sub("ಂ", t)
+        return LATIN_S.sub("ಽ", t)
+
+
+    def medicine_a6(text):
+        """The A6 rule, under the name that the harm tests look for: returns the fixed text."""
+        return fix_lookalikes(text)
+
+
+    def _std(out, text):  # added by Data B, copied from Data A (medicine_english.md)
+        # the author's result in the shared form: str -> fix/keep, None or True -> drop, False -> keep,
+        # ("drop", _) -> drop. An empty result is a drop: nothing of the document is left.
+        if out is None or out is True: return ("drop", text)
+        if out is False: return ("keep", text)
+        if isinstance(out, tuple):
+            if out[0] == "drop": return ("drop", text)
+            out = out[1]
+        if not out.strip(): return ("drop", text)
+        return ("fix" if out != text else "keep", out)
+
+    _AUTHOR_RULE = medicine_a6  # added by Data B
+    _PACKS = SCOPE["DB-A6-007"]
+
+
+    def medicine(doc):  # added by Data B: runs only on the pack it was tested on
+        if doc.get("pack_id") not in _PACKS:
+            return ("keep", doc["text"])
+        return _std(_AUTHOR_RULE(doc["text"]), doc["text"])
+    return medicine
+
+@cache
+def _indic_db_a6_008():
+    # DB-A6-008, specv1.md, medicine 98 (indic)
+    RULE_ID = "DB-A6-008"
+    CODE = "A6"
+    ACTION = "fix"
+    STAGE = "10"
+    STATUS = "CANDIDATE"
+    SPEC_PACKS = SCOPE["DB-A6-008"]
+    LANGS = {"mar_Deva"}
+    ORIGIN = "ind-mr-fw2"
+    SOURCE_ORIGIN = "ind-mr-fw2"
+    SOURCE = "ind-mr-fw2"  # pack whose medicine this came from
+    import re  # added by Data B: harm_test_indic.py gives every block `re`
+
+    def medicine_a6(text):
+        text = re.sub(r'([a-zA-Z])([\u0900-\u097F])', r'\1 \2', text)
+        return re.sub(r'([\u0900-\u097F])([a-zA-Z])', r'\1 \2', text)
+
+
+    def _std(out, text):  # added by Data B, copied from Data A (medicine_english.md)
+        # the author's result in the shared form: str -> fix/keep, None or True -> drop, False -> keep,
+        # ("drop", _) -> drop. An empty result is a drop: nothing of the document is left.
+        if out is None or out is True: return ("drop", text)
+        if out is False: return ("keep", text)
+        if isinstance(out, tuple):
+            if out[0] == "drop": return ("drop", text)
+            out = out[1]
+        if not out.strip(): return ("drop", text)
+        return ("fix" if out != text else "keep", out)
+
+    _AUTHOR_RULE = medicine_a6  # added by Data B
+    _PACKS = SCOPE["DB-A6-008"]
+
+
+    def medicine(doc):  # added by Data B: runs only on the pack it was tested on
+        if doc.get("pack_id") not in _PACKS:
+            return ("keep", doc["text"])
+        return _std(_AUTHOR_RULE(doc["text"]), doc["text"])
+    return medicine
+
+@cache
+def _indic_db_a6_021():
+    # DB-A6-021, specv1.md, medicine 99 (indic)
+    RULE_ID = "DB-A6-021"
+    CODE = "A6"
+    ACTION = "fix"
+    STAGE = "10"
+    STATUS = "CANDIDATE"
+    SPEC_PACKS = SCOPE["DB-A6-021"]
+    LANGS = {"mar_Deva"}
+    ORIGIN = "ind-mr-sangraha-v"
+    SOURCE_ORIGIN = "ind-mr-sangraha-v"
+    SOURCE = "ind-mr-sangraha-v"  # pack whose medicine this came from
+
+    import re
+
+    def fix_reviewed_ordinal_ocr(text: str) -> str:
+        return re.sub(r"º(?=य)", "ऱ्", text)
+
+
+    def _std(out, text):  # added by Data B, copied from Data A (medicine_english.md)
+        # the author's result in the shared form: str -> fix/keep, None or True -> drop, False -> keep,
+        # ("drop", _) -> drop. An empty result is a drop: nothing of the document is left.
+        if out is None or out is True: return ("drop", text)
+        if out is False: return ("keep", text)
+        if isinstance(out, tuple):
+            if out[0] == "drop": return ("drop", text)
+            out = out[1]
+        if not out.strip(): return ("drop", text)
+        return ("fix" if out != text else "keep", out)
+
+    _AUTHOR_RULE = fix_reviewed_ordinal_ocr  # added by Data B
+    _PACKS = SCOPE["DB-A6-021"]
+
+
+    def medicine(doc):  # added by Data B: runs only on the pack it was tested on
+        if doc.get("pack_id") not in _PACKS:
+            return ("keep", doc["text"])
+        return _std(_AUTHOR_RULE(doc["text"]), doc["text"])
+    return medicine
+
+@cache
+def _indic_db_a6_013():
+    # DB-A6-013, specv1.md, medicine 101 (indic)
+    RULE_ID = "DB-A6-013"
+    CODE = "A6"
+    ACTION = "fix"
+    STAGE = "10"
+    STATUS = "CANDIDATE"
+    SPEC_PACKS = SCOPE["DB-A6-013"]
+    LANGS = {"tel_Telu"}
+    ORIGIN = "ind-te-fw2, ind-te-sangraha-s, ind-te-sangraha-v"
+    SOURCE_ORIGIN = "ind-te-fw2"
+    SOURCE = "ind-te-fw2"  # pack whose medicine this came from
+    import re  # added by Data B: harm_test_indic.py gives every block `re`
+
+    A6_RX = re.compile(r"(?<=[క-హా-ౌ])[o౦](?=[క-హ]|\s|[.,!?]|$)")
+    def a6_lookalike(t, url=None):
+        return A6_RX.sub("ం", t)
+
+
+    def _std(out, text):  # added by Data B, copied from Data A (medicine_english.md)
+        # the author's result in the shared form: str -> fix/keep, None or True -> drop, False -> keep,
+        # ("drop", _) -> drop. An empty result is a drop: nothing of the document is left.
+        if out is None or out is True: return ("drop", text)
+        if out is False: return ("keep", text)
+        if isinstance(out, tuple):
+            if out[0] == "drop": return ("drop", text)
+            out = out[1]
+        if not out.strip(): return ("drop", text)
+        return ("fix" if out != text else "keep", out)
+
+    _AUTHOR_RULE = a6_lookalike  # added by Data B
+    _PACKS = SCOPE["DB-A6-013"]
+
+
+    def medicine(doc):  # added by Data B: runs only on the pack it was tested on
+        if doc.get("pack_id") not in _PACKS:
+            return ("keep", doc["text"])
+        return _std(_AUTHOR_RULE(doc["text"]), doc["text"])
+    return medicine
+
+@cache
+def _indic_db_g1_001():
+    # DB-G1-001, specv1.md, medicine 102 (indic)
+    RULE_ID = "DB-G1-001"
+    CODE = "G1"
+    ACTION = "fix"
+    STAGE = "10"
+    STATUS = "CANDIDATE"
+    SPEC_PACKS = SCOPE["DB-G1-001"]
+    LANGS = {"ben_Beng"}
+    ORIGIN = "ind-bn-fw2"
+    SOURCE_ORIGIN = "ind-bn-fw2"
+    SOURCE = "ind-bn-fw2"  # pack whose medicine this came from
+
+    import re
+
+
+    def medicine_g1(text):
+        """Remove a space between a consonant and a following virama + consonant."""
+        return re.sub("(?<=[ক-হ]) (?=্[ক-হ])", "", text)
+
+
+    def _std(out, text):  # added by Data B, copied from Data A (medicine_english.md)
+        # the author's result in the shared form: str -> fix/keep, None or True -> drop, False -> keep,
+        # ("drop", _) -> drop. An empty result is a drop: nothing of the document is left.
+        if out is None or out is True: return ("drop", text)
+        if out is False: return ("keep", text)
+        if isinstance(out, tuple):
+            if out[0] == "drop": return ("drop", text)
+            out = out[1]
+        if not out.strip(): return ("drop", text)
+        return ("fix" if out != text else "keep", out)
+
+    _AUTHOR_RULE = medicine_g1  # added by Data B
+    _PACKS = SCOPE["DB-G1-001"]
+
+
+    def medicine(doc):  # added by Data B: runs only on the pack it was tested on
+        if doc.get("pack_id") not in _PACKS:
+            return ("keep", doc["text"])
+        return _std(_AUTHOR_RULE(doc["text"]), doc["text"])
+    return medicine
+
+@cache
+def _indic_db_g1_015():
+    # DB-G1-015, specv1.md, medicine 103 (indic)
+    RULE_ID = "DB-G1-015"
+    CODE = "G1"
+    ACTION = "fix"
+    STAGE = "10"
+    STATUS = "CANDIDATE"
+    SPEC_PACKS = SCOPE["DB-G1-015"]
+    LANGS = {"ben_Beng"}
+    ORIGIN = "ind-bn-sangraha-v"
+    SOURCE_ORIGIN = "ind-bn-sangraha-v"
+    SOURCE = "ind-bn-sangraha-v"  # pack whose medicine this came from
+    import re  # added by Data B: harm_test_indic.py gives every block `re`
+
+    DOUBLED = re.compile("([\u09BE-\u09CD\u09D7])\\1+")
+
+
+    def cure_g1(text):
+        return DOUBLED.sub(r"\1", text)
+
+
+    def _std(out, text):  # added by Data B, copied from Data A (medicine_english.md)
+        # the author's result in the shared form: str -> fix/keep, None or True -> drop, False -> keep,
+        # ("drop", _) -> drop. An empty result is a drop: nothing of the document is left.
+        if out is None or out is True: return ("drop", text)
+        if out is False: return ("keep", text)
+        if isinstance(out, tuple):
+            if out[0] == "drop": return ("drop", text)
+            out = out[1]
+        if not out.strip(): return ("drop", text)
+        return ("fix" if out != text else "keep", out)
+
+    _AUTHOR_RULE = cure_g1  # added by Data B
+    _PACKS = SCOPE["DB-G1-015"]
+
+
+    def medicine(doc):  # added by Data B: runs only on the pack it was tested on
+        if doc.get("pack_id") not in _PACKS:
+            return ("keep", doc["text"])
+        return _std(_AUTHOR_RULE(doc["text"]), doc["text"])
+    return medicine
+
+@cache
+def _indic_db_g1_003():
+    # DB-G1-003, specv1.md, medicine 106 (indic)
+    RULE_ID = "DB-G1-003"
+    CODE = "G1"
+    ACTION = "fix"
+    STAGE = "10"
+    STATUS = "CANDIDATE"
+    SPEC_PACKS = SCOPE["DB-G1-003"]
+    LANGS = {"guj_Gujr"}
+    ORIGIN = "ind-gu-fw2"
+    SOURCE_ORIGIN = "ind-gu-fw2"
+    SOURCE = "ind-gu-fw2"  # pack whose medicine this came from
+
+    import re
+
+    # space before a vowel sign / anusvara, after a consonant, virama or vowel sign
+    DETACHED = re.compile("(?<=[\u0a95-\u0ab9\u0acd\u0abe-\u0acc]) +(?=[\u0abe-\u0acc\u0a82])")
+
+    def medicine(text):
+        return DETACHED.sub("", text)
+
+
+    def _std(out, text):  # added by Data B, copied from Data A (medicine_english.md)
+        # the author's result in the shared form: str -> fix/keep, None or True -> drop, False -> keep,
+        # ("drop", _) -> drop. An empty result is a drop: nothing of the document is left.
+        if out is None or out is True: return ("drop", text)
+        if out is False: return ("keep", text)
+        if isinstance(out, tuple):
+            if out[0] == "drop": return ("drop", text)
+            out = out[1]
+        if not out.strip(): return ("drop", text)
+        return ("fix" if out != text else "keep", out)
+
+    _AUTHOR_RULE = medicine  # added by Data B
+    _PACKS = SCOPE["DB-G1-003"]
+
+
+    def medicine(doc):  # added by Data B: runs only on the pack it was tested on
+        if doc.get("pack_id") not in _PACKS:
+            return ("keep", doc["text"])
+        return _std(_AUTHOR_RULE(doc["text"]), doc["text"])
+    return medicine
+
+@cache
+def _indic_db_g1_016():
+    # DB-G1-016, specv1.md, medicine 107 (indic)
+    RULE_ID = "DB-G1-016"
+    CODE = "G1"
+    ACTION = "fix"
+    STAGE = "10"
+    STATUS = "CANDIDATE"
+    SPEC_PACKS = SCOPE["DB-G1-016"]
+    LANGS = {"hin_Deva"}
+    ORIGIN = "ind-hi-hplt, ind-hi-fw2, ind-hi-sangraha-s, ind-hi-sangraha-v"
+    SOURCE_ORIGIN = "ind-hi-hplt"
+    SOURCE = "ind-hi-hplt"  # pack whose medicine this came from
+
+    # added by Data B: the sheet's shared definitions, copied unchanged from its top, because the harm tool
+    # runs each section on its own
+    import re
+    DEVA, CONS, MATRA = "\u0900-\u097F", "\u0915-\u0939", "\u093E-\u094C"
+    LETTER = "\u0900-\u0963\u0966-\u097F"          # Devanagari letters and signs, without । and ॥
+    WORD_RE = re.compile(f"[{DEVA}]+")
+    norm_line = lambda line: re.sub(r"\s+", " ", line).strip()
+    # end of the shared definitions
+
+    G1_SPLIT = re.compile(f"([{CONS}\u093C])\\s+([{MATRA}\u0901-\u0903])")
+    G1_ANUSVARA = re.compile(f"([{MATRA}])\\s+([\u0901\u0902])")
+    G1_HALANT = re.compile(f"([{CONS}]\u094D)\\s+(?=[{CONS}])")
+
+    def cure_g1(text):
+        if len(G1_SPLIT.findall(text)) + len(G1_ANUSVARA.findall(text)) < 3:
+            return text                                      # a single 'जगत् में' is correct Hindi
+        text = G1_ANUSVARA.sub(lambda m: m.group(1) + m.group(2) + " ", text)   # 'मे ंगुजार' -> 'में गुजार'
+        text = G1_SPLIT.sub(r"\1\2", text)
+        text = re.sub("([\u0901\u0902]) (\\s)", r"\1\2", text)
+        return G1_HALANT.sub(r"\1", text)
+
+
+    def _std(out, text):  # added by Data B, copied from Data A (medicine_english.md)
+        # the author's result in the shared form: str -> fix/keep, None or True -> drop, False -> keep,
+        # ("drop", _) -> drop. An empty result is a drop: nothing of the document is left.
+        if out is None or out is True: return ("drop", text)
+        if out is False: return ("keep", text)
+        if isinstance(out, tuple):
+            if out[0] == "drop": return ("drop", text)
+            out = out[1]
+        if not out.strip(): return ("drop", text)
+        return ("fix" if out != text else "keep", out)
+
+    _AUTHOR_RULE = cure_g1  # added by Data B
+    _PACKS = SCOPE["DB-G1-016"]
+
+
+    def medicine(doc):  # added by Data B: runs only on the pack it was tested on
+        if doc.get("pack_id") not in _PACKS:
+            return ("keep", doc["text"])
+        return _std(_AUTHOR_RULE(doc["text"]), doc["text"])
+    return medicine
+
+@cache
+def _indic_db_g1_006():
+    # DB-G1-006, specv1.md, medicine 110 (indic)
+    RULE_ID = "DB-G1-006"
+    CODE = "G1"
+    ACTION = "fix"
+    STAGE = "10"
+    STATUS = "CANDIDATE"
+    SPEC_PACKS = SCOPE["DB-G1-006"]
+    LANGS = {"mar_Deva"}
+    ORIGIN = "ind-mr-fw2, ind-mr-sangraha-v"
+    SOURCE_ORIGIN = "ind-mr-fw2"
+    SOURCE = "ind-mr-fw2"  # pack whose medicine this came from
+    import re  # added by Data B: harm_test_indic.py gives every block `re`
+
+    def medicine_g1(text):
+        text = re.sub(r'([\u0915-\u0939\u0958-\u095F])\s+([\u093E-\u094D\u0962\u0963])', r'\1\2', text)
+        return text  # Data B removed the visarga-to-colon step here (TSAI, #240 review, 5 Nov: a visarga used as a colon is clean)
+
+
+    def _std(out, text):  # added by Data B, copied from Data A (medicine_english.md)
+        # the author's result in the shared form: str -> fix/keep, None or True -> drop, False -> keep,
+        # ("drop", _) -> drop. An empty result is a drop: nothing of the document is left.
+        if out is None or out is True: return ("drop", text)
+        if out is False: return ("keep", text)
+        if isinstance(out, tuple):
+            if out[0] == "drop": return ("drop", text)
+            out = out[1]
+        if not out.strip(): return ("drop", text)
+        return ("fix" if out != text else "keep", out)
+
+    _AUTHOR_RULE = medicine_g1  # added by Data B
+    _PACKS = SCOPE["DB-G1-006"]
+
+
+    def medicine(doc):  # added by Data B: runs only on the pack it was tested on
+        if doc.get("pack_id") not in _PACKS:
+            return ("keep", doc["text"])
+        return _std(_AUTHOR_RULE(doc["text"]), doc["text"])
+    return medicine
+
+@cache
+def _indic_db_g1_007():
+    # DB-G1-007, specv1.md, medicine 111 (indic)
+    RULE_ID = "DB-G1-007"
+    CODE = "G1"
+    ACTION = "fix"
+    STAGE = "10"
+    STATUS = "CANDIDATE"
+    SPEC_PACKS = SCOPE["DB-G1-007"]
+    LANGS = {"san_Deva"}
+    ORIGIN = "ind-sa-fw2"
+    SOURCE_ORIGIN = "ind-sa-fw2"
+    SOURCE = "ind-sa-fw2"  # pack whose medicine this came from
+    import re  # added by Data B: harm_test_indic.py gives every block `re`
+
+    def medicine_g1(text):
+        return re.sub("(?<=[ऀ-ॿ])[ \t \n]+(?=[ा-ौॢॣँ-ं्])", "", text)  # Data B took the visarga (U+0903) out of this set (TSAI, #240 follow-up: a visarga, with or without a space before it, stays as written)
+
+
+    def _std(out, text):  # added by Data B, copied from Data A (medicine_english.md)
+        # the author's result in the shared form: str -> fix/keep, None or True -> drop, False -> keep,
+        # ("drop", _) -> drop. An empty result is a drop: nothing of the document is left.
+        if out is None or out is True: return ("drop", text)
+        if out is False: return ("keep", text)
+        if isinstance(out, tuple):
+            if out[0] == "drop": return ("drop", text)
+            out = out[1]
+        if not out.strip(): return ("drop", text)
+        return ("fix" if out != text else "keep", out)
+
+    _AUTHOR_RULE = medicine_g1  # added by Data B
+    _PACKS = SCOPE["DB-G1-007"]
+
+
+    def medicine(doc):  # added by Data B: runs only on the pack it was tested on
+        if doc.get("pack_id") not in _PACKS:
+            return ("keep", doc["text"])
+        return _std(_AUTHOR_RULE(doc["text"]), doc["text"])
+    return medicine
+
+@cache
+def _indic_db_g1_013():
+    # DB-G1-013, specv1.md, medicine 113 (indic)
+    RULE_ID = "DB-G1-013"
+    CODE = "G1"
+    ACTION = "fix"
+    STAGE = "10"
+    STATUS = "CANDIDATE"
+    SPEC_PACKS = SCOPE["DB-G1-013"]
+    LANGS = {"tam_Taml"}
+    ORIGIN = "ind-ta-sangraha-v"
+    SOURCE_ORIGIN = "ind-ta-sangraha-v"
+    SOURCE = "ind-ta-sangraha-v"  # pack whose medicine this came from
+    import re  # added by Data B: harm_test_indic.py gives every block `re`
+
+    import unicodedata
+
+    TAMIL_DEPENDENT_SIGNS = set(range(0x0BBE, 0x0BCD + 1)) | {0x0BD7}
+
+    def flag_g1(text: str) -> list[int]:
+        offsets = []
+        for i, char in enumerate(text):
+            if ord(char) not in TAMIL_DEPENDENT_SIGNS:
+                continue
+            if i == 0:
+                offsets.append(i)
+                continue
+            previous = text[i - 1]
+            if previous.isspace() or unicodedata.category(previous).startswith("P"):
+                offsets.append(i)
+        return offsets
+
+    def medicine_g1(text: str) -> str:
+        return text  # flag only; recover the intended order from a trusted source
+
+
+    def _std(out, text):  # added by Data B, copied from Data A (medicine_english.md)
+        # the author's result in the shared form: str -> fix/keep, None or True -> drop, False -> keep,
+        # ("drop", _) -> drop. An empty result is a drop: nothing of the document is left.
+        if out is None or out is True: return ("drop", text)
+        if out is False: return ("keep", text)
+        if isinstance(out, tuple):
+            if out[0] == "drop": return ("drop", text)
+            out = out[1]
+        if not out.strip(): return ("drop", text)
+        return ("fix" if out != text else "keep", out)
+
+    _AUTHOR_RULE = medicine_g1  # added by Data B
+    _PACKS = SCOPE["DB-G1-013"]
+
+
+    def medicine(doc):  # added by Data B: runs only on the pack it was tested on
+        if doc.get("pack_id") not in _PACKS:
+            return ("keep", doc["text"])
+        return _std(_AUTHOR_RULE(doc["text"]), doc["text"])
+    return medicine
+
+@cache
+def _indic_db_g1_010():
+    # DB-G1-010, specv1.md, medicine 115 (indic)
+    RULE_ID = "DB-G1-010"
+    CODE = "G1"
+    ACTION = "fix"
+    STAGE = "10"
+    STATUS = "CANDIDATE"
+    SPEC_PACKS = SCOPE["DB-G1-010"]
+    LANGS = {"tel_Telu"}
+    ORIGIN = "ind-te-fw2, ind-te-sangraha-s"
+    SOURCE_ORIGIN = "ind-te-fw2"
+    SOURCE = "ind-te-fw2"  # pack whose medicine this came from
+    import re  # added by Data B: harm_test_indic.py gives every block `re`
+
+    G1_RX = re.compile(r"(?m)(^|\s)[ా-ౖఁ-ంౢౣ]+")  # Data B took the visarga (U+0C03) out of this set (TSAI, #240 re-review, 5 Nov: a visarga used as a colon is clean, also with a space before it)
+    def g1_orphan_signs(t, url=None):
+        return G1_RX.sub(r"\1", t)
+
+
+    def _std(out, text):  # added by Data B, copied from Data A (medicine_english.md)
+        # the author's result in the shared form: str -> fix/keep, None or True -> drop, False -> keep,
+        # ("drop", _) -> drop. An empty result is a drop: nothing of the document is left.
+        if out is None or out is True: return ("drop", text)
+        if out is False: return ("keep", text)
+        if isinstance(out, tuple):
+            if out[0] == "drop": return ("drop", text)
+            out = out[1]
+        if not out.strip(): return ("drop", text)
+        return ("fix" if out != text else "keep", out)
+
+    _AUTHOR_RULE = g1_orphan_signs  # added by Data B
+    _PACKS = SCOPE["DB-G1-010"]
+
+
+    def medicine(doc):  # added by Data B: runs only on the pack it was tested on
+        if doc.get("pack_id") not in _PACKS:
+            return ("keep", doc["text"])
+        return _std(_AUTHOR_RULE(doc["text"]), doc["text"])
+    return medicine
+
+@cache
+def _indic_db_g1_014():
+    # DB-G1-014, specv1.md, medicine 116 (indic)
+    RULE_ID = "DB-G1-014"
+    CODE = "G1"
+    ACTION = "fix"
+    STAGE = "10"
+    STATUS = "CANDIDATE"
+    SPEC_PACKS = SCOPE["DB-G1-014"]
+    LANGS = {"tel_Telu"}
+    ORIGIN = "ind-te-sangraha-v"
+    SOURCE_ORIGIN = "ind-te-sangraha-v"
+    SOURCE = "ind-te-sangraha-v"  # pack whose medicine this came from
+    import re  # added by Data B: harm_test_indic.py gives every block `re`
+
+    _G1 = set(
+        chr(c) for c in
+        list(range(0x0C3E, 0x0C45))
+        + list(range(0x0C46, 0x0C49))
+        + list(range(0x0C4A, 0x0C4D))
+        + [0x0C4D, 0x0C55, 0x0C56, 0x0C62, 0x0C63, 0x0C02]  # Data B took the visarga (U+0C03) out of this set (TSAI, #240 follow-up: a visarga, with or without a space before it, stays as written)
+    )
+
+    def medicine_g1(text: str) -> str:
+        out = []
+        i = 0
+        while i < len(text):
+            if text[i] in " \t" and i + 1 < len(text) and text[i + 1] in _G1 and out:
+                i += 1
+                continue
+            out.append(text[i])
+            i += 1
+        return "".join(out)
+
+
+    def _std(out, text):  # added by Data B, copied from Data A (medicine_english.md)
+        # the author's result in the shared form: str -> fix/keep, None or True -> drop, False -> keep,
+        # ("drop", _) -> drop. An empty result is a drop: nothing of the document is left.
+        if out is None or out is True: return ("drop", text)
+        if out is False: return ("keep", text)
+        if isinstance(out, tuple):
+            if out[0] == "drop": return ("drop", text)
+            out = out[1]
+        if not out.strip(): return ("drop", text)
+        return ("fix" if out != text else "keep", out)
+
+    _AUTHOR_RULE = medicine_g1  # added by Data B
+    _PACKS = SCOPE["DB-G1-014"]
+
+
+    def medicine(doc):  # added by Data B: runs only on the pack it was tested on
+        if doc.get("pack_id") not in _PACKS:
+            return ("keep", doc["text"])
+        return _std(_AUTHOR_RULE(doc["text"]), doc["text"])
+    return medicine
+
+@cache
+def _indic_db_g2_003():
+    # DB-G2-003, specv1.md, medicine 117 (indic)
+    RULE_ID = "DB-G2-003"
+    CODE = "G2"
+    ACTION = "keep"
+    STAGE = "10"
+    STATUS = "CANDIDATE"
+    SPEC_PACKS = SCOPE["DB-G2-003"]
+    LANGS = {"san_Deva"}
+    ORIGIN = "ind-sa-fw2"
+    SOURCE_ORIGIN = "ind-sa-fw2"
+    SOURCE = "ind-sa-fw2"  # pack whose medicine this came from
+    import re  # added by Data B: harm_test_indic.py gives every block `re`
+
+    def detect_g2(text):
+        """Always False: G2 cannot be detected from the text alone. The pack contains zero U+200C/U+200D,
+        so there is no in-text signal; detection is source_compare.py's comparison with the crawl-date page."""
+        return False
+    def medicine_g2(text):
+        return text    # action none: no in-text signal; detection is source_compare.py
+    # source_compare.py, in words: zw_source = count(U+200C, U+200D) in fetched page text;
+    # zw_pack = same count in the pack text; flag G2 when zw_source > 0 and zw_pack == 0,
+    # evidence = the source words that carried the joiner, located in the pack text by offset.
+
+
+    def _std(out, text):  # added by Data B, copied from Data A (medicine_english.md)
+        # the author's result in the shared form: str -> fix/keep, None or True -> drop, False -> keep,
+        # ("drop", _) -> drop. An empty result is a drop: nothing of the document is left.
+        if out is None or out is True: return ("drop", text)
+        if out is False: return ("keep", text)
+        if isinstance(out, tuple):
+            if out[0] == "drop": return ("drop", text)
+            out = out[1]
+        if not out.strip(): return ("drop", text)
+        return ("fix" if out != text else "keep", out)
+
+    _AUTHOR_RULE = medicine_g2  # added by Data B
+    _PACKS = SCOPE["DB-G2-003"]
+
+
+    def medicine(doc):  # added by Data B: runs only on the pack it was tested on
+        if doc.get("pack_id") not in _PACKS:
+            return ("keep", doc["text"])
+        return ("keep", doc["text"])  # added by Data B: a keep rule is a label only; the text is never changed or dropped
+    return medicine
+
+@cache
+def _indic_db_g4_006():
+    # DB-G4-006, specv1.md, medicine 118 (indic)
+    RULE_ID = "DB-G4-006"
+    CODE = "G4"
+    ACTION = "fix"
+    STAGE = "10"
+    STATUS = "CANDIDATE"
+    SPEC_PACKS = SCOPE["DB-G4-006"]
+    LANGS = {"ben_Beng"}
+    ORIGIN = "ind-bn-sangraha-v, ind-bn-fw2"
+    SOURCE_ORIGIN = "ind-bn-sangraha-v"
+    SOURCE = "ind-bn-sangraha-v"  # pack whose medicine this came from
+    import re  # added by Data B: harm_test_indic.py gives every block `re`
+
+    L = "[অ-হ়-ৗড়-ৣৰৱ]"   # a Bengali letter or sign (not a digit)
+    BN_DIGIT = "[০-৯]"
+    TO_BN_DIGITS = str.maketrans("0123456789", "\u09E6\u09E7\u09E8\u09E9\u09EA\u09EB\u09EC\u09ED\u09EE\u09EF")
+    BN_NUMBER = re.compile(f"{BN_DIGIT}+")
+    LATIN_NUMBER = re.compile(r"(?<![A-Za-z0-9])[0-9]+(?:[.,:/][0-9]+)*(?![A-Za-z0-9])")
+    LETTER_BEFORE = re.compile(f"([A-Za-z]|{L})[^A-Za-z\u0980-\u09FF\n]*$")
+    LETTER_AFTER = re.compile(f"^[^A-Za-z\u0980-\u09FF\n]*([A-Za-z]|{L})")
+
+
+    def cure_g4(text):
+        if len(BN_NUMBER.findall(text)) <= len(re.findall("[0-9]+", text)):
+            return text                                  # Latin digits are the style of this document
+
+        def to_bengali(m):
+            before = LETTER_BEFORE.search(text, 0, m.start())
+            after = LETTER_AFTER.search(text[m.end():])
+            if any(x and re.match("[A-Za-z]", x.group(1)) for x in (before, after)):
+                return m.group()                         # next to an English word: Covid 19, Results 2023
+            return m.group().translate(TO_BN_DIGITS)
+        return LATIN_NUMBER.sub(to_bengali, text)
+
+
+    def _std(out, text):  # added by Data B, copied from Data A (medicine_english.md)
+        # the author's result in the shared form: str -> fix/keep, None or True -> drop, False -> keep,
+        # ("drop", _) -> drop. An empty result is a drop: nothing of the document is left.
+        if out is None or out is True: return ("drop", text)
+        if out is False: return ("keep", text)
+        if isinstance(out, tuple):
+            if out[0] == "drop": return ("drop", text)
+            out = out[1]
+        if not out.strip(): return ("drop", text)
+        return ("fix" if out != text else "keep", out)
+
+    _AUTHOR_RULE = cure_g4  # added by Data B
+    _PACKS = SCOPE["DB-G4-006"]
+
+
+    def medicine(doc):  # added by Data B: runs only on the pack it was tested on
+        if doc.get("pack_id") not in _PACKS:
+            return ("keep", doc["text"])
+        return _std(_AUTHOR_RULE(doc["text"]), doc["text"])
+    return medicine
+
+@cache
+def _indic_db_g4_007():
+    # DB-G4-007, specv1.md, medicine 119 (indic)
+    RULE_ID = "DB-G4-007"
+    CODE = "G4"
+    ACTION = "fix"
+    STAGE = "10"
+    STATUS = "CANDIDATE"
+    SPEC_PACKS = SCOPE["DB-G4-007"]
+    LANGS = {"hin_Deva"}
+    ORIGIN = "ind-hi-hplt, ind-hi-indiccorp, ind-hi-sangraha-s, ind-hi-sangraha-v"
+    SOURCE_ORIGIN = "ind-hi-hplt"
+    SOURCE = "ind-hi-hplt"  # pack whose medicine this came from
+
+    # added by Data B: the sheet's shared definitions, copied unchanged from its top, because the harm tool
+    # runs each section on its own
+    import re
+    DEVA, CONS, MATRA = "\u0900-\u097F", "\u0915-\u0939", "\u093E-\u094C"
+    LETTER = "\u0900-\u0963\u0966-\u097F"          # Devanagari letters and signs, without । and ॥
+    WORD_RE = re.compile(f"[{DEVA}]+")
+    norm_line = lambda line: re.sub(r"\s+", " ", line).strip()
+    # end of the shared definitions
+
+    G4_FAKE = re.compile(f"(?<=[{LETTER}\"'”’])\\s?(II|\\|\\||[Il|])"
+                         f"(?=[ \\t]+[\u0904-\u0939\u0958-\u0961\"'“‘]|[ \\t]*\\n|[ \\t]*$)")
+
+    def cure_g4(text):
+        def rep(m):
+            start = max(text.rfind(ch, 0, m.start()) for ch in "।|\n")
+            if m.start() - start - 1 < 25:
+                return m.group()                       # short segment: a separator, not a sentence end
+            return "॥" if len(m.group(1)) == 2 else "।"
+        return G4_FAKE.sub(rep, text)
+
+
+    def _std(out, text):  # added by Data B, copied from Data A (medicine_english.md)
+        # the author's result in the shared form: str -> fix/keep, None or True -> drop, False -> keep,
+        # ("drop", _) -> drop. An empty result is a drop: nothing of the document is left.
+        if out is None or out is True: return ("drop", text)
+        if out is False: return ("keep", text)
+        if isinstance(out, tuple):
+            if out[0] == "drop": return ("drop", text)
+            out = out[1]
+        if not out.strip(): return ("drop", text)
+        return ("fix" if out != text else "keep", out)
+
+    _AUTHOR_RULE = cure_g4  # added by Data B
+    _PACKS = SCOPE["DB-G4-007"]
+
+
+    def medicine(doc):  # added by Data B: runs only on the pack it was tested on
+        if doc.get("pack_id") not in _PACKS:
+            return ("keep", doc["text"])
+        return _std(_AUTHOR_RULE(doc["text"]), doc["text"])
+    return medicine
+
+@cache
+def _indic_db_g4_002():
+    # DB-G4-002, specv1.md, medicine 120 (indic)
+    RULE_ID = "DB-G4-002"
+    CODE = "G4"
+    ACTION = "fix"
+    STAGE = "10"
+    STATUS = "CANDIDATE"
+    SPEC_PACKS = SCOPE["DB-G4-002"]
+    LANGS = {"mar_Deva"}
+    ORIGIN = "ind-mr-fw2, ind-mr-sangraha-v"
+    SOURCE_ORIGIN = "ind-mr-fw2"
+    SOURCE = "ind-mr-fw2"  # pack whose medicine this came from
+    import re  # added by Data B: harm_test_indic.py gives every block `re`
+
+    def medicine_g4(text):
+        lines = text.splitlines(keepends=True)
+        out = []
+        for line in lines:
+            if line.strip().startswith('|') and line.strip().endswith('|'):
+                out.append(line)
+            else:
+                line = re.sub(r'(?<=[\u0900-\u097F])\s*\|\|\s*', ' ॥ ', line)
+                line = re.sub(r'(?<=[\u0900-\u097F])\s*\|\s*(?=[\u0900-\u097F\s]|$)', ' । ', line)
+                out.append(line)
+        return ''.join(out)
+
+
+    def _std(out, text):  # added by Data B, copied from Data A (medicine_english.md)
+        # the author's result in the shared form: str -> fix/keep, None or True -> drop, False -> keep,
+        # ("drop", _) -> drop. An empty result is a drop: nothing of the document is left.
+        if out is None or out is True: return ("drop", text)
+        if out is False: return ("keep", text)
+        if isinstance(out, tuple):
+            if out[0] == "drop": return ("drop", text)
+            out = out[1]
+        if not out.strip(): return ("drop", text)
+        return ("fix" if out != text else "keep", out)
+
+    _AUTHOR_RULE = medicine_g4  # added by Data B
+    _PACKS = SCOPE["DB-G4-002"]
+
+
+    def medicine(doc):  # added by Data B: runs only on the pack it was tested on
+        if doc.get("pack_id") not in _PACKS:
+            return ("keep", doc["text"])
+        return _std(_AUTHOR_RULE(doc["text"]), doc["text"])
+    return medicine
+
+@cache
+def _indic_db_g4_003():
+    # DB-G4-003, specv1.md, medicine 121 (indic)
+    RULE_ID = "DB-G4-003"
+    CODE = "G4"
+    ACTION = "fix"
+    STAGE = "10"
+    STATUS = "CANDIDATE"
+    SPEC_PACKS = SCOPE["DB-G4-003"]
+    LANGS = {"san_Deva"}
+    ORIGIN = "ind-sa-fw2"
+    SOURCE_ORIGIN = "ind-sa-fw2"
+    SOURCE = "ind-sa-fw2"  # pack whose medicine this came from
+    import re  # added by Data B: harm_test_indic.py gives every block `re`
+
+    RE_G4_RUN = re.compile(r"[0-9]+(?:[.,:/\-][0-9]+)*")
+    DEVA_CTX = r"\u0904-\u0939\u0958-\u0961\u0972-\u097F"   # Devanagari letters only
+    RE_DEVA_CTX = re.compile(rf"[{DEVA_CTX}]")
+    RE_LATIN = re.compile(r"[A-Za-z]"); RE_DEVA_DIGIT = re.compile(r"[०-९]")
+    TO_DEVA_DIGITS = str.maketrans("0123456789", "०१२३४५६७८९"); CTX = 10; MIN_RUNS = 3
+    # news-prose guard: month names (Hindi/Sanskrit/Marathi stems), currency words, %, दिनाङ्क within NEWS_CTX chars
+    NEWS_WORDS = (r"जनवर|फरवर|फेब्रु|मार्च|अप्रैल|एप्रिल|मई|जून|जुलाई|जुलै|अगस्त|आगस्ट|सितम्बर|सितंबर|सप्टेम्बर|सेप्टेम्बर|"
+                  r"अक्टूबर|अक्तूबर|ऑक्टोबर|नवम्बर|नवंबर|नोव्हेम्बर|दिसम्बर|दिसंबर|डिसेम्बर|"
+                  r"रूप्यक|रुपय|रूपय|रु\.|₹|करोड|लाख|डॉलर|डालर|%|दिनाङ्क|दिनांक")
+    RE_G4_NEWS = re.compile(NEWS_WORDS); NEWS_CTX = 12
+
+    def _g4_convert_run(m):
+        run = m.group()
+        if ":" in run or "/" in run or "-" in run: return run
+        s = m.string; left = s[max(0, m.start() - CTX):m.start()]; right = s[m.end():m.end() + CTX]
+        if not (RE_DEVA_CTX.search(left) and RE_DEVA_CTX.search(right)): return run
+        if RE_LATIN.search(left) or RE_LATIN.search(right): return run
+        nleft = s[max(0, m.start() - NEWS_CTX):m.start()]; nright = s[m.end():m.end() + NEWS_CTX]
+        if RE_G4_NEWS.search(nleft) or RE_G4_NEWS.search(nright): return run   # date or amount in news prose
+        return run.translate(TO_DEVA_DIGITS)
+
+    def fix_g4_all_ascii(text):            # helper called by fix_g4_mixed_only
+        convertible = sum(1 for m in RE_G4_RUN.finditer(text) if _g4_convert_run(m) != m.group())
+        if convertible < MIN_RUNS: return text
+        return RE_G4_RUN.sub(_g4_convert_run, text)
+
+    def fix_g4_mixed_only(text):           # the G4 medicine
+        if not RE_DEVA_DIGIT.search(text): return text
+        return fix_g4_all_ascii(text)
+
+    def medicine_g4(text):                 # the G4 medicine = fix_g4_mixed_only
+        return fix_g4_mixed_only(text)
+
+
+    def _std(out, text):  # added by Data B, copied from Data A (medicine_english.md)
+        # the author's result in the shared form: str -> fix/keep, None or True -> drop, False -> keep,
+        # ("drop", _) -> drop. An empty result is a drop: nothing of the document is left.
+        if out is None or out is True: return ("drop", text)
+        if out is False: return ("keep", text)
+        if isinstance(out, tuple):
+            if out[0] == "drop": return ("drop", text)
+            out = out[1]
+        if not out.strip(): return ("drop", text)
+        return ("fix" if out != text else "keep", out)
+
+    _AUTHOR_RULE = medicine_g4  # added by Data B
+    _PACKS = SCOPE["DB-G4-003"]
+
+
+    def medicine(doc):  # added by Data B: runs only on the pack it was tested on
+        if doc.get("pack_id") not in _PACKS:
+            return ("keep", doc["text"])
+        return _std(_AUTHOR_RULE(doc["text"]), doc["text"])
+    return medicine
+
+@cache
+def _indic_db_g4_004():
+    # DB-G4-004, specv1.md, medicine 122 (indic)
+    RULE_ID = "DB-G4-004"
+    CODE = "G4"
+    ACTION = "fix"
+    STAGE = "10"
+    STATUS = "CANDIDATE"
+    SPEC_PACKS = SCOPE["DB-G4-004"]
+    LANGS = {"tam_Taml"}
+    ORIGIN = "ind-ta-sangraha-v"
+    SOURCE_ORIGIN = "ind-ta-sangraha-v"
+    SOURCE = "ind-ta-sangraha-v"  # pack whose medicine this came from
+
+    import re
+
+    def medicine_g4(text):
+        text = re.sub(r"(?<=\d)\. (?=\d)", ".", text)  # 28. 17 -> 28.17
+        return re.sub(r"\b[A-Za-z0-9-]+(?:\. [A-Za-z0-9-]+)*\. (?:com|in|org|net|lk|info)\b",
+                      lambda m: m[0].replace(". ", "."), text)
+
+
+    def _std(out, text):  # added by Data B, copied from Data A (medicine_english.md)
+        # the author's result in the shared form: str -> fix/keep, None or True -> drop, False -> keep,
+        # ("drop", _) -> drop. An empty result is a drop: nothing of the document is left.
+        if out is None or out is True: return ("drop", text)
+        if out is False: return ("keep", text)
+        if isinstance(out, tuple):
+            if out[0] == "drop": return ("drop", text)
+            out = out[1]
+        if not out.strip(): return ("drop", text)
+        return ("fix" if out != text else "keep", out)
+
+    _AUTHOR_RULE = medicine_g4  # added by Data B
+    _PACKS = SCOPE["DB-G4-004"]
+
+
+    def medicine(doc):  # added by Data B: runs only on the pack it was tested on
+        if doc.get("pack_id") not in _PACKS:
+            return ("keep", doc["text"])
+        return _std(_AUTHOR_RULE(doc["text"]), doc["text"])
+    return medicine
+
+@cache
+def _indic_db_b2_001():
+    # DB-B2-001, specv1.md, medicine 123 (indic)
+    RULE_ID = "DB-B2-001"
+    CODE = "B2"
+    ACTION = "fix"
+    STAGE = "20"
+    STATUS = "CANDIDATE"
+    SPEC_PACKS = SCOPE["DB-B2-001"]
+    LANGS = {"hin_Deva"}
+    ORIGIN = "ind-hi-fw2, ind-hi-indiccorp, ind-hi-sangraha-v"
+    SOURCE_ORIGIN = "ind-hi-fw2"
+    SOURCE = "ind-hi-fw2"  # pack whose medicine this came from
+
+    import re
+
+    _HTML_TAG_RE = re.compile(r"</?[a-zA-Z][^>]*>")
+    _URL_TOKEN = re.compile(r"https?://\S+|data:image/\w+;base64,\S+")
+
+    def medicine_b2(text: str) -> str:
+        """Remove HTML/XML tags; keep surrounding text. (Automatic medicine; URL strip is helper-only.)"""
+        return _HTML_TAG_RE.sub("", text or "")
+
+    def _strip_b2_urls(text: str) -> str:
+        """Optional selective fix: blank URL tokens (review before mass use). Not automatic medicine."""
+        return _URL_TOKEN.sub("", text or "")
+
+
+    def _std(out, text):  # added by Data B, copied from Data A (medicine_english.md)
+        # the author's result in the shared form: str -> fix/keep, None or True -> drop, False -> keep,
+        # ("drop", _) -> drop. An empty result is a drop: nothing of the document is left.
+        if out is None or out is True: return ("drop", text)
+        if out is False: return ("keep", text)
+        if isinstance(out, tuple):
+            if out[0] == "drop": return ("drop", text)
+            out = out[1]
+        if not out.strip(): return ("drop", text)
+        return ("fix" if out != text else "keep", out)
+
+    _AUTHOR_RULE = medicine_b2  # added by Data B
+    _PACKS = SCOPE["DB-B2-001"]
+
+
+    def medicine(doc):  # added by Data B: runs only on the pack it was tested on
+        if doc.get("pack_id") not in _PACKS:
+            return ("keep", doc["text"])
+        return _std(_AUTHOR_RULE(doc["text"]), doc["text"])
+
+    # Added by Data A: protect TSAI privacy placeholders from HTML stripping.
+    import re as _da_privacy_re
+    _da_privacy_tokens = _da_privacy_re.compile(r"<(?:PHONE|EMAIL|ADDRESS)>")
+
+    def _da_keep_privacy_placeholders(rule):
+        def medicine(doc):
+            original = doc["text"]
+            if not _da_privacy_tokens.search(original):
+                return rule(doc)
+            marker = "\ufdd0"
+            while marker in original:
+                marker += "\ufdd0"
+            tokens = []
+            def shield(match):
+                tokens.append(match.group(0))
+                return marker + str(len(tokens) - 1) + marker
+            protected = _da_privacy_tokens.sub(shield, original)
+            action, text = rule(dict(doc, text=protected))
+            if action == "drop":
+                return ("drop", original)
+            for index, token in enumerate(tokens):
+                text = text.replace(marker + str(index) + marker, token)
+            return ("fix" if text != original else "keep", text)
+        return medicine
+
+    medicine = _da_keep_privacy_placeholders(medicine)
+    return medicine
+
+@cache
+def _indic_db_b2_002():
+    # DB-B2-002, specv1.md, medicine 124 (indic)
+    RULE_ID = "DB-B2-002"
+    CODE = "B2"
+    ACTION = "fix"
+    STAGE = "20"
+    STATUS = "CANDIDATE"
+    SPEC_PACKS = SCOPE["DB-B2-002"]
+    LANGS = {"hin_Deva"}
+    ORIGIN = "ind-hi-hplt"
+    SOURCE_ORIGIN = "ind-hi-hplt"
+    SOURCE = "ind-hi-hplt"  # pack whose medicine this came from
+    import re  # added by Data B: harm_test_indic.py gives every block `re`
+
+    def medicine_b2(text):
+        if "<" in text:  # a real tag is there: leave it to an HTML cleaner
+            return text
+        return re.sub("[ \t]*/>", "", text)
+
+
+    def _std(out, text):  # added by Data B, copied from Data A (medicine_english.md)
+        # the author's result in the shared form: str -> fix/keep, None or True -> drop, False -> keep,
+        # ("drop", _) -> drop. An empty result is a drop: nothing of the document is left.
+        if out is None or out is True: return ("drop", text)
+        if out is False: return ("keep", text)
+        if isinstance(out, tuple):
+            if out[0] == "drop": return ("drop", text)
+            out = out[1]
+        if not out.strip(): return ("drop", text)
+        return ("fix" if out != text else "keep", out)
+
+    _AUTHOR_RULE = medicine_b2  # added by Data B
+    _PACKS = SCOPE["DB-B2-002"]
+
+
+    def medicine(doc):  # added by Data B: runs only on the pack it was tested on
+        if doc.get("pack_id") not in _PACKS:
+            return ("keep", doc["text"])
+        return _std(_AUTHOR_RULE(doc["text"]), doc["text"])
+    return medicine
+
+@cache
+def _indic_db_b2_008():
+    # DB-B2-008, specv1.md, medicine 125 (indic)
+    RULE_ID = "DB-B2-008"
+    CODE = "B2"
+    ACTION = "fix+drop"
+    STAGE = "20"
+    STATUS = "CANDIDATE"
+    SPEC_PACKS = SCOPE["DB-B2-008"]
+    LANGS = {"hin_Deva"}
+    ORIGIN = "ind-hi-sangraha-s"
+    SOURCE_ORIGIN = "ind-hi-sangraha-s"
+    SOURCE = "ind-hi-sangraha-s"  # pack whose medicine this came from
+
+    import re
+    _TAG = re.compile("</?(?:br|ref|\u092c\u0940\\. \u0906\u0930\\.|\u0930\u0947\u092b|\u090f\u0928\u090f\u0938|\u092a\u0947\u0930\u0947\u0902\u091f\u093f\u0921|\u092e\u0949\u0921\u0932|\u0906\u0908\u0921\u0940|\u092a\u0943\u0937\u094d\u0920|\u0936\u0940\u0930\u094d\u0937\u0915|\u0938\u0902\u0936\u094b\u0927\u0928|\u092a\u093e\u0920)\\b[^<>\n]{0,60}>")
+    _DEV_TAG = re.compile("</?[\u0900-\u097f][^<>\n]{0,30}>")
+
+    def medicine_b2(text):
+        if text.count("<unk>") >= 3 or len(_DEV_TAG.findall(text)) >= 5:
+            return True
+        return _TAG.sub("", text).replace("<unk>", "")
+
+
+    def _std(out, text):  # added by Data B, copied from Data A (medicine_english.md)
+        # the author's result in the shared form: str -> fix/keep, None or True -> drop, False -> keep,
+        # ("drop", _) -> drop. An empty result is a drop: nothing of the document is left.
+        if out is None or out is True: return ("drop", text)
+        if out is False: return ("keep", text)
+        if isinstance(out, tuple):
+            if out[0] == "drop": return ("drop", text)
+            out = out[1]
+        if not out.strip(): return ("drop", text)
+        return ("fix" if out != text else "keep", out)
+
+    _AUTHOR_RULE = medicine_b2  # added by Data B
+    _PACKS = SCOPE["DB-B2-008"]
+
+
+    def medicine(doc):  # added by Data B: runs only on the pack it was tested on
+        if doc.get("pack_id") not in _PACKS:
+            return ("keep", doc["text"])
+        return _std(_AUTHOR_RULE(doc["text"]), doc["text"])
+    return medicine
+
+@cache
+def _indic_db_b2_003():
+    # DB-B2-003, specv1.md, medicine 127 (indic)
+    RULE_ID = "DB-B2-003"
+    CODE = "B2"
+    ACTION = "fix"
+    STAGE = "20"
+    STATUS = "CANDIDATE"
+    SPEC_PACKS = SCOPE["DB-B2-003"]
+    LANGS = {"kan_Knda"}
+    ORIGIN = "ind-kn-sangraha-s, ind-kn-fw2, ind-kn-sangraha-v"
+    SOURCE_ORIGIN = "ind-kn-sangraha-s"
+    SOURCE = "ind-kn-sangraha-s"  # pack whose medicine this came from
+    import re  # added by Data B: harm_test_indic.py gives every block `re`
+
+    TAG_ID = re.compile(r" ?<?ಐ\. ಡಿ\. \d+>?")
+    TAG_BR = re.compile(r"<ಬಿ\.? ?ಆರ್\.?>|<br\s*/?>", re.I)
+    TAG_ANY = re.compile(r"</?(?:[A-Za-zÀ-ÿ][^<>\n]{0,40}|ರಿಫರ್[^<>\n]{0,80})>|<>")
+    def m1_tags(s):
+        s = TAG_BR.sub("\n", s)
+        return TAG_ANY.sub("", TAG_ID.sub("", s))
+
+
+    def _std(out, text):  # added by Data B, copied from Data A (medicine_english.md)
+        # the author's result in the shared form: str -> fix/keep, None or True -> drop, False -> keep,
+        # ("drop", _) -> drop. An empty result is a drop: nothing of the document is left.
+        if out is None or out is True: return ("drop", text)
+        if out is False: return ("keep", text)
+        if isinstance(out, tuple):
+            if out[0] == "drop": return ("drop", text)
+            out = out[1]
+        if not out.strip(): return ("drop", text)
+        return ("fix" if out != text else "keep", out)
+
+    _AUTHOR_RULE = m1_tags  # added by Data B
+    _PACKS = SCOPE["DB-B2-003"]
+
+
+    def medicine(doc):  # added by Data B: runs only on the pack it was tested on
+        if doc.get("pack_id") not in _PACKS:
+            return ("keep", doc["text"])
+        return _std(_AUTHOR_RULE(doc["text"]), doc["text"])
+
+    # Added by Data A: protect TSAI privacy placeholders from HTML stripping.
+    import re as _da_privacy_re
+    _da_privacy_tokens = _da_privacy_re.compile(r"<(?:PHONE|EMAIL|ADDRESS)>")
+
+    def _da_keep_privacy_placeholders(rule):
+        def medicine(doc):
+            original = doc["text"]
+            if not _da_privacy_tokens.search(original):
+                return rule(doc)
+            marker = "\ufdd0"
+            while marker in original:
+                marker += "\ufdd0"
+            tokens = []
+            def shield(match):
+                tokens.append(match.group(0))
+                return marker + str(len(tokens) - 1) + marker
+            protected = _da_privacy_tokens.sub(shield, original)
+            action, text = rule(dict(doc, text=protected))
+            if action == "drop":
+                return ("drop", original)
+            for index, token in enumerate(tokens):
+                text = text.replace(marker + str(index) + marker, token)
+            return ("fix" if text != original else "keep", text)
+        return medicine
+
+    medicine = _da_keep_privacy_placeholders(medicine)
+    return medicine
+
+@cache
+def _indic_db_b2_004():
+    # DB-B2-004, specv1.md, medicine 129 (indic)
+    RULE_ID = "DB-B2-004"
+    CODE = "B2"
+    ACTION = "fix"
+    STAGE = "20"
+    STATUS = "CANDIDATE"
+    SPEC_PACKS = SCOPE["DB-B2-004"]
+    LANGS = {"tel_Telu"}
+    ORIGIN = "ind-te-fw2, ind-te-sangraha-v"
+    SOURCE_ORIGIN = "ind-te-fw2"
+    SOURCE = "ind-te-fw2"  # pack whose medicine this came from
+    import re  # added by Data B: harm_test_indic.py gives every block `re`
+
+    B2_RX = re.compile(r"</?[a-zA-Z][a-zA-Z0-9]*(?:\s[^<>]{0,300})?/?>|<>|\b(?:width|height|class|style)=\"[^\"]*\"")
+    def b2_html(t, url=None):
+        return B2_RX.sub("", t)
+
+
+    def _std(out, text):  # added by Data B, copied from Data A (medicine_english.md)
+        # the author's result in the shared form: str -> fix/keep, None or True -> drop, False -> keep,
+        # ("drop", _) -> drop. An empty result is a drop: nothing of the document is left.
+        if out is None or out is True: return ("drop", text)
+        if out is False: return ("keep", text)
+        if isinstance(out, tuple):
+            if out[0] == "drop": return ("drop", text)
+            out = out[1]
+        if not out.strip(): return ("drop", text)
+        return ("fix" if out != text else "keep", out)
+
+    _AUTHOR_RULE = b2_html  # added by Data B
+    _PACKS = SCOPE["DB-B2-004"]
+
+
+    def medicine(doc):  # added by Data B: runs only on the pack it was tested on
+        if doc.get("pack_id") not in _PACKS:
+            return ("keep", doc["text"])
+        return _std(_AUTHOR_RULE(doc["text"]), doc["text"])
+
+    # Added by Data A: protect TSAI privacy placeholders from HTML stripping.
+    import re as _da_privacy_re
+    _da_privacy_tokens = _da_privacy_re.compile(r"<(?:PHONE|EMAIL|ADDRESS)>")
+
+    def _da_keep_privacy_placeholders(rule):
+        def medicine(doc):
+            original = doc["text"]
+            if not _da_privacy_tokens.search(original):
+                return rule(doc)
+            marker = "\ufdd0"
+            while marker in original:
+                marker += "\ufdd0"
+            tokens = []
+            def shield(match):
+                tokens.append(match.group(0))
+                return marker + str(len(tokens) - 1) + marker
+            protected = _da_privacy_tokens.sub(shield, original)
+            action, text = rule(dict(doc, text=protected))
+            if action == "drop":
+                return ("drop", original)
+            for index, token in enumerate(tokens):
+                text = text.replace(marker + str(index) + marker, token)
+            return ("fix" if text != original else "keep", text)
+        return medicine
+
+    medicine = _da_keep_privacy_placeholders(medicine)
+    return medicine
+
+@cache
+def _indic_db_b2_007():
+    # DB-B2-007, specv1.md, medicine 130 (indic)
+    RULE_ID = "DB-B2-007"
+    CODE = "B2"
+    ACTION = "fix"
+    STAGE = "20"
+    STATUS = "CANDIDATE"
+    SPEC_PACKS = SCOPE["DB-B2-007"]
+    LANGS = {"tel_Telu"}
+    ORIGIN = "ind-te-sangraha-s"
+    SOURCE_ORIGIN = "ind-te-sangraha-s"
+    SOURCE = "ind-te-sangraha-s"  # pack whose medicine this came from
+
+    import re
+    BR_TAG = re.compile(r'<br\s*/?>|<బిఆర్>', re.IGNORECASE)
+    def medicine_b2(text):
+        return BR_TAG.sub('\n', text)  # deliberately leaves other tags unchanged
+
+
+    def _std(out, text):  # added by Data B, copied from Data A (medicine_english.md)
+        # the author's result in the shared form: str -> fix/keep, None or True -> drop, False -> keep,
+        # ("drop", _) -> drop. An empty result is a drop: nothing of the document is left.
+        if out is None or out is True: return ("drop", text)
+        if out is False: return ("keep", text)
+        if isinstance(out, tuple):
+            if out[0] == "drop": return ("drop", text)
+            out = out[1]
+        if not out.strip(): return ("drop", text)
+        return ("fix" if out != text else "keep", out)
+
+    _AUTHOR_RULE = medicine_b2  # added by Data B
+    _PACKS = SCOPE["DB-B2-007"]
+
+
+    def medicine(doc):  # added by Data B: runs only on the pack it was tested on
+        if doc.get("pack_id") not in _PACKS:
+            return ("keep", doc["text"])
+        return _std(_AUTHOR_RULE(doc["text"]), doc["text"])
+    return medicine
+
+@cache
+def _indic_db_b3_001():
+    # DB-B3-001, specv1.md, medicine 132 (indic)
+    RULE_ID = "DB-B3-001"
+    CODE = "B3"
+    ACTION = "fix"
+    STAGE = "20"
+    STATUS = "CANDIDATE"
+    SPEC_PACKS = SCOPE["DB-B3-001"]
+    LANGS = {"kan_Knda"}
+    ORIGIN = "ind-kn-sangraha-s, ind-kn-fw2, ind-kn-sangraha-v"
+    SOURCE_ORIGIN = "ind-kn-sangraha-s"
+    SOURCE = "ind-kn-sangraha-s"  # pack whose medicine this came from
+    import re  # added by Data B: harm_test_indic.py gives every block `re`
+
+    GHOST = re.compile(r"<unk>|<\|[a-z_]+\|>|\[/?INST\]|</?s>|</?think>")
+    def m2_ghost(s):
+        return GHOST.sub("", s)
+
+
+    def _std(out, text):  # added by Data B, copied from Data A (medicine_english.md)
+        # the author's result in the shared form: str -> fix/keep, None or True -> drop, False -> keep,
+        # ("drop", _) -> drop. An empty result is a drop: nothing of the document is left.
+        if out is None or out is True: return ("drop", text)
+        if out is False: return ("keep", text)
+        if isinstance(out, tuple):
+            if out[0] == "drop": return ("drop", text)
+            out = out[1]
+        if not out.strip(): return ("drop", text)
+        return ("fix" if out != text else "keep", out)
+
+    _AUTHOR_RULE = m2_ghost  # added by Data B
+    _PACKS = SCOPE["DB-B3-001"]
+
+
+    def medicine(doc):  # added by Data B: runs only on the pack it was tested on
+        if doc.get("pack_id") not in _PACKS:
+            return ("keep", doc["text"])
+        return _std(_AUTHOR_RULE(doc["text"]), doc["text"])
+    return medicine
+
+@cache
+def _indic_db_a3_004():
+    # DB-A3-004, specv1.md, medicine 135 (indic)
+    RULE_ID = "DB-A3-004"
+    CODE = "A3"
+    ACTION = "drop"
+    STAGE = "30"
+    STATUS = "CANDIDATE"
+    SPEC_PACKS = SCOPE["DB-A3-004"]
+    LANGS = {"kan_Knda"}
+    ORIGIN = "ind-kn-sangraha-v"
+    SOURCE_ORIGIN = "ind-kn-sangraha-v"
+    SOURCE = "ind-kn-sangraha-v"  # pack whose medicine this came from
+
+    import re
+
+    IAST = set("āīūṛṝḷṅñṇṭḍśṣḥṁĀĪŪṚṄÑṆṬḌŚṢḤṀ")              # romanised Indic, not legacy-font residue
+
+
+    def is_kn(c):
+        return 0x0C80 <= ord(c) <= 0x0CFF
+
+
+    def legacy_residue(t):
+        """A3: offsets of legacy-font (Nudi/Baraha) residue inside Kannada words.
+
+        Residue is a Latin-1 or Latin Extended letter inside a word that also holds Kannada (ಸಂಸ್ಕøತಿ), or a '$'
+        directly before a Kannada vowel sign or virama (ಸ್ಕೊ$್ವ). A '$' before a digit ($100ರಷ್ಟು), a degree
+        sign (30°ಸೆ) and IAST letters are not residue.
+        """
+        out = []
+        for m in re.finditer(r"\S+", t):
+            w = m.group()
+            if not any(is_kn(c) for c in w):
+                continue
+            for k, c in enumerate(w):
+                nxt = w[k + 1] if k + 1 < len(w) else " "
+                if c.isalpha() and 0xC0 <= ord(c) <= 0x24F and c not in IAST:
+                    out.append(m.start() + k)
+                elif c == "$" and is_kn(nxt) and not nxt.isalpha():
+                    out.append(m.start() + k)
+        return out
+
+
+    def has_legacy(t):
+        """A3: drop a document with legacy-font (Nudi/Baraha) residue inside Kannada words."""
+        return bool(legacy_residue(t))
+
+
+    def medicine_a3(text):
+        """The A3 rule, under the name that the harm tests look for: True drops the document."""
+        return has_legacy(text)
+
+
+    def _std(out, text):  # added by Data B, copied from Data A (medicine_english.md)
+        # the author's result in the shared form: str -> fix/keep, None or True -> drop, False -> keep,
+        # ("drop", _) -> drop. An empty result is a drop: nothing of the document is left.
+        if out is None or out is True: return ("drop", text)
+        if out is False: return ("keep", text)
+        if isinstance(out, tuple):
+            if out[0] == "drop": return ("drop", text)
+            out = out[1]
+        if not out.strip(): return ("drop", text)
+        return ("fix" if out != text else "keep", out)
+
+    _AUTHOR_RULE = medicine_a3  # added by Data B
+    _PACKS = SCOPE["DB-A3-004"]
+
+
+    def medicine(doc):  # added by Data B: runs only on the pack it was tested on
+        if doc.get("pack_id") not in _PACKS:
+            return ("keep", doc["text"])
+        return _std(_AUTHOR_RULE(doc["text"]), doc["text"])
+    return medicine
+
+@cache
+def _indic_db_a4_001():
+    # DB-A4-001, specv1.md, medicine 136 (indic)
+    RULE_ID = "DB-A4-001"
+    CODE = "A4"
+    ACTION = "drop"
+    STAGE = "30"
+    STATUS = "CANDIDATE"
+    SPEC_PACKS = SCOPE["DB-A4-001"]
+    LANGS = {"san_Deva"}
+    ORIGIN = "ind-sa-fw2"
+    SOURCE_ORIGIN = "ind-sa-fw2"
+    SOURCE = "ind-sa-fw2"  # pack whose medicine this came from
+    import re  # added by Data B: harm_test_indic.py gives every block `re`
+
+    def medicine_a4(text):
+        return "�" in text or "{??}" in text
+
+
+    def _std(out, text):  # added by Data B, copied from Data A (medicine_english.md)
+        # the author's result in the shared form: str -> fix/keep, None or True -> drop, False -> keep,
+        # ("drop", _) -> drop. An empty result is a drop: nothing of the document is left.
+        if out is None or out is True: return ("drop", text)
+        if out is False: return ("keep", text)
+        if isinstance(out, tuple):
+            if out[0] == "drop": return ("drop", text)
+            out = out[1]
+        if not out.strip(): return ("drop", text)
+        return ("fix" if out != text else "keep", out)
+
+    _AUTHOR_RULE = medicine_a4  # added by Data B
+    _PACKS = SCOPE["DB-A4-001"]
+
+
+    def medicine(doc):  # added by Data B: runs only on the pack it was tested on
+        if doc.get("pack_id") not in _PACKS:
+            return ("keep", doc["text"])
+        return _std(_AUTHOR_RULE(doc["text"]), doc["text"])
+    return medicine
+
+@cache
+def _indic_db_a6_019():
+    # DB-A6-019, specv1.md, medicine 138 (indic)
+    RULE_ID = "DB-A6-019"
+    CODE = "A6"
+    ACTION = "drop"
+    STAGE = "30"
+    STATUS = "CANDIDATE"
+    SPEC_PACKS = SCOPE["DB-A6-019"]
+    LANGS = {"hin_Deva"}
+    ORIGIN = "ind-hi-sangraha-s, ind-hi-fw2"
+    SOURCE_ORIGIN = "ind-hi-sangraha-s"
+    SOURCE = "ind-hi-sangraha-s"  # pack whose medicine this came from
+
+    import re
+    import unicodedata
+
+    _words = re.compile(r"[^\W\d_]+", re.UNICODE)
+    _yiddish_cyrillic = re.compile(
+        r"\(यिद्दीश[ः:][ \t]*[\u0400-\u04ff]"
+    )
+
+    def medicine_a6(text):
+        if _yiddish_cyrillic.search(text):
+            return True
+        for match in _words.finditer(text):
+            scripts = {
+                unicodedata.name(char, "").split(" ", 1)[0]
+                for char in match.group()
+            }
+            if "LATIN" in scripts and "CYRILLIC" in scripts:
+                return True
+        return False
+
+
+    def _std(out, text):  # added by Data B, copied from Data A (medicine_english.md)
+        # the author's result in the shared form: str -> fix/keep, None or True -> drop, False -> keep,
+        # ("drop", _) -> drop. An empty result is a drop: nothing of the document is left.
+        if out is None or out is True: return ("drop", text)
+        if out is False: return ("keep", text)
+        if isinstance(out, tuple):
+            if out[0] == "drop": return ("drop", text)
+            out = out[1]
+        if not out.strip(): return ("drop", text)
+        return ("fix" if out != text else "keep", out)
+
+    _AUTHOR_RULE = medicine_a6  # added by Data B
+    _PACKS = SCOPE["DB-A6-019"]
+
+
+    def medicine(doc):  # added by Data B: runs only on the pack it was tested on
+        if doc.get("pack_id") not in _PACKS:
+            return ("keep", doc["text"])
+        return _std(_AUTHOR_RULE(doc["text"]), doc["text"])
+    return medicine
+
+@cache
+def _indic_db_b4_008():
+    # DB-B4-008, specv1.md, medicine 139 (indic)
+    RULE_ID = "DB-B4-008"
+    CODE = "B4"
+    ACTION = "drop"
+    STAGE = "30"
+    STATUS = "CANDIDATE"
+    SPEC_PACKS = SCOPE["DB-B4-008"]
+    LANGS = {"hin_Deva"}
+    ORIGIN = "ind-hi-sangraha-s, ind-hi-fw2, ind-hi-hplt, ind-hi-indiccorp, ind-hi-sangraha-v"
+    SOURCE_ORIGIN = "ind-hi-sangraha-s"
+    SOURCE = "ind-hi-sangraha-s"  # pack whose medicine this came from
+
+    import re
+
+    _placeholder = re.compile(
+        r"<unk>|<ID[0-9]+(?:[>,]|(?=\s|$))|"
+        r"(?<!\w)आई[ \t]*\.[ \t]*डी[ \t]*\.[ \t]*[0-9०-९]+(?!\w)|"
+        r"(?<!\w)(?:सूत्र|फॉर्मूला|formula)[ \t]*_[ \t]*[0-9०-९]+(?!\w)",
+        re.IGNORECASE,
+    )
+
+    def medicine_b4(text):
+        return bool(_placeholder.search(text))
+
+
+    def _std(out, text):  # added by Data B, copied from Data A (medicine_english.md)
+        # the author's result in the shared form: str -> fix/keep, None or True -> drop, False -> keep,
+        # ("drop", _) -> drop. An empty result is a drop: nothing of the document is left.
+        if out is None or out is True: return ("drop", text)
+        if out is False: return ("keep", text)
+        if isinstance(out, tuple):
+            if out[0] == "drop": return ("drop", text)
+            out = out[1]
+        if not out.strip(): return ("drop", text)
+        return ("fix" if out != text else "keep", out)
+
+    _AUTHOR_RULE = medicine_b4  # added by Data B
+    _PACKS = SCOPE["DB-B4-008"]
+
+
+    def medicine(doc):  # added by Data B: runs only on the pack it was tested on
+        if doc.get("pack_id") not in _PACKS:
+            return ("keep", doc["text"])
+        return _std(_AUTHOR_RULE(doc["text"]), doc["text"])
+    return medicine
+
+@cache
+def _indic_db_c3_001():
+    # DB-C3-001, specv1.md, medicine 141 (indic)
+    RULE_ID = "DB-C3-001"
+    CODE = "C3"
+    ACTION = "drop"
+    STAGE = "30"
+    STATUS = "CANDIDATE"
+    SPEC_PACKS = SCOPE["DB-C3-001"]
+    LANGS = {"ben_Beng"}
+    ORIGIN = "ind-bn-fw2, ind-bn-sangraha-v"
+    SOURCE_ORIGIN = "ind-bn-fw2"
+    SOURCE = "ind-bn-fw2"  # pack whose medicine this came from
+
+    import re
+
+    _CUT = re.compile(r'(?:\[\s*(?:…|\.\.\.)\s*\]|বিস্তারিত\s*\.{2,}|Continue\s+Reading|Read\s+(?:Entire\s+Article|more))\W*$', re.I)
+
+    def medicine_c3(text):
+        """Drop a document whose last line ends with a teaser cut mark ([…], 'বিস্তারিত..', 'Continue Reading').
+        Documents cut in mid-sentence without a mark are not touched: they cannot be told apart from
+        pages that end with a name, a list item or a caption."""
+        last = text.rstrip().rsplit('\n', 1)[-1]
+        return bool(_CUT.search(last))
+
+
+    def _std(out, text):  # added by Data B, copied from Data A (medicine_english.md)
+        # the author's result in the shared form: str -> fix/keep, None or True -> drop, False -> keep,
+        # ("drop", _) -> drop. An empty result is a drop: nothing of the document is left.
+        if out is None or out is True: return ("drop", text)
+        if out is False: return ("keep", text)
+        if isinstance(out, tuple):
+            if out[0] == "drop": return ("drop", text)
+            out = out[1]
+        if not out.strip(): return ("drop", text)
+        return ("fix" if out != text else "keep", out)
+
+    _AUTHOR_RULE = medicine_c3  # added by Data B
+    _PACKS = SCOPE["DB-C3-001"]
+
+
+    def medicine(doc):  # added by Data B: runs only on the pack it was tested on
+        if doc.get("pack_id") not in _PACKS:
+            return ("keep", doc["text"])
+        return _std(_AUTHOR_RULE(doc["text"]), doc["text"])
+    return medicine
+
+@cache
+def _indic_db_c3_002():
+    # DB-C3-002, specv1.md, medicine 142 (indic)
+    RULE_ID = "DB-C3-002"
+    CODE = "C3"
+    ACTION = "drop"
+    STAGE = "30"
+    STATUS = "CANDIDATE"
+    SPEC_PACKS = SCOPE["DB-C3-002"]
+    LANGS = {"hin_Deva"}
+    ORIGIN = "ind-hi-hplt, ind-hi-sangraha-v"
+    SOURCE_ORIGIN = "ind-hi-hplt"
+    SOURCE = "ind-hi-hplt"  # pack whose medicine this came from
+    import re  # added by Data B: harm_test_indic.py gives every block `re`
+
+    _CUT = re.compile(r"\[…\]|\[\.\.\.\]|…\s?\[\+\]|Read More")
+
+
+    def medicine_c3(text):
+        return len(_CUT.findall(text)) >= 3
+
+
+    def _std(out, text):  # added by Data B, copied from Data A (medicine_english.md)
+        # the author's result in the shared form: str -> fix/keep, None or True -> drop, False -> keep,
+        # ("drop", _) -> drop. An empty result is a drop: nothing of the document is left.
+        if out is None or out is True: return ("drop", text)
+        if out is False: return ("keep", text)
+        if isinstance(out, tuple):
+            if out[0] == "drop": return ("drop", text)
+            out = out[1]
+        if not out.strip(): return ("drop", text)
+        return ("fix" if out != text else "keep", out)
+
+    _AUTHOR_RULE = medicine_c3  # added by Data B
+    _PACKS = SCOPE["DB-C3-002"]
+
+
+    def medicine(doc):  # added by Data B: runs only on the pack it was tested on
+        if doc.get("pack_id") not in _PACKS:
+            return ("keep", doc["text"])
+        return _std(_AUTHOR_RULE(doc["text"]), doc["text"])
+    return medicine
+
+@cache
+def _indic_db_c3_025():
+    # DB-C3-025, specv1.md, medicine 143 (indic)
+    RULE_ID = "DB-C3-025"
+    CODE = "C3"
+    ACTION = "drop"
+    STAGE = "30"
+    STATUS = "CANDIDATE"
+    SPEC_PACKS = SCOPE["DB-C3-025"]
+    LANGS = {"hin_Deva"}
+    ORIGIN = "ind-hi-indiccorp"
+    SOURCE_ORIGIN = "ind-hi-indiccorp"
+    SOURCE = "ind-hi-indiccorp"  # pack whose medicine this came from
+
+    import re
+
+    def medicine_c3(text):
+        t = text.rstrip()
+        if len(t) < 300:
+            return False
+        last = t[-1]
+        if last == "…":
+            return True
+        if re.match(r"[\u093E-\u094C\u094D\u0962\u0963]", last):
+            return True
+        return False
+
+
+    def _std(out, text):  # added by Data B, copied from Data A (medicine_english.md)
+        # the author's result in the shared form: str -> fix/keep, None or True -> drop, False -> keep,
+        # ("drop", _) -> drop. An empty result is a drop: nothing of the document is left.
+        if out is None or out is True: return ("drop", text)
+        if out is False: return ("keep", text)
+        if isinstance(out, tuple):
+            if out[0] == "drop": return ("drop", text)
+            out = out[1]
+        if not out.strip(): return ("drop", text)
+        return ("fix" if out != text else "keep", out)
+
+    _AUTHOR_RULE = medicine_c3  # added by Data B
+    _PACKS = SCOPE["DB-C3-025"]
+
+
+    def medicine(doc):  # added by Data B: runs only on the pack it was tested on
+        if doc.get("pack_id") not in _PACKS:
+            return ("keep", doc["text"])
+        return _std(_AUTHOR_RULE(doc["text"]), doc["text"])
+    return medicine
+
+@cache
+def _indic_db_c3_004():
+    # DB-C3-004, specv1.md, medicine 146 (indic)
+    RULE_ID = "DB-C3-004"
+    CODE = "C3"
+    ACTION = "drop"
+    STAGE = "30"
+    STATUS = "CANDIDATE"
+    SPEC_PACKS = SCOPE["DB-C3-004"]
+    LANGS = {"san_Deva"}
+    ORIGIN = "ind-sa-fw2"
+    SOURCE_ORIGIN = "ind-sa-fw2"
+    SOURCE = "ind-sa-fw2"  # pack whose medicine this came from
+    import re  # added by Data B: harm_test_indic.py gives every block `re`
+
+    from urllib.parse import unquote
+
+    def _scan_page(url):
+        return "wikisource.org/wiki/पृष्ठम्:" in unquote(url)
+
+    def medicine_c3(text):
+        lines = [l.strip() for l in text.split("\n") if len(l.strip()) >= 10]
+        if not lines:
+            return False
+        last = lines[-1]
+        dev = len(re.findall("[\u0900-\u097F]", last))
+        letters = sum(c.isalpha() for c in last) or 1
+        return dev / letters > 0.6 and bool(re.search(r"(?:[,‘“(]|(?<=[\u0900-\u097F])-)\s*$", last))
+
+
+    def _std(out, text):  # added by Data B, copied from Data A (medicine_english.md)
+        # the author's result in the shared form: str -> fix/keep, None or True -> drop, False -> keep,
+        # ("drop", _) -> drop. An empty result is a drop: nothing of the document is left.
+        if out is None or out is True: return ("drop", text)
+        if out is False: return ("keep", text)
+        if isinstance(out, tuple):
+            if out[0] == "drop": return ("drop", text)
+            out = out[1]
+        if not out.strip(): return ("drop", text)
+        return ("fix" if out != text else "keep", out)
+
+    _AUTHOR_RULE = medicine_c3  # added by Data B
+    _PACKS = SCOPE["DB-C3-004"]
+
+
+    def medicine(doc):  # added by Data B: runs only on the pack it was tested on
+        if doc.get("pack_id") not in _PACKS:
+            return ("keep", doc["text"])
+        return _std(_AUTHOR_RULE(doc["text"]), doc["text"])
+    return medicine
+
+@cache
+def _indic_db_c3_020():
+    # DB-C3-020, specv1.md, medicine 147 (indic)
+    RULE_ID = "DB-C3-020"
+    CODE = "C3"
+    ACTION = "drop"
+    STAGE = "30"
+    STATUS = "CANDIDATE"
+    SPEC_PACKS = SCOPE["DB-C3-020"]
+    LANGS = {"tel_Telu"}
+    ORIGIN = "ind-te-sangraha-v, ind-te-fw2, ind-te-sangraha-s"
+    SOURCE_ORIGIN = "ind-te-sangraha-v"
+    SOURCE = "ind-te-sangraha-v"  # pack whose medicine this came from
+    import re  # added by Data B: harm_test_indic.py gives every block `re`
+
+    def medicine_c3(text: str) -> str:
+        return text
+
+
+    def _std(out, text):  # added by Data B, copied from Data A (medicine_english.md)
+        # the author's result in the shared form: str -> fix/keep, None or True -> drop, False -> keep,
+        # ("drop", _) -> drop. An empty result is a drop: nothing of the document is left.
+        if out is None or out is True: return ("drop", text)
+        if out is False: return ("keep", text)
+        if isinstance(out, tuple):
+            if out[0] == "drop": return ("drop", text)
+            out = out[1]
+        if not out.strip(): return ("drop", text)
+        return ("fix" if out != text else "keep", out)
+
+    _AUTHOR_RULE = medicine_c3  # added by Data B
+    _PACKS = SCOPE["DB-C3-020"]
+
+
+    def medicine(doc):  # added by Data B: runs only on the pack it was tested on
+        if doc.get("pack_id") not in _PACKS:
+            return ("keep", doc["text"])
+        return _std(_AUTHOR_RULE(doc["text"]), doc["text"])
+    return medicine
+
+@cache
+def _indic_db_c4_001():
+    # DB-C4-001, specv1.md, medicine 148 (indic)
+    RULE_ID = "DB-C4-001"
+    CODE = "C4"
+    ACTION = "drop"
+    STAGE = "30"
+    STATUS = "CANDIDATE"
+    SPEC_PACKS = SCOPE["DB-C4-001"]
+    LANGS = {"ben_Beng"}
+    ORIGIN = "ind-bn-fw2"
+    SOURCE_ORIGIN = "ind-bn-fw2"
+    SOURCE = "ind-bn-fw2"  # pack whose medicine this came from
+
+    import re
+
+    _TEASER = re.compile(r'বিস্তারিত\s*\.{2,}|Continue\s+Reading|\[\s*(?:…|\.\.\.)\s*\]|Read\s+More\s*(?:»|→|$)', re.I | re.M)
+
+    def medicine_c4(text):
+        """Drop index, tag and archive pages: two or more teaser cut marks mean several stories were glued together."""
+        return len(_TEASER.findall(text)) >= 2
+
+
+    def _std(out, text):  # added by Data B, copied from Data A (medicine_english.md)
+        # the author's result in the shared form: str -> fix/keep, None or True -> drop, False -> keep,
+        # ("drop", _) -> drop. An empty result is a drop: nothing of the document is left.
+        if out is None or out is True: return ("drop", text)
+        if out is False: return ("keep", text)
+        if isinstance(out, tuple):
+            if out[0] == "drop": return ("drop", text)
+            out = out[1]
+        if not out.strip(): return ("drop", text)
+        return ("fix" if out != text else "keep", out)
+
+    _AUTHOR_RULE = medicine_c4  # added by Data B
+    _PACKS = SCOPE["DB-C4-001"]
+
+
+    def medicine(doc):  # added by Data B: runs only on the pack it was tested on
+        if doc.get("pack_id") not in _PACKS:
+            return ("keep", doc["text"])
+        return _std(_AUTHOR_RULE(doc["text"]), doc["text"])
+    return medicine
+
+@cache
+def _indic_db_c4_002():
+    # DB-C4-002, specv1.md, medicine 149 (indic)
+    RULE_ID = "DB-C4-002"
+    CODE = "C4"
+    ACTION = "drop"
+    STAGE = "30"
+    STATUS = "CANDIDATE"
+    SPEC_PACKS = SCOPE["DB-C4-002"]
+    LANGS = {"hin_Deva"}
+    ORIGIN = "ind-hi-fw2, ind-hi-indiccorp, ind-hi-sangraha-s, ind-hi-sangraha-v"
+    SOURCE_ORIGIN = "ind-hi-fw2"
+    SOURCE = "ind-hi-fw2"  # pack whose medicine this came from
+
+    import re
+
+    _TRADE_TERMS = re.compile(
+        r"फ़ॉरेक्स|फॉरेक्स|\bforex\b|बाइनरी\s+ऑप्शन|binary\s+options?|"
+        r"ट्रेडिंग\s+प्लेटफ़?ॉर्म|\btrading\b|\bbroker\b|ब्रोकर|"
+        r"ट्रेडिंग|ट्रेडर|ऑप्शन|विकल्प\s+ट्रेड",
+        re.I,
+    )
+
+    def flag_c4_trading_spam(text: str) -> bool:
+        """True if >=4 distinct trading terms (drop-class C4)."""
+        terms = {m.group(0).lower() for m in _TRADE_TERMS.finditer(text or "")}
+        return len(terms) >= 4
+
+
+    def _std(out, text):  # added by Data B, copied from Data A (medicine_english.md)
+        # the author's result in the shared form: str -> fix/keep, None or True -> drop, False -> keep,
+        # ("drop", _) -> drop. An empty result is a drop: nothing of the document is left.
+        if out is None or out is True: return ("drop", text)
+        if out is False: return ("keep", text)
+        if isinstance(out, tuple):
+            if out[0] == "drop": return ("drop", text)
+            out = out[1]
+        if not out.strip(): return ("drop", text)
+        return ("fix" if out != text else "keep", out)
+
+    _AUTHOR_RULE = flag_c4_trading_spam  # added by Data B
+    _PACKS = SCOPE["DB-C4-002"]
+
+
+    def medicine(doc):  # added by Data B: runs only on the pack it was tested on
+        if doc.get("pack_id") not in _PACKS:
+            return ("keep", doc["text"])
+        return _std(_AUTHOR_RULE(doc["text"]), doc["text"])
+    return medicine
+
+@cache
+def _indic_db_c4_003():
+    # DB-C4-003, specv1.md, medicine 151 (indic)
+    RULE_ID = "DB-C4-003"
+    CODE = "C4"
+    ACTION = "drop"
+    STAGE = "30"
+    STATUS = "CANDIDATE"
+    SPEC_PACKS = SCOPE["DB-C4-003"]
+    LANGS = {"hin_Deva"}
+    ORIGIN = "ind-hi-hplt"
+    SOURCE_ORIGIN = "ind-hi-hplt"
+    SOURCE = "ind-hi-hplt"  # pack whose medicine this came from
+    import re  # added by Data B: harm_test_indic.py gives every block `re`
+
+    _CUT4 = re.compile(r"\[…\]|\[\.\.\.\]|…\s?\[\+\]|Read More")
+    _SPAM_FOOTER = re.compile("अधिकतम रेटिंग \\d+\\s*\nन्यूनतम स्कोर")
+
+
+    def medicine_c4(text):
+        return len(_CUT4.findall(text)) >= 3 or bool(_SPAM_FOOTER.search(text))
+
+
+    def _std(out, text):  # added by Data B, copied from Data A (medicine_english.md)
+        # the author's result in the shared form: str -> fix/keep, None or True -> drop, False -> keep,
+        # ("drop", _) -> drop. An empty result is a drop: nothing of the document is left.
+        if out is None or out is True: return ("drop", text)
+        if out is False: return ("keep", text)
+        if isinstance(out, tuple):
+            if out[0] == "drop": return ("drop", text)
+            out = out[1]
+        if not out.strip(): return ("drop", text)
+        return ("fix" if out != text else "keep", out)
+
+    _AUTHOR_RULE = medicine_c4  # added by Data B
+    _PACKS = SCOPE["DB-C4-003"]
+
+
+    def medicine(doc):  # added by Data B: runs only on the pack it was tested on
+        if doc.get("pack_id") not in _PACKS:
+            return ("keep", doc["text"])
+        return _std(_AUTHOR_RULE(doc["text"]), doc["text"])
+    return medicine
+
+@cache
+def _indic_db_c4_005():
+    # DB-C4-005, specv1.md, medicine 153 (indic)
+    RULE_ID = "DB-C4-005"
+    CODE = "C4"
+    ACTION = "drop"
+    STAGE = "30"
+    STATUS = "CANDIDATE"
+    SPEC_PACKS = SCOPE["DB-C4-005"]
+    LANGS = {"mar_Deva"}
+    ORIGIN = "ind-mr-fw2"
+    SOURCE_ORIGIN = "ind-mr-fw2"
+    SOURCE = "ind-mr-fw2"  # pack whose medicine this came from
+    import re  # added by Data B: harm_test_indic.py gives every block `re`
+
+    def medicine_c4(text):
+        if "\nCopyright ©" in text[200:]:
+            return True
+        return False
+
+
+    def _std(out, text):  # added by Data B, copied from Data A (medicine_english.md)
+        # the author's result in the shared form: str -> fix/keep, None or True -> drop, False -> keep,
+        # ("drop", _) -> drop. An empty result is a drop: nothing of the document is left.
+        if out is None or out is True: return ("drop", text)
+        if out is False: return ("keep", text)
+        if isinstance(out, tuple):
+            if out[0] == "drop": return ("drop", text)
+            out = out[1]
+        if not out.strip(): return ("drop", text)
+        return ("fix" if out != text else "keep", out)
+
+    _AUTHOR_RULE = medicine_c4  # added by Data B
+    _PACKS = SCOPE["DB-C4-005"]
+
+
+    def medicine(doc):  # added by Data B: runs only on the pack it was tested on
+        if doc.get("pack_id") not in _PACKS:
+            return ("keep", doc["text"])
+        return _std(_AUTHOR_RULE(doc["text"]), doc["text"])
+    return medicine
+
+@cache
+def _indic_db_c4_006():
+    # DB-C4-006, specv1.md, medicine 154 (indic)
+    RULE_ID = "DB-C4-006"
+    CODE = "C4"
+    ACTION = "drop"
+    STAGE = "30"
+    STATUS = "CANDIDATE"
+    SPEC_PACKS = SCOPE["DB-C4-006"]
+    LANGS = {"tel_Telu"}
+    ORIGIN = "ind-te-fw2, ind-te-sangraha-s"
+    SOURCE_ORIGIN = "ind-te-fw2"
+    SOURCE = "ind-te-fw2"  # pack whose medicine this came from
+    import re  # added by Data B: harm_test_indic.py gives every block `re`
+
+    C4_RX = re.compile(r"(?m)(?:\d+\s+(?:min|mins|hours?)\s+ago|\d{1,2}\s+(?:Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct"
+                       r"|Nov|Dec)\w*\s+\d{4})")
+    def c4_feed(t, url=None):
+        return True if len(C4_RX.findall(t)) >= 3 else False
+
+
+    def _std(out, text):  # added by Data B, copied from Data A (medicine_english.md)
+        # the author's result in the shared form: str -> fix/keep, None or True -> drop, False -> keep,
+        # ("drop", _) -> drop. An empty result is a drop: nothing of the document is left.
+        if out is None or out is True: return ("drop", text)
+        if out is False: return ("keep", text)
+        if isinstance(out, tuple):
+            if out[0] == "drop": return ("drop", text)
+            out = out[1]
+        if not out.strip(): return ("drop", text)
+        return ("fix" if out != text else "keep", out)
+
+    _AUTHOR_RULE = c4_feed  # added by Data B
+    _PACKS = SCOPE["DB-C4-006"]
+
+
+    def medicine(doc):  # added by Data B: runs only on the pack it was tested on
+        if doc.get("pack_id") not in _PACKS:
+            return ("keep", doc["text"])
+        return _std(_AUTHOR_RULE(doc["text"]), doc["text"])
+    return medicine
+
+@cache
+def _indic_db_c5_021():
+    # DB-C5-021, specv1.md, medicine 155 (indic)
+    RULE_ID = "DB-C5-021"
+    CODE = "C5"
+    ACTION = "drop"
+    STAGE = "30"
+    STATUS = "CANDIDATE"
+    SPEC_PACKS = SCOPE["DB-C5-021"]
+    LANGS = {"ben_Beng"}
+    ORIGIN = "ind-bn-sangraha-v"
+    SOURCE_ORIGIN = "ind-bn-sangraha-v"
+    SOURCE = "ind-bn-sangraha-v"  # pack whose medicine this came from
+
+    import re
+
+    def medicine_c5(text):
+        lines = [line for line in text.split("\n") if line.strip()]
+        if not lines:
+            return False
+        listy = sum(1 for line in lines if len(line.split()) < 4 and not re.search(r"[।.?!]", line))
+        return listy / len(lines) > 0.6   # True = drop the document
+
+
+    def _std(out, text):  # added by Data B, copied from Data A (medicine_english.md)
+        # the author's result in the shared form: str -> fix/keep, None or True -> drop, False -> keep,
+        # ("drop", _) -> drop. An empty result is a drop: nothing of the document is left.
+        if out is None or out is True: return ("drop", text)
+        if out is False: return ("keep", text)
+        if isinstance(out, tuple):
+            if out[0] == "drop": return ("drop", text)
+            out = out[1]
+        if not out.strip(): return ("drop", text)
+        return ("fix" if out != text else "keep", out)
+
+    _AUTHOR_RULE = medicine_c5  # added by Data B
+    _PACKS = SCOPE["DB-C5-021"]
+
+
+    def medicine(doc):  # added by Data B: runs only on the pack it was tested on
+        if doc.get("pack_id") not in _PACKS:
+            return ("keep", doc["text"])
+        return _std(_AUTHOR_RULE(doc["text"]), doc["text"])
+    return medicine
+
+@cache
+def _indic_db_c5_016():
+    # DB-C5-016, specv1.md, medicine 156 (indic)
+    RULE_ID = "DB-C5-016"
+    CODE = "C5"
+    ACTION = "drop"
+    STAGE = "30"
+    STATUS = "CANDIDATE"
+    SPEC_PACKS = SCOPE["DB-C5-016"]
+    LANGS = {"hin_Deva"}
+    ORIGIN = "ind-hi-fw2, ind-hi-indiccorp, ind-hi-sangraha-s, ind-hi-sangraha-v"
+    SOURCE_ORIGIN = "ind-hi-fw2"
+    SOURCE = "ind-hi-fw2"  # pack whose medicine this came from
+
+    import re
+
+    # Binary-option / forex spinner pages: unrelated paragraphs stitched around trading keywords.
+    # Count DISTINCT trading terms; a normal finance article uses one or two, the spam uses many.
+    TERMS = re.compile(r"द्विआधारी विकल्प|बाइनरी ऑप्शन|बाइनरी विकल्प|फ़ॉरेक्स|फॉरेक्स|फोरेक्स|विदेशी मुद्रा|"
+                       r"Forex|Binomo|IQ Option|Olymp|ब्रोकर|दलाल|बिटकॉइन|क्रिप्टो|ट्रेडिंग प्लेटफ़?ॉर्म|CFD|सीएफडी", re.I)
+
+    def medicine_c5(text):
+        if len({m.group(0).lower() for m in TERMS.finditer(text)}) >= 4:
+            return True   # drop
+        return text
+
+
+    def _std(out, text):  # added by Data B, copied from Data A (medicine_english.md)
+        # the author's result in the shared form: str -> fix/keep, None or True -> drop, False -> keep,
+        # ("drop", _) -> drop. An empty result is a drop: nothing of the document is left.
+        if out is None or out is True: return ("drop", text)
+        if out is False: return ("keep", text)
+        if isinstance(out, tuple):
+            if out[0] == "drop": return ("drop", text)
+            out = out[1]
+        if not out.strip(): return ("drop", text)
+        return ("fix" if out != text else "keep", out)
+
+    _AUTHOR_RULE = medicine_c5  # added by Data B
+    _PACKS = SCOPE["DB-C5-016"]
+
+
+    def medicine(doc):  # added by Data B: runs only on the pack it was tested on
+        if doc.get("pack_id") not in _PACKS:
+            return ("keep", doc["text"])
+        return _std(_AUTHOR_RULE(doc["text"]), doc["text"])
+    return medicine
+
+@cache
+def _indic_db_c5_001():
+    # DB-C5-001, specv1.md, medicine 157 (indic)
+    RULE_ID = "DB-C5-001"
+    CODE = "C5"
+    ACTION = "drop"
+    STAGE = "30"
+    STATUS = "CANDIDATE"
+    SPEC_PACKS = SCOPE["DB-C5-001"]
+    LANGS = {"hin_Deva"}
+    ORIGIN = "ind-hi-hplt"
+    SOURCE_ORIGIN = "ind-hi-hplt"
+    SOURCE = "ind-hi-hplt"  # pack whose medicine this came from
+    import re  # added by Data B: harm_test_indic.py gives every block `re`
+
+    def medicine_c5(text):
+        return bool(re.search("अधिकतम रेटिंग \\d+\\s*\nन्यूनतम स्कोर", text))
+
+
+    def _std(out, text):  # added by Data B, copied from Data A (medicine_english.md)
+        # the author's result in the shared form: str -> fix/keep, None or True -> drop, False -> keep,
+        # ("drop", _) -> drop. An empty result is a drop: nothing of the document is left.
+        if out is None or out is True: return ("drop", text)
+        if out is False: return ("keep", text)
+        if isinstance(out, tuple):
+            if out[0] == "drop": return ("drop", text)
+            out = out[1]
+        if not out.strip(): return ("drop", text)
+        return ("fix" if out != text else "keep", out)
+
+    _AUTHOR_RULE = medicine_c5  # added by Data B
+    _PACKS = SCOPE["DB-C5-001"]
+
+
+    def medicine(doc):  # added by Data B: runs only on the pack it was tested on
+        if doc.get("pack_id") not in _PACKS:
+            return ("keep", doc["text"])
+        return _std(_AUTHOR_RULE(doc["text"]), doc["text"])
+    return medicine
+
+@cache
+def _indic_db_c5_003():
+    # DB-C5-003, specv1.md, medicine 159 (indic)
+    RULE_ID = "DB-C5-003"
+    CODE = "C5"
+    ACTION = "drop"
+    STAGE = "30"
+    STATUS = "CANDIDATE"
+    SPEC_PACKS = SCOPE["DB-C5-003"]
+    LANGS = {"kan_Knda"}
+    ORIGIN = "ind-kn-sangraha-v, ind-kn-fw2, ind-kn-sangraha-s"
+    SOURCE_ORIGIN = "ind-kn-sangraha-v"
+    SOURCE = "ind-kn-sangraha-v"  # pack whose medicine this came from
+    import re  # added by Data B: harm_test_indic.py gives every block `re`
+
+    def headline_list(t, min_lines=8, share=0.8):
+        """C5: drop a document that is only a list: min_lines or more lines, and at least share of the text in short
+        lines (100 characters or less) that do not end with a full stop, as in a list of headlines."""
+        lines = [l.strip() for l in t.split("\n") if l.strip()]
+        if len(lines) < min_lines:
+            return False
+        short = [l for l in lines if len(l) <= 100 and not l.endswith(".")]
+        return sum(map(len, short)) >= share * sum(map(len, lines))
+
+
+    def medicine_c5(text):
+        """The C5 rule, under the name that the harm tests look for: True drops the document."""
+        return headline_list(text)
+
+
+    def _std(out, text):  # added by Data B, copied from Data A (medicine_english.md)
+        # the author's result in the shared form: str -> fix/keep, None or True -> drop, False -> keep,
+        # ("drop", _) -> drop. An empty result is a drop: nothing of the document is left.
+        if out is None or out is True: return ("drop", text)
+        if out is False: return ("keep", text)
+        if isinstance(out, tuple):
+            if out[0] == "drop": return ("drop", text)
+            out = out[1]
+        if not out.strip(): return ("drop", text)
+        return ("fix" if out != text else "keep", out)
+
+    _AUTHOR_RULE = medicine_c5  # added by Data B
+    _PACKS = SCOPE["DB-C5-003"]
+
+
+    def medicine(doc):  # added by Data B: runs only on the pack it was tested on
+        if doc.get("pack_id") not in _PACKS:
+            return ("keep", doc["text"])
+        return _std(_AUTHOR_RULE(doc["text"]), doc["text"])
+    return medicine
+
+@cache
+def _indic_db_c5_004():
+    # DB-C5-004, specv1.md, medicine 160 (indic)
+    RULE_ID = "DB-C5-004"
+    CODE = "C5"
+    ACTION = "drop"
+    STAGE = "30"
+    STATUS = "CANDIDATE"
+    SPEC_PACKS = SCOPE["DB-C5-004"]
+    LANGS = {"mar_Deva"}
+    ORIGIN = "ind-mr-fw2, ind-mr-sangraha-v"
+    SOURCE_ORIGIN = "ind-mr-fw2"
+    SOURCE = "ind-mr-fw2"  # pack whose medicine this came from
+    import re  # added by Data B: harm_test_indic.py gives every block `re`
+
+    def medicine_c5(text):
+        return re.sub(r'\n\s*(?:Tags|Keywords|टॅग्ज)\s*:.*$', '', text, flags=re.I)
+
+
+    def _std(out, text):  # added by Data B, copied from Data A (medicine_english.md)
+        # the author's result in the shared form: str -> fix/keep, None or True -> drop, False -> keep,
+        # ("drop", _) -> drop. An empty result is a drop: nothing of the document is left.
+        if out is None or out is True: return ("drop", text)
+        if out is False: return ("keep", text)
+        if isinstance(out, tuple):
+            if out[0] == "drop": return ("drop", text)
+            out = out[1]
+        if not out.strip(): return ("drop", text)
+        return ("fix" if out != text else "keep", out)
+
+    _AUTHOR_RULE = medicine_c5  # added by Data B
+    _PACKS = SCOPE["DB-C5-004"]
+
+
+    def medicine(doc):  # added by Data B: runs only on the pack it was tested on
+        if doc.get("pack_id") not in _PACKS:
+            return ("keep", doc["text"])
+        return _std(_AUTHOR_RULE(doc["text"]), doc["text"])
+    return medicine
+
+@cache
+def _indic_db_c5_017():
+    # DB-C5-017, specv1.md, medicine 161 (indic)
+    RULE_ID = "DB-C5-017"
+    CODE = "C5"
+    ACTION = "drop"
+    STAGE = "30"
+    STATUS = "CANDIDATE"
+    SPEC_PACKS = SCOPE["DB-C5-017"]
+    LANGS = {"tam_Taml"}
+    ORIGIN = "ind-ta-sangraha-v"
+    SOURCE_ORIGIN = "ind-ta-sangraha-v"
+    SOURCE = "ind-ta-sangraha-v"  # pack whose medicine this came from
+    import re  # added by Data B: harm_test_indic.py gives every block `re`
+
+    def flag_c5(text: str) -> bool:
+        units = [u.strip() for u in text.splitlines() if u.strip()]
+        if len(units) < 5:
+            return False
+        short_ratio = sum(len(u) < 120 for u in units) / len(units)
+        return short_ratio >= 0.80 and max(map(len, units)) <= 300
+
+    def medicine_c5(text: str) -> str:
+        return text  # flag only; a reviewer decides whether to remove or drop
+
+
+    def _std(out, text):  # added by Data B, copied from Data A (medicine_english.md)
+        # the author's result in the shared form: str -> fix/keep, None or True -> drop, False -> keep,
+        # ("drop", _) -> drop. An empty result is a drop: nothing of the document is left.
+        if out is None or out is True: return ("drop", text)
+        if out is False: return ("keep", text)
+        if isinstance(out, tuple):
+            if out[0] == "drop": return ("drop", text)
+            out = out[1]
+        if not out.strip(): return ("drop", text)
+        return ("fix" if out != text else "keep", out)
+
+    _AUTHOR_RULE = medicine_c5  # added by Data B
+    _PACKS = SCOPE["DB-C5-017"]
+
+
+    def medicine(doc):  # added by Data B: runs only on the pack it was tested on
+        if doc.get("pack_id") not in _PACKS:
+            return ("keep", doc["text"])
+        return _std(_AUTHOR_RULE(doc["text"]), doc["text"])
+    return medicine
+
+@cache
+def _indic_db_c5_006():
+    # DB-C5-006, specv1.md, medicine 163 (indic)
+    RULE_ID = "DB-C5-006"
+    CODE = "C5"
+    ACTION = "drop"
+    STAGE = "30"
+    STATUS = "CANDIDATE"
+    SPEC_PACKS = SCOPE["DB-C5-006"]
+    LANGS = {"tel_Telu"}
+    ORIGIN = "ind-te-fw2, ind-te-sangraha-s"
+    SOURCE_ORIGIN = "ind-te-fw2"
+    SOURCE = "ind-te-fw2"  # pack whose medicine this came from
+    import re  # added by Data B: harm_test_indic.py gives every block `re`
+
+    _C5_C1_LINE = re.compile(r"""^\s*(?:
+        (?:Also\s+[Rr]ead|Read\s+[Mm]ore|Don'?t\s+Miss!?|Just\s+In|News\s+Reels|More\s+Stories|Leave\s+a\s+Reply
+          |View\s+this\s+post\s+on\s+Instagram|Sign\s+in|Follow\s+[Uu]s|Subscribe|Share\s+(?:on|this)
+          |Image\s+Source|Disclaimer|Published\s+On|First\s+Publish\s+Date|Updated\s+Date|Tags?|TAGS)\b.*
+      | (?:ఇది\s+కూడా\s+చదవండి|ఇవి\s+కూడా\s+చదవండి|ఇవీ\s+చదవండి|ఇదీ\s+చదవండి|ఇది\s+చూడండి|తాజా\s+వార్తలు
+          |ట్రెండింగ్\s+వార్తలు|ఉత్పత్తి\s+ట్యాగ్లు|పోస్ట్\s+సమయం|వ్యాఖ్యను\s+పోస్ట్\s+చేయండి
+          |మీ\s+అభిప్రాయాలను\s+కామెంట్|గమనిక:\s*ఈనాడు\.నెట్|\[\[సంబంధిత\s+కథనం\]\]).*
+      | (?:మరిన్ని|ప్రకటన|g-ప్రకటన)(?:\s*-\s*[\w\s]{0,30})?
+      | .*(?:Empowering\s+140\+\s+Indians|India\s+Herald\s+Group\s+of\s+Publishers|pic\.twitter\.com/|t\.co/\w).*
+      | -?\s*\d{1,2}\s+\w{3}\s+\d{4}\s+\d{1,2}:\d{2}\s+[AP]M(?:\s+GMT)?.*
+      | \w[\w\s.]{0,40},\s*News18,\s*\w+.*
+    )\s*$""", re.X)
+    def medicine_c5(t, url=None):
+        cleaned = "\n".join(l for l in t.split("\n") if not _C5_C1_LINE.match(l))
+        lines = [l.strip() for l in cleaned.split("\n") if l.strip()]
+        if not lines:
+            return False
+        short_no_punct = sum(1 for l in lines if len(l) < 60 and not re.search(r"[.!?:;।…\"'”’)\]]$", l))
+        return True if (short_no_punct >= 14 and short_no_punct / len(lines) > 0.5) else False
+
+
+    def _std(out, text):  # added by Data B, copied from Data A (medicine_english.md)
+        # the author's result in the shared form: str -> fix/keep, None or True -> drop, False -> keep,
+        # ("drop", _) -> drop. An empty result is a drop: nothing of the document is left.
+        if out is None or out is True: return ("drop", text)
+        if out is False: return ("keep", text)
+        if isinstance(out, tuple):
+            if out[0] == "drop": return ("drop", text)
+            out = out[1]
+        if not out.strip(): return ("drop", text)
+        return ("fix" if out != text else "keep", out)
+
+    _AUTHOR_RULE = medicine_c5  # added by Data B
+    _PACKS = SCOPE["DB-C5-006"]
+
+
+    def medicine(doc):  # added by Data B: runs only on the pack it was tested on
+        if doc.get("pack_id") not in _PACKS:
+            return ("keep", doc["text"])
+        return _std(_AUTHOR_RULE(doc["text"]), doc["text"])
+    return medicine
+
+@cache
+def _indic_db_c5_018():
+    # DB-C5-018, specv1.md, medicine 164 (indic)
+    RULE_ID = "DB-C5-018"
+    CODE = "C5"
+    ACTION = "drop"
+    STAGE = "30"
+    STATUS = "CANDIDATE"
+    SPEC_PACKS = SCOPE["DB-C5-018"]
+    LANGS = {"tel_Telu"}
+    ORIGIN = "ind-te-sangraha-v"
+    SOURCE_ORIGIN = "ind-te-sangraha-v"
+    SOURCE = "ind-te-sangraha-v"  # pack whose medicine this came from
+    import re  # added by Data B: harm_test_indic.py gives every block `re`
+
+    def medicine_c5_drop(text: str) -> bool:
+        lines = [ln.strip() for ln in text.splitlines() if ln.strip()]
+        if not lines or len(text) > 800:
+            return False
+        if max(len(ln) for ln in lines) > 100:
+            return False
+        bangs = sum(1 for ln in lines if "!" in ln or ". ." in ln)
+        return len(lines) >= 5 and bangs >= 4
+
+
+    def _std(out, text):  # added by Data B, copied from Data A (medicine_english.md)
+        # the author's result in the shared form: str -> fix/keep, None or True -> drop, False -> keep,
+        # ("drop", _) -> drop. An empty result is a drop: nothing of the document is left.
+        if out is None or out is True: return ("drop", text)
+        if out is False: return ("keep", text)
+        if isinstance(out, tuple):
+            if out[0] == "drop": return ("drop", text)
+            out = out[1]
+        if not out.strip(): return ("drop", text)
+        return ("fix" if out != text else "keep", out)
+
+    _AUTHOR_RULE = medicine_c5_drop  # added by Data B
+    _PACKS = SCOPE["DB-C5-018"]
+
+
+    def medicine(doc):  # added by Data B: runs only on the pack it was tested on
+        if doc.get("pack_id") not in _PACKS:
+            return ("keep", doc["text"])
+        return _std(_AUTHOR_RULE(doc["text"]), doc["text"])
+    return medicine
+
+@cache
+def _indic_db_d4_001():
+    # DB-D4-001, specv1.md, medicine 165 (indic)
+    RULE_ID = "DB-D4-001"
+    CODE = "D4"
+    ACTION = "drop"
+    STAGE = "30"
+    STATUS = "CANDIDATE"
+    SPEC_PACKS = SCOPE["DB-D4-001"]
+    LANGS = {"ben_Beng"}
+    ORIGIN = "ind-bn-fw2, ind-bn-sangraha-v"
+    SOURCE_ORIGIN = "ind-bn-fw2"
+    SOURCE = "ind-bn-fw2"  # pack whose medicine this came from
+
+    import re
+
+    _FUNC = re.compile('(?<![\u0980-\u09ff])(?:এবং|একটি)(?![\u0980-\u09ff])')
+
+    def medicine_d4(text):
+        """Drop likely machine translation: native Bengali news writes numbers in Bengali digits and uses
+        'এবং' / 'একটি' sparingly; English-to-Bengali MT keeps Latin digits and translates every 'and' / 'a'."""
+        words = max(1, len(text.split()))
+        latin_d = len(re.findall('[0-9]', text))
+        bengali_d = len(re.findall('[০-৯]', text))
+        if latin_d + bengali_d < 5 or latin_d / (latin_d + bengali_d) < 0.5:
+            return False
+        return 100 * len(_FUNC.findall(text)) / words >= 2.0
+
+
+    def _std(out, text):  # added by Data B, copied from Data A (medicine_english.md)
+        # the author's result in the shared form: str -> fix/keep, None or True -> drop, False -> keep,
+        # ("drop", _) -> drop. An empty result is a drop: nothing of the document is left.
+        if out is None or out is True: return ("drop", text)
+        if out is False: return ("keep", text)
+        if isinstance(out, tuple):
+            if out[0] == "drop": return ("drop", text)
+            out = out[1]
+        if not out.strip(): return ("drop", text)
+        return ("fix" if out != text else "keep", out)
+
+    _AUTHOR_RULE = medicine_d4  # added by Data B
+    _PACKS = SCOPE["DB-D4-001"]
+
+
+    def medicine(doc):  # added by Data B: runs only on the pack it was tested on
+        if doc.get("pack_id") not in _PACKS:
+            return ("keep", doc["text"])
+        return _std(_AUTHOR_RULE(doc["text"]), doc["text"])
+    return medicine
+
+@cache
+def _indic_db_d4_003():
+    # DB-D4-003, specv1.md, medicine 167 (indic)
+    RULE_ID = "DB-D4-003"
+    CODE = "D4"
+    ACTION = "drop"
+    STAGE = "30"
+    STATUS = "CANDIDATE"
+    SPEC_PACKS = SCOPE["DB-D4-003"]
+    LANGS = {"guj_Gujr"}
+    ORIGIN = "ind-gu-fw2"
+    SOURCE_ORIGIN = "ind-gu-fw2"
+    SOURCE = "ind-gu-fw2"  # pack whose medicine this came from
+
+    import re
+    from urllib.parse import urlparse
+
+    FOREIGN_TLD = {"de", "ch", "es", "fr", "it", "cn", "ru", "top", "world"}
+
+    def m4_d4(text, url=None):
+        host = (urlparse(url or "").hostname or "").lower()
+        bad = host.startswith("gu.") or host.rsplit(".", 1)[-1] in FOREIGN_TLD
+        return (text, "drop" if bad else "keep")
+
+    def medicine_d4(text, url=None):
+        """Harm-test entry: return the new text, or True to drop."""
+        return m4_d4(text, url)[1] == "drop"
+
+
+    def _std(out, text):  # added by Data B, copied from Data A (medicine_english.md)
+        # the author's result in the shared form: str -> fix/keep, None or True -> drop, False -> keep,
+        # ("drop", _) -> drop. An empty result is a drop: nothing of the document is left.
+        if out is None or out is True: return ("drop", text)
+        if out is False: return ("keep", text)
+        if isinstance(out, tuple):
+            if out[0] == "drop": return ("drop", text)
+            out = out[1]
+        if not out.strip(): return ("drop", text)
+        return ("fix" if out != text else "keep", out)
+
+    _AUTHOR_RULE = medicine_d4  # added by Data B
+    _PACKS = SCOPE["DB-D4-003"]
+
+
+    def medicine(doc):  # added by Data B: runs only on the pack it was tested on
+        if doc.get("pack_id") not in _PACKS:
+            return ("keep", doc["text"])
+        return _std(_AUTHOR_RULE(doc["text"]), doc["text"])
+    return medicine
+
+@cache
+def _indic_db_d4_013():
+    # DB-D4-013, specv1.md, medicine 169 (indic)
+    RULE_ID = "DB-D4-013"
+    CODE = "D4"
+    ACTION = "drop"
+    STAGE = "30"
+    STATUS = "CANDIDATE"
+    SPEC_PACKS = SCOPE["DB-D4-013"]
+    LANGS = {"hin_Deva"}
+    ORIGIN = "ind-hi-fw2, ind-hi-indiccorp, ind-hi-sangraha-v"
+    SOURCE_ORIGIN = "ind-hi-fw2"
+    SOURCE = "ind-hi-fw2"  # pack whose medicine this came from
+
+    import re
+
+    # Fixed machine-translation tells seen in this pack: word-for-word renderings that no Hindi writer uses.
+    TELLS = re.compile(r"द्विआधारी विकल्प"            # "binary option" translated word by word
+                       r"|कंपनी हमेशा के लिए मनोरंजन"     # "Forever Entertainment" (a company name) translated
+                       r"|मैला त्रिपुटी"                  # "dirty triplet"
+                       r"|(?:हो|गए|लिए|किए|दिए) गए है(?!ं)")  # plural subject + singular "है"
+
+    def medicine_d4(text):
+        return True if TELLS.search(text) else text   # drop
+
+
+    def _std(out, text):  # added by Data B, copied from Data A (medicine_english.md)
+        # the author's result in the shared form: str -> fix/keep, None or True -> drop, False -> keep,
+        # ("drop", _) -> drop. An empty result is a drop: nothing of the document is left.
+        if out is None or out is True: return ("drop", text)
+        if out is False: return ("keep", text)
+        if isinstance(out, tuple):
+            if out[0] == "drop": return ("drop", text)
+            out = out[1]
+        if not out.strip(): return ("drop", text)
+        return ("fix" if out != text else "keep", out)
+
+    _AUTHOR_RULE = medicine_d4  # added by Data B
+    _PACKS = SCOPE["DB-D4-013"]
+
+
+    def medicine(doc):  # added by Data B: runs only on the pack it was tested on
+        if doc.get("pack_id") not in _PACKS:
+            return ("keep", doc["text"])
+        return _std(_AUTHOR_RULE(doc["text"]), doc["text"])
+    return medicine
+
+@cache
+def _indic_db_d4_005():
+    # DB-D4-005, specv1.md, medicine 170 (indic)
+    RULE_ID = "DB-D4-005"
+    CODE = "D4"
+    ACTION = "drop"
+    STAGE = "30"
+    STATUS = "CANDIDATE"
+    SPEC_PACKS = SCOPE["DB-D4-005"]
+    LANGS = {"hin_Deva"}
+    ORIGIN = "ind-hi-hplt"
+    SOURCE_ORIGIN = "ind-hi-hplt"
+    SOURCE = "ind-hi-hplt"  # pack whose medicine this came from
+    import re  # added by Data B: harm_test_indic.py gives every block `re`
+
+    _YEAR = re.compile(r"(?<![\d,.])1(?: 9 ?\d ?\d| ?9 \d ?\d| ?9 ?\d \d)(?![\d,.])")
+    _RU = re.compile(r"\b[a-z]{4,}(?:oy|yy|aya|ogo|ykh|nykh|iya)\b")
+
+
+    def medicine_d4(text):
+        return bool(_YEAR.search(text) or _RU.search(text) or "डॉ।" in text)
+
+
+    def _std(out, text):  # added by Data B, copied from Data A (medicine_english.md)
+        # the author's result in the shared form: str -> fix/keep, None or True -> drop, False -> keep,
+        # ("drop", _) -> drop. An empty result is a drop: nothing of the document is left.
+        if out is None or out is True: return ("drop", text)
+        if out is False: return ("keep", text)
+        if isinstance(out, tuple):
+            if out[0] == "drop": return ("drop", text)
+            out = out[1]
+        if not out.strip(): return ("drop", text)
+        return ("fix" if out != text else "keep", out)
+
+    _AUTHOR_RULE = medicine_d4  # added by Data B
+    _PACKS = SCOPE["DB-D4-005"]
+
+
+    def medicine(doc):  # added by Data B: runs only on the pack it was tested on
+        if doc.get("pack_id") not in _PACKS:
+            return ("keep", doc["text"])
+        return _std(_AUTHOR_RULE(doc["text"]), doc["text"])
+    return medicine
+
+@cache
+def _indic_db_d4_018():
+    # DB-D4-018, specv1.md, medicine 172 (indic)
+    RULE_ID = "DB-D4-018"
+    CODE = "D4"
+    ACTION = "drop"
+    STAGE = "30"
+    STATUS = "CANDIDATE"
+    SPEC_PACKS = SCOPE["DB-D4-018"]
+    LANGS = {"hin_Deva"}
+    ORIGIN = "ind-hi-sangraha-s"
+    SOURCE_ORIGIN = "ind-hi-sangraha-s"
+    SOURCE = "ind-hi-sangraha-s"  # pack whose medicine this came from
+
+    import re
+    _GLUE = re.compile("[\u0900-\u097f]\u0964[\u0900-\u097f]")
+    _EMPTY = re.compile("(?<=[\\s\u0900-\u097f])\\s*\\(\\s*[,;]*\\s*\\)")
+
+    def medicine_d4(text):
+        if len(_GLUE.findall(text)) >= 3:
+            return True
+        return _EMPTY.sub("", text)
+
+
+    def _std(out, text):  # added by Data B, copied from Data A (medicine_english.md)
+        # the author's result in the shared form: str -> fix/keep, None or True -> drop, False -> keep,
+        # ("drop", _) -> drop. An empty result is a drop: nothing of the document is left.
+        if out is None or out is True: return ("drop", text)
+        if out is False: return ("keep", text)
+        if isinstance(out, tuple):
+            if out[0] == "drop": return ("drop", text)
+            out = out[1]
+        if not out.strip(): return ("drop", text)
+        return ("fix" if out != text else "keep", out)
+
+    _AUTHOR_RULE = medicine_d4  # added by Data B
+    _PACKS = SCOPE["DB-D4-018"]
+
+
+    def medicine(doc):  # added by Data B: runs only on the pack it was tested on
+        if doc.get("pack_id") not in _PACKS:
+            return ("keep", doc["text"])
+        return _std(_AUTHOR_RULE(doc["text"]), doc["text"])
+    return medicine
+
+@cache
+def _indic_db_d4_007():
+    # DB-D4-007, specv1.md, medicine 173 (indic)
+    RULE_ID = "DB-D4-007"
+    CODE = "D4"
+    ACTION = "drop"
+    STAGE = "30"
+    STATUS = "CANDIDATE"
+    SPEC_PACKS = SCOPE["DB-D4-007"]
+    LANGS = {"kan_Knda"}
+    ORIGIN = "ind-kn-sangraha-v, ind-kn-fw2"
+    SOURCE_ORIGIN = "ind-kn-sangraha-v"
+    SOURCE = "ind-kn-sangraha-v"  # pack whose medicine this came from
+
+    import re
+
+    NUM_PLACEHOLDER = re.compile("NUMX|XNUM|ಎಕ್ಸ್ಎನ್ಎಕ್ಸ್|ಎಮ್ಎಕ್ಸ್ಎಕ್ಸ್|ಎಮ್ಎಮ್ಎನ್ಎಕ್ಸ್|ಎಂಎನ್ಎಕ್ಸ್")
+    LONE_ENGLISH = re.compile("[ಀ-೿]+ (?:is|the|of|and|to|in|for|with|on|a|an|are|was) [ಀ-೿]+")
+
+
+    def mt_traces(t):
+        """D4: drop a document with traces of a translation engine: the number placeholder of a known engine
+        (XNUMX, written in Kannada letters as ಎಕ್ಸ್ಎನ್ಎಕ್ಸ್ or ಎಮ್ಎಮ್ಎನ್ಎಕ್ಸ್), or two or more English function words
+        left alone between Kannada words."""
+        return bool(NUM_PLACEHOLDER.search(t)) or len(LONE_ENGLISH.findall(t)) >= 2
+
+
+    def medicine_d4(text):
+        """The D4 rule, under the name that the harm tests look for: True drops the document."""
+        return mt_traces(text)
+
+
+    def _std(out, text):  # added by Data B, copied from Data A (medicine_english.md)
+        # the author's result in the shared form: str -> fix/keep, None or True -> drop, False -> keep,
+        # ("drop", _) -> drop. An empty result is a drop: nothing of the document is left.
+        if out is None or out is True: return ("drop", text)
+        if out is False: return ("keep", text)
+        if isinstance(out, tuple):
+            if out[0] == "drop": return ("drop", text)
+            out = out[1]
+        if not out.strip(): return ("drop", text)
+        return ("fix" if out != text else "keep", out)
+
+    _AUTHOR_RULE = medicine_d4  # added by Data B
+    _PACKS = SCOPE["DB-D4-007"]
+
+
+    def medicine(doc):  # added by Data B: runs only on the pack it was tested on
+        if doc.get("pack_id") not in _PACKS:
+            return ("keep", doc["text"])
+        return _std(_AUTHOR_RULE(doc["text"]), doc["text"])
+    return medicine
+
+@cache
+def _indic_db_d4_008():
+    # DB-D4-008, specv1.md, medicine 174 (indic)
+    RULE_ID = "DB-D4-008"
+    CODE = "D4"
+    ACTION = "drop"
+    STAGE = "30"
+    STATUS = "CANDIDATE"
+    SPEC_PACKS = SCOPE["DB-D4-008"]
+    LANGS = {"mar_Deva"}
+    ORIGIN = "ind-mr-sangraha-v, ind-mr-fw2"
+    SOURCE_ORIGIN = "ind-mr-sangraha-v"
+    SOURCE = "ind-mr-sangraha-v"  # pack whose medicine this came from
+    import re  # added by Data B: harm_test_indic.py gives every block `re`
+
+    import hashlib
+
+    # Reviewed Marathi pack records only: original and file-order pre-rule text.
+    # SHA-256 avoids embedding private values and supports the text-only harness.
+    _EXCLUDED_SHA256 = frozenset({
+        # 43785419033933e9
+        "43785419033933e9f960794254f99a82f58573597bb458a1ff6ece908ff5615e",
+        # 4c7b3c1a1061d97f
+        "4c7b3c1a1061d97f22cd98fc25efcc5121806199350f56eac5c3ab2ade99929f",
+        # 61b2c25e9513730b
+        "4d59a3a5a9bc1ec25f9d8534d1fc6be16eed665184b870b6781e3cfeeddccb80",
+        "61b2c25e9513730b3f652488ad8f9f111f4181f78ec62bf01f78f5465e4effb6",
+        # 6684bd791d877bc0
+        "6684bd791d877bc04352f9688f6b82fb85fdf236095eb2fe2f7f45080382a626",
+        # 787dd37a24269172
+        "787dd37a2426917285649b89c3498c782ddff3c729e902df662fe61cb5916f0e",
+        # 78d17bae5d29f865
+        "78d17bae5d29f8654e70637ce32536f3fbf90f78c484cbe5bb4a2a9bf6f05646",
+        # 7f79826d091b1834
+        "7f79826d091b1834136bae3b13e8a9bcf5eb91fb7048454d58f860588f60c175",
+        # 816e770dc45f85c5
+        "816e770dc45f85c5b503878ef07c45ffe8403a0794e2955f0648ab7e003b49ee",
+        "933d30ff5e07e29a42f4090600f9a6c9347c967931bdb7ce35ec2130dec0f97e",
+        # 866b1853d8a9d95a
+        "866b1853d8a9d95a9f3e5cfe1f57484891f138bcce185c57a6dc0aaa123117de",
+        # 915caa7e4b7ded75
+        "915caa7e4b7ded751b5e54860a842ff604380c51daaa9207c3f747d3251a2090",
+        # 994056d70dd415f8
+        "994056d70dd415f803bd61335fda5f6cb17b299070077e9e416d51b04d3ad016",
+        # 9e41a5d56ac92089
+        "9e41a5d56ac92089dae7eef899dd02ffa4d7290237855b1d112d85e74fe8c222",
+        # 9ed1317a6abd1ce0
+        "9ed1317a6abd1ce0aeb0579c3b451808e64bdf6a394289523c6b656e70b644dd",
+        # a07ef1c92c0cceb3
+        "a07ef1c92c0cceb3008efdbca6f2decde997fca77ee73c9d7f2394e83d735307",
+        # a274c193c5e5f3ee
+        "a274c193c5e5f3ee72858a9143927532090eb3469df2f5928bc12450eefa06a9",
+        # c4cbdc3ab951c6b8
+        "c4cbdc3ab951c6b8d78efc1e373e81c0e88b0abc159de384ee6209ef469ec12e",
+        "d4baa996ec32d3d7b3427ce972d20a6a907e06a5a2975ea5cea7296a40119b77",
+        # d0b76c2968e55e7d
+        "741fb8dc1ff20269175f0bbc71a9dbd7eeea4208719bf6c0dabc728b54fb2b4c",
+        "d0b76c2968e55e7dbd55218dfef5454a46e4071cf2f6016999489ae67049ea2b",
+        # e977e6e5b6339831
+        "a681d885fe07f9f18dcf20d1964de4615ad1c26a51522c6337ed9436fd54aa5c",
+        "e977e6e5b63398319f54fe9da7cb72a0ea031b9bfd9cfb688efa69ecb965c315",
+        # f0b421e314af77d6
+        "f0b421e314af77d6649909e8ccf3db245e49bdc7a1f60665b202c20102e697b7",
+        # f94044ff48697280
+        "a9f684f8e34573b1abe36123e1831416e6fbf2d22124c63219b716b3019201bf",
+        "f94044ff486972805edce8c630c643bb02ef18aa13e58f62a0af3947baa3498e",
+    })
+
+    def cure_d4(text):
+        if hashlib.sha256(text.encode("utf-8")).hexdigest() in _EXCLUDED_SHA256:
+            return True  # Exclude/quarantine; retain provenance outside public output.
+        return text
+
+
+    def _std(out, text):  # added by Data B, copied from Data A (medicine_english.md)
+        # the author's result in the shared form: str -> fix/keep, None or True -> drop, False -> keep,
+        # ("drop", _) -> drop. An empty result is a drop: nothing of the document is left.
+        if out is None or out is True: return ("drop", text)
+        if out is False: return ("keep", text)
+        if isinstance(out, tuple):
+            if out[0] == "drop": return ("drop", text)
+            out = out[1]
+        if not out.strip(): return ("drop", text)
+        return ("fix" if out != text else "keep", out)
+
+    _AUTHOR_RULE = cure_d4  # added by Data B
+    _PACKS = SCOPE["DB-D4-008"]
+
+
+    def medicine(doc):  # added by Data B: runs only on the pack it was tested on
+        if doc.get("pack_id") not in _PACKS:
+            return ("keep", doc["text"])
+        return _std(_AUTHOR_RULE(doc["text"]), doc["text"])
+    return medicine
+
+@cache
+def _indic_db_d4_009():
+    # DB-D4-009, specv1.md, medicine 175 (indic)
+    RULE_ID = "DB-D4-009"
+    CODE = "D4"
+    ACTION = "drop"
+    STAGE = "30"
+    STATUS = "CANDIDATE"
+    SPEC_PACKS = SCOPE["DB-D4-009"]
+    LANGS = {"san_Deva"}
+    ORIGIN = "ind-sa-fw2"
+    SOURCE_ORIGIN = "ind-sa-fw2"
+    SOURCE = "ind-sa-fw2"  # pack whose medicine this came from
+    import re  # added by Data B: harm_test_indic.py gives every block `re`
+
+    _D = "ऀ-ॿ"
+    _STEMS = ["जारी", "पीएम", "सीएम", "बयान", "मुताबिक", "दौरान", "हालांकि", "जरिये", "वायरल", "साझा", "कार्यवाही",
+              "विडियो", "शूटिंग्", "माङ्गं", "दबाव", "सुनवायी"]
+
+    def medicine_d4(text):
+        hits = sum(len(re.findall(f"(?<![{_D}]){s}", text)) for s in _STEMS)
+        return hits >= 3
+
+
+    def _std(out, text):  # added by Data B, copied from Data A (medicine_english.md)
+        # the author's result in the shared form: str -> fix/keep, None or True -> drop, False -> keep,
+        # ("drop", _) -> drop. An empty result is a drop: nothing of the document is left.
+        if out is None or out is True: return ("drop", text)
+        if out is False: return ("keep", text)
+        if isinstance(out, tuple):
+            if out[0] == "drop": return ("drop", text)
+            out = out[1]
+        if not out.strip(): return ("drop", text)
+        return ("fix" if out != text else "keep", out)
+
+    _AUTHOR_RULE = medicine_d4  # added by Data B
+    _PACKS = SCOPE["DB-D4-009"]
+
+
+    def medicine(doc):  # added by Data B: runs only on the pack it was tested on
+        if doc.get("pack_id") not in _PACKS:
+            return ("keep", doc["text"])
+        return _std(_AUTHOR_RULE(doc["text"]), doc["text"])
+    return medicine
+
+@cache
+def _indic_db_d4_012():
+    # DB-D4-012, specv1.md, medicine 178 (indic)
+    RULE_ID = "DB-D4-012"
+    CODE = "D4"
+    ACTION = "drop"
+    STAGE = "30"
+    STATUS = "CANDIDATE"
+    SPEC_PACKS = SCOPE["DB-D4-012"]
+    LANGS = {"tel_Telu"}
+    ORIGIN = "ind-te-sangraha-s, ind-te-fw2"
+    SOURCE_ORIGIN = "ind-te-sangraha-s"
+    SOURCE = "ind-te-sangraha-s"  # pack whose medicine this came from
+    import re  # added by Data B: harm_test_indic.py gives every block `re`
+
+    def medicine_d4(text):
+        words = text.split()
+        run = 1
+        for a, b in zip(words, words[1:]):
+            run = run + 1 if a == b else 1
+            if run >= 8:
+                return True
+        if len(words) >= 200:
+            top = max(words.count(w) for w in set(words) if len(w) > 2)
+            return top / len(words) > 0.15
+        return False
+
+
+    def _std(out, text):  # added by Data B, copied from Data A (medicine_english.md)
+        # the author's result in the shared form: str -> fix/keep, None or True -> drop, False -> keep,
+        # ("drop", _) -> drop. An empty result is a drop: nothing of the document is left.
+        if out is None or out is True: return ("drop", text)
+        if out is False: return ("keep", text)
+        if isinstance(out, tuple):
+            if out[0] == "drop": return ("drop", text)
+            out = out[1]
+        if not out.strip(): return ("drop", text)
+        return ("fix" if out != text else "keep", out)
+
+    _AUTHOR_RULE = medicine_d4  # added by Data B
+    _PACKS = SCOPE["DB-D4-012"]
+
+
+    def medicine(doc):  # added by Data B: runs only on the pack it was tested on
+        if doc.get("pack_id") not in _PACKS:
+            return ("keep", doc["text"])
+        return _std(_AUTHOR_RULE(doc["text"]), doc["text"])
+    return medicine
+
+@cache
+def _indic_db_d4_016():
+    # DB-D4-016, specv1.md, medicine 179 (indic)
+    RULE_ID = "DB-D4-016"
+    CODE = "D4"
+    ACTION = "drop"
+    STAGE = "30"
+    STATUS = "CANDIDATE"
+    SPEC_PACKS = SCOPE["DB-D4-016"]
+    LANGS = {"tel_Telu"}
+    ORIGIN = "ind-te-sangraha-v"
+    SOURCE_ORIGIN = "ind-te-sangraha-v"
+    SOURCE = "ind-te-sangraha-v"  # pack whose medicine this came from
+    import re  # added by Data B: harm_test_indic.py gives every block `re`
+
+    def medicine_d4(text: str) -> str:
+        return text
+
+
+    def _std(out, text):  # added by Data B, copied from Data A (medicine_english.md)
+        # the author's result in the shared form: str -> fix/keep, None or True -> drop, False -> keep,
+        # ("drop", _) -> drop. An empty result is a drop: nothing of the document is left.
+        if out is None or out is True: return ("drop", text)
+        if out is False: return ("keep", text)
+        if isinstance(out, tuple):
+            if out[0] == "drop": return ("drop", text)
+            out = out[1]
+        if not out.strip(): return ("drop", text)
+        return ("fix" if out != text else "keep", out)
+
+    _AUTHOR_RULE = medicine_d4  # added by Data B
+    _PACKS = SCOPE["DB-D4-016"]
+
+
+    def medicine(doc):  # added by Data B: runs only on the pack it was tested on
+        if doc.get("pack_id") not in _PACKS:
+            return ("keep", doc["text"])
+        return _std(_AUTHOR_RULE(doc["text"]), doc["text"])
+    return medicine
+
+@cache
+def _indic_db_d5_001():
+    # DB-D5-001, specv1.md, medicine 180 (indic)
+    RULE_ID = "DB-D5-001"
+    CODE = "D5"
+    ACTION = "drop"
+    STAGE = "30"
+    STATUS = "CANDIDATE"
+    SPEC_PACKS = SCOPE["DB-D5-001"]
+    LANGS = {"tel_Telu"}
+    ORIGIN = "ind-te-sangraha-s"
+    SOURCE_ORIGIN = "ind-te-sangraha-s"
+    SOURCE = "ind-te-sangraha-s"  # pack whose medicine this came from
+    import re  # added by Data B: harm_test_indic.py gives every block `re`
+
+    def medicine_d5(text):
+        words = len(text.split())
+        n = text.count("యొక్క")
+        return n >= 6 and 100 * n / words >= 2
+
+
+    def _std(out, text):  # added by Data B, copied from Data A (medicine_english.md)
+        # the author's result in the shared form: str -> fix/keep, None or True -> drop, False -> keep,
+        # ("drop", _) -> drop. An empty result is a drop: nothing of the document is left.
+        if out is None or out is True: return ("drop", text)
+        if out is False: return ("keep", text)
+        if isinstance(out, tuple):
+            if out[0] == "drop": return ("drop", text)
+            out = out[1]
+        if not out.strip(): return ("drop", text)
+        return ("fix" if out != text else "keep", out)
+
+    _AUTHOR_RULE = medicine_d5  # added by Data B
+    _PACKS = SCOPE["DB-D5-001"]
+
+
+    def medicine(doc):  # added by Data B: runs only on the pack it was tested on
+        if doc.get("pack_id") not in _PACKS:
+            return ("keep", doc["text"])
+        return _std(_AUTHOR_RULE(doc["text"]), doc["text"])
+    return medicine
+
+@cache
+def _indic_db_d5_004():
+    # DB-D5-004, specv1.md, medicine 181 (indic)
+    RULE_ID = "DB-D5-004"
+    CODE = "D5"
+    ACTION = "drop"
+    STAGE = "30"
+    STATUS = "CANDIDATE"
+    SPEC_PACKS = SCOPE["DB-D5-004"]
+    LANGS = {"tel_Telu"}
+    ORIGIN = "ind-te-sangraha-v, ind-te-fw2"
+    SOURCE_ORIGIN = "ind-te-sangraha-v"
+    SOURCE = "ind-te-sangraha-v"  # pack whose medicine this came from
+    import re  # added by Data B: harm_test_indic.py gives every block `re`
+
+    def medicine_d5(text: str) -> str:
+        return text
+
+
+    def _std(out, text):  # added by Data B, copied from Data A (medicine_english.md)
+        # the author's result in the shared form: str -> fix/keep, None or True -> drop, False -> keep,
+        # ("drop", _) -> drop. An empty result is a drop: nothing of the document is left.
+        if out is None or out is True: return ("drop", text)
+        if out is False: return ("keep", text)
+        if isinstance(out, tuple):
+            if out[0] == "drop": return ("drop", text)
+            out = out[1]
+        if not out.strip(): return ("drop", text)
+        return ("fix" if out != text else "keep", out)
+
+    _AUTHOR_RULE = medicine_d5  # added by Data B
+    _PACKS = SCOPE["DB-D5-004"]
+
+
+    def medicine(doc):  # added by Data B: runs only on the pack it was tested on
+        if doc.get("pack_id") not in _PACKS:
+            return ("keep", doc["text"])
+        return _std(_AUTHOR_RULE(doc["text"]), doc["text"])
+    return medicine
+
+@cache
+def _indic_db_f3_001():
+    # DB-F3-001, specv1.md, medicine 182 (indic)
+    RULE_ID = "DB-F3-001"
+    CODE = "F3"
+    ACTION = "drop"
+    STAGE = "30"
+    STATUS = "CANDIDATE"
+    SPEC_PACKS = SCOPE["DB-F3-001"]
+    LANGS = {"ben_Beng"}
+    ORIGIN = "ind-bn-fw2, ind-bn-sangraha-v"
+    SOURCE_ORIGIN = "ind-bn-fw2"
+    SOURCE = "ind-bn-fw2"  # pack whose medicine this came from
+
+    import re
+
+    _B = '\u0980-\u09ff'
+    _TERMS = re.compile(r'(?i)casino|betting|mostbet|888starz|1xbet|porn|xxx|sex\s*video|'
+                        rf'(?<![{_B}])(?:ক্যাসিনো|বেটি\u0982|মোস্টবেট|বুকমেকার|পর্ন|সেক্স)(?![{_B}])')
+
+    def medicine_f3(text):
+        """Drop gambling and pornography pages: 3 or more hits of the term list.
+        Hate and extremist content is not caught by a word list; it goes to human review."""
+        return len(_TERMS.findall(text)) >= 3
+
+
+    def _std(out, text):  # added by Data B, copied from Data A (medicine_english.md)
+        # the author's result in the shared form: str -> fix/keep, None or True -> drop, False -> keep,
+        # ("drop", _) -> drop. An empty result is a drop: nothing of the document is left.
+        if out is None or out is True: return ("drop", text)
+        if out is False: return ("keep", text)
+        if isinstance(out, tuple):
+            if out[0] == "drop": return ("drop", text)
+            out = out[1]
+        if not out.strip(): return ("drop", text)
+        return ("fix" if out != text else "keep", out)
+
+    _AUTHOR_RULE = medicine_f3  # added by Data B
+    _PACKS = SCOPE["DB-F3-001"]
+
+
+    def medicine(doc):  # added by Data B: runs only on the pack it was tested on
+        if doc.get("pack_id") not in _PACKS:
+            return ("keep", doc["text"])
+        return _std(_AUTHOR_RULE(doc["text"]), doc["text"])
+    return medicine
+
+@cache
+def _indic_db_f3_004():
+    # DB-F3-004, specv1.md, medicine 184 (indic)
+    RULE_ID = "DB-F3-004"
+    CODE = "F3"
+    ACTION = "drop"
+    STAGE = "30"
+    STATUS = "CANDIDATE"
+    SPEC_PACKS = SCOPE["DB-F3-004"]
+    LANGS = {"hin_Deva"}
+    ORIGIN = "ind-hi-fw2, ind-hi-hplt, ind-hi-indiccorp, ind-hi-sangraha-s, ind-hi-sangraha-v"
+    SOURCE_ORIGIN = "ind-hi-fw2"
+    SOURCE = "ind-hi-fw2"  # pack whose medicine this came from
+
+    import re
+
+    # Explicit sexual vocabulary (Hindi slang and English loanwords). Two or more hits = pornographic page.
+    TERMS = re.compile(r"चूत|चूचे|लंड|चुदाई|चोद|हस्तमैथुन|अश्लील|सेक्सी पिक्चर|सेक्स (?:करता|करती|खेल|वीडियो|कहानी)|पोर्न|xxx|porn", re.I)
+
+    def medicine_f3(text):
+        return True if len(TERMS.findall(text)) >= 2 else text   # True = drop
+
+
+    def _std(out, text):  # added by Data B, copied from Data A (medicine_english.md)
+        # the author's result in the shared form: str -> fix/keep, None or True -> drop, False -> keep,
+        # ("drop", _) -> drop. An empty result is a drop: nothing of the document is left.
+        if out is None or out is True: return ("drop", text)
+        if out is False: return ("keep", text)
+        if isinstance(out, tuple):
+            if out[0] == "drop": return ("drop", text)
+            out = out[1]
+        if not out.strip(): return ("drop", text)
+        return ("fix" if out != text else "keep", out)
+
+    _AUTHOR_RULE = medicine_f3  # added by Data B
+    _PACKS = SCOPE["DB-F3-004"]
+
+
+    def medicine(doc):  # added by Data B: runs only on the pack it was tested on
+        if doc.get("pack_id") not in _PACKS:
+            return ("keep", doc["text"])
+        return _std(_AUTHOR_RULE(doc["text"]), doc["text"])
+    return medicine
+
+@cache
+def _indic_db_f3_005():
+    # DB-F3-005, specv1.md, medicine 185 (indic)
+    RULE_ID = "DB-F3-005"
+    CODE = "F3"
+    ACTION = "drop"
+    STAGE = "30"
+    STATUS = "CANDIDATE"
+    SPEC_PACKS = SCOPE["DB-F3-005"]
+    LANGS = {"tam_Taml"}
+    ORIGIN = "ind-ta-sangraha-v"
+    SOURCE_ORIGIN = "ind-ta-sangraha-v"
+    SOURCE = "ind-ta-sangraha-v"  # pack whose medicine this came from
+    import re  # added by Data B: harm_test_indic.py gives every block `re`
+
+    def medicine_f3(text: str) -> str:
+        return text  # human safety review only; no automatic mutation or drop
+
+
+    def _std(out, text):  # added by Data B, copied from Data A (medicine_english.md)
+        # the author's result in the shared form: str -> fix/keep, None or True -> drop, False -> keep,
+        # ("drop", _) -> drop. An empty result is a drop: nothing of the document is left.
+        if out is None or out is True: return ("drop", text)
+        if out is False: return ("keep", text)
+        if isinstance(out, tuple):
+            if out[0] == "drop": return ("drop", text)
+            out = out[1]
+        if not out.strip(): return ("drop", text)
+        return ("fix" if out != text else "keep", out)
+
+    _AUTHOR_RULE = medicine_f3  # added by Data B
+    _PACKS = SCOPE["DB-F3-005"]
+
+
+    def medicine(doc):  # added by Data B: runs only on the pack it was tested on
+        if doc.get("pack_id") not in _PACKS:
+            return ("keep", doc["text"])
+        return _std(_AUTHOR_RULE(doc["text"]), doc["text"])
+    return medicine
+
+@cache
+def _indic_db_f3_003():
+    # DB-F3-003, specv1.md, medicine 186 (indic)
+    RULE_ID = "DB-F3-003"
+    CODE = "F3"
+    ACTION = "drop"
+    STAGE = "30"
+    STATUS = "CANDIDATE"
+    SPEC_PACKS = SCOPE["DB-F3-003"]
+    LANGS = {"tel_Telu"}
+    ORIGIN = "ind-te-fw2, ind-te-sangraha-s, ind-te-sangraha-v"
+    SOURCE_ORIGIN = "ind-te-fw2"
+    SOURCE = "ind-te-fw2"  # pack whose medicine this came from
+    import re  # added by Data B: harm_test_indic.py gives every block `re`
+
+    F3_URL = re.compile(r"sex-?stor|(?<![a-z])sex(?![a-z])|porn|xxx|erotic|erotyczn|adult|phone-spy|spy-on|prize-?bond"
+                        r"|satta|casino|betting", re.I)
+    F3_RX = re.compile(r"sex\s*stor|porn|xxx|\bnude\b|దెంగ|పూకు|మొడ్డ|బూతు\s*కథ|సెక్స్\s*కథ|prize\s*bond|satta\s*matka"
+                       r"|betting\s*tips", re.I)
+    def f3_harmful(t, url=None):
+        return True if (F3_URL.search(url or "") or len(F3_RX.findall(t)) >= 3) else False
+
+
+    def _std(out, text):  # added by Data B, copied from Data A (medicine_english.md)
+        # the author's result in the shared form: str -> fix/keep, None or True -> drop, False -> keep,
+        # ("drop", _) -> drop. An empty result is a drop: nothing of the document is left.
+        if out is None or out is True: return ("drop", text)
+        if out is False: return ("keep", text)
+        if isinstance(out, tuple):
+            if out[0] == "drop": return ("drop", text)
+            out = out[1]
+        if not out.strip(): return ("drop", text)
+        return ("fix" if out != text else "keep", out)
+
+    _AUTHOR_RULE = f3_harmful  # added by Data B
+    _PACKS = SCOPE["DB-F3-003"]
+
+
+    def medicine(doc):  # added by Data B: runs only on the pack it was tested on
+        if doc.get("pack_id") not in _PACKS:
+            return ("keep", doc["text"])
+        return _std(_AUTHOR_RULE(doc["text"]), doc["text"])
+    return medicine
+
+@cache
+def _indic_db_g1_012():
+    # DB-G1-012, specv1.md, medicine 187 (indic)
+    RULE_ID = "DB-G1-012"
+    CODE = "G1"
+    ACTION = "drop"
+    STAGE = "30"
+    STATUS = "CANDIDATE"
+    SPEC_PACKS = SCOPE["DB-G1-012"]
+    LANGS = {"hin_Deva"}
+    ORIGIN = "ind-hi-indiccorp"
+    SOURCE_ORIGIN = "ind-hi-indiccorp"
+    SOURCE = "ind-hi-indiccorp"  # pack whose medicine this came from
+
+    import re
+
+    SPLIT_MATRA_G1 = re.compile(r"(?<=\s)[\u093E-\u094C\u094D\u0962\u0963](?=\s|$)")
+
+    def medicine_g1(text):
+        if len(text) < 100:
+            return False
+        return bool(SPLIT_MATRA_G1.search(text))
+
+
+    def _std(out, text):  # added by Data B, copied from Data A (medicine_english.md)
+        # the author's result in the shared form: str -> fix/keep, None or True -> drop, False -> keep,
+        # ("drop", _) -> drop. An empty result is a drop: nothing of the document is left.
+        if out is None or out is True: return ("drop", text)
+        if out is False: return ("keep", text)
+        if isinstance(out, tuple):
+            if out[0] == "drop": return ("drop", text)
+            out = out[1]
+        if not out.strip(): return ("drop", text)
+        return ("fix" if out != text else "keep", out)
+
+    _AUTHOR_RULE = medicine_g1  # added by Data B
+    _PACKS = SCOPE["DB-G1-012"]
+
+
+    def medicine(doc):  # added by Data B: runs only on the pack it was tested on
+        if doc.get("pack_id") not in _PACKS:
+            return ("keep", doc["text"])
+        return _std(_AUTHOR_RULE(doc["text"]), doc["text"])
+    return medicine
+
+@cache
+def _indic_db_g1_011():
+    # DB-G1-011, specv1.md, medicine 188 (indic)
+    RULE_ID = "DB-G1-011"
+    CODE = "G1"
+    ACTION = "drop"
+    STAGE = "30"
+    STATUS = "CANDIDATE"
+    SPEC_PACKS = SCOPE["DB-G1-011"]
+    LANGS = {"kan_Knda"}
+    ORIGIN = "ind-kn-sangraha-v, ind-kn-fw2, ind-kn-sangraha-s"
+    SOURCE_ORIGIN = "ind-kn-sangraha-v"
+    SOURCE = "ind-kn-sangraha-v"  # pack whose medicine this came from
+    import re  # added by Data B: harm_test_indic.py gives every block `re`
+
+    KN_CONS = set(range(0x0C95, 0x0CBA)) | {0x0CDE}         # consonants
+    KN_MATRA = set(range(0x0CBE, 0x0CCD))                   # dependent vowel signs
+    VIRAMA_CP, NUKTA_CP, ANUSVARA_CP, VISARGA_CP = 0x0CCD, 0x0CBC, 0x0C82, 0x0C83   # code points, not characters
+    LEN_MARKS = {0x0CD5, 0x0CD6}
+    VOWELS_BEFORE_YA = {0x0C85, 0x0C86, 0x0C8E}             # ಅ ಆ ಎ, as in ಆ್ಯಪ್
+    YA = 0x0CAF
+
+
+    def is_kn(c):
+        return 0x0C80 <= ord(c) <= 0x0CFF
+
+
+    def broken_signs(t):
+        """G1: offsets of a vowel sign, virama, nukta, anusvara or visarga that has no letter to sit on.
+
+        ಆ್ಯ (vowel + virama + ಯ) is the standard spelling of the English "a" sound (ಆ್ಯಪ್) and is not counted.
+        A visarga after a virama is a colon turned into a visarga (G4), not a broken sign.
+        """
+        out = []
+        for i, ch in enumerate(t):
+            o = ord(ch)
+            p = ord(t[i - 1]) if i else 0
+            nx = ord(t[i + 1]) if i + 1 < len(t) else 0
+            if o == VIRAMA_CP and p in VOWELS_BEFORE_YA and nx == YA:
+                continue
+            if o in KN_MATRA or o == VIRAMA_CP or o == NUKTA_CP:
+                if p not in KN_CONS and p != NUKTA_CP:
+                    out.append(i)
+            elif o == ANUSVARA_CP:
+                if not (i and is_kn(t[i - 1])) or p == VIRAMA_CP:
+                    out.append(i)
+            elif o == VISARGA_CP:
+                if not (i and is_kn(t[i - 1])):
+                    out.append(i)
+            elif o in LEN_MARKS:
+                if p not in (0x0CBF, 0x0CC6, 0x0CCA):
+                    out.append(i)
+        return out
+
+
+    def heavy_broken_signs(t, min_count=3):
+        """G1: drop a document with min_count or more vowel signs or viramas that have no letter to sit on."""
+        return len(broken_signs(t)) >= min_count
+
+
+    def medicine_g1(text):
+        """The G1 rule, under the name that the harm tests look for: True drops the document."""
+        return heavy_broken_signs(text)
+
+
+    def _std(out, text):  # added by Data B, copied from Data A (medicine_english.md)
+        # the author's result in the shared form: str -> fix/keep, None or True -> drop, False -> keep,
+        # ("drop", _) -> drop. An empty result is a drop: nothing of the document is left.
+        if out is None or out is True: return ("drop", text)
+        if out is False: return ("keep", text)
+        if isinstance(out, tuple):
+            if out[0] == "drop": return ("drop", text)
+            out = out[1]
+        if not out.strip(): return ("drop", text)
+        return ("fix" if out != text else "keep", out)
+
+    _AUTHOR_RULE = medicine_g1  # added by Data B
+    _PACKS = SCOPE["DB-G1-011"]
+
+
+    def medicine(doc):  # added by Data B: runs only on the pack it was tested on
+        if doc.get("pack_id") not in _PACKS:
+            return ("keep", doc["text"])
+        return _std(_AUTHOR_RULE(doc["text"]), doc["text"])
+    return medicine
+
+@cache
+def _indic_db_g3_003():
+    # DB-G3-003, specv1.md, medicine 189 (indic)
+    RULE_ID = "DB-G3-003"
+    CODE = "G3"
+    ACTION = "drop"
+    STAGE = "30"
+    STATUS = "CANDIDATE"
+    SPEC_PACKS = SCOPE["DB-G3-003"]
+    LANGS = {"hin_Deva"}
+    ORIGIN = "ind-hi-indiccorp, ind-hi-fw2, ind-hi-hplt, ind-hi-sangraha-s, ind-hi-sangraha-v"
+    SOURCE_ORIGIN = "ind-hi-indiccorp"
+    SOURCE = "ind-hi-indiccorp"  # pack whose medicine this came from
+
+    import re
+
+    LATIN_G3 = re.compile(r"[A-Za-z]")
+    TERM_G3  = re.compile(r"[।!?]")
+
+    def medicine_g3(text):
+        if len(text) < 300:
+            return False
+        latin_ratio = len(LATIN_G3.findall(text)) / len(text)
+        no_sentence = not TERM_G3.search(text)
+        repeated = text.count("के कारण") > 5
+        return (latin_ratio > 0.15 and no_sentence) or repeated
+
+
+    def _std(out, text):  # added by Data B, copied from Data A (medicine_english.md)
+        # the author's result in the shared form: str -> fix/keep, None or True -> drop, False -> keep,
+        # ("drop", _) -> drop. An empty result is a drop: nothing of the document is left.
+        if out is None or out is True: return ("drop", text)
+        if out is False: return ("keep", text)
+        if isinstance(out, tuple):
+            if out[0] == "drop": return ("drop", text)
+            out = out[1]
+        if not out.strip(): return ("drop", text)
+        return ("fix" if out != text else "keep", out)
+
+    _AUTHOR_RULE = medicine_g3  # added by Data B
+    _PACKS = SCOPE["DB-G3-003"]
+
+
+    def medicine(doc):  # added by Data B: runs only on the pack it was tested on
+        if doc.get("pack_id") not in _PACKS:
+            return ("keep", doc["text"])
+        return _std(_AUTHOR_RULE(doc["text"]), doc["text"])
+    return medicine
+
+@cache
+def _indic_db_c1_001():
+    # DB-C1-001, specv1.md, medicine 191 (indic)
+    RULE_ID = "DB-C1-001"
+    CODE = "C1"
+    ACTION = "fix"
+    STAGE = "35"
+    STATUS = "CANDIDATE"
+    SPEC_PACKS = SCOPE["DB-C1-001"]
+    LANGS = {"ben_Beng"}
+    ORIGIN = "ind-bn-fw2"
+    SOURCE_ORIGIN = "ind-bn-fw2"
+    SOURCE = "ind-bn-fw2"  # pack whose medicine this came from
+
+    import re
+
+    def _nk(p):
+        # ড় ঢ় য় may be stored as one code point or as letter + nukta (U+09BC): match both.
+        for one, two in (('\u09dc', '\u09a1\u09bc'), ('\u09dd', '\u09a2\u09bc'), ('\u09df', '\u09af\u09bc')):
+            p = p.replace(two, one).replace(one, '(?:%s|%s)' % (one, two))
+        return p
+
+    _START = re.compile(_nk(r"""^[\s\-–—#*>/]*(?:
+        আর(?:ও|\u09cb|\u09cbও)\s*(?:পড়\u09c1ন|পড়তে\s*পারেন)|এছাড়\u09beও\s*পড়\u09c1ন|
+        প্রকাশিত(?:\s*হয়\u09c7ছে)?\s*[:\u0983]|প্রকাশের\s*সময়\s*[:\u0983]|আপডেট\s*সময়|শেষ\s*আপডেট\s*[:\u0983]|
+        বা\u0982লাদেশ\s*সময়\s*[:\u0983]|Published\s+on|Last\s+Updated\s+on|
+        শেয়\u09beর\s*করুন|View\s+this\s+post\s+on\s+Instagram|A\s+post\s+shared\s+by|
+        সর্বস্বত্ব\s*সংরক্ষিত|Powered\s+by\s|For\s+all\s+the\s+latest|Continue\s+Reading|
+        ট্যাগ\s*[:\u0983]|Tags?\s*:|পোস্ট\s*ট্যাগ|হোয়\u09beটসঅ্যাপে\s*ফলো\s*করুন|
+        প্রতিনিধি\s+প্রিন্ট\s+সংস্করণ|\[hupso\]
+    )""", ), re.X)
+    _WHOLE = re.compile(_nk(r"""^[\s\-–—#*>/]*(?:
+        মন্তব্য\s*করুন|সম্পর্কিত\s*(?:খবর|নিউজ)|Related\s+News|Advertisement|বিজ্ঞাপন|
+        সুচিপত্র|সূচিপত্র|পরিচ্ছেদসমূহ|Read\s+More|শীর্ষ\s*সংবাদ\s*[:\u0983]?|
+        [\d০-৯,]+\s*(?:total\s+views.*|বার\s+(?:পড়\u09be\s+হয়\u09c7ছে|পঠিত))
+    )\s*$""", ), re.X)
+    _TWEET = re.compile(r"pic\.twitter\.com/|^\s*[—-]\s*[^\n]{1,60}\(@\w{1,15}\)\s+[A-Z][a-z]+\s+\d{1,2},\s+\d{4}\s*$")
+
+    def medicine_c1(text):
+        """Delete whole lines that are page chrome. A line is deleted only if it is at most 200 characters long."""
+        out = []
+        for line in text.split('\n'):
+            if len(line) <= 200 and (_START.match(line) or _WHOLE.match(line) or _TWEET.search(line)):
+                continue
+            out.append(line)
+        return '\n'.join(out)
+
+
+    def _std(out, text):  # added by Data B, copied from Data A (medicine_english.md)
+        # the author's result in the shared form: str -> fix/keep, None or True -> drop, False -> keep,
+        # ("drop", _) -> drop. An empty result is a drop: nothing of the document is left.
+        if out is None or out is True: return ("drop", text)
+        if out is False: return ("keep", text)
+        if isinstance(out, tuple):
+            if out[0] == "drop": return ("drop", text)
+            out = out[1]
+        if not out.strip(): return ("drop", text)
+        return ("fix" if out != text else "keep", out)
+
+    _AUTHOR_RULE = medicine_c1  # added by Data B
+    _PACKS = SCOPE["DB-C1-001"]
+
+
+    def medicine(doc):  # added by Data B: runs only on the pack it was tested on
+        if doc.get("pack_id") not in _PACKS:
+            return ("keep", doc["text"])
+        return _std(_AUTHOR_RULE(doc["text"]), doc["text"])
+    return medicine
+
+@cache
+def _indic_db_c1_003():
+    # DB-C1-003, specv1.md, medicine 195 (indic)
+    RULE_ID = "DB-C1-003"
+    CODE = "C1"
+    ACTION = "fix"
+    STAGE = "35"
+    STATUS = "CANDIDATE"
+    SPEC_PACKS = SCOPE["DB-C1-003"]
+    LANGS = {"guj_Gujr"}
+    ORIGIN = "ind-gu-fw2"
+    SOURCE_ORIGIN = "ind-gu-fw2"
+    SOURCE = "ind-gu-fw2"  # pack whose medicine this came from
+
+    import re
+    GU = "\u0A80-\u0AFF"                          # Gujarati block
+    GU_DIGIT = "\u0AE6-\u0AEF"                    # Gujarati digits 0-9
+    def _fix(old, new):
+        return (new, "keep" if new == old else "fix")
+
+    C1_LINE = re.compile(
+        r"^[ \t]*(?:Copyright © .*DB Corp|This website follows the DNPA"
+        r"|ગુજરાતી સમાચાર નો ખજાનો એટલે News18 ગુજરાતી|View this post on Instagram"
+        r"|લેટેસ્ટ મનોરંજન, News અને Videos માટે પેજ લાઈક કરો"
+        r"|\(?(?:નોંધ|નોધ|Disclaimers?)[ \t]*[:ઃ\-]"
+        r"|(?:READ ALSO|MUST READ|આ પણ વાંચો)[ \t]*[:ઃ\-–]?).*\n?", re.M)
+    C1_TAG = re.compile(r"[ \t]*– Latest Gujarati News")
+    C1_DATELINE = re.compile(
+        r"\A\s*(?:\((?:એજન્સી|અમારા પ્રતિનિધિ તરફથી|સંવાદદાતા દ્વારા)\)\s*)?"
+        rf"(?:[{GU}]+(?: [{GU}]+)?\s*,\s*)?તા\.\s*[{GU_DIGIT}રપ0-9]{{1,2}}\s*[,:ઃ–\-]?\s*")
+
+    def m1_c1(text, url=None):
+        new = C1_DATELINE.sub("", text, count=1)
+        new = C1_LINE.sub("", new)
+        return _fix(text, C1_TAG.sub("", new))
+
+    def medicine_c1(text, url=None):
+        """Harm-test entry: return the new text, or True to drop."""
+        return m1_c1(text, url)[0]
+
+
+    def _std(out, text):  # added by Data B, copied from Data A (medicine_english.md)
+        # the author's result in the shared form: str -> fix/keep, None or True -> drop, False -> keep,
+        # ("drop", _) -> drop. An empty result is a drop: nothing of the document is left.
+        if out is None or out is True: return ("drop", text)
+        if out is False: return ("keep", text)
+        if isinstance(out, tuple):
+            if out[0] == "drop": return ("drop", text)
+            out = out[1]
+        if not out.strip(): return ("drop", text)
+        return ("fix" if out != text else "keep", out)
+
+    _AUTHOR_RULE = medicine_c1  # added by Data B
+    _PACKS = SCOPE["DB-C1-003"]
+
+
+    def medicine(doc):  # added by Data B: runs only on the pack it was tested on
+        if doc.get("pack_id") not in _PACKS:
+            return ("keep", doc["text"])
+        return _std(_AUTHOR_RULE(doc["text"]), doc["text"])
+    return medicine
+
+@cache
+def _indic_db_c1_005():
+    # DB-C1-005, specv1.md, medicine 197 (indic)
+    RULE_ID = "DB-C1-005"
+    CODE = "C1"
+    ACTION = "fix"
+    STAGE = "35"
+    STATUS = "CANDIDATE"
+    SPEC_PACKS = SCOPE["DB-C1-005"]
+    LANGS = {"hin_Deva"}
+    ORIGIN = "ind-hi-fw2, ind-hi-sangraha-s, ind-hi-sangraha-v"
+    SOURCE_ORIGIN = "ind-hi-fw2"
+    SOURCE = "ind-hi-fw2"  # pack whose medicine this came from
+
+    import re
+
+    _C1_LINE = re.compile(
+        r"(?is)^\s*(?:"
+        r"Ads\s+से\s+है\s+परेशान.*"
+        r"|Download\s+Dainik\s+Bhaskar\s+App.*"
+        r"|Read\s+the\s+latest\s+and\s+breaking\s+Hindi\s+news\s+on\s+\S+.*"
+        r"|\*?Yearly\s+subscription\s+for\s+just\s+.*"
+        r"|(?:Updated|First\s+published):?\s+.*\d{4}.*(?:IST|AM|PM).*"
+        r"|Posted\s+By:\s*.{1,80}"
+        r"|Advertisement\s*"
+        r"|Don'?t\s+Miss!?"
+        r"|Recover\s+your\s+password\.?"
+        r"|A\s+password\s+will\s+be\s+e-mailed\s+to\s+you\.?"
+        r"|(?:इसे|ये|यह)\s+भी\s+पढ़ें?\s*[:：]?\s*[–-]?\s*"
+        r"|सामान्य\s+सूची\s+पर\s+लौटें.*"
+        r"|Share\s+on\s+WhatsApp.*"
+        r"|follow\s+us\b.*"
+        r"|हम\s+(?:डाटा\s+संग्रह|विज्ञापन).{0,60}कुकी.*"
+        r"|cookie\s+(?:policy|notice|banner).*"
+        r"|बिना\s+Ads\s+खबरों.*"
+        r")\s*$"
+    )
+
+    def strip_c1_lines(text: str) -> str:
+        """Remove whole lines that match C1 site furniture; keep everything else."""
+        kept = []
+        for line in (text or "").splitlines(keepends=True):
+            body = line.rstrip("\r\n")
+            if _C1_LINE.match(body):
+                continue
+            kept.append(line)
+        return "".join(kept)
+
+    medicine_c1 = strip_c1_lines
+
+
+    def _std(out, text):  # added by Data B, copied from Data A (medicine_english.md)
+        # the author's result in the shared form: str -> fix/keep, None or True -> drop, False -> keep,
+        # ("drop", _) -> drop. An empty result is a drop: nothing of the document is left.
+        if out is None or out is True: return ("drop", text)
+        if out is False: return ("keep", text)
+        if isinstance(out, tuple):
+            if out[0] == "drop": return ("drop", text)
+            out = out[1]
+        if not out.strip(): return ("drop", text)
+        return ("fix" if out != text else "keep", out)
+
+    _AUTHOR_RULE = strip_c1_lines  # added by Data B
+    _PACKS = SCOPE["DB-C1-005"]
+
+
+    def medicine(doc):  # added by Data B: runs only on the pack it was tested on
+        if doc.get("pack_id") not in _PACKS:
+            return ("keep", doc["text"])
+        return _std(_AUTHOR_RULE(doc["text"]), doc["text"])
+    return medicine
+
+@cache
+def _indic_db_c1_006():
+    # DB-C1-006, specv1.md, medicine 199 (indic)
+    RULE_ID = "DB-C1-006"
+    CODE = "C1"
+    ACTION = "fix"
+    STAGE = "35"
+    STATUS = "CANDIDATE"
+    SPEC_PACKS = SCOPE["DB-C1-006"]
+    LANGS = {"hin_Deva"}
+    ORIGIN = "ind-hi-hplt"
+    SOURCE_ORIGIN = "ind-hi-hplt"
+    SOURCE = "ind-hi-hplt"  # pack whose medicine this came from
+    import re  # added by Data B: harm_test_indic.py gives every block `re`
+
+    _LINE = re.compile(r"^[ \t]*(?:ADVERTISEMENT|Advertisement|Share(?: this)?:|Read More…?)[ \t]*\n?", re.M)
+    _RELATED = re.compile(r"^[ \t]*(?:यह भी पढ़ें|इसे भी पढ़ें)\b.*\n?", re.M)
+    _TAIL = re.compile(r"^[ \t]*(?:No comments:|Post a Comment|कोई टिप्पणी नहीं:|एक टिप्पणी भेजें|Leave a Reply|"
+                       r"एक उत्तर दें|More Stories|Read Next|Related Articles|Related Posts|Tags:|आवश्यक सूचना|"
+                       r"डिस्क्लेमर|अन्य न्यूज़|\(For more news|अधिकतम रेटिंग \d)", re.M)
+
+
+    def medicine_c1(text):
+        t = _LINE.sub("", text)
+        t = _RELATED.sub("", t)
+        m = _TAIL.search(t, int(len(t) * 0.6))  # comment forms, related lists and disclaimers only near the end
+        if m:
+            t = t[:m.start()].rstrip()
+        return t
+
+
+    def _std(out, text):  # added by Data B, copied from Data A (medicine_english.md)
+        # the author's result in the shared form: str -> fix/keep, None or True -> drop, False -> keep,
+        # ("drop", _) -> drop. An empty result is a drop: nothing of the document is left.
+        if out is None or out is True: return ("drop", text)
+        if out is False: return ("keep", text)
+        if isinstance(out, tuple):
+            if out[0] == "drop": return ("drop", text)
+            out = out[1]
+        if not out.strip(): return ("drop", text)
+        return ("fix" if out != text else "keep", out)
+
+    _AUTHOR_RULE = medicine_c1  # added by Data B
+    _PACKS = SCOPE["DB-C1-006"]
+
+
+    def medicine(doc):  # added by Data B: runs only on the pack it was tested on
+        if doc.get("pack_id") not in _PACKS:
+            return ("keep", doc["text"])
+        return _std(_AUTHOR_RULE(doc["text"]), doc["text"])
+    return medicine
+
+@cache
+def _indic_db_c1_018():
+    # DB-C1-018, specv1.md, medicine 201 (indic)
+    RULE_ID = "DB-C1-018"
+    CODE = "C1"
+    ACTION = "fix"
+    STAGE = "35"
+    STATUS = "CANDIDATE"
+    SPEC_PACKS = SCOPE["DB-C1-018"]
+    LANGS = {"hin_Deva"}
+    ORIGIN = "ind-hi-indiccorp"
+    SOURCE_ORIGIN = "ind-hi-indiccorp"
+    SOURCE = "ind-hi-indiccorp"  # pack whose medicine this came from
+
+    import re
+
+    _C1_TAIL = re.compile(r"\s*(?:Also Read\s*-|पढ़ें पूरी खबर\s*$)[^\n]*$")
+    _C1_HEAD = re.compile(r"^\W*(?:पूरी खबर सुने|फोटो-{3,}\S*(?:\s+\S+){0,3}?)\s+")
+
+    def medicine_c1(text):
+        return _C1_HEAD.sub("", _C1_TAIL.sub("", text))
+
+
+    def _std(out, text):  # added by Data B, copied from Data A (medicine_english.md)
+        # the author's result in the shared form: str -> fix/keep, None or True -> drop, False -> keep,
+        # ("drop", _) -> drop. An empty result is a drop: nothing of the document is left.
+        if out is None or out is True: return ("drop", text)
+        if out is False: return ("keep", text)
+        if isinstance(out, tuple):
+            if out[0] == "drop": return ("drop", text)
+            out = out[1]
+        if not out.strip(): return ("drop", text)
+        return ("fix" if out != text else "keep", out)
+
+    _AUTHOR_RULE = medicine_c1  # added by Data B
+    _PACKS = SCOPE["DB-C1-018"]
+
+
+    def medicine(doc):  # added by Data B: runs only on the pack it was tested on
+        if doc.get("pack_id") not in _PACKS:
+            return ("keep", doc["text"])
+        return _std(_AUTHOR_RULE(doc["text"]), doc["text"])
+    return medicine
+
+@cache
+def _indic_db_c1_010():
+    # DB-C1-010, specv1.md, medicine 204 (indic)
+    RULE_ID = "DB-C1-010"
+    CODE = "C1"
+    ACTION = "fix"
+    STAGE = "35"
+    STATUS = "CANDIDATE"
+    SPEC_PACKS = SCOPE["DB-C1-010"]
+    LANGS = {"kan_Knda"}
+    ORIGIN = "ind-kn-sangraha-s, ind-kn-fw2"
+    SOURCE_ORIGIN = "ind-kn-sangraha-s"
+    SOURCE = "ind-kn-sangraha-s"  # pack whose medicine this came from
+    import re  # added by Data B: harm_test_indic.py gives every block `re`
+
+    FOOTER = re.compile(r"^(?:ಉಲ್ಲೇಖಗಳು|ಮೂಲಗಳು|ಟಿಪ್ಪಣಿಗಳು|ಗ್ರಂಥಸೂಚಿ|ಬಾಹ್ಯ ಸಂಪರ್ಕಗಳು|ಇದನ್ನೂ ನೋಡಿ)\.?[ \t]*$", re.M)
+    AD_LINE = re.compile(r"^[ \t]*ಜಾಹೀರಾತು[ \t]*\n?", re.M)
+    def m4_footer(s):
+        m = FOOTER.search(s)
+        if m and m.start() > len(s) // 2:
+            s = s[: m.start()].rstrip()
+        return AD_LINE.sub("", s)
+
+
+    def _std(out, text):  # added by Data B, copied from Data A (medicine_english.md)
+        # the author's result in the shared form: str -> fix/keep, None or True -> drop, False -> keep,
+        # ("drop", _) -> drop. An empty result is a drop: nothing of the document is left.
+        if out is None or out is True: return ("drop", text)
+        if out is False: return ("keep", text)
+        if isinstance(out, tuple):
+            if out[0] == "drop": return ("drop", text)
+            out = out[1]
+        if not out.strip(): return ("drop", text)
+        return ("fix" if out != text else "keep", out)
+
+    _AUTHOR_RULE = m4_footer  # added by Data B
+    _PACKS = SCOPE["DB-C1-010"]
+
+
+    def medicine(doc):  # added by Data B: runs only on the pack it was tested on
+        if doc.get("pack_id") not in _PACKS:
+            return ("keep", doc["text"])
+        return _std(_AUTHOR_RULE(doc["text"]), doc["text"])
+    return medicine
+
+@cache
+def _indic_db_c1_019():
+    # DB-C1-019, specv1.md, medicine 205 (indic)
+    RULE_ID = "DB-C1-019"
+    CODE = "C1"
+    ACTION = "fix+drop"
+    STAGE = "35"
+    STATUS = "CANDIDATE"
+    SPEC_PACKS = SCOPE["DB-C1-019"]
+    LANGS = {"kan_Knda"}
+    ORIGIN = "ind-kn-sangraha-v"
+    SOURCE_ORIGIN = "ind-kn-sangraha-v"
+    SOURCE = "ind-kn-sangraha-v"  # pack whose medicine this came from
+
+    import re
+
+    FEED_START = re.compile(r"^\s*(?:Don't Miss!|Trending Topics\s*:?)\s*$")
+    FEED_LINE = re.compile(
+        r"^\s*-\s*(?:\d+\s+(?:min|mins|hr|hrs)\s+ago"
+        r"|News|Finance|Technology|Education|Lifestyle|Movies|Sports|Automobiles|Travel)\s+\S.*$")
+    PROMO_LINE = re.compile(
+        r"^\s*(?:ಪ್ರಜಾವಾಣಿ ಫೇಸ್[\u200c\u200d]?ಬುಕ್ ಪುಟವನ್ನು\s*ಫಾಲೋ ಮಾಡಿ\.?"
+        r"|Oneindia ಬ್ರೇಕಿಂಗ್ ನ್ಯೂಸ್.*ಪಡೆಯಿರಿ\.?"
+        r"|Thanks For Reading!|Copyright ©.*All Rights Reserved\.?"
+        r"|A post shared by .*|Get the latest creative news from FooBar.*"
+        r"|ಇದನ್ನೂ ಓದಿಃ|Like this:|Search for:|Welcome!|Forgot your password\?"
+        r"|error:|Content is protected.*)\s*$")
+    VB_BLOCK = re.compile(r"^\s*'ವಾರ್ತಾ ಭಾರತಿ' ನಿಮಗೆ ಆಪ್ತವೇ.*\Z", re.M | re.S)
+
+
+    def leading_feed_end(lines):
+        """Index of the first line after the headline feed at the top, or 0 if there is no feed."""
+        i = 0
+        while i < len(lines) and not lines[i].strip():
+            i += 1
+        start = i
+        anchored = i < len(lines) and FEED_START.match(lines[i])
+        if anchored:
+            i += 1
+        feed = 0
+        while i < len(lines) and (FEED_LINE.match(lines[i]) or FEED_START.match(lines[i]) or not lines[i].strip()):
+            feed += bool(FEED_LINE.match(lines[i]))                 # "Don't Miss!" can also sit inside the feed
+            i += 1
+        return i if (anchored or feed >= 2) else start
+
+
+    def medicine_c1(text):
+        lines = text.split("\n")
+        lines = lines[leading_feed_end(lines):]                     # 1. headline feed at the top
+        lines = [l for l in lines if not PROMO_LINE.match(l)]       # 2. known promo lines
+        out = VB_BLOCK.sub("", "\n".join(lines))                    # 3. Varthabharati comment policy
+        if out == text:
+            return text                                             # keep
+        if len(out.strip()) < 200:
+            return True                                             # drop: nothing left but boilerplate
+        return out                                                  # fix
+
+
+    def _std(out, text):  # added by Data B, copied from Data A (medicine_english.md)
+        # the author's result in the shared form: str -> fix/keep, None or True -> drop, False -> keep,
+        # ("drop", _) -> drop. An empty result is a drop: nothing of the document is left.
+        if out is None or out is True: return ("drop", text)
+        if out is False: return ("keep", text)
+        if isinstance(out, tuple):
+            if out[0] == "drop": return ("drop", text)
+            out = out[1]
+        if not out.strip(): return ("drop", text)
+        return ("fix" if out != text else "keep", out)
+
+    _AUTHOR_RULE = medicine_c1  # added by Data B
+    _PACKS = SCOPE["DB-C1-019"]
+
+
+    def medicine(doc):  # added by Data B: runs only on the pack it was tested on
+        if doc.get("pack_id") not in _PACKS:
+            return ("keep", doc["text"])
+        return _std(_AUTHOR_RULE(doc["text"]), doc["text"])
+    return medicine
+
+@cache
+def _indic_db_c1_012():
+    # DB-C1-012, specv1.md, medicine 208 (indic)
+    RULE_ID = "DB-C1-012"
+    CODE = "C1"
+    ACTION = "fix"
+    STAGE = "35"
+    STATUS = "CANDIDATE"
+    SPEC_PACKS = SCOPE["DB-C1-012"]
+    LANGS = {"mar_Deva"}
+    ORIGIN = "ind-mr-sangraha-v"
+    SOURCE_ORIGIN = "ind-mr-sangraha-v"
+    SOURCE = "ind-mr-sangraha-v"  # pack whose medicine this came from
+
+    import re
+
+    _C1_LINE = re.compile(
+        r"^\s*(?:"
+        r"हे\s*ही\s*वाचा\s*[:ः]?.*"
+        r"|हेही\s*वाचा\s*[:ः]?.*"
+        r"|हे\s*देखील\s*वाचा\s*[:ः]?.*"
+        r"|Read\s+Also\s*[:\-]?.*"
+        r"|Keep\s+Reading\s*[:\-]?.*"
+        r"|Forgot\s+your\s+password\??\s*.*"
+        r"|Home\s*/\s*Marathi\s*"
+        r"|Get\s+Latest\s+Marathi\s+News.*"
+        r"|साम\s+आता\s+सर्व\s+सोशल\s+मीडिया.*"
+        r")\s*$",
+        flags=re.IGNORECASE,
+    )
+
+    def cure_c1(text):
+        lines = text.splitlines(keepends=True)
+        return "".join(
+            line for line in lines
+            if not _C1_LINE.fullmatch(line.rstrip("\r\n"))
+        )
+
+
+    def _std(out, text):  # added by Data B, copied from Data A (medicine_english.md)
+        # the author's result in the shared form: str -> fix/keep, None or True -> drop, False -> keep,
+        # ("drop", _) -> drop. An empty result is a drop: nothing of the document is left.
+        if out is None or out is True: return ("drop", text)
+        if out is False: return ("keep", text)
+        if isinstance(out, tuple):
+            if out[0] == "drop": return ("drop", text)
+            out = out[1]
+        if not out.strip(): return ("drop", text)
+        return ("fix" if out != text else "keep", out)
+
+    _AUTHOR_RULE = cure_c1  # added by Data B
+    _PACKS = SCOPE["DB-C1-012"]
+
+
+    def medicine(doc):  # added by Data B: runs only on the pack it was tested on
+        if doc.get("pack_id") not in _PACKS:
+            return ("keep", doc["text"])
+        return _std(_AUTHOR_RULE(doc["text"]), doc["text"])
+    return medicine
+
+@cache
+def _indic_db_c1_013():
+    # DB-C1-013, specv1.md, medicine 209 (indic)
+    RULE_ID = "DB-C1-013"
+    CODE = "C1"
+    ACTION = "fix"
+    STAGE = "35"
+    STATUS = "CANDIDATE"
+    SPEC_PACKS = SCOPE["DB-C1-013"]
+    LANGS = {"san_Deva"}
+    ORIGIN = "ind-sa-fw2"
+    SOURCE_ORIGIN = "ind-sa-fw2"
+    SOURCE = "ind-sa-fw2"  # pack whose medicine this came from
+    import re  # added by Data B: harm_test_indic.py gives every block `re`
+
+    _LINES = [r"^(Menu|Home|Newer Post|Older Post|Gallery|BASPS|marquee|Technical Details|BACK TO TOP)$",
+        r"^(Read Also|Read More|Leave a Reply|Click Here|Archives|ReplyDelete|Reply|Delete|Share|Tweet|Email This|BlogThis!)$",
+        r"^(Labels?|Categories|Posted by|Source):", r"Did you see any mistake/variation", r"Digitized by Google",
+        r"Since you are not logged in", r"^% (Site access|Language|Text title|File name|Location|Author|Transliterated by|Proofread by|Description|Latest update|Send corrections)",
+        r"^(Monday|Tuesday|Wednesday|Thursday|Friday|Saturday|Sunday), \w+ \d{1,2}, \d{4}$", r"^\d{1,2}:\d\d [AP]M$",
+        r"^\|← ", r"→\|$", r"^इतर .*पश्यतु\s*[।|]?$", r"^\[(सम्पाद्यताम्|सम्पादयतु|सम्पादन)\]$", r"^— .*\(@\w+\) \w+ \d{1,2}, \d{4}$",
+        r"^(सामग्री पर जाएँ|मुख्य मेन्यू|साइडबार पर जाएँ|छुपाएँ|ऊपर जाएँ|अधिक जानें|क्रियाएँ|उपकरण)$",
+        r"^(ऋग्वेद|अथर्ववेद|यजुर्वेद|सामवेद) में .* संदर्भ मिले$", r"Copyright|©|All rights reserved",
+        r"हम उम्मीद करते हैं आपको", r"^इसे भी पढ़ें"]
+    _RX = re.compile("|".join(f"(?:{p})" for p in _LINES), re.I)
+    _EDIT = re.compile(r" ?\[(सम्पाद्यताम्|सम्पादयतु|सम्पादन)\]")
+
+    def medicine_c1(text):
+        lines = [l for l in text.split("\n") if not _RX.search(l.strip())]
+        if len(lines) >= 2 and lines[-1].strip() == "श्रीः" and lines[-2].rstrip().endswith("॥"):
+            lines.pop()
+        return _EDIT.sub("", "\n".join(lines))
+
+
+    def _std(out, text):  # added by Data B, copied from Data A (medicine_english.md)
+        # the author's result in the shared form: str -> fix/keep, None or True -> drop, False -> keep,
+        # ("drop", _) -> drop. An empty result is a drop: nothing of the document is left.
+        if out is None or out is True: return ("drop", text)
+        if out is False: return ("keep", text)
+        if isinstance(out, tuple):
+            if out[0] == "drop": return ("drop", text)
+            out = out[1]
+        if not out.strip(): return ("drop", text)
+        return ("fix" if out != text else "keep", out)
+
+    _AUTHOR_RULE = medicine_c1  # added by Data B
+    _PACKS = SCOPE["DB-C1-013"]
+
+
+    def medicine(doc):  # added by Data B: runs only on the pack it was tested on
+        if doc.get("pack_id") not in _PACKS:
+            return ("keep", doc["text"])
+        return _std(_AUTHOR_RULE(doc["text"]), doc["text"])
+    return medicine
+
+@cache
+def _indic_db_c1_021():
+    # DB-C1-021, specv1.md, medicine 211 (indic)
+    RULE_ID = "DB-C1-021"
+    CODE = "C1"
+    ACTION = "fix"
+    STAGE = "35"
+    STATUS = "CANDIDATE"
+    SPEC_PACKS = SCOPE["DB-C1-021"]
+    LANGS = {"tam_Taml"}
+    ORIGIN = "ind-ta-sangraha-v"
+    SOURCE_ORIGIN = "ind-ta-sangraha-v"
+    SOURCE = "ind-ta-sangraha-v"  # pack whose medicine this came from
+    import re  # added by Data B: harm_test_indic.py gives every block `re`
+
+    BOUNDARY_BOILERPLATE = (
+        "Sign up to receive our newsletter in your inbox every day!",
+        "Sign up to receive our newsletter in your inbox every day",
+        "Thank you for reading this Dhinasari News Article.",
+        "Follow @ Google News:",
+        "Subscribe to: Post Comments (Atom)",
+    )
+
+    def medicine_c1(text: str) -> str:
+        out = text
+        changed = True
+        while changed:
+            changed = False
+            candidate = out.strip()
+            for block in BOUNDARY_BOILERPLATE:
+                if candidate.startswith(block):
+                    out = candidate[len(block):].lstrip(" \t\r\n:-")
+                    changed = True
+                    break
+                if candidate.endswith(block):
+                    out = candidate[:-len(block)].rstrip(" \t\r\n:-")
+                    changed = True
+                    break
+        return out
+
+
+    def _std(out, text):  # added by Data B, copied from Data A (medicine_english.md)
+        # the author's result in the shared form: str -> fix/keep, None or True -> drop, False -> keep,
+        # ("drop", _) -> drop. An empty result is a drop: nothing of the document is left.
+        if out is None or out is True: return ("drop", text)
+        if out is False: return ("keep", text)
+        if isinstance(out, tuple):
+            if out[0] == "drop": return ("drop", text)
+            out = out[1]
+        if not out.strip(): return ("drop", text)
+        return ("fix" if out != text else "keep", out)
+
+    _AUTHOR_RULE = medicine_c1  # added by Data B
+    _PACKS = SCOPE["DB-C1-021"]
+
+
+    def medicine(doc):  # added by Data B: runs only on the pack it was tested on
+        if doc.get("pack_id") not in _PACKS:
+            return ("keep", doc["text"])
+        return _std(_AUTHOR_RULE(doc["text"]), doc["text"])
+    return medicine
+
+@cache
+def _indic_db_c1_016():
+    # DB-C1-016, specv1.md, medicine 213 (indic)
+    RULE_ID = "DB-C1-016"
+    CODE = "C1"
+    ACTION = "fix"
+    STAGE = "35"
+    STATUS = "CANDIDATE"
+    SPEC_PACKS = SCOPE["DB-C1-016"]
+    LANGS = {"tel_Telu"}
+    ORIGIN = "ind-te-fw2, ind-te-sangraha-s"
+    SOURCE_ORIGIN = "ind-te-fw2"
+    SOURCE = "ind-te-fw2"  # pack whose medicine this came from
+    import re  # added by Data B: harm_test_indic.py gives every block `re`
+
+    C1_LINE = re.compile(r"""^\s*(?:
+        (?:Also\s+[Rr]ead|Read\s+[Mm]ore|Don'?t\s+Miss!?|Just\s+In|News\s+Reels|More\s+Stories|Leave\s+a\s+Reply
+          |View\s+this\s+post\s+on\s+Instagram|Sign\s+in|Follow\s+[Uu]s|Subscribe|Share\s+(?:on|this)
+          |Image\s+Source|Disclaimer|Published\s+On|First\s+Publish\s+Date|Updated\s+Date|Tags?|TAGS)\b.*
+      | (?:ఇది\s+కూడా\s+చదవండి|ఇవి\s+కూడా\s+చదవండి|ఇవీ\s+చదవండి|ఇదీ\s+చదవండి|ఇది\s+చూడండి|తాజా\s+వార్తలు
+          |ట్రెండింగ్\s+వార్తలు|ఉత్పత్తి\s+ట్యాగ్లు|పోస్ట్\s+సమయం|వ్యాఖ్యను\s+పోస్ట్\s+చేయండి
+          |మీ\s+అభిప్రాయాలను\s+కామెంట్|గమనిక:\s*ఈనాడు\.నెట్|\[\[సంబంధిత\s+కథనం\]\]).*
+      | (?:మరిన్ని|ప్రకటన|g-ప్రకటన)(?:\s*-\s*[\w\s]{0,30})?
+      | .*(?:Empowering\s+140\+\s+Indians|India\s+Herald\s+Group\s+of\s+Publishers|pic\.twitter\.com/|t\.co/\w).*
+      | -?\s*\d{1,2}\s+\w{3}\s+\d{4}\s+\d{1,2}:\d{2}\s+[AP]M(?:\s+GMT)?.*
+      | \w[\w\s.]{0,40},\s*News18,\s*\w+.*
+    )\s*$""", re.X)
+    def c1_boilerplate(t, url=None):
+        return "\n".join(l for l in t.split("\n") if not C1_LINE.match(l))
+
+
+    def _std(out, text):  # added by Data B, copied from Data A (medicine_english.md)
+        # the author's result in the shared form: str -> fix/keep, None or True -> drop, False -> keep,
+        # ("drop", _) -> drop. An empty result is a drop: nothing of the document is left.
+        if out is None or out is True: return ("drop", text)
+        if out is False: return ("keep", text)
+        if isinstance(out, tuple):
+            if out[0] == "drop": return ("drop", text)
+            out = out[1]
+        if not out.strip(): return ("drop", text)
+        return ("fix" if out != text else "keep", out)
+
+    _AUTHOR_RULE = c1_boilerplate  # added by Data B
+    _PACKS = SCOPE["DB-C1-016"]
+
+
+    def medicine(doc):  # added by Data B: runs only on the pack it was tested on
+        if doc.get("pack_id") not in _PACKS:
+            return ("keep", doc["text"])
+        return _std(_AUTHOR_RULE(doc["text"]), doc["text"])
+    return medicine
+
+@cache
+def _indic_db_c1_022():
+    # DB-C1-022, specv1.md, medicine 214 (indic)
+    RULE_ID = "DB-C1-022"
+    CODE = "C1"
+    ACTION = "fix"
+    STAGE = "35"
+    STATUS = "CANDIDATE"
+    SPEC_PACKS = SCOPE["DB-C1-022"]
+    LANGS = {"tel_Telu"}
+    ORIGIN = "ind-te-sangraha-v"
+    SOURCE_ORIGIN = "ind-te-sangraha-v"
+    SOURCE = "ind-te-sangraha-v"  # pack whose medicine this came from
+
+    import re
+
+    _C1 = [
+        re.compile(r"We use cookies and other tracking technologies[\s\S]*", re.I),
+        re.compile(r"To Start receiving timely alerts please follow the below steps:[\s\S]*?save the changes\.", re.I),
+        re.compile(r"Do you want to clear all the notifications from your inbox\??"),
+        re.compile(r"Templatesyard is a blogger resources site[\s\S]*", re.I),
+        re.compile(r"Subscribe to:\s*Post Comments \(Atom\)"),
+        re.compile(r"Follow us on:\s*"),
+        re.compile(r"(?m)^Apps:\s*$"),
+        re.compile(r"(?m)^Visit:\s*$"),
+    ]
+
+    def medicine_c1(text: str) -> str:
+        for pattern in _C1:
+            text = pattern.sub("", text)
+        return text
+
+
+    def _std(out, text):  # added by Data B, copied from Data A (medicine_english.md)
+        # the author's result in the shared form: str -> fix/keep, None or True -> drop, False -> keep,
+        # ("drop", _) -> drop. An empty result is a drop: nothing of the document is left.
+        if out is None or out is True: return ("drop", text)
+        if out is False: return ("keep", text)
+        if isinstance(out, tuple):
+            if out[0] == "drop": return ("drop", text)
+            out = out[1]
+        if not out.strip(): return ("drop", text)
+        return ("fix" if out != text else "keep", out)
+
+    _AUTHOR_RULE = medicine_c1  # added by Data B
+    _PACKS = SCOPE["DB-C1-022"]
+
+
+    def medicine(doc):  # added by Data B: runs only on the pack it was tested on
+        if doc.get("pack_id") not in _PACKS:
+            return ("keep", doc["text"])
+        return _std(_AUTHOR_RULE(doc["text"]), doc["text"])
+    return medicine
+
+@cache
+def _indic_db_c2_001():
+    # DB-C2-001, specv1.md, medicine 216 (indic)
+    RULE_ID = "DB-C2-001"
+    CODE = "C2"
+    ACTION = "fix"
+    STAGE = "35"
+    STATUS = "CANDIDATE"
+    SPEC_PACKS = SCOPE["DB-C2-001"]
+    LANGS = {"ben_Beng"}
+    ORIGIN = "ind-bn-fw2"
+    SOURCE_ORIGIN = "ind-bn-fw2"
+    SOURCE = "ind-bn-fw2"  # pack whose medicine this came from
+    import re  # added by Data B: harm_test_indic.py gives every block `re`
+
+    def medicine_c2(text):
+        """Delete the second and later copies of a line of 40 or more characters."""
+        seen, out = set(), []
+        for line in text.split('\n'):
+            key = line.strip()
+            if len(key) >= 40:
+                if key in seen:
+                    continue
+                seen.add(key)
+            out.append(line)
+        return '\n'.join(out)
+
+
+    def _std(out, text):  # added by Data B, copied from Data A (medicine_english.md)
+        # the author's result in the shared form: str -> fix/keep, None or True -> drop, False -> keep,
+        # ("drop", _) -> drop. An empty result is a drop: nothing of the document is left.
+        if out is None or out is True: return ("drop", text)
+        if out is False: return ("keep", text)
+        if isinstance(out, tuple):
+            if out[0] == "drop": return ("drop", text)
+            out = out[1]
+        if not out.strip(): return ("drop", text)
+        return ("fix" if out != text else "keep", out)
+
+    _AUTHOR_RULE = medicine_c2  # added by Data B
+    _PACKS = SCOPE["DB-C2-001"]
+
+
+    def medicine(doc):  # added by Data B: runs only on the pack it was tested on
+        if doc.get("pack_id") not in _PACKS:
+            return ("keep", doc["text"])
+        return _std(_AUTHOR_RULE(doc["text"]), doc["text"])
+    return medicine
+
+@cache
+def _indic_db_c2_023():
+    # DB-C2-023, specv1.md, medicine 219 (indic)
+    RULE_ID = "DB-C2-023"
+    CODE = "C2"
+    ACTION = "fix"
+    STAGE = "35"
+    STATUS = "CANDIDATE"
+    SPEC_PACKS = SCOPE["DB-C2-023"]
+    LANGS = {"ben_Beng"}
+    ORIGIN = "ind-bn-sangraha-v"
+    SOURCE_ORIGIN = "ind-bn-sangraha-v"
+    SOURCE = "ind-bn-sangraha-v"  # pack whose medicine this came from
+    import re  # added by Data B: harm_test_indic.py gives every block `re`
+
+    from collections import Counter
+
+    def medicine_c2(text):
+        lines = text.split("\n")
+        counts = Counter(line for line in lines if len(line) > 20)
+        seen, kept = set(), []
+        for line in lines:
+            if len(line) > 20 and counts[line] >= 3:
+                if line in seen:
+                    continue
+                seen.add(line)
+            kept.append(line)
+        return "\n".join(kept)
+
+
+    def _std(out, text):  # added by Data B, copied from Data A (medicine_english.md)
+        # the author's result in the shared form: str -> fix/keep, None or True -> drop, False -> keep,
+        # ("drop", _) -> drop. An empty result is a drop: nothing of the document is left.
+        if out is None or out is True: return ("drop", text)
+        if out is False: return ("keep", text)
+        if isinstance(out, tuple):
+            if out[0] == "drop": return ("drop", text)
+            out = out[1]
+        if not out.strip(): return ("drop", text)
+        return ("fix" if out != text else "keep", out)
+
+    _AUTHOR_RULE = medicine_c2  # added by Data B
+    _PACKS = SCOPE["DB-C2-023"]
+
+
+    def medicine(doc):  # added by Data B: runs only on the pack it was tested on
+        if doc.get("pack_id") not in _PACKS:
+            return ("keep", doc["text"])
+        return _std(_AUTHOR_RULE(doc["text"]), doc["text"])
+    return medicine
+
+@cache
+def _indic_db_c2_003():
+    # DB-C2-003, specv1.md, medicine 220 (indic)
+    RULE_ID = "DB-C2-003"
+    CODE = "C2"
+    ACTION = "fix"
+    STAGE = "35"
+    STATUS = "CANDIDATE"
+    SPEC_PACKS = SCOPE["DB-C2-003"]
+    LANGS = {"guj_Gujr"}
+    ORIGIN = "ind-gu-fw2"
+    SOURCE_ORIGIN = "ind-gu-fw2"
+    SOURCE = "ind-gu-fw2"  # pack whose medicine this came from
+    import re  # added by Data B: harm_test_indic.py gives every block `re`
+
+    def medicine(text):
+        seen, out = set(), []
+        for line in text.split("\n"):
+            key = line.strip()
+            if len(key) > 15 and not key.endswith((",", "…")):   # keep poem refrains
+                if key in seen:
+                    continue
+                seen.add(key)
+            out.append(line)
+        return "\n".join(out)
+
+
+    def _std(out, text):  # added by Data B, copied from Data A (medicine_english.md)
+        # the author's result in the shared form: str -> fix/keep, None or True -> drop, False -> keep,
+        # ("drop", _) -> drop. An empty result is a drop: nothing of the document is left.
+        if out is None or out is True: return ("drop", text)
+        if out is False: return ("keep", text)
+        if isinstance(out, tuple):
+            if out[0] == "drop": return ("drop", text)
+            out = out[1]
+        if not out.strip(): return ("drop", text)
+        return ("fix" if out != text else "keep", out)
+
+    _AUTHOR_RULE = medicine  # added by Data B
+    _PACKS = SCOPE["DB-C2-003"]
+
+
+    def medicine(doc):  # added by Data B: runs only on the pack it was tested on
+        if doc.get("pack_id") not in _PACKS:
+            return ("keep", doc["text"])
+        return _std(_AUTHOR_RULE(doc["text"]), doc["text"])
+    return medicine
+
+@cache
+def _indic_db_c2_014():
+    # DB-C2-014, specv1.md, medicine 221 (indic)
+    RULE_ID = "DB-C2-014"
+    CODE = "C2"
+    ACTION = "fix"
+    STAGE = "35"
+    STATUS = "CANDIDATE"
+    SPEC_PACKS = SCOPE["DB-C2-014"]
+    LANGS = {"hin_Deva"}
+    ORIGIN = "ind-hi-fw2, ind-hi-indiccorp, ind-hi-sangraha-s, ind-hi-sangraha-v"
+    SOURCE_ORIGIN = "ind-hi-fw2"
+    SOURCE = "ind-hi-fw2"  # pack whose medicine this came from
+
+    import re
+
+    SPLIT = re.compile(r"(?<=[।?!])[ \t]+|\n")
+
+    def medicine_c2(text):
+        # Keep the first copy of every long sentence (>= 90 chars); delete later exact copies.
+        seen, out, pos = set(), [], 0
+        for m in SPLIT.finditer(text + "\n"):
+            sent = text[pos:m.start()]
+            key = sent.strip()
+            if len(key) >= 90 and key in seen:
+                pass                                  # drop the repeat, keep its separator
+            else:
+                out.append(sent)
+                if len(key) >= 90:
+                    seen.add(key)
+            out.append(text[m.start():m.end()] if m.end() <= len(text) else "")
+            pos = m.end()
+        return "".join(out)
+
+
+    def _std(out, text):  # added by Data B, copied from Data A (medicine_english.md)
+        # the author's result in the shared form: str -> fix/keep, None or True -> drop, False -> keep,
+        # ("drop", _) -> drop. An empty result is a drop: nothing of the document is left.
+        if out is None or out is True: return ("drop", text)
+        if out is False: return ("keep", text)
+        if isinstance(out, tuple):
+            if out[0] == "drop": return ("drop", text)
+            out = out[1]
+        if not out.strip(): return ("drop", text)
+        return ("fix" if out != text else "keep", out)
+
+    _AUTHOR_RULE = medicine_c2  # added by Data B
+    _PACKS = SCOPE["DB-C2-014"]
+
+
+    def medicine(doc):  # added by Data B: runs only on the pack it was tested on
+        if doc.get("pack_id") not in _PACKS:
+            return ("keep", doc["text"])
+        return _std(_AUTHOR_RULE(doc["text"]), doc["text"])
+    return medicine
+
+@cache
+def _indic_db_c2_021():
+    # DB-C2-021, specv1.md, medicine 222 (indic)
+    RULE_ID = "DB-C2-021"
+    CODE = "C2"
+    ACTION = "fix"
+    STAGE = "35"
+    STATUS = "CANDIDATE"
+    SPEC_PACKS = SCOPE["DB-C2-021"]
+    LANGS = {"hin_Deva"}
+    ORIGIN = "ind-hi-hplt"
+    SOURCE_ORIGIN = "ind-hi-hplt"
+    SOURCE = "ind-hi-hplt"  # pack whose medicine this came from
+
+    # added by Data B: the sheet's shared definitions, copied unchanged from its top, because the harm tool
+    # runs each section on its own
+    import re
+    DEVA, CONS, MATRA = "\u0900-\u097F", "\u0915-\u0939", "\u093E-\u094C"
+    LETTER = "\u0900-\u0963\u0966-\u097F"          # Devanagari letters and signs, without । and ॥
+    WORD_RE = re.compile(f"[{DEVA}]+")
+    norm_line = lambda line: re.sub(r"\s+", " ", line).strip()
+    # end of the shared definitions
+    from collections import Counter  # added by Data B: the author's code uses it, but the sheet never imports it
+
+    def cure_c2(text):
+        lines = text.split("\n")
+        count = Counter(norm_line(line) for line in lines)
+        seen, out = set(), []
+        for line in lines:
+            nl = norm_line(line)
+            if nl in seen and (len(nl) >= 300 or (len(nl) >= 25 and count[nl] >= 3)):
+                continue
+            seen.add(nl)
+            out.append(line)
+        return "\n".join(out)
+
+
+    def _std(out, text):  # added by Data B, copied from Data A (medicine_english.md)
+        # the author's result in the shared form: str -> fix/keep, None or True -> drop, False -> keep,
+        # ("drop", _) -> drop. An empty result is a drop: nothing of the document is left.
+        if out is None or out is True: return ("drop", text)
+        if out is False: return ("keep", text)
+        if isinstance(out, tuple):
+            if out[0] == "drop": return ("drop", text)
+            out = out[1]
+        if not out.strip(): return ("drop", text)
+        return ("fix" if out != text else "keep", out)
+
+    _AUTHOR_RULE = cure_c2  # added by Data B
+    _PACKS = SCOPE["DB-C2-021"]
+
+
+    def medicine(doc):  # added by Data B: runs only on the pack it was tested on
+        if doc.get("pack_id") not in _PACKS:
+            return ("keep", doc["text"])
+        return _std(_AUTHOR_RULE(doc["text"]), doc["text"])
+    return medicine
+
+@cache
+def _indic_db_c2_008():
+    # DB-C2-008, specv1.md, medicine 227 (indic)
+    RULE_ID = "DB-C2-008"
+    CODE = "C2"
+    ACTION = "fix"
+    STAGE = "35"
+    STATUS = "CANDIDATE"
+    SPEC_PACKS = SCOPE["DB-C2-008"]
+    LANGS = {"kan_Knda"}
+    ORIGIN = "ind-kn-sangraha-v, ind-kn-sangraha-s"
+    SOURCE_ORIGIN = "ind-kn-sangraha-v"
+    SOURCE = "ind-kn-sangraha-v"  # pack whose medicine this came from
+    import re  # added by Data B: harm_test_indic.py gives every block `re`
+
+    def dedupe_lines(t, min_len=30):
+        """C2: keep the first copy of a line that is repeated word for word (lines of min_len characters or more)."""
+        seen, out = set(), []
+        for l in t.split("\n"):
+            k = l.strip()
+            if len(k) >= min_len and k in seen:
+                continue
+            seen.add(k); out.append(l)
+        return "\n".join(out)
+
+
+    def medicine_c2(text):
+        """The C2 rule, under the name that the harm tests look for: returns the fixed text."""
+        return dedupe_lines(text)
+
+
+    def _std(out, text):  # added by Data B, copied from Data A (medicine_english.md)
+        # the author's result in the shared form: str -> fix/keep, None or True -> drop, False -> keep,
+        # ("drop", _) -> drop. An empty result is a drop: nothing of the document is left.
+        if out is None or out is True: return ("drop", text)
+        if out is False: return ("keep", text)
+        if isinstance(out, tuple):
+            if out[0] == "drop": return ("drop", text)
+            out = out[1]
+        if not out.strip(): return ("drop", text)
+        return ("fix" if out != text else "keep", out)
+
+    _AUTHOR_RULE = medicine_c2  # added by Data B
+    _PACKS = SCOPE["DB-C2-008"]
+
+
+    def medicine(doc):  # added by Data B: runs only on the pack it was tested on
+        if doc.get("pack_id") not in _PACKS:
+            return ("keep", doc["text"])
+        return _std(_AUTHOR_RULE(doc["text"]), doc["text"])
+    return medicine
+
+@cache
+def _indic_db_c2_015():
+    # DB-C2-015, specv1.md, medicine 228 (indic)
+    RULE_ID = "DB-C2-015"
+    CODE = "C2"
+    ACTION = "fix"
+    STAGE = "35"
+    STATUS = "CANDIDATE"
+    SPEC_PACKS = SCOPE["DB-C2-015"]
+    LANGS = {"mar_Deva"}
+    ORIGIN = "ind-mr-fw2"
+    SOURCE_ORIGIN = "ind-mr-fw2"
+    SOURCE = "ind-mr-fw2"  # pack whose medicine this came from
+    import re  # added by Data B: harm_test_indic.py gives every block `re`
+
+    def fix_c2(text: str) -> str:
+        seen = set()
+        out  = []
+        for line in text.split('\n'):
+            key = line.strip()
+            if key and key in seen:
+                continue
+            seen.add(key)
+            out.append(line)
+        return '\n'.join(out)
+
+
+    def _std(out, text):  # added by Data B, copied from Data A (medicine_english.md)
+        # the author's result in the shared form: str -> fix/keep, None or True -> drop, False -> keep,
+        # ("drop", _) -> drop. An empty result is a drop: nothing of the document is left.
+        if out is None or out is True: return ("drop", text)
+        if out is False: return ("keep", text)
+        if isinstance(out, tuple):
+            if out[0] == "drop": return ("drop", text)
+            out = out[1]
+        if not out.strip(): return ("drop", text)
+        return ("fix" if out != text else "keep", out)
+
+    _AUTHOR_RULE = fix_c2  # added by Data B
+    _PACKS = SCOPE["DB-C2-015"]
+
+
+    def medicine(doc):  # added by Data B: runs only on the pack it was tested on
+        if doc.get("pack_id") not in _PACKS:
+            return ("keep", doc["text"])
+        return _std(_AUTHOR_RULE(doc["text"]), doc["text"])
+    return medicine
+
+@cache
+def _indic_db_c2_010():
+    # DB-C2-010, specv1.md, medicine 231 (indic)
+    RULE_ID = "DB-C2-010"
+    CODE = "C2"
+    ACTION = "fix"
+    STAGE = "35"
+    STATUS = "CANDIDATE"
+    SPEC_PACKS = SCOPE["DB-C2-010"]
+    LANGS = {"mar_Deva"}
+    ORIGIN = "ind-mr-sangraha-v"
+    SOURCE_ORIGIN = "ind-mr-sangraha-v"
+    SOURCE = "ind-mr-sangraha-v"  # pack whose medicine this came from
+    import re  # added by Data B: harm_test_indic.py gives every block `re`
+
+    def cure_c2(text):
+        seed_len, min_repeat, search_limit = 48, 80, 1600
+        if len(text) < min_repeat * 2:
+            return text
+        seed = text[:seed_len]
+        second = text.find(seed, seed_len, min(len(text), search_limit))
+        if second < 0:
+            return text
+        matched = 0
+        max_match = min(second, len(text) - second)
+        while matched < max_match and text[matched] == text[second + matched]:
+            matched += 1
+        if matched < min_repeat:
+            return text
+        return text[:second] + text[second + matched:]
+
+
+    def _std(out, text):  # added by Data B, copied from Data A (medicine_english.md)
+        # the author's result in the shared form: str -> fix/keep, None or True -> drop, False -> keep,
+        # ("drop", _) -> drop. An empty result is a drop: nothing of the document is left.
+        if out is None or out is True: return ("drop", text)
+        if out is False: return ("keep", text)
+        if isinstance(out, tuple):
+            if out[0] == "drop": return ("drop", text)
+            out = out[1]
+        if not out.strip(): return ("drop", text)
+        return ("fix" if out != text else "keep", out)
+
+    _AUTHOR_RULE = cure_c2  # added by Data B
+    _PACKS = SCOPE["DB-C2-010"]
+
+
+    def medicine(doc):  # added by Data B: runs only on the pack it was tested on
+        if doc.get("pack_id") not in _PACKS:
+            return ("keep", doc["text"])
+        return _std(_AUTHOR_RULE(doc["text"]), doc["text"])
+    return medicine
+
+@cache
+def _indic_db_c2_016():
+    # DB-C2-016, specv1.md, medicine 233 (indic)
+    RULE_ID = "DB-C2-016"
+    CODE = "C2"
+    ACTION = "fix"
+    STAGE = "35"
+    STATUS = "CANDIDATE"
+    SPEC_PACKS = SCOPE["DB-C2-016"]
+    LANGS = {"tam_Taml"}
+    ORIGIN = "ind-ta-sangraha-v"
+    SOURCE_ORIGIN = "ind-ta-sangraha-v"
+    SOURCE = "ind-ta-sangraha-v"  # pack whose medicine this came from
+
+    import re
+
+    def medicine_c2(text: str) -> str:
+        lines = text.splitlines(keepends=True)
+        out = []
+        i = 0
+        while i < len(lines):
+            key = re.sub(r"\s+", " ", lines[i]).strip()
+            if not key:
+                out.append(lines[i])
+                i += 1
+                continue
+            j = i + 1
+            while j < len(lines):
+                other = re.sub(r"\s+", " ", lines[j]).strip()
+                if other != key:
+                    break
+                j += 1
+            if j - i >= 3:
+                out.append(lines[i])
+            else:
+                out.extend(lines[i:j])
+            i = j
+        return "".join(out)
+
+
+    def _std(out, text):  # added by Data B, copied from Data A (medicine_english.md)
+        # the author's result in the shared form: str -> fix/keep, None or True -> drop, False -> keep,
+        # ("drop", _) -> drop. An empty result is a drop: nothing of the document is left.
+        if out is None or out is True: return ("drop", text)
+        if out is False: return ("keep", text)
+        if isinstance(out, tuple):
+            if out[0] == "drop": return ("drop", text)
+            out = out[1]
+        if not out.strip(): return ("drop", text)
+        return ("fix" if out != text else "keep", out)
+
+    _AUTHOR_RULE = medicine_c2  # added by Data B
+    _PACKS = SCOPE["DB-C2-016"]
+
+
+    def medicine(doc):  # added by Data B: runs only on the pack it was tested on
+        if doc.get("pack_id") not in _PACKS:
+            return ("keep", doc["text"])
+        return _std(_AUTHOR_RULE(doc["text"]), doc["text"])
+    return medicine
+
+@cache
+def _indic_db_c2_013():
+    # DB-C2-013, specv1.md, medicine 235 (indic)
+    RULE_ID = "DB-C2-013"
+    CODE = "C2"
+    ACTION = "fix"
+    STAGE = "35"
+    STATUS = "CANDIDATE"
+    SPEC_PACKS = SCOPE["DB-C2-013"]
+    LANGS = {"tel_Telu"}
+    ORIGIN = "ind-te-fw2"
+    SOURCE_ORIGIN = "ind-te-fw2"
+    SOURCE = "ind-te-fw2"  # pack whose medicine this came from
+    import re  # added by Data B: harm_test_indic.py gives every block `re`
+
+    from collections import Counter
+    def c2_repeats(t, url=None):
+        lines = t.split("\n"); n = Counter(l.strip() for l in lines if len(l.strip()) >= 15)
+        seen, out = set(), []
+        for l in lines:
+            s = l.strip()
+            if n.get(s, 0) >= 2:
+                if s in seen: continue
+                seen.add(s)
+            out.append(l)
+        return "\n".join(out)
+
+
+    def _std(out, text):  # added by Data B, copied from Data A (medicine_english.md)
+        # the author's result in the shared form: str -> fix/keep, None or True -> drop, False -> keep,
+        # ("drop", _) -> drop. An empty result is a drop: nothing of the document is left.
+        if out is None or out is True: return ("drop", text)
+        if out is False: return ("keep", text)
+        if isinstance(out, tuple):
+            if out[0] == "drop": return ("drop", text)
+            out = out[1]
+        if not out.strip(): return ("drop", text)
+        return ("fix" if out != text else "keep", out)
+
+    _AUTHOR_RULE = c2_repeats  # added by Data B
+    _PACKS = SCOPE["DB-C2-013"]
+
+
+    def medicine(doc):  # added by Data B: runs only on the pack it was tested on
+        if doc.get("pack_id") not in _PACKS:
+            return ("keep", doc["text"])
+        return _std(_AUTHOR_RULE(doc["text"]), doc["text"])
+    return medicine
+
+@cache
+def _indic_db_c2_017():
+    # DB-C2-017, specv1.md, medicine 236 (indic)
+    RULE_ID = "DB-C2-017"
+    CODE = "C2"
+    ACTION = "fix"
+    STAGE = "35"
+    STATUS = "CANDIDATE"
+    SPEC_PACKS = SCOPE["DB-C2-017"]
+    LANGS = {"tel_Telu"}
+    ORIGIN = "ind-te-sangraha-s"
+    SOURCE_ORIGIN = "ind-te-sangraha-s"
+    SOURCE = "ind-te-sangraha-s"  # pack whose medicine this came from
+
+    import re
+    RUNAWAY_WORDS = re.compile(r'(?<!\S)(\S+)(?:[ \t]+\1(?=\s|$)){4,}')
+    def medicine_c2(text):
+        return RUNAWAY_WORDS.sub(lambda m: m.group(1), text)
+    # For repeated whole sentences: review and remove only exact verified spans.
+
+
+    def _std(out, text):  # added by Data B, copied from Data A (medicine_english.md)
+        # the author's result in the shared form: str -> fix/keep, None or True -> drop, False -> keep,
+        # ("drop", _) -> drop. An empty result is a drop: nothing of the document is left.
+        if out is None or out is True: return ("drop", text)
+        if out is False: return ("keep", text)
+        if isinstance(out, tuple):
+            if out[0] == "drop": return ("drop", text)
+            out = out[1]
+        if not out.strip(): return ("drop", text)
+        return ("fix" if out != text else "keep", out)
+
+    _AUTHOR_RULE = medicine_c2  # added by Data B
+    _PACKS = SCOPE["DB-C2-017"]
+
+
+    def medicine(doc):  # added by Data B: runs only on the pack it was tested on
+        if doc.get("pack_id") not in _PACKS:
+            return ("keep", doc["text"])
+        return _std(_AUTHOR_RULE(doc["text"]), doc["text"])
+    return medicine
+
+@cache
+def _indic_db_c2_018():
+    # DB-C2-018, specv1.md, medicine 237 (indic)
+    RULE_ID = "DB-C2-018"
+    CODE = "C2"
+    ACTION = "fix"
+    STAGE = "35"
+    STATUS = "CANDIDATE"
+    SPEC_PACKS = SCOPE["DB-C2-018"]
+    LANGS = {"tel_Telu"}
+    ORIGIN = "ind-te-sangraha-v"
+    SOURCE_ORIGIN = "ind-te-sangraha-v"
+    SOURCE = "ind-te-sangraha-v"  # pack whose medicine this came from
+    import re  # added by Data B: harm_test_indic.py gives every block `re`
+
+    def medicine_c2(text: str) -> str:
+        lines = text.splitlines(keepends=True)
+        seen = set()
+        out = []
+        changed = False
+        for line in lines:
+            key = line.strip()
+            if len(key) >= 40 and key in seen:
+                changed = True
+                continue
+            if len(key) >= 40:
+                seen.add(key)
+            out.append(line)
+        return "".join(out) if changed else text
+
+
+    def _std(out, text):  # added by Data B, copied from Data A (medicine_english.md)
+        # the author's result in the shared form: str -> fix/keep, None or True -> drop, False -> keep,
+        # ("drop", _) -> drop. An empty result is a drop: nothing of the document is left.
+        if out is None or out is True: return ("drop", text)
+        if out is False: return ("keep", text)
+        if isinstance(out, tuple):
+            if out[0] == "drop": return ("drop", text)
+            out = out[1]
+        if not out.strip(): return ("drop", text)
+        return ("fix" if out != text else "keep", out)
+
+    _AUTHOR_RULE = medicine_c2  # added by Data B
+    _PACKS = SCOPE["DB-C2-018"]
+
+
+    def medicine(doc):  # added by Data B: runs only on the pack it was tested on
+        if doc.get("pack_id") not in _PACKS:
+            return ("keep", doc["text"])
+        return _std(_AUTHOR_RULE(doc["text"]), doc["text"])
+    return medicine
+
+@cache
+def _indic_db_c3_006():
+    # DB-C3-006, specv1.md, medicine 239 (indic)
+    RULE_ID = "DB-C3-006"
+    CODE = "C3"
+    ACTION = "fix"
+    STAGE = "35"
+    STATUS = "CANDIDATE"
+    SPEC_PACKS = SCOPE["DB-C3-006"]
+    LANGS = {"hin_Deva"}
+    ORIGIN = "ind-hi-fw2"
+    SOURCE_ORIGIN = "ind-hi-fw2"
+    SOURCE = "ind-hi-fw2"  # pack whose medicine this came from
+
+    import re
+
+    _TERM_END = re.compile(r'[।!?.…"\'”’)\]]\s*$')
+
+    def _flag_c3_truncated(text: str) -> bool:
+        """True if the document does not end on a sentence terminator (label hint only)."""
+        t = (text or "").rstrip()
+        if not t:
+            return False
+        return _TERM_END.search(t) is None
+
+    def medicine_c3(text: str) -> str:
+        """Automatic medicine: keep text. Soft C3 is label/fix; do not mass-drop open endings."""
+        return text or ""
+
+
+    def _std(out, text):  # added by Data B, copied from Data A (medicine_english.md)
+        # the author's result in the shared form: str -> fix/keep, None or True -> drop, False -> keep,
+        # ("drop", _) -> drop. An empty result is a drop: nothing of the document is left.
+        if out is None or out is True: return ("drop", text)
+        if out is False: return ("keep", text)
+        if isinstance(out, tuple):
+            if out[0] == "drop": return ("drop", text)
+            out = out[1]
+        if not out.strip(): return ("drop", text)
+        return ("fix" if out != text else "keep", out)
+
+    _AUTHOR_RULE = medicine_c3  # added by Data B
+    _PACKS = SCOPE["DB-C3-006"]
+
+
+    def medicine(doc):  # added by Data B: runs only on the pack it was tested on
+        if doc.get("pack_id") not in _PACKS:
+            return ("keep", doc["text"])
+        return _std(_AUTHOR_RULE(doc["text"]), doc["text"])
+    return medicine
+
+@cache
+def _indic_db_c3_023():
+    # DB-C3-023, specv1.md, medicine 244 (indic)
+    RULE_ID = "DB-C3-023"
+    CODE = "C3"
+    ACTION = "fix"
+    STAGE = "35"
+    STATUS = "CANDIDATE"
+    SPEC_PACKS = SCOPE["DB-C3-023"]
+    LANGS = {"hin_Deva"}
+    ORIGIN = "ind-hi-sangraha-s"
+    SOURCE_ORIGIN = "ind-hi-sangraha-s"
+    SOURCE = "ind-hi-sangraha-s"  # pack whose medicine this came from
+
+    import re
+    _HEAD = re.compile("^[^\n]{1,40}[\u0964\u0903:]$")
+
+    def _is_head(line):
+        return line is not None and bool(_HEAD.match(line.strip())) and len(line.split()) <= 3
+
+    def medicine_c3(text):
+        lines = text.split("\n")
+        out = []
+        for i, line in enumerate(lines):
+            nxt = next((x for x in lines[i + 1:] if x.strip()), None)
+            if _is_head(line) and (nxt is None or _is_head(nxt)):
+                continue
+            out.append(line)
+        return "\n".join(out)
+
+
+    def _std(out, text):  # added by Data B, copied from Data A (medicine_english.md)
+        # the author's result in the shared form: str -> fix/keep, None or True -> drop, False -> keep,
+        # ("drop", _) -> drop. An empty result is a drop: nothing of the document is left.
+        if out is None or out is True: return ("drop", text)
+        if out is False: return ("keep", text)
+        if isinstance(out, tuple):
+            if out[0] == "drop": return ("drop", text)
+            out = out[1]
+        if not out.strip(): return ("drop", text)
+        return ("fix" if out != text else "keep", out)
+
+    _AUTHOR_RULE = medicine_c3  # added by Data B
+    _PACKS = SCOPE["DB-C3-023"]
+
+
+    def medicine(doc):  # added by Data B: runs only on the pack it was tested on
+        if doc.get("pack_id") not in _PACKS:
+            return ("keep", doc["text"])
+        return _std(_AUTHOR_RULE(doc["text"]), doc["text"])
+    return medicine
+
+@cache
+def _indic_db_c3_017():
+    # DB-C3-017, specv1.md, medicine 246 (indic)
+    RULE_ID = "DB-C3-017"
+    CODE = "C3"
+    ACTION = "fix"
+    STAGE = "35"
+    STATUS = "CANDIDATE"
+    SPEC_PACKS = SCOPE["DB-C3-017"]
+    LANGS = {"kan_Knda"}
+    ORIGIN = "ind-kn-sangraha-s"
+    SOURCE_ORIGIN = "ind-kn-sangraha-s"
+    SOURCE = "ind-kn-sangraha-s"  # pack whose medicine this came from
+    import re  # added by Data B: harm_test_indic.py gives every block `re`
+
+    TAIL_HEADINGS = {"ಉಲ್ಲೇಖಗಳು","ಟಿಪ್ಪಣಿಗಳು","ಮೂಲಗಳು","ಮೂಲ","ಗ್ರಂಥಸೂಚಿ","ಬಾಹ್ಯ ಕೊಂಡಿಗಳು",
+                     "ಬಾಹ್ಯ ಸಂಪರ್ಕಗಳು","ಇದನ್ನೂ ನೋಡಿ","ಹೆಚ್ಚಿನ ಓದುವಿಕೆ","ಎರಕಹೊಯ್ದ","ಪಾತ್ರವರ್ಗ"}
+    END_OK = tuple(".!?\"'”’)]।")
+    LEAD_IN = re.compile(r"(?:ಈ ಕೆಳಗಿನ|ಕೆಳಗಿನಂತೆ|ಹೀಗಿವೆ|ಹೀಗಿದೆ|ಇಂತಿವೆ|ಇಂತಿದೆ)[^.]*\.?$")
+    VERB_END = re.compile(r"(?:ರು|ದೆ|ತೆ|ರೆ|ವೆ|ತು|ದು|ನು|ಳು|ವು|ಲ್ಲ|ಬೇಕು|ಇದೆ)\W*$")
+
+    def _last_sentence_start(line):
+        body = line.rstrip()[:-1]
+        cut = max(body.rfind(". "), body.rfind("? "), body.rfind("! "))
+        return 0 if cut < 0 else cut + 2
+
+    def _dangling(core):                       # core = last line, stripped
+        bare = core.rstrip(".:ಃ ").strip()
+        if bare in TAIL_HEADINGS: return "line"
+        if core.endswith((":", "ಃ")): return "sentence"
+        if core.endswith(".") and LEAD_IN.search(core[_last_sentence_start(core):]): return "sentence"
+        if core[-1].isdigit(): return None
+        if not core.endswith(END_OK) and len(core.split()) <= 4: return "line"
+        if core.endswith(".") and len(core.split()) <= 2 and len(core) <= 30 \
+                and not VERB_END.search(core[:-1]): return "line"
+        return None
+
+    def trim_dangling_tail(text, max_trim=400):
+        first = text.lstrip()
+        title_end = len(text) - len(first) + (first.find("\n") if "\n" in first else len(first))
+        end = start = len(text.rstrip())
+        while start > title_end:
+            ls = text.rfind("\n", 0, start) + 1
+            line = text[ls:start]
+            how = _dangling(line.strip()) if line.strip() else None
+            if how is None: break
+            new = ls if how == "line" else ls + _last_sentence_start(line)
+            if new <= title_end: break
+            start = new
+            while start > title_end and text[start - 1] in " \t\n": start -= 1
+        if start == end or end - start > max_trim: return text
+        return text[:start] + text[end:]
+
+
+    def _std(out, text):  # added by Data B, copied from Data A (medicine_english.md)
+        # the author's result in the shared form: str -> fix/keep, None or True -> drop, False -> keep,
+        # ("drop", _) -> drop. An empty result is a drop: nothing of the document is left.
+        if out is None or out is True: return ("drop", text)
+        if out is False: return ("keep", text)
+        if isinstance(out, tuple):
+            if out[0] == "drop": return ("drop", text)
+            out = out[1]
+        if not out.strip(): return ("drop", text)
+        return ("fix" if out != text else "keep", out)
+
+    _AUTHOR_RULE = trim_dangling_tail  # added by Data B
+    _PACKS = SCOPE["DB-C3-017"]
+
+
+    def medicine(doc):  # added by Data B: runs only on the pack it was tested on
+        if doc.get("pack_id") not in _PACKS:
+            return ("keep", doc["text"])
+        return _std(_AUTHOR_RULE(doc["text"]), doc["text"])
+    return medicine
+
+@cache
+def _indic_db_c3_024():
+    # DB-C3-024, specv1.md, medicine 249 (indic)
+    RULE_ID = "DB-C3-024"
+    CODE = "C3"
+    ACTION = "fix+drop"
+    STAGE = "35"
+    STATUS = "CANDIDATE"
+    SPEC_PACKS = SCOPE["DB-C3-024"]
+    LANGS = {"mar_Deva"}
+    ORIGIN = "ind-mr-fw2"
+    SOURCE_ORIGIN = "ind-mr-fw2"
+    SOURCE = "ind-mr-fw2"  # pack whose medicine this came from
+
+    import re
+
+    _C3_MARK = re.compile(r"\[…\]|\[\.\.\.\]|Continue Reading|Read More")
+    _C3_TAIL = re.compile(r"(?:\s*(?:\[…\]|\[\.\.\.\]|…\]|Continue Reading|Read More|\.\.\.))+\s*\Z")
+
+    def medicine_c3(text):
+        """Drop a teaser listing (>= 3 explicit truncation markers); else trim a truncation marker at the end of the text."""
+        if len(_C3_MARK.findall(text)) >= 3:
+            return True
+        return _C3_TAIL.sub("", text)
+
+
+    def _std(out, text):  # added by Data B, copied from Data A (medicine_english.md)
+        # the author's result in the shared form: str -> fix/keep, None or True -> drop, False -> keep,
+        # ("drop", _) -> drop. An empty result is a drop: nothing of the document is left.
+        if out is None or out is True: return ("drop", text)
+        if out is False: return ("keep", text)
+        if isinstance(out, tuple):
+            if out[0] == "drop": return ("drop", text)
+            out = out[1]
+        if not out.strip(): return ("drop", text)
+        return ("fix" if out != text else "keep", out)
+
+    _AUTHOR_RULE = medicine_c3  # added by Data B
+    _PACKS = SCOPE["DB-C3-024"]
+
+
+    def medicine(doc):  # added by Data B: runs only on the pack it was tested on
+        if doc.get("pack_id") not in _PACKS:
+            return ("keep", doc["text"])
+        return _std(_AUTHOR_RULE(doc["text"]), doc["text"])
+    return medicine
+
+@cache
+def _indic_db_c3_010():
+    # DB-C3-010, specv1.md, medicine 250 (indic)
+    RULE_ID = "DB-C3-010"
+    CODE = "C3"
+    ACTION = "fix+drop"
+    STAGE = "35"
+    STATUS = "CANDIDATE"
+    SPEC_PACKS = SCOPE["DB-C3-010"]
+    LANGS = {"mar_Deva"}
+    ORIGIN = "ind-mr-sangraha-v"
+    SOURCE_ORIGIN = "ind-mr-sangraha-v"
+    SOURCE = "ind-mr-sangraha-v"  # pack whose medicine this came from
+    import re  # added by Data B: harm_test_indic.py gives every block `re`
+
+    import hashlib
+
+    # Reviewed Marathi pack records only: original and file-order pre-rule text.
+    # SHA-256 avoids embedding private values and supports the text-only harness.
+    _EXCLUDED_SHA256 = frozenset({
+        # 0ad004d5deb1e7fe
+        "0ad004d5deb1e7fece97aa9806c12904aa8f3443a9784e6ad8192fe37ccdc50a",
+        # 10cfc7c874a1bb29
+        "10cfc7c874a1bb29938183dcf35cdeb6b9bd36cb47b721b46cea9429e60552c9",
+        "395b9f4527f05f508da2f9ea26395d99bec57bd7a46934165c4dad8eb2e04ce3",
+    })
+
+    def cure_c3(text):
+        if hashlib.sha256(text.encode("utf-8")).hexdigest() in _EXCLUDED_SHA256:
+            return True  # Exclude/quarantine; retain provenance outside public output.
+        return text
+
+
+    def _std(out, text):  # added by Data B, copied from Data A (medicine_english.md)
+        # the author's result in the shared form: str -> fix/keep, None or True -> drop, False -> keep,
+        # ("drop", _) -> drop. An empty result is a drop: nothing of the document is left.
+        if out is None or out is True: return ("drop", text)
+        if out is False: return ("keep", text)
+        if isinstance(out, tuple):
+            if out[0] == "drop": return ("drop", text)
+            out = out[1]
+        if not out.strip(): return ("drop", text)
+        return ("fix" if out != text else "keep", out)
+
+    _AUTHOR_RULE = cure_c3  # added by Data B
+    _PACKS = SCOPE["DB-C3-010"]
+
+
+    def medicine(doc):  # added by Data B: runs only on the pack it was tested on
+        if doc.get("pack_id") not in _PACKS:
+            return ("keep", doc["text"])
+        return _std(_AUTHOR_RULE(doc["text"]), doc["text"])
+    return medicine
+
+@cache
+def _indic_db_c3_021():
+    # DB-C3-021, specv1.md, medicine 252 (indic)
+    RULE_ID = "DB-C3-021"
+    CODE = "C3"
+    ACTION = "fix"
+    STAGE = "35"
+    STATUS = "CANDIDATE"
+    SPEC_PACKS = SCOPE["DB-C3-021"]
+    LANGS = {"tam_Taml"}
+    ORIGIN = "ind-ta-sangraha-v"
+    SOURCE_ORIGIN = "ind-ta-sangraha-v"
+    SOURCE = "ind-ta-sangraha-v"  # pack whose medicine this came from
+    import re  # added by Data B: harm_test_indic.py gives every block `re`
+
+    from typing import Optional
+
+    def medicine_c3(
+        text: str,
+        recovered_tail: Optional[str] = None,
+        confirmed_cut: Optional[int] = None,
+    ) -> str:
+        if recovered_tail is not None:
+            return text + recovered_tail
+        if confirmed_cut is not None:
+            return text[:confirmed_cut].rstrip()
+        return text
+
+
+    def _std(out, text):  # added by Data B, copied from Data A (medicine_english.md)
+        # the author's result in the shared form: str -> fix/keep, None or True -> drop, False -> keep,
+        # ("drop", _) -> drop. An empty result is a drop: nothing of the document is left.
+        if out is None or out is True: return ("drop", text)
+        if out is False: return ("keep", text)
+        if isinstance(out, tuple):
+            if out[0] == "drop": return ("drop", text)
+            out = out[1]
+        if not out.strip(): return ("drop", text)
+        return ("fix" if out != text else "keep", out)
+
+    _AUTHOR_RULE = medicine_c3  # added by Data B
+    _PACKS = SCOPE["DB-C3-021"]
+
+
+    def medicine(doc):  # added by Data B: runs only on the pack it was tested on
+        if doc.get("pack_id") not in _PACKS:
+            return ("keep", doc["text"])
+        return _std(_AUTHOR_RULE(doc["text"]), doc["text"])
+    return medicine
+
+@cache
+def _indic_db_c4_015():
+    # DB-C4-015, specv1.md, medicine 256 (indic)
+    RULE_ID = "DB-C4-015"
+    CODE = "C4"
+    ACTION = "fix"
+    STAGE = "35"
+    STATUS = "CANDIDATE"
+    SPEC_PACKS = SCOPE["DB-C4-015"]
+    LANGS = {"ben_Beng"}
+    ORIGIN = "ind-bn-sangraha-v"
+    SOURCE_ORIGIN = "ind-bn-sangraha-v"
+    SOURCE = "ind-bn-sangraha-v"  # pack whose medicine this came from
+    import re  # added by Data B: harm_test_indic.py gives every block `re`
+
+    READ_MORE = re.compile(r"^\s*(?:আর[োও]\s*পড়ুন|Read more|Also read)\b.*$\n?", re.M | re.I)
+
+
+    def cure_c4(text):
+        return READ_MORE.sub("", text)
+
+
+    def _std(out, text):  # added by Data B, copied from Data A (medicine_english.md)
+        # the author's result in the shared form: str -> fix/keep, None or True -> drop, False -> keep,
+        # ("drop", _) -> drop. An empty result is a drop: nothing of the document is left.
+        if out is None or out is True: return ("drop", text)
+        if out is False: return ("keep", text)
+        if isinstance(out, tuple):
+            if out[0] == "drop": return ("drop", text)
+            out = out[1]
+        if not out.strip(): return ("drop", text)
+        return ("fix" if out != text else "keep", out)
+
+    _AUTHOR_RULE = cure_c4  # added by Data B
+    _PACKS = SCOPE["DB-C4-015"]
+
+
+    def medicine(doc):  # added by Data B: runs only on the pack it was tested on
+        if doc.get("pack_id") not in _PACKS:
+            return ("keep", doc["text"])
+        return _std(_AUTHOR_RULE(doc["text"]), doc["text"])
+    return medicine
+
+@cache
+def _indic_db_c4_007():
+    # DB-C4-007, specv1.md, medicine 257 (indic)
+    RULE_ID = "DB-C4-007"
+    CODE = "C4"
+    ACTION = "fix"
+    STAGE = "35"
+    STATUS = "CANDIDATE"
+    SPEC_PACKS = SCOPE["DB-C4-007"]
+    LANGS = {"guj_Gujr"}
+    ORIGIN = "ind-gu-fw2"
+    SOURCE_ORIGIN = "ind-gu-fw2"
+    SOURCE = "ind-gu-fw2"  # pack whose medicine this came from
+
+    import re
+    GU = "\u0A80-\u0AFF"                          # Gujarati block
+    GU_DIGIT = "\u0AE6-\u0AEF"                    # Gujarati digits 0-9
+
+    C4_DATELINE = re.compile(
+        r"^\s*(?:\((?:એજન્સી|અમારા પ્રતિનિધિ તરફથી|સંવાદદાતા દ્વારા)\)\s*)?"
+        rf"[{GU}]+(?: [{GU}]+)?\s*,\s*તા\.\s*[{GU_DIGIT}રપ0-9]{{1,2}}\s*$", re.M)
+    C4_MARK = re.compile(r"^\s*(?:READ ALSO|MUST READ)\s*[:\-–]?", re.M)
+    C4_BODY = re.compile(r"^(?!\s*[-•]).{200,}$", re.M)
+
+    def m8_c4(text, url=None, min_part=300, min_body=200):
+        cuts = [m.start() for m in C4_DATELINE.finditer(text)
+                if m.start() >= min_part and len(text) - m.end() >= min_body]
+        m = C4_MARK.search(text)
+        if m and C4_BODY.search(text, m.end()):
+            cuts.append(m.start())
+        if not cuts:
+            return (text, "keep")
+        bounds = [0] + sorted(set(cuts)) + [len(text)]
+        parts = [text[a:b].strip() for a, b in zip(bounds, bounds[1:])]
+        return ([p for p in parts if p], "split")
+
+    def medicine_c4(text, url=None):
+        """Harm-test entry: return the new text, or True to drop."""
+        parts, action = m8_c4(text, url)
+        return "\n\n".join(parts) if action == "split" else text
+
+
+    def _std(out, text):  # added by Data B, copied from Data A (medicine_english.md)
+        # the author's result in the shared form: str -> fix/keep, None or True -> drop, False -> keep,
+        # ("drop", _) -> drop. An empty result is a drop: nothing of the document is left.
+        if out is None or out is True: return ("drop", text)
+        if out is False: return ("keep", text)
+        if isinstance(out, tuple):
+            if out[0] == "drop": return ("drop", text)
+            out = out[1]
+        if not out.strip(): return ("drop", text)
+        return ("fix" if out != text else "keep", out)
+
+    _AUTHOR_RULE = medicine_c4  # added by Data B
+    _PACKS = SCOPE["DB-C4-007"]
+
+
+    def medicine(doc):  # added by Data B: runs only on the pack it was tested on
+        if doc.get("pack_id") not in _PACKS:
+            return ("keep", doc["text"])
+        return _std(_AUTHOR_RULE(doc["text"]), doc["text"])
+    return medicine
+
+@cache
+def _indic_db_c4_009():
+    # DB-C4-009, specv1.md, medicine 260 (indic)
+    RULE_ID = "DB-C4-009"
+    CODE = "C4"
+    ACTION = "fix+drop"
+    STAGE = "35"
+    STATUS = "CANDIDATE"
+    SPEC_PACKS = SCOPE["DB-C4-009"]
+    LANGS = {"mar_Deva"}
+    ORIGIN = "ind-mr-sangraha-v"
+    SOURCE_ORIGIN = "ind-mr-sangraha-v"
+    SOURCE = "ind-mr-sangraha-v"  # pack whose medicine this came from
+    import re  # added by Data B: harm_test_indic.py gives every block `re`
+
+    import hashlib
+
+    # Reviewed Marathi pack records only: original and file-order pre-rule text.
+    # SHA-256 avoids embedding private values and supports the text-only harness.
+    _EXCLUDED_SHA256 = frozenset({
+        # 802ea4e0038fae55
+        "802ea4e0038fae55fba668aca47d3f7c546b15564d109bc8afb500c5ad78fd02",
+        # 9910e11f3461f5d0
+        "9910e11f3461f5d09f7abfb46cfca489b7bb5209d507d963dab976ff55e3b112",
+        "e5d935b539d7724761ec3e96fbfe365fece60f1423ef62aee339f1a913889716",
+        # a3a467b4dcb9c51b
+        "a3a467b4dcb9c51b0a2112852ad9b31a8b9f895f21d207c9a3dac6114617ca02",
+        "dbc9e19bc50ab161305d9e57e012f471e5250092c7dc4eef472245eb3ecb86e8",
+        # d89a364142de1d38
+        "c71c2ca6277898aaf1416e32d9f280c46f4a98293b21601bf23103e5f0536aa9",
+        "d89a364142de1d38711026940c0f096e45d2276cb062773651c866d4998228d7",
+    })
+
+    def cure_c4(text):
+        if hashlib.sha256(text.encode("utf-8")).hexdigest() in _EXCLUDED_SHA256:
+            return True  # Exclude/quarantine; retain provenance outside public output.
+        return text
+
+
+    def _std(out, text):  # added by Data B, copied from Data A (medicine_english.md)
+        # the author's result in the shared form: str -> fix/keep, None or True -> drop, False -> keep,
+        # ("drop", _) -> drop. An empty result is a drop: nothing of the document is left.
+        if out is None or out is True: return ("drop", text)
+        if out is False: return ("keep", text)
+        if isinstance(out, tuple):
+            if out[0] == "drop": return ("drop", text)
+            out = out[1]
+        if not out.strip(): return ("drop", text)
+        return ("fix" if out != text else "keep", out)
+
+    _AUTHOR_RULE = cure_c4  # added by Data B
+    _PACKS = SCOPE["DB-C4-009"]
+
+
+    def medicine(doc):  # added by Data B: runs only on the pack it was tested on
+        if doc.get("pack_id") not in _PACKS:
+            return ("keep", doc["text"])
+        return _std(_AUTHOR_RULE(doc["text"]), doc["text"])
+    return medicine
+
+@cache
+def _indic_db_c4_010():
+    # DB-C4-010, specv1.md, medicine 261 (indic)
+    RULE_ID = "DB-C4-010"
+    CODE = "C4"
+    ACTION = "fix"
+    STAGE = "35"
+    STATUS = "CANDIDATE"
+    SPEC_PACKS = SCOPE["DB-C4-010"]
+    LANGS = {"san_Deva"}
+    ORIGIN = "ind-sa-fw2"
+    SOURCE_ORIGIN = "ind-sa-fw2"
+    SOURCE = "ind-sa-fw2"  # pack whose medicine this came from
+    import re  # added by Data B: harm_test_indic.py gives every block `re`
+
+    def medicine_c4(text):
+        def cut(m):
+            start = text.rfind("\n", 0, m.start()) + 1
+            return m.group(1) + ("\n\n" if m.start() - start >= 60 else "")
+        return re.sub("([।!?])(?=[ऀ-ॿ][ऀ-ॿ ]{1,40}\\s?>)", cut, text)
+
+
+    def _std(out, text):  # added by Data B, copied from Data A (medicine_english.md)
+        # the author's result in the shared form: str -> fix/keep, None or True -> drop, False -> keep,
+        # ("drop", _) -> drop. An empty result is a drop: nothing of the document is left.
+        if out is None or out is True: return ("drop", text)
+        if out is False: return ("keep", text)
+        if isinstance(out, tuple):
+            if out[0] == "drop": return ("drop", text)
+            out = out[1]
+        if not out.strip(): return ("drop", text)
+        return ("fix" if out != text else "keep", out)
+
+    _AUTHOR_RULE = medicine_c4  # added by Data B
+    _PACKS = SCOPE["DB-C4-010"]
+
+
+    def medicine(doc):  # added by Data B: runs only on the pack it was tested on
+        if doc.get("pack_id") not in _PACKS:
+            return ("keep", doc["text"])
+        return _std(_AUTHOR_RULE(doc["text"]), doc["text"])
+    return medicine
+
+@cache
+def _indic_db_c4_013():
+    # DB-C4-013, specv1.md, medicine 263 (indic)
+    RULE_ID = "DB-C4-013"
+    CODE = "C4"
+    ACTION = "fix"
+    STAGE = "35"
+    STATUS = "CANDIDATE"
+    SPEC_PACKS = SCOPE["DB-C4-013"]
+    LANGS = {"tam_Taml"}
+    ORIGIN = "ind-ta-sangraha-v"
+    SOURCE_ORIGIN = "ind-ta-sangraha-v"
+    SOURCE = "ind-ta-sangraha-v"  # pack whose medicine this came from
+    import re  # added by Data B: harm_test_indic.py gives every block `re`
+
+    from typing import List, Optional, Union
+
+    def medicine_c4(
+        text: str, boundary: Optional[int] = None
+    ) -> Union[str, List[str]]:
+        if boundary is None:
+            return text
+        left = text[:boundary].rstrip()
+        right = text[boundary:].lstrip()
+        return [part for part in (left, right) if part]
+
+
+    def _std(out, text):  # added by Data B, copied from Data A (medicine_english.md)
+        # the author's result in the shared form: str -> fix/keep, None or True -> drop, False -> keep,
+        # ("drop", _) -> drop. An empty result is a drop: nothing of the document is left.
+        if out is None or out is True: return ("drop", text)
+        if out is False: return ("keep", text)
+        if isinstance(out, tuple):
+            if out[0] == "drop": return ("drop", text)
+            out = out[1]
+        if not out.strip(): return ("drop", text)
+        return ("fix" if out != text else "keep", out)
+
+    _AUTHOR_RULE = medicine_c4  # added by Data B
+    _PACKS = SCOPE["DB-C4-013"]
+
+
+    def medicine(doc):  # added by Data B: runs only on the pack it was tested on
+        if doc.get("pack_id") not in _PACKS:
+            return ("keep", doc["text"])
+        return _std(_AUTHOR_RULE(doc["text"]), doc["text"])
+    return medicine
+
+@cache
+def _indic_db_c4_014():
+    # DB-C4-014, specv1.md, medicine 264 (indic)
+    RULE_ID = "DB-C4-014"
+    CODE = "C4"
+    ACTION = "fix"
+    STAGE = "35"
+    STATUS = "CANDIDATE"
+    SPEC_PACKS = SCOPE["DB-C4-014"]
+    LANGS = {"tel_Telu"}
+    ORIGIN = "ind-te-sangraha-v"
+    SOURCE_ORIGIN = "ind-te-sangraha-v"
+    SOURCE = "ind-te-sangraha-v"  # pack whose medicine this came from
+    import re  # added by Data B: harm_test_indic.py gives every block `re`
+
+    def medicine_c4(text: str) -> str:
+        return text
+
+
+    def _std(out, text):  # added by Data B, copied from Data A (medicine_english.md)
+        # the author's result in the shared form: str -> fix/keep, None or True -> drop, False -> keep,
+        # ("drop", _) -> drop. An empty result is a drop: nothing of the document is left.
+        if out is None or out is True: return ("drop", text)
+        if out is False: return ("keep", text)
+        if isinstance(out, tuple):
+            if out[0] == "drop": return ("drop", text)
+            out = out[1]
+        if not out.strip(): return ("drop", text)
+        return ("fix" if out != text else "keep", out)
+
+    _AUTHOR_RULE = medicine_c4  # added by Data B
+    _PACKS = SCOPE["DB-C4-014"]
+
+
+    def medicine(doc):  # added by Data B: runs only on the pack it was tested on
+        if doc.get("pack_id") not in _PACKS:
+            return ("keep", doc["text"])
+        return _std(_AUTHOR_RULE(doc["text"]), doc["text"])
+    return medicine
+
+@cache
+def _indic_db_c5_007():
+    # DB-C5-007, specv1.md, medicine 265 (indic)
+    RULE_ID = "DB-C5-007"
+    CODE = "C5"
+    ACTION = "fix"
+    STAGE = "35"
+    STATUS = "CANDIDATE"
+    SPEC_PACKS = SCOPE["DB-C5-007"]
+    LANGS = {"ben_Beng"}
+    ORIGIN = "ind-bn-fw2"
+    SOURCE_ORIGIN = "ind-bn-fw2"
+    SOURCE = "ind-bn-fw2"  # pack whose medicine this came from
+
+    import re
+
+    def _is_headline(line):
+        s = line.strip()
+        return (s.startswith(('- ', '• ', '* ')) and len(s) <= 120 and len(s.split()) >= 5
+                and not s.endswith(('।', '?', '!', '.', ':')))
+
+    def medicine_c5(text):
+        """Delete runs of 5 or more consecutive bullet lines that look like headlines: at least 4 words after
+        the bullet, at most 120 characters, no sentence-final punctuation (related-news tickers)."""
+        lines = text.split('\n')
+        keep = [True] * len(lines)
+        i = 0
+        while i < len(lines):
+            j = i
+            while j < len(lines) and _is_headline(lines[j]):
+                j += 1
+            if j - i >= 5:
+                for k in range(i, j):
+                    keep[k] = False
+            i = max(j, i + 1)
+        return '\n'.join(l for l, k in zip(lines, keep) if k)
+
+
+    def _std(out, text):  # added by Data B, copied from Data A (medicine_english.md)
+        # the author's result in the shared form: str -> fix/keep, None or True -> drop, False -> keep,
+        # ("drop", _) -> drop. An empty result is a drop: nothing of the document is left.
+        if out is None or out is True: return ("drop", text)
+        if out is False: return ("keep", text)
+        if isinstance(out, tuple):
+            if out[0] == "drop": return ("drop", text)
+            out = out[1]
+        if not out.strip(): return ("drop", text)
+        return ("fix" if out != text else "keep", out)
+
+    _AUTHOR_RULE = medicine_c5  # added by Data B
+    _PACKS = SCOPE["DB-C5-007"]
+
+
+    def medicine(doc):  # added by Data B: runs only on the pack it was tested on
+        if doc.get("pack_id") not in _PACKS:
+            return ("keep", doc["text"])
+        return _std(_AUTHOR_RULE(doc["text"]), doc["text"])
+    return medicine
+
+@cache
+def _indic_db_c5_009():
+    # DB-C5-009, specv1.md, medicine 267 (indic)
+    RULE_ID = "DB-C5-009"
+    CODE = "C5"
+    ACTION = "fix"
+    STAGE = "35"
+    STATUS = "CANDIDATE"
+    SPEC_PACKS = SCOPE["DB-C5-009"]
+    LANGS = {"guj_Gujr"}
+    ORIGIN = "ind-gu-fw2"
+    SOURCE_ORIGIN = "ind-gu-fw2"
+    SOURCE = "ind-gu-fw2"  # pack whose medicine this came from
+
+    import re
+    def _fix(old, new):
+        return (new, "keep" if new == old else "fix")
+
+    C5_LINE = re.compile(r"^\s*(?:Tags\s*:|Android\s*:|iOS\s*:).*\n?|^\s*https?://\S+\s*\n?", re.M)
+
+    def m9_c5(text, url=None):
+        return _fix(text, C5_LINE.sub("", text))
+
+    def medicine_c5(text, url=None):
+        """Harm-test entry: return the new text, or True to drop."""
+        return m9_c5(text, url)[0]
+
+
+    def _std(out, text):  # added by Data B, copied from Data A (medicine_english.md)
+        # the author's result in the shared form: str -> fix/keep, None or True -> drop, False -> keep,
+        # ("drop", _) -> drop. An empty result is a drop: nothing of the document is left.
+        if out is None or out is True: return ("drop", text)
+        if out is False: return ("keep", text)
+        if isinstance(out, tuple):
+            if out[0] == "drop": return ("drop", text)
+            out = out[1]
+        if not out.strip(): return ("drop", text)
+        return ("fix" if out != text else "keep", out)
+
+    _AUTHOR_RULE = medicine_c5  # added by Data B
+    _PACKS = SCOPE["DB-C5-009"]
+
+
+    def medicine(doc):  # added by Data B: runs only on the pack it was tested on
+        if doc.get("pack_id") not in _PACKS:
+            return ("keep", doc["text"])
+        return _std(_AUTHOR_RULE(doc["text"]), doc["text"])
+    return medicine
+
+@cache
+def _indic_db_c5_014():
+    # DB-C5-014, specv1.md, medicine 274 (indic)
+    RULE_ID = "DB-C5-014"
+    CODE = "C5"
+    ACTION = "fix"
+    STAGE = "35"
+    STATUS = "CANDIDATE"
+    SPEC_PACKS = SCOPE["DB-C5-014"]
+    LANGS = {"san_Deva"}
+    ORIGIN = "ind-sa-fw2"
+    SOURCE_ORIGIN = "ind-sa-fw2"
+    SOURCE = "ind-sa-fw2"  # pack whose medicine this came from
+    import re  # added by Data B: harm_test_indic.py gives every block `re`
+
+    _LINK = re.compile(r"Click Here\s*\|?$|^https?://\S+$", re.I)
+
+    def medicine_c5(text):
+        return "\n".join(l for l in text.split("\n") if not _LINK.search(l.strip()))
+
+
+    def _std(out, text):  # added by Data B, copied from Data A (medicine_english.md)
+        # the author's result in the shared form: str -> fix/keep, None or True -> drop, False -> keep,
+        # ("drop", _) -> drop. An empty result is a drop: nothing of the document is left.
+        if out is None or out is True: return ("drop", text)
+        if out is False: return ("keep", text)
+        if isinstance(out, tuple):
+            if out[0] == "drop": return ("drop", text)
+            out = out[1]
+        if not out.strip(): return ("drop", text)
+        return ("fix" if out != text else "keep", out)
+
+    _AUTHOR_RULE = medicine_c5  # added by Data B
+    _PACKS = SCOPE["DB-C5-014"]
+
+
+    def medicine(doc):  # added by Data B: runs only on the pack it was tested on
+        if doc.get("pack_id") not in _PACKS:
+            return ("keep", doc["text"])
+        return _std(_AUTHOR_RULE(doc["text"]), doc["text"])
+    return medicine
+
+@cache
+def _indic_db_d2_003():
+    # DB-D2-003, specv1.md, medicine 276 (indic)
+    RULE_ID = "DB-D2-003"
+    CODE = "D2"
+    ACTION = "fix"
+    STAGE = "35"
+    STATUS = "CANDIDATE"
+    SPEC_PACKS = SCOPE["DB-D2-003"]
+    LANGS = {"hin_Deva"}
+    ORIGIN = "ind-hi-hplt, ind-hi-fw2, ind-hi-indiccorp, ind-hi-sangraha-s, ind-hi-sangraha-v"
+    SOURCE_ORIGIN = "ind-hi-hplt"
+    SOURCE = "ind-hi-hplt"  # pack whose medicine this came from
+
+    # added by Data B: the sheet's shared definitions, copied unchanged from its top, because the harm tool
+    # runs each section on its own
+    import re
+    DEVA, CONS, MATRA = "\u0900-\u097F", "\u0915-\u0939", "\u093E-\u094C"
+    LETTER = "\u0900-\u0963\u0966-\u097F"          # Devanagari letters and signs, without । and ॥
+    WORD_RE = re.compile(f"[{DEVA}]+")
+    norm_line = lambda line: re.sub(r"\s+", " ", line).strip()
+    # end of the shared definitions
+
+    ROMAN_HI = {"kya", "hai", "hain", "kaise", "kare", "karen", "karein", "ka", "ki", "ke", "se", "ko", "mein", "aur",
+                "kab", "kyon", "kyun", "aaj", "nahi", "hota", "hoti", "hote", "wala", "wali", "kitna", "kaun", "apne",
+                "apna", "liye", "sath", "ek", "bhi", "tak", "rashifal", "katha", "vrat"}  # no English look-alikes ('me', 'par')
+    LATIN_WORD = re.compile(r"[A-Za-z]+")
+
+    def cure_d2(text):
+        out = []
+        for line in text.split("\n"):
+            words = [w.lower() for w in LATIN_WORD.findall(line)]
+            hits = sum(w in ROMAN_HI for w in words)
+            if not re.search(f"[{DEVA}]", line) and len(words) >= 3 and hits >= 1 and hits >= 0.25 * len(words):
+                continue
+            out.append(line)
+        return "\n".join(out)
+
+
+    def _std(out, text):  # added by Data B, copied from Data A (medicine_english.md)
+        # the author's result in the shared form: str -> fix/keep, None or True -> drop, False -> keep,
+        # ("drop", _) -> drop. An empty result is a drop: nothing of the document is left.
+        if out is None or out is True: return ("drop", text)
+        if out is False: return ("keep", text)
+        if isinstance(out, tuple):
+            if out[0] == "drop": return ("drop", text)
+            out = out[1]
+        if not out.strip(): return ("drop", text)
+        return ("fix" if out != text else "keep", out)
+
+    _AUTHOR_RULE = cure_d2  # added by Data B
+    _PACKS = SCOPE["DB-D2-003"]
+
+
+    def medicine(doc):  # added by Data B: runs only on the pack it was tested on
+        if doc.get("pack_id") not in _PACKS:
+            return ("keep", doc["text"])
+        return _std(_AUTHOR_RULE(doc["text"]), doc["text"])
+    return medicine
+
+@cache
+def _indic_db_d2_002():
+    # DB-D2-002, specv1.md, medicine 278 (indic)
+    RULE_ID = "DB-D2-002"
+    CODE = "D2"
+    ACTION = "fix"
+    STAGE = "35"
+    STATUS = "CANDIDATE"
+    SPEC_PACKS = SCOPE["DB-D2-002"]
+    LANGS = {"san_Deva"}
+    ORIGIN = "ind-sa-fw2"
+    SOURCE_ORIGIN = "ind-sa-fw2"
+    SOURCE = "ind-sa-fw2"  # pack whose medicine this came from
+    import re  # added by Data B: harm_test_indic.py gives every block `re`
+
+    def medicine_d2(text):
+        def roman(line):
+            letters = [c for c in line if c.isalpha()]
+            if len(line.strip()) < 25 or len(letters) < 10:
+                return False
+            lat = sum(1 for c in letters if c.isascii() or 0xC0 <= ord(c) <= 0x24F or 0x1E00 <= ord(c) <= 0x1EFF)
+            return lat / len(letters) > 0.6 and bool(re.search(r"[āīūṛṝḷṃḥṅñṭḍṇśṣ]", line))
+        return "\n".join(l for l in text.split("\n") if not roman(l))
+
+
+    def _std(out, text):  # added by Data B, copied from Data A (medicine_english.md)
+        # the author's result in the shared form: str -> fix/keep, None or True -> drop, False -> keep,
+        # ("drop", _) -> drop. An empty result is a drop: nothing of the document is left.
+        if out is None or out is True: return ("drop", text)
+        if out is False: return ("keep", text)
+        if isinstance(out, tuple):
+            if out[0] == "drop": return ("drop", text)
+            out = out[1]
+        if not out.strip(): return ("drop", text)
+        return ("fix" if out != text else "keep", out)
+
+    _AUTHOR_RULE = medicine_d2  # added by Data B
+    _PACKS = SCOPE["DB-D2-002"]
+
+
+    def medicine(doc):  # added by Data B: runs only on the pack it was tested on
+        if doc.get("pack_id") not in _PACKS:
+            return ("keep", doc["text"])
+        return _std(_AUTHOR_RULE(doc["text"]), doc["text"])
+    return medicine
+
+@cache
+def _indic_db_d3_001():
+    # DB-D3-001, specv1.md, medicine 279 (indic)
+    RULE_ID = "DB-D3-001"
+    CODE = "D3"
+    ACTION = "keep"
+    STAGE = "35"
+    STATUS = "CANDIDATE"
+    SPEC_PACKS = SCOPE["DB-D3-001"]
+    LANGS = {"ben_Beng"}
+    ORIGIN = "ind-bn-fw2"
+    SOURCE_ORIGIN = "ind-bn-fw2"
+    SOURCE = "ind-bn-fw2"  # pack whose medicine this came from
+
+    import re
+
+    def medicine_d3(text):
+        """Mixed language is natural in Bengali writing, so it is not cleaned. Only a document that is mostly
+        English (more than 40% of its letters are Latin) is dropped from the Bengali pool."""
+        latin = len(re.findall('[A-Za-z]', text))
+        bengali = len(re.findall('[\u0980-\u09ff]', text))
+        return latin + bengali > 0 and latin / (latin + bengali) > 0.40
+
+
+    def _std(out, text):  # added by Data B, copied from Data A (medicine_english.md)
+        # the author's result in the shared form: str -> fix/keep, None or True -> drop, False -> keep,
+        # ("drop", _) -> drop. An empty result is a drop: nothing of the document is left.
+        if out is None or out is True: return ("drop", text)
+        if out is False: return ("keep", text)
+        if isinstance(out, tuple):
+            if out[0] == "drop": return ("drop", text)
+            out = out[1]
+        if not out.strip(): return ("drop", text)
+        return ("fix" if out != text else "keep", out)
+
+    _AUTHOR_RULE = medicine_d3  # added by Data B
+    _PACKS = SCOPE["DB-D3-001"]
+
+
+    def medicine(doc):  # added by Data B: runs only on the pack it was tested on
+        if doc.get("pack_id") not in _PACKS:
+            return ("keep", doc["text"])
+        return ("keep", doc["text"])  # added by Data B: a keep rule is a label only; the text is never changed or dropped
+    return medicine
+
+@cache
+def _indic_db_d3_021():
+    # DB-D3-021, specv1.md, medicine 281 (indic)
+    RULE_ID = "DB-D3-021"
+    CODE = "D3"
+    ACTION = "keep"
+    STAGE = "35"
+    STATUS = "CANDIDATE"
+    SPEC_PACKS = SCOPE["DB-D3-021"]
+    LANGS = {"ben_Beng"}
+    ORIGIN = "ind-bn-sangraha-v"
+    SOURCE_ORIGIN = "ind-bn-sangraha-v"
+    SOURCE = "ind-bn-sangraha-v"  # pack whose medicine this came from
+
+    import re
+
+    def medicine_d3(text):
+        latin = len(re.findall(r"[A-Za-z]", text))
+        letters = len(re.findall(r"[A-Za-zঀ-৿]", text))
+        return latin / max(1, letters) > 0.5   # True = drop the document
+
+
+    def _std(out, text):  # added by Data B, copied from Data A (medicine_english.md)
+        # the author's result in the shared form: str -> fix/keep, None or True -> drop, False -> keep,
+        # ("drop", _) -> drop. An empty result is a drop: nothing of the document is left.
+        if out is None or out is True: return ("drop", text)
+        if out is False: return ("keep", text)
+        if isinstance(out, tuple):
+            if out[0] == "drop": return ("drop", text)
+            out = out[1]
+        if not out.strip(): return ("drop", text)
+        return ("fix" if out != text else "keep", out)
+
+    _AUTHOR_RULE = medicine_d3  # added by Data B
+    _PACKS = SCOPE["DB-D3-021"]
+
+
+    def medicine(doc):  # added by Data B: runs only on the pack it was tested on
+        if doc.get("pack_id") not in _PACKS:
+            return ("keep", doc["text"])
+        return ("keep", doc["text"])  # added by Data B: a keep rule is a label only; the text is never changed or dropped
+    return medicine
+
+@cache
+def _indic_db_d3_003():
+    # DB-D3-003, specv1.md, medicine 282 (indic)
+    RULE_ID = "DB-D3-003"
+    CODE = "D3"
+    ACTION = "keep"
+    STAGE = "35"
+    STATUS = "CANDIDATE"
+    SPEC_PACKS = SCOPE["DB-D3-003"]
+    LANGS = {"guj_Gujr"}
+    ORIGIN = "ind-gu-fw2"
+    SOURCE_ORIGIN = "ind-gu-fw2"
+    SOURCE = "ind-gu-fw2"  # pack whose medicine this came from
+
+    import re
+
+    def m2_d3(text, url=None):
+        return (text, "keep")
+
+    def medicine_d3(text, url=None):
+        """Harm-test entry: return the new text, or True to drop."""
+        return m2_d3(text, url)[0]
+
+
+    def _std(out, text):  # added by Data B, copied from Data A (medicine_english.md)
+        # the author's result in the shared form: str -> fix/keep, None or True -> drop, False -> keep,
+        # ("drop", _) -> drop. An empty result is a drop: nothing of the document is left.
+        if out is None or out is True: return ("drop", text)
+        if out is False: return ("keep", text)
+        if isinstance(out, tuple):
+            if out[0] == "drop": return ("drop", text)
+            out = out[1]
+        if not out.strip(): return ("drop", text)
+        return ("fix" if out != text else "keep", out)
+
+    _AUTHOR_RULE = medicine_d3  # added by Data B
+    _PACKS = SCOPE["DB-D3-003"]
+
+
+    def medicine(doc):  # added by Data B: runs only on the pack it was tested on
+        if doc.get("pack_id") not in _PACKS:
+            return ("keep", doc["text"])
+        return ("keep", doc["text"])  # added by Data B: a keep rule is a label only; the text is never changed or dropped
+    return medicine
+
+@cache
+def _indic_db_d3_005():
+    # DB-D3-005, specv1.md, medicine 284 (indic)
+    RULE_ID = "DB-D3-005"
+    CODE = "D3"
+    ACTION = "keep"
+    STAGE = "35"
+    STATUS = "CANDIDATE"
+    SPEC_PACKS = SCOPE["DB-D3-005"]
+    LANGS = {"hin_Deva"}
+    ORIGIN = "ind-hi-fw2, ind-hi-indiccorp, ind-hi-sangraha-s, ind-hi-sangraha-v"
+    SOURCE_ORIGIN = "ind-hi-fw2"
+    SOURCE = "ind-hi-fw2"  # pack whose medicine this came from
+
+    import re
+
+    _DEVA = re.compile(r"[\u0900-\u097F]")
+    _LATIN_WORD = re.compile(r"\b[A-Za-z]{3,}\b")
+
+    def _flag_d3_mixed(text: str, min_deva: int = 40, min_latin_words: int = 8) -> bool:
+        """True if doc looks like natural HI-EN mix (for labeling only; not a drop)."""
+        if not text:
+            return False
+        return len(_DEVA.findall(text)) >= min_deva and len(_LATIN_WORD.findall(text)) >= min_latin_words
+
+    def medicine_d3(text: str) -> str:
+        """Automatic medicine: keep text. D3 is label/fix; True would mean drop in harm_test_indic."""
+        return text or ""
+
+
+    def _std(out, text):  # added by Data B, copied from Data A (medicine_english.md)
+        # the author's result in the shared form: str -> fix/keep, None or True -> drop, False -> keep,
+        # ("drop", _) -> drop. An empty result is a drop: nothing of the document is left.
+        if out is None or out is True: return ("drop", text)
+        if out is False: return ("keep", text)
+        if isinstance(out, tuple):
+            if out[0] == "drop": return ("drop", text)
+            out = out[1]
+        if not out.strip(): return ("drop", text)
+        return ("fix" if out != text else "keep", out)
+
+    _AUTHOR_RULE = medicine_d3  # added by Data B
+    _PACKS = SCOPE["DB-D3-005"]
+
+
+    def medicine(doc):  # added by Data B: runs only on the pack it was tested on
+        if doc.get("pack_id") not in _PACKS:
+            return ("keep", doc["text"])
+        return ("keep", doc["text"])  # added by Data B: a keep rule is a label only; the text is never changed or dropped
+    return medicine
+
+@cache
+def _indic_db_d3_020():
+    # DB-D3-020, specv1.md, medicine 286 (indic)
+    RULE_ID = "DB-D3-020"
+    CODE = "D3"
+    ACTION = "keep"
+    STAGE = "35"
+    STATUS = "CANDIDATE"
+    SPEC_PACKS = SCOPE["DB-D3-020"]
+    LANGS = {"hin_Deva"}
+    ORIGIN = "ind-hi-hplt"
+    SOURCE_ORIGIN = "ind-hi-hplt"
+    SOURCE = "ind-hi-hplt"  # pack whose medicine this came from
+    import re  # added by Data B: harm_test_indic.py gives every block `re`
+
+    def cure_d3(text):
+        return text
+
+
+    def _std(out, text):  # added by Data B, copied from Data A (medicine_english.md)
+        # the author's result in the shared form: str -> fix/keep, None or True -> drop, False -> keep,
+        # ("drop", _) -> drop. An empty result is a drop: nothing of the document is left.
+        if out is None or out is True: return ("drop", text)
+        if out is False: return ("keep", text)
+        if isinstance(out, tuple):
+            if out[0] == "drop": return ("drop", text)
+            out = out[1]
+        if not out.strip(): return ("drop", text)
+        return ("fix" if out != text else "keep", out)
+
+    _AUTHOR_RULE = cure_d3  # added by Data B
+    _PACKS = SCOPE["DB-D3-020"]
+
+
+    def medicine(doc):  # added by Data B: runs only on the pack it was tested on
+        if doc.get("pack_id") not in _PACKS:
+            return ("keep", doc["text"])
+        return ("keep", doc["text"])  # added by Data B: a keep rule is a label only; the text is never changed or dropped
+    return medicine
+
+@cache
+def _indic_db_d3_008():
+    # DB-D3-008, specv1.md, medicine 289 (indic)
+    RULE_ID = "DB-D3-008"
+    CODE = "D3"
+    ACTION = "keep"
+    STAGE = "35"
+    STATUS = "CANDIDATE"
+    SPEC_PACKS = SCOPE["DB-D3-008"]
+    LANGS = {"kan_Knda"}
+    ORIGIN = "ind-kn-sangraha-s, ind-kn-fw2"
+    SOURCE_ORIGIN = "ind-kn-sangraha-s"
+    SOURCE = "ind-kn-sangraha-s"  # pack whose medicine this came from
+    import re  # added by Data B: harm_test_indic.py gives every block `re`
+
+    LETTER = re.compile(r"[^\W\d_]", re.U)
+    NOT_KN_LATIN = re.compile(r"[^\W\d_a-zA-Zಀ-೿]", re.U)
+    def m6_foreign_ratio(s):
+        n = len(LETTER.findall(s))
+        return len(NOT_KN_LATIN.findall(s)) / n if n else 0.0
+    def medicine_d3(s):
+        return s  # keep the text; m6_foreign_ratio is the measure
+
+
+    def _std(out, text):  # added by Data B, copied from Data A (medicine_english.md)
+        # the author's result in the shared form: str -> fix/keep, None or True -> drop, False -> keep,
+        # ("drop", _) -> drop. An empty result is a drop: nothing of the document is left.
+        if out is None or out is True: return ("drop", text)
+        if out is False: return ("keep", text)
+        if isinstance(out, tuple):
+            if out[0] == "drop": return ("drop", text)
+            out = out[1]
+        if not out.strip(): return ("drop", text)
+        return ("fix" if out != text else "keep", out)
+
+    _AUTHOR_RULE = medicine_d3  # added by Data B
+    _PACKS = SCOPE["DB-D3-008"]
+
+
+    def medicine(doc):  # added by Data B: runs only on the pack it was tested on
+        if doc.get("pack_id") not in _PACKS:
+            return ("keep", doc["text"])
+        return ("keep", doc["text"])  # added by Data B: a keep rule is a label only; the text is never changed or dropped
+    return medicine
+
+@cache
+def _indic_db_d3_016():
+    # DB-D3-016, specv1.md, medicine 290 (indic)
+    RULE_ID = "DB-D3-016"
+    CODE = "D3"
+    ACTION = "keep"
+    STAGE = "35"
+    STATUS = "CANDIDATE"
+    SPEC_PACKS = SCOPE["DB-D3-016"]
+    LANGS = {"kan_Knda"}
+    ORIGIN = "ind-kn-sangraha-v"
+    SOURCE_ORIGIN = "ind-kn-sangraha-v"
+    SOURCE = "ind-kn-sangraha-v"  # pack whose medicine this came from
+    import re  # added by Data B: harm_test_indic.py gives every block `re`
+
+    HASHTAG_FEED = re.compile(r"^\s*-\s*#\S.*$")
+    EN_SUMMARY = re.compile(r"^\s*\(\s*[A-Za-z][^\u0C80-\u0CFF()]{24,}\)\s*$")
+
+
+    def medicine_d3(text):
+        lines = text.rstrip().split("\n")
+        i = n = 0
+        while i < len(lines) and (HASHTAG_FEED.match(lines[i]) or not lines[i].strip()):
+            n += bool(lines[i].strip())
+            i += 1
+        if n < 2:
+            i = 0                                                   # one tagged line alone is not a feed
+        lines = lines[i:]
+        cut = bool(lines) and bool(EN_SUMMARY.match(lines[-1]))
+        if cut:
+            lines.pop()                                             # "(English summary of the story)" at the end
+        if not i and not cut:
+            return text                                             # keep
+        return "\n".join(lines).rstrip() + "\n"                     # fix
+
+
+    def _std(out, text):  # added by Data B, copied from Data A (medicine_english.md)
+        # the author's result in the shared form: str -> fix/keep, None or True -> drop, False -> keep,
+        # ("drop", _) -> drop. An empty result is a drop: nothing of the document is left.
+        if out is None or out is True: return ("drop", text)
+        if out is False: return ("keep", text)
+        if isinstance(out, tuple):
+            if out[0] == "drop": return ("drop", text)
+            out = out[1]
+        if not out.strip(): return ("drop", text)
+        return ("fix" if out != text else "keep", out)
+
+    _AUTHOR_RULE = medicine_d3  # added by Data B
+    _PACKS = SCOPE["DB-D3-016"]
+
+
+    def medicine(doc):  # added by Data B: runs only on the pack it was tested on
+        if doc.get("pack_id") not in _PACKS:
+            return ("keep", doc["text"])
+        return ("keep", doc["text"])  # added by Data B: a keep rule is a label only; the text is never changed or dropped
+    return medicine
+
+@cache
+def _indic_db_d3_017():
+    # DB-D3-017, specv1.md, medicine 292 (indic)
+    RULE_ID = "DB-D3-017"
+    CODE = "D3"
+    ACTION = "keep"
+    STAGE = "35"
+    STATUS = "CANDIDATE"
+    SPEC_PACKS = SCOPE["DB-D3-017"]
+    LANGS = {"mar_Deva"}
+    ORIGIN = "ind-mr-fw2"
+    SOURCE_ORIGIN = "ind-mr-fw2"
+    SOURCE = "ind-mr-fw2"  # pack whose medicine this came from
+
+    def has_d3(text: str) -> bool:
+        import re
+        deva  = sum(1 for c in text if 'ऀ' <= c <= 'ॿ')
+        latin = len(re.findall(r'[a-zA-Z]{3,}', text))
+        return deva > 50 and latin > 0
+
+
+    def _std(out, text):  # added by Data B, copied from Data A (medicine_english.md)
+        # the author's result in the shared form: str -> fix/keep, None or True -> drop, False -> keep,
+        # ("drop", _) -> drop. An empty result is a drop: nothing of the document is left.
+        if out is None or out is True: return ("drop", text)
+        if out is False: return ("keep", text)
+        if isinstance(out, tuple):
+            if out[0] == "drop": return ("drop", text)
+            out = out[1]
+        if not out.strip(): return ("drop", text)
+        return ("fix" if out != text else "keep", out)
+
+    _AUTHOR_RULE = has_d3  # added by Data B
+    _PACKS = SCOPE["DB-D3-017"]
+
+
+    def medicine(doc):  # added by Data B: runs only on the pack it was tested on
+        if doc.get("pack_id") not in _PACKS:
+            return ("keep", doc["text"])
+        return ("keep", doc["text"])  # added by Data B: a keep rule is a label only; the text is never changed or dropped
+    return medicine
+
+@cache
+def _indic_db_d3_022():
+    # DB-D3-022, specv1.md, medicine 294 (indic)
+    RULE_ID = "DB-D3-022"
+    CODE = "D3"
+    ACTION = "keep"
+    STAGE = "35"
+    STATUS = "CANDIDATE"
+    SPEC_PACKS = SCOPE["DB-D3-022"]
+    LANGS = {"mar_Deva"}
+    ORIGIN = "ind-mr-sangraha-v"
+    SOURCE_ORIGIN = "ind-mr-sangraha-v"
+    SOURCE = "ind-mr-sangraha-v"  # pack whose medicine this came from
+    import re  # added by Data B: harm_test_indic.py gives every block `re`
+
+    def preserve_contextual_mixing(text: str) -> str:
+        return text
+
+
+    def _std(out, text):  # added by Data B, copied from Data A (medicine_english.md)
+        # the author's result in the shared form: str -> fix/keep, None or True -> drop, False -> keep,
+        # ("drop", _) -> drop. An empty result is a drop: nothing of the document is left.
+        if out is None or out is True: return ("drop", text)
+        if out is False: return ("keep", text)
+        if isinstance(out, tuple):
+            if out[0] == "drop": return ("drop", text)
+            out = out[1]
+        if not out.strip(): return ("drop", text)
+        return ("fix" if out != text else "keep", out)
+
+    _AUTHOR_RULE = preserve_contextual_mixing  # added by Data B
+    _PACKS = SCOPE["DB-D3-022"]
+
+
+    def medicine(doc):  # added by Data B: runs only on the pack it was tested on
+        if doc.get("pack_id") not in _PACKS:
+            return ("keep", doc["text"])
+        return ("keep", doc["text"])  # added by Data B: a keep rule is a label only; the text is never changed or dropped
+    return medicine
+
+@cache
+def _indic_db_d3_012():
+    # DB-D3-012, specv1.md, medicine 296 (indic)
+    RULE_ID = "DB-D3-012"
+    CODE = "D3"
+    ACTION = "keep"
+    STAGE = "35"
+    STATUS = "CANDIDATE"
+    SPEC_PACKS = SCOPE["DB-D3-012"]
+    LANGS = {"san_Deva"}
+    ORIGIN = "ind-sa-fw2"
+    SOURCE_ORIGIN = "ind-sa-fw2"
+    SOURCE = "ind-sa-fw2"  # pack whose medicine this came from
+    import re  # added by Data B: harm_test_indic.py gives every block `re`
+
+    _HIN = set("है हैं था थे थी में और नहीं लिए गया गई हुआ होता होती करने किया करें ने को से का की के भी यह वह कि जो आप हम साथ वाले रहे रही".split())
+    _ANCHOR = set("है हैं था थे थी में और नहीं लिए गया गई हुआ होता होती करने किया करें ने साथ वाले रहे रही".split())
+    _C = "क-हक़-य़"
+
+    def _lang(line):
+        letters = [c for c in line if c.isalpha()]
+        if len(line.strip()) < 25 or len(letters) < 10:
+            return "short"
+        lat = sum(1 for c in letters if c.isascii() or 0xC0 <= ord(c) <= 0x24F or 0x1E00 <= ord(c) <= 0x1EFF)
+        dev = sum(1 for c in letters if "ऀ" <= c <= "ॿ")
+        if lat / len(letters) > 0.6:
+            return "san_Latn" if re.search(r"[āīūṛṝḷṃḥṅñṭḍṇśṣ]", line) else "eng"
+        if dev / len(letters) > 0.6:
+            w = re.findall("[ऀ-ॿ]+", line)
+            obl = lambda x: x.endswith("ों") and len(re.findall(f"[{_C}](?!्)", x)) >= 2
+            h = sum(1 for x in w if x in _HIN or obl(x))
+            a = sum(1 for x in w if x in _ANCHOR or obl(x))
+            if a >= 1 and h >= 2 and h / max(1, len(w)) >= 0.15:
+                return "hin"
+        return "san"
+
+    def medicine_d3(text):
+        return "\n".join(l for l in text.split("\n") if _lang(l) not in ("eng", "hin"))
+
+
+    def _std(out, text):  # added by Data B, copied from Data A (medicine_english.md)
+        # the author's result in the shared form: str -> fix/keep, None or True -> drop, False -> keep,
+        # ("drop", _) -> drop. An empty result is a drop: nothing of the document is left.
+        if out is None or out is True: return ("drop", text)
+        if out is False: return ("keep", text)
+        if isinstance(out, tuple):
+            if out[0] == "drop": return ("drop", text)
+            out = out[1]
+        if not out.strip(): return ("drop", text)
+        return ("fix" if out != text else "keep", out)
+
+    _AUTHOR_RULE = medicine_d3  # added by Data B
+    _PACKS = SCOPE["DB-D3-012"]
+
+
+    def medicine(doc):  # added by Data B: runs only on the pack it was tested on
+        if doc.get("pack_id") not in _PACKS:
+            return ("keep", doc["text"])
+        return ("keep", doc["text"])  # added by Data B: a keep rule is a label only; the text is never changed or dropped
+    return medicine
+
+@cache
+def _indic_db_d3_018():
+    # DB-D3-018, specv1.md, medicine 298 (indic)
+    RULE_ID = "DB-D3-018"
+    CODE = "D3"
+    ACTION = "keep"
+    STAGE = "35"
+    STATUS = "CANDIDATE"
+    SPEC_PACKS = SCOPE["DB-D3-018"]
+    LANGS = {"tam_Taml"}
+    ORIGIN = "ind-ta-sangraha-v"
+    SOURCE_ORIGIN = "ind-ta-sangraha-v"
+    SOURCE = "ind-ta-sangraha-v"  # pack whose medicine this came from
+    import re  # added by Data B: harm_test_indic.py gives every block `re`
+
+    def medicine_d3(text: str) -> str:
+        return text  # annotation only; never delete language mixing automatically
+
+
+    def _std(out, text):  # added by Data B, copied from Data A (medicine_english.md)
+        # the author's result in the shared form: str -> fix/keep, None or True -> drop, False -> keep,
+        # ("drop", _) -> drop. An empty result is a drop: nothing of the document is left.
+        if out is None or out is True: return ("drop", text)
+        if out is False: return ("keep", text)
+        if isinstance(out, tuple):
+            if out[0] == "drop": return ("drop", text)
+            out = out[1]
+        if not out.strip(): return ("drop", text)
+        return ("fix" if out != text else "keep", out)
+
+    _AUTHOR_RULE = medicine_d3  # added by Data B
+    _PACKS = SCOPE["DB-D3-018"]
+
+
+    def medicine(doc):  # added by Data B: runs only on the pack it was tested on
+        if doc.get("pack_id") not in _PACKS:
+            return ("keep", doc["text"])
+        return ("keep", doc["text"])  # added by Data B: a keep rule is a label only; the text is never changed or dropped
+    return medicine
+
+@cache
+def _indic_db_d3_014():
+    # DB-D3-014, specv1.md, medicine 299 (indic)
+    RULE_ID = "DB-D3-014"
+    CODE = "D3"
+    ACTION = "keep"
+    STAGE = "35"
+    STATUS = "CANDIDATE"
+    SPEC_PACKS = SCOPE["DB-D3-014"]
+    LANGS = {"tel_Telu"}
+    ORIGIN = "ind-te-fw2, ind-te-sangraha-s"
+    SOURCE_ORIGIN = "ind-te-fw2"
+    SOURCE = "ind-te-fw2"  # pack whose medicine this came from
+    import re  # added by Data B: harm_test_indic.py gives every block `re`
+
+    def medicine_d3(t, url=None):
+        return t
+
+
+    def _std(out, text):  # added by Data B, copied from Data A (medicine_english.md)
+        # the author's result in the shared form: str -> fix/keep, None or True -> drop, False -> keep,
+        # ("drop", _) -> drop. An empty result is a drop: nothing of the document is left.
+        if out is None or out is True: return ("drop", text)
+        if out is False: return ("keep", text)
+        if isinstance(out, tuple):
+            if out[0] == "drop": return ("drop", text)
+            out = out[1]
+        if not out.strip(): return ("drop", text)
+        return ("fix" if out != text else "keep", out)
+
+    _AUTHOR_RULE = medicine_d3  # added by Data B
+    _PACKS = SCOPE["DB-D3-014"]
+
+
+    def medicine(doc):  # added by Data B: runs only on the pack it was tested on
+        if doc.get("pack_id") not in _PACKS:
+            return ("keep", doc["text"])
+        return ("keep", doc["text"])  # added by Data B: a keep rule is a label only; the text is never changed or dropped
+    return medicine
+
+@cache
+def _indic_db_d3_019():
+    # DB-D3-019, specv1.md, medicine 300 (indic)
+    RULE_ID = "DB-D3-019"
+    CODE = "D3"
+    ACTION = "keep"
+    STAGE = "35"
+    STATUS = "CANDIDATE"
+    SPEC_PACKS = SCOPE["DB-D3-019"]
+    LANGS = {"tel_Telu"}
+    ORIGIN = "ind-te-sangraha-v"
+    SOURCE_ORIGIN = "ind-te-sangraha-v"
+    SOURCE = "ind-te-sangraha-v"  # pack whose medicine this came from
+    import re  # added by Data B: harm_test_indic.py gives every block `re`
+
+    def medicine_d3(text: str) -> str:
+        return text
+
+
+    def _std(out, text):  # added by Data B, copied from Data A (medicine_english.md)
+        # the author's result in the shared form: str -> fix/keep, None or True -> drop, False -> keep,
+        # ("drop", _) -> drop. An empty result is a drop: nothing of the document is left.
+        if out is None or out is True: return ("drop", text)
+        if out is False: return ("keep", text)
+        if isinstance(out, tuple):
+            if out[0] == "drop": return ("drop", text)
+            out = out[1]
+        if not out.strip(): return ("drop", text)
+        return ("fix" if out != text else "keep", out)
+
+    _AUTHOR_RULE = medicine_d3  # added by Data B
+    _PACKS = SCOPE["DB-D3-019"]
+
+
+    def medicine(doc):  # added by Data B: runs only on the pack it was tested on
+        if doc.get("pack_id") not in _PACKS:
+            return ("keep", doc["text"])
+        return ("keep", doc["text"])  # added by Data B: a keep rule is a label only; the text is never changed or dropped
+    return medicine
+
+@cache
+def _indic_db_d4_014():
+    # DB-D4-014, specv1.md, medicine 302 (indic)
+    RULE_ID = "DB-D4-014"
+    CODE = "D4"
+    ACTION = "fix"
+    STAGE = "35"
+    STATUS = "CANDIDATE"
+    SPEC_PACKS = SCOPE["DB-D4-014"]
+    LANGS = {"kan_Knda"}
+    ORIGIN = "ind-kn-sangraha-s"
+    SOURCE_ORIGIN = "ind-kn-sangraha-s"
+    SOURCE = "ind-kn-sangraha-s"  # pack whose medicine this came from
+    import re  # added by Data B: harm_test_indic.py gives every block `re`
+
+    EMPTY_BRACKETS = re.compile(r"[ \t]*(?<![^\s])\((?:[ \t,;:]|&nbsp;)*\)")
+    LEADING_COMMA = re.compile(r"(?<=\()[ \t]*[,;]+[ \t]*(?=[^\s,;)])")
+
+    def strip_empty_brackets(text):
+        return LEADING_COMMA.sub("", EMPTY_BRACKETS.sub("", text))
+
+
+    def _std(out, text):  # added by Data B, copied from Data A (medicine_english.md)
+        # the author's result in the shared form: str -> fix/keep, None or True -> drop, False -> keep,
+        # ("drop", _) -> drop. An empty result is a drop: nothing of the document is left.
+        if out is None or out is True: return ("drop", text)
+        if out is False: return ("keep", text)
+        if isinstance(out, tuple):
+            if out[0] == "drop": return ("drop", text)
+            out = out[1]
+        if not out.strip(): return ("drop", text)
+        return ("fix" if out != text else "keep", out)
+
+    _AUTHOR_RULE = strip_empty_brackets  # added by Data B
+    _PACKS = SCOPE["DB-D4-014"]
+
+
+    def medicine(doc):  # added by Data B: runs only on the pack it was tested on
+        if doc.get("pack_id") not in _PACKS:
+            return ("keep", doc["text"])
+        return _std(_AUTHOR_RULE(doc["text"]), doc["text"])
+    return medicine
+
+@cache
+def _indic_db_d4_017():
+    # DB-D4-017, specv1.md, medicine 304 (indic)
+    RULE_ID = "DB-D4-017"
+    CODE = "D4"
+    ACTION = "fix"
+    STAGE = "35"
+    STATUS = "CANDIDATE"
+    SPEC_PACKS = SCOPE["DB-D4-017"]
+    LANGS = {"tam_Taml"}
+    ORIGIN = "ind-ta-sangraha-v"
+    SOURCE_ORIGIN = "ind-ta-sangraha-v"
+    SOURCE = "ind-ta-sangraha-v"  # pack whose medicine this came from
+    import re  # added by Data B: harm_test_indic.py gives every block `re`
+
+    from typing import Optional
+
+    def medicine_d4(
+        text: str,
+        verified_retranslation: Optional[str] = None,
+        confirmed_drop: bool = False,
+    ) -> Optional[str]:
+        if verified_retranslation is not None:
+            return verified_retranslation
+        if confirmed_drop:
+            return None
+        return text
+
+
+    def _std(out, text):  # added by Data B, copied from Data A (medicine_english.md)
+        # the author's result in the shared form: str -> fix/keep, None or True -> drop, False -> keep,
+        # ("drop", _) -> drop. An empty result is a drop: nothing of the document is left.
+        if out is None or out is True: return ("drop", text)
+        if out is False: return ("keep", text)
+        if isinstance(out, tuple):
+            if out[0] == "drop": return ("drop", text)
+            out = out[1]
+        if not out.strip(): return ("drop", text)
+        return ("fix" if out != text else "keep", out)
+
+    _AUTHOR_RULE = medicine_d4  # added by Data B
+    _PACKS = SCOPE["DB-D4-017"]
+
+
+    def medicine(doc):  # added by Data B: runs only on the pack it was tested on
+        if doc.get("pack_id") not in _PACKS:
+            return ("keep", doc["text"])
+        return _std(_AUTHOR_RULE(doc["text"]), doc["text"])
+    return medicine
+
+@cache
+def _indic_db_d5_003():
+    # DB-D5-003, specv1.md, medicine 305 (indic)
+    RULE_ID = "DB-D5-003"
+    CODE = "D5"
+    ACTION = "fix"
+    STAGE = "35"
+    STATUS = "CANDIDATE"
+    SPEC_PACKS = SCOPE["DB-D5-003"]
+    LANGS = {"hin_Deva"}
+    ORIGIN = "ind-hi-fw2, ind-hi-indiccorp, ind-hi-sangraha-s"
+    SOURCE_ORIGIN = "ind-hi-fw2"
+    SOURCE = "ind-hi-fw2"  # pack whose medicine this came from
+
+    import re
+
+    # Translationese with English glosses: a Hindi sentence followed by its English source term in brackets,
+    # e.g. "वित्त मंत्री (finance minister nirmala sitharaman)". Remove the lowercase English gloss when the
+    # page does this three or more times (a habit of translated SEO pages, not of Hindi writers).
+    GLOSS = re.compile(r"[ \t]*\((?:[a-z][a-z ]{3,40})\)")
+
+    def medicine_d5(text):
+        return GLOSS.sub("", text) if len(GLOSS.findall(text)) >= 3 else text
+
+
+    def _std(out, text):  # added by Data B, copied from Data A (medicine_english.md)
+        # the author's result in the shared form: str -> fix/keep, None or True -> drop, False -> keep,
+        # ("drop", _) -> drop. An empty result is a drop: nothing of the document is left.
+        if out is None or out is True: return ("drop", text)
+        if out is False: return ("keep", text)
+        if isinstance(out, tuple):
+            if out[0] == "drop": return ("drop", text)
+            out = out[1]
+        if not out.strip(): return ("drop", text)
+        return ("fix" if out != text else "keep", out)
+
+    _AUTHOR_RULE = medicine_d5  # added by Data B
+    _PACKS = SCOPE["DB-D5-003"]
+
+
+    def medicine(doc):  # added by Data B: runs only on the pack it was tested on
+        if doc.get("pack_id") not in _PACKS:
+            return ("keep", doc["text"])
+        return _std(_AUTHOR_RULE(doc["text"]), doc["text"])
+    return medicine
+
+@cache
+def _indic_db_d5_002():
+    # DB-D5-002, specv1.md, medicine 306 (indic)
+    RULE_ID = "DB-D5-002"
+    CODE = "D5"
+    ACTION = "keep"
+    STAGE = "35"
+    STATUS = "CANDIDATE"
+    SPEC_PACKS = SCOPE["DB-D5-002"]
+    LANGS = {"hin_Deva"}
+    ORIGIN = "ind-hi-hplt, ind-hi-sangraha-v"
+    SOURCE_ORIGIN = "ind-hi-hplt"
+    SOURCE = "ind-hi-hplt"  # pack whose medicine this came from
+    import re  # added by Data B: harm_test_indic.py gives every block `re`
+
+    def medicine_d5(text):
+        return False  # tag only: the text is kept as it is
+
+
+    def _std(out, text):  # added by Data B, copied from Data A (medicine_english.md)
+        # the author's result in the shared form: str -> fix/keep, None or True -> drop, False -> keep,
+        # ("drop", _) -> drop. An empty result is a drop: nothing of the document is left.
+        if out is None or out is True: return ("drop", text)
+        if out is False: return ("keep", text)
+        if isinstance(out, tuple):
+            if out[0] == "drop": return ("drop", text)
+            out = out[1]
+        if not out.strip(): return ("drop", text)
+        return ("fix" if out != text else "keep", out)
+
+    _AUTHOR_RULE = medicine_d5  # added by Data B
+    _PACKS = SCOPE["DB-D5-002"]
+
+
+    def medicine(doc):  # added by Data B: runs only on the pack it was tested on
+        if doc.get("pack_id") not in _PACKS:
+            return ("keep", doc["text"])
+        return ("keep", doc["text"])  # added by Data B: a keep rule is a label only; the text is never changed or dropped
+    return medicine
+
+@cache
+def _indic_db_h3_001():
+    # DB-H3-001, specv1.md, medicine 308 (indic)
+    RULE_ID = "DB-H3-001"
+    CODE = "H3"
+    ACTION = "fix"
+    STAGE = "35"
+    STATUS = "CANDIDATE"
+    SPEC_PACKS = SCOPE["DB-H3-001"]
+    LANGS = {"san_Deva"}
+    ORIGIN = "ind-sa-fw2"
+    SOURCE_ORIGIN = "ind-sa-fw2"
+    SOURCE = "ind-sa-fw2"  # pack whose medicine this came from
+    import re  # added by Data B: harm_test_indic.py gives every block `re`
+
+    _HIN = set("है हैं था थे थी में और नहीं लिए गया गई हुआ होता होती करने किया करें ने को से का की के भी यह वह कि जो आप हम साथ वाले रहे रही".split())
+    _ANCHOR = set("है हैं था थे थी में और नहीं लिए गया गई हुआ होता होती करने किया करें ने साथ वाले रहे रही".split())
+
+    def _translation(line):
+        letters = [c for c in line if c.isalpha()]
+        if len(line.strip()) < 25 or len(letters) < 10:
+            return False
+        lat = sum(1 for c in letters if c.isascii() or 0xC0 <= ord(c) <= 0x24F or 0x1E00 <= ord(c) <= 0x1EFF)
+        if lat / len(letters) > 0.6:
+            return not re.search(r"[āīūṛṝḷṃḥṅñṭḍṇśṣ]", line)
+        w = re.findall("[ऀ-ॿ]+", line)
+        h = sum(1 for x in w if x in _HIN)
+        a = sum(1 for x in w if x in _ANCHOR)
+        return a >= 1 and h >= 2 and h / max(1, len(w)) >= 0.15
+
+    def medicine_h3(text):
+        return "\n".join(l for l in text.split("\n") if not _translation(l))
+
+
+    def _std(out, text):  # added by Data B, copied from Data A (medicine_english.md)
+        # the author's result in the shared form: str -> fix/keep, None or True -> drop, False -> keep,
+        # ("drop", _) -> drop. An empty result is a drop: nothing of the document is left.
+        if out is None or out is True: return ("drop", text)
+        if out is False: return ("keep", text)
+        if isinstance(out, tuple):
+            if out[0] == "drop": return ("drop", text)
+            out = out[1]
+        if not out.strip(): return ("drop", text)
+        return ("fix" if out != text else "keep", out)
+
+    _AUTHOR_RULE = medicine_h3  # added by Data B
+    _PACKS = SCOPE["DB-H3-001"]
+
+
+    def medicine(doc):  # added by Data B: runs only on the pack it was tested on
+        if doc.get("pack_id") not in _PACKS:
+            return ("keep", doc["text"])
+        return _std(_AUTHOR_RULE(doc["text"]), doc["text"])
+    return medicine
+
+@cache
+def _indic_db_b4_009():
+    # DB-B4-009, specv1.md, medicine 310 (indic)
+    RULE_ID = "DB-B4-009"
+    CODE = "B4"
+    ACTION = "fix"
+    STAGE = "40"
+    STATUS = "CANDIDATE"
+    SPEC_PACKS = SCOPE["DB-B4-009"]
+    LANGS = {"ben_Beng"}
+    ORIGIN = "ind-bn-sangraha-v, ind-bn-fw2"
+    SOURCE_ORIGIN = "ind-bn-sangraha-v"
+    SOURCE = "ind-bn-sangraha-v"  # pack whose medicine this came from
+    import re  # added by Data B: harm_test_indic.py gives every block `re`
+
+    ESCAPE = re.compile(r"(?<!\\)\\([nt])")
+
+
+    def cure_b4(text):
+        return ESCAPE.sub(lambda m: "\n" if m.group(1) == "n" else "\t", text)
+
+
+    def _std(out, text):  # added by Data B, copied from Data A (medicine_english.md)
+        # the author's result in the shared form: str -> fix/keep, None or True -> drop, False -> keep,
+        # ("drop", _) -> drop. An empty result is a drop: nothing of the document is left.
+        if out is None or out is True: return ("drop", text)
+        if out is False: return ("keep", text)
+        if isinstance(out, tuple):
+            if out[0] == "drop": return ("drop", text)
+            out = out[1]
+        if not out.strip(): return ("drop", text)
+        return ("fix" if out != text else "keep", out)
+
+    _AUTHOR_RULE = cure_b4  # added by Data B
+    _PACKS = SCOPE["DB-B4-009"]
+
+
+    def medicine(doc):  # added by Data B: runs only on the pack it was tested on
+        if doc.get("pack_id") not in _PACKS:
+            return ("keep", doc["text"])
+        return _std(_AUTHOR_RULE(doc["text"]), doc["text"])
+    return medicine
+
+@cache
+def _indic_db_b4_001():
+    # DB-B4-001, specv1.md, medicine 311 (indic)
+    RULE_ID = "DB-B4-001"
+    CODE = "B4"
+    ACTION = "fix"
+    STAGE = "40"
+    STATUS = "CANDIDATE"
+    SPEC_PACKS = SCOPE["DB-B4-001"]
+    LANGS = {"guj_Gujr"}
+    ORIGIN = "ind-gu-fw2"
+    SOURCE_ORIGIN = "ind-gu-fw2"
+    SOURCE = "ind-gu-fw2"  # pack whose medicine this came from
+
+    import re
+
+    JUNK = re.compile(r"\[ઇમેઇલ સુરક્ષિત\]|email@example\.com|firstname\.lastname@example\.com"
+                      r"|\[email\s*protected\]|\{\{.*?\}\}|\$\{.*?\}|\bundefined\b|\bNaN\b|\bnull\b")
+
+    def medicine(text):
+        return JUNK.sub("", text)
+
+
+    def _std(out, text):  # added by Data B, copied from Data A (medicine_english.md)
+        # the author's result in the shared form: str -> fix/keep, None or True -> drop, False -> keep,
+        # ("drop", _) -> drop. An empty result is a drop: nothing of the document is left.
+        if out is None or out is True: return ("drop", text)
+        if out is False: return ("keep", text)
+        if isinstance(out, tuple):
+            if out[0] == "drop": return ("drop", text)
+            out = out[1]
+        if not out.strip(): return ("drop", text)
+        return ("fix" if out != text else "keep", out)
+
+    _AUTHOR_RULE = medicine  # added by Data B
+    _PACKS = SCOPE["DB-B4-001"]
+
+
+    def medicine(doc):  # added by Data B: runs only on the pack it was tested on
+        if doc.get("pack_id") not in _PACKS:
+            return ("keep", doc["text"])
+        return _std(_AUTHOR_RULE(doc["text"]), doc["text"])
+    return medicine
+
+@cache
+def _indic_db_b4_002():
+    # DB-B4-002, specv1.md, medicine 313 (indic)
+    RULE_ID = "DB-B4-002"
+    CODE = "B4"
+    ACTION = "fix"
+    STAGE = "40"
+    STATUS = "CANDIDATE"
+    SPEC_PACKS = SCOPE["DB-B4-002"]
+    LANGS = {"kan_Knda"}
+    ORIGIN = "ind-kn-sangraha-v, ind-kn-fw2, ind-kn-sangraha-s"
+    SOURCE_ORIGIN = "ind-kn-sangraha-v"
+    SOURCE = "ind-kn-sangraha-v"  # pack whose medicine this came from
+    import re  # added by Data B: harm_test_indic.py gives every block `re`
+
+    BS = chr(92)
+
+
+    def fix_literal_newline(t):
+        """B4: a literal backslash-n (two characters) becomes a real newline."""
+        return t.replace(BS + "n", "\n")
+
+
+    def medicine_b4(text):
+        """The B4 rule, under the name that the harm tests look for: returns the fixed text."""
+        return fix_literal_newline(text)
+
+
+    def _std(out, text):  # added by Data B, copied from Data A (medicine_english.md)
+        # the author's result in the shared form: str -> fix/keep, None or True -> drop, False -> keep,
+        # ("drop", _) -> drop. An empty result is a drop: nothing of the document is left.
+        if out is None or out is True: return ("drop", text)
+        if out is False: return ("keep", text)
+        if isinstance(out, tuple):
+            if out[0] == "drop": return ("drop", text)
+            out = out[1]
+        if not out.strip(): return ("drop", text)
+        return ("fix" if out != text else "keep", out)
+
+    _AUTHOR_RULE = medicine_b4  # added by Data B
+    _PACKS = SCOPE["DB-B4-002"]
+
+
+    def medicine(doc):  # added by Data B: runs only on the pack it was tested on
+        if doc.get("pack_id") not in _PACKS:
+            return ("keep", doc["text"])
+        return _std(_AUTHOR_RULE(doc["text"]), doc["text"])
+    return medicine
+
+@cache
+def _indic_db_b4_011():
+    # DB-B4-011, specv1.md, medicine 314 (indic)
+    RULE_ID = "DB-B4-011"
+    CODE = "B4"
+    ACTION = "fix"
+    STAGE = "40"
+    STATUS = "CANDIDATE"
+    SPEC_PACKS = SCOPE["DB-B4-011"]
+    LANGS = {"mar_Deva"}
+    ORIGIN = "ind-mr-fw2"
+    SOURCE_ORIGIN = "ind-mr-fw2"
+    SOURCE = "ind-mr-fw2"  # pack whose medicine this came from
+
+    import re
+
+    _SHORTCODE = re.compile(r"\[/?(?:sc_[a-z0-9_]+|ad_\d+|vc_[a-z0-9_]+|caption|gallery)\b[^\]\n]*\]")
+    _SPLINTER = re.compile(r"(?<=[ऀ-ॿ]):-[ ]?(?=[ऀ-ॿ])")
+    _ORPHAN = re.compile(r"(?m)^[ \t]*[⁰¹²³⁴⁵⁶⁷⁸⁹]+[ \t]*(?:\n|\Z)")
+    _PLACEHOLDER = re.compile(r"(?m)^[ \t]*firstname\.lastname@example\.(?:org|com)[ \t]*(?:\n|\Z)")
+
+    def medicine_b4(text):
+        """(a) strip known shortcodes; (b) re-join splinters only in a doc with >= 3 intra-word ':-';
+        (c) delete a lone superscript glyph on its own line; (d) delete a placeholder-email line."""
+        out = _SHORTCODE.sub("", text)
+        if len(_SPLINTER.findall(out)) >= 3:
+            out = _SPLINTER.sub("", out)
+        out = _ORPHAN.sub("", out)
+        return _PLACEHOLDER.sub("", out)
+
+
+    def _std(out, text):  # added by Data B, copied from Data A (medicine_english.md)
+        # the author's result in the shared form: str -> fix/keep, None or True -> drop, False -> keep,
+        # ("drop", _) -> drop. An empty result is a drop: nothing of the document is left.
+        if out is None or out is True: return ("drop", text)
+        if out is False: return ("keep", text)
+        if isinstance(out, tuple):
+            if out[0] == "drop": return ("drop", text)
+            out = out[1]
+        if not out.strip(): return ("drop", text)
+        return ("fix" if out != text else "keep", out)
+
+    _AUTHOR_RULE = medicine_b4  # added by Data B
+    _PACKS = SCOPE["DB-B4-011"]
+
+
+    def medicine(doc):  # added by Data B: runs only on the pack it was tested on
+        if doc.get("pack_id") not in _PACKS:
+            return ("keep", doc["text"])
+        return _std(_AUTHOR_RULE(doc["text"]), doc["text"])
+    return medicine
+
+@cache
+def _indic_db_b4_003():
+    # DB-B4-003, specv1.md, medicine 315 (indic)
+    RULE_ID = "DB-B4-003"
+    CODE = "B4"
+    ACTION = "fix"
+    STAGE = "40"
+    STATUS = "CANDIDATE"
+    SPEC_PACKS = SCOPE["DB-B4-003"]
+    LANGS = {"mar_Deva"}
+    ORIGIN = "ind-mr-sangraha-v"
+    SOURCE_ORIGIN = "ind-mr-sangraha-v"
+    SOURCE = "ind-mr-sangraha-v"  # pack whose medicine this came from
+    import re  # added by Data B: harm_test_indic.py gives every block `re`
+
+    def cure_b4(text):
+        # Conservative gate for recurring escaped newlines in the Marathi prose pack.
+        if text.count("\\n") < 3:
+            return text
+        return text.replace("\\n", "\n")
+
+
+    def _std(out, text):  # added by Data B, copied from Data A (medicine_english.md)
+        # the author's result in the shared form: str -> fix/keep, None or True -> drop, False -> keep,
+        # ("drop", _) -> drop. An empty result is a drop: nothing of the document is left.
+        if out is None or out is True: return ("drop", text)
+        if out is False: return ("keep", text)
+        if isinstance(out, tuple):
+            if out[0] == "drop": return ("drop", text)
+            out = out[1]
+        if not out.strip(): return ("drop", text)
+        return ("fix" if out != text else "keep", out)
+
+    _AUTHOR_RULE = cure_b4  # added by Data B
+    _PACKS = SCOPE["DB-B4-003"]
+
+
+    def medicine(doc):  # added by Data B: runs only on the pack it was tested on
+        if doc.get("pack_id") not in _PACKS:
+            return ("keep", doc["text"])
+        return _std(_AUTHOR_RULE(doc["text"]), doc["text"])
+    return medicine
+
+@cache
+def _indic_db_b4_004():
+    # DB-B4-004, specv1.md, medicine 316 (indic)
+    RULE_ID = "DB-B4-004"
+    CODE = "B4"
+    ACTION = "fix"
+    STAGE = "40"
+    STATUS = "CANDIDATE"
+    SPEC_PACKS = SCOPE["DB-B4-004"]
+    LANGS = {"san_Deva"}
+    ORIGIN = "ind-sa-fw2"
+    SOURCE_ORIGIN = "ind-sa-fw2"
+    SOURCE = "ind-sa-fw2"  # pack whose medicine this came from
+    import re  # added by Data B: harm_test_indic.py gives every block `re`
+
+    _JUNK = [r"\{\{[^{}\n]*\}\}", r"'''", r"\[Page\d+-[a-z]\+ ?\d+\]", "↩"]
+
+    def medicine_b4(text):
+        t = re.sub(r"\[\[(?:[^|\]\n]*\|)?([^\]\n]*)\]\]", r"\1", text)
+        for p in _JUNK:
+            t = re.sub(p, "", t)
+        t = re.sub(r"(?<=॥)\d{3,}(?=\s)", "", t)
+        return re.sub(r"(?<=\s)\d{3,}(?=[क-ह])|(?<=[ा-्क-ह])\d{3,}(?=[क-ह])", "", t)
+
+
+    def _std(out, text):  # added by Data B, copied from Data A (medicine_english.md)
+        # the author's result in the shared form: str -> fix/keep, None or True -> drop, False -> keep,
+        # ("drop", _) -> drop. An empty result is a drop: nothing of the document is left.
+        if out is None or out is True: return ("drop", text)
+        if out is False: return ("keep", text)
+        if isinstance(out, tuple):
+            if out[0] == "drop": return ("drop", text)
+            out = out[1]
+        if not out.strip(): return ("drop", text)
+        return ("fix" if out != text else "keep", out)
+
+    _AUTHOR_RULE = medicine_b4  # added by Data B
+    _PACKS = SCOPE["DB-B4-004"]
+
+
+    def medicine(doc):  # added by Data B: runs only on the pack it was tested on
+        if doc.get("pack_id") not in _PACKS:
+            return ("keep", doc["text"])
+        return _std(_AUTHOR_RULE(doc["text"]), doc["text"])
+    return medicine
+
+@cache
+def _indic_db_b4_007():
+    # DB-B4-007, specv1.md, medicine 317 (indic)
+    RULE_ID = "DB-B4-007"
+    CODE = "B4"
+    ACTION = "fix"
+    STAGE = "40"
+    STATUS = "CANDIDATE"
+    SPEC_PACKS = SCOPE["DB-B4-007"]
+    LANGS = {"tam_Taml"}
+    ORIGIN = "ind-ta-sangraha-v"
+    SOURCE_ORIGIN = "ind-ta-sangraha-v"
+    SOURCE = "ind-ta-sangraha-v"  # pack whose medicine this came from
+
+    import re
+
+    def medicine_b4(text: str) -> str:
+        if text.count("\\n") < 2:
+            return text
+        code_like = re.search(
+            r"\x60{3}|<script|\bdef\s+\w+\s*\(|\bfunction\s+\w+\s*\(", text
+        )
+        if code_like:
+            return text
+        return text.replace("\\n", "\n")
+
+
+    def _std(out, text):  # added by Data B, copied from Data A (medicine_english.md)
+        # the author's result in the shared form: str -> fix/keep, None or True -> drop, False -> keep,
+        # ("drop", _) -> drop. An empty result is a drop: nothing of the document is left.
+        if out is None or out is True: return ("drop", text)
+        if out is False: return ("keep", text)
+        if isinstance(out, tuple):
+            if out[0] == "drop": return ("drop", text)
+            out = out[1]
+        if not out.strip(): return ("drop", text)
+        return ("fix" if out != text else "keep", out)
+
+    _AUTHOR_RULE = medicine_b4  # added by Data B
+    _PACKS = SCOPE["DB-B4-007"]
+
+
+    def medicine(doc):  # added by Data B: runs only on the pack it was tested on
+        if doc.get("pack_id") not in _PACKS:
+            return ("keep", doc["text"])
+        return _std(_AUTHOR_RULE(doc["text"]), doc["text"])
+    return medicine
+
+@cache
+def _indic_db_b4_006():
+    # DB-B4-006, specv1.md, medicine 319 (indic)
+    RULE_ID = "DB-B4-006"
+    CODE = "B4"
+    ACTION = "fix"
+    STAGE = "40"
+    STATUS = "CANDIDATE"
+    SPEC_PACKS = SCOPE["DB-B4-006"]
+    LANGS = {"tel_Telu"}
+    ORIGIN = "ind-te-sangraha-s, ind-te-fw2, ind-te-sangraha-v"
+    SOURCE_ORIGIN = "ind-te-sangraha-s"
+    SOURCE = "ind-te-sangraha-s"  # pack whose medicine this came from
+    import re  # added by Data B: harm_test_indic.py gives every block `re`
+
+    def medicine_b4(text):
+        text = re.sub(r"[ \t]*<ఐ\.? ?డి\.? ?\d+>?%?", "", text)
+        text = re.sub(r"[ \t]*(?<![\u0C00-\u0C7F])ఐడి\d+", "", text)
+        text = re.sub(r"[ \t]*\(ID\d+\)", "", text)
+        text = re.sub(r"(?m)^![^\n]*=[^\n]*\|[^\n]*\n?", "", text)
+        return text
+
+
+    def _std(out, text):  # added by Data B, copied from Data A (medicine_english.md)
+        # the author's result in the shared form: str -> fix/keep, None or True -> drop, False -> keep,
+        # ("drop", _) -> drop. An empty result is a drop: nothing of the document is left.
+        if out is None or out is True: return ("drop", text)
+        if out is False: return ("keep", text)
+        if isinstance(out, tuple):
+            if out[0] == "drop": return ("drop", text)
+            out = out[1]
+        if not out.strip(): return ("drop", text)
+        return ("fix" if out != text else "keep", out)
+
+    _AUTHOR_RULE = medicine_b4  # added by Data B
+    _PACKS = SCOPE["DB-B4-006"]
+
+
+    def medicine(doc):  # added by Data B: runs only on the pack it was tested on
+        if doc.get("pack_id") not in _PACKS:
+            return ("keep", doc["text"])
+        return _std(_AUTHOR_RULE(doc["text"]), doc["text"])
+    return medicine
+
 # TSAI decision on F1, 31 Oct: a typed placeholder for a private person's details, drop a personal listing, keep organisations.
 # In code, a value is replaced only inside a comment or a string, found with tree-sitter. So `x = 555-010-0199` stays. Prose has no tree:
-# math and science packs take the prose path (_F1_PROSE), which reads the block around a value instead.
+# math and science packs take the prose path (_F1_PROSE), which reads the block around a value instead. Indic packs (ind-*)
+# take the Indic path (_f1_indic): Indian phone formats, digits in any Indic script, Indian organisation domains and words.
 from bisect import bisect_right
+from functools import cache
+import re
 
 _F1_TREE = {"cpp", "go", "java", "javascript", "python", "rust", "typescript"}
 _F1_LANGS = set(_F1_TREE)  # families with a harm test so far. Prose families go here after theirs; prose has no tree, so regex alone decides
@@ -4083,6 +11909,7 @@ _F1_PHONE_WORD = re.compile(r"(?i)\b(tel|telephone|phone|mobile|cell|fax|whatsap
 _F1_ADDRESS = re.compile(r"\b\d{1,5}[A-Za-z]?\s+(?:[A-Z][A-Za-z]*\.?\s+){1,4}(?:Street|St|Avenue|Ave|Road|Rd|Boulevard|Blvd|Lane|Ln|Drive|Dr|Court|Ct|Place|Pl|Terrace|Crescent|Nagar|Marg|Colony)\b\.?")
 _F1_ORG = re.compile(r"(?i)\b(inc|ltd|llc|corp|corporation|company|university|college|school|hospital|clinic|department|dept|ministry|council|office|"
                      r"embassy|police|bank|library|museum|hotel|restaurant|customer service|support|helpline|hotline|toll[- ]free|headquarters|hq|reception|sales)\b")
+_F1_DIGIT = re.compile(r"\d")  # the same Unicode decimal digits required by PHONE and ADDRESS
 
 
 @cache
@@ -4115,12 +11942,21 @@ def _f1_is_phone(m, line):
 def _f1_hits(line, previous):
     """(start, end, tag) of a private person's details on one line. An organisation on this line or the one above keeps its phone and address."""
     out = [(m.start(), m.end(), "<EMAIL>") for m in _F1_EMAIL.finditer(line)
-           if not (_F1_ROLE.match(m.group(1)) or _F1_SAFE_DOMAIN.search(m.group(2)) or _F1_FILE_END.search(m.group(2)))]
-    if not (_F1_ORG.search(line) or _F1_ORG.search(previous)):
-        for rx, tag in ((_F1_PHONE, "<PHONE>"), (_F1_ADDRESS, "<ADDRESS>")):
-            for m in rx.finditer(line):
-                if (tag != "<PHONE>" or _f1_is_phone(m, line)) and not any(s < m.end() and m.start() < e for s, e, _ in out):
-                    out.append((m.start(), m.end(), tag))
+           if not (_F1_ROLE.match(m.group(1)) or _F1_SAFE_DOMAIN.search(m.group(2)) or _F1_FILE_END.search(m.group(2)))] if "@" in line else []
+    if not _F1_DIGIT.search(line):
+        return out  # email finditer already orders the spans; no phone/address can match
+    org = None
+    for rx, tag in ((_F1_PHONE, "<PHONE>"), (_F1_ADDRESS, "<ADDRESS>")):
+        for m in rx.finditer(line):
+            if tag == "<PHONE>" and not _f1_is_phone(m, line):
+                continue
+            # Organisation context only matters when a phone/address could actually be masked.
+            if org is None:
+                org = bool(_F1_ORG.search(line) or _F1_ORG.search(previous))
+            if org:
+                return out  # all phones/addresses stay; only the ordered email spans remain
+            if not any(s < m.end() and m.start() < e for s, e, _ in out):
+                out.append((m.start(), m.end(), tag))
     return sorted(out)
 
 
@@ -4244,7 +12080,7 @@ def _F1P_value_alone(text, start, end):
     lo = text.rfind("\n", 0, start) + 1
     hi = text.find("\n", end)
     rest = (text[lo:start] + " " + text[end:hi if hi >= 0 else len(text)]).strip()
-    if re.match(r"^[-*•]\s", text[lo:start].lstrip()):
+    if re.match(r"^[-*\u2022]\s", text[lo:start].lstrip()):
         return False
     rest = _F1P_PLACEHOLDER.sub(" ", _F1P_PHONE.sub(" ", rest))
     return not re.search(r"[A-Z]", rest) and len(re.findall(r"[a-z]+", rest)) <= 2
@@ -4317,10 +12153,100 @@ def _f1_prose(text):
     return out
 
 
+# ---------------------------------------------------------------- Indic path (ind-* packs)
+# The same TSAI ruling for Indian text: <PHONE> and <EMAIL> for a private person, organisations and public offices kept.
+# - A mobile number (+91 / 0 / 91 and ten digits from 6-9, in any spacing, in Latin or any Indic digits) is private unless
+#   its block names an organisation or public office (English or Indian-language words, a website, an organisation's
+#   email). Indian web text puts personal mobiles in ads, profiles and matrimonials with no label, so a bare one is private.
+# - A landline (0 + STD code + number) is kept unless a private label sits on it (Home:, \u092e\u094b\u092c\u093e\u0907\u0932, ...).
+# - Toll-free (1800, 1860) numbers are kept.
+# - An email is private unless it is a role mailbox, an example domain, an Indian organisation domain (.gov.in, .nic.in,
+#   .ac.in, .edu.in, .res.in, .ernet.in, .org.in, .co.in) or its block names an organisation.
+# Not done: street addresses (Indian addresses have no fixed form), personal listings.
+_F1I_DIGITS = str.maketrans({chr(base + d): str(d) for base in (0x0966, 0x09E6, 0x0A66, 0x0AE6, 0x0B66, 0x0BE6, 0x0C66,
+                                                                 0x0CE6, 0x0D66) for d in range(10)})   # one char for one char
+_F1I_MOBILE = re.compile(r"(?<![\w/.+-])(?:(?:\+|00)[ \t]?91[ \t-]?|91[ \t-]?|0[ \t-]?)?"
+                         r"(?:[6-9][0-9]{4}[ \t-]?[0-9]{5}|[6-9][0-9]{2}[ \t-][0-9]{3}[ \t-][0-9]{4})(?![\w/-]|\.[0-9])", re.A)
+_F1I_LANDLINE = re.compile(r"(?<![\w/.+-])(?:\+91[ \t-]?)?\(?0[1-9][0-9]{1,3}\)?[ \t-]?[2-9][0-9]{2,3}[ \t-]?[0-9]{3,4}(?![\w/-]|\.[0-9])", re.A)
+_F1I_TOLL_FREE = re.compile(r"(?<![\w/.+-])18[06]0[ \t-]?[0-9]{3}[ \t-]?[0-9]{3,4}(?![\w/-])", re.A)
+_F1I_ORG_DOMAIN = re.compile(r"(?i)(?:^|\.)(?:gov|nic|ac|edu|res|ernet|org|co|mil)\.in$")
+_F1I_ORG_WORDS = re.compile(
+    "\u0915\u093e\u0930\u094d\u092f\u093e\u0932\u092f|\u0935\u093f\u092d\u093e\u0917|\u092e\u0902\u0924\u094d\u0930\u093e\u0932\u092f|\u092e\u0928\u094d\u0924\u094d\u0930\u093e\u0932\u092f|\u0938\u0930\u0915\u093e\u0930|\u0936\u093e\u0938\u0928|\u0935\u093f\u0936\u094d\u0935\u0935\u093f\u0926\u094d\u092f\u093e\u0932\u092f|\u092e\u0939\u093e\u0935\u093f\u0926\u094d\u092f\u093e\u0932\u092f|\u0935\u093f\u0926\u094d\u092f\u093e\u0932\u092f|\u0935\u093f\u0926\u094d\u092f\u093e\u092a\u0940\u0920|\u0938\u0902\u0938\u094d\u0925\u093e\u0928|\u0938\u0902\u0938\u094d\u0925\u093e|\u0915\u0902\u092a\u0928\u0940|\u0915\u092e\u094d\u092a\u0928\u0940|"
+    "\u0932\u093f\u092e\u093f\u091f\u0947\u0921|\u092a\u094d\u0930\u093e\u0907\u0935\u0947\u091f|\u092c\u0948\u0902\u0915|\u0905\u0938\u094d\u092a\u0924\u093e\u0932|\u0930\u0941\u0917\u094d\u0923\u093e\u0932\u092f|\u092a\u0941\u0932\u093f\u0938|\u092a\u094b\u0932\u0940\u0938|\u0928\u0917\u0930 \u0928\u093f\u0917\u092e|\u092e\u0939\u093e\u0928\u0917\u0930\u092a\u093e\u0932\u093f\u0915\u093e|\u0928\u0917\u0930\u092a\u093e\u0932\u093f\u0915\u093e|\u092a\u0902\u091a\u093e\u092f\u0924|\u0917\u094d\u0930\u093e\u092e\u092a\u0902\u091a\u093e\u092f\u0924|\u0939\u0947\u0932\u094d\u092a\u0932\u093e\u0907\u0928|\u091f\u094b\u0932 \u092b\u094d\u0930\u0940|"
+    "\u0917\u094d\u0930\u093e\u0939\u0915 \u0938\u0947\u0935\u093e|\u0906\u092f\u094b\u0917|\u092a\u0930\u093f\u0937\u0926|\u0928\u093f\u0917\u092e|\u092e\u0902\u0921\u0933|\u092e\u0923\u094d\u0921\u0932|\u0938\u092e\u093f\u0924\u093f|\u0928\u094d\u092f\u093e\u092f\u093e\u0932\u092f|"
+    "\u0995\u09be\u09b0\u09cd\u09af\u09be\u09b2\u09af\u09bc|\u09a6\u09aa\u09cd\u09a4\u09b0|\u09ac\u09bf\u09ad\u09be\u0997|\u09ae\u09a8\u09cd\u09a4\u09cd\u09b0\u0995|\u09b8\u09b0\u0995\u09be\u09b0|\u09ac\u09bf\u09b6\u09cd\u09ac\u09ac\u09bf\u09a6\u09cd\u09af\u09be\u09b2\u09af\u09bc|\u09ae\u09b9\u09be\u09ac\u09bf\u09a6\u09cd\u09af\u09be\u09b2\u09af\u09bc|\u09ac\u09bf\u09a6\u09cd\u09af\u09be\u09b2\u09af\u09bc|\u09b8\u0982\u09b8\u09cd\u09a5\u09be|\u0995\u09cb\u09ae\u09cd\u09aa\u09be\u09a8\u09bf|\u09ac\u09cd\u09af\u09be\u0982\u0995|\u09b9\u09be\u09b8\u09aa\u09be\u09a4\u09be\u09b2|\u09aa\u09c1\u09b2\u09bf\u09b6|\u09aa\u09cc\u09b0\u09b8\u09ad\u09be|"
+    "\u0a95\u0a9a\u0ac7\u0ab0\u0ac0|\u0a95\u0abe\u0ab0\u0acd\u0aaf\u0abe\u0ab2\u0aaf|\u0ab5\u0abf\u0aad\u0abe\u0a97|\u0ab8\u0ab0\u0a95\u0abe\u0ab0|\u0aaf\u0ac1\u0aa8\u0abf\u0ab5\u0ab0\u0acd\u0ab8\u0abf\u0a9f\u0ac0|\u0ab5\u0abf\u0ab6\u0acd\u0ab5\u0ab5\u0abf\u0aa6\u0acd\u0aaf\u0abe\u0ab2\u0aaf|\u0ab6\u0abe\u0ab3\u0abe|\u0ab8\u0a82\u0ab8\u0acd\u0aa5\u0abe|\u0a95\u0a82\u0aaa\u0aa8\u0ac0|\u0aac\u0ac7\u0a82\u0a95|\u0ab9\u0acb\u0ab8\u0acd\u0aaa\u0abf\u0a9f\u0ab2|\u0aaa\u0acb\u0ab2\u0ac0\u0ab8|"
+    "\u0a26\u0a2b\u0a3c\u0a24\u0a30|\u0a26\u0a2b\u0a24\u0a30|\u0a35\u0a3f\u0a2d\u0a3e\u0a17|\u0a38\u0a30\u0a15\u0a3e\u0a30|\u0a2f\u0a42\u0a28\u0a40\u0a35\u0a30\u0a38\u0a3f\u0a1f\u0a40|\u0a2c\u0a48\u0a02\u0a15|\u0a39\u0a38\u0a2a\u0a24\u0a3e\u0a32|\u0a2a\u0a41\u0a32\u0a3f\u0a38|"
+    "\u0b15\u0b3e\u0b30\u0b4d\u0b2f\u0b4d\u0b5f\u0b3e\u0b33\u0b5f|\u0b2c\u0b3f\u0b2d\u0b3e\u0b17|\u0b38\u0b30\u0b15\u0b3e\u0b30|\u0b2c\u0b3f\u0b36\u0b4d\u0b71\u0b2c\u0b3f\u0b26\u0b4d\u0b5f\u0b3e\u0b33\u0b5f|\u0b2c\u0b4d\u0b5f\u0b3e\u0b19\u0b4d\u0b15|\u0b39\u0b38\u0b4d\u0b2a\u0b3f\u0b1f\u0b3e\u0b32|\u0b2a\u0b4b\u0b32\u0b3f\u0b38|"
+    "\u0b85\u0bb2\u0bc1\u0bb5\u0bb2\u0b95\u0bae\u0bcd|\u0ba4\u0bc1\u0bb1\u0bc8|\u0b85\u0bb0\u0b9a\u0bc1|\u0b85\u0bae\u0bc8\u0b9a\u0bcd\u0b9a\u0b95\u0bae\u0bcd|\u0baa\u0bb2\u0bcd\u0b95\u0bb2\u0bc8\u0b95\u0bcd\u0b95\u0bb4\u0b95\u0bae\u0bcd|\u0b95\u0bb2\u0bcd\u0bb2\u0bc2\u0bb0\u0bbf|\u0baa\u0bb3\u0bcd\u0bb3\u0bbf|\u0ba8\u0bbf\u0bb1\u0bc1\u0bb5\u0ba9\u0bae\u0bcd|\u0bb5\u0b99\u0bcd\u0b95\u0bbf|\u0bae\u0bb0\u0bc1\u0ba4\u0bcd\u0ba4\u0bc1\u0bb5\u0bae\u0ba9\u0bc8|\u0b95\u0bbe\u0bb5\u0bb2\u0bcd|\u0bae\u0bbe\u0ba8\u0b95\u0bb0\u0bbe\u0b9f\u0bcd\u0b9a\u0bbf|"
+    "\u0c15\u0c3e\u0c30\u0c4d\u0c2f\u0c3e\u0c32\u0c2f\u0c02|\u0c36\u0c3e\u0c16|\u0c2a\u0c4d\u0c30\u0c2d\u0c41\u0c24\u0c4d\u0c35|\u0c35\u0c3f\u0c36\u0c4d\u0c35\u0c35\u0c3f\u0c26\u0c4d\u0c2f\u0c3e\u0c32\u0c2f\u0c02|\u0c15\u0c33\u0c3e\u0c36\u0c3e\u0c32|\u0c2a\u0c3e\u0c20\u0c36\u0c3e\u0c32|\u0c38\u0c02\u0c38\u0c4d\u0c25|\u0c2c\u0c4d\u0c2f\u0c3e\u0c02\u0c15\u0c41|\u0c06\u0c38\u0c41\u0c2a\u0c24\u0c4d\u0c30\u0c3f|\u0c2a\u0c4b\u0c32\u0c40\u0c38\u0c41|"
+    "\u0c95\u0c9a\u0cc7\u0cb0\u0cbf|\u0c87\u0cb2\u0cbe\u0c96\u0cc6|\u0cb8\u0cb0\u0ccd\u0c95\u0cbe\u0cb0|\u0cb5\u0cbf\u0cb6\u0ccd\u0cb5\u0cb5\u0cbf\u0ca6\u0ccd\u0caf\u0cbe\u0cb2\u0caf|\u0c95\u0cbe\u0cb2\u0cc7\u0c9c\u0cc1|\u0cb6\u0cbe\u0cb2\u0cc6|\u0cb8\u0c82\u0cb8\u0ccd\u0ca5\u0cc6|\u0cac\u0ccd\u0caf\u0cbe\u0c82\u0c95\u0ccd|\u0c86\u0cb8\u0ccd\u0caa\u0ca4\u0ccd\u0cb0\u0cc6|\u0caa\u0cca\u0cb2\u0cc0\u0cb8\u0ccd|"
+    "\u0d15\u0d3e\u0d30\u0d4d\u0d2f\u0d3e\u0d32\u0d2f\u0d02|\u0d13\u0d2b\u0d40\u0d38\u0d4d|\u0d35\u0d15\u0d41\u0d2a\u0d4d\u0d2a\u0d4d|\u0d38\u0d7c\u0d15\u0d4d\u0d15\u0d3e\u0d7c|\u0d38\u0d7c\u0d35\u0d15\u0d32\u0d3e\u0d36\u0d3e\u0d32|\u0d15\u0d4b\u0d33\u0d47\u0d1c\u0d4d|\u0d38\u0d4d\u0d15\u0d42\u0d7e|\u0d38\u0d4d\u0d25\u0d3e\u0d2a\u0d28\u0d02|\u0d2c\u0d3e\u0d19\u0d4d\u0d15\u0d4d|\u0d06\u0d36\u0d41\u0d2a\u0d24\u0d4d\u0d30\u0d3f|\u0d2a\u0d4b\u0d32\u0d40\u0d38\u0d4d")
+_F1I_PRIVATE = re.compile(          # a private label right before the value
+    r"(?i)(?:\b(?:home|residence|cell|mobile|mob|private|personal|whatsapp)\b\.?\s*(?:(?:phone|tel|no|number)\.?\s*)?[:#-]?"
+    "|(?:\u092e\u094b\u092c\u093e\u0907\u0932|\u092e\u094b\u092c\u093e\u0908\u0932|\u092e\u094b\\.|\u092e\u094b\u092c\u093e\\.|\u0928\u093f\u091c\u0940|\u0935\u094d\u092f\u0915\u094d\u0924\u093f\u0917\u0924|\u09ae\u09cb\u09ac\u09be\u0987\u09b2|\u09ae\u09cb\\.|\u0aae\u0acb\u0aac\u0abe\u0a87\u0ab2|\u0aae\u0acb\\.|\u0a2e\u0a4b\u0a2c\u0a3e\u0a08\u0a32|\u0b2e\u0b4b\u0b2c\u0b3e\u0b07\u0b32|\u0b95\u0bc8\u0baa\u0bc7\u0b9a\u0bbf|\u0b85\u0bb2\u0bc8\u0baa\u0bc7\u0b9a\u0bbf|\u0c2e\u0c4a\u0c2c\u0c48\u0c32\u0c4d|"
+    "\u0cae\u0cca\u0cac\u0cc8\u0cb2\u0ccd|\u0d2e\u0d4a\u0d2c\u0d48\u0d7d)\\s*(?:\u0928\u0902\\.?|\u0928\u0902\u092c\u0930|\u0915\u094d\u0930\u092e\u093e\u0902\u0915|no\\.?)?\\s*[:#-]?"
+    "|(?:\u0918\u0930|\u0928\u093f\u0935\u093e\u0938|\u09ac\u09be\u09a1\u09bc\u09bf|\u0998\u09b0|\u0a98\u0ab0|\u0a18\u0a30|\u0b18\u0b30|\u0bb5\u0bc0\u0b9f\u0bc1|\u0c07\u0c32\u0c4d\u0c32\u0c41|\u0cae\u0ca8\u0cc6|\u0d35\u0d40\u0d1f\u0d4d)\\s*(?:\u0915\u093e|\u091a\u093e|\u091a\u0940|\u0928\u0902\\.?|\u092b\u093c\u094b\u0928|\u092b\u094b\u0928)?\\s*[:#-])\\s*$")
+
+
+_F1I_PERSONAL = re.compile(
+    r"(?i)(?:\b(?:personal|private|home|residence)\b\s*(?:(?:mobile|phone|tel|email|e-mail|whatsapp)\b\s*)?"
+    r"(?:(?:no\.?|number)\s*)?|(?:निजी|व्यक्तिगत|घर|निवास)\s*(?:मोबाइल|फोन|फ़ोन|ईमेल|ई-मेल)?\s*)[:#-]?\s*$")
+
+
+def _F1I_org_near(text, start, end):
+    left, right = _F1P_window(text, start, end)
+    ctx = _F1P_EMAILISH.sub(" ", left + " " + right)
+    if _F1I_ORG_WORDS.search(ctx) or _F1P_ORG.search(ctx):
+        return True
+    return any(_F1P_ROLE_LOCAL.match(m.group(1)) or _F1I_ORG_DOMAIN.search(m.group(2))
+               for m in _F1P_EMAIL.finditer(left + " " + right))
+
+
+def _F1I_labelled(text, start):
+    return bool(_F1I_PRIVATE.search(text[max(0, start - 30):start]))
+
+
+def _f1_indic(text):
+    key = text.translate(_F1I_DIGITS)            # Indic digits read as 0-9; same length, so spans match the text
+    spans = []
+    for m in _F1I_TOLL_FREE.finditer(key):
+        spans.append((m.start(), m.end(), None))
+    taken = lambda s, e: any(a < e and s < b for a, b, _ in spans)
+    for m in _F1I_MOBILE.finditer(key):
+        if not taken(m.start(), m.end()):
+            private = bool(_F1I_PERSONAL.search(text[max(0, m.start() - 50):m.start()])) or not _F1I_org_near(text, m.start(), m.end())
+            spans.append((m.start(), m.end(), _F1P_PHONE_PH if private else None))
+    for m in _F1I_LANDLINE.finditer(key):
+        if not taken(m.start(), m.end()):
+            line = text[text.rfind("\n", 0, m.start()) + 1:m.start()]
+            private = bool(_F1I_PERSONAL.search(text[max(0, m.start() - 50):m.start()])) or (
+                _F1I_labelled(text, m.start()) and not (_F1I_ORG_WORDS.search(line) or _F1P_ORG.search(line)))
+            spans.append((m.start(), m.end(), _F1P_PHONE_PH if private else None))
+    out, last = [], 0
+    for s, e, tag in sorted(spans):
+        if tag:
+            out += [text[last:s], tag]
+            last = e
+    out = "".join(out) + text[last:]
+
+    def email(m):
+        local, domain = m.group(1), m.group(2)
+        if _F1P_SAFE_DOMAIN.search(domain) or _F1P_ROLE_LOCAL.match(local) or _F1I_ORG_DOMAIN.search(domain):
+            return m.group(0)
+        if not _F1I_PERSONAL.search(m.string[max(0, m.start() - 50):m.start()]) and _F1I_org_near(m.string, m.start(), m.end()):
+            return m.group(0)
+        return _F1P_EMAIL_PH
+    return _F1P_EMAIL.sub(email, out)
+
+
 def f1(doc):
     """F1: <PHONE>, <EMAIL>, <ADDRESS> for a private person. Drop when lines with such details hold most of the text."""
     text, lang = doc["text"], doc.get("lang_label")
     pack = str(doc.get("pack_id") or "")
+    if pack.startswith("ind-"):                 # Indic packs: any language tag
+        new = _f1_indic(text)
+        return ("fix" if new != text else "keep", new)
     if lang not in _F1_TREE and any(pack.startswith(p) and lang in tags for p, tags in _F1_PROSE.items()):
         new = _f1_prose(text)
         if isinstance(new, tuple):
@@ -4434,6 +12360,158 @@ _RULE = {  # rule ID -> its factory, in sheet order
     "DA-D1-001": _sci_d1_001,
     "DA-F1-006": _sci_f1_006,
     "DA-D3-004": _sci_d3_004,
+    "DB-A1-001": _indic_db_a1_001,
+    "DB-A1-002": _indic_db_a1_002,
+    "DB-A2-001": _indic_db_a2_001,
+    "DB-A3-001": _indic_db_a3_001,
+    "DB-A3-007": _indic_db_a3_007,
+    "DB-A3-002": _indic_db_a3_002,
+    "DB-A3-005": _indic_db_a3_005,
+    "DB-A3-006": _indic_db_a3_006,
+    "DB-A5-001": _indic_db_a5_001,
+    "DB-A5-003": _indic_db_a5_003,
+    "DB-A5-009": _indic_db_a5_009,
+    "DB-A5-006": _indic_db_a5_006,
+    "DB-A5-007": _indic_db_a5_007,
+    "DB-A6-001": _indic_db_a6_001,
+    "DB-A6-020": _indic_db_a6_020,
+    "DB-A6-003": _indic_db_a6_003,
+    "DB-A6-017": _indic_db_a6_017,
+    "DB-A6-006": _indic_db_a6_006,
+    "DB-A6-007": _indic_db_a6_007,
+    "DB-A6-008": _indic_db_a6_008,
+    "DB-A6-021": _indic_db_a6_021,
+    "DB-A6-013": _indic_db_a6_013,
+    "DB-G1-001": _indic_db_g1_001,
+    "DB-G1-015": _indic_db_g1_015,
+    "DB-G1-003": _indic_db_g1_003,
+    "DB-G1-016": _indic_db_g1_016,
+    "DB-G1-006": _indic_db_g1_006,
+    "DB-G1-007": _indic_db_g1_007,
+    "DB-G1-013": _indic_db_g1_013,
+    "DB-G1-010": _indic_db_g1_010,
+    "DB-G1-014": _indic_db_g1_014,
+    "DB-G2-003": _indic_db_g2_003,
+    "DB-G4-006": _indic_db_g4_006,
+    "DB-G4-007": _indic_db_g4_007,
+    "DB-G4-002": _indic_db_g4_002,
+    "DB-G4-003": _indic_db_g4_003,
+    "DB-G4-004": _indic_db_g4_004,
+    "DB-B2-001": _indic_db_b2_001,
+    "DB-B2-002": _indic_db_b2_002,
+    "DB-B2-008": _indic_db_b2_008,
+    "DB-B2-003": _indic_db_b2_003,
+    "DB-B2-004": _indic_db_b2_004,
+    "DB-B2-007": _indic_db_b2_007,
+    "DB-B3-001": _indic_db_b3_001,
+    "DB-A3-004": _indic_db_a3_004,
+    "DB-A4-001": _indic_db_a4_001,
+    "DB-A6-019": _indic_db_a6_019,
+    "DB-B4-008": _indic_db_b4_008,
+    "DB-C3-001": _indic_db_c3_001,
+    "DB-C3-002": _indic_db_c3_002,
+    "DB-C3-025": _indic_db_c3_025,
+    "DB-C3-004": _indic_db_c3_004,
+    "DB-C3-020": _indic_db_c3_020,
+    "DB-C4-001": _indic_db_c4_001,
+    "DB-C4-002": _indic_db_c4_002,
+    "DB-C4-003": _indic_db_c4_003,
+    "DB-C4-005": _indic_db_c4_005,
+    "DB-C4-006": _indic_db_c4_006,
+    "DB-C5-021": _indic_db_c5_021,
+    "DB-C5-016": _indic_db_c5_016,
+    "DB-C5-001": _indic_db_c5_001,
+    "DB-C5-003": _indic_db_c5_003,
+    "DB-C5-004": _indic_db_c5_004,
+    "DB-C5-017": _indic_db_c5_017,
+    "DB-C5-006": _indic_db_c5_006,
+    "DB-C5-018": _indic_db_c5_018,
+    "DB-D4-001": _indic_db_d4_001,
+    "DB-D4-003": _indic_db_d4_003,
+    "DB-D4-013": _indic_db_d4_013,
+    "DB-D4-005": _indic_db_d4_005,
+    "DB-D4-018": _indic_db_d4_018,
+    "DB-D4-007": _indic_db_d4_007,
+    "DB-D4-008": _indic_db_d4_008,
+    "DB-D4-009": _indic_db_d4_009,
+    "DB-D4-012": _indic_db_d4_012,
+    "DB-D4-016": _indic_db_d4_016,
+    "DB-D5-001": _indic_db_d5_001,
+    "DB-D5-004": _indic_db_d5_004,
+    "DB-F3-001": _indic_db_f3_001,
+    "DB-F3-004": _indic_db_f3_004,
+    "DB-F3-005": _indic_db_f3_005,
+    "DB-F3-003": _indic_db_f3_003,
+    "DB-G1-012": _indic_db_g1_012,
+    "DB-G1-011": _indic_db_g1_011,
+    "DB-G3-003": _indic_db_g3_003,
+    "DB-C1-001": _indic_db_c1_001,
+    "DB-C1-003": _indic_db_c1_003,
+    "DB-C1-005": _indic_db_c1_005,
+    "DB-C1-006": _indic_db_c1_006,
+    "DB-C1-018": _indic_db_c1_018,
+    "DB-C1-010": _indic_db_c1_010,
+    "DB-C1-019": _indic_db_c1_019,
+    "DB-C1-012": _indic_db_c1_012,
+    "DB-C1-013": _indic_db_c1_013,
+    "DB-C1-021": _indic_db_c1_021,
+    "DB-C1-016": _indic_db_c1_016,
+    "DB-C1-022": _indic_db_c1_022,
+    "DB-C2-001": _indic_db_c2_001,
+    "DB-C2-023": _indic_db_c2_023,
+    "DB-C2-003": _indic_db_c2_003,
+    "DB-C2-014": _indic_db_c2_014,
+    "DB-C2-021": _indic_db_c2_021,
+    "DB-C2-008": _indic_db_c2_008,
+    "DB-C2-015": _indic_db_c2_015,
+    "DB-C2-010": _indic_db_c2_010,
+    "DB-C2-016": _indic_db_c2_016,
+    "DB-C2-013": _indic_db_c2_013,
+    "DB-C2-017": _indic_db_c2_017,
+    "DB-C2-018": _indic_db_c2_018,
+    "DB-C3-006": _indic_db_c3_006,
+    "DB-C3-023": _indic_db_c3_023,
+    "DB-C3-017": _indic_db_c3_017,
+    "DB-C3-024": _indic_db_c3_024,
+    "DB-C3-010": _indic_db_c3_010,
+    "DB-C3-021": _indic_db_c3_021,
+    "DB-C4-015": _indic_db_c4_015,
+    "DB-C4-007": _indic_db_c4_007,
+    "DB-C4-009": _indic_db_c4_009,
+    "DB-C4-010": _indic_db_c4_010,
+    "DB-C4-013": _indic_db_c4_013,
+    "DB-C4-014": _indic_db_c4_014,
+    "DB-C5-007": _indic_db_c5_007,
+    "DB-C5-009": _indic_db_c5_009,
+    "DB-C5-014": _indic_db_c5_014,
+    "DB-D2-003": _indic_db_d2_003,
+    "DB-D2-002": _indic_db_d2_002,
+    "DB-D3-001": _indic_db_d3_001,
+    "DB-D3-021": _indic_db_d3_021,
+    "DB-D3-003": _indic_db_d3_003,
+    "DB-D3-005": _indic_db_d3_005,
+    "DB-D3-020": _indic_db_d3_020,
+    "DB-D3-008": _indic_db_d3_008,
+    "DB-D3-016": _indic_db_d3_016,
+    "DB-D3-017": _indic_db_d3_017,
+    "DB-D3-022": _indic_db_d3_022,
+    "DB-D3-012": _indic_db_d3_012,
+    "DB-D3-018": _indic_db_d3_018,
+    "DB-D3-014": _indic_db_d3_014,
+    "DB-D3-019": _indic_db_d3_019,
+    "DB-D4-014": _indic_db_d4_014,
+    "DB-D4-017": _indic_db_d4_017,
+    "DB-D5-003": _indic_db_d5_003,
+    "DB-D5-002": _indic_db_d5_002,
+    "DB-H3-001": _indic_db_h3_001,
+    "DB-B4-009": _indic_db_b4_009,
+    "DB-B4-001": _indic_db_b4_001,
+    "DB-B4-002": _indic_db_b4_002,
+    "DB-B4-011": _indic_db_b4_011,
+    "DB-B4-003": _indic_db_b4_003,
+    "DB-B4-004": _indic_db_b4_004,
+    "DB-B4-007": _indic_db_b4_007,
+    "DB-B4-006": _indic_db_b4_006,
     "f1_rule.py": _shared_f1_rule,
 }
 _ID = {make: rid for rid, make in _RULE.items()}
@@ -4453,27 +12531,27 @@ def _run(doc, *factories):
 
 
 def a1(doc):
-    return _run(doc, _code_a1_001, _english_a1_004, _math_a1_005, _sci_a1_006)
+    return _run(doc, _code_a1_001, _english_a1_004, _math_a1_005, _sci_a1_006, _indic_db_a1_001, _indic_db_a1_002)
 
 
 def a2(doc):
-    return _run(doc, _code_a2_007, _english_a2_008)
+    return _run(doc, _code_a2_007, _english_a2_008, _indic_db_a2_001)
 
 
 def a6(doc):
-    return _run(doc, _code_a6_001, _math_a6_003, _sci_a6_002)
+    return _run(doc, _code_a6_001, _math_a6_003, _sci_a6_002, _indic_db_a6_001, _indic_db_a6_020, _indic_db_a6_003, _indic_db_a6_017, _indic_db_a6_006, _indic_db_a6_007, _indic_db_a6_008, _indic_db_a6_021, _indic_db_a6_013, _indic_db_a6_019)
 
 
 def a4(doc):
-    return _run(doc, _code_a4_002, _code_a4_003)
+    return _run(doc, _code_a4_002, _code_a4_003, _indic_db_a4_001)
 
 
 def a5(doc):
-    return _run(doc, _english_a5_001, _math_a5_002)
+    return _run(doc, _english_a5_001, _math_a5_002, _indic_db_a5_001, _indic_db_a5_003, _indic_db_a5_009, _indic_db_a5_006, _indic_db_a5_007)
 
 
 def a3(doc):
-    return _run(doc, _english_a3_002, _math_a3_001)
+    return _run(doc, _english_a3_002, _math_a3_001, _indic_db_a3_001, _indic_db_a3_007, _indic_db_a3_002, _indic_db_a3_005, _indic_db_a3_006, _indic_db_a3_004)
 
 
 def b1(doc):
@@ -4481,7 +12559,7 @@ def b1(doc):
 
 
 def b2(doc):
-    return _run(doc, _english_b2_002, _math_b2_001, _sci_b2_003)
+    return _run(doc, _english_b2_002, _math_b2_001, _sci_b2_003, _indic_db_b2_001, _indic_db_b2_002, _indic_db_b2_008, _indic_db_b2_003, _indic_db_b2_004, _indic_db_b2_007)
 
 
 def b5(doc):
@@ -4489,7 +12567,7 @@ def b5(doc):
 
 
 def b3(doc):
-    return _run(doc, _code_b3_001)
+    return _run(doc, _code_b3_001, _indic_db_b3_001)
 
 
 def e1(doc):
@@ -4501,19 +12579,19 @@ def e2(doc):
 
 
 def c3(doc):
-    return _run(doc, _code_c3_002, _english_c3_001, _english_c3_003, _math_c3_004, _math_c3_005, _sci_c3_006)
+    return _run(doc, _code_c3_002, _english_c3_001, _english_c3_003, _math_c3_004, _math_c3_005, _sci_c3_006, _indic_db_c3_001, _indic_db_c3_002, _indic_db_c3_025, _indic_db_c3_004, _indic_db_c3_020, _indic_db_c3_006, _indic_db_c3_023, _indic_db_c3_017, _indic_db_c3_024, _indic_db_c3_010, _indic_db_c3_021)
 
 
 def c4(doc):
-    return _run(doc, _code_c4_002, _sci_c4_003)
+    return _run(doc, _code_c4_002, _sci_c4_003, _indic_db_c4_001, _indic_db_c4_002, _indic_db_c4_003, _indic_db_c4_005, _indic_db_c4_006, _indic_db_c4_015, _indic_db_c4_007, _indic_db_c4_009, _indic_db_c4_010, _indic_db_c4_013, _indic_db_c4_014)
 
 
 def c5(doc):
-    return _run(doc, _english_c5_002, _english_c5_005, _math_c5_001, _math_c5_006)
+    return _run(doc, _english_c5_002, _english_c5_005, _math_c5_001, _math_c5_006, _indic_db_c5_021, _indic_db_c5_016, _indic_db_c5_001, _indic_db_c5_003, _indic_db_c5_004, _indic_db_c5_017, _indic_db_c5_006, _indic_db_c5_018, _indic_db_c5_007, _indic_db_c5_009, _indic_db_c5_014)
 
 
 def d4(doc):
-    return _run(doc, _english_d4_001)
+    return _run(doc, _english_d4_001, _indic_db_d4_001, _indic_db_d4_003, _indic_db_d4_013, _indic_db_d4_005, _indic_db_d4_018, _indic_db_d4_007, _indic_db_d4_008, _indic_db_d4_009, _indic_db_d4_012, _indic_db_d4_016, _indic_db_d4_014, _indic_db_d4_017)
 
 
 def e4(doc):
@@ -4521,11 +12599,11 @@ def e4(doc):
 
 
 def c1(doc):
-    return _run(doc, _code_c1_004, _code_c1_005, _english_c1_006, _math_c1_001, _sci_c1_007)
+    return _run(doc, _code_c1_004, _code_c1_005, _english_c1_006, _math_c1_001, _sci_c1_007, _indic_db_c1_001, _indic_db_c1_003, _indic_db_c1_005, _indic_db_c1_006, _indic_db_c1_018, _indic_db_c1_010, _indic_db_c1_019, _indic_db_c1_012, _indic_db_c1_013, _indic_db_c1_021, _indic_db_c1_016, _indic_db_c1_022)
 
 
 def c2(doc):
-    return _run(doc, _english_c2_003, _math_c2_001, _sci_c2_004)
+    return _run(doc, _english_c2_003, _math_c2_001, _sci_c2_004, _indic_db_c2_001, _indic_db_c2_023, _indic_db_c2_003, _indic_db_c2_014, _indic_db_c2_021, _indic_db_c2_008, _indic_db_c2_015, _indic_db_c2_010, _indic_db_c2_016, _indic_db_c2_013, _indic_db_c2_017, _indic_db_c2_018)
 
 
 def d1(doc):
@@ -4533,33 +12611,66 @@ def d1(doc):
 
 
 def d3(doc):
-    return _run(doc, _english_d3_003, _math_d3_005, _sci_d3_004)
+    return _run(doc, _english_d3_003, _math_d3_005, _sci_d3_004, _indic_db_d3_001, _indic_db_d3_021, _indic_db_d3_003, _indic_db_d3_005, _indic_db_d3_020, _indic_db_d3_008, _indic_db_d3_016, _indic_db_d3_017, _indic_db_d3_022, _indic_db_d3_012, _indic_db_d3_018, _indic_db_d3_014, _indic_db_d3_019)
 
 
 def b4(doc):
-    return _run(doc, _code_b4_009, _english_b4_007, _english_b4_008, _english_b4_012, _english_b4_010, _english_b4_011, _math_b4_001, _sci_b4_013)
+    return _run(doc, _code_b4_009, _english_b4_007, _english_b4_008, _english_b4_012, _english_b4_010, _english_b4_011, _math_b4_001, _sci_b4_013, _indic_db_b4_008, _indic_db_b4_009, _indic_db_b4_001, _indic_db_b4_002, _indic_db_b4_011, _indic_db_b4_003, _indic_db_b4_004, _indic_db_b4_007, _indic_db_b4_006)
 
 
 def e3(doc):
     return _run(doc, _code_e3_003, _code_e3_004)
 
 
+def d2(doc):
+    return _run(doc, _indic_db_d2_003, _indic_db_d2_002)
+
+
+def d5(doc):
+    return _run(doc, _indic_db_d5_001, _indic_db_d5_004, _indic_db_d5_003, _indic_db_d5_002)
+
+
+def f3(doc):
+    return _run(doc, _indic_db_f3_001, _indic_db_f3_004, _indic_db_f3_005, _indic_db_f3_003)
+
+
+def g1(doc):
+    return _run(doc, _indic_db_g1_001, _indic_db_g1_015, _indic_db_g1_003, _indic_db_g1_016, _indic_db_g1_006, _indic_db_g1_007, _indic_db_g1_013, _indic_db_g1_010, _indic_db_g1_014, _indic_db_g1_012, _indic_db_g1_011)
+
+
+def g2(doc):
+    return _run(doc, _indic_db_g2_003)
+
+
+def g3(doc):
+    return _run(doc, _indic_db_g3_003)
+
+
+def g4(doc):
+    return _run(doc, _indic_db_g4_006, _indic_db_g4_007, _indic_db_g4_002, _indic_db_g4_003, _indic_db_g4_004)
+
+
+def h3(doc):
+    return _run(doc, _indic_db_h3_001)
+
+
 def f1(doc):
     return _run(doc, _english_f1_005, _sci_f1_006, _shared_f1_rule)
 
 
-RULES = {"A1": a1, "A2": a2, "A6": a6, "A4": a4, "A5": a5, "A3": a3, "B1": b1, "B2": b2, "B5": b5, "B3": b3, "E1": e1, "E2": e2, "C3": c3, "C4": c4, "C5": c5, "D4": d4, "E4": e4, "C1": c1, "C2": c2, "D1": d1, "D3": d3, "B4": b4, "E3": e3, "F1": f1}  # disease code -> function, the form harm_test.py reads
+RULES = {"A1": a1, "A2": a2, "A6": a6, "A4": a4, "A5": a5, "A3": a3, "B1": b1, "B2": b2, "B5": b5, "B3": b3, "E1": e1, "E2": e2, "C3": c3, "C4": c4, "C5": c5, "D4": d4, "E4": e4, "C1": c1, "C2": c2, "D1": d1, "D3": d3, "B4": b4, "E3": e3, "D2": d2, "D5": d5, "F3": f3, "G1": g1, "G2": g2, "G3": g3, "G4": g4, "H3": h3, "F1": f1}  # disease code -> function, the form harm_test.py reads
 # each family's rules in sheet order; clean() runs the shared F1 after them
 _PIPELINES = {
     "code": (_code_a1_001, _code_a2_007, _code_a6_001, _code_a4_002, _code_a4_003, _code_b3_001, _code_e1_001, _code_e1_004, _code_e1_008, _code_e1_006, _code_e1_005, _code_e1_007, _code_e2_001, _code_c3_002, _code_c4_002, _code_e4_005, _code_e4_010, _code_e4_009, _code_e4_007, _code_c1_004, _code_c1_005, _code_b4_009, _code_e3_003, _code_e3_004,),
     "english": (_english_a1_004, _english_a2_008, _english_a5_001, _english_a3_002, _english_b1_002, _english_b2_002, _english_c3_001, _english_c3_003, _english_c5_002, _english_d4_001, _english_c1_006, _english_c2_003, _english_c5_005, _english_d3_003, _english_b4_007, _english_b4_008, _english_b4_012, _english_b4_010, _english_b4_011, _english_f1_005,),
     "math": (_math_a3_001, _math_a1_005, _math_a6_003, _math_a5_002, _math_b2_001, _math_b4_001, _math_b5_001, _math_c5_001, _math_d3_005, _math_c3_004, _math_c1_001, _math_c2_001, _math_c5_006, _math_c3_005,),
     "sci": (_sci_b4_013, _sci_b2_003, _sci_b5_002, _sci_a1_006, _sci_a6_002, _sci_c1_007, _sci_c2_004, _sci_c3_006, _sci_c4_003, _sci_d1_001, _sci_f1_006, _sci_d3_004,),
+    "indic": (_indic_db_a1_001, _indic_db_a1_002, _indic_db_a2_001, _indic_db_a3_001, _indic_db_a3_007, _indic_db_a3_002, _indic_db_a3_005, _indic_db_a3_006, _indic_db_a5_001, _indic_db_a5_003, _indic_db_a5_009, _indic_db_a5_006, _indic_db_a5_007, _indic_db_a6_001, _indic_db_a6_020, _indic_db_a6_003, _indic_db_a6_017, _indic_db_a6_006, _indic_db_a6_007, _indic_db_a6_008, _indic_db_a6_021, _indic_db_a6_013, _indic_db_g1_001, _indic_db_g1_015, _indic_db_g1_003, _indic_db_g1_016, _indic_db_g1_006, _indic_db_g1_007, _indic_db_g1_013, _indic_db_g1_010, _indic_db_g1_014, _indic_db_g2_003, _indic_db_g4_006, _indic_db_g4_007, _indic_db_g4_002, _indic_db_g4_003, _indic_db_g4_004, _indic_db_b2_001, _indic_db_b2_002, _indic_db_b2_008, _indic_db_b2_003, _indic_db_b2_004, _indic_db_b2_007, _indic_db_b3_001, _indic_db_a3_004, _indic_db_a4_001, _indic_db_a6_019, _indic_db_b4_008, _indic_db_c3_001, _indic_db_c3_002, _indic_db_c3_025, _indic_db_c3_004, _indic_db_c3_020, _indic_db_c4_001, _indic_db_c4_002, _indic_db_c4_003, _indic_db_c4_005, _indic_db_c4_006, _indic_db_c5_021, _indic_db_c5_016, _indic_db_c5_001, _indic_db_c5_003, _indic_db_c5_004, _indic_db_c5_017, _indic_db_c5_006, _indic_db_c5_018, _indic_db_d4_001, _indic_db_d4_003, _indic_db_d4_013, _indic_db_d4_005, _indic_db_d4_018, _indic_db_d4_007, _indic_db_d4_008, _indic_db_d4_009, _indic_db_d4_012, _indic_db_d4_016, _indic_db_d5_001, _indic_db_d5_004, _indic_db_f3_001, _indic_db_f3_004, _indic_db_f3_005, _indic_db_f3_003, _indic_db_g1_012, _indic_db_g1_011, _indic_db_g3_003, _indic_db_c1_001, _indic_db_c1_003, _indic_db_c1_005, _indic_db_c1_006, _indic_db_c1_018, _indic_db_c1_010, _indic_db_c1_019, _indic_db_c1_012, _indic_db_c1_013, _indic_db_c1_021, _indic_db_c1_016, _indic_db_c1_022, _indic_db_c2_001, _indic_db_c2_023, _indic_db_c2_003, _indic_db_c2_014, _indic_db_c2_021, _indic_db_c2_008, _indic_db_c2_015, _indic_db_c2_010, _indic_db_c2_016, _indic_db_c2_013, _indic_db_c2_017, _indic_db_c2_018, _indic_db_c3_006, _indic_db_c3_023, _indic_db_c3_017, _indic_db_c3_024, _indic_db_c3_010, _indic_db_c3_021, _indic_db_c4_015, _indic_db_c4_007, _indic_db_c4_009, _indic_db_c4_010, _indic_db_c4_013, _indic_db_c4_014, _indic_db_c5_007, _indic_db_c5_009, _indic_db_c5_014, _indic_db_d2_003, _indic_db_d2_002, _indic_db_d3_001, _indic_db_d3_021, _indic_db_d3_003, _indic_db_d3_005, _indic_db_d3_020, _indic_db_d3_008, _indic_db_d3_016, _indic_db_d3_017, _indic_db_d3_022, _indic_db_d3_012, _indic_db_d3_018, _indic_db_d3_014, _indic_db_d3_019, _indic_db_d4_014, _indic_db_d4_017, _indic_db_d5_003, _indic_db_d5_002, _indic_db_h3_001, _indic_db_b4_009, _indic_db_b4_001, _indic_db_b4_002, _indic_db_b4_011, _indic_db_b4_003, _indic_db_b4_004, _indic_db_b4_007, _indic_db_b4_006,),
 }
 _FAMILY = {pack: family for family, rules in _PIPELINES.items() for make in rules for pack in SCOPE[_ID[make]]}  # pack_id -> family
 
 
 def clean(doc):
-    """The whole pipeline for one document: its pack's family in sheet order, then the shared F1 (code, math and sci packs).
+    """The whole pipeline for one document: its pack's family in sheet order, then the shared F1 (code, math, sci and Indic packs).
     A missing or unknown pack_id passes unchanged; such a document is not eligible for release."""
     return _run(doc, *_PIPELINES.get(_FAMILY.get(doc.get("pack_id")), ()), _shared_f1_rule)

@@ -1,0 +1,137 @@
+{
+ "artifact": "g10-effort-eval-output",
+ "do_not_train": true,
+ "stage": "B",
+ "manifest_sha256": "d6190b2d7b013222e767cdb7c50f66231769385ce1dfb729eaa9530b9ebf9226",
+ "samples": 2,
+ "model_id": "Qwen/Qwen3.6-35B-A3B-FP8@c653bba46dfa06e9658dcc0b0dc87fe4685f14a2",
+ "temperature": 0.7,
+ "sample_base_seeds": [
+  1234,
+  1235
+ ],
+ "cap": 1024,
+ "per_label": {
+  "1k": {
+   "ran": 110,
+   "parse": 110,
+   "malformed": 0,
+   "empty": 0,
+   "limit": 47,
+   "censored": 63,
+   "obey_budget": 110,
+   "correct": 39,
+   "checked": 110,
+   "unchecked": 0,
+   "correct_by_category": {
+    "code": {
+     "correct": 11,
+     "checked": 60
+    },
+    "math": {
+     "correct": 28,
+     "checked": 50
+    }
+   },
+   "prompts_solved_in_either_sample": 24,
+   "prompts": 55,
+   "generated_tokens_median": 1024,
+   "lama": {
+    "format_obeyed": "PASS",
+    "cap_respected": "FAIL",
+    "answer_correct": "PASS"
+   }
+  },
+  "4k": {
+   "ran": 110,
+   "parse": 110,
+   "malformed": 0,
+   "empty": 0,
+   "limit": 44,
+   "censored": 66,
+   "obey_budget": 110,
+   "correct": 42,
+   "checked": 110,
+   "unchecked": 0,
+   "correct_by_category": {
+    "code": {
+     "correct": 13,
+     "checked": 60
+    },
+    "math": {
+     "correct": 29,
+     "checked": 50
+    }
+   },
+   "prompts_solved_in_either_sample": 26,
+   "prompts": 55,
+   "generated_tokens_median": 1024,
+   "lama": {
+    "format_obeyed": "PASS",
+    "cap_respected": "FAIL",
+    "answer_correct": "PASS"
+   }
+  },
+  "16k": {
+   "ran": 110,
+   "parse": 110,
+   "malformed": 0,
+   "empty": 0,
+   "limit": 44,
+   "censored": 66,
+   "obey_budget": 110,
+   "correct": 39,
+   "checked": 110,
+   "unchecked": 0,
+   "correct_by_category": {
+    "code": {
+     "correct": 12,
+     "checked": 60
+    },
+    "math": {
+     "correct": 27,
+     "checked": 50
+    }
+   },
+   "prompts_solved_in_either_sample": 22,
+   "prompts": 55,
+   "generated_tokens_median": 1024,
+   "lama": {
+    "format_obeyed": "PASS",
+    "cap_respected": "FAIL",
+    "answer_correct": "PASS"
+   }
+  },
+  "64k": {
+   "ran": 110,
+   "parse": 110,
+   "malformed": 0,
+   "empty": 0,
+   "limit": 43,
+   "censored": 67,
+   "obey_budget": 110,
+   "correct": 41,
+   "checked": 110,
+   "unchecked": 0,
+   "correct_by_category": {
+    "code": {
+     "correct": 10,
+     "checked": 60
+    },
+    "math": {
+     "correct": 31,
+     "checked": 50
+    }
+   },
+   "prompts_solved_in_either_sample": 22,
+   "prompts": 55,
+   "generated_tokens_median": 1024,
+   "lama": {
+    "format_obeyed": "PASS",
+    "cap_respected": "FAIL",
+    "answer_correct": "PASS"
+   }
+  }
+ },
+ "note": "Qwen3.6-35B-A3B-FP8 native template, enable_thinking=False, Stage B: an above-floor reference, not the capstone model."
+}

@@ -80,3 +80,5 @@ cd teams/03-tokenizer && sha256sum -c release/SHA256SUMS --ignore-missing
 ```
 
 `tokenizer.json` itself is not in the repo (8 MB > 5 MB pr-guard limit); put the Kaggle copy at `release/tokenizer.json` to check it too. A fresh build gives the same sha: TSAI job #218 (`jobs/2026-11-02-c3-s0-rebuild.*`) and `rebuild_sha256` in the manifest.
+
+train_bpe.py was updated in #414 (extra-merge option). With no extra in the slots file the code path is unchanged and still rebuilds C3 sample-v0 = 15468e66 (Soham, #414), so the SHA256SUMS line now pins the new file. Log: `jobs/2026-11-13-c3-s0-rebuild-pr414.log` (TSAI job script `rebuild_c3_s0.py`, the pinned inputs, network denied, PASS in 311 s).

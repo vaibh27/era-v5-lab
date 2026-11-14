@@ -1,0 +1,26 @@
+# TSAI job (1 GPU): step time, peak memory and router checksum for the loop on OLMoE-1B-7B-0125-Instruct.
+# Measurement only: the task is the synthetic token task (random token ids, no text), so no training data is used.
+# A learning run waits for RL data v1 and TSAI's choice of data and algorithm.
+seed: 1234
+device: cuda
+out_dir: out
+model:
+  kind: hf
+  path: REPLACE_WITH_LOCAL_COPY   # or pass --model-path; the job runs offline (local_files_only)
+  dtype: bfloat16
+  stop_at_eos: true
+task: {kind: toy, rule: parity, vocab: 50304, prompt_len: 8, n_train: 256, n_heldout: 32}
+train:
+  algo: grpo
+  steps: 20
+  prompts_per_step: 8
+  k: 8
+  max_new: 64
+  temperature: 1.0
+  lr: 1.0e-5
+  clip_eps: 0.2
+  ppo_epochs: 1
+  kl_coef: 0.0
+  trainable: ['\.self_attn\.']   # attention only; experts frozen too, router always frozen
+  eval_every: 10
+  eval_k: 2

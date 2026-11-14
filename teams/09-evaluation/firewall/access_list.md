@@ -1,6 +1,6 @@
 # Eval access list
 
-Who may read the eval folder, as defined in [eval_firewall.md](eval_firewall.md), section 2. Last updated Wed 11 Nov 2026.
+Who may read the eval folder, as defined in [eval_firewall.md](eval_firewall.md), section 2. Last updated Fri 13 Nov 2026.
 
 This list is a record, not a lock. It sets no permission. On the lab compute, TSAI places eval files only for an
 approved Team 9 job (`eval_firewall.md`, section 3, rule 4). Everyone listed follows the handling rules in section 4 of
@@ -42,7 +42,7 @@ the date here.
 | `saitej123` | Team 10 lead | MMLU-Pro (Qwen2.5-1.5B) | Row open, #271 | |
 | `arunnayan` | to confirm | to confirm | to confirm | |
 | `tejaswivinnakota` (to confirm) | to confirm | to confirm | to confirm | |
-| `vedang-patel-10` | Team 5 | MuSR (llama-3.2-3b) | Claimed | |
+| `vedang-patel-10` | Team 5 | MuSR (llama-3.2-3b) | Row merged, #389; deletion confirmed in G9 on 12 Nov | 12 Nov |
 
 ## 3. Week-3 rotators: no access needed
 

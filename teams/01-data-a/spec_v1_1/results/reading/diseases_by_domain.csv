@@ -1,0 +1,66 @@
+domain,kind,code,docs,docs_read,percent,readers,spec_v1_rules,spec_v1_1,example_doc_ids
+code,missed,E4,3,100,3.0,revant,DA-E4-005 CANDIDATE; DA-E4-010 CANDIDATE; DA-E4-009 CANDIDATE; DA-E4-007 CANDIDATE,,11aa7a16ad5a2061 811ce55eef413610 a0d94ae2c8f0d393
+code,missed,C3,2,100,2.0,revant,DA-C3-002 CANDIDATE,,7d0432188888631b df63f98851068f39
+code,missed,E1,2,100,2.0,revant,DA-E1-001 CANDIDATE; DA-E1-004 CANDIDATE; DA-E1-008 CANDIDATE; DA-E1-006 CANDIDATE; DA-E1-005 CANDIDATE; DA-E1-007 CANDIDATE,,8f07828d5c3af2a6 d840fa74b5200b65
+math,new,NEW-missing-formulas,29,299,9.7,pyru satyanarayana,none,yes,0614bc6ecf034495 06f2d75b8c5610f1 0e89fda818263262
+math,new,NEW-flattened-formulas,22,299,7.4,pyru satyanarayana,none,yes,033ab42a96110ff9 0f2f052fd95da6d4 1ab888d9366a43fd
+math,new,NEW-seo-filler,15,299,5.0,pyru satyanarayana,none,yes,053c7e6dfbdb4e46 085f9f7987b7cf56 0e2b9cc0beb5fb11
+math,new,NEW-missing-spaces,13,299,4.3,pyru satyanarayana,none,yes,03aeffcf72c72418 167ef4a340862a0e 1ab888d9366a43fd
+math,new,NEW-merged-table-cells,11,299,3.7,pyru satyanarayana,none,yes,06f2d75b8c5610f1 1b1c42eddd14c8e7 1e7fad525310d310
+math,new,NEW-template-pages,9,299,3.0,pyru satyanarayana,none,yes,28f56e454b2ade39 32b1f031d8c464e4 647d9713533c5664
+math,new,NEW-ai-generated-text,8,299,2.7,pyru,none,yes,10d547035dd610e2 36c3e8b4b4457083 8f1f8a9c194e88f2
+math,new,NEW-missing-figures,5,299,1.7,satyanarayana,none,yes,019fda08843696eb 03aeffcf72c72418 0ab64ed894610ef7
+math,new,NEW-aggregated-questions,4,299,1.3,satyanarayana,none,yes,2a062df14b5b83a9 2c58af66b7d3bfe8 99d9b817f8c74cdf
+math,new,B1,3,299,1.0,pyru,none,yes,61515ee94cba4c0c 8758fc16164dd1b6 d805befbd984308c
+math,new,D4,2,299,0.7,pyru,none,,9373e806c8ee0ac8 e492f103e239bec0
+math,new,E2,2,299,0.7,pyru,none,,125fe0fb9ea9baf6 28f56e454b2ade39
+math,new,NEW-orphan-footnote-markers,2,299,0.7,satyanarayana,none,,3bba0803064abf48 a4ba0e437a4f83b7
+math,new,A4,1,299,0.3,pyru,none,,033ab42a96110ff9
+math,new,C4,1,299,0.3,pyru,none,,611df2fbc4c0e699
+math,new,D2,1,299,0.3,pyru,none,,dc76a8ad4d35952e
+math,new,E1,1,299,0.3,pyru,none,,0d5843ac84b81432
+math,new,NEW-dropped-ligatures,1,299,0.3,pyru,none,,c4f8ad82ea97fd64
+math,new,NEW-hyphen-split-words,1,299,0.3,pyru,none,,1ab888d9366a43fd
+math,new,NEW-interleaved-columns,1,299,0.3,pyru,none,,1eadf4cf278db7e6
+math,new,NEW-merged-documents,1,299,0.3,satyanarayana,none,,c653ba40a72ae6a4
+math,new,NEW-missing-code-lines,1,299,0.3,pyru,none,,1b1a0d909bc9c515
+math,new,NEW-missing-interactive-content,1,299,0.3,satyanarayana,none,,2c3cb9502e41cc15
+math,new,NEW-offtopic-poll,1,299,0.3,satyanarayana,none,,3d0c0e3284e57c48
+math,new,NEW-orphan-figure-labels,1,299,0.3,pyru,none,,9e9292036542a1b0
+math,new,NEW-truncated-previews,1,299,0.3,satyanarayana,none,,0e0f204b1378b7ab
+math,new,NEW-unattributed-copy,1,299,0.3,pyru,none,,c9cc04b4cece5d95
+math,missed,C1,167,299,55.9,pyru satyanarayana,DA-C1-001 CANDIDATE,,006ffef8ad023034 0156e747a3f842b7 019fda08843696eb
+math,missed,C5,22,299,7.4,pyru satyanarayana,DA-C5-001 CANDIDATE; DA-C5-006 CANDIDATE,,0e2b9cc0beb5fb11 2581a275cbb83d16 291cff41d0672085
+math,missed,C2,20,299,6.7,pyru satyanarayana,DA-C2-001 CANDIDATE,,0156e747a3f842b7 0610be9612d18bc6 0a34dcef3fe6b07a
+math,missed,B5,18,299,6.0,pyru,DA-B5-001 CANDIDATE,,0156e747a3f842b7 0f2f052fd95da6d4 11ece04d6039799d
+math,missed,A3,7,299,2.3,pyru satyanarayana,DA-A3-001 CANDIDATE,,03aeffcf72c72418 1eadf4cf278db7e6 291cff41d0672085
+math,missed,B4,5,299,1.7,pyru satyanarayana,DA-B4-001 CANDIDATE,,404146d814b03d07 627f7669b7376fb5 d420078066dbe0e3
+math,missed,C3,4,299,1.3,pyru satyanarayana,DA-C3-004 CANDIDATE; DA-C3-005 CANDIDATE,,1797bf0bd4dcaddb 743e8c255952e983 8f88eda8c99d74b2
+math,missed,B2,3,299,1.0,pyru,DA-B2-001 CANDIDATE,,4783c724f8fbfa52 7872171b9bf54929 8df3b2b6e4aa72b7
+math,missed,D3,1,299,0.3,pyru,DA-D3-005 CANDIDATE,,b0db84c6cc4bfa1d
+math,missed,F2,1,299,0.3,pyru,none,,5a93d530d9026175
+math,harm,DA-C2-001,6,299,2.0,pyru,DA-C2-001 math CANDIDATE,,1b1a0d909bc9c515 3bc7339b3365a201 404146d814b03d07
+math,harm,DA-D3-005,1,299,0.3,pyru,DA-D3-005 math CANDIDATE,,1eadf4cf278db7e6
+science,new,NEW-pdf-ligatures,5,100,5.0,aditeya,none,yes,21f33206f24a2f0e 255f57592e1e996a 507e3afaa15e2375
+science,new,NEW-hyphen-split-words,3,100,3.0,aditeya,none,yes,5a201c19575522f9 75768b1b6b165557 93412124dc441459
+science,new,NEW-merged-table-cells,3,100,3.0,aditeya,none,yes,680400a6c14bde86 6cdcf2807cbf5156 6deaff0b02c57734
+science,new,NEW-missing-table-data,3,100,3.0,aditeya,none,yes,0863ac75c9ec153e 4a33733776358fac fac0d63aba9fab0c
+science,new,NEW-reading-order,2,100,2.0,aditeya,none,yes,e4d1400f9236b8c9 ef812364b6cca7a0
+science,new,NEW-seo-filler,2,100,2.0,aditeya,none,yes,365b8539483e5a3f d8a1ed9b1607a1dd
+science,new,NEW-toc-dot-leaders,2,100,2.0,aditeya,none,yes,59aef569bc52cdff b1857f12c0d28f07
+science,new,NEW-underscore-blanks,2,100,2.0,aditeya,none,yes,3b2c0420a33ccaab d8e3f724095e4aaa
+science,new,C5,1,100,1.0,aditeya,none,yes,39bb03a0df7d4af5
+science,new,NEW-detached-diacritics,1,100,1.0,aditeya,none,yes,21f33206f24a2f0e
+science,new,NEW-figure-only-doc,1,100,1.0,aditeya,none,yes,35d51dcf919068f8
+science,new,NEW-generated-image-captions,1,100,1.0,aditeya,none,yes,79596acc4ee8648a
+science,new,NEW-missing-spaces,1,100,1.0,aditeya,none,yes,f163172e98bdaa35
+science,new,NEW-orphan-figure-labels,1,100,1.0,aditeya,none,yes,75183caf56d8e54b
+science,new,NEW-pdf-quote-glyphs,1,100,1.0,aditeya,none,yes,a286f7d691161a05
+science,new,NEW-split-superscripts,1,100,1.0,aditeya,none,yes,db955ac64864c36c
+science,new,NEW-spun-text,1,100,1.0,aditeya,none,yes,f82d23a50e08a31f
+science,missed,C1,18,100,18.0,aditeya,DA-C1-007 ?,,00b17b2db8046697 03f43ec094ecc97c 1a15c4ec5610cc58
+science,missed,C2,4,100,4.0,aditeya,DA-C2-004 ?,,2223dc794fb288a2 980d490625a9634d b1857f12c0d28f07
+science,missed,F1,4,100,4.0,aditeya,DA-F1-006 ?,,1a15c4ec5610cc58 687e6f4c567f4a39 980d490625a9634d
+science,missed,C3,3,100,3.0,aditeya,DA-C3-006 ?,,00b17b2db8046697 c7953f24786c4754 e46456a5002848ec
+science,missed,A1,1,100,1.0,aditeya,DA-A1-006 ?,,507e3afaa15e2375
+science,missed,D1,1,100,1.0,aditeya,DA-D1-001 ?,,79596acc4ee8648a

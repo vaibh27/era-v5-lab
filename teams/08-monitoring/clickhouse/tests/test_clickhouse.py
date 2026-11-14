@@ -35,13 +35,18 @@ def test_parse_team5_and_team6_sources_offline():
     assert p_g6["jsonl_lines"] == 150
     assert p_g6["metric_rows"] > 150
     names = {r["name"] for r in p_g6["rows"]}
-    assert {"step_ms", "mfu", "model_flops_utilization", "gpu_utilization", "gpu_memory_used"} <= names
+    assert {
+        "step_ms", "mfu", "model_flops_utilization", "gpu_utilization", "gpu_memory_used",
+        "mfu_method.g6-v1", "mfu_scope.selected_gpu",
+    } <= names
+    assert "mfu_method.g6-v2" not in names
 
-    # Verify Team 06 additive MFU fields (mfu_method, mfu_scope, participants, global_tokens_per_s, run-scope reason codes)
+    # Verify Team 06 additive MFU fields (mfu_method, mfu_scope, ke2_mean_support_len, participants, global_tokens_per_s)
     g6_v2_doc = json.loads(resolve_source_text("teams/06-performance/results/modal_gpu/h200_v1.json")[2])
     g6_v2_doc["metrics"].update({
         "mfu_method": "g6-v2",
         "mfu_scope": "run",
+        "ke2_mean_support_len": 1.5,
         "global_tokens_per_s": 190918.0,
         "participants": {
             "world_size": 2,
@@ -56,11 +61,35 @@ def test_parse_team5_and_team6_sources_offline():
         p_g6_v2 = parse_source(str(g6_path))
         by_n = {r["name"]: r["value"] for r in p_g6_v2["rows"]}
         assert p_g6_v2["null_rows"] == 0
+        assert math.isclose(by_n["mfu_method.g6-v2"], 1.0)
+        assert "mfu_method.g6-v1" not in by_n
+        assert math.isclose(by_n["mfu_scope.run"], 1.0)
+        assert "mfu_scope.selected_gpu" not in by_n
+        assert math.isclose(by_n["ke2_mean_support_len"], 1.5)
         assert math.isclose(by_n["global_tokens_per_s"], 190918.0)
         assert math.isclose(by_n["participants.world_size"], 2.0)
         assert math.isclose(by_n["participants.peak_tflops_sum"], 624.0)
     finally:
         g6_path.unlink(missing_ok=True)
+
+    # Non-KE2 model writes `"ke2_mean_support_len": null` -> omitted cleanly without inflating null_rows
+    g6_non_ke2 = json.loads(resolve_source_text("teams/06-performance/results/modal_gpu/h200_v1.json")[2])
+    g6_non_ke2["metrics"].update({
+        "mfu_method": "g6-v2",
+        "mfu_scope": "selected_gpu",
+        "ke2_mean_support_len": None,
+    })
+    with tempfile.NamedTemporaryFile("w", suffix=".json", delete=False, encoding="utf-8") as tmp_nk:
+        json.dump(g6_non_ke2, tmp_nk)
+        nk_path = Path(tmp_nk.name)
+    try:
+        p_nk = parse_source(str(nk_path))
+        nk_names = {r["name"] for r in p_nk["rows"]}
+        assert p_nk["null_rows"] == 0
+        assert {"mfu_method.g6-v2", "mfu_scope.selected_gpu"} <= nk_names
+        assert "ke2_mean_support_len" not in nk_names
+    finally:
+        nk_path.unlink(missing_ok=True)
 
 
 def test_parse_eval_mini_v1_json_and_jsonl():
@@ -208,6 +237,46 @@ def test_parse_live_g6_events_and_null_handling():
         assert by_name[(3, "loss_ntp")] is None
         assert by_name[(3, "mfu")] is None
         assert by_name[(3, "gradient_norm")] is None
+    finally:
+        tmp_path.unlink(missing_ok=True)
+
+
+def test_parse_wide_jsonl_mfu_tags_and_2d_expert_load():
+    sample = "\n".join([
+        json.dumps({
+            "step": 10,
+            "time": "2026-11-13T00:00:10.000Z",
+            "run_id": "g6_jsonl_v2",
+            "mfu": 0.42,
+            "mfu_method": "g6-v2",
+            "mfu_scope": "selected_gpu",
+            "ke2_mean_support_len": 1.5,
+            "expert_load": [[0.25, 0.25, 0.25, 0.25], [0.5, 0.5, 0.0, 0.0]],
+        }),
+        json.dumps({
+            "step": 11,
+            "time": "2026-11-13T00:00:11.000Z",
+            "run_id": "g6_jsonl_v2",
+            "mfu": 0.41,
+            "mfu_method": "g6-v2",
+            "mfu_scope": "selected_gpu",
+            "ke2_mean_support_len": None,
+        }),
+    ])
+    with tempfile.NamedTemporaryFile("w", suffix=".jsonl", delete=False, encoding="utf-8") as tmp:
+        tmp.write(sample + "\n")
+        tmp_path = Path(tmp.name)
+    try:
+        parsed = parse_source(str(tmp_path))
+        assert parsed["jsonl_lines"] == 2
+        assert parsed["null_rows"] == 0
+        by_name = {(r["step"], r["name"]): r["value"] for r in parsed["rows"]}
+        assert by_name[(10, "mfu_method.g6-v2")] == 1.0
+        assert by_name[(10, "mfu_scope.selected_gpu")] == 1.0
+        assert math.isclose(by_name[(10, "ke2_mean_support_len")], 1.5)
+        assert math.isclose(by_name[(10, "expert_load.0.0")], 0.25)
+        assert math.isclose(by_name[(10, "expert_load.1.0")], 0.5)
+        assert (11, "ke2_mean_support_len") not in by_name
     finally:
         tmp_path.unlink(missing_ok=True)
 

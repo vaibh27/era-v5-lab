@@ -1,0 +1,2 @@
+# Same as spec_v1/.gitattributes had for these tests: LF on every system (pr-guard allows only .md directly in the team folder).
+*.py text eol=lf

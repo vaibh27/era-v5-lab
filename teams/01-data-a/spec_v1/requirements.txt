@@ -1,0 +1,9 @@
+# Spec v1: clean.py, run_clean.py, the scripts in spec_v1/build/ and spec_v1/validate/ and the tests in tests/spec_v1/.
+# Python 3.10 or later (every package below needs it); tested on Python 3.12.10, where all the tests pass.
+# Install from teams/01-data-a/:
+#   python3 -m pip install -r spec_v1/requirements.txt
+pyarrow==23.0.1                      # reads and writes the Parquet packs
+ftfy==6.3.1                          # the English mojibake rule, DA-A3-002
+tree-sitter-language-pack==1.22.1    # the shared F1 on code: finds comments and strings
+tree-sitter==0.26.0                  # what tree-sitter-language-pack runs on; pinned so its parsers do not change under it
+pytest==9.1.1                        # the unit tests

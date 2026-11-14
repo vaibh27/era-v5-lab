@@ -1,0 +1,11 @@
+# Phase C (c3_grpo_router_trainable): OLMoE-1B-7B-0125-DPO on MATH train (decontaminated, 0<p<1 in survey B1), raw problem as prompt.
+# Pre-registered in research/g10_gpu/C_PREREGISTRATION.md (capstone folder) before any run.
+seed: 1234
+device: cuda
+model: {kind: hf, path: /vol/hf/allenai/OLMoE-1B-7B-0125-DPO, dtype: bfloat16, stop_at_eos: true}
+task: {kind: math, tasks: /vol/data/math_tasks_clean.jsonl, train_ids: /vol/data/c_train_ids.txt,
+       heldout_ids: /vol/data/c_heldout_ids.txt, instruction_file: null}
+train: {algo: grpo, steps: 200, prompts_per_step: 16, k: 8, max_new: 1024, temperature: 1.0, lr: 5.0e-6, clip_eps: 0.2,
+        ppo_epochs: 1, kl_coef: 0.0, grad_clip: 1.0, trainable: ['\.self_attn\.'], eval_every: 25, eval_k: 4,
+        sampler: vllm, vllm: {gpu_memory_utilization: 0.3, max_model_len: 2048}, tis_clip: 2.0,
+        routing_log: true, routing_probe: 8, kl_to_start: true, micro_rows: 2, router_trainable: true}

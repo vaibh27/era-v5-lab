@@ -1,0 +1,106 @@
+Tokenizer sample v0: candidate validation, 2026-11-02 (America/New_York)
+clean.py SHA-256: 97c1a55b89f4a15ef4985928ef124f29f04a37c21038eb0ea4977598767ae58f
+All commands exited 0. Inputs: current repository own-pack gold and local week-1 diagnosis packs.
+Reports and this log contain counts, IDs and digests only.
+
+Command: python -m pytest teams/01-data-a -q
+........................................................................ [  6%]
+........................................................................ [ 12%]
+........................................................................ [ 19%]
+........................................................................ [ 25%]
+........................................................................ [ 32%]
+........................................................................ [ 38%]
+........................................................................ [ 45%]
+........................................................................ [ 51%]
+........................................................................ [ 58%]
+........................................................................ [ 64%]
+........................................................................ [ 70%]
+........................................................................ [ 77%]
+........................................................................ [ 83%]
+.................................................. [ 88%]
+........................................................................ [ 94%]
+................................s.........................                                                                   [100%]
+1115 passed, 1 skipped, 42 subtests passed in 12.09s
+
+Command: python teams/01-data-a/spec_v1/tools/harm_f1_indic.py --packs <diagnosis packs>
+ind-bn-fw2: gold 238 (limit 2) | F1 0+0 PASS | clean() 0+0 PASS
+ind-bn-sangraha-v: gold 50 (limit 1) | F1 0+0 PASS | clean() 0+0 PASS
+ind-gu-fw2: gold 19 (limit 1) | F1 0+0 PASS | clean() 0+0 PASS
+ind-hi-fw2: gold 234 (limit 2) | F1 0+0 PASS | clean() 0+1 PASS
+ind-hi-hplt: gold 67 (limit 1) | F1 0+0 PASS | clean() 0+0 PASS
+ind-hi-indiccorp: gold 130 (limit 1) | F1 0+0 PASS | clean() 0+0 PASS
+ind-kn-fw2: gold 45 (limit 1) | F1 0+0 PASS | clean() 0+0 PASS
+ind-kn-sangraha-s: gold 27 (limit 1) | F1 0+0 PASS | clean() 0+0 PASS
+ind-kn-sangraha-v: gold 103 (limit 1) | F1 0+0 PASS | clean() 0+0 PASS
+ind-mr-fw2: gold 140 (limit 1) | F1 0+0 PASS | clean() 1+0 PASS
+ind-mr-sangraha-v: gold 88 (limit 1) | F1 0+0 PASS | clean() 0+0 PASS
+ind-sa-fw2: gold 68 (limit 1) | F1 0+0 PASS | clean() 1+0 PASS
+ind-ta-sangraha-v: gold 41 (limit 1) | F1 0+0 PASS | clean() 0+0 PASS
+ind-te-fw2: gold 18 (limit 1) | F1 0+0 PASS | clean() 0+0 PASS
+ind-te-sangraha-s: gold 5 (limit 1) | F1 0+0 PASS | clean() 0+0 PASS
+ind-te-sangraha-v: gold 27 (limit 1) | F1 0+0 PASS | clean() 0+0 PASS
+
+Command: python teams/01-data-a/spec_v1/tools/check_indic_integration.py --packs <diagnosis packs> --baseline <pre-PR-28 clean.py from 97d7252>
+code-cpp differences 0 matching baseline errors 0
+code-go differences 0 matching baseline errors 0
+code-java differences 0 matching baseline errors 1
+code-js-ts differences 0 matching baseline errors 0
+code-python differences 0 matching baseline errors 2
+code-rust differences 0 matching baseline errors 0
+en-dclm differences 0 matching baseline errors 0
+en-fineweb-edu differences 0 matching baseline errors 0
+en-nemotroncc differences 0 matching baseline errors 0
+en-nemotroncc-synth differences 0 matching baseline errors 0
+math-finemath differences 0 matching baseline errors 0
+math-megamath differences 0 matching baseline errors 0
+sci-finepdfs differences 0 matching baseline errors 0
+ind-bn-fw2 PASS gold 0 0 full 114 45 errors 0 second-run changes 0
+ind-bn-sangraha-v PASS gold 0 0 full 41 7 errors 0 second-run changes 0
+ind-gu-fw2 PASS gold 0 0 full 173 10 errors 0 second-run changes 0
+ind-hi-fw2 PASS gold 0 1 full 26 4 errors 0 second-run changes 0
+ind-hi-hplt PASS gold 0 0 full 92 33 errors 0 second-run changes 0
+ind-hi-indiccorp PASS gold 0 0 full 3 0 errors 0 second-run changes 0
+ind-kn-fw2 PASS gold 0 0 full 88 9 errors 0 second-run changes 0
+ind-kn-sangraha-s PASS gold 0 0 full 72 1 errors 0 second-run changes 0
+ind-kn-sangraha-v PASS gold 0 0 full 40 12 errors 0 second-run changes 0
+ind-mr-fw2 PASS gold 1 0 full 79 8 errors 0 second-run changes 0
+ind-mr-sangraha-v PASS gold 0 0 full 266 26 errors 0 second-run changes 0
+ind-sa-fw2 PASS gold 1 0 full 227 21 errors 0 second-run changes 0
+ind-ta-sangraha-v PASS gold 0 0 full 215 3 errors 0 second-run changes 0
+ind-te-fw2 PASS gold 0 0 full 112 111 errors 0 second-run changes 0
+ind-te-sangraha-s PASS gold 0 0 full 106 30 errors 0 second-run changes 0
+ind-te-sangraha-v PASS gold 0 0 full 36 30 errors 0 second-run changes 0
+
+Command: python teams/01-data-a/spec_v1/tools/validate_specv1.py --packs <diagnosis packs> --gold teams/01-data-a/gold --indic-gold teams/02-data-b/gold
+code-cpp PASS gold 0 0 pack errors 0
+code-go PASS gold 0 0 pack errors 0
+code-java PASS gold 0 0 pack errors 0
+code-js-ts PASS gold 0 0 pack errors 0
+code-python PASS gold 0 0 pack errors 0
+code-rust PASS gold 0 0 pack errors 0
+en-dclm PASS gold 0 0 pack errors 0
+en-fineweb-edu PASS gold 0 0 pack errors 0
+en-nemotroncc PASS gold 0 0 pack errors 0
+en-nemotroncc-synth PASS gold 0 0 pack errors 0
+ind-bn-fw2 PASS gold 0 0 pack errors 0
+ind-bn-sangraha-v PASS gold 0 0 pack errors 0
+ind-gu-fw2 PASS gold 0 0 pack errors 0
+ind-hi-fw2 PASS gold 0 1 pack errors 0
+ind-hi-hplt PASS gold 0 0 pack errors 0
+ind-hi-indiccorp PASS gold 0 0 pack errors 0
+ind-kn-fw2 PASS gold 0 0 pack errors 0
+ind-kn-sangraha-s PASS gold 0 0 pack errors 0
+ind-kn-sangraha-v PASS gold 0 0 pack errors 0
+ind-mr-fw2 PASS gold 1 0 pack errors 0
+ind-mr-sangraha-v PASS gold 0 0 pack errors 0
+ind-sa-fw2 PASS gold 1 0 pack errors 0
+ind-ta-sangraha-v PASS gold 0 0 pack errors 0
+ind-te-fw2 PASS gold 0 0 pack errors 0
+ind-te-sangraha-s PASS gold 0 0 pack errors 0
+ind-te-sangraha-v PASS gold 0 0 pack errors 0
+math-finemath PASS gold 0 0 pack errors 0
+math-megamath PASS gold 0 0 pack errors 0
+sci-finepdfs PASS gold 0 0 pack errors 0
+
+Build check: clean.py rebuilt byte-for-byte identically after sheet validation; config/log cleaner pins match.
+Local sample inventory: 80/86 checksum-matched parts; TSAI must mount the full sample.

@@ -10,6 +10,7 @@ import pytest
 import revalidate_tokenizer_candidates as rtc
 
 RESULTS = Path(__file__).resolve().parents[1] / "results" / "tokenizer_candidates"
+SAMPLE_V0_RESULTS = RESULTS / "sample_v0"
 
 
 def test_parse_candidate():
@@ -80,3 +81,47 @@ def test_committed_candidate_results_are_internally_consistent():
         assert totals["tokens"] == expected["n_tokens_in_groups"]
         assert totals["excess"] == expected["n_excess_tokens"]
     assert not any(extraction == "raw" for _, extraction, _ in group_sums)
+
+
+def test_sample_v0_candidate_results_are_internally_consistent():
+    """The separately generated sample-v0 report covers the delivered C1/C2/C3 artifacts."""
+    report = json.loads((SAMPLE_V0_RESULTS / "summary.json").read_text(encoding="utf-8"))
+    expected_order = ["C1-s0", "C2-s0", "C3-s0"]
+    assert report["candidate_order"] == expected_order
+    assert set(report["candidates"]) == set(expected_order)
+
+    for name in expected_order:
+        candidate = report["candidates"][name]
+        assert candidate["tokenizer_sha256"] == rtc.EXPECTED_SHA256[name]
+        assert candidate["vocab_size"] == 131_072
+        assert candidate["max_raw_byte_length"] == 32
+        assert candidate["gate_zero_other_collision_groups"]
+        for pos_dim in (32, 64):
+            raw = candidate["collision_totals"][f"raw_P{pos_dim}"]
+            assert raw["n_groups"] == raw["n_tokens_in_groups"] == raw["n_excess_tokens"] == 0
+
+    candidates_in_csv = set()
+    totals = defaultdict(int)
+    with (SAMPLE_V0_RESULTS / "collisions_by_script.csv").open(encoding="utf-8", newline="") as handle:
+        for row in csv.DictReader(handle):
+            candidates_in_csv.add(row["candidate"])
+            totals[row["candidate"], row["extraction"], int(row["P"])] += int(row["n_tokens"])
+    assert candidates_in_csv == set(expected_order)
+    assert set(totals.values()) == {131_072}
+
+    with (SAMPLE_V0_RESULTS / "collision_groups.csv").open(encoding="utf-8", newline="") as handle:
+        groups = list(csv.DictReader(handle))
+    assert groups
+    assert {row["candidate"] for row in groups} == set(expected_order)
+    assert {row["extraction"] for row in groups} == {"decode"}
+    assert {row["cause"] for row in groups} == {"decode_collapse"}
+
+    difference = report["differences_from_previous_candidate"]["C2-s0"]
+    assert difference["reference"] == "C1-s0"
+    assert difference["raw_changed"]["count"] == 8_704
+    assert difference["decode_changed"]["count"] == 8_704
+
+    difference = report["differences_from_previous_candidate"]["C3-s0"]
+    assert difference["reference"] == "C2-s0"
+    assert difference["raw_changed"]["count"] == 5_406
+    assert difference["decode_changed"]["count"] == 5_406

@@ -1,0 +1,22 @@
+{
+  "complete_sample": false,
+  "parts": [
+    {
+      "output_rows": 14493,
+      "output_sha256": "ba9cce03ae973b6446ca712ce5733625c195b881489aa27a5b959bce3fcdcc05",
+      "pack_id": "ind-hi-sangraha-v",
+      "part": "train/ind-hi-sangraha-v/part-00000.parquet",
+      "split": "train",
+      "status": "cleaned"
+    },
+    {
+      "output_rows": 5706,
+      "output_sha256": "cee7f90c410429a111d635d9872ed4944cfbb51000144080d4d94a1c654bd5be",
+      "pack_id": "ind-te-fw2",
+      "part": "train/ind-te-fw2/part-00000.parquet",
+      "split": "train",
+      "status": "cleaned"
+    }
+  ],
+  "sample": "era-v5-lab tokenizer sample v0"
+}

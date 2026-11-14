@@ -1,0 +1,82 @@
+{
+ "set": "rl-code-swe-rebench-pilot",
+ "run_at": "2026-11-11T17:14:53Z",
+ "fingerprints": "v2",
+ "set_sha256": "2826a3b883210c653979103c09ce1c79e40fc4f7034b54027f2836482370d22a",
+ "scope": "full set",
+ "benchmarks": [
+  "aime_2024",
+  "aime_2025",
+  "bfcl_v3",
+  "codeforces",
+  "flores200",
+  "gaia",
+  "gpqa_diamond",
+  "gsm8k",
+  "heldout_g5_v1",
+  "hle",
+  "in22_conv",
+  "in22_gen",
+  "livecodebench",
+  "longbench_v2",
+  "milu",
+  "mmlu",
+  "swe_bench_live",
+  "swe_bench_pro",
+  "swe_bench_verified",
+  "terminal_bench_2"
+ ],
+ "tools": {
+  "files": {
+   "decontam_check.py": "62a269a25123543b5470c4956ba1be530ea257c597bc2be2eab19201cb62df8f",
+   "canary_scan.py": "322066d675e13af8bee0d05602f755f49e33da5a148bf664306ce6d6a9f908c2",
+   "fpset.py": "7f5f48d08506d619ebfadd2742e86d29ec3ea28e5fcfd729f13cd8d959689c59",
+   "normalize.py": "570dcb820ac2ae6c667b1abc5ea1d781a6795aa42a7735aa94377e756d7d70e9",
+   "lab_canary.py": "373536a777c9f16367cf6affcc2cc6243755ac23e75850a2624eadf65918ea09"
+  },
+  "git_commit": "5f73fb9513beaf98421a99a95920178e9b77016a"
+ },
+ "inputs": [
+  {
+   "name": "rebench_pilot_docs.jsonl",
+   "bytes": 14500,
+   "sha256": "64a1ebcaf22343e9e085af86e591e2e3193fb2e442f1d436569766bc8c441adf"
+  }
+ ],
+ "rows_in": 15,
+ "rows_flagged": 0,
+ "rows_canary": 0,
+ "rows_removed": 0,
+ "rows_kept": 15,
+ "by_benchmark": {},
+ "flagged": {},
+ "canary": {
+  "exit": 0,
+  "docs_with_canary": 0,
+  "hits": [],
+  "files_skipped": 0
+ },
+ "clean": [
+  {
+   "name": "rl-code-swe-rebench-pilot.clean.jsonl",
+   "sha256": "64a1ebcaf22343e9e085af86e591e2e3193fb2e442f1d436569766bc8c441adf"
+  }
+ ],
+ "recheck_on_clean": {
+  "docs": 15,
+  "flagged": 0,
+  "set_sha256": "2826a3b883210c653979103c09ce1c79e40fc4f7034b54027f2836482370d22a"
+ },
+ "duplicate_ids": 0,
+ "checks": {
+  "ids_unique": true,
+  "docs_match_checker": true,
+  "flagged_ids_in_input": true,
+  "canary_ids_in_input": true,
+  "flagged_count_matches": true,
+  "rows_in_eq_kept_plus_removed": true,
+  "canary_scan_complete": true,
+  "clean_file_flags_0": true
+ },
+ "ok": true
+}

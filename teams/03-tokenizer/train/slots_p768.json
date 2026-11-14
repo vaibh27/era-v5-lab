@@ -1,0 +1,92 @@
+{
+  "_comment": "C3 sample-v0 (slots_v2.json, mix_s0.json) plus 768 extra merges per script (v2_spec idea 1). The extra ids come from the next unused o200k base tokens in o200k_v2.json's prune list, after the 13,850 swapped ones; a script's ids are its block plus those ranges. Use with --mix mix_s0.json --special-layout v0 --normalizer v1.",
+  "vocab_size": 131072,
+  "special_slots": 256,
+  "named_specials": [
+    "<|begin_of_text|>",
+    "<|end_of_text|>",
+    "<|pad|>",
+    "<|unk|>",
+    "<|im_start|>",
+    "<|im_end|>",
+    "<|system|>",
+    "<|user|>",
+    "<|assistant|>",
+    "<|tool_call|>",
+    "<|tool_result|>",
+    "<|think|>",
+    "<|/think|>",
+    "<|fim_prefix|>",
+    "<|fim_middle|>",
+    "<|fim_suffix|>"
+  ],
+  "base": 114332,
+  "o200k_swap": "o200k_v2.json",
+  "scripts": {
+    "Devanagari": {
+      "slots": 3072,
+      "langs": [
+        "Hi",
+        "Mr"
+      ],
+      "extra": 768
+    },
+    "Bengali": {
+      "slots": 2048,
+      "langs": [
+        "Bn",
+        "As"
+      ],
+      "extra": 768
+    },
+    "Tamil": {
+      "slots": 1792,
+      "langs": [
+        "Ta"
+      ],
+      "extra": 768
+    },
+    "Telugu": {
+      "slots": 1920,
+      "langs": [
+        "Te"
+      ],
+      "extra": 768
+    },
+    "Kannada": {
+      "slots": 1920,
+      "langs": [
+        "Kn"
+      ],
+      "extra": 768
+    },
+    "Malayalam": {
+      "slots": 2048,
+      "langs": [
+        "Ml"
+      ],
+      "extra": 768
+    },
+    "Gujarati": {
+      "slots": 1024,
+      "langs": [
+        "Gu"
+      ],
+      "extra": 768
+    },
+    "Gurmukhi": {
+      "slots": 1024,
+      "langs": [
+        "Pa"
+      ],
+      "extra": 768
+    },
+    "Oriya": {
+      "slots": 1536,
+      "langs": [
+        "Or"
+      ],
+      "extra": 768
+    }
+  }
+}

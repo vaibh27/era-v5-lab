@@ -1,0 +1,98 @@
+$ python -m pytest teams/01-data-a/tests -q
+........................................................................ [  3%]
+..............................................................s......... [  6%]
+........................................................................ [ 10%]
+........................................................................ [ 13%]
+........................................................................ [ 16%]
+........................................................................ [ 20%]
+........................................................................ [ 23%]
+........................................................................ [ 27%]
+........................................................................ [ 30%]
+........................................................................ [ 33%]
+........................................................................ [ 37%]
+........................................................................ [ 40%]
+........................................................................ [ 44%]
+........................................................................ [ 47%]
+........................................................................ [ 50%]
+........................................................................ [ 54%]
+........................................................................ [ 57%]
+........................................................................ [ 61%]
+........................................................................ [ 64%]
+........................................................................ [ 67%]
+........................................................................ [ 71%]
+........................................................................ [ 74%]
+........................................................................ [ 78%]
+........................................................................ [ 81%]
+........................................................................ [ 84%]
+........................................................................ [ 88%]
+........................................................................ [ 91%]
+........................................................................ [ 95%]
+...................................................................................................... [100%]
+2117 passed, 1 skipped, 42 subtests passed in 33.98s
+
+$ python -I teams/01-data-a/spec_v1/validate/make_harm_tests.py <isolated-own-pack-gold-checkout> <diagnosis-packs>
+code-cpp PASS gold 0 0 | not passing: [] | out of scope acting: []
+code-go PASS gold 0 0 | not passing: [] | out of scope acting: []
+code-java PASS gold 0 0 | not passing: [] | out of scope acting: []
+code-js-ts PASS gold 0 0 | not passing: [] | out of scope acting: []
+code-python PASS gold 0 0 | not passing: [] | out of scope acting: []
+code-rust PASS gold 0 0 | not passing: [] | out of scope acting: []
+en-dclm PASS gold 0 0 | not passing: [] | out of scope acting: []
+en-fineweb-edu PASS gold 0 0 | not passing: [] | out of scope acting: []
+en-nemotroncc PASS gold 0 0 | not passing: [] | out of scope acting: []
+en-nemotroncc-synth PASS gold 0 0 | not passing: [] | out of scope acting: []
+math-finemath PASS gold 0 0 | not passing: [] | out of scope acting: []
+math-megamath PASS gold 0 0 | not passing: [] | out of scope acting: []
+sci-finepdfs PASS gold 0 0 | not passing: [] | out of scope acting: []
+ind-bn-fw2 PASS gold 1 1 | not passing: [] | out of scope acting: []
+ind-bn-sangraha-v PASS gold 1 0 | not passing: [] | out of scope acting: []
+ind-gu-fw2 PASS gold 0 0 | not passing: [] | out of scope acting: []
+ind-hi-fw2 PASS gold 1 1 | not passing: [] | out of scope acting: []
+ind-hi-hplt PASS gold 0 0 | not passing: [] | out of scope acting: []
+ind-hi-indiccorp PASS gold 1 1 | not passing: [] | out of scope acting: []
+ind-hi-sangraha-s PASS gold 0 0 | not passing: [] | out of scope acting: []
+ind-hi-sangraha-v PASS gold 2 0 | not passing: [] | out of scope acting: []
+ind-kn-fw2 PASS gold 1 0 | not passing: [] | out of scope acting: []
+ind-kn-sangraha-s PASS gold 0 0 | not passing: [] | out of scope acting: []
+ind-kn-sangraha-v PASS gold 0 0 | not passing: [] | out of scope acting: []
+ind-mr-fw2 PASS gold 1 0 | not passing: [] | out of scope acting: []
+ind-mr-sangraha-v PASS gold 0 0 | not passing: [] | out of scope acting: []
+ind-sa-fw2 PASS gold 1 0 | not passing: [] | out of scope acting: []
+ind-ta-sangraha-v PASS gold 1 0 | not passing: [] | out of scope acting: []
+ind-te-fw2 PASS gold 0 0 | not passing: [] | out of scope acting: []
+ind-te-sangraha-s PASS gold 0 0 | not passing: [] | out of scope acting: []
+ind-te-sangraha-v PASS gold 0 0 | not passing: [] | out of scope acting: []
+wrote <validation-workspace>/harm_tests.md | not run: []
+
+$ python -I teams/01-data-a/spec_v1/validate/check_indic_integration.py --packs <diagnosis-packs> --gold teams/02-data-b/gold --baseline <476f026-clean.py>
+code-cpp differences 0 matching baseline errors 0
+code-go differences 0 matching baseline errors 0
+code-java differences 0 matching baseline errors 0
+code-js-ts differences 0 matching baseline errors 0
+code-python differences 0 matching baseline errors 0
+code-rust differences 0 matching baseline errors 0
+en-dclm differences 0 matching baseline errors 0
+en-fineweb-edu differences 0 matching baseline errors 0
+en-nemotroncc differences 0 matching baseline errors 0
+en-nemotroncc-synth differences 0 matching baseline errors 0
+math-finemath differences 0 matching baseline errors 0
+math-megamath differences 0 matching baseline errors 0
+sci-finepdfs differences 0 matching baseline errors 0
+ind-bn-fw2 PASS gold 1 1 full 106 43 errors 0 second-run changes 0
+ind-bn-sangraha-v PASS gold 1 0 full 63 7 errors 0 second-run changes 0
+ind-gu-fw2 PASS gold 0 0 full 173 10 errors 0 second-run changes 0
+ind-hi-fw2 PASS gold 1 1 full 34 29 errors 0 second-run changes 0
+ind-hi-hplt PASS gold 0 0 full 97 57 errors 0 second-run changes 0
+ind-hi-indiccorp PASS gold 1 1 full 5 6 errors 0 second-run changes 0
+ind-hi-sangraha-s PASS gold 0 0 full 93 66 errors 0 second-run changes 0
+ind-hi-sangraha-v PASS gold 2 0 full 40 5 errors 0 second-run changes 0
+ind-kn-fw2 PASS gold 1 0 full 13 1 errors 0 second-run changes 0
+ind-kn-sangraha-s PASS gold 0 0 full 143 0 errors 0 second-run changes 0
+ind-kn-sangraha-v PASS gold 0 0 full 100 12 errors 0 second-run changes 0
+ind-mr-fw2 PASS gold 1 0 full 75 9 errors 0 second-run changes 0
+ind-mr-sangraha-v PASS gold 0 0 full 272 26 errors 0 second-run changes 0
+ind-sa-fw2 PASS gold 1 0 full 226 21 errors 0 second-run changes 0
+ind-ta-sangraha-v PASS gold 1 0 full 106 0 errors 0 second-run changes 0
+ind-te-fw2 PASS gold 0 0 full 144 24 errors 0 second-run changes 0
+ind-te-sangraha-s PASS gold 0 0 full 15 30 errors 0 second-run changes 0
+ind-te-sangraha-v PASS gold 0 0 full 24 1 errors 0 second-run changes 0

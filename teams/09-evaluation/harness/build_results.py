@@ -96,10 +96,14 @@ NOTES: dict[tuple[str, str, int], str] = {
         "random train exemplars and extracts the last number, while Qwen's 4-shot prompt and extraction are not "
         "published. Two independent harnesses, lm_eval here and lighteval on the SmolLM2 card, agree with each other "
         "on these models and not with Qwen's figure, so this is a prompt-format gap on the publisher's side, not a "
-        "defect of this run",
+        "defect of this run. PR #88 pre-registered this anchor as excluded: \"Qwen GSM8K 4-shot (prompt not published)\" "
+        "(teams/09-evaluation/harness_code_indic/published_scores.json, under `excluded`)",
     ("Qwen/Qwen2.5-1.5B", "gsm8k", 4):
         "same shot count as Qwen's report; see the 0.5B row for why the gap is prompt format. The lighteval 5-shot "
-        "figure on the SmolLM2 card (61.3) is the harness-measured reference for this model",
+        "figure on the SmolLM2 card (61.3) is the harness-measured reference for this model. PR #88 pre-registered "
+        "this anchor as excluded: \"Qwen GSM8K 4-shot (prompt not published)\" "
+        "(teams/09-evaluation/harness_code_indic/published_scores.json, under `excluded`). The 5-shot comparison "
+        "against the SmolLM2 card's lighteval run is +1.5, within 2.",
     ("Qwen/Qwen2.5-0.5B", "arc_challenge", 25):
         "same 25-shot setting as Qwen's report (few-shot exemplars sampled from the ARC train split with seed 42)",
     ("Qwen/Qwen2.5-1.5B", "arc_challenge", 0):

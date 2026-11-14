@@ -1,0 +1,1272 @@
+{
+  "actions": {
+    "drop": 507,
+    "fix": 2101,
+    "keep": 18098
+  },
+  "clean_sha256": "22d818c72c9f30bf338de344a0fcda230e2d1de30a1aaec5d92bc525bae99179",
+  "completed_parts": 2,
+  "config_sha256": "8c58030f51e3d9f338f59719daa91b6ab59614f3ffdb9c60bb35997b35ea63ec",
+  "errors": 0,
+  "expected_parts": 86,
+  "input_rows": 20706,
+  "manifest_sha256": "7fd647c8d4662d17e2310efbcc20981d70656fdad2fabb7663c266a2153a1b7e",
+  "optional_f2": false,
+  "output_rows": 20199,
+  "packages": {
+    "ftfy": "6.3.1",
+    "pyarrow": "23.0.1",
+    "tree-sitter": "0.26.0",
+    "tree-sitter-language-pack": "1.22.1"
+  },
+  "parts": [
+    {
+      "actions": {
+        "drop": 216,
+        "fix": 938,
+        "keep": 13555
+      },
+      "errors": 0,
+      "input_rows": 14709,
+      "input_sha256": "26adb8a93f68d316e49f233cf5258852dc5a390ba61bb2297b6e0cc0be047551",
+      "language_tags": [
+        "hi"
+      ],
+      "output_rows": 14493,
+      "output_sha256": "ba9cce03ae973b6446ca712ce5733625c195b881489aa27a5b959bce3fcdcc05",
+      "pack_id": "ind-hi-sangraha-v",
+      "part": "train/ind-hi-sangraha-v/part-00000.parquet",
+      "rule_counts": {
+        "DB-A6-017": {
+          "drop": 0,
+          "eligible_by_pack": 14709,
+          "error": 0,
+          "fix": 192,
+          "invocations": 14709,
+          "keep": 14517,
+          "not_reached": 0
+        },
+        "DB-B2-001": {
+          "drop": 0,
+          "eligible_by_pack": 14709,
+          "error": 0,
+          "fix": 4,
+          "invocations": 14709,
+          "keep": 14705,
+          "not_reached": 0
+        },
+        "DB-B4-008": {
+          "drop": 0,
+          "eligible_by_pack": 14709,
+          "error": 0,
+          "fix": 0,
+          "invocations": 14709,
+          "keep": 14709,
+          "not_reached": 0
+        },
+        "DB-C1-005": {
+          "drop": 1,
+          "eligible_by_pack": 14709,
+          "error": 0,
+          "fix": 304,
+          "invocations": 14494,
+          "keep": 14189,
+          "not_reached": 215
+        },
+        "DB-C2-014": {
+          "drop": 0,
+          "eligible_by_pack": 14709,
+          "error": 0,
+          "fix": 448,
+          "invocations": 14493,
+          "keep": 14045,
+          "not_reached": 216
+        },
+        "DB-C3-002": {
+          "drop": 2,
+          "eligible_by_pack": 14709,
+          "error": 0,
+          "fix": 0,
+          "invocations": 14709,
+          "keep": 14707,
+          "not_reached": 0
+        },
+        "DB-C4-002": {
+          "drop": 0,
+          "eligible_by_pack": 14709,
+          "error": 0,
+          "fix": 0,
+          "invocations": 14707,
+          "keep": 14707,
+          "not_reached": 2
+        },
+        "DB-C5-016": {
+          "drop": 0,
+          "eligible_by_pack": 14709,
+          "error": 0,
+          "fix": 0,
+          "invocations": 14707,
+          "keep": 14707,
+          "not_reached": 2
+        },
+        "DB-D2-003": {
+          "drop": 0,
+          "eligible_by_pack": 14709,
+          "error": 0,
+          "fix": 7,
+          "invocations": 14493,
+          "keep": 14486,
+          "not_reached": 216
+        },
+        "DB-D3-005": {
+          "drop": 0,
+          "eligible_by_pack": 14709,
+          "error": 0,
+          "fix": 0,
+          "invocations": 14493,
+          "keep": 14493,
+          "not_reached": 216
+        },
+        "DB-D4-013": {
+          "drop": 56,
+          "eligible_by_pack": 14709,
+          "error": 0,
+          "fix": 0,
+          "invocations": 14707,
+          "keep": 14651,
+          "not_reached": 2
+        },
+        "DB-D5-002": {
+          "drop": 0,
+          "eligible_by_pack": 14709,
+          "error": 0,
+          "fix": 0,
+          "invocations": 14493,
+          "keep": 14493,
+          "not_reached": 216
+        },
+        "DB-F3-004": {
+          "drop": 55,
+          "eligible_by_pack": 14709,
+          "error": 0,
+          "fix": 0,
+          "invocations": 14651,
+          "keep": 14596,
+          "not_reached": 58
+        },
+        "DB-G1-016": {
+          "drop": 0,
+          "eligible_by_pack": 14709,
+          "error": 0,
+          "fix": 3,
+          "invocations": 14709,
+          "keep": 14706,
+          "not_reached": 0
+        },
+        "DB-G3-003": {
+          "drop": 102,
+          "eligible_by_pack": 14709,
+          "error": 0,
+          "fix": 0,
+          "invocations": 14596,
+          "keep": 14494,
+          "not_reached": 113
+        },
+        "DB-G4-007": {
+          "drop": 0,
+          "eligible_by_pack": 14709,
+          "error": 0,
+          "fix": 0,
+          "invocations": 14709,
+          "keep": 14709,
+          "not_reached": 0
+        },
+        "f1_rule.py": {
+          "drop": 0,
+          "eligible_by_pack": 14709,
+          "error": 0,
+          "fix": 26,
+          "invocations": 14493,
+          "keep": 14467,
+          "not_reached": 216
+        }
+      },
+      "seconds": 28.251,
+      "split": "train",
+      "status": "cleaned"
+    },
+    {
+      "actions": {
+        "drop": 291,
+        "fix": 1163,
+        "keep": 4543
+      },
+      "errors": 0,
+      "input_rows": 5997,
+      "input_sha256": "194f080c14dec33a3a7312bdc147c86c51450b995086189aa092a92ef4316165",
+      "language_tags": [
+        "te"
+      ],
+      "output_rows": 5706,
+      "output_sha256": "cee7f90c410429a111d635d9872ed4944cfbb51000144080d4d94a1c654bd5be",
+      "pack_id": "ind-te-fw2",
+      "part": "train/ind-te-fw2/part-00000.parquet",
+      "rule_counts": {
+        "DB-A1-002": {
+          "drop": 0,
+          "eligible_by_pack": 5997,
+          "error": 0,
+          "fix": 0,
+          "invocations": 5997,
+          "keep": 5997,
+          "not_reached": 0
+        },
+        "DB-A6-013": {
+          "drop": 0,
+          "eligible_by_pack": 5997,
+          "error": 0,
+          "fix": 50,
+          "invocations": 5997,
+          "keep": 5947,
+          "not_reached": 0
+        },
+        "DB-B2-004": {
+          "drop": 0,
+          "eligible_by_pack": 5997,
+          "error": 0,
+          "fix": 6,
+          "invocations": 5997,
+          "keep": 5991,
+          "not_reached": 0
+        },
+        "DB-B4-006": {
+          "drop": 0,
+          "eligible_by_pack": 5997,
+          "error": 0,
+          "fix": 0,
+          "invocations": 5706,
+          "keep": 5706,
+          "not_reached": 291
+        },
+        "DB-C1-016": {
+          "drop": 0,
+          "eligible_by_pack": 5997,
+          "error": 0,
+          "fix": 837,
+          "invocations": 5706,
+          "keep": 4869,
+          "not_reached": 291
+        },
+        "DB-C2-013": {
+          "drop": 0,
+          "eligible_by_pack": 5997,
+          "error": 0,
+          "fix": 248,
+          "invocations": 5706,
+          "keep": 5458,
+          "not_reached": 291
+        },
+        "DB-C3-020": {
+          "drop": 0,
+          "eligible_by_pack": 5997,
+          "error": 0,
+          "fix": 0,
+          "invocations": 5997,
+          "keep": 5997,
+          "not_reached": 0
+        },
+        "DB-C4-006": {
+          "drop": 39,
+          "eligible_by_pack": 5997,
+          "error": 0,
+          "fix": 0,
+          "invocations": 5997,
+          "keep": 5958,
+          "not_reached": 0
+        },
+        "DB-C5-006": {
+          "drop": 223,
+          "eligible_by_pack": 5997,
+          "error": 0,
+          "fix": 0,
+          "invocations": 5958,
+          "keep": 5735,
+          "not_reached": 39
+        },
+        "DB-D3-014": {
+          "drop": 0,
+          "eligible_by_pack": 5997,
+          "error": 0,
+          "fix": 0,
+          "invocations": 5706,
+          "keep": 5706,
+          "not_reached": 291
+        },
+        "DB-D4-012": {
+          "drop": 2,
+          "eligible_by_pack": 5997,
+          "error": 0,
+          "fix": 0,
+          "invocations": 5735,
+          "keep": 5733,
+          "not_reached": 262
+        },
+        "DB-D5-004": {
+          "drop": 0,
+          "eligible_by_pack": 5997,
+          "error": 0,
+          "fix": 0,
+          "invocations": 5733,
+          "keep": 5733,
+          "not_reached": 264
+        },
+        "DB-F3-003": {
+          "drop": 27,
+          "eligible_by_pack": 5997,
+          "error": 0,
+          "fix": 0,
+          "invocations": 5733,
+          "keep": 5706,
+          "not_reached": 264
+        },
+        "DB-G1-010": {
+          "drop": 0,
+          "eligible_by_pack": 5997,
+          "error": 0,
+          "fix": 45,
+          "invocations": 5997,
+          "keep": 5952,
+          "not_reached": 0
+        },
+        "f1_rule.py": {
+          "drop": 0,
+          "eligible_by_pack": 5997,
+          "error": 0,
+          "fix": 39,
+          "invocations": 5706,
+          "keep": 5667,
+          "not_reached": 291
+        }
+      },
+      "seconds": 24.53,
+      "split": "train",
+      "status": "cleaned"
+    }
+  ],
+  "peak_rss_mib": 173.504,
+  "python": "3.12.3",
+  "rule_count_semantics": "sequential invocations inside actual clean.clean/_run; fixes on later-dropped docs still count; not independent rule hits",
+  "rule_scope": {
+    "DA-A1-001": [
+      "code-cpp",
+      "code-go",
+      "code-java",
+      "code-js-ts",
+      "code-python",
+      "code-rust"
+    ],
+    "DA-A1-004": [
+      "en-dclm",
+      "en-fineweb-edu",
+      "en-nemotroncc",
+      "en-nemotroncc-synth"
+    ],
+    "DA-A1-005": [
+      "math-finemath"
+    ],
+    "DA-A1-006": [
+      "sci-finepdfs"
+    ],
+    "DA-A2-007": [
+      "code-cpp",
+      "code-go",
+      "code-java",
+      "code-js-ts",
+      "code-python",
+      "code-rust"
+    ],
+    "DA-A2-008": [
+      "en-dclm",
+      "en-fineweb-edu",
+      "en-nemotroncc",
+      "en-nemotroncc-synth"
+    ],
+    "DA-A3-001": [
+      "math-finemath",
+      "math-megamath"
+    ],
+    "DA-A3-002": [
+      "en-dclm",
+      "en-fineweb-edu",
+      "en-nemotroncc",
+      "en-nemotroncc-synth"
+    ],
+    "DA-A4-002": [
+      "code-cpp",
+      "code-go",
+      "code-java",
+      "code-js-ts",
+      "code-python",
+      "code-rust"
+    ],
+    "DA-A4-003": [
+      "code-java"
+    ],
+    "DA-A5-001": [
+      "en-dclm",
+      "en-fineweb-edu",
+      "en-nemotroncc",
+      "en-nemotroncc-synth"
+    ],
+    "DA-A5-002": [
+      "math-finemath",
+      "math-megamath"
+    ],
+    "DA-A6-001": [
+      "code-cpp",
+      "code-go",
+      "code-java",
+      "code-js-ts",
+      "code-python",
+      "code-rust"
+    ],
+    "DA-A6-002": [
+      "sci-finepdfs"
+    ],
+    "DA-A6-003": [
+      "math-finemath"
+    ],
+    "DA-B1-002": [
+      "en-dclm",
+      "en-fineweb-edu",
+      "en-nemotroncc",
+      "en-nemotroncc-synth"
+    ],
+    "DA-B2-001": [
+      "math-finemath",
+      "math-megamath"
+    ],
+    "DA-B2-002": [
+      "en-dclm",
+      "en-fineweb-edu",
+      "en-nemotroncc",
+      "en-nemotroncc-synth"
+    ],
+    "DA-B2-003": [
+      "sci-finepdfs"
+    ],
+    "DA-B3-001": [
+      "code-cpp",
+      "code-go",
+      "code-java",
+      "code-js-ts",
+      "code-python",
+      "code-rust"
+    ],
+    "DA-B4-001": [
+      "math-finemath",
+      "math-megamath"
+    ],
+    "DA-B4-007": [
+      "en-dclm",
+      "en-fineweb-edu",
+      "en-nemotroncc",
+      "en-nemotroncc-synth"
+    ],
+    "DA-B4-008": [
+      "en-dclm",
+      "en-fineweb-edu",
+      "en-nemotroncc",
+      "en-nemotroncc-synth"
+    ],
+    "DA-B4-009": [
+      "code-cpp",
+      "code-go",
+      "code-java",
+      "code-js-ts",
+      "code-python",
+      "code-rust"
+    ],
+    "DA-B4-010": [
+      "en-dclm",
+      "en-fineweb-edu",
+      "en-nemotroncc",
+      "en-nemotroncc-synth"
+    ],
+    "DA-B4-011": [
+      "en-dclm",
+      "en-fineweb-edu",
+      "en-nemotroncc",
+      "en-nemotroncc-synth"
+    ],
+    "DA-B4-012": [
+      "en-dclm",
+      "en-fineweb-edu",
+      "en-nemotroncc",
+      "en-nemotroncc-synth"
+    ],
+    "DA-B4-013": [
+      "sci-finepdfs"
+    ],
+    "DA-B5-001": [
+      "math-finemath",
+      "math-megamath"
+    ],
+    "DA-B5-002": [
+      "sci-finepdfs"
+    ],
+    "DA-C1-001": [
+      "math-finemath"
+    ],
+    "DA-C1-004": [
+      "code-go"
+    ],
+    "DA-C1-005": [
+      "code-java"
+    ],
+    "DA-C1-006": [
+      "en-dclm",
+      "en-fineweb-edu",
+      "en-nemotroncc",
+      "en-nemotroncc-synth"
+    ],
+    "DA-C1-007": [
+      "sci-finepdfs"
+    ],
+    "DA-C2-001": [
+      "math-finemath"
+    ],
+    "DA-C2-003": [
+      "en-dclm",
+      "en-fineweb-edu",
+      "en-nemotroncc",
+      "en-nemotroncc-synth"
+    ],
+    "DA-C2-004": [
+      "sci-finepdfs"
+    ],
+    "DA-C3-001": [
+      "en-dclm",
+      "en-fineweb-edu",
+      "en-nemotroncc",
+      "en-nemotroncc-synth"
+    ],
+    "DA-C3-002": [
+      "code-go"
+    ],
+    "DA-C3-003": [
+      "en-dclm",
+      "en-fineweb-edu",
+      "en-nemotroncc",
+      "en-nemotroncc-synth"
+    ],
+    "DA-C3-004": [
+      "math-finemath"
+    ],
+    "DA-C3-005": [
+      "math-finemath"
+    ],
+    "DA-C3-006": [
+      "sci-finepdfs"
+    ],
+    "DA-C4-002": [
+      "code-java"
+    ],
+    "DA-C4-003": [
+      "sci-finepdfs"
+    ],
+    "DA-C5-001": [
+      "math-megamath"
+    ],
+    "DA-C5-002": [
+      "en-dclm",
+      "en-fineweb-edu",
+      "en-nemotroncc",
+      "en-nemotroncc-synth"
+    ],
+    "DA-C5-005": [
+      "en-dclm",
+      "en-fineweb-edu",
+      "en-nemotroncc",
+      "en-nemotroncc-synth"
+    ],
+    "DA-C5-006": [
+      "math-finemath",
+      "math-megamath"
+    ],
+    "DA-D1-001": [
+      "sci-finepdfs"
+    ],
+    "DA-D3-003": [
+      "en-dclm",
+      "en-fineweb-edu",
+      "en-nemotroncc",
+      "en-nemotroncc-synth"
+    ],
+    "DA-D3-004": [
+      "sci-finepdfs"
+    ],
+    "DA-D3-005": [
+      "math-finemath",
+      "math-megamath"
+    ],
+    "DA-D4-001": [
+      "en-dclm",
+      "en-fineweb-edu",
+      "en-nemotroncc",
+      "en-nemotroncc-synth"
+    ],
+    "DA-E1-001": [
+      "code-go"
+    ],
+    "DA-E1-004": [
+      "code-python",
+      "code-rust"
+    ],
+    "DA-E1-005": [
+      "code-cpp"
+    ],
+    "DA-E1-006": [
+      "code-java"
+    ],
+    "DA-E1-007": [
+      "code-cpp"
+    ],
+    "DA-E1-008": [
+      "code-js-ts"
+    ],
+    "DA-E2-001": [
+      "code-cpp",
+      "code-go",
+      "code-java",
+      "code-js-ts",
+      "code-python",
+      "code-rust"
+    ],
+    "DA-E3-003": [
+      "code-cpp",
+      "code-go",
+      "code-java",
+      "code-js-ts",
+      "code-python",
+      "code-rust"
+    ],
+    "DA-E3-004": [
+      "code-cpp",
+      "code-go",
+      "code-java",
+      "code-js-ts",
+      "code-python",
+      "code-rust"
+    ],
+    "DA-E4-005": [
+      "code-go"
+    ],
+    "DA-E4-007": [
+      "code-js-ts"
+    ],
+    "DA-E4-009": [
+      "code-java"
+    ],
+    "DA-E4-010": [
+      "code-cpp",
+      "code-go",
+      "code-java",
+      "code-python",
+      "code-rust"
+    ],
+    "DA-F1-005": [
+      "en-dclm",
+      "en-fineweb-edu",
+      "en-nemotroncc",
+      "en-nemotroncc-synth"
+    ],
+    "DA-F1-006": [
+      "sci-finepdfs"
+    ],
+    "DB-A1-001": [
+      "ind-mr-fw2",
+      "ind-mr-sangraha-v"
+    ],
+    "DB-A1-002": [
+      "ind-te-fw2",
+      "ind-te-sangraha-s",
+      "ind-te-sangraha-v"
+    ],
+    "DB-A2-001": [
+      "ind-bn-fw2",
+      "ind-bn-sangraha-v"
+    ],
+    "DB-A3-001": [
+      "ind-bn-fw2"
+    ],
+    "DB-A3-002": [
+      "ind-gu-fw2"
+    ],
+    "DB-A3-004": [
+      "ind-kn-sangraha-v"
+    ],
+    "DB-A3-005": [
+      "ind-kn-fw2",
+      "ind-kn-sangraha-s"
+    ],
+    "DB-A3-006": [
+      "ind-mr-fw2",
+      "ind-mr-sangraha-v"
+    ],
+    "DB-A3-007": [
+      "ind-bn-sangraha-v"
+    ],
+    "DB-A4-001": [
+      "ind-sa-fw2"
+    ],
+    "DB-A5-001": [
+      "ind-bn-fw2",
+      "ind-bn-sangraha-v"
+    ],
+    "DB-A5-003": [
+      "ind-gu-fw2"
+    ],
+    "DB-A5-006": [
+      "ind-mr-sangraha-v"
+    ],
+    "DB-A5-007": [
+      "ind-sa-fw2"
+    ],
+    "DB-A5-009": [
+      "ind-mr-fw2"
+    ],
+    "DB-A6-001": [
+      "ind-bn-fw2"
+    ],
+    "DB-A6-003": [
+      "ind-gu-fw2"
+    ],
+    "DB-A6-006": [
+      "ind-kn-fw2",
+      "ind-kn-sangraha-s"
+    ],
+    "DB-A6-007": [
+      "ind-kn-sangraha-v"
+    ],
+    "DB-A6-008": [
+      "ind-mr-fw2"
+    ],
+    "DB-A6-013": [
+      "ind-te-fw2",
+      "ind-te-sangraha-s",
+      "ind-te-sangraha-v"
+    ],
+    "DB-A6-017": [
+      "ind-hi-hplt",
+      "ind-hi-indiccorp",
+      "ind-hi-sangraha-v"
+    ],
+    "DB-A6-019": [
+      "ind-hi-fw2",
+      "ind-hi-sangraha-s"
+    ],
+    "DB-A6-020": [
+      "ind-bn-sangraha-v"
+    ],
+    "DB-A6-021": [
+      "ind-mr-sangraha-v"
+    ],
+    "DB-B2-001": [
+      "ind-hi-fw2",
+      "ind-hi-indiccorp",
+      "ind-hi-sangraha-v"
+    ],
+    "DB-B2-002": [
+      "ind-hi-hplt"
+    ],
+    "DB-B2-003": [
+      "ind-kn-fw2",
+      "ind-kn-sangraha-s",
+      "ind-kn-sangraha-v"
+    ],
+    "DB-B2-004": [
+      "ind-te-fw2",
+      "ind-te-sangraha-v"
+    ],
+    "DB-B2-007": [
+      "ind-te-sangraha-s"
+    ],
+    "DB-B2-008": [
+      "ind-hi-sangraha-s"
+    ],
+    "DB-B3-001": [
+      "ind-kn-fw2",
+      "ind-kn-sangraha-s",
+      "ind-kn-sangraha-v"
+    ],
+    "DB-B4-001": [
+      "ind-gu-fw2"
+    ],
+    "DB-B4-002": [
+      "ind-kn-fw2",
+      "ind-kn-sangraha-s",
+      "ind-kn-sangraha-v"
+    ],
+    "DB-B4-003": [
+      "ind-mr-sangraha-v"
+    ],
+    "DB-B4-004": [
+      "ind-sa-fw2"
+    ],
+    "DB-B4-006": [
+      "ind-te-fw2",
+      "ind-te-sangraha-s",
+      "ind-te-sangraha-v"
+    ],
+    "DB-B4-007": [
+      "ind-ta-sangraha-v"
+    ],
+    "DB-B4-008": [
+      "ind-hi-fw2",
+      "ind-hi-hplt",
+      "ind-hi-indiccorp",
+      "ind-hi-sangraha-s",
+      "ind-hi-sangraha-v"
+    ],
+    "DB-B4-009": [
+      "ind-bn-fw2",
+      "ind-bn-sangraha-v"
+    ],
+    "DB-B4-011": [
+      "ind-mr-fw2"
+    ],
+    "DB-C1-001": [
+      "ind-bn-fw2"
+    ],
+    "DB-C1-003": [
+      "ind-gu-fw2"
+    ],
+    "DB-C1-005": [
+      "ind-hi-fw2",
+      "ind-hi-sangraha-s",
+      "ind-hi-sangraha-v"
+    ],
+    "DB-C1-006": [
+      "ind-hi-hplt"
+    ],
+    "DB-C1-010": [
+      "ind-kn-fw2",
+      "ind-kn-sangraha-s"
+    ],
+    "DB-C1-012": [
+      "ind-mr-sangraha-v"
+    ],
+    "DB-C1-013": [
+      "ind-sa-fw2"
+    ],
+    "DB-C1-016": [
+      "ind-te-fw2",
+      "ind-te-sangraha-s"
+    ],
+    "DB-C1-018": [
+      "ind-hi-indiccorp"
+    ],
+    "DB-C1-019": [
+      "ind-kn-sangraha-v"
+    ],
+    "DB-C1-021": [
+      "ind-ta-sangraha-v"
+    ],
+    "DB-C1-022": [
+      "ind-te-sangraha-v"
+    ],
+    "DB-C2-001": [
+      "ind-bn-fw2"
+    ],
+    "DB-C2-003": [
+      "ind-gu-fw2"
+    ],
+    "DB-C2-008": [
+      "ind-kn-sangraha-s",
+      "ind-kn-sangraha-v"
+    ],
+    "DB-C2-010": [
+      "ind-mr-sangraha-v"
+    ],
+    "DB-C2-013": [
+      "ind-te-fw2"
+    ],
+    "DB-C2-014": [
+      "ind-hi-fw2",
+      "ind-hi-indiccorp",
+      "ind-hi-sangraha-s",
+      "ind-hi-sangraha-v"
+    ],
+    "DB-C2-015": [
+      "ind-mr-fw2"
+    ],
+    "DB-C2-016": [
+      "ind-ta-sangraha-v"
+    ],
+    "DB-C2-017": [
+      "ind-te-sangraha-s"
+    ],
+    "DB-C2-018": [
+      "ind-te-sangraha-v"
+    ],
+    "DB-C2-021": [
+      "ind-hi-hplt"
+    ],
+    "DB-C2-023": [
+      "ind-bn-sangraha-v"
+    ],
+    "DB-C3-001": [
+      "ind-bn-fw2",
+      "ind-bn-sangraha-v"
+    ],
+    "DB-C3-002": [
+      "ind-hi-hplt",
+      "ind-hi-sangraha-v"
+    ],
+    "DB-C3-004": [
+      "ind-sa-fw2"
+    ],
+    "DB-C3-006": [
+      "ind-hi-fw2"
+    ],
+    "DB-C3-010": [
+      "ind-mr-sangraha-v"
+    ],
+    "DB-C3-017": [
+      "ind-kn-sangraha-s"
+    ],
+    "DB-C3-020": [
+      "ind-te-fw2",
+      "ind-te-sangraha-s",
+      "ind-te-sangraha-v"
+    ],
+    "DB-C3-021": [
+      "ind-ta-sangraha-v"
+    ],
+    "DB-C3-023": [
+      "ind-hi-sangraha-s"
+    ],
+    "DB-C3-024": [
+      "ind-mr-fw2"
+    ],
+    "DB-C3-025": [
+      "ind-hi-indiccorp"
+    ],
+    "DB-C4-001": [
+      "ind-bn-fw2"
+    ],
+    "DB-C4-002": [
+      "ind-hi-fw2",
+      "ind-hi-indiccorp",
+      "ind-hi-sangraha-s",
+      "ind-hi-sangraha-v"
+    ],
+    "DB-C4-003": [
+      "ind-hi-hplt"
+    ],
+    "DB-C4-005": [
+      "ind-mr-fw2"
+    ],
+    "DB-C4-006": [
+      "ind-te-fw2",
+      "ind-te-sangraha-s"
+    ],
+    "DB-C4-007": [
+      "ind-gu-fw2"
+    ],
+    "DB-C4-009": [
+      "ind-mr-sangraha-v"
+    ],
+    "DB-C4-010": [
+      "ind-sa-fw2"
+    ],
+    "DB-C4-013": [
+      "ind-ta-sangraha-v"
+    ],
+    "DB-C4-014": [
+      "ind-te-sangraha-v"
+    ],
+    "DB-C4-015": [
+      "ind-bn-sangraha-v"
+    ],
+    "DB-C5-001": [
+      "ind-hi-hplt"
+    ],
+    "DB-C5-003": [
+      "ind-kn-fw2",
+      "ind-kn-sangraha-s",
+      "ind-kn-sangraha-v"
+    ],
+    "DB-C5-004": [
+      "ind-mr-fw2",
+      "ind-mr-sangraha-v"
+    ],
+    "DB-C5-006": [
+      "ind-te-fw2",
+      "ind-te-sangraha-s"
+    ],
+    "DB-C5-007": [
+      "ind-bn-fw2"
+    ],
+    "DB-C5-009": [
+      "ind-gu-fw2"
+    ],
+    "DB-C5-014": [
+      "ind-sa-fw2"
+    ],
+    "DB-C5-016": [
+      "ind-hi-fw2",
+      "ind-hi-indiccorp",
+      "ind-hi-sangraha-s",
+      "ind-hi-sangraha-v"
+    ],
+    "DB-C5-017": [
+      "ind-ta-sangraha-v"
+    ],
+    "DB-C5-018": [
+      "ind-te-sangraha-v"
+    ],
+    "DB-C5-021": [
+      "ind-bn-sangraha-v"
+    ],
+    "DB-D2-002": [
+      "ind-sa-fw2"
+    ],
+    "DB-D2-003": [
+      "ind-hi-fw2",
+      "ind-hi-hplt",
+      "ind-hi-indiccorp",
+      "ind-hi-sangraha-s",
+      "ind-hi-sangraha-v"
+    ],
+    "DB-D3-001": [
+      "ind-bn-fw2"
+    ],
+    "DB-D3-003": [
+      "ind-gu-fw2"
+    ],
+    "DB-D3-005": [
+      "ind-hi-fw2",
+      "ind-hi-indiccorp",
+      "ind-hi-sangraha-s",
+      "ind-hi-sangraha-v"
+    ],
+    "DB-D3-008": [
+      "ind-kn-fw2",
+      "ind-kn-sangraha-s"
+    ],
+    "DB-D3-012": [
+      "ind-sa-fw2"
+    ],
+    "DB-D3-014": [
+      "ind-te-fw2",
+      "ind-te-sangraha-s"
+    ],
+    "DB-D3-016": [
+      "ind-kn-sangraha-v"
+    ],
+    "DB-D3-017": [
+      "ind-mr-fw2"
+    ],
+    "DB-D3-018": [
+      "ind-ta-sangraha-v"
+    ],
+    "DB-D3-019": [
+      "ind-te-sangraha-v"
+    ],
+    "DB-D3-020": [
+      "ind-hi-hplt"
+    ],
+    "DB-D3-021": [
+      "ind-bn-sangraha-v"
+    ],
+    "DB-D3-022": [
+      "ind-mr-sangraha-v"
+    ],
+    "DB-D4-001": [
+      "ind-bn-fw2",
+      "ind-bn-sangraha-v"
+    ],
+    "DB-D4-003": [
+      "ind-gu-fw2"
+    ],
+    "DB-D4-005": [
+      "ind-hi-hplt"
+    ],
+    "DB-D4-007": [
+      "ind-kn-fw2",
+      "ind-kn-sangraha-v"
+    ],
+    "DB-D4-008": [
+      "ind-mr-fw2",
+      "ind-mr-sangraha-v"
+    ],
+    "DB-D4-009": [
+      "ind-sa-fw2"
+    ],
+    "DB-D4-012": [
+      "ind-te-fw2",
+      "ind-te-sangraha-s"
+    ],
+    "DB-D4-013": [
+      "ind-hi-fw2",
+      "ind-hi-indiccorp",
+      "ind-hi-sangraha-v"
+    ],
+    "DB-D4-014": [
+      "ind-kn-sangraha-s"
+    ],
+    "DB-D4-016": [
+      "ind-te-sangraha-v"
+    ],
+    "DB-D4-017": [
+      "ind-ta-sangraha-v"
+    ],
+    "DB-D4-018": [
+      "ind-hi-sangraha-s"
+    ],
+    "DB-D5-001": [
+      "ind-te-sangraha-s"
+    ],
+    "DB-D5-002": [
+      "ind-hi-hplt",
+      "ind-hi-sangraha-v"
+    ],
+    "DB-D5-003": [
+      "ind-hi-fw2",
+      "ind-hi-indiccorp",
+      "ind-hi-sangraha-s"
+    ],
+    "DB-D5-004": [
+      "ind-te-fw2",
+      "ind-te-sangraha-v"
+    ],
+    "DB-F3-001": [
+      "ind-bn-fw2",
+      "ind-bn-sangraha-v"
+    ],
+    "DB-F3-003": [
+      "ind-te-fw2",
+      "ind-te-sangraha-s",
+      "ind-te-sangraha-v"
+    ],
+    "DB-F3-004": [
+      "ind-hi-fw2",
+      "ind-hi-hplt",
+      "ind-hi-indiccorp",
+      "ind-hi-sangraha-s",
+      "ind-hi-sangraha-v"
+    ],
+    "DB-F3-005": [
+      "ind-ta-sangraha-v"
+    ],
+    "DB-G1-001": [
+      "ind-bn-fw2"
+    ],
+    "DB-G1-003": [
+      "ind-gu-fw2"
+    ],
+    "DB-G1-006": [
+      "ind-mr-fw2",
+      "ind-mr-sangraha-v"
+    ],
+    "DB-G1-007": [
+      "ind-sa-fw2"
+    ],
+    "DB-G1-010": [
+      "ind-te-fw2",
+      "ind-te-sangraha-s"
+    ],
+    "DB-G1-011": [
+      "ind-kn-fw2",
+      "ind-kn-sangraha-s",
+      "ind-kn-sangraha-v"
+    ],
+    "DB-G1-012": [
+      "ind-hi-indiccorp"
+    ],
+    "DB-G1-013": [
+      "ind-ta-sangraha-v"
+    ],
+    "DB-G1-014": [
+      "ind-te-sangraha-v"
+    ],
+    "DB-G1-015": [
+      "ind-bn-sangraha-v"
+    ],
+    "DB-G1-016": [
+      "ind-hi-fw2",
+      "ind-hi-hplt",
+      "ind-hi-sangraha-s",
+      "ind-hi-sangraha-v"
+    ],
+    "DB-G2-003": [
+      "ind-sa-fw2"
+    ],
+    "DB-G3-003": [
+      "ind-hi-fw2",
+      "ind-hi-hplt",
+      "ind-hi-indiccorp",
+      "ind-hi-sangraha-s",
+      "ind-hi-sangraha-v"
+    ],
+    "DB-G4-002": [
+      "ind-mr-fw2",
+      "ind-mr-sangraha-v"
+    ],
+    "DB-G4-003": [
+      "ind-sa-fw2"
+    ],
+    "DB-G4-004": [
+      "ind-ta-sangraha-v"
+    ],
+    "DB-G4-006": [
+      "ind-bn-fw2",
+      "ind-bn-sangraha-v"
+    ],
+    "DB-G4-007": [
+      "ind-hi-hplt",
+      "ind-hi-indiccorp",
+      "ind-hi-sangraha-s",
+      "ind-hi-sangraha-v"
+    ],
+    "DB-H3-001": [
+      "ind-sa-fw2"
+    ],
+    "f1_rule.py": [
+      "code-cpp",
+      "code-go",
+      "code-java",
+      "code-js-ts",
+      "code-python",
+      "code-rust",
+      "ind-bn-fw2",
+      "ind-bn-sangraha-v",
+      "ind-gu-fw2",
+      "ind-hi-fw2",
+      "ind-hi-hplt",
+      "ind-hi-indiccorp",
+      "ind-hi-sangraha-s",
+      "ind-hi-sangraha-v",
+      "ind-kn-fw2",
+      "ind-kn-sangraha-s",
+      "ind-kn-sangraha-v",
+      "ind-mr-fw2",
+      "ind-mr-sangraha-v",
+      "ind-sa-fw2",
+      "ind-ta-sangraha-v",
+      "ind-te-fw2",
+      "ind-te-sangraha-s",
+      "ind-te-sangraha-v",
+      "math-finemath",
+      "math-megamath",
+      "sci-finepdfs"
+    ]
+  },
+  "runner_sha256": "fc1609a23a6498b0d732b9e479fa9c240e4fea35d867cba705bfda790e4c9119",
+  "sample": "era-v5-lab tokenizer sample v0",
+  "scope": "partial smoke test",
+  "unsupported_parts": [],
+  "wall_seconds": 52.902
+}

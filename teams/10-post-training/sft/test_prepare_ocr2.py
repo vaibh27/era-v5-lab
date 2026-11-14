@@ -36,6 +36,15 @@ def allow_in_table(monkeypatch):
     monkeypatch.setattr(g10, "licence_row", lambda set_id, table=None: row)
 
 
+RESERVED = "TSAI reserves"
+
+
+def reserve_in_table(monkeypatch):
+    """Pin a reserve ruling in the licence table, whatever the real table says today."""
+    row = dict(g10.licence_row(SET_ID), decision=RESERVED)
+    monkeypatch.setattr(g10, "licence_row", lambda set_id, table=None: row)
+
+
 # --- the ordinal -------------------------------------------------------------------------------
 
 @parametrize("value,expected", [("0", 0), ("17", 17), (5, 5), (str(2**63 - 1), 2**63 - 1)])
@@ -211,8 +220,9 @@ def test_a_source_with_no_pinned_snapshot_is_held_not_guessed(tmp_path):
     assert result["by_source"]["apps/train"] == {"held_source_unavailable": 1}
 
 
-def test_admission_mode_is_refused_under_a_reserve_ruling(tmp_path):
-    world = World(tmp_path / "w", {0: [ocr_row(0, "taco", "train", "0")]})
+def test_admission_mode_is_refused_under_a_reserve_ruling(tmp_path, monkeypatch):
+    reserve_in_table(monkeypatch)
+    world = World(tmp_path / "w", {0: [ocr_row(0, "taco", "train", "0")]}, policy={"set_decision": RESERVED})
     with pytest.raises(join.Refusal, match="not allowed"):
         world.prepare(tmp_path / "out", mode="admission")
     assert not (tmp_path / "out").exists()
@@ -221,12 +231,21 @@ def test_admission_mode_is_refused_under_a_reserve_ruling(tmp_path):
     assert code == 3 and not (tmp_path / "out").exists()
 
 
-def test_a_policy_cannot_overrule_the_licence_table(tmp_path):
+def test_a_policy_cannot_overrule_the_licence_table(tmp_path, monkeypatch):
+    reserve_in_table(monkeypatch)
     world = World(tmp_path / "w", {0: [ocr_row(0, "taco", "train", "0")]})
-    allow_everything(world)  # the policy file now says allowed; licences/licence_table.md still says TSAI reserves
+    allow_everything(world)  # the policy file now says allowed; the (pinned) licence table says TSAI reserves
     for mode in ("diagnostic", "admission"):
         with pytest.raises(join.Refusal, match="the table decides"):
             world.prepare(tmp_path / mode, mode=mode)
+
+
+def test_the_real_policy_and_licence_table_agree():
+    """Whatever TSAI rules, ocr2_policy.json and the Stage 1 row of licences/licence_table.md move together."""
+    policy, _ = join.load_policy(HERE / "ocr2_policy.json")
+    assert policy["set_decision"] == g10.licence_row(SET_ID)["decision"]
+    assert policy["set_decision"] in policy["ruling"]["set"]
+    join.gate(policy, "diagnostic", g10.licence_row(SET_ID)["decision"])
 
 
 @parametrize("change,reason", [

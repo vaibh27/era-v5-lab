@@ -1,0 +1,283 @@
+{
+ "instance_id": "astanin__python-tabulate-139",
+ "checked_at": "2026-11-11T22:46:56+0530",
+ "source": {
+  "found": true,
+  "source_instance_id": "astanin__python-tabulate-139",
+  "source_created_at": "2021-08-19 14:41:05",
+  "source_licence_name": "MIT License",
+  "base_commit_matches": true,
+  "source_base_commit": "b2c26bcb70e497f674b38aa7e29de12c0123708a",
+  "f2p_same": true,
+  "f2p_only_source": [],
+  "f2p_only_rebuild": [],
+  "p2p_source_total": 107,
+  "p2p_source_in_rebuild_files": 107,
+  "p2p_in_files_only_source": [
+   "test.test_output::test_grid_wide_characters",
+   "test.test_output::test_pandas_rst_with_index",
+   "test.test_output::test_pandas_rst_with_named_index",
+   "test.test_output::test_pandas_with_index",
+   "test.test_output::test_pandas_without_index",
+   "test.test_output::test_plain_maxcolwidth_autowraps_wide_chars"
+  ],
+  "p2p_only_rebuild": [],
+  "differences": [
+   "6 in-file PASS_TO_PASS tests of the source row are not PASS_TO_PASS in the rebuild (they fail on both sides here, see env.json build_notes)"
+  ],
+  "variant": "G10 rebuilt variant: 6 in-file PASS_TO_PASS tests of the source row are not PASS_TO_PASS in the rebuild (they fail on both sides here, see env.json build_notes)"
+ },
+ "platforms": [
+  {
+   "platform": "native",
+   "image_platform": "linux/arm64",
+   "image": "g10-swe/astanin__python-tabulate-139:v1",
+   "image_id": "sha256:98f1d54cf94fc900788dbef592c7132c47e4036ba88b863a15d2239f502ab6f3",
+   "build_seconds_if_built": 0.0,
+   "runs": 5,
+   "no_patch_fails": "5/5",
+   "gold_passes": "5/5",
+   "before": [
+    {
+     "run": 1,
+     "ok": true,
+     "problems": [],
+     "seconds": 0.6
+    },
+    {
+     "run": 2,
+     "ok": true,
+     "problems": [],
+     "seconds": 0.5
+    },
+    {
+     "run": 3,
+     "ok": true,
+     "problems": [],
+     "seconds": 0.5
+    },
+    {
+     "run": 4,
+     "ok": true,
+     "problems": [],
+     "seconds": 0.5
+    },
+    {
+     "run": 5,
+     "ok": true,
+     "problems": [],
+     "seconds": 0.7
+    }
+   ],
+   "after": [
+    {
+     "run": 1,
+     "ok": true,
+     "problems": [],
+     "seconds": 0.5
+    },
+    {
+     "run": 2,
+     "ok": true,
+     "problems": [],
+     "seconds": 0.5
+    },
+    {
+     "run": 3,
+     "ok": true,
+     "problems": [],
+     "seconds": 0.5
+    },
+    {
+     "run": 4,
+     "ok": true,
+     "problems": [],
+     "seconds": 0.9
+    },
+    {
+     "run": 5,
+     "ok": true,
+     "problems": [],
+     "seconds": 0.5
+    }
+   ],
+   "negative_control": {
+    "patch": "diff --git a/tabulate.py b/tabulate.py\n--- a/tabulate.py\n+++ b/tabulate.py\n@@ -1,3 +1,4 @@\n+# g10 negative control: comment only, no behaviour change\n # -*- coding: utf-8 -*-\n \n \"\"\"Pretty-print tabular data.\"\"\"\n",
+    "reward": {
+     "instance_id": "astanin__python-tabulate-139",
+     "reward": 0,
+     "failed": [
+      "test.test_output::test_empty_data_with_headers"
+     ],
+     "n_failed": 1,
+     "seconds": 0.5
+    }
+   },
+   "gold_reward": {
+    "instance_id": "astanin__python-tabulate-139",
+    "reward": 1,
+    "failed": [],
+    "n_failed": 0,
+    "seconds": 0.5
+   },
+   "isolation_probe": {
+    "interfaces_up": [
+     "lo"
+    ],
+    "interfaces_down": [
+     "erspan0",
+     "gre0",
+     "gretap0",
+     "ip6_vti0",
+     "ip6gre0",
+     "ip6tnl0",
+     "ip_vti0",
+     "sit0",
+     "tunl0"
+    ],
+    "ipv4_routes": 0,
+    "uid": 1000,
+    "tcp_connect": "failed: OSError",
+    "dns": "failed: gaierror",
+    "commits": 1,
+    "ok": true
+   },
+   "leftover_containers": [],
+   "docker_flags": [
+    "--network=none",
+    "--memory=2g",
+    "--cpus=2",
+    "--pids-limit=256",
+    "--cap-drop=ALL",
+    "--security-opt=no-new-privileges"
+   ],
+   "ok": true
+  },
+  {
+   "platform": "linux/amd64",
+   "image_platform": "linux/amd64",
+   "image": "g10-swe/astanin__python-tabulate-139:v1-amd64",
+   "image_id": "sha256:ee3a976dfc0f8270f74bcc05c33f772e640f0df9d1aa9478baf6d00e5c46ea4e",
+   "build_seconds_if_built": 0.0,
+   "runs": 5,
+   "no_patch_fails": "5/5",
+   "gold_passes": "5/5",
+   "before": [
+    {
+     "run": 1,
+     "ok": true,
+     "problems": [],
+     "seconds": 1.1
+    },
+    {
+     "run": 2,
+     "ok": true,
+     "problems": [],
+     "seconds": 0.9
+    },
+    {
+     "run": 3,
+     "ok": true,
+     "problems": [],
+     "seconds": 0.9
+    },
+    {
+     "run": 4,
+     "ok": true,
+     "problems": [],
+     "seconds": 0.9
+    },
+    {
+     "run": 5,
+     "ok": true,
+     "problems": [],
+     "seconds": 0.9
+    }
+   ],
+   "after": [
+    {
+     "run": 1,
+     "ok": true,
+     "problems": [],
+     "seconds": 0.9
+    },
+    {
+     "run": 2,
+     "ok": true,
+     "problems": [],
+     "seconds": 0.9
+    },
+    {
+     "run": 3,
+     "ok": true,
+     "problems": [],
+     "seconds": 0.9
+    },
+    {
+     "run": 4,
+     "ok": true,
+     "problems": [],
+     "seconds": 0.9
+    },
+    {
+     "run": 5,
+     "ok": true,
+     "problems": [],
+     "seconds": 0.9
+    }
+   ],
+   "negative_control": {
+    "patch": "diff --git a/tabulate.py b/tabulate.py\n--- a/tabulate.py\n+++ b/tabulate.py\n@@ -1,3 +1,4 @@\n+# g10 negative control: comment only, no behaviour change\n # -*- coding: utf-8 -*-\n \n \"\"\"Pretty-print tabular data.\"\"\"\n",
+    "reward": {
+     "instance_id": "astanin__python-tabulate-139",
+     "reward": 0,
+     "failed": [
+      "test.test_output::test_empty_data_with_headers"
+     ],
+     "n_failed": 1,
+     "seconds": 1.0
+    }
+   },
+   "gold_reward": {
+    "instance_id": "astanin__python-tabulate-139",
+    "reward": 1,
+    "failed": [],
+    "n_failed": 0,
+    "seconds": 0.9
+   },
+   "isolation_probe": {
+    "interfaces_up": [
+     "lo"
+    ],
+    "interfaces_down": [
+     "erspan0",
+     "gre0",
+     "gretap0",
+     "ip6_vti0",
+     "ip6gre0",
+     "ip6tnl0",
+     "ip_vti0",
+     "sit0",
+     "tunl0"
+    ],
+    "ipv4_routes": 0,
+    "uid": 1000,
+    "tcp_connect": "failed: OSError",
+    "dns": "failed: gaierror",
+    "commits": 1,
+    "ok": true
+   },
+   "leftover_containers": [],
+   "docker_flags": [
+    "--network=none",
+    "--memory=2g",
+    "--cpus=2",
+    "--pids-limit=256",
+    "--cap-drop=ALL",
+    "--security-opt=no-new-privileges"
+   ],
+   "ok": true
+  }
+ ],
+ "admitted": true
+}

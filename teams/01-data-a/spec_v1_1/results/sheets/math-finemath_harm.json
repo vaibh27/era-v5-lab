@@ -1,0 +1,147 @@
+{
+  "pack": "math-finemath.parquet",
+  "pack_sha256": "99aec0d9ece5d6c7f4f13feaad87d165b4f87ca728ecff482f5b30ebd0b3764b",
+  "gold": "math-finemath_gold.csv",
+  "gold_sha256": "633f6b6c370a32b42340169f1a72328fa4cd6d3e5e2f09ebc98061e5fb4c4cab",
+  "gold_count": 86,
+  "rules": "teams/01-data-a/spec_v1_1/sheets/medicine_math.md",
+  "rules_file_sha256": "87921b0c2bdd8cb270d4b22022b1fb309e1188c01b3f1d800a7efcf74ae70403",
+  "code_sha256": "538501e9c2657325344184dec40a165e301ee9c0f209b768d28861f49805e200",
+  "limit_percent": "1",
+  "limit_documents": 1,
+  "status": "FAIL",
+  "results": [
+    {
+      "rule": "DA-A8-001",
+      "changed": 1,
+      "dropped": 0,
+      "affected_unique": 1,
+      "errors": 0,
+      "error_types": [],
+      "percent": "1.162791",
+      "result": "PASS",
+      "changed_ids": [
+        "2d328b828fa97706"
+      ],
+      "dropped_ids": [],
+      "affected_ids": [
+        "2d328b828fa97706"
+      ]
+    },
+    {
+      "rule": "DA-C9-003",
+      "changed": 0,
+      "dropped": 1,
+      "affected_unique": 1,
+      "errors": 0,
+      "error_types": [],
+      "percent": "1.162791",
+      "result": "PASS",
+      "changed_ids": [],
+      "dropped_ids": [
+        "0f119a596e8b7f63"
+      ],
+      "affected_ids": [
+        "0f119a596e8b7f63"
+      ]
+    },
+    {
+      "rule": "DA-C9-001",
+      "changed": 0,
+      "dropped": 0,
+      "affected_unique": 0,
+      "errors": 0,
+      "error_types": [],
+      "percent": "0.000000",
+      "result": "PASS",
+      "changed_ids": [],
+      "dropped_ids": [],
+      "affected_ids": []
+    },
+    {
+      "rule": "DA-D6-001",
+      "changed": 0,
+      "dropped": 0,
+      "affected_unique": 0,
+      "errors": 0,
+      "error_types": [],
+      "percent": "0.000000",
+      "result": "PASS",
+      "changed_ids": [],
+      "dropped_ids": [],
+      "affected_ids": []
+    },
+    {
+      "rule": "DA-C7-001",
+      "changed": 0,
+      "dropped": 0,
+      "affected_unique": 0,
+      "errors": 0,
+      "error_types": [],
+      "percent": "0.000000",
+      "result": "PASS",
+      "changed_ids": [],
+      "dropped_ids": [],
+      "affected_ids": []
+    },
+    {
+      "rule": "DA-C7-002",
+      "changed": 0,
+      "dropped": 0,
+      "affected_unique": 0,
+      "errors": 0,
+      "error_types": [],
+      "percent": "0.000000",
+      "result": "PASS",
+      "changed_ids": [],
+      "dropped_ids": [],
+      "affected_ids": []
+    },
+    {
+      "rule": "DA-C8-001",
+      "changed": 0,
+      "dropped": 0,
+      "affected_unique": 0,
+      "errors": 0,
+      "error_types": [],
+      "percent": "0.000000",
+      "result": "PASS",
+      "changed_ids": [],
+      "dropped_ids": [],
+      "affected_ids": []
+    },
+    {
+      "rule": "DA-C8-002",
+      "changed": 0,
+      "dropped": 0,
+      "affected_unique": 0,
+      "errors": 0,
+      "error_types": [],
+      "percent": "0.000000",
+      "result": "PASS",
+      "changed_ids": [],
+      "dropped_ids": [],
+      "affected_ids": []
+    },
+    {
+      "rule": "ALL IN ORDER",
+      "changed": 1,
+      "dropped": 1,
+      "affected_unique": 2,
+      "errors": 0,
+      "error_types": [],
+      "percent": "2.325581",
+      "result": "FAIL",
+      "changed_ids": [
+        "2d328b828fa97706"
+      ],
+      "dropped_ids": [
+        "0f119a596e8b7f63"
+      ],
+      "affected_ids": [
+        "2d328b828fa97706",
+        "0f119a596e8b7f63"
+      ]
+    }
+  ]
+}

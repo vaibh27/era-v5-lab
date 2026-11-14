@@ -1,0 +1,526 @@
+{
+  "scope": "local sample input preflight, not a full cleaning run",
+  "input_root": "../erav5-lab-other-files/tokernizer_sample",
+  "manifest_sha256": "7fd647c8d4662d17e2310efbcc20981d70656fdad2fabb7663c266a2153a1b7e",
+  "clean_sha256": "22d818c72c9f30bf338de344a0fcda230e2d1de30a1aaec5d92bc525bae99179",
+  "parts": [
+    {
+      "part": "train/cadj-commits/part-00000.parquet",
+      "result": "MISSING_OR_MISMATCHED"
+    },
+    {
+      "part": "heldout/cadj-commits/part-00000.parquet",
+      "result": "MISSING_OR_MISMATCHED"
+    },
+    {
+      "part": "train/cadj-notebooks/part-00000.parquet",
+      "result": "MISSING_OR_MISMATCHED"
+    },
+    {
+      "part": "heldout/cadj-notebooks/part-00000.parquet",
+      "result": "MISSING_OR_MISMATCHED"
+    },
+    {
+      "part": "train/cadj-stackexchange/part-00000.parquet",
+      "result": "MISSING_OR_MISMATCHED"
+    },
+    {
+      "part": "heldout/cadj-stackexchange/part-00000.parquet",
+      "result": "MISSING_OR_MISMATCHED"
+    },
+    {
+      "part": "train/code-cpp/part-00000.parquet",
+      "result": "PASS",
+      "sha256": "5d638fd78dc7a661e1f287199984de8d4e1c7fee5e9ce21dfa5b5fb97a00a971",
+      "bytes": 67463772
+    },
+    {
+      "part": "train/code-cpp/part-00001.parquet",
+      "result": "PASS",
+      "sha256": "0a4ff1232dcf7f4af2f79476294063714a029054b553690bb8e84da3d88608f2",
+      "bytes": 23877420
+    },
+    {
+      "part": "heldout/code-cpp/part-00000.parquet",
+      "result": "PASS",
+      "sha256": "25bf9442a84771d1a54a4bde4981859f30f434d434f1aaaece82807bb0724f01",
+      "bytes": 1019024
+    },
+    {
+      "part": "train/code-go/part-00000.parquet",
+      "result": "PASS",
+      "sha256": "6b7b52e854df0456e3a9867b32f5217b54995faa30dbd6b8b94e23eab6db8eb1",
+      "bytes": 70002039
+    },
+    {
+      "part": "train/code-go/part-00001.parquet",
+      "result": "PASS",
+      "sha256": "40aedd68c4ec949eb825edc68896ae4518cf6c3283027d9ba1430ee66ee247fc",
+      "bytes": 24746544
+    },
+    {
+      "part": "heldout/code-go/part-00000.parquet",
+      "result": "PASS",
+      "sha256": "be4917c1049d1e1a22286d2822c96c47f688bcf2bb9bdafba9511ae350728745",
+      "bytes": 984578
+    },
+    {
+      "part": "train/code-java/part-00000.parquet",
+      "result": "PASS",
+      "sha256": "e4dca53d3b6931a4277ff794881fa437e62db04074ed4efca833775ac97f097b",
+      "bytes": 66111436
+    },
+    {
+      "part": "train/code-java/part-00001.parquet",
+      "result": "PASS",
+      "sha256": "278439aa70bd41a18f167de9adc3ca552309f52e635640adf6bf9e999d1266c3",
+      "bytes": 23472102
+    },
+    {
+      "part": "heldout/code-java/part-00000.parquet",
+      "result": "PASS",
+      "sha256": "c50e6accad04341e291e188738ec368134142b2c06118a358940491837e218c4",
+      "bytes": 870070
+    },
+    {
+      "part": "train/code-js-ts/part-00000.parquet",
+      "result": "PASS",
+      "sha256": "185694a65f72630cbbd56c98a2b8728e872b2da9dab5ebb26c39b0722ef42653",
+      "bytes": 76620569
+    },
+    {
+      "part": "train/code-js-ts/part-00001.parquet",
+      "result": "PASS",
+      "sha256": "36fea017a45e62fef38d0431f316ed5fd6afdde57db111817af6883f8f3f1f35",
+      "bytes": 26983707
+    },
+    {
+      "part": "heldout/code-js-ts/part-00000.parquet",
+      "result": "PASS",
+      "sha256": "cad9e205b551282cb8a55999cef0fdc36455f59446e58b1eacd0c45f577de77e",
+      "bytes": 1084170
+    },
+    {
+      "part": "train/code-python/part-00000.parquet",
+      "result": "PASS",
+      "sha256": "8d9575b43cfb9cf3647e63e91d026eb8ed40f3981b698da33b83d09e6326641d",
+      "bytes": 73787047
+    },
+    {
+      "part": "train/code-python/part-00001.parquet",
+      "result": "PASS",
+      "sha256": "985831590bc02ebddc0276223e1f022fde0e7c2e809fb7d97e74492bb6f5aa16",
+      "bytes": 26171161
+    },
+    {
+      "part": "heldout/code-python/part-00000.parquet",
+      "result": "PASS",
+      "sha256": "6ebf57ef84a2963e45b74c10df397206ca47aaf278dd35d6464f9792f548da2e",
+      "bytes": 995551
+    },
+    {
+      "part": "train/code-rust/part-00000.parquet",
+      "result": "PASS",
+      "sha256": "f1632a12383e1efb9eee68bf8b57566291ea64801146cf144dfba9c363f32e21",
+      "bytes": 64361751
+    },
+    {
+      "part": "train/code-rust/part-00001.parquet",
+      "result": "PASS",
+      "sha256": "9dab607bd3c9464536bed594b77b5cd8edef6e731c5320f0c50d1017ebf59513",
+      "bytes": 22693863
+    },
+    {
+      "part": "heldout/code-rust/part-00000.parquet",
+      "result": "PASS",
+      "sha256": "7879813e212722e3540dde0340c2f9d3dbe2e74112a6121c9c36ad81bf9669ec",
+      "bytes": 960265
+    },
+    {
+      "part": "train/en-dclm/part-00000.parquet",
+      "result": "PASS",
+      "sha256": "67b305d60aa0f4091612f6fefe0c7aee867872943017c5ebb598293c19dfeb88",
+      "bytes": 112531894
+    },
+    {
+      "part": "train/en-dclm/part-00001.parquet",
+      "result": "PASS",
+      "sha256": "0dec2d4fc09db2950d6f619810b6d2abf6d854b5d44d402c646cce2b74bd96a6",
+      "bytes": 37403872
+    },
+    {
+      "part": "heldout/en-dclm/part-00000.parquet",
+      "result": "PASS",
+      "sha256": "60d0741e754b70dffab4398ca617b37a408121b2f60fed95f8cf871996aacc36",
+      "bytes": 1450976
+    },
+    {
+      "part": "train/en-fineweb-edu/part-00000.parquet",
+      "result": "PASS",
+      "sha256": "53cbbf7a77b84e46108836c889e6cb83e6fcdc048c316fbf699586a7fef1dbe2",
+      "bytes": 109320898
+    },
+    {
+      "part": "train/en-fineweb-edu/part-00001.parquet",
+      "result": "PASS",
+      "sha256": "bdd5d5b4f7aa8ec00e17865b5ebe13344728569aa7ffff7f37ba942b6fe42229",
+      "bytes": 36607806
+    },
+    {
+      "part": "heldout/en-fineweb-edu/part-00000.parquet",
+      "result": "PASS",
+      "sha256": "727ee3f5ee0ef235fdd5839e516130e3b3fbb4a95345bfc827175f69ecd2647a",
+      "bytes": 1485536
+    },
+    {
+      "part": "train/en-nemotroncc/part-00000.parquet",
+      "result": "PASS",
+      "sha256": "19d641f52f5fc9c884da2fc4b4df1bc0327d73e327c12abb8efe0201c1668fda",
+      "bytes": 110274883
+    },
+    {
+      "part": "train/en-nemotroncc/part-00001.parquet",
+      "result": "PASS",
+      "sha256": "afba6a19de409e5208b3eb690ed360ad90aebb5c4cfd7f2bd389b468d2066202",
+      "bytes": 36680661
+    },
+    {
+      "part": "heldout/en-nemotroncc/part-00000.parquet",
+      "result": "PASS",
+      "sha256": "76653abac4785a2a7b14931142af29f64d3d621e8ea0c26c8d729a82b29f7845",
+      "bytes": 1665953
+    },
+    {
+      "part": "train/en-nemotroncc-synth/part-00000.parquet",
+      "result": "PASS",
+      "sha256": "a601748f22e32bfb839bdb76e8e645f3beae510460857eb206fbdf3ce53a2427",
+      "bytes": 118009469
+    },
+    {
+      "part": "train/en-nemotroncc-synth/part-00001.parquet",
+      "result": "PASS",
+      "sha256": "03a9efeb92e210dcb5b32d350cdee60fa032d21ea9454cefc913b0785f55ae9f",
+      "bytes": 39492056
+    },
+    {
+      "part": "heldout/en-nemotroncc-synth/part-00000.parquet",
+      "result": "PASS",
+      "sha256": "3fcbb50614d90f680168e0c95479e364e995a6ebbbdfc56df90746b58c38aff8",
+      "bytes": 1540625
+    },
+    {
+      "part": "train/ind-bn-fw2/part-00000.parquet",
+      "result": "PASS",
+      "sha256": "fda2605fd302c5bee7ad3c780e11460a7ccdfc60d4a1467854c1dee974d633e9",
+      "bytes": 17287068
+    },
+    {
+      "part": "heldout/ind-bn-fw2/part-00000.parquet",
+      "result": "PASS",
+      "sha256": "dcaa8dabd3ea88c672d2acf20ac49779d00c9c938f07a1c8f7d203221493c35c",
+      "bytes": 205383
+    },
+    {
+      "part": "train/ind-bn-sangraha-v/part-00000.parquet",
+      "result": "PASS",
+      "sha256": "84a59d8676186cdd4676e65cd8d00ce5dde23a3abb76be66c1d9389a163194ed",
+      "bytes": 17078214
+    },
+    {
+      "part": "heldout/ind-bn-sangraha-v/part-00000.parquet",
+      "result": "PASS",
+      "sha256": "e6745f0059d965c9426ef9530161c0a1d0d8c53c79336656bc16e4e9f1090ad0",
+      "bytes": 209037
+    },
+    {
+      "part": "train/ind-gu-fw2/part-00000.parquet",
+      "result": "PASS",
+      "sha256": "c6acc68da0a785c7704821414230474f05ebb40824f0fd30cc19cdcd29b5000f",
+      "bytes": 35870907
+    },
+    {
+      "part": "heldout/ind-gu-fw2/part-00000.parquet",
+      "result": "PASS",
+      "sha256": "928f0d5f4ec290f6196197247b26fc62ee100949d1d409a2b744295d9968c349",
+      "bytes": 357015
+    },
+    {
+      "part": "train/ind-hi-fw2/part-00000.parquet",
+      "result": "PASS",
+      "sha256": "28f77743e293573f70554bdc8f3d3b29764f5e5154ed53ee4fb61c951604c4e3",
+      "bytes": 21707540
+    },
+    {
+      "part": "heldout/ind-hi-fw2/part-00000.parquet",
+      "result": "PASS",
+      "sha256": "149346eb3cda65d2fa47891fb5f277e1755445d9e46bfac8c7840d677347d732",
+      "bytes": 199557
+    },
+    {
+      "part": "train/ind-hi-hplt/part-00000.parquet",
+      "result": "PASS",
+      "sha256": "77c3d8297b9d472c0d4138998d61e3f5f167df2cf69810790701e9f078ec6afc",
+      "bytes": 20443641
+    },
+    {
+      "part": "heldout/ind-hi-hplt/part-00000.parquet",
+      "result": "PASS",
+      "sha256": "251efe0c09e08f7f2a062a314fee86ac3e023cf6ba233c9946a62b1028846c38",
+      "bytes": 204171
+    },
+    {
+      "part": "train/ind-hi-indiccorp/part-00000.parquet",
+      "result": "PASS",
+      "sha256": "43666b10ed3aef16a065c357630fd2dd8e253712e605580355b007e17e388030",
+      "bytes": 23581237
+    },
+    {
+      "part": "heldout/ind-hi-indiccorp/part-00000.parquet",
+      "result": "PASS",
+      "sha256": "91588fb9b28290aa7183ae83974cabed441e4da8370ba024f181914b377c2c4f",
+      "bytes": 230055
+    },
+    {
+      "part": "train/ind-hi-sangraha-s/part-00000.parquet",
+      "result": "PASS",
+      "sha256": "d55c8005f7f030d676bef8e76f22f723e2f63ccbd46f5df2efb0d7ea42bbc256",
+      "bytes": 19923747
+    },
+    {
+      "part": "heldout/ind-hi-sangraha-s/part-00000.parquet",
+      "result": "PASS",
+      "sha256": "b7609dd83ef724f2a56b97e0cd5cd8b0d686b4f58f63010c9a70848d57b97ea1",
+      "bytes": 193943
+    },
+    {
+      "part": "train/ind-hi-sangraha-v/part-00000.parquet",
+      "result": "PASS",
+      "sha256": "26adb8a93f68d316e49f233cf5258852dc5a390ba61bb2297b6e0cc0be047551",
+      "bytes": 20843145
+    },
+    {
+      "part": "heldout/ind-hi-sangraha-v/part-00000.parquet",
+      "result": "PASS",
+      "sha256": "6c2c8796889990fb042b437d980bb2b30888f8d21d8bec35fb96abcee4df49a6",
+      "bytes": 153674
+    },
+    {
+      "part": "train/ind-kn-fw2/part-00000.parquet",
+      "result": "PASS",
+      "sha256": "0afbb42297d99031143f722aca4a6dd6929eec5b31e4b518494a2913d1a73811",
+      "bytes": 11453001
+    },
+    {
+      "part": "heldout/ind-kn-fw2/part-00000.parquet",
+      "result": "PASS",
+      "sha256": "806511e48a1fb03ae6a69af53d190806850ae6efd1f88dbc704466424c1b0a27",
+      "bytes": 130203
+    },
+    {
+      "part": "train/ind-kn-sangraha-s/part-00000.parquet",
+      "result": "PASS",
+      "sha256": "4008c98bbcb089bd1968df1ef8fa8d6d66e5cd592252ff8581cd143d2703d757",
+      "bytes": 10448193
+    },
+    {
+      "part": "heldout/ind-kn-sangraha-s/part-00000.parquet",
+      "result": "PASS",
+      "sha256": "aafbe26613276f8855956e3d15368baf16f85c8e9aecca674bd4f7f62910a28e",
+      "bytes": 100766
+    },
+    {
+      "part": "train/ind-kn-sangraha-v/part-00000.parquet",
+      "result": "PASS",
+      "sha256": "f142558db1b861c59fca75e6242a7cb890aa6d095967c2b2e90d31b72b7a585b",
+      "bytes": 11320535
+    },
+    {
+      "part": "heldout/ind-kn-sangraha-v/part-00000.parquet",
+      "result": "PASS",
+      "sha256": "b044fe4c156b356eb730a81a659c3a14fdcf143c7bdedb2c732dce72cb29d268",
+      "bytes": 108264
+    },
+    {
+      "part": "train/ind-ml-fw2/part-00000.parquet",
+      "result": "PASS",
+      "sha256": "ad1c7c7021864d45eeaa9f6524467c35db853c5be0593067d9b52b98914bdfe6",
+      "bytes": 33652699
+    },
+    {
+      "part": "heldout/ind-ml-fw2/part-00000.parquet",
+      "result": "PASS",
+      "sha256": "10bfc53418bcdff95eef834cc657fe12b722d6f5ffc7cae71004d57dc7fec5f1",
+      "bytes": 294914
+    },
+    {
+      "part": "train/ind-mr-fw2/part-00000.parquet",
+      "result": "PASS",
+      "sha256": "b015d9fa295b12b93b3d14e5c249a67e05ddf7c73d9f37051d84f7a69350105c",
+      "bytes": 17557310
+    },
+    {
+      "part": "heldout/ind-mr-fw2/part-00000.parquet",
+      "result": "PASS",
+      "sha256": "7a031852f76d48bae8ff7d115ab1d27a939605aec0c891fd6c7ef2d2aa764948",
+      "bytes": 141336
+    },
+    {
+      "part": "train/ind-mr-sangraha-v/part-00000.parquet",
+      "result": "PASS",
+      "sha256": "85f3fe3355206939f4b483da0e7e0187aa3738067951a78ffcccfb097237b7cc",
+      "bytes": 16889324
+    },
+    {
+      "part": "heldout/ind-mr-sangraha-v/part-00000.parquet",
+      "result": "PASS",
+      "sha256": "9ab16d0b5f775cf907b27729ea7eb00ebec827e7fff41d4ecd1c6616ec9b94e3",
+      "bytes": 183475
+    },
+    {
+      "part": "train/ind-or-fw2/part-00000.parquet",
+      "result": "PASS",
+      "sha256": "e5a9d06de192e38871bb3bde349d9544990a6f6abac8c4ea299c40fc627b77eb",
+      "bytes": 34649584
+    },
+    {
+      "part": "heldout/ind-or-fw2/part-00000.parquet",
+      "result": "PASS",
+      "sha256": "6e6503a92b93304009ba029c9e4027457848597a214e85160335351f49a8e78a",
+      "bytes": 322801
+    },
+    {
+      "part": "train/ind-sa-fw2/part-00000.parquet",
+      "result": "PASS",
+      "sha256": "1238fde5e67f36130972e3aa0df015450d6352e979dcbc0a852f9133fb17e0ee",
+      "bytes": 22172624
+    },
+    {
+      "part": "heldout/ind-sa-fw2/part-00000.parquet",
+      "result": "PASS",
+      "sha256": "eaa16f46dbc391efe6f172545c000c64794b9d505b97069b6c41e11f06f19d8d",
+      "bytes": 196125
+    },
+    {
+      "part": "train/ind-ta-fw2/part-00000.parquet",
+      "result": "PASS",
+      "sha256": "1eb97539bd7f328e3f6c54d9b297216e3934cc473566c10659d9537437f2af74",
+      "bytes": 10819093
+    },
+    {
+      "part": "heldout/ind-ta-fw2/part-00000.parquet",
+      "result": "PASS",
+      "sha256": "a5b66882de196db04f84cf70768d4756138643ae44f3bffdfd344556c256bc51",
+      "bytes": 95477
+    },
+    {
+      "part": "train/ind-ta-sangraha-s/part-00000.parquet",
+      "result": "PASS",
+      "sha256": "dc0fa0cc9791dcf163aa58272c1075ef2317fbd7e157daabd5bd8de42e6f938b",
+      "bytes": 9959234
+    },
+    {
+      "part": "heldout/ind-ta-sangraha-s/part-00000.parquet",
+      "result": "PASS",
+      "sha256": "b8653a36bcbd237e4c7bc78bf713245dc982058166e62aa416b2ebbefd1db34c",
+      "bytes": 132233
+    },
+    {
+      "part": "train/ind-ta-sangraha-v/part-00000.parquet",
+      "result": "PASS",
+      "sha256": "3774dd4f98e7834b3510261dfbd24950e8b052dc25636b642b7830d02d1b724b",
+      "bytes": 10396798
+    },
+    {
+      "part": "heldout/ind-ta-sangraha-v/part-00000.parquet",
+      "result": "PASS",
+      "sha256": "2679b256560a14239f428cb161c219eec6e7d1f8a82111a3351f125e5a5bc270",
+      "bytes": 98925
+    },
+    {
+      "part": "train/ind-te-fw2/part-00000.parquet",
+      "result": "PASS",
+      "sha256": "194f080c14dec33a3a7312bdc147c86c51450b995086189aa092a92ef4316165",
+      "bytes": 11588900
+    },
+    {
+      "part": "heldout/ind-te-fw2/part-00000.parquet",
+      "result": "PASS",
+      "sha256": "b739477aa9bd2ccf2148086342ce67e9e0f08803b519e92af19e94e711314be2",
+      "bytes": 108864
+    },
+    {
+      "part": "train/ind-te-sangraha-s/part-00000.parquet",
+      "result": "PASS",
+      "sha256": "878ece52c5dff94686df2ff296e6556bb6234aa5b413c56574360dd5f7a70c7f",
+      "bytes": 10649335
+    },
+    {
+      "part": "heldout/ind-te-sangraha-s/part-00000.parquet",
+      "result": "PASS",
+      "sha256": "c05ed17b031d1fbae24927464ffac8e02d40ffa2c338e54f476a43327aa37a85",
+      "bytes": 69971
+    },
+    {
+      "part": "train/ind-te-sangraha-v/part-00000.parquet",
+      "result": "PASS",
+      "sha256": "5e10f6717de94d516fb6dbc45372d4b620fbe0bb7970dec13ff8c10b429ab6f9",
+      "bytes": 11604104
+    },
+    {
+      "part": "heldout/ind-te-sangraha-v/part-00000.parquet",
+      "result": "PASS",
+      "sha256": "d2bd9afc4c0ac84f048e013c7115c7a635ef495e372a4c97af488774371bf159",
+      "bytes": 107713
+    },
+    {
+      "part": "train/math-finemath/part-00000.parquet",
+      "result": "PASS",
+      "sha256": "a5dbb4da6d0c2e890901aecb10b5c2bd71378d8e66e5975adc0d7d98592f51b2",
+      "bytes": 56525427
+    },
+    {
+      "part": "heldout/math-finemath/part-00000.parquet",
+      "result": "PASS",
+      "sha256": "63e6eab00769eeb6805bd4eccdada9f4bc61ebe8d0cd23654cb6da95e0a290e4",
+      "bytes": 587745
+    },
+    {
+      "part": "train/math-megamath/part-00000.parquet",
+      "result": "PASS",
+      "sha256": "e8c53baf0e1c842d303199b93cc36768199edbc64a142925df890915c4cb7d91",
+      "bytes": 53355385
+    },
+    {
+      "part": "heldout/math-megamath/part-00000.parquet",
+      "result": "PASS",
+      "sha256": "294a31a67392329a1fcf6f01da95fec064c7f1d63ad93449cdd7d2c90c223872",
+      "bytes": 440426
+    },
+    {
+      "part": "train/sci-finepdfs/part-00000.parquet",
+      "result": "PASS",
+      "sha256": "87dd59b9268bf5784e8f60e40a829ccfb6c6b62d28e6c88ddb4770782af0eb69",
+      "bytes": 58676205
+    },
+    {
+      "part": "heldout/sci-finepdfs/part-00000.parquet",
+      "result": "PASS",
+      "sha256": "88566b9a129599950dc2f6eacf89908abac238e0541988f06c5e2bb808164ad6",
+      "bytes": 330771
+    }
+  ],
+  "verified_parts": 80,
+  "expected_parts": 86,
+  "unsupported_packs": [
+    "cadj-commits",
+    "cadj-notebooks",
+    "cadj-stackexchange",
+    "ind-ml-fw2",
+    "ind-or-fw2",
+    "ind-ta-fw2",
+    "ind-ta-sangraha-s"
+  ],
+  "unsupported_parts": 14,
+  "supported_packs": 31,
+  "total_docs": 1444766
+}

@@ -148,14 +148,14 @@ What this means for the 15%:
 
 The area shares stay **35 / 25 / 15 / 15 / 7 / 3**. Kept-row counts are not those shares.
 
-Added to `sft/decontam_report.md` on 9 Nov, same fingerprints, 0 canaries:
+Added to `sft/decontam_report.md` on 9 and 10 Nov, same fingerprints, 0 canaries:
 
 | Set | Scope | Removed | Kept |
 |---|---|---:|---:|
-| `sft-code-commitpackft` | python split | 15 of 56,025 (0.03%) | 56,010 |
+| `sft-code-commitpackft` | all 277 language files (10 Nov; the 9 Nov run was the python split: 15 of 56,025) | 1,001 of 702,062 (0.14%) | 701,061 |
 | `sft-code-opencodereasoning-2` | all 70 python shards; questions joined from TACO, APPS, and code_contests | 115,067 of 542,219 (21.22%) | 427,152 |
-| `sft-math-nemotron-proofs-v3-sft` | first of 10 parts; only rows that fit the 64k budget | 42 of 1,757 (2.39%) | 1,715 |
+| `sft-math-nemotron-proofs-v3-sft` | all 10 files (10 Nov; the 9 Nov run was the first part: 42 of 1,757); only rows that fit the 64k budget, 293,648 of 414,890 source rows | 3,012 of 293,648 (1.03%) | 290,636 |
 
-All 70 OpenCodeReasoning-2 python shards are converted. Of the 1,398,166 raw rows, 268,752 are upstream test splits, 3,629 are protected family, 513,809 fail the quality proposal and 69,690 are held because the `open-r1/codeforces` revision is not established; 542,286 join, 67 are rejected by the converter and 542,219 reach the scan, with 0 canaries. The joined rows are 19,825 distinct problems by position (19,340 by content at Jaccard 0.8). The 427,152 kept rows are 15,670 problems by position and 15,402 by content at Jaccard 0.8, about 2.54B trained tokens (2,539,177,884). In the proofs part, 18,266 of 20,023 source rows were over 64k and were not converted, so they were not checked.
+All 70 OpenCodeReasoning-2 python shards are converted. Of the 1,398,166 raw rows, 268,752 are upstream test splits, 3,629 are protected family, 513,809 fail the quality proposal and 69,690 are held because the `open-r1/codeforces` revision is not established; 542,286 join, 67 are rejected by the converter and 542,219 reach the scan, with 0 canaries. The joined rows are 19,825 distinct problems by position (19,340 by content at Jaccard 0.8). The 427,152 kept rows are 15,670 problems by position and 15,402 by content at Jaccard 0.8, about 2.54B trained tokens (2,539,177,884). In the proofs part, 121,242 of the 414,890 source rows are over the 64k budget and were not converted, so they were not checked.
 
 `sft-safety-aegis-v1` has no assistant turn. Its stored `text` column was still checked on 9 Nov (11,997 rows, 2 removed, 0 canary). That does not make it chat training data. `sft-safety-indicguard`, `sft-safety-nemotron-guard-v3`, `sft-safety-wildjailbreak`, `sft-safety-nemotron-sft-v2`, and `sft-code-self-oss-instruct` are `excluded`. So are `rl-community-alignment`, `rl-safety-hh-rlhf`, `rl-safety-alignment-faking`, and `rl-wildguardmix`. Until TSAI names an allowed safety set with chat rows, use the section 6 fallback: **0% Safety / 10% General**.

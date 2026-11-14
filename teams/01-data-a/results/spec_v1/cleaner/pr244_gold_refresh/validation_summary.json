@@ -1,0 +1,728 @@
+{
+  "validation_scope": "Local PR244 diagnosis/gold validation after #362; not a tokenizer-sample job",
+  "source_head": "2eff94990675e06643021bcce5c94c75867bca8a",
+  "gold_pr": 362,
+  "gold_merge_commit": "e9550201a5a25f3798a8566fadb6e5d294be031a",
+  "source_rule_pr": 240,
+  "source_rule_commit": "3bbd31f051ae0f714ddf932cbec247c40d475a70",
+  "baseline_commit": "476f026",
+  "baseline_clean_sha256": "21d95374ca5522dfe0bd964142ab571962e4186901054e38da730d91fad5ce47",
+  "clean_sha256": "22d818c72c9f30bf338de344a0fcda230e2d1de30a1aaec5d92bc525bae99179",
+  "indic_packs": 18,
+  "supported_packs": 31,
+  "indic_gold": 2193,
+  "baseline_nonindic_documents": 6500,
+  "indic_diagnosis_documents": 9000,
+  "f2_gold_drops": 0,
+  "non_indic_function_AST_unchanged": true,
+  "active_rule_ids": 223,
+  "native_ready_cards": 260,
+  "native_selected": 152,
+  "native_deferred": 108,
+  "retired_cards": 10,
+  "accepted_sibling_scopes": 94,
+  "new_hindi_pack": {
+    "pack": "ind-hi-sangraha-v",
+    "rows": 500,
+    "gold": 219,
+    "all_gold_present": true,
+    "pack_sha256": "b0fb32f2327aa39badc9a55110c992303ce273b02711e0973f877d465a00557e"
+  },
+  "marathi_scope_rejection": {
+    "rule_id": "DB-C1-012",
+    "source_pack": "ind-mr-sangraha-v",
+    "code": "C1",
+    "gold": {
+      "rule": "DB-C1-012",
+      "changed": 1,
+      "dropped": 0,
+      "affected_unique": 1,
+      "errors": 0,
+      "error_types": [],
+      "percent": "0.632911",
+      "result": "PASS",
+      "changed_ids": [
+        "870fb0ffd8d7a041"
+      ],
+      "dropped_ids": [],
+      "affected_ids": [
+        "870fb0ffd8d7a041"
+      ]
+    },
+    "full_rule": {
+      "nonidempotent_ids": [],
+      "errors": []
+    },
+    "combined_gold": {
+      "rule": "combined",
+      "changed": 2,
+      "dropped": 0,
+      "affected_unique": 2,
+      "errors": 0,
+      "error_types": [],
+      "percent": "1.265823",
+      "result": "FAIL",
+      "changed_ids": [
+        "870fb0ffd8d7a041",
+        "c85acdaeebe64599"
+      ],
+      "dropped_ids": [],
+      "affected_ids": [
+        "870fb0ffd8d7a041",
+        "c85acdaeebe64599"
+      ]
+    },
+    "result": "REJECTED",
+    "reasons": [
+      "combined receiving-pack gold: FAIL"
+    ]
+  },
+  "full_generated_harm": {
+    "packs": 31,
+    "gold_documents": 4162,
+    "all_active_checks_pass": true,
+    "per_pack": [
+      {
+        "pack": "code-cpp",
+        "gold": 122,
+        "report_sha256": "11244bfb3ac562ab7b41c934cfb7696e4419e5da033924a7fe8b4c18c850cc73",
+        "gold_sha256": "143d6cbdc97684d8baa2efa515a2de838be101b87f4bff63073c344e22ac8120",
+        "pack_sha256": "2aa25660b81ccaea5e153ab30c0abd80df2a0cf42531421094c5ff9c96401bd5",
+        "pipeline": "PASS",
+        "gold_changed": 0,
+        "gold_dropped": 0,
+        "rules": 13,
+        "functions": 11,
+        "report_path": "teams/01-data-a/results/spec_v1/cleaner/specv1_code-cpp_harm.json"
+      },
+      {
+        "pack": "code-go",
+        "gold": 163,
+        "report_sha256": "ff90be7f3956b8c9faef93f3df388ad80d1c0be9d1b52f9d9203bd565de7adb4",
+        "gold_sha256": "81942db337e2e191b15b916941a2cf4160d1f581296c58b07167be1660c677a6",
+        "pack_sha256": "30fc352199a6b3773d76a692420d25469835e8668ded2cfe8a6be09d71958661",
+        "pipeline": "PASS",
+        "gold_changed": 0,
+        "gold_dropped": 0,
+        "rules": 15,
+        "functions": 13,
+        "report_path": "teams/01-data-a/results/spec_v1/cleaner/specv1_code-go_harm.json"
+      },
+      {
+        "pack": "code-java",
+        "gold": 116,
+        "report_sha256": "a29db26723626a9ea005fc98c5863b77eabc4c785e27e3c9520b5991a74a6134",
+        "gold_sha256": "223d555f68e1bd7ecc93f4d3510e7b3425401539729443b2bff8ed1b0212e869",
+        "pack_sha256": "739dc95cdb4241847b051e8c55f5a723a4597919c62f9d6e4ebb9a957d445b00",
+        "pipeline": "PASS",
+        "gold_changed": 0,
+        "gold_dropped": 0,
+        "rules": 16,
+        "functions": 13,
+        "report_path": "teams/01-data-a/results/spec_v1/cleaner/specv1_code-java_harm.json"
+      },
+      {
+        "pack": "code-js-ts",
+        "gold": 204,
+        "report_sha256": "c61430a80d0ef8e0a20d9dd09ee57bae27f3a0c180c35cee51ba240a0b6d3859",
+        "gold_sha256": "1dd36cc9e2bd1411b81fc00e35a2178840c6c56de87b1642824abf99775b63d7",
+        "pack_sha256": "4aa4dea19a83b8db922156838b6772e107f39c4ce6af76bf19b3008a57b27018",
+        "pipeline": "PASS",
+        "gold_changed": 0,
+        "gold_dropped": 0,
+        "rules": 12,
+        "functions": 11,
+        "report_path": "teams/01-data-a/results/spec_v1/cleaner/specv1_code-js-ts_harm.json"
+      },
+      {
+        "pack": "code-python",
+        "gold": 141,
+        "report_sha256": "20ba59826ca05dfe3919f4799c42fbfe82ed01c5f991df80ab002dd3d1f72e0a",
+        "gold_sha256": "80f2144b9adc3ca21143eef556f4feea715e4f61c0ff2b8399eb71bc965480d2",
+        "pack_sha256": "b79698620cd7526f9fcb6157376c86274616367baa7757976568c50a6b802e1f",
+        "pipeline": "PASS",
+        "gold_changed": 0,
+        "gold_dropped": 0,
+        "rules": 12,
+        "functions": 11,
+        "report_path": "teams/01-data-a/results/spec_v1/cleaner/specv1_code-python_harm.json"
+      },
+      {
+        "pack": "code-rust",
+        "gold": 234,
+        "report_sha256": "b07a24c13e286d716c37fac0fbc1e0d0dcd00eae6c95f6dac89b43dd5f9981c1",
+        "gold_sha256": "89855018827c2f6c185b50ed35225798552d64283bd54becd6b41e1ba9661dc5",
+        "pack_sha256": "c5822b7df0e76a6bbca95ea6d73a94f19970fe8a71e5645e9205195193a227e5",
+        "pipeline": "PASS",
+        "gold_changed": 0,
+        "gold_dropped": 0,
+        "rules": 12,
+        "functions": 11,
+        "report_path": "teams/01-data-a/results/spec_v1/cleaner/specv1_code-rust_harm.json"
+      },
+      {
+        "pack": "en-dclm",
+        "gold": 62,
+        "report_sha256": "56902cd28caa8484cb75a82a2f9560b277994548665e13c7e1691fc6746f8bd3",
+        "gold_sha256": "8165439648189b96fb5b7986435761a05fd34a50474a6d30a196c5308d27767d",
+        "pack_sha256": "d5ae1e7e991de478eb443ec6ca991308473c22922a986c3ebbba71ebfe0fa2b4",
+        "pipeline": "PASS",
+        "gold_changed": 0,
+        "gold_dropped": 0,
+        "rules": 20,
+        "functions": 14,
+        "report_path": "teams/01-data-a/results/spec_v1/cleaner/specv1_en-dclm_harm.json"
+      },
+      {
+        "pack": "en-fineweb-edu",
+        "gold": 158,
+        "report_sha256": "161075230d62b85d0266fbc6823d2d8014ecf1dd2881a10cb509fa00abd272a7",
+        "gold_sha256": "a06212a5f4952b9bf0922d3e21dc72ee3110e53dec60fec533af9deb87084190",
+        "pack_sha256": "3a0ad16983c03e9d8b6a40d8e58d769d9b89e68406a3b86e79fd7b8d68e022de",
+        "pipeline": "PASS",
+        "gold_changed": 0,
+        "gold_dropped": 0,
+        "rules": 20,
+        "functions": 14,
+        "report_path": "teams/01-data-a/results/spec_v1/cleaner/specv1_en-fineweb-edu_harm.json"
+      },
+      {
+        "pack": "en-nemotroncc-synth",
+        "gold": 326,
+        "report_sha256": "9a8b13f0282d44850a2300033d0f666b6b0b1c94406ce99fb8d2944a299a405b",
+        "gold_sha256": "075d0f0fe43592787e0ec46761053118419a042a2cb189e75c93e73b63373ee5",
+        "pack_sha256": "0f1c3a9866ada7fb5ea2a244135d9766375351bec366c13cd9c5abfb3d82573c",
+        "pipeline": "PASS",
+        "gold_changed": 0,
+        "gold_dropped": 0,
+        "rules": 20,
+        "functions": 14,
+        "report_path": "teams/01-data-a/results/spec_v1/cleaner/specv1_en-nemotroncc-synth_harm.json"
+      },
+      {
+        "pack": "en-nemotroncc",
+        "gold": 129,
+        "report_sha256": "0b227eb0caf83d59657ab369982eb2dd47c5b9fa86a6490af4c27f8dafd0aa3d",
+        "gold_sha256": "955598fb766f49633d0ea4c5a9621bc5f4b8e1bff8f4121c69438118685de735",
+        "pack_sha256": "6eae1507bc689c79ec8b73011b264f5b4558ef8eb3ddbf866a598588b7cf0fbb",
+        "pipeline": "PASS",
+        "gold_changed": 0,
+        "gold_dropped": 0,
+        "rules": 20,
+        "functions": 14,
+        "report_path": "teams/01-data-a/results/spec_v1/cleaner/specv1_en-nemotroncc_harm.json"
+      },
+      {
+        "pack": "ind-bn-fw2",
+        "gold": 227,
+        "report_sha256": "dcf4f5e7b719a881bb489b1f277bd126bc06633caf5d5311e9012cc612004a8d",
+        "gold_sha256": "fb5538fa063daedf1dfbd2c1fcdf8e43267217de93794206bda8398e5877b7ff",
+        "pack_sha256": "b5f91af826c982b548f7fc06404a2d53623b1393d511049f2e004b0353847913",
+        "pipeline": "PASS",
+        "gold_changed": 1,
+        "gold_dropped": 1,
+        "rules": 16,
+        "functions": 16,
+        "report_path": "teams/01-data-a/results/spec_v1/cleaner/specv1_ind-bn-fw2_harm.json"
+      },
+      {
+        "pack": "ind-bn-sangraha-v",
+        "gold": 137,
+        "report_sha256": "47ee3b91a9f09bf7fa61c0ff98bbd3ea6f719d7ff0b55f9c0d31e86a245e68e0",
+        "gold_sha256": "a3858b50eaed2fdfcd865ad5be92e1457b39fd75b960f1bbcee9ca2ac6570982",
+        "pack_sha256": "e64c471dd6391dac861e039c2ad1d3c3732b21b97f29efd4b9bcaf0bf54baf81",
+        "pipeline": "PASS",
+        "gold_changed": 1,
+        "gold_dropped": 0,
+        "rules": 15,
+        "functions": 15,
+        "report_path": "teams/01-data-a/results/spec_v1/cleaner/specv1_ind-bn-sangraha-v_harm.json"
+      },
+      {
+        "pack": "ind-gu-fw2",
+        "gold": 80,
+        "report_sha256": "7e1b34cdde9e0c204bffa43b8a25dcc62f3a148cdcac941c4f6e780b381dcc1d",
+        "gold_sha256": "1a1592f183e6c8a153b5d6a3573848f73bee05d553d66d106437208301616a14",
+        "pack_sha256": "9f58ad695beac877b7f71f9773328c141e5f19385b9f292ebc9c2b21b19daa6a",
+        "pipeline": "PASS",
+        "gold_changed": 0,
+        "gold_dropped": 0,
+        "rules": 12,
+        "functions": 12,
+        "report_path": "teams/01-data-a/results/spec_v1/cleaner/specv1_ind-gu-fw2_harm.json"
+      },
+      {
+        "pack": "ind-hi-fw2",
+        "gold": 218,
+        "report_sha256": "adffe83a36170882d589a3acc0ad57bd1bcb88475e8eec0bd19036056db002f1",
+        "gold_sha256": "f164fd765388e20a2bbf859fa744802d325fd6f952e25badabdb8e5e4d71663f",
+        "pack_sha256": "f9e1a898c982fcdfb788a931910f79f2204c177e530709df71a2d3b8223f5169",
+        "pipeline": "PASS",
+        "gold_changed": 1,
+        "gold_dropped": 1,
+        "rules": 16,
+        "functions": 16,
+        "report_path": "teams/01-data-a/results/spec_v1/cleaner/specv1_ind-hi-fw2_harm.json"
+      },
+      {
+        "pack": "ind-hi-hplt",
+        "gold": 37,
+        "report_sha256": "277ffaca6fae33d2304a4fa2d17ebc77c8e28f4afc6386112fbfebf8b3ebbd98",
+        "gold_sha256": "53b7cbdbed01a111b70454d4e241f0ca7bba83932fbe54b225fefa73fff0d9a3",
+        "pack_sha256": "497533fc4d6407b1ef2e83f7304d65ab7f9fe7892fee09ab6d10f45c913eadc6",
+        "pipeline": "PASS",
+        "gold_changed": 0,
+        "gold_dropped": 0,
+        "rules": 17,
+        "functions": 17,
+        "report_path": "teams/01-data-a/results/spec_v1/cleaner/specv1_ind-hi-hplt_harm.json"
+      },
+      {
+        "pack": "ind-hi-indiccorp",
+        "gold": 425,
+        "report_sha256": "1019f7e8f8ab3f6897a520c3e784a0361dee4288f9110e5ea804875845a21a95",
+        "gold_sha256": "a0b3f7021b6a168666eacb60c3d517feb403f302d8afa791bf176a6920d5718a",
+        "pack_sha256": "c55b80d3d5c820fb34cab3b0bf8ccaabd2e73496cea42267c08d05cc34ecd612",
+        "pipeline": "PASS",
+        "gold_changed": 1,
+        "gold_dropped": 1,
+        "rules": 17,
+        "functions": 17,
+        "report_path": "teams/01-data-a/results/spec_v1/cleaner/specv1_ind-hi-indiccorp_harm.json"
+      },
+      {
+        "pack": "ind-hi-sangraha-s",
+        "gold": 24,
+        "report_sha256": "1b1d797a54d9888f67774efc0396967e7a649f7ba4ad899274786e30227db275",
+        "gold_sha256": "f3943ff76a96e9e67896a88130bb41ee3b08b2025c010381d8e052807e10ea80",
+        "pack_sha256": "7fd34f97729659a7c0c7f6bed0190e7f4eda29ed8a0f9b9eacbfe4a607a3ff6d",
+        "pipeline": "PASS",
+        "gold_changed": 0,
+        "gold_dropped": 0,
+        "rules": 17,
+        "functions": 17,
+        "report_path": "teams/01-data-a/results/spec_v1/cleaner/specv1_ind-hi-sangraha-s_harm.json"
+      },
+      {
+        "pack": "ind-hi-sangraha-v",
+        "gold": 219,
+        "report_sha256": "8b20fecc75a0548b0154f379d558b0192876f1ebaeb8511be34c6be5c6e3a09f",
+        "gold_sha256": "5f1992d87749bed3d71655168905076538a45849666bb67c0d4ecc3baba1e1a9",
+        "pack_sha256": "b0fb32f2327aa39badc9a55110c992303ce273b02711e0973f877d465a00557e",
+        "pipeline": "PASS",
+        "gold_changed": 2,
+        "gold_dropped": 0,
+        "rules": 17,
+        "functions": 17,
+        "report_path": "teams/01-data-a/results/spec_v1/cleaner/specv1_ind-hi-sangraha-v_harm.json"
+      },
+      {
+        "pack": "ind-kn-fw2",
+        "gold": 115,
+        "report_sha256": "7a69bde24ea585f7e042642b1775a67fdb5a4a4f1e6f53278c00d7d7bd1b56e8",
+        "gold_sha256": "3f8661f313b07d8e5f8aa598d32db591d6cd46ba939d22afe7d417ddeabbb381",
+        "pack_sha256": "3859c21e3f715ff7c0fbe978dcd0719b48ead11cff58fe215afa23f1175fd3ee",
+        "pipeline": "PASS",
+        "gold_changed": 1,
+        "gold_dropped": 0,
+        "rules": 11,
+        "functions": 11,
+        "report_path": "teams/01-data-a/results/spec_v1/cleaner/specv1_ind-kn-fw2_harm.json"
+      },
+      {
+        "pack": "ind-kn-sangraha-s",
+        "gold": 22,
+        "report_sha256": "af95559bdd2847bc4cdffda2a4421a2997e178f5e0dfe17a6bd0771f57c59dd0",
+        "gold_sha256": "4aacabee4d5ab012f3041d63cd91310a7188cf68877692c644d7bc080c055556",
+        "pack_sha256": "a161966005c037a1bdb70245c2b6135520967c57c5fc618cba5f29d9e248f427",
+        "pipeline": "PASS",
+        "gold_changed": 0,
+        "gold_dropped": 0,
+        "rules": 13,
+        "functions": 13,
+        "report_path": "teams/01-data-a/results/spec_v1/cleaner/specv1_ind-kn-sangraha-s_harm.json"
+      },
+      {
+        "pack": "ind-kn-sangraha-v",
+        "gold": 99,
+        "report_sha256": "a86633d53a97966398fec5e00c3fb41148b72b5cf40f5a25d681191764c144fc",
+        "gold_sha256": "42b45e25c85f3c793a0e0de0740ed6d3352e74d81bb8e10f1d6af10684305645",
+        "pack_sha256": "39d2bce100b2b2016fbe44d0f58ccbf5d2df8df24d8b3418051e691115d877fc",
+        "pipeline": "PASS",
+        "gold_changed": 0,
+        "gold_dropped": 0,
+        "rules": 12,
+        "functions": 12,
+        "report_path": "teams/01-data-a/results/spec_v1/cleaner/specv1_ind-kn-sangraha-v_harm.json"
+      },
+      {
+        "pack": "ind-mr-fw2",
+        "gold": 158,
+        "report_sha256": "d29a915fcbd7c6bf1a4e19206c7ddb808ce5d1d49d2ccc14ca3fe3def5adf1bb",
+        "gold_sha256": "401a155d5768b1e44cacdd6f5e813365bff625828a1ee7ebfbbed565512f65d0",
+        "pack_sha256": "94a1d14caa9a46f40c2212c6d2c436b9ebb03093ac60ec04658023adeb2d3e2b",
+        "pipeline": "PASS",
+        "gold_changed": 1,
+        "gold_dropped": 0,
+        "rules": 14,
+        "functions": 14,
+        "report_path": "teams/01-data-a/results/spec_v1/cleaner/specv1_ind-mr-fw2_harm.json"
+      },
+      {
+        "pack": "ind-mr-sangraha-v",
+        "gold": 99,
+        "report_sha256": "c77762b4e4dc8f7a846c68897c1ddf2c4d4079ee0068c978213c1a0e08c07e62",
+        "gold_sha256": "a38541f77304d18871b7fc30c275969452e5c74eea2a9f13ae4bbb0b4a6c3f61",
+        "pack_sha256": "ad598b6ac2330c00b423b26f826f6d120d8940f0eb7f5412fca2fcd045b4ef30",
+        "pipeline": "PASS",
+        "gold_changed": 0,
+        "gold_dropped": 0,
+        "rules": 15,
+        "functions": 15,
+        "report_path": "teams/01-data-a/results/spec_v1/cleaner/specv1_ind-mr-sangraha-v_harm.json"
+      },
+      {
+        "pack": "ind-sa-fw2",
+        "gold": 71,
+        "report_sha256": "acfd19193eed1d94f7cac3969c5aa9cae96883d30aefea00a36442569a0e4890",
+        "gold_sha256": "bfa93e597a4ab341f2c597388ce8b7c8e3912e728283e867fca8fa5970046865",
+        "pack_sha256": "95e08d6b9ef1c3baf2d98c7f6bef3a0d12236d6b7c54583e5d4565884b3108e0",
+        "pipeline": "PASS",
+        "gold_changed": 1,
+        "gold_dropped": 0,
+        "rules": 15,
+        "functions": 15,
+        "report_path": "teams/01-data-a/results/spec_v1/cleaner/specv1_ind-sa-fw2_harm.json"
+      },
+      {
+        "pack": "ind-ta-sangraha-v",
+        "gold": 141,
+        "report_sha256": "df71e69a401542f9f328eb6fcf8fe88c024e310d1e0d094c6d23169a9d2b02e5",
+        "gold_sha256": "da9e3ff4db5df66b3886dc957ea7db35828083d2c78ed8a7fc8760a386af6948",
+        "pack_sha256": "1df8e92c0f6a18d510ec8af5bf97d41aacf4834746fb9f24dc97821018057d78",
+        "pipeline": "PASS",
+        "gold_changed": 1,
+        "gold_dropped": 0,
+        "rules": 12,
+        "functions": 12,
+        "report_path": "teams/01-data-a/results/spec_v1/cleaner/specv1_ind-ta-sangraha-v_harm.json"
+      },
+      {
+        "pack": "ind-te-fw2",
+        "gold": 17,
+        "report_sha256": "2fd4e0fba72683909e8cb8906afe11d6dd711d985731d247bbfee1a6b9f423aa",
+        "gold_sha256": "25c25c78467ce64f812582f46f2e27e2b15a2c78dc97fe7eaeb5167f3c25da3d",
+        "pack_sha256": "f893df548895804bd63f47b5d6405b51393d79f0647e4389665956198cdaf5bb",
+        "pipeline": "PASS",
+        "gold_changed": 0,
+        "gold_dropped": 0,
+        "rules": 15,
+        "functions": 15,
+        "report_path": "teams/01-data-a/results/spec_v1/cleaner/specv1_ind-te-fw2_harm.json"
+      },
+      {
+        "pack": "ind-te-sangraha-s",
+        "gold": 24,
+        "report_sha256": "4202c699295b9d73ea3f5ca2ea1380fed08a0f637f0e9a0130b25c780beca599",
+        "gold_sha256": "410ce1d6483c56086e8c9f6d1f23265278246999520e2f6f20845010ebc0f3e3",
+        "pack_sha256": "feeb676e76dee102d132846c1af2a92c3ea4d1018e0fd5239f50fc0da0fb6069",
+        "pipeline": "PASS",
+        "gold_changed": 0,
+        "gold_dropped": 0,
+        "rules": 15,
+        "functions": 15,
+        "report_path": "teams/01-data-a/results/spec_v1/cleaner/specv1_ind-te-sangraha-s_harm.json"
+      },
+      {
+        "pack": "ind-te-sangraha-v",
+        "gold": 80,
+        "report_sha256": "3d62fab0083313e0426697223237e34b122e8177f4f7cf6ab85e23840a69079c",
+        "gold_sha256": "f73858bf14d7d4d37537644f573b5d492c681a7a2f07644e7760202793ade075",
+        "pack_sha256": "d3d928606d1fd0a7a81fcbce10db3e3d8f4b7df74486bc51c9a9d30299812817",
+        "pipeline": "PASS",
+        "gold_changed": 0,
+        "gold_dropped": 0,
+        "rules": 15,
+        "functions": 15,
+        "report_path": "teams/01-data-a/results/spec_v1/cleaner/specv1_ind-te-sangraha-v_harm.json"
+      },
+      {
+        "pack": "math-finemath",
+        "gold": 86,
+        "report_sha256": "5eb03807ab6923873b2b85f0ca75f7512c5f65916560bb6f136f29bc0eb3ca4b",
+        "gold_sha256": "633f6b6c370a32b42340169f1a72328fa4cd6d3e5e2f09ebc98061e5fb4c4cab",
+        "pack_sha256": "99aec0d9ece5d6c7f4f13feaad87d165b4f87ca728ecff482f5b30ebd0b3764b",
+        "pipeline": "PASS",
+        "gold_changed": 0,
+        "gold_dropped": 0,
+        "rules": 14,
+        "functions": 13,
+        "report_path": "teams/01-data-a/results/spec_v1/cleaner/specv1_math-finemath_harm.json"
+      },
+      {
+        "pack": "math-megamath",
+        "gold": 26,
+        "report_sha256": "38d6c4f7038a655d9c9ebe37c9a5bea3e1d1aa34674024a866121287c3fa86f3",
+        "gold_sha256": "fe865ce3454414234fd50511a45d02d94c4454998b101bdb4806ffb57f6f04d3",
+        "pack_sha256": "07cdf1aa40a57f86377474a3c940e7a23b67929acce92d263185d4184954400b",
+        "pipeline": "PASS",
+        "gold_changed": 0,
+        "gold_dropped": 0,
+        "rules": 9,
+        "functions": 8,
+        "report_path": "teams/01-data-a/results/spec_v1/cleaner/specv1_math-megamath_harm.json"
+      },
+      {
+        "pack": "sci-finepdfs",
+        "gold": 202,
+        "report_sha256": "b78166576728e871562a893604a93a5d12322f2917a0dee16b0ea3fdf4f7e878",
+        "gold_sha256": "0aa12af6cd0a2a52435111621dac7e65766554e57da58643bdfb14b57d0648d8",
+        "pack_sha256": "5a3228b797f57234ad252fb89bf9a78c66084069540c6ac8564d062c313ea249",
+        "pipeline": "PASS",
+        "gold_changed": 0,
+        "gold_dropped": 0,
+        "rules": 13,
+        "functions": 12,
+        "report_path": "teams/01-data-a/results/spec_v1/cleaner/specv1_sci-finepdfs_harm.json"
+      }
+    ]
+  },
+  "tests": {
+    "workspace_passed": 2112,
+    "isolated_committed_inputs_passed": 2111,
+    "skipped": 1,
+    "subtests_passed": 42
+  },
+  "baseline_nonindic_results": {
+    "code-cpp": {
+      "documents": 500,
+      "different_ids": [],
+      "matching_baseline_errors": []
+    },
+    "code-go": {
+      "documents": 500,
+      "different_ids": [],
+      "matching_baseline_errors": []
+    },
+    "code-java": {
+      "documents": 500,
+      "different_ids": [],
+      "matching_baseline_errors": []
+    },
+    "code-js-ts": {
+      "documents": 500,
+      "different_ids": [],
+      "matching_baseline_errors": []
+    },
+    "code-python": {
+      "documents": 500,
+      "different_ids": [],
+      "matching_baseline_errors": []
+    },
+    "code-rust": {
+      "documents": 500,
+      "different_ids": [],
+      "matching_baseline_errors": []
+    },
+    "en-dclm": {
+      "documents": 500,
+      "different_ids": [],
+      "matching_baseline_errors": []
+    },
+    "en-fineweb-edu": {
+      "documents": 500,
+      "different_ids": [],
+      "matching_baseline_errors": []
+    },
+    "en-nemotroncc": {
+      "documents": 500,
+      "different_ids": [],
+      "matching_baseline_errors": []
+    },
+    "en-nemotroncc-synth": {
+      "documents": 500,
+      "different_ids": [],
+      "matching_baseline_errors": []
+    },
+    "math-finemath": {
+      "documents": 500,
+      "different_ids": [],
+      "matching_baseline_errors": []
+    },
+    "math-megamath": {
+      "documents": 500,
+      "different_ids": [],
+      "matching_baseline_errors": []
+    },
+    "sci-finepdfs": {
+      "documents": 500,
+      "different_ids": [],
+      "matching_baseline_errors": []
+    }
+  },
+  "own_pack_gold": [
+    {
+      "pack": "ind-bn-fw2",
+      "gold_n": 227,
+      "gold_sha256": "fb5538fa063daedf1dfbd2c1fcdf8e43267217de93794206bda8398e5877b7ff",
+      "pack_sha256": "b5f91af826c982b548f7fc06404a2d53623b1393d511049f2e004b0353847913",
+      "result": "PASS"
+    },
+    {
+      "pack": "ind-bn-sangraha-v",
+      "gold_n": 137,
+      "gold_sha256": "a3858b50eaed2fdfcd865ad5be92e1457b39fd75b960f1bbcee9ca2ac6570982",
+      "pack_sha256": "e64c471dd6391dac861e039c2ad1d3c3732b21b97f29efd4b9bcaf0bf54baf81",
+      "result": "PASS"
+    },
+    {
+      "pack": "ind-gu-fw2",
+      "gold_n": 80,
+      "gold_sha256": "1a1592f183e6c8a153b5d6a3573848f73bee05d553d66d106437208301616a14",
+      "pack_sha256": "9f58ad695beac877b7f71f9773328c141e5f19385b9f292ebc9c2b21b19daa6a",
+      "result": "PASS"
+    },
+    {
+      "pack": "ind-hi-fw2",
+      "gold_n": 218,
+      "gold_sha256": "f164fd765388e20a2bbf859fa744802d325fd6f952e25badabdb8e5e4d71663f",
+      "pack_sha256": "f9e1a898c982fcdfb788a931910f79f2204c177e530709df71a2d3b8223f5169",
+      "result": "PASS"
+    },
+    {
+      "pack": "ind-hi-hplt",
+      "gold_n": 37,
+      "gold_sha256": "53b7cbdbed01a111b70454d4e241f0ca7bba83932fbe54b225fefa73fff0d9a3",
+      "pack_sha256": "497533fc4d6407b1ef2e83f7304d65ab7f9fe7892fee09ab6d10f45c913eadc6",
+      "result": "PASS"
+    },
+    {
+      "pack": "ind-hi-indiccorp",
+      "gold_n": 425,
+      "gold_sha256": "a0b3f7021b6a168666eacb60c3d517feb403f302d8afa791bf176a6920d5718a",
+      "pack_sha256": "c55b80d3d5c820fb34cab3b0bf8ccaabd2e73496cea42267c08d05cc34ecd612",
+      "result": "PASS"
+    },
+    {
+      "pack": "ind-hi-sangraha-s",
+      "gold_n": 24,
+      "gold_sha256": "f3943ff76a96e9e67896a88130bb41ee3b08b2025c010381d8e052807e10ea80",
+      "pack_sha256": "7fd34f97729659a7c0c7f6bed0190e7f4eda29ed8a0f9b9eacbfe4a607a3ff6d",
+      "result": "PASS"
+    },
+    {
+      "pack": "ind-hi-sangraha-v",
+      "gold_n": 219,
+      "gold_sha256": "5f1992d87749bed3d71655168905076538a45849666bb67c0d4ecc3baba1e1a9",
+      "pack_sha256": "b0fb32f2327aa39badc9a55110c992303ce273b02711e0973f877d465a00557e",
+      "result": "PASS"
+    },
+    {
+      "pack": "ind-kn-fw2",
+      "gold_n": 115,
+      "gold_sha256": "3f8661f313b07d8e5f8aa598d32db591d6cd46ba939d22afe7d417ddeabbb381",
+      "pack_sha256": "3859c21e3f715ff7c0fbe978dcd0719b48ead11cff58fe215afa23f1175fd3ee",
+      "result": "PASS"
+    },
+    {
+      "pack": "ind-kn-sangraha-s",
+      "gold_n": 22,
+      "gold_sha256": "4aacabee4d5ab012f3041d63cd91310a7188cf68877692c644d7bc080c055556",
+      "pack_sha256": "a161966005c037a1bdb70245c2b6135520967c57c5fc618cba5f29d9e248f427",
+      "result": "PASS"
+    },
+    {
+      "pack": "ind-kn-sangraha-v",
+      "gold_n": 99,
+      "gold_sha256": "42b45e25c85f3c793a0e0de0740ed6d3352e74d81bb8e10f1d6af10684305645",
+      "pack_sha256": "39d2bce100b2b2016fbe44d0f58ccbf5d2df8df24d8b3418051e691115d877fc",
+      "result": "PASS"
+    },
+    {
+      "pack": "ind-mr-fw2",
+      "gold_n": 158,
+      "gold_sha256": "401a155d5768b1e44cacdd6f5e813365bff625828a1ee7ebfbbed565512f65d0",
+      "pack_sha256": "94a1d14caa9a46f40c2212c6d2c436b9ebb03093ac60ec04658023adeb2d3e2b",
+      "result": "PASS"
+    },
+    {
+      "pack": "ind-mr-sangraha-v",
+      "gold_n": 99,
+      "gold_sha256": "a38541f77304d18871b7fc30c275969452e5c74eea2a9f13ae4bbb0b4a6c3f61",
+      "pack_sha256": "ad598b6ac2330c00b423b26f826f6d120d8940f0eb7f5412fca2fcd045b4ef30",
+      "result": "PASS"
+    },
+    {
+      "pack": "ind-sa-fw2",
+      "gold_n": 71,
+      "gold_sha256": "bfa93e597a4ab341f2c597388ce8b7c8e3912e728283e867fca8fa5970046865",
+      "pack_sha256": "95e08d6b9ef1c3baf2d98c7f6bef3a0d12236d6b7c54583e5d4565884b3108e0",
+      "result": "PASS"
+    },
+    {
+      "pack": "ind-ta-sangraha-v",
+      "gold_n": 141,
+      "gold_sha256": "da9e3ff4db5df66b3886dc957ea7db35828083d2c78ed8a7fc8760a386af6948",
+      "pack_sha256": "1df8e92c0f6a18d510ec8af5bf97d41aacf4834746fb9f24dc97821018057d78",
+      "result": "PASS"
+    },
+    {
+      "pack": "ind-te-fw2",
+      "gold_n": 17,
+      "gold_sha256": "25c25c78467ce64f812582f46f2e27e2b15a2c78dc97fe7eaeb5167f3c25da3d",
+      "pack_sha256": "f893df548895804bd63f47b5d6405b51393d79f0647e4389665956198cdaf5bb",
+      "result": "PASS"
+    },
+    {
+      "pack": "ind-te-sangraha-s",
+      "gold_n": 24,
+      "gold_sha256": "410ce1d6483c56086e8c9f6d1f23265278246999520e2f6f20845010ebc0f3e3",
+      "pack_sha256": "feeb676e76dee102d132846c1af2a92c3ea4d1018e0fd5239f50fc0da0fb6069",
+      "result": "PASS"
+    },
+    {
+      "pack": "ind-te-sangraha-v",
+      "gold_n": 80,
+      "gold_sha256": "f73858bf14d7d4d37537644f573b5d492c681a7a2f07644e7760202793ade075",
+      "pack_sha256": "d3d928606d1fd0a7a81fcbce10db3e3d8f4b7df74486bc51c9a9d30299812817",
+      "result": "PASS"
+    }
+  ],
+  "optional_f2": {
+    "set_sha256": "11e290a44d1467875fdf8bebc55eab21f0a6367f411aab98a4a027a546fd372e",
+    "f2_rule_sha256": "0f6968be84b136574ffb5c6f566088baa1b7b4dfd3b2c74cd0eab153d52ab402",
+    "packs": 18,
+    "gold": 2193,
+    "all_checks_pass": true,
+    "raw_gold_dropped": 0,
+    "default_cleaner_enabled": false,
+    "itihasa_covered": false
+  },
+  "no_new_job_submitted": true,
+  "reports": [
+    {
+      "path": "teams/01-data-a/results/spec_v1/cleaner/indic_integration.json",
+      "sha256": "80e5a229ffa98ca03a87b546c066c47c14373146a0fb351c5ca45618131e7ef0"
+    },
+    {
+      "path": "teams/01-data-a/results/spec_v1/cleaner/indic_sibling_scopes.json",
+      "sha256": "769c2c958e308de563ddc4a6a83a59ca089fc1322755f4bd3a69be7faf3d2ffb"
+    },
+    {
+      "path": "teams/01-data-a/results/spec_v1/cleaner/indic_clean_validation.json",
+      "sha256": "2d3b50f4977fa2441e8f85deb8d23b8ec0316921e778f31338d8aeff4d4e6c92"
+    },
+    {
+      "path": "teams/01-data-a/results/spec_v1/cleaner/f1_indic_harm.json",
+      "sha256": "fcade39b85ee87a0ed755d570ea072f34d5e2e6f142493ae0d26b69bf9f30304"
+    },
+    {
+      "path": "teams/01-data-a/results/spec_v1/cleaner/specv1_validation.json",
+      "sha256": "a3213b3665d7725f98ec68bdfa6fa1b36a14e1383ffdb2601e57aa3a01950a8b"
+    },
+    {
+      "path": "teams/01-data-a/results/spec_v1/f2/indic_gold_validation.json",
+      "sha256": "012200c67db09efbb132175f325ba7b7cdcb8f9eed1f2acd7c3eceffc911d0be"
+    }
+  ]
+}

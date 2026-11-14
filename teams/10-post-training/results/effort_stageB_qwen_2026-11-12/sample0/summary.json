@@ -1,0 +1,1066 @@
+{
+ "artifact": "g10-effort-eval-output",
+ "do_not_train": true,
+ "manifest_sha256": "d6190b2d7b013222e767cdb7c50f66231769385ce1dfb729eaa9530b9ebf9226",
+ "stage": "B",
+ "cells_ran": [
+  [
+   "code-00",
+   "16k"
+  ],
+  [
+   "code-00",
+   "1k"
+  ],
+  [
+   "code-00",
+   "4k"
+  ],
+  [
+   "code-00",
+   "64k"
+  ],
+  [
+   "code-01",
+   "16k"
+  ],
+  [
+   "code-01",
+   "1k"
+  ],
+  [
+   "code-01",
+   "4k"
+  ],
+  [
+   "code-01",
+   "64k"
+  ],
+  [
+   "code-02",
+   "16k"
+  ],
+  [
+   "code-02",
+   "1k"
+  ],
+  [
+   "code-02",
+   "4k"
+  ],
+  [
+   "code-02",
+   "64k"
+  ],
+  [
+   "code-03",
+   "16k"
+  ],
+  [
+   "code-03",
+   "1k"
+  ],
+  [
+   "code-03",
+   "4k"
+  ],
+  [
+   "code-03",
+   "64k"
+  ],
+  [
+   "code-04",
+   "16k"
+  ],
+  [
+   "code-04",
+   "1k"
+  ],
+  [
+   "code-04",
+   "4k"
+  ],
+  [
+   "code-04",
+   "64k"
+  ],
+  [
+   "code-05",
+   "16k"
+  ],
+  [
+   "code-05",
+   "1k"
+  ],
+  [
+   "code-05",
+   "4k"
+  ],
+  [
+   "code-05",
+   "64k"
+  ],
+  [
+   "code-06",
+   "16k"
+  ],
+  [
+   "code-06",
+   "1k"
+  ],
+  [
+   "code-06",
+   "4k"
+  ],
+  [
+   "code-06",
+   "64k"
+  ],
+  [
+   "code-07",
+   "16k"
+  ],
+  [
+   "code-07",
+   "1k"
+  ],
+  [
+   "code-07",
+   "4k"
+  ],
+  [
+   "code-07",
+   "64k"
+  ],
+  [
+   "code-08",
+   "16k"
+  ],
+  [
+   "code-08",
+   "1k"
+  ],
+  [
+   "code-08",
+   "4k"
+  ],
+  [
+   "code-08",
+   "64k"
+  ],
+  [
+   "code-09",
+   "16k"
+  ],
+  [
+   "code-09",
+   "1k"
+  ],
+  [
+   "code-09",
+   "4k"
+  ],
+  [
+   "code-09",
+   "64k"
+  ],
+  [
+   "code-10",
+   "16k"
+  ],
+  [
+   "code-10",
+   "1k"
+  ],
+  [
+   "code-10",
+   "4k"
+  ],
+  [
+   "code-10",
+   "64k"
+  ],
+  [
+   "code-11",
+   "16k"
+  ],
+  [
+   "code-11",
+   "1k"
+  ],
+  [
+   "code-11",
+   "4k"
+  ],
+  [
+   "code-11",
+   "64k"
+  ],
+  [
+   "code-12",
+   "16k"
+  ],
+  [
+   "code-12",
+   "1k"
+  ],
+  [
+   "code-12",
+   "4k"
+  ],
+  [
+   "code-12",
+   "64k"
+  ],
+  [
+   "code-13",
+   "16k"
+  ],
+  [
+   "code-13",
+   "1k"
+  ],
+  [
+   "code-13",
+   "4k"
+  ],
+  [
+   "code-13",
+   "64k"
+  ],
+  [
+   "code-14",
+   "16k"
+  ],
+  [
+   "code-14",
+   "1k"
+  ],
+  [
+   "code-14",
+   "4k"
+  ],
+  [
+   "code-14",
+   "64k"
+  ],
+  [
+   "code-15",
+   "16k"
+  ],
+  [
+   "code-15",
+   "1k"
+  ],
+  [
+   "code-15",
+   "4k"
+  ],
+  [
+   "code-15",
+   "64k"
+  ],
+  [
+   "code-16",
+   "16k"
+  ],
+  [
+   "code-16",
+   "1k"
+  ],
+  [
+   "code-16",
+   "4k"
+  ],
+  [
+   "code-16",
+   "64k"
+  ],
+  [
+   "code-17",
+   "16k"
+  ],
+  [
+   "code-17",
+   "1k"
+  ],
+  [
+   "code-17",
+   "4k"
+  ],
+  [
+   "code-17",
+   "64k"
+  ],
+  [
+   "code-18",
+   "16k"
+  ],
+  [
+   "code-18",
+   "1k"
+  ],
+  [
+   "code-18",
+   "4k"
+  ],
+  [
+   "code-18",
+   "64k"
+  ],
+  [
+   "code-19",
+   "16k"
+  ],
+  [
+   "code-19",
+   "1k"
+  ],
+  [
+   "code-19",
+   "4k"
+  ],
+  [
+   "code-19",
+   "64k"
+  ],
+  [
+   "code-20",
+   "16k"
+  ],
+  [
+   "code-20",
+   "1k"
+  ],
+  [
+   "code-20",
+   "4k"
+  ],
+  [
+   "code-20",
+   "64k"
+  ],
+  [
+   "code-21",
+   "16k"
+  ],
+  [
+   "code-21",
+   "1k"
+  ],
+  [
+   "code-21",
+   "4k"
+  ],
+  [
+   "code-21",
+   "64k"
+  ],
+  [
+   "code-22",
+   "16k"
+  ],
+  [
+   "code-22",
+   "1k"
+  ],
+  [
+   "code-22",
+   "4k"
+  ],
+  [
+   "code-22",
+   "64k"
+  ],
+  [
+   "code-23",
+   "16k"
+  ],
+  [
+   "code-23",
+   "1k"
+  ],
+  [
+   "code-23",
+   "4k"
+  ],
+  [
+   "code-23",
+   "64k"
+  ],
+  [
+   "code-24",
+   "16k"
+  ],
+  [
+   "code-24",
+   "1k"
+  ],
+  [
+   "code-24",
+   "4k"
+  ],
+  [
+   "code-24",
+   "64k"
+  ],
+  [
+   "code-25",
+   "16k"
+  ],
+  [
+   "code-25",
+   "1k"
+  ],
+  [
+   "code-25",
+   "4k"
+  ],
+  [
+   "code-25",
+   "64k"
+  ],
+  [
+   "code-26",
+   "16k"
+  ],
+  [
+   "code-26",
+   "1k"
+  ],
+  [
+   "code-26",
+   "4k"
+  ],
+  [
+   "code-26",
+   "64k"
+  ],
+  [
+   "code-27",
+   "16k"
+  ],
+  [
+   "code-27",
+   "1k"
+  ],
+  [
+   "code-27",
+   "4k"
+  ],
+  [
+   "code-27",
+   "64k"
+  ],
+  [
+   "code-28",
+   "16k"
+  ],
+  [
+   "code-28",
+   "1k"
+  ],
+  [
+   "code-28",
+   "4k"
+  ],
+  [
+   "code-28",
+   "64k"
+  ],
+  [
+   "code-29",
+   "16k"
+  ],
+  [
+   "code-29",
+   "1k"
+  ],
+  [
+   "code-29",
+   "4k"
+  ],
+  [
+   "code-29",
+   "64k"
+  ],
+  [
+   "math-00",
+   "16k"
+  ],
+  [
+   "math-00",
+   "1k"
+  ],
+  [
+   "math-00",
+   "4k"
+  ],
+  [
+   "math-00",
+   "64k"
+  ],
+  [
+   "math-01",
+   "16k"
+  ],
+  [
+   "math-01",
+   "1k"
+  ],
+  [
+   "math-01",
+   "4k"
+  ],
+  [
+   "math-01",
+   "64k"
+  ],
+  [
+   "math-02",
+   "16k"
+  ],
+  [
+   "math-02",
+   "1k"
+  ],
+  [
+   "math-02",
+   "4k"
+  ],
+  [
+   "math-02",
+   "64k"
+  ],
+  [
+   "math-03",
+   "16k"
+  ],
+  [
+   "math-03",
+   "1k"
+  ],
+  [
+   "math-03",
+   "4k"
+  ],
+  [
+   "math-03",
+   "64k"
+  ],
+  [
+   "math-04",
+   "16k"
+  ],
+  [
+   "math-04",
+   "1k"
+  ],
+  [
+   "math-04",
+   "4k"
+  ],
+  [
+   "math-04",
+   "64k"
+  ],
+  [
+   "math-05",
+   "16k"
+  ],
+  [
+   "math-05",
+   "1k"
+  ],
+  [
+   "math-05",
+   "4k"
+  ],
+  [
+   "math-05",
+   "64k"
+  ],
+  [
+   "math-06",
+   "16k"
+  ],
+  [
+   "math-06",
+   "1k"
+  ],
+  [
+   "math-06",
+   "4k"
+  ],
+  [
+   "math-06",
+   "64k"
+  ],
+  [
+   "math-07",
+   "16k"
+  ],
+  [
+   "math-07",
+   "1k"
+  ],
+  [
+   "math-07",
+   "4k"
+  ],
+  [
+   "math-07",
+   "64k"
+  ],
+  [
+   "math-08",
+   "16k"
+  ],
+  [
+   "math-08",
+   "1k"
+  ],
+  [
+   "math-08",
+   "4k"
+  ],
+  [
+   "math-08",
+   "64k"
+  ],
+  [
+   "math-09",
+   "16k"
+  ],
+  [
+   "math-09",
+   "1k"
+  ],
+  [
+   "math-09",
+   "4k"
+  ],
+  [
+   "math-09",
+   "64k"
+  ],
+  [
+   "math-10",
+   "16k"
+  ],
+  [
+   "math-10",
+   "1k"
+  ],
+  [
+   "math-10",
+   "4k"
+  ],
+  [
+   "math-10",
+   "64k"
+  ],
+  [
+   "math-11",
+   "16k"
+  ],
+  [
+   "math-11",
+   "1k"
+  ],
+  [
+   "math-11",
+   "4k"
+  ],
+  [
+   "math-11",
+   "64k"
+  ],
+  [
+   "math-12",
+   "16k"
+  ],
+  [
+   "math-12",
+   "1k"
+  ],
+  [
+   "math-12",
+   "4k"
+  ],
+  [
+   "math-12",
+   "64k"
+  ],
+  [
+   "math-13",
+   "16k"
+  ],
+  [
+   "math-13",
+   "1k"
+  ],
+  [
+   "math-13",
+   "4k"
+  ],
+  [
+   "math-13",
+   "64k"
+  ],
+  [
+   "math-14",
+   "16k"
+  ],
+  [
+   "math-14",
+   "1k"
+  ],
+  [
+   "math-14",
+   "4k"
+  ],
+  [
+   "math-14",
+   "64k"
+  ],
+  [
+   "math-15",
+   "16k"
+  ],
+  [
+   "math-15",
+   "1k"
+  ],
+  [
+   "math-15",
+   "4k"
+  ],
+  [
+   "math-15",
+   "64k"
+  ],
+  [
+   "math-16",
+   "16k"
+  ],
+  [
+   "math-16",
+   "1k"
+  ],
+  [
+   "math-16",
+   "4k"
+  ],
+  [
+   "math-16",
+   "64k"
+  ],
+  [
+   "math-17",
+   "16k"
+  ],
+  [
+   "math-17",
+   "1k"
+  ],
+  [
+   "math-17",
+   "4k"
+  ],
+  [
+   "math-17",
+   "64k"
+  ],
+  [
+   "math-18",
+   "16k"
+  ],
+  [
+   "math-18",
+   "1k"
+  ],
+  [
+   "math-18",
+   "4k"
+  ],
+  [
+   "math-18",
+   "64k"
+  ],
+  [
+   "math-19",
+   "16k"
+  ],
+  [
+   "math-19",
+   "1k"
+  ],
+  [
+   "math-19",
+   "4k"
+  ],
+  [
+   "math-19",
+   "64k"
+  ],
+  [
+   "math-20",
+   "16k"
+  ],
+  [
+   "math-20",
+   "1k"
+  ],
+  [
+   "math-20",
+   "4k"
+  ],
+  [
+   "math-20",
+   "64k"
+  ],
+  [
+   "math-21",
+   "16k"
+  ],
+  [
+   "math-21",
+   "1k"
+  ],
+  [
+   "math-21",
+   "4k"
+  ],
+  [
+   "math-21",
+   "64k"
+  ],
+  [
+   "math-22",
+   "16k"
+  ],
+  [
+   "math-22",
+   "1k"
+  ],
+  [
+   "math-22",
+   "4k"
+  ],
+  [
+   "math-22",
+   "64k"
+  ],
+  [
+   "math-23",
+   "16k"
+  ],
+  [
+   "math-23",
+   "1k"
+  ],
+  [
+   "math-23",
+   "4k"
+  ],
+  [
+   "math-23",
+   "64k"
+  ],
+  [
+   "math-24",
+   "16k"
+  ],
+  [
+   "math-24",
+   "1k"
+  ],
+  [
+   "math-24",
+   "4k"
+  ],
+  [
+   "math-24",
+   "64k"
+  ]
+ ],
+ "cells_unsupported": [],
+ "per_label": {
+  "1k": {
+   "cells": 55,
+   "ran": 55,
+   "unsupported": 0,
+   "functional_success": {
+    "k": 18,
+    "n": 55,
+    "rate": 0.3273
+   },
+   "functional_success_censored_in_denominator": 31,
+   "no_checker": 0,
+   "parse_ok": {
+    "k": 55,
+    "n": 55,
+    "rate": 1.0
+   },
+   "parse_malformed": 0,
+   "empty": 0,
+   "censored_at_cap": {
+    "k": 31,
+    "n": 55,
+    "rate": 0.5636
+   },
+   "tool_call_valid": {
+    "k": 0,
+    "n": 0,
+    "rate": null
+   },
+   "generated_tokens_mean": 816.6,
+   "generated_tokens_median": 1024,
+   "trace_tokens_median_parsed_only": 0,
+   "wall_s_total": 187.96
+  },
+  "4k": {
+   "cells": 55,
+   "ran": 55,
+   "unsupported": 0,
+   "functional_success": {
+    "k": 21,
+    "n": 55,
+    "rate": 0.3818
+   },
+   "functional_success_censored_in_denominator": 34,
+   "no_checker": 0,
+   "parse_ok": {
+    "k": 55,
+    "n": 55,
+    "rate": 1.0
+   },
+   "parse_malformed": 0,
+   "empty": 0,
+   "censored_at_cap": {
+    "k": 34,
+    "n": 55,
+    "rate": 0.6182
+   },
+   "tool_call_valid": {
+    "k": 0,
+    "n": 0,
+    "rate": null
+   },
+   "generated_tokens_mean": 827.3,
+   "generated_tokens_median": 1024,
+   "trace_tokens_median_parsed_only": 0,
+   "wall_s_total": 189.5
+  },
+  "16k": {
+   "cells": 55,
+   "ran": 55,
+   "unsupported": 0,
+   "functional_success": {
+    "k": 20,
+    "n": 55,
+    "rate": 0.3636
+   },
+   "functional_success_censored_in_denominator": 33,
+   "no_checker": 0,
+   "parse_ok": {
+    "k": 55,
+    "n": 55,
+    "rate": 1.0
+   },
+   "parse_malformed": 0,
+   "empty": 0,
+   "censored_at_cap": {
+    "k": 33,
+    "n": 55,
+    "rate": 0.6
+   },
+   "tool_call_valid": {
+    "k": 0,
+    "n": 0,
+    "rate": null
+   },
+   "generated_tokens_mean": 812.9,
+   "generated_tokens_median": 1024,
+   "trace_tokens_median_parsed_only": 0,
+   "wall_s_total": 186.22
+  },
+  "64k": {
+   "cells": 55,
+   "ran": 55,
+   "unsupported": 0,
+   "functional_success": {
+    "k": 20,
+    "n": 55,
+    "rate": 0.3636
+   },
+   "functional_success_censored_in_denominator": 33,
+   "no_checker": 0,
+   "parse_ok": {
+    "k": 55,
+    "n": 55,
+    "rate": 1.0
+   },
+   "parse_malformed": 0,
+   "empty": 0,
+   "censored_at_cap": {
+    "k": 33,
+    "n": 55,
+    "rate": 0.6
+   },
+   "tool_call_valid": {
+    "k": 0,
+    "n": 0,
+    "rate": null
+   },
+   "generated_tokens_mean": 820.2,
+   "generated_tokens_median": 1024,
+   "trace_tokens_median_parsed_only": 0,
+   "wall_s_total": 187.9
+  }
+ },
+ "matched_vs_1k": {
+  "4k_vs_1k": {
+   "success_changes": {
+    "gained": 5,
+    "lost": 2,
+    "same": 48
+   },
+   "pairs": 55,
+   "generated_tokens_delta_median": 0
+  },
+  "16k_vs_1k": {
+   "success_changes": {
+    "gained": 4,
+    "lost": 2,
+    "same": 49
+   },
+   "pairs": 55,
+   "generated_tokens_delta_median": 0
+  },
+  "64k_vs_1k": {
+   "success_changes": {
+    "gained": 5,
+    "lost": 3,
+    "same": 47
+   },
+   "pairs": 55,
+   "generated_tokens_delta_median": 0
+  }
+ },
+ "unavailable_slots": 45,
+ "unavailable_by_category": {
+  "tool_agentic": 20,
+  "indic": 15,
+  "general": 10
+ },
+ "interpretation": "A plain-text effort label is not budget enforcement. Stage A/B use one common cap, so they test the effect of the label text at a fixed cap, not four-tier compliance.",
+ "backend": "vllm",
+ "template": "native",
+ "model_id": "Qwen/Qwen3.6-35B-A3B-FP8@c653bba46dfa06e9658dcc0b0dc87fe4685f14a2",
+ "context": 8192,
+ "temperature": 0.7,
+ "base_seed": 1234,
+ "scored_locally": true
+}

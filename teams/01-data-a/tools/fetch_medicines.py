@@ -212,7 +212,7 @@ def main(argv=None, api=None) -> int:
     for m, _, state in results:
         print(f"{m.pack_id[:28]:28} {m.handle[:22]:22} {state:9} {m.source.split(':')[0]}")
     if results:
-        print("\nNext, for each file: python -I teams/01-data-a/tools/medicine_extract.py <file>")
+        print("\nNext, for each file: python -I teams/01-data-a/harmtest/medicine_extract.py <file>")
     if warnings:
         print(f"\n{len(warnings)} warning(s):", file=sys.stderr)
         for w in warnings[:60]:

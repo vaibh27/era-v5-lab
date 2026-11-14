@@ -1,0 +1,5998 @@
+{
+  "privacy_missing_packs": [],
+  "shared_f1_packs": [
+    "ind-bn-fw2",
+    "ind-bn-sangraha-v",
+    "ind-gu-fw2",
+    "ind-hi-fw2",
+    "ind-hi-hplt",
+    "ind-hi-indiccorp",
+    "ind-hi-sangraha-s",
+    "ind-hi-sangraha-v",
+    "ind-kn-fw2",
+    "ind-kn-sangraha-s",
+    "ind-kn-sangraha-v",
+    "ind-mr-fw2",
+    "ind-mr-sangraha-v",
+    "ind-sa-fw2",
+    "ind-ta-sangraha-v",
+    "ind-te-fw2",
+    "ind-te-sangraha-s",
+    "ind-te-sangraha-v"
+  ],
+  "f1_rule_sha256": "6e5c18000f762c14313444598ea1886c1982c3a9cf3f52c52a8f43d07d651b9a",
+  "combined_execution": "selected native/sibling medicines followed by shared Indic F1",
+  "source_sha256": "166ab23156de5fd4ae6beb58d411c6463312a42a6edc2ad63eb635c326bd7565",
+  "source_code_sha256": "6b9dfeaeeef689c5b45f6dde63503d138812741bcff32902f01e2db4302d61a5",
+  "policy": {
+    "enabled": true,
+    "same_language_only": true,
+    "donors": "selected native candidates only",
+    "native_rules_take_priority": true,
+    "fill_missing_diseases_only": true,
+    "require_receiving_gold": true,
+    "target_pack_ids": [
+      "ind-bn-fw2",
+      "ind-bn-sangraha-v",
+      "ind-gu-fw2",
+      "ind-hi-fw2",
+      "ind-hi-hplt",
+      "ind-hi-indiccorp",
+      "ind-hi-sangraha-s",
+      "ind-hi-sangraha-v",
+      "ind-kn-fw2",
+      "ind-kn-sangraha-s",
+      "ind-kn-sangraha-v",
+      "ind-ml-fw2",
+      "ind-mr-fw2",
+      "ind-mr-sangraha-v",
+      "ind-or-fw2",
+      "ind-sa-fw2",
+      "ind-ta-fw2",
+      "ind-ta-sangraha-s",
+      "ind-ta-sangraha-v",
+      "ind-te-fw2",
+      "ind-te-sangraha-s",
+      "ind-te-sangraha-v"
+    ],
+    "allowed_rule_packs": {
+      "DB-D4-011": [
+        "ind-te-fw2"
+      ],
+      "DB-D5-001": [
+        "ind-te-sangraha-s"
+      ]
+    }
+  },
+  "targets": {
+    "ind-bn-fw2": {
+      "native_rules": [
+        "DB-A3-001",
+        "DB-A5-001",
+        "DB-A6-001",
+        "DB-G1-001",
+        "DB-C3-001",
+        "DB-C4-001",
+        "DB-D4-001",
+        "DB-F3-001",
+        "DB-C1-001",
+        "DB-C2-001",
+        "DB-C5-007",
+        "DB-D3-001"
+      ],
+      "accepted": [
+        "DB-A2-001",
+        "DB-G4-006",
+        "DB-B4-009"
+      ],
+      "attempts": [
+        {
+          "rule_id": "DB-A2-001",
+          "source_pack": "ind-bn-sangraha-v",
+          "code": "A2",
+          "gold": {
+            "rule": "DB-A2-001",
+            "changed": 0,
+            "dropped": 0,
+            "affected_unique": 0,
+            "errors": 0,
+            "error_types": [],
+            "percent": "0.000000",
+            "result": "PASS",
+            "changed_ids": [],
+            "dropped_ids": [],
+            "affected_ids": []
+          },
+          "full_rule": {
+            "nonidempotent_ids": [],
+            "errors": []
+          },
+          "combined_gold": {
+            "rule": "combined",
+            "changed": 0,
+            "dropped": 1,
+            "affected_unique": 1,
+            "errors": 0,
+            "error_types": [],
+            "percent": "0.440529",
+            "result": "PASS",
+            "changed_ids": [],
+            "dropped_ids": [
+              "016f4687d4a36ce9"
+            ],
+            "affected_ids": [
+              "016f4687d4a36ce9"
+            ]
+          },
+          "combined_full": {
+            "nonidempotent_ids": [],
+            "errors": []
+          },
+          "result": "ACCEPTED",
+          "reasons": []
+        },
+        {
+          "rule_id": "DB-G4-006",
+          "source_pack": "ind-bn-sangraha-v",
+          "code": "G4",
+          "gold": {
+            "rule": "DB-G4-006",
+            "changed": 1,
+            "dropped": 0,
+            "affected_unique": 1,
+            "errors": 0,
+            "error_types": [],
+            "percent": "0.440529",
+            "result": "PASS",
+            "changed_ids": [
+              "7c0457dedb71f333"
+            ],
+            "dropped_ids": [],
+            "affected_ids": [
+              "7c0457dedb71f333"
+            ]
+          },
+          "full_rule": {
+            "nonidempotent_ids": [],
+            "errors": []
+          },
+          "combined_gold": {
+            "rule": "combined",
+            "changed": 1,
+            "dropped": 1,
+            "affected_unique": 2,
+            "errors": 0,
+            "error_types": [],
+            "percent": "0.881057",
+            "result": "PASS",
+            "changed_ids": [
+              "7c0457dedb71f333"
+            ],
+            "dropped_ids": [
+              "016f4687d4a36ce9"
+            ],
+            "affected_ids": [
+              "7c0457dedb71f333",
+              "016f4687d4a36ce9"
+            ]
+          },
+          "combined_full": {
+            "nonidempotent_ids": [],
+            "errors": []
+          },
+          "result": "ACCEPTED",
+          "reasons": []
+        },
+        {
+          "rule_id": "DB-B4-009",
+          "source_pack": "ind-bn-sangraha-v",
+          "code": "B4",
+          "gold": {
+            "rule": "DB-B4-009",
+            "changed": 0,
+            "dropped": 0,
+            "affected_unique": 0,
+            "errors": 0,
+            "error_types": [],
+            "percent": "0.000000",
+            "result": "PASS",
+            "changed_ids": [],
+            "dropped_ids": [],
+            "affected_ids": []
+          },
+          "full_rule": {
+            "nonidempotent_ids": [],
+            "errors": []
+          },
+          "combined_gold": {
+            "rule": "combined",
+            "changed": 1,
+            "dropped": 1,
+            "affected_unique": 2,
+            "errors": 0,
+            "error_types": [],
+            "percent": "0.881057",
+            "result": "PASS",
+            "changed_ids": [
+              "7c0457dedb71f333"
+            ],
+            "dropped_ids": [
+              "016f4687d4a36ce9"
+            ],
+            "affected_ids": [
+              "7c0457dedb71f333",
+              "016f4687d4a36ce9"
+            ]
+          },
+          "combined_full": {
+            "nonidempotent_ids": [],
+            "errors": []
+          },
+          "result": "ACCEPTED",
+          "reasons": []
+        }
+      ],
+      "result": "PASS",
+      "gold_n": 227,
+      "pack_sha256": "b5f91af826c982b548f7fc06404a2d53623b1393d511049f2e004b0353847913",
+      "gold_sha256": "fb5538fa063daedf1dfbd2c1fcdf8e43267217de93794206bda8398e5877b7ff",
+      "combined_gold": {
+        "rule": "combined",
+        "changed": 1,
+        "dropped": 1,
+        "affected_unique": 2,
+        "errors": 0,
+        "error_types": [],
+        "percent": "0.881057",
+        "result": "PASS",
+        "changed_ids": [
+          "7c0457dedb71f333"
+        ],
+        "dropped_ids": [
+          "016f4687d4a36ce9"
+        ],
+        "affected_ids": [
+          "7c0457dedb71f333",
+          "016f4687d4a36ce9"
+        ]
+      },
+      "final_full": {
+        "nonidempotent_ids": [],
+        "errors": []
+      }
+    },
+    "ind-bn-sangraha-v": {
+      "native_rules": [
+        "DB-A2-001",
+        "DB-A3-007",
+        "DB-A6-020",
+        "DB-G1-015",
+        "DB-G4-006",
+        "DB-C5-021",
+        "DB-C2-023",
+        "DB-C4-015",
+        "DB-D3-021",
+        "DB-B4-009"
+      ],
+      "accepted": [
+        "DB-A5-001",
+        "DB-C3-001",
+        "DB-D4-001",
+        "DB-F3-001"
+      ],
+      "attempts": [
+        {
+          "rule_id": "DB-A5-001",
+          "source_pack": "ind-bn-fw2",
+          "code": "A5",
+          "gold": {
+            "rule": "DB-A5-001",
+            "changed": 1,
+            "dropped": 0,
+            "affected_unique": 1,
+            "errors": 0,
+            "error_types": [],
+            "percent": "0.729927",
+            "result": "PASS",
+            "changed_ids": [
+              "fa5d153e743890ce"
+            ],
+            "dropped_ids": [],
+            "affected_ids": [
+              "fa5d153e743890ce"
+            ]
+          },
+          "full_rule": {
+            "nonidempotent_ids": [],
+            "errors": []
+          },
+          "combined_gold": {
+            "rule": "combined",
+            "changed": 1,
+            "dropped": 0,
+            "affected_unique": 1,
+            "errors": 0,
+            "error_types": [],
+            "percent": "0.729927",
+            "result": "PASS",
+            "changed_ids": [
+              "fa5d153e743890ce"
+            ],
+            "dropped_ids": [],
+            "affected_ids": [
+              "fa5d153e743890ce"
+            ]
+          },
+          "combined_full": {
+            "nonidempotent_ids": [],
+            "errors": []
+          },
+          "result": "ACCEPTED",
+          "reasons": []
+        },
+        {
+          "rule_id": "DB-C3-001",
+          "source_pack": "ind-bn-fw2",
+          "code": "C3",
+          "gold": {
+            "rule": "DB-C3-001",
+            "changed": 0,
+            "dropped": 0,
+            "affected_unique": 0,
+            "errors": 0,
+            "error_types": [],
+            "percent": "0.000000",
+            "result": "PASS",
+            "changed_ids": [],
+            "dropped_ids": [],
+            "affected_ids": []
+          },
+          "full_rule": {
+            "nonidempotent_ids": [],
+            "errors": []
+          },
+          "combined_gold": {
+            "rule": "combined",
+            "changed": 1,
+            "dropped": 0,
+            "affected_unique": 1,
+            "errors": 0,
+            "error_types": [],
+            "percent": "0.729927",
+            "result": "PASS",
+            "changed_ids": [
+              "fa5d153e743890ce"
+            ],
+            "dropped_ids": [],
+            "affected_ids": [
+              "fa5d153e743890ce"
+            ]
+          },
+          "combined_full": {
+            "nonidempotent_ids": [],
+            "errors": []
+          },
+          "result": "ACCEPTED",
+          "reasons": []
+        },
+        {
+          "rule_id": "DB-D4-001",
+          "source_pack": "ind-bn-fw2",
+          "code": "D4",
+          "gold": {
+            "rule": "DB-D4-001",
+            "changed": 0,
+            "dropped": 0,
+            "affected_unique": 0,
+            "errors": 0,
+            "error_types": [],
+            "percent": "0.000000",
+            "result": "PASS",
+            "changed_ids": [],
+            "dropped_ids": [],
+            "affected_ids": []
+          },
+          "full_rule": {
+            "nonidempotent_ids": [],
+            "errors": []
+          },
+          "combined_gold": {
+            "rule": "combined",
+            "changed": 1,
+            "dropped": 0,
+            "affected_unique": 1,
+            "errors": 0,
+            "error_types": [],
+            "percent": "0.729927",
+            "result": "PASS",
+            "changed_ids": [
+              "fa5d153e743890ce"
+            ],
+            "dropped_ids": [],
+            "affected_ids": [
+              "fa5d153e743890ce"
+            ]
+          },
+          "combined_full": {
+            "nonidempotent_ids": [],
+            "errors": []
+          },
+          "result": "ACCEPTED",
+          "reasons": []
+        },
+        {
+          "rule_id": "DB-F3-001",
+          "source_pack": "ind-bn-fw2",
+          "code": "F3",
+          "gold": {
+            "rule": "DB-F3-001",
+            "changed": 0,
+            "dropped": 0,
+            "affected_unique": 0,
+            "errors": 0,
+            "error_types": [],
+            "percent": "0.000000",
+            "result": "PASS",
+            "changed_ids": [],
+            "dropped_ids": [],
+            "affected_ids": []
+          },
+          "full_rule": {
+            "nonidempotent_ids": [],
+            "errors": []
+          },
+          "combined_gold": {
+            "rule": "combined",
+            "changed": 1,
+            "dropped": 0,
+            "affected_unique": 1,
+            "errors": 0,
+            "error_types": [],
+            "percent": "0.729927",
+            "result": "PASS",
+            "changed_ids": [
+              "fa5d153e743890ce"
+            ],
+            "dropped_ids": [],
+            "affected_ids": [
+              "fa5d153e743890ce"
+            ]
+          },
+          "combined_full": {
+            "nonidempotent_ids": [],
+            "errors": []
+          },
+          "result": "ACCEPTED",
+          "reasons": []
+        },
+        {
+          "rule_id": "DB-C1-001",
+          "source_pack": "ind-bn-fw2",
+          "code": "C1",
+          "gold": {
+            "rule": "DB-C1-001",
+            "changed": 0,
+            "dropped": 0,
+            "affected_unique": 0,
+            "errors": 0,
+            "error_types": [],
+            "percent": "0.000000",
+            "result": "PASS",
+            "changed_ids": [],
+            "dropped_ids": [],
+            "affected_ids": []
+          },
+          "full_rule": {
+            "nonidempotent_ids": [],
+            "errors": []
+          },
+          "combined_gold": {
+            "rule": "combined",
+            "changed": 1,
+            "dropped": 0,
+            "affected_unique": 1,
+            "errors": 0,
+            "error_types": [],
+            "percent": "0.729927",
+            "result": "PASS",
+            "changed_ids": [
+              "fa5d153e743890ce"
+            ],
+            "dropped_ids": [],
+            "affected_ids": [
+              "fa5d153e743890ce"
+            ]
+          },
+          "combined_full": {
+            "nonidempotent_ids": [
+              "8a82a545913a2a14"
+            ],
+            "errors": []
+          },
+          "result": "REJECTED",
+          "reasons": [
+            "combined receiving-pack runtime/idempotence failure"
+          ]
+        }
+      ],
+      "result": "PASS",
+      "gold_n": 137,
+      "pack_sha256": "e64c471dd6391dac861e039c2ad1d3c3732b21b97f29efd4b9bcaf0bf54baf81",
+      "gold_sha256": "a3858b50eaed2fdfcd865ad5be92e1457b39fd75b960f1bbcee9ca2ac6570982",
+      "combined_gold": {
+        "rule": "combined",
+        "changed": 1,
+        "dropped": 0,
+        "affected_unique": 1,
+        "errors": 0,
+        "error_types": [],
+        "percent": "0.729927",
+        "result": "PASS",
+        "changed_ids": [
+          "fa5d153e743890ce"
+        ],
+        "dropped_ids": [],
+        "affected_ids": [
+          "fa5d153e743890ce"
+        ]
+      },
+      "final_full": {
+        "nonidempotent_ids": [],
+        "errors": []
+      }
+    },
+    "ind-gu-fw2": {
+      "native_rules": [
+        "DB-A3-002",
+        "DB-A5-003",
+        "DB-A6-003",
+        "DB-G1-003",
+        "DB-D4-003",
+        "DB-C1-003",
+        "DB-C2-003",
+        "DB-C4-007",
+        "DB-C5-009",
+        "DB-D3-003",
+        "DB-B4-001"
+      ],
+      "accepted": [],
+      "attempts": [],
+      "result": "PASS",
+      "gold_n": 80,
+      "pack_sha256": "9f58ad695beac877b7f71f9773328c141e5f19385b9f292ebc9c2b21b19daa6a",
+      "gold_sha256": "1a1592f183e6c8a153b5d6a3573848f73bee05d553d66d106437208301616a14",
+      "combined_gold": {
+        "rule": "combined",
+        "changed": 0,
+        "dropped": 0,
+        "affected_unique": 0,
+        "errors": 0,
+        "error_types": [],
+        "percent": "0.000000",
+        "result": "PASS",
+        "changed_ids": [],
+        "dropped_ids": [],
+        "affected_ids": []
+      },
+      "final_full": {
+        "nonidempotent_ids": [],
+        "errors": []
+      }
+    },
+    "ind-hi-fw2": {
+      "native_rules": [
+        "DB-B2-001",
+        "DB-C4-002",
+        "DB-C5-016",
+        "DB-D4-013",
+        "DB-F3-004",
+        "DB-C1-005",
+        "DB-C2-014",
+        "DB-C3-006",
+        "DB-D3-005",
+        "DB-D5-003"
+      ],
+      "accepted": [
+        "DB-G1-016",
+        "DB-A6-019",
+        "DB-B4-008",
+        "DB-G3-003",
+        "DB-D2-003"
+      ],
+      "attempts": [
+        {
+          "rule_id": "DB-A6-017",
+          "source_pack": "ind-hi-hplt",
+          "code": "A6",
+          "gold": {
+            "rule": "DB-A6-017",
+            "changed": 2,
+            "dropped": 0,
+            "affected_unique": 2,
+            "errors": 0,
+            "error_types": [],
+            "percent": "0.917431",
+            "result": "PASS",
+            "changed_ids": [
+              "82aaaa571c06ea23",
+              "f6e6f8129ccafbf5"
+            ],
+            "dropped_ids": [],
+            "affected_ids": [
+              "82aaaa571c06ea23",
+              "f6e6f8129ccafbf5"
+            ]
+          },
+          "full_rule": {
+            "nonidempotent_ids": [],
+            "errors": []
+          },
+          "combined_gold": {
+            "rule": "combined",
+            "changed": 3,
+            "dropped": 0,
+            "affected_unique": 3,
+            "errors": 0,
+            "error_types": [],
+            "percent": "1.376147",
+            "result": "FAIL",
+            "changed_ids": [
+              "277fa2fd630f90fd",
+              "82aaaa571c06ea23",
+              "f6e6f8129ccafbf5"
+            ],
+            "dropped_ids": [],
+            "affected_ids": [
+              "277fa2fd630f90fd",
+              "82aaaa571c06ea23",
+              "f6e6f8129ccafbf5"
+            ]
+          },
+          "result": "REJECTED",
+          "reasons": [
+            "combined receiving-pack gold: FAIL"
+          ]
+        },
+        {
+          "rule_id": "DB-G1-016",
+          "source_pack": "ind-hi-hplt",
+          "code": "G1",
+          "gold": {
+            "rule": "DB-G1-016",
+            "changed": 0,
+            "dropped": 0,
+            "affected_unique": 0,
+            "errors": 0,
+            "error_types": [],
+            "percent": "0.000000",
+            "result": "PASS",
+            "changed_ids": [],
+            "dropped_ids": [],
+            "affected_ids": []
+          },
+          "full_rule": {
+            "nonidempotent_ids": [],
+            "errors": []
+          },
+          "combined_gold": {
+            "rule": "combined",
+            "changed": 1,
+            "dropped": 0,
+            "affected_unique": 1,
+            "errors": 0,
+            "error_types": [],
+            "percent": "0.458716",
+            "result": "PASS",
+            "changed_ids": [
+              "277fa2fd630f90fd"
+            ],
+            "dropped_ids": [],
+            "affected_ids": [
+              "277fa2fd630f90fd"
+            ]
+          },
+          "combined_full": {
+            "nonidempotent_ids": [],
+            "errors": []
+          },
+          "result": "ACCEPTED",
+          "reasons": []
+        },
+        {
+          "rule_id": "DB-G4-007",
+          "source_pack": "ind-hi-hplt",
+          "code": "G4",
+          "gold": {
+            "rule": "DB-G4-007",
+            "changed": 2,
+            "dropped": 0,
+            "affected_unique": 2,
+            "errors": 0,
+            "error_types": [],
+            "percent": "0.917431",
+            "result": "PASS",
+            "changed_ids": [
+              "82aaaa571c06ea23",
+              "f6e6f8129ccafbf5"
+            ],
+            "dropped_ids": [],
+            "affected_ids": [
+              "82aaaa571c06ea23",
+              "f6e6f8129ccafbf5"
+            ]
+          },
+          "full_rule": {
+            "nonidempotent_ids": [],
+            "errors": []
+          },
+          "combined_gold": {
+            "rule": "combined",
+            "changed": 3,
+            "dropped": 0,
+            "affected_unique": 3,
+            "errors": 0,
+            "error_types": [],
+            "percent": "1.376147",
+            "result": "FAIL",
+            "changed_ids": [
+              "277fa2fd630f90fd",
+              "82aaaa571c06ea23",
+              "f6e6f8129ccafbf5"
+            ],
+            "dropped_ids": [],
+            "affected_ids": [
+              "277fa2fd630f90fd",
+              "82aaaa571c06ea23",
+              "f6e6f8129ccafbf5"
+            ]
+          },
+          "result": "REJECTED",
+          "reasons": [
+            "combined receiving-pack gold: FAIL"
+          ]
+        },
+        {
+          "rule_id": "DB-A6-019",
+          "source_pack": "ind-hi-sangraha-s",
+          "code": "A6",
+          "gold": {
+            "rule": "DB-A6-019",
+            "changed": 0,
+            "dropped": 0,
+            "affected_unique": 0,
+            "errors": 0,
+            "error_types": [],
+            "percent": "0.000000",
+            "result": "PASS",
+            "changed_ids": [],
+            "dropped_ids": [],
+            "affected_ids": []
+          },
+          "full_rule": {
+            "nonidempotent_ids": [],
+            "errors": []
+          },
+          "combined_gold": {
+            "rule": "combined",
+            "changed": 1,
+            "dropped": 0,
+            "affected_unique": 1,
+            "errors": 0,
+            "error_types": [],
+            "percent": "0.458716",
+            "result": "PASS",
+            "changed_ids": [
+              "277fa2fd630f90fd"
+            ],
+            "dropped_ids": [],
+            "affected_ids": [
+              "277fa2fd630f90fd"
+            ]
+          },
+          "combined_full": {
+            "nonidempotent_ids": [],
+            "errors": []
+          },
+          "result": "ACCEPTED",
+          "reasons": []
+        },
+        {
+          "rule_id": "DB-B4-008",
+          "source_pack": "ind-hi-sangraha-s",
+          "code": "B4",
+          "gold": {
+            "rule": "DB-B4-008",
+            "changed": 0,
+            "dropped": 0,
+            "affected_unique": 0,
+            "errors": 0,
+            "error_types": [],
+            "percent": "0.000000",
+            "result": "PASS",
+            "changed_ids": [],
+            "dropped_ids": [],
+            "affected_ids": []
+          },
+          "full_rule": {
+            "nonidempotent_ids": [],
+            "errors": []
+          },
+          "combined_gold": {
+            "rule": "combined",
+            "changed": 1,
+            "dropped": 0,
+            "affected_unique": 1,
+            "errors": 0,
+            "error_types": [],
+            "percent": "0.458716",
+            "result": "PASS",
+            "changed_ids": [
+              "277fa2fd630f90fd"
+            ],
+            "dropped_ids": [],
+            "affected_ids": [
+              "277fa2fd630f90fd"
+            ]
+          },
+          "combined_full": {
+            "nonidempotent_ids": [],
+            "errors": []
+          },
+          "result": "ACCEPTED",
+          "reasons": []
+        },
+        {
+          "rule_id": "DB-G3-003",
+          "source_pack": "ind-hi-indiccorp",
+          "code": "G3",
+          "gold": {
+            "rule": "DB-G3-003",
+            "changed": 0,
+            "dropped": 1,
+            "affected_unique": 1,
+            "errors": 0,
+            "error_types": [],
+            "percent": "0.458716",
+            "result": "PASS",
+            "changed_ids": [],
+            "dropped_ids": [
+              "8296566eea7d3680"
+            ],
+            "affected_ids": [
+              "8296566eea7d3680"
+            ]
+          },
+          "full_rule": {
+            "nonidempotent_ids": [],
+            "errors": []
+          },
+          "combined_gold": {
+            "rule": "combined",
+            "changed": 1,
+            "dropped": 1,
+            "affected_unique": 2,
+            "errors": 0,
+            "error_types": [],
+            "percent": "0.917431",
+            "result": "PASS",
+            "changed_ids": [
+              "277fa2fd630f90fd"
+            ],
+            "dropped_ids": [
+              "8296566eea7d3680"
+            ],
+            "affected_ids": [
+              "277fa2fd630f90fd",
+              "8296566eea7d3680"
+            ]
+          },
+          "combined_full": {
+            "nonidempotent_ids": [],
+            "errors": []
+          },
+          "result": "ACCEPTED",
+          "reasons": []
+        },
+        {
+          "rule_id": "DB-D2-003",
+          "source_pack": "ind-hi-hplt",
+          "code": "D2",
+          "gold": {
+            "rule": "DB-D2-003",
+            "changed": 0,
+            "dropped": 0,
+            "affected_unique": 0,
+            "errors": 0,
+            "error_types": [],
+            "percent": "0.000000",
+            "result": "PASS",
+            "changed_ids": [],
+            "dropped_ids": [],
+            "affected_ids": []
+          },
+          "full_rule": {
+            "nonidempotent_ids": [],
+            "errors": []
+          },
+          "combined_gold": {
+            "rule": "combined",
+            "changed": 1,
+            "dropped": 1,
+            "affected_unique": 2,
+            "errors": 0,
+            "error_types": [],
+            "percent": "0.917431",
+            "result": "PASS",
+            "changed_ids": [
+              "277fa2fd630f90fd"
+            ],
+            "dropped_ids": [
+              "8296566eea7d3680"
+            ],
+            "affected_ids": [
+              "277fa2fd630f90fd",
+              "8296566eea7d3680"
+            ]
+          },
+          "combined_full": {
+            "nonidempotent_ids": [],
+            "errors": []
+          },
+          "result": "ACCEPTED",
+          "reasons": []
+        }
+      ],
+      "result": "PASS",
+      "gold_n": 218,
+      "pack_sha256": "f9e1a898c982fcdfb788a931910f79f2204c177e530709df71a2d3b8223f5169",
+      "gold_sha256": "f164fd765388e20a2bbf859fa744802d325fd6f952e25badabdb8e5e4d71663f",
+      "combined_gold": {
+        "rule": "combined",
+        "changed": 1,
+        "dropped": 1,
+        "affected_unique": 2,
+        "errors": 0,
+        "error_types": [],
+        "percent": "0.917431",
+        "result": "PASS",
+        "changed_ids": [
+          "277fa2fd630f90fd"
+        ],
+        "dropped_ids": [
+          "8296566eea7d3680"
+        ],
+        "affected_ids": [
+          "277fa2fd630f90fd",
+          "8296566eea7d3680"
+        ]
+      },
+      "final_full": {
+        "nonidempotent_ids": [],
+        "errors": []
+      }
+    },
+    "ind-hi-hplt": {
+      "native_rules": [
+        "DB-A6-017",
+        "DB-G1-016",
+        "DB-G4-007",
+        "DB-B2-002",
+        "DB-C3-002",
+        "DB-C4-003",
+        "DB-C5-001",
+        "DB-D4-005",
+        "DB-C1-006",
+        "DB-C2-021",
+        "DB-D2-003",
+        "DB-D3-020",
+        "DB-D5-002"
+      ],
+      "accepted": [
+        "DB-B4-008",
+        "DB-F3-004",
+        "DB-G3-003"
+      ],
+      "attempts": [
+        {
+          "rule_id": "DB-B4-008",
+          "source_pack": "ind-hi-sangraha-s",
+          "code": "B4",
+          "gold": {
+            "rule": "DB-B4-008",
+            "changed": 0,
+            "dropped": 0,
+            "affected_unique": 0,
+            "errors": 0,
+            "error_types": [],
+            "percent": "0.000000",
+            "result": "PASS",
+            "changed_ids": [],
+            "dropped_ids": [],
+            "affected_ids": []
+          },
+          "full_rule": {
+            "nonidempotent_ids": [],
+            "errors": []
+          },
+          "combined_gold": {
+            "rule": "combined",
+            "changed": 0,
+            "dropped": 0,
+            "affected_unique": 0,
+            "errors": 0,
+            "error_types": [],
+            "percent": "0.000000",
+            "result": "PASS",
+            "changed_ids": [],
+            "dropped_ids": [],
+            "affected_ids": []
+          },
+          "combined_full": {
+            "nonidempotent_ids": [],
+            "errors": []
+          },
+          "result": "ACCEPTED",
+          "reasons": []
+        },
+        {
+          "rule_id": "DB-F3-004",
+          "source_pack": "ind-hi-fw2",
+          "code": "F3",
+          "gold": {
+            "rule": "DB-F3-004",
+            "changed": 0,
+            "dropped": 0,
+            "affected_unique": 0,
+            "errors": 0,
+            "error_types": [],
+            "percent": "0.000000",
+            "result": "PASS",
+            "changed_ids": [],
+            "dropped_ids": [],
+            "affected_ids": []
+          },
+          "full_rule": {
+            "nonidempotent_ids": [],
+            "errors": []
+          },
+          "combined_gold": {
+            "rule": "combined",
+            "changed": 0,
+            "dropped": 0,
+            "affected_unique": 0,
+            "errors": 0,
+            "error_types": [],
+            "percent": "0.000000",
+            "result": "PASS",
+            "changed_ids": [],
+            "dropped_ids": [],
+            "affected_ids": []
+          },
+          "combined_full": {
+            "nonidempotent_ids": [],
+            "errors": []
+          },
+          "result": "ACCEPTED",
+          "reasons": []
+        },
+        {
+          "rule_id": "DB-G3-003",
+          "source_pack": "ind-hi-indiccorp",
+          "code": "G3",
+          "gold": {
+            "rule": "DB-G3-003",
+            "changed": 0,
+            "dropped": 0,
+            "affected_unique": 0,
+            "errors": 0,
+            "error_types": [],
+            "percent": "0.000000",
+            "result": "PASS",
+            "changed_ids": [],
+            "dropped_ids": [],
+            "affected_ids": []
+          },
+          "full_rule": {
+            "nonidempotent_ids": [],
+            "errors": []
+          },
+          "combined_gold": {
+            "rule": "combined",
+            "changed": 0,
+            "dropped": 0,
+            "affected_unique": 0,
+            "errors": 0,
+            "error_types": [],
+            "percent": "0.000000",
+            "result": "PASS",
+            "changed_ids": [],
+            "dropped_ids": [],
+            "affected_ids": []
+          },
+          "combined_full": {
+            "nonidempotent_ids": [],
+            "errors": []
+          },
+          "result": "ACCEPTED",
+          "reasons": []
+        }
+      ],
+      "result": "PASS",
+      "gold_n": 37,
+      "pack_sha256": "497533fc4d6407b1ef2e83f7304d65ab7f9fe7892fee09ab6d10f45c913eadc6",
+      "gold_sha256": "53b7cbdbed01a111b70454d4e241f0ca7bba83932fbe54b225fefa73fff0d9a3",
+      "combined_gold": {
+        "rule": "combined",
+        "changed": 0,
+        "dropped": 0,
+        "affected_unique": 0,
+        "errors": 0,
+        "error_types": [],
+        "percent": "0.000000",
+        "result": "PASS",
+        "changed_ids": [],
+        "dropped_ids": [],
+        "affected_ids": []
+      },
+      "final_full": {
+        "nonidempotent_ids": [],
+        "errors": []
+      }
+    },
+    "ind-hi-indiccorp": {
+      "native_rules": [
+        "DB-C3-025",
+        "DB-G1-012",
+        "DB-G3-003",
+        "DB-C1-018"
+      ],
+      "accepted": [
+        "DB-A6-017",
+        "DB-G4-007",
+        "DB-B2-001",
+        "DB-B4-008",
+        "DB-C4-002",
+        "DB-C5-016",
+        "DB-D4-013",
+        "DB-F3-004",
+        "DB-C2-014",
+        "DB-D2-003",
+        "DB-D3-005",
+        "DB-D5-003"
+      ],
+      "attempts": [
+        {
+          "rule_id": "DB-A6-017",
+          "source_pack": "ind-hi-hplt",
+          "code": "A6",
+          "gold": {
+            "rule": "DB-A6-017",
+            "changed": 1,
+            "dropped": 0,
+            "affected_unique": 1,
+            "errors": 0,
+            "error_types": [],
+            "percent": "0.235294",
+            "result": "PASS",
+            "changed_ids": [
+              "3dff830fcad18cef"
+            ],
+            "dropped_ids": [],
+            "affected_ids": [
+              "3dff830fcad18cef"
+            ]
+          },
+          "full_rule": {
+            "nonidempotent_ids": [],
+            "errors": []
+          },
+          "combined_gold": {
+            "rule": "combined",
+            "changed": 1,
+            "dropped": 1,
+            "affected_unique": 2,
+            "errors": 0,
+            "error_types": [],
+            "percent": "0.470588",
+            "result": "PASS",
+            "changed_ids": [
+              "3dff830fcad18cef"
+            ],
+            "dropped_ids": [
+              "c1403c97611401f8"
+            ],
+            "affected_ids": [
+              "3dff830fcad18cef",
+              "c1403c97611401f8"
+            ]
+          },
+          "combined_full": {
+            "nonidempotent_ids": [],
+            "errors": []
+          },
+          "result": "ACCEPTED",
+          "reasons": []
+        },
+        {
+          "rule_id": "DB-G4-007",
+          "source_pack": "ind-hi-hplt",
+          "code": "G4",
+          "gold": {
+            "rule": "DB-G4-007",
+            "changed": 1,
+            "dropped": 0,
+            "affected_unique": 1,
+            "errors": 0,
+            "error_types": [],
+            "percent": "0.235294",
+            "result": "PASS",
+            "changed_ids": [
+              "3dff830fcad18cef"
+            ],
+            "dropped_ids": [],
+            "affected_ids": [
+              "3dff830fcad18cef"
+            ]
+          },
+          "full_rule": {
+            "nonidempotent_ids": [],
+            "errors": []
+          },
+          "combined_gold": {
+            "rule": "combined",
+            "changed": 1,
+            "dropped": 1,
+            "affected_unique": 2,
+            "errors": 0,
+            "error_types": [],
+            "percent": "0.470588",
+            "result": "PASS",
+            "changed_ids": [
+              "3dff830fcad18cef"
+            ],
+            "dropped_ids": [
+              "c1403c97611401f8"
+            ],
+            "affected_ids": [
+              "3dff830fcad18cef",
+              "c1403c97611401f8"
+            ]
+          },
+          "combined_full": {
+            "nonidempotent_ids": [],
+            "errors": []
+          },
+          "result": "ACCEPTED",
+          "reasons": []
+        },
+        {
+          "rule_id": "DB-B2-001",
+          "source_pack": "ind-hi-fw2",
+          "code": "B2",
+          "gold": {
+            "rule": "DB-B2-001",
+            "changed": 0,
+            "dropped": 0,
+            "affected_unique": 0,
+            "errors": 0,
+            "error_types": [],
+            "percent": "0.000000",
+            "result": "PASS",
+            "changed_ids": [],
+            "dropped_ids": [],
+            "affected_ids": []
+          },
+          "full_rule": {
+            "nonidempotent_ids": [],
+            "errors": []
+          },
+          "combined_gold": {
+            "rule": "combined",
+            "changed": 1,
+            "dropped": 1,
+            "affected_unique": 2,
+            "errors": 0,
+            "error_types": [],
+            "percent": "0.470588",
+            "result": "PASS",
+            "changed_ids": [
+              "3dff830fcad18cef"
+            ],
+            "dropped_ids": [
+              "c1403c97611401f8"
+            ],
+            "affected_ids": [
+              "3dff830fcad18cef",
+              "c1403c97611401f8"
+            ]
+          },
+          "combined_full": {
+            "nonidempotent_ids": [],
+            "errors": []
+          },
+          "result": "ACCEPTED",
+          "reasons": []
+        },
+        {
+          "rule_id": "DB-B4-008",
+          "source_pack": "ind-hi-sangraha-s",
+          "code": "B4",
+          "gold": {
+            "rule": "DB-B4-008",
+            "changed": 0,
+            "dropped": 0,
+            "affected_unique": 0,
+            "errors": 0,
+            "error_types": [],
+            "percent": "0.000000",
+            "result": "PASS",
+            "changed_ids": [],
+            "dropped_ids": [],
+            "affected_ids": []
+          },
+          "full_rule": {
+            "nonidempotent_ids": [],
+            "errors": []
+          },
+          "combined_gold": {
+            "rule": "combined",
+            "changed": 1,
+            "dropped": 1,
+            "affected_unique": 2,
+            "errors": 0,
+            "error_types": [],
+            "percent": "0.470588",
+            "result": "PASS",
+            "changed_ids": [
+              "3dff830fcad18cef"
+            ],
+            "dropped_ids": [
+              "c1403c97611401f8"
+            ],
+            "affected_ids": [
+              "3dff830fcad18cef",
+              "c1403c97611401f8"
+            ]
+          },
+          "combined_full": {
+            "nonidempotent_ids": [],
+            "errors": []
+          },
+          "result": "ACCEPTED",
+          "reasons": []
+        },
+        {
+          "rule_id": "DB-C4-002",
+          "source_pack": "ind-hi-fw2",
+          "code": "C4",
+          "gold": {
+            "rule": "DB-C4-002",
+            "changed": 0,
+            "dropped": 0,
+            "affected_unique": 0,
+            "errors": 0,
+            "error_types": [],
+            "percent": "0.000000",
+            "result": "PASS",
+            "changed_ids": [],
+            "dropped_ids": [],
+            "affected_ids": []
+          },
+          "full_rule": {
+            "nonidempotent_ids": [],
+            "errors": []
+          },
+          "combined_gold": {
+            "rule": "combined",
+            "changed": 1,
+            "dropped": 1,
+            "affected_unique": 2,
+            "errors": 0,
+            "error_types": [],
+            "percent": "0.470588",
+            "result": "PASS",
+            "changed_ids": [
+              "3dff830fcad18cef"
+            ],
+            "dropped_ids": [
+              "c1403c97611401f8"
+            ],
+            "affected_ids": [
+              "3dff830fcad18cef",
+              "c1403c97611401f8"
+            ]
+          },
+          "combined_full": {
+            "nonidempotent_ids": [],
+            "errors": []
+          },
+          "result": "ACCEPTED",
+          "reasons": []
+        },
+        {
+          "rule_id": "DB-C5-016",
+          "source_pack": "ind-hi-fw2",
+          "code": "C5",
+          "gold": {
+            "rule": "DB-C5-016",
+            "changed": 0,
+            "dropped": 0,
+            "affected_unique": 0,
+            "errors": 0,
+            "error_types": [],
+            "percent": "0.000000",
+            "result": "PASS",
+            "changed_ids": [],
+            "dropped_ids": [],
+            "affected_ids": []
+          },
+          "full_rule": {
+            "nonidempotent_ids": [],
+            "errors": []
+          },
+          "combined_gold": {
+            "rule": "combined",
+            "changed": 1,
+            "dropped": 1,
+            "affected_unique": 2,
+            "errors": 0,
+            "error_types": [],
+            "percent": "0.470588",
+            "result": "PASS",
+            "changed_ids": [
+              "3dff830fcad18cef"
+            ],
+            "dropped_ids": [
+              "c1403c97611401f8"
+            ],
+            "affected_ids": [
+              "3dff830fcad18cef",
+              "c1403c97611401f8"
+            ]
+          },
+          "combined_full": {
+            "nonidempotent_ids": [],
+            "errors": []
+          },
+          "result": "ACCEPTED",
+          "reasons": []
+        },
+        {
+          "rule_id": "DB-D4-013",
+          "source_pack": "ind-hi-fw2",
+          "code": "D4",
+          "gold": {
+            "rule": "DB-D4-013",
+            "changed": 0,
+            "dropped": 0,
+            "affected_unique": 0,
+            "errors": 0,
+            "error_types": [],
+            "percent": "0.000000",
+            "result": "PASS",
+            "changed_ids": [],
+            "dropped_ids": [],
+            "affected_ids": []
+          },
+          "full_rule": {
+            "nonidempotent_ids": [],
+            "errors": []
+          },
+          "combined_gold": {
+            "rule": "combined",
+            "changed": 1,
+            "dropped": 1,
+            "affected_unique": 2,
+            "errors": 0,
+            "error_types": [],
+            "percent": "0.470588",
+            "result": "PASS",
+            "changed_ids": [
+              "3dff830fcad18cef"
+            ],
+            "dropped_ids": [
+              "c1403c97611401f8"
+            ],
+            "affected_ids": [
+              "3dff830fcad18cef",
+              "c1403c97611401f8"
+            ]
+          },
+          "combined_full": {
+            "nonidempotent_ids": [],
+            "errors": []
+          },
+          "result": "ACCEPTED",
+          "reasons": []
+        },
+        {
+          "rule_id": "DB-F3-004",
+          "source_pack": "ind-hi-fw2",
+          "code": "F3",
+          "gold": {
+            "rule": "DB-F3-004",
+            "changed": 0,
+            "dropped": 0,
+            "affected_unique": 0,
+            "errors": 0,
+            "error_types": [],
+            "percent": "0.000000",
+            "result": "PASS",
+            "changed_ids": [],
+            "dropped_ids": [],
+            "affected_ids": []
+          },
+          "full_rule": {
+            "nonidempotent_ids": [],
+            "errors": []
+          },
+          "combined_gold": {
+            "rule": "combined",
+            "changed": 1,
+            "dropped": 1,
+            "affected_unique": 2,
+            "errors": 0,
+            "error_types": [],
+            "percent": "0.470588",
+            "result": "PASS",
+            "changed_ids": [
+              "3dff830fcad18cef"
+            ],
+            "dropped_ids": [
+              "c1403c97611401f8"
+            ],
+            "affected_ids": [
+              "3dff830fcad18cef",
+              "c1403c97611401f8"
+            ]
+          },
+          "combined_full": {
+            "nonidempotent_ids": [],
+            "errors": []
+          },
+          "result": "ACCEPTED",
+          "reasons": []
+        },
+        {
+          "rule_id": "DB-C2-014",
+          "source_pack": "ind-hi-fw2",
+          "code": "C2",
+          "gold": {
+            "rule": "DB-C2-014",
+            "changed": 0,
+            "dropped": 0,
+            "affected_unique": 0,
+            "errors": 0,
+            "error_types": [],
+            "percent": "0.000000",
+            "result": "PASS",
+            "changed_ids": [],
+            "dropped_ids": [],
+            "affected_ids": []
+          },
+          "full_rule": {
+            "nonidempotent_ids": [],
+            "errors": []
+          },
+          "combined_gold": {
+            "rule": "combined",
+            "changed": 1,
+            "dropped": 1,
+            "affected_unique": 2,
+            "errors": 0,
+            "error_types": [],
+            "percent": "0.470588",
+            "result": "PASS",
+            "changed_ids": [
+              "3dff830fcad18cef"
+            ],
+            "dropped_ids": [
+              "c1403c97611401f8"
+            ],
+            "affected_ids": [
+              "3dff830fcad18cef",
+              "c1403c97611401f8"
+            ]
+          },
+          "combined_full": {
+            "nonidempotent_ids": [],
+            "errors": []
+          },
+          "result": "ACCEPTED",
+          "reasons": []
+        },
+        {
+          "rule_id": "DB-D2-003",
+          "source_pack": "ind-hi-hplt",
+          "code": "D2",
+          "gold": {
+            "rule": "DB-D2-003",
+            "changed": 0,
+            "dropped": 0,
+            "affected_unique": 0,
+            "errors": 0,
+            "error_types": [],
+            "percent": "0.000000",
+            "result": "PASS",
+            "changed_ids": [],
+            "dropped_ids": [],
+            "affected_ids": []
+          },
+          "full_rule": {
+            "nonidempotent_ids": [],
+            "errors": []
+          },
+          "combined_gold": {
+            "rule": "combined",
+            "changed": 1,
+            "dropped": 1,
+            "affected_unique": 2,
+            "errors": 0,
+            "error_types": [],
+            "percent": "0.470588",
+            "result": "PASS",
+            "changed_ids": [
+              "3dff830fcad18cef"
+            ],
+            "dropped_ids": [
+              "c1403c97611401f8"
+            ],
+            "affected_ids": [
+              "3dff830fcad18cef",
+              "c1403c97611401f8"
+            ]
+          },
+          "combined_full": {
+            "nonidempotent_ids": [],
+            "errors": []
+          },
+          "result": "ACCEPTED",
+          "reasons": []
+        },
+        {
+          "rule_id": "DB-D3-005",
+          "source_pack": "ind-hi-fw2",
+          "code": "D3",
+          "gold": {
+            "rule": "DB-D3-005",
+            "changed": 0,
+            "dropped": 0,
+            "affected_unique": 0,
+            "errors": 0,
+            "error_types": [],
+            "percent": "0.000000",
+            "result": "PASS",
+            "changed_ids": [],
+            "dropped_ids": [],
+            "affected_ids": []
+          },
+          "full_rule": {
+            "nonidempotent_ids": [],
+            "errors": []
+          },
+          "combined_gold": {
+            "rule": "combined",
+            "changed": 1,
+            "dropped": 1,
+            "affected_unique": 2,
+            "errors": 0,
+            "error_types": [],
+            "percent": "0.470588",
+            "result": "PASS",
+            "changed_ids": [
+              "3dff830fcad18cef"
+            ],
+            "dropped_ids": [
+              "c1403c97611401f8"
+            ],
+            "affected_ids": [
+              "3dff830fcad18cef",
+              "c1403c97611401f8"
+            ]
+          },
+          "combined_full": {
+            "nonidempotent_ids": [],
+            "errors": []
+          },
+          "result": "ACCEPTED",
+          "reasons": []
+        },
+        {
+          "rule_id": "DB-D5-003",
+          "source_pack": "ind-hi-fw2",
+          "code": "D5",
+          "gold": {
+            "rule": "DB-D5-003",
+            "changed": 0,
+            "dropped": 0,
+            "affected_unique": 0,
+            "errors": 0,
+            "error_types": [],
+            "percent": "0.000000",
+            "result": "PASS",
+            "changed_ids": [],
+            "dropped_ids": [],
+            "affected_ids": []
+          },
+          "full_rule": {
+            "nonidempotent_ids": [],
+            "errors": []
+          },
+          "combined_gold": {
+            "rule": "combined",
+            "changed": 1,
+            "dropped": 1,
+            "affected_unique": 2,
+            "errors": 0,
+            "error_types": [],
+            "percent": "0.470588",
+            "result": "PASS",
+            "changed_ids": [
+              "3dff830fcad18cef"
+            ],
+            "dropped_ids": [
+              "c1403c97611401f8"
+            ],
+            "affected_ids": [
+              "3dff830fcad18cef",
+              "c1403c97611401f8"
+            ]
+          },
+          "combined_full": {
+            "nonidempotent_ids": [],
+            "errors": []
+          },
+          "result": "ACCEPTED",
+          "reasons": []
+        }
+      ],
+      "result": "PASS",
+      "gold_n": 425,
+      "pack_sha256": "c55b80d3d5c820fb34cab3b0bf8ccaabd2e73496cea42267c08d05cc34ecd612",
+      "gold_sha256": "a0b3f7021b6a168666eacb60c3d517feb403f302d8afa791bf176a6920d5718a",
+      "combined_gold": {
+        "rule": "combined",
+        "changed": 1,
+        "dropped": 1,
+        "affected_unique": 2,
+        "errors": 0,
+        "error_types": [],
+        "percent": "0.470588",
+        "result": "PASS",
+        "changed_ids": [
+          "3dff830fcad18cef"
+        ],
+        "dropped_ids": [
+          "c1403c97611401f8"
+        ],
+        "affected_ids": [
+          "3dff830fcad18cef",
+          "c1403c97611401f8"
+        ]
+      },
+      "final_full": {
+        "nonidempotent_ids": [],
+        "errors": []
+      }
+    },
+    "ind-hi-sangraha-s": {
+      "native_rules": [
+        "DB-B2-008",
+        "DB-A6-019",
+        "DB-B4-008",
+        "DB-D4-018",
+        "DB-C3-023"
+      ],
+      "accepted": [
+        "DB-G1-016",
+        "DB-G4-007",
+        "DB-C4-002",
+        "DB-C5-016",
+        "DB-F3-004",
+        "DB-G3-003",
+        "DB-C1-005",
+        "DB-C2-014",
+        "DB-D2-003",
+        "DB-D3-005",
+        "DB-D5-003"
+      ],
+      "attempts": [
+        {
+          "rule_id": "DB-G1-016",
+          "source_pack": "ind-hi-hplt",
+          "code": "G1",
+          "gold": {
+            "rule": "DB-G1-016",
+            "changed": 0,
+            "dropped": 0,
+            "affected_unique": 0,
+            "errors": 0,
+            "error_types": [],
+            "percent": "0.000000",
+            "result": "PASS",
+            "changed_ids": [],
+            "dropped_ids": [],
+            "affected_ids": []
+          },
+          "full_rule": {
+            "nonidempotent_ids": [],
+            "errors": []
+          },
+          "combined_gold": {
+            "rule": "combined",
+            "changed": 0,
+            "dropped": 0,
+            "affected_unique": 0,
+            "errors": 0,
+            "error_types": [],
+            "percent": "0.000000",
+            "result": "PASS",
+            "changed_ids": [],
+            "dropped_ids": [],
+            "affected_ids": []
+          },
+          "combined_full": {
+            "nonidempotent_ids": [],
+            "errors": []
+          },
+          "result": "ACCEPTED",
+          "reasons": []
+        },
+        {
+          "rule_id": "DB-G4-007",
+          "source_pack": "ind-hi-hplt",
+          "code": "G4",
+          "gold": {
+            "rule": "DB-G4-007",
+            "changed": 0,
+            "dropped": 0,
+            "affected_unique": 0,
+            "errors": 0,
+            "error_types": [],
+            "percent": "0.000000",
+            "result": "PASS",
+            "changed_ids": [],
+            "dropped_ids": [],
+            "affected_ids": []
+          },
+          "full_rule": {
+            "nonidempotent_ids": [],
+            "errors": []
+          },
+          "combined_gold": {
+            "rule": "combined",
+            "changed": 0,
+            "dropped": 0,
+            "affected_unique": 0,
+            "errors": 0,
+            "error_types": [],
+            "percent": "0.000000",
+            "result": "PASS",
+            "changed_ids": [],
+            "dropped_ids": [],
+            "affected_ids": []
+          },
+          "combined_full": {
+            "nonidempotent_ids": [],
+            "errors": []
+          },
+          "result": "ACCEPTED",
+          "reasons": []
+        },
+        {
+          "rule_id": "DB-C4-002",
+          "source_pack": "ind-hi-fw2",
+          "code": "C4",
+          "gold": {
+            "rule": "DB-C4-002",
+            "changed": 0,
+            "dropped": 0,
+            "affected_unique": 0,
+            "errors": 0,
+            "error_types": [],
+            "percent": "0.000000",
+            "result": "PASS",
+            "changed_ids": [],
+            "dropped_ids": [],
+            "affected_ids": []
+          },
+          "full_rule": {
+            "nonidempotent_ids": [],
+            "errors": []
+          },
+          "combined_gold": {
+            "rule": "combined",
+            "changed": 0,
+            "dropped": 0,
+            "affected_unique": 0,
+            "errors": 0,
+            "error_types": [],
+            "percent": "0.000000",
+            "result": "PASS",
+            "changed_ids": [],
+            "dropped_ids": [],
+            "affected_ids": []
+          },
+          "combined_full": {
+            "nonidempotent_ids": [],
+            "errors": []
+          },
+          "result": "ACCEPTED",
+          "reasons": []
+        },
+        {
+          "rule_id": "DB-C5-016",
+          "source_pack": "ind-hi-fw2",
+          "code": "C5",
+          "gold": {
+            "rule": "DB-C5-016",
+            "changed": 0,
+            "dropped": 0,
+            "affected_unique": 0,
+            "errors": 0,
+            "error_types": [],
+            "percent": "0.000000",
+            "result": "PASS",
+            "changed_ids": [],
+            "dropped_ids": [],
+            "affected_ids": []
+          },
+          "full_rule": {
+            "nonidempotent_ids": [],
+            "errors": []
+          },
+          "combined_gold": {
+            "rule": "combined",
+            "changed": 0,
+            "dropped": 0,
+            "affected_unique": 0,
+            "errors": 0,
+            "error_types": [],
+            "percent": "0.000000",
+            "result": "PASS",
+            "changed_ids": [],
+            "dropped_ids": [],
+            "affected_ids": []
+          },
+          "combined_full": {
+            "nonidempotent_ids": [],
+            "errors": []
+          },
+          "result": "ACCEPTED",
+          "reasons": []
+        },
+        {
+          "rule_id": "DB-F3-004",
+          "source_pack": "ind-hi-fw2",
+          "code": "F3",
+          "gold": {
+            "rule": "DB-F3-004",
+            "changed": 0,
+            "dropped": 0,
+            "affected_unique": 0,
+            "errors": 0,
+            "error_types": [],
+            "percent": "0.000000",
+            "result": "PASS",
+            "changed_ids": [],
+            "dropped_ids": [],
+            "affected_ids": []
+          },
+          "full_rule": {
+            "nonidempotent_ids": [],
+            "errors": []
+          },
+          "combined_gold": {
+            "rule": "combined",
+            "changed": 0,
+            "dropped": 0,
+            "affected_unique": 0,
+            "errors": 0,
+            "error_types": [],
+            "percent": "0.000000",
+            "result": "PASS",
+            "changed_ids": [],
+            "dropped_ids": [],
+            "affected_ids": []
+          },
+          "combined_full": {
+            "nonidempotent_ids": [],
+            "errors": []
+          },
+          "result": "ACCEPTED",
+          "reasons": []
+        },
+        {
+          "rule_id": "DB-G3-003",
+          "source_pack": "ind-hi-indiccorp",
+          "code": "G3",
+          "gold": {
+            "rule": "DB-G3-003",
+            "changed": 0,
+            "dropped": 0,
+            "affected_unique": 0,
+            "errors": 0,
+            "error_types": [],
+            "percent": "0.000000",
+            "result": "PASS",
+            "changed_ids": [],
+            "dropped_ids": [],
+            "affected_ids": []
+          },
+          "full_rule": {
+            "nonidempotent_ids": [],
+            "errors": []
+          },
+          "combined_gold": {
+            "rule": "combined",
+            "changed": 0,
+            "dropped": 0,
+            "affected_unique": 0,
+            "errors": 0,
+            "error_types": [],
+            "percent": "0.000000",
+            "result": "PASS",
+            "changed_ids": [],
+            "dropped_ids": [],
+            "affected_ids": []
+          },
+          "combined_full": {
+            "nonidempotent_ids": [],
+            "errors": []
+          },
+          "result": "ACCEPTED",
+          "reasons": []
+        },
+        {
+          "rule_id": "DB-C1-005",
+          "source_pack": "ind-hi-fw2",
+          "code": "C1",
+          "gold": {
+            "rule": "DB-C1-005",
+            "changed": 0,
+            "dropped": 0,
+            "affected_unique": 0,
+            "errors": 0,
+            "error_types": [],
+            "percent": "0.000000",
+            "result": "PASS",
+            "changed_ids": [],
+            "dropped_ids": [],
+            "affected_ids": []
+          },
+          "full_rule": {
+            "nonidempotent_ids": [],
+            "errors": []
+          },
+          "combined_gold": {
+            "rule": "combined",
+            "changed": 0,
+            "dropped": 0,
+            "affected_unique": 0,
+            "errors": 0,
+            "error_types": [],
+            "percent": "0.000000",
+            "result": "PASS",
+            "changed_ids": [],
+            "dropped_ids": [],
+            "affected_ids": []
+          },
+          "combined_full": {
+            "nonidempotent_ids": [],
+            "errors": []
+          },
+          "result": "ACCEPTED",
+          "reasons": []
+        },
+        {
+          "rule_id": "DB-C2-014",
+          "source_pack": "ind-hi-fw2",
+          "code": "C2",
+          "gold": {
+            "rule": "DB-C2-014",
+            "changed": 0,
+            "dropped": 0,
+            "affected_unique": 0,
+            "errors": 0,
+            "error_types": [],
+            "percent": "0.000000",
+            "result": "PASS",
+            "changed_ids": [],
+            "dropped_ids": [],
+            "affected_ids": []
+          },
+          "full_rule": {
+            "nonidempotent_ids": [],
+            "errors": []
+          },
+          "combined_gold": {
+            "rule": "combined",
+            "changed": 0,
+            "dropped": 0,
+            "affected_unique": 0,
+            "errors": 0,
+            "error_types": [],
+            "percent": "0.000000",
+            "result": "PASS",
+            "changed_ids": [],
+            "dropped_ids": [],
+            "affected_ids": []
+          },
+          "combined_full": {
+            "nonidempotent_ids": [],
+            "errors": []
+          },
+          "result": "ACCEPTED",
+          "reasons": []
+        },
+        {
+          "rule_id": "DB-D2-003",
+          "source_pack": "ind-hi-hplt",
+          "code": "D2",
+          "gold": {
+            "rule": "DB-D2-003",
+            "changed": 0,
+            "dropped": 0,
+            "affected_unique": 0,
+            "errors": 0,
+            "error_types": [],
+            "percent": "0.000000",
+            "result": "PASS",
+            "changed_ids": [],
+            "dropped_ids": [],
+            "affected_ids": []
+          },
+          "full_rule": {
+            "nonidempotent_ids": [],
+            "errors": []
+          },
+          "combined_gold": {
+            "rule": "combined",
+            "changed": 0,
+            "dropped": 0,
+            "affected_unique": 0,
+            "errors": 0,
+            "error_types": [],
+            "percent": "0.000000",
+            "result": "PASS",
+            "changed_ids": [],
+            "dropped_ids": [],
+            "affected_ids": []
+          },
+          "combined_full": {
+            "nonidempotent_ids": [],
+            "errors": []
+          },
+          "result": "ACCEPTED",
+          "reasons": []
+        },
+        {
+          "rule_id": "DB-D3-005",
+          "source_pack": "ind-hi-fw2",
+          "code": "D3",
+          "gold": {
+            "rule": "DB-D3-005",
+            "changed": 0,
+            "dropped": 0,
+            "affected_unique": 0,
+            "errors": 0,
+            "error_types": [],
+            "percent": "0.000000",
+            "result": "PASS",
+            "changed_ids": [],
+            "dropped_ids": [],
+            "affected_ids": []
+          },
+          "full_rule": {
+            "nonidempotent_ids": [],
+            "errors": []
+          },
+          "combined_gold": {
+            "rule": "combined",
+            "changed": 0,
+            "dropped": 0,
+            "affected_unique": 0,
+            "errors": 0,
+            "error_types": [],
+            "percent": "0.000000",
+            "result": "PASS",
+            "changed_ids": [],
+            "dropped_ids": [],
+            "affected_ids": []
+          },
+          "combined_full": {
+            "nonidempotent_ids": [],
+            "errors": []
+          },
+          "result": "ACCEPTED",
+          "reasons": []
+        },
+        {
+          "rule_id": "DB-D5-003",
+          "source_pack": "ind-hi-fw2",
+          "code": "D5",
+          "gold": {
+            "rule": "DB-D5-003",
+            "changed": 0,
+            "dropped": 0,
+            "affected_unique": 0,
+            "errors": 0,
+            "error_types": [],
+            "percent": "0.000000",
+            "result": "PASS",
+            "changed_ids": [],
+            "dropped_ids": [],
+            "affected_ids": []
+          },
+          "full_rule": {
+            "nonidempotent_ids": [],
+            "errors": []
+          },
+          "combined_gold": {
+            "rule": "combined",
+            "changed": 0,
+            "dropped": 0,
+            "affected_unique": 0,
+            "errors": 0,
+            "error_types": [],
+            "percent": "0.000000",
+            "result": "PASS",
+            "changed_ids": [],
+            "dropped_ids": [],
+            "affected_ids": []
+          },
+          "combined_full": {
+            "nonidempotent_ids": [],
+            "errors": []
+          },
+          "result": "ACCEPTED",
+          "reasons": []
+        }
+      ],
+      "result": "PASS",
+      "gold_n": 24,
+      "pack_sha256": "7fd34f97729659a7c0c7f6bed0190e7f4eda29ed8a0f9b9eacbfe4a607a3ff6d",
+      "gold_sha256": "f3943ff76a96e9e67896a88130bb41ee3b08b2025c010381d8e052807e10ea80",
+      "combined_gold": {
+        "rule": "combined",
+        "changed": 0,
+        "dropped": 0,
+        "affected_unique": 0,
+        "errors": 0,
+        "error_types": [],
+        "percent": "0.000000",
+        "result": "PASS",
+        "changed_ids": [],
+        "dropped_ids": [],
+        "affected_ids": []
+      },
+      "final_full": {
+        "nonidempotent_ids": [],
+        "errors": []
+      }
+    },
+    "ind-hi-sangraha-v": {
+      "native_rules": [],
+      "accepted": [
+        "DB-A6-017",
+        "DB-G1-016",
+        "DB-G4-007",
+        "DB-B2-001",
+        "DB-B4-008",
+        "DB-C3-002",
+        "DB-C4-002",
+        "DB-C5-016",
+        "DB-D4-013",
+        "DB-F3-004",
+        "DB-G3-003",
+        "DB-C1-005",
+        "DB-C2-014",
+        "DB-D2-003",
+        "DB-D3-005",
+        "DB-D5-002"
+      ],
+      "attempts": [
+        {
+          "rule_id": "DB-A6-017",
+          "source_pack": "ind-hi-hplt",
+          "code": "A6",
+          "gold": {
+            "rule": "DB-A6-017",
+            "changed": 2,
+            "dropped": 0,
+            "affected_unique": 2,
+            "errors": 0,
+            "error_types": [],
+            "percent": "0.913242",
+            "result": "PASS",
+            "changed_ids": [
+              "8db11a691069d11f",
+              "ca34db0194d6b70e"
+            ],
+            "dropped_ids": [],
+            "affected_ids": [
+              "8db11a691069d11f",
+              "ca34db0194d6b70e"
+            ]
+          },
+          "full_rule": {
+            "nonidempotent_ids": [],
+            "errors": []
+          },
+          "combined_gold": {
+            "rule": "combined",
+            "changed": 2,
+            "dropped": 0,
+            "affected_unique": 2,
+            "errors": 0,
+            "error_types": [],
+            "percent": "0.913242",
+            "result": "PASS",
+            "changed_ids": [
+              "8db11a691069d11f",
+              "ca34db0194d6b70e"
+            ],
+            "dropped_ids": [],
+            "affected_ids": [
+              "8db11a691069d11f",
+              "ca34db0194d6b70e"
+            ]
+          },
+          "combined_full": {
+            "nonidempotent_ids": [],
+            "errors": []
+          },
+          "result": "ACCEPTED",
+          "reasons": []
+        },
+        {
+          "rule_id": "DB-G1-016",
+          "source_pack": "ind-hi-hplt",
+          "code": "G1",
+          "gold": {
+            "rule": "DB-G1-016",
+            "changed": 0,
+            "dropped": 0,
+            "affected_unique": 0,
+            "errors": 0,
+            "error_types": [],
+            "percent": "0.000000",
+            "result": "PASS",
+            "changed_ids": [],
+            "dropped_ids": [],
+            "affected_ids": []
+          },
+          "full_rule": {
+            "nonidempotent_ids": [],
+            "errors": []
+          },
+          "combined_gold": {
+            "rule": "combined",
+            "changed": 2,
+            "dropped": 0,
+            "affected_unique": 2,
+            "errors": 0,
+            "error_types": [],
+            "percent": "0.913242",
+            "result": "PASS",
+            "changed_ids": [
+              "8db11a691069d11f",
+              "ca34db0194d6b70e"
+            ],
+            "dropped_ids": [],
+            "affected_ids": [
+              "8db11a691069d11f",
+              "ca34db0194d6b70e"
+            ]
+          },
+          "combined_full": {
+            "nonidempotent_ids": [],
+            "errors": []
+          },
+          "result": "ACCEPTED",
+          "reasons": []
+        },
+        {
+          "rule_id": "DB-G4-007",
+          "source_pack": "ind-hi-hplt",
+          "code": "G4",
+          "gold": {
+            "rule": "DB-G4-007",
+            "changed": 1,
+            "dropped": 0,
+            "affected_unique": 1,
+            "errors": 0,
+            "error_types": [],
+            "percent": "0.456621",
+            "result": "PASS",
+            "changed_ids": [
+              "8db11a691069d11f"
+            ],
+            "dropped_ids": [],
+            "affected_ids": [
+              "8db11a691069d11f"
+            ]
+          },
+          "full_rule": {
+            "nonidempotent_ids": [],
+            "errors": []
+          },
+          "combined_gold": {
+            "rule": "combined",
+            "changed": 2,
+            "dropped": 0,
+            "affected_unique": 2,
+            "errors": 0,
+            "error_types": [],
+            "percent": "0.913242",
+            "result": "PASS",
+            "changed_ids": [
+              "8db11a691069d11f",
+              "ca34db0194d6b70e"
+            ],
+            "dropped_ids": [],
+            "affected_ids": [
+              "8db11a691069d11f",
+              "ca34db0194d6b70e"
+            ]
+          },
+          "combined_full": {
+            "nonidempotent_ids": [],
+            "errors": []
+          },
+          "result": "ACCEPTED",
+          "reasons": []
+        },
+        {
+          "rule_id": "DB-B2-001",
+          "source_pack": "ind-hi-fw2",
+          "code": "B2",
+          "gold": {
+            "rule": "DB-B2-001",
+            "changed": 0,
+            "dropped": 0,
+            "affected_unique": 0,
+            "errors": 0,
+            "error_types": [],
+            "percent": "0.000000",
+            "result": "PASS",
+            "changed_ids": [],
+            "dropped_ids": [],
+            "affected_ids": []
+          },
+          "full_rule": {
+            "nonidempotent_ids": [],
+            "errors": []
+          },
+          "combined_gold": {
+            "rule": "combined",
+            "changed": 2,
+            "dropped": 0,
+            "affected_unique": 2,
+            "errors": 0,
+            "error_types": [],
+            "percent": "0.913242",
+            "result": "PASS",
+            "changed_ids": [
+              "8db11a691069d11f",
+              "ca34db0194d6b70e"
+            ],
+            "dropped_ids": [],
+            "affected_ids": [
+              "8db11a691069d11f",
+              "ca34db0194d6b70e"
+            ]
+          },
+          "combined_full": {
+            "nonidempotent_ids": [],
+            "errors": []
+          },
+          "result": "ACCEPTED",
+          "reasons": []
+        },
+        {
+          "rule_id": "DB-B4-008",
+          "source_pack": "ind-hi-sangraha-s",
+          "code": "B4",
+          "gold": {
+            "rule": "DB-B4-008",
+            "changed": 0,
+            "dropped": 0,
+            "affected_unique": 0,
+            "errors": 0,
+            "error_types": [],
+            "percent": "0.000000",
+            "result": "PASS",
+            "changed_ids": [],
+            "dropped_ids": [],
+            "affected_ids": []
+          },
+          "full_rule": {
+            "nonidempotent_ids": [],
+            "errors": []
+          },
+          "combined_gold": {
+            "rule": "combined",
+            "changed": 2,
+            "dropped": 0,
+            "affected_unique": 2,
+            "errors": 0,
+            "error_types": [],
+            "percent": "0.913242",
+            "result": "PASS",
+            "changed_ids": [
+              "8db11a691069d11f",
+              "ca34db0194d6b70e"
+            ],
+            "dropped_ids": [],
+            "affected_ids": [
+              "8db11a691069d11f",
+              "ca34db0194d6b70e"
+            ]
+          },
+          "combined_full": {
+            "nonidempotent_ids": [],
+            "errors": []
+          },
+          "result": "ACCEPTED",
+          "reasons": []
+        },
+        {
+          "rule_id": "DB-C3-002",
+          "source_pack": "ind-hi-hplt",
+          "code": "C3",
+          "gold": {
+            "rule": "DB-C3-002",
+            "changed": 0,
+            "dropped": 0,
+            "affected_unique": 0,
+            "errors": 0,
+            "error_types": [],
+            "percent": "0.000000",
+            "result": "PASS",
+            "changed_ids": [],
+            "dropped_ids": [],
+            "affected_ids": []
+          },
+          "full_rule": {
+            "nonidempotent_ids": [],
+            "errors": []
+          },
+          "combined_gold": {
+            "rule": "combined",
+            "changed": 2,
+            "dropped": 0,
+            "affected_unique": 2,
+            "errors": 0,
+            "error_types": [],
+            "percent": "0.913242",
+            "result": "PASS",
+            "changed_ids": [
+              "8db11a691069d11f",
+              "ca34db0194d6b70e"
+            ],
+            "dropped_ids": [],
+            "affected_ids": [
+              "8db11a691069d11f",
+              "ca34db0194d6b70e"
+            ]
+          },
+          "combined_full": {
+            "nonidempotent_ids": [],
+            "errors": []
+          },
+          "result": "ACCEPTED",
+          "reasons": []
+        },
+        {
+          "rule_id": "DB-C4-002",
+          "source_pack": "ind-hi-fw2",
+          "code": "C4",
+          "gold": {
+            "rule": "DB-C4-002",
+            "changed": 0,
+            "dropped": 0,
+            "affected_unique": 0,
+            "errors": 0,
+            "error_types": [],
+            "percent": "0.000000",
+            "result": "PASS",
+            "changed_ids": [],
+            "dropped_ids": [],
+            "affected_ids": []
+          },
+          "full_rule": {
+            "nonidempotent_ids": [],
+            "errors": []
+          },
+          "combined_gold": {
+            "rule": "combined",
+            "changed": 2,
+            "dropped": 0,
+            "affected_unique": 2,
+            "errors": 0,
+            "error_types": [],
+            "percent": "0.913242",
+            "result": "PASS",
+            "changed_ids": [
+              "8db11a691069d11f",
+              "ca34db0194d6b70e"
+            ],
+            "dropped_ids": [],
+            "affected_ids": [
+              "8db11a691069d11f",
+              "ca34db0194d6b70e"
+            ]
+          },
+          "combined_full": {
+            "nonidempotent_ids": [],
+            "errors": []
+          },
+          "result": "ACCEPTED",
+          "reasons": []
+        },
+        {
+          "rule_id": "DB-C5-016",
+          "source_pack": "ind-hi-fw2",
+          "code": "C5",
+          "gold": {
+            "rule": "DB-C5-016",
+            "changed": 0,
+            "dropped": 0,
+            "affected_unique": 0,
+            "errors": 0,
+            "error_types": [],
+            "percent": "0.000000",
+            "result": "PASS",
+            "changed_ids": [],
+            "dropped_ids": [],
+            "affected_ids": []
+          },
+          "full_rule": {
+            "nonidempotent_ids": [],
+            "errors": []
+          },
+          "combined_gold": {
+            "rule": "combined",
+            "changed": 2,
+            "dropped": 0,
+            "affected_unique": 2,
+            "errors": 0,
+            "error_types": [],
+            "percent": "0.913242",
+            "result": "PASS",
+            "changed_ids": [
+              "8db11a691069d11f",
+              "ca34db0194d6b70e"
+            ],
+            "dropped_ids": [],
+            "affected_ids": [
+              "8db11a691069d11f",
+              "ca34db0194d6b70e"
+            ]
+          },
+          "combined_full": {
+            "nonidempotent_ids": [],
+            "errors": []
+          },
+          "result": "ACCEPTED",
+          "reasons": []
+        },
+        {
+          "rule_id": "DB-D4-013",
+          "source_pack": "ind-hi-fw2",
+          "code": "D4",
+          "gold": {
+            "rule": "DB-D4-013",
+            "changed": 0,
+            "dropped": 0,
+            "affected_unique": 0,
+            "errors": 0,
+            "error_types": [],
+            "percent": "0.000000",
+            "result": "PASS",
+            "changed_ids": [],
+            "dropped_ids": [],
+            "affected_ids": []
+          },
+          "full_rule": {
+            "nonidempotent_ids": [],
+            "errors": []
+          },
+          "combined_gold": {
+            "rule": "combined",
+            "changed": 2,
+            "dropped": 0,
+            "affected_unique": 2,
+            "errors": 0,
+            "error_types": [],
+            "percent": "0.913242",
+            "result": "PASS",
+            "changed_ids": [
+              "8db11a691069d11f",
+              "ca34db0194d6b70e"
+            ],
+            "dropped_ids": [],
+            "affected_ids": [
+              "8db11a691069d11f",
+              "ca34db0194d6b70e"
+            ]
+          },
+          "combined_full": {
+            "nonidempotent_ids": [],
+            "errors": []
+          },
+          "result": "ACCEPTED",
+          "reasons": []
+        },
+        {
+          "rule_id": "DB-F3-004",
+          "source_pack": "ind-hi-fw2",
+          "code": "F3",
+          "gold": {
+            "rule": "DB-F3-004",
+            "changed": 0,
+            "dropped": 0,
+            "affected_unique": 0,
+            "errors": 0,
+            "error_types": [],
+            "percent": "0.000000",
+            "result": "PASS",
+            "changed_ids": [],
+            "dropped_ids": [],
+            "affected_ids": []
+          },
+          "full_rule": {
+            "nonidempotent_ids": [],
+            "errors": []
+          },
+          "combined_gold": {
+            "rule": "combined",
+            "changed": 2,
+            "dropped": 0,
+            "affected_unique": 2,
+            "errors": 0,
+            "error_types": [],
+            "percent": "0.913242",
+            "result": "PASS",
+            "changed_ids": [
+              "8db11a691069d11f",
+              "ca34db0194d6b70e"
+            ],
+            "dropped_ids": [],
+            "affected_ids": [
+              "8db11a691069d11f",
+              "ca34db0194d6b70e"
+            ]
+          },
+          "combined_full": {
+            "nonidempotent_ids": [],
+            "errors": []
+          },
+          "result": "ACCEPTED",
+          "reasons": []
+        },
+        {
+          "rule_id": "DB-G3-003",
+          "source_pack": "ind-hi-indiccorp",
+          "code": "G3",
+          "gold": {
+            "rule": "DB-G3-003",
+            "changed": 0,
+            "dropped": 0,
+            "affected_unique": 0,
+            "errors": 0,
+            "error_types": [],
+            "percent": "0.000000",
+            "result": "PASS",
+            "changed_ids": [],
+            "dropped_ids": [],
+            "affected_ids": []
+          },
+          "full_rule": {
+            "nonidempotent_ids": [],
+            "errors": []
+          },
+          "combined_gold": {
+            "rule": "combined",
+            "changed": 2,
+            "dropped": 0,
+            "affected_unique": 2,
+            "errors": 0,
+            "error_types": [],
+            "percent": "0.913242",
+            "result": "PASS",
+            "changed_ids": [
+              "8db11a691069d11f",
+              "ca34db0194d6b70e"
+            ],
+            "dropped_ids": [],
+            "affected_ids": [
+              "8db11a691069d11f",
+              "ca34db0194d6b70e"
+            ]
+          },
+          "combined_full": {
+            "nonidempotent_ids": [],
+            "errors": []
+          },
+          "result": "ACCEPTED",
+          "reasons": []
+        },
+        {
+          "rule_id": "DB-C1-005",
+          "source_pack": "ind-hi-fw2",
+          "code": "C1",
+          "gold": {
+            "rule": "DB-C1-005",
+            "changed": 0,
+            "dropped": 0,
+            "affected_unique": 0,
+            "errors": 0,
+            "error_types": [],
+            "percent": "0.000000",
+            "result": "PASS",
+            "changed_ids": [],
+            "dropped_ids": [],
+            "affected_ids": []
+          },
+          "full_rule": {
+            "nonidempotent_ids": [],
+            "errors": []
+          },
+          "combined_gold": {
+            "rule": "combined",
+            "changed": 2,
+            "dropped": 0,
+            "affected_unique": 2,
+            "errors": 0,
+            "error_types": [],
+            "percent": "0.913242",
+            "result": "PASS",
+            "changed_ids": [
+              "8db11a691069d11f",
+              "ca34db0194d6b70e"
+            ],
+            "dropped_ids": [],
+            "affected_ids": [
+              "8db11a691069d11f",
+              "ca34db0194d6b70e"
+            ]
+          },
+          "combined_full": {
+            "nonidempotent_ids": [],
+            "errors": []
+          },
+          "result": "ACCEPTED",
+          "reasons": []
+        },
+        {
+          "rule_id": "DB-C2-014",
+          "source_pack": "ind-hi-fw2",
+          "code": "C2",
+          "gold": {
+            "rule": "DB-C2-014",
+            "changed": 0,
+            "dropped": 0,
+            "affected_unique": 0,
+            "errors": 0,
+            "error_types": [],
+            "percent": "0.000000",
+            "result": "PASS",
+            "changed_ids": [],
+            "dropped_ids": [],
+            "affected_ids": []
+          },
+          "full_rule": {
+            "nonidempotent_ids": [],
+            "errors": []
+          },
+          "combined_gold": {
+            "rule": "combined",
+            "changed": 2,
+            "dropped": 0,
+            "affected_unique": 2,
+            "errors": 0,
+            "error_types": [],
+            "percent": "0.913242",
+            "result": "PASS",
+            "changed_ids": [
+              "8db11a691069d11f",
+              "ca34db0194d6b70e"
+            ],
+            "dropped_ids": [],
+            "affected_ids": [
+              "8db11a691069d11f",
+              "ca34db0194d6b70e"
+            ]
+          },
+          "combined_full": {
+            "nonidempotent_ids": [],
+            "errors": []
+          },
+          "result": "ACCEPTED",
+          "reasons": []
+        },
+        {
+          "rule_id": "DB-D2-003",
+          "source_pack": "ind-hi-hplt",
+          "code": "D2",
+          "gold": {
+            "rule": "DB-D2-003",
+            "changed": 0,
+            "dropped": 0,
+            "affected_unique": 0,
+            "errors": 0,
+            "error_types": [],
+            "percent": "0.000000",
+            "result": "PASS",
+            "changed_ids": [],
+            "dropped_ids": [],
+            "affected_ids": []
+          },
+          "full_rule": {
+            "nonidempotent_ids": [],
+            "errors": []
+          },
+          "combined_gold": {
+            "rule": "combined",
+            "changed": 2,
+            "dropped": 0,
+            "affected_unique": 2,
+            "errors": 0,
+            "error_types": [],
+            "percent": "0.913242",
+            "result": "PASS",
+            "changed_ids": [
+              "8db11a691069d11f",
+              "ca34db0194d6b70e"
+            ],
+            "dropped_ids": [],
+            "affected_ids": [
+              "8db11a691069d11f",
+              "ca34db0194d6b70e"
+            ]
+          },
+          "combined_full": {
+            "nonidempotent_ids": [],
+            "errors": []
+          },
+          "result": "ACCEPTED",
+          "reasons": []
+        },
+        {
+          "rule_id": "DB-D3-005",
+          "source_pack": "ind-hi-fw2",
+          "code": "D3",
+          "gold": {
+            "rule": "DB-D3-005",
+            "changed": 0,
+            "dropped": 0,
+            "affected_unique": 0,
+            "errors": 0,
+            "error_types": [],
+            "percent": "0.000000",
+            "result": "PASS",
+            "changed_ids": [],
+            "dropped_ids": [],
+            "affected_ids": []
+          },
+          "full_rule": {
+            "nonidempotent_ids": [],
+            "errors": []
+          },
+          "combined_gold": {
+            "rule": "combined",
+            "changed": 2,
+            "dropped": 0,
+            "affected_unique": 2,
+            "errors": 0,
+            "error_types": [],
+            "percent": "0.913242",
+            "result": "PASS",
+            "changed_ids": [
+              "8db11a691069d11f",
+              "ca34db0194d6b70e"
+            ],
+            "dropped_ids": [],
+            "affected_ids": [
+              "8db11a691069d11f",
+              "ca34db0194d6b70e"
+            ]
+          },
+          "combined_full": {
+            "nonidempotent_ids": [],
+            "errors": []
+          },
+          "result": "ACCEPTED",
+          "reasons": []
+        },
+        {
+          "rule_id": "DB-D5-003",
+          "source_pack": "ind-hi-fw2",
+          "code": "D5",
+          "gold": {
+            "rule": "DB-D5-003",
+            "changed": 1,
+            "dropped": 0,
+            "affected_unique": 1,
+            "errors": 0,
+            "error_types": [],
+            "percent": "0.456621",
+            "result": "PASS",
+            "changed_ids": [
+              "bc9fb43bbec6c2ea"
+            ],
+            "dropped_ids": [],
+            "affected_ids": [
+              "bc9fb43bbec6c2ea"
+            ]
+          },
+          "full_rule": {
+            "nonidempotent_ids": [],
+            "errors": []
+          },
+          "combined_gold": {
+            "rule": "combined",
+            "changed": 3,
+            "dropped": 0,
+            "affected_unique": 3,
+            "errors": 0,
+            "error_types": [],
+            "percent": "1.369863",
+            "result": "FAIL",
+            "changed_ids": [
+              "8db11a691069d11f",
+              "bc9fb43bbec6c2ea",
+              "ca34db0194d6b70e"
+            ],
+            "dropped_ids": [],
+            "affected_ids": [
+              "8db11a691069d11f",
+              "bc9fb43bbec6c2ea",
+              "ca34db0194d6b70e"
+            ]
+          },
+          "result": "REJECTED",
+          "reasons": [
+            "combined receiving-pack gold: FAIL"
+          ]
+        },
+        {
+          "rule_id": "DB-D5-002",
+          "source_pack": "ind-hi-hplt",
+          "code": "D5",
+          "gold": {
+            "rule": "DB-D5-002",
+            "changed": 0,
+            "dropped": 0,
+            "affected_unique": 0,
+            "errors": 0,
+            "error_types": [],
+            "percent": "0.000000",
+            "result": "PASS",
+            "changed_ids": [],
+            "dropped_ids": [],
+            "affected_ids": []
+          },
+          "full_rule": {
+            "nonidempotent_ids": [],
+            "errors": []
+          },
+          "combined_gold": {
+            "rule": "combined",
+            "changed": 2,
+            "dropped": 0,
+            "affected_unique": 2,
+            "errors": 0,
+            "error_types": [],
+            "percent": "0.913242",
+            "result": "PASS",
+            "changed_ids": [
+              "8db11a691069d11f",
+              "ca34db0194d6b70e"
+            ],
+            "dropped_ids": [],
+            "affected_ids": [
+              "8db11a691069d11f",
+              "ca34db0194d6b70e"
+            ]
+          },
+          "combined_full": {
+            "nonidempotent_ids": [],
+            "errors": []
+          },
+          "result": "ACCEPTED",
+          "reasons": []
+        }
+      ],
+      "result": "PASS",
+      "gold_n": 219,
+      "pack_sha256": "b0fb32f2327aa39badc9a55110c992303ce273b02711e0973f877d465a00557e",
+      "gold_sha256": "5f1992d87749bed3d71655168905076538a45849666bb67c0d4ecc3baba1e1a9",
+      "combined_gold": {
+        "rule": "combined",
+        "changed": 2,
+        "dropped": 0,
+        "affected_unique": 2,
+        "errors": 0,
+        "error_types": [],
+        "percent": "0.913242",
+        "result": "PASS",
+        "changed_ids": [
+          "8db11a691069d11f",
+          "ca34db0194d6b70e"
+        ],
+        "dropped_ids": [],
+        "affected_ids": [
+          "8db11a691069d11f",
+          "ca34db0194d6b70e"
+        ]
+      },
+      "final_full": {
+        "nonidempotent_ids": [],
+        "errors": []
+      }
+    },
+    "ind-kn-fw2": {
+      "native_rules": [],
+      "accepted": [
+        "DB-A3-005",
+        "DB-A6-006",
+        "DB-B2-003",
+        "DB-B3-001",
+        "DB-C5-003",
+        "DB-D4-007",
+        "DB-G1-011",
+        "DB-C1-010",
+        "DB-D3-008",
+        "DB-B4-002"
+      ],
+      "attempts": [
+        {
+          "rule_id": "DB-A3-005",
+          "source_pack": "ind-kn-sangraha-s",
+          "code": "A3",
+          "gold": {
+            "rule": "DB-A3-005",
+            "changed": 0,
+            "dropped": 0,
+            "affected_unique": 0,
+            "errors": 0,
+            "error_types": [],
+            "percent": "0.000000",
+            "result": "PASS",
+            "changed_ids": [],
+            "dropped_ids": [],
+            "affected_ids": []
+          },
+          "full_rule": {
+            "nonidempotent_ids": [],
+            "errors": []
+          },
+          "combined_gold": {
+            "rule": "combined",
+            "changed": 1,
+            "dropped": 0,
+            "affected_unique": 1,
+            "errors": 0,
+            "error_types": [],
+            "percent": "0.869565",
+            "result": "PASS",
+            "changed_ids": [
+              "51f68b9da172f3ae"
+            ],
+            "dropped_ids": [],
+            "affected_ids": [
+              "51f68b9da172f3ae"
+            ]
+          },
+          "combined_full": {
+            "nonidempotent_ids": [],
+            "errors": []
+          },
+          "result": "ACCEPTED",
+          "reasons": []
+        },
+        {
+          "rule_id": "DB-A6-006",
+          "source_pack": "ind-kn-sangraha-s",
+          "code": "A6",
+          "gold": {
+            "rule": "DB-A6-006",
+            "changed": 0,
+            "dropped": 0,
+            "affected_unique": 0,
+            "errors": 0,
+            "error_types": [],
+            "percent": "0.000000",
+            "result": "PASS",
+            "changed_ids": [],
+            "dropped_ids": [],
+            "affected_ids": []
+          },
+          "full_rule": {
+            "nonidempotent_ids": [],
+            "errors": []
+          },
+          "combined_gold": {
+            "rule": "combined",
+            "changed": 1,
+            "dropped": 0,
+            "affected_unique": 1,
+            "errors": 0,
+            "error_types": [],
+            "percent": "0.869565",
+            "result": "PASS",
+            "changed_ids": [
+              "51f68b9da172f3ae"
+            ],
+            "dropped_ids": [],
+            "affected_ids": [
+              "51f68b9da172f3ae"
+            ]
+          },
+          "combined_full": {
+            "nonidempotent_ids": [],
+            "errors": []
+          },
+          "result": "ACCEPTED",
+          "reasons": []
+        },
+        {
+          "rule_id": "DB-B2-003",
+          "source_pack": "ind-kn-sangraha-s",
+          "code": "B2",
+          "gold": {
+            "rule": "DB-B2-003",
+            "changed": 0,
+            "dropped": 0,
+            "affected_unique": 0,
+            "errors": 0,
+            "error_types": [],
+            "percent": "0.000000",
+            "result": "PASS",
+            "changed_ids": [],
+            "dropped_ids": [],
+            "affected_ids": []
+          },
+          "full_rule": {
+            "nonidempotent_ids": [],
+            "errors": []
+          },
+          "combined_gold": {
+            "rule": "combined",
+            "changed": 1,
+            "dropped": 0,
+            "affected_unique": 1,
+            "errors": 0,
+            "error_types": [],
+            "percent": "0.869565",
+            "result": "PASS",
+            "changed_ids": [
+              "51f68b9da172f3ae"
+            ],
+            "dropped_ids": [],
+            "affected_ids": [
+              "51f68b9da172f3ae"
+            ]
+          },
+          "combined_full": {
+            "nonidempotent_ids": [],
+            "errors": []
+          },
+          "result": "ACCEPTED",
+          "reasons": []
+        },
+        {
+          "rule_id": "DB-B3-001",
+          "source_pack": "ind-kn-sangraha-s",
+          "code": "B3",
+          "gold": {
+            "rule": "DB-B3-001",
+            "changed": 0,
+            "dropped": 0,
+            "affected_unique": 0,
+            "errors": 0,
+            "error_types": [],
+            "percent": "0.000000",
+            "result": "PASS",
+            "changed_ids": [],
+            "dropped_ids": [],
+            "affected_ids": []
+          },
+          "full_rule": {
+            "nonidempotent_ids": [],
+            "errors": []
+          },
+          "combined_gold": {
+            "rule": "combined",
+            "changed": 1,
+            "dropped": 0,
+            "affected_unique": 1,
+            "errors": 0,
+            "error_types": [],
+            "percent": "0.869565",
+            "result": "PASS",
+            "changed_ids": [
+              "51f68b9da172f3ae"
+            ],
+            "dropped_ids": [],
+            "affected_ids": [
+              "51f68b9da172f3ae"
+            ]
+          },
+          "combined_full": {
+            "nonidempotent_ids": [],
+            "errors": []
+          },
+          "result": "ACCEPTED",
+          "reasons": []
+        },
+        {
+          "rule_id": "DB-C5-003",
+          "source_pack": "ind-kn-sangraha-v",
+          "code": "C5",
+          "gold": {
+            "rule": "DB-C5-003",
+            "changed": 0,
+            "dropped": 0,
+            "affected_unique": 0,
+            "errors": 0,
+            "error_types": [],
+            "percent": "0.000000",
+            "result": "PASS",
+            "changed_ids": [],
+            "dropped_ids": [],
+            "affected_ids": []
+          },
+          "full_rule": {
+            "nonidempotent_ids": [],
+            "errors": []
+          },
+          "combined_gold": {
+            "rule": "combined",
+            "changed": 1,
+            "dropped": 0,
+            "affected_unique": 1,
+            "errors": 0,
+            "error_types": [],
+            "percent": "0.869565",
+            "result": "PASS",
+            "changed_ids": [
+              "51f68b9da172f3ae"
+            ],
+            "dropped_ids": [],
+            "affected_ids": [
+              "51f68b9da172f3ae"
+            ]
+          },
+          "combined_full": {
+            "nonidempotent_ids": [],
+            "errors": []
+          },
+          "result": "ACCEPTED",
+          "reasons": []
+        },
+        {
+          "rule_id": "DB-D4-007",
+          "source_pack": "ind-kn-sangraha-v",
+          "code": "D4",
+          "gold": {
+            "rule": "DB-D4-007",
+            "changed": 0,
+            "dropped": 0,
+            "affected_unique": 0,
+            "errors": 0,
+            "error_types": [],
+            "percent": "0.000000",
+            "result": "PASS",
+            "changed_ids": [],
+            "dropped_ids": [],
+            "affected_ids": []
+          },
+          "full_rule": {
+            "nonidempotent_ids": [],
+            "errors": []
+          },
+          "combined_gold": {
+            "rule": "combined",
+            "changed": 1,
+            "dropped": 0,
+            "affected_unique": 1,
+            "errors": 0,
+            "error_types": [],
+            "percent": "0.869565",
+            "result": "PASS",
+            "changed_ids": [
+              "51f68b9da172f3ae"
+            ],
+            "dropped_ids": [],
+            "affected_ids": [
+              "51f68b9da172f3ae"
+            ]
+          },
+          "combined_full": {
+            "nonidempotent_ids": [],
+            "errors": []
+          },
+          "result": "ACCEPTED",
+          "reasons": []
+        },
+        {
+          "rule_id": "DB-G1-011",
+          "source_pack": "ind-kn-sangraha-v",
+          "code": "G1",
+          "gold": {
+            "rule": "DB-G1-011",
+            "changed": 0,
+            "dropped": 0,
+            "affected_unique": 0,
+            "errors": 0,
+            "error_types": [],
+            "percent": "0.000000",
+            "result": "PASS",
+            "changed_ids": [],
+            "dropped_ids": [],
+            "affected_ids": []
+          },
+          "full_rule": {
+            "nonidempotent_ids": [],
+            "errors": []
+          },
+          "combined_gold": {
+            "rule": "combined",
+            "changed": 1,
+            "dropped": 0,
+            "affected_unique": 1,
+            "errors": 0,
+            "error_types": [],
+            "percent": "0.869565",
+            "result": "PASS",
+            "changed_ids": [
+              "51f68b9da172f3ae"
+            ],
+            "dropped_ids": [],
+            "affected_ids": [
+              "51f68b9da172f3ae"
+            ]
+          },
+          "combined_full": {
+            "nonidempotent_ids": [],
+            "errors": []
+          },
+          "result": "ACCEPTED",
+          "reasons": []
+        },
+        {
+          "rule_id": "DB-C1-010",
+          "source_pack": "ind-kn-sangraha-s",
+          "code": "C1",
+          "gold": {
+            "rule": "DB-C1-010",
+            "changed": 0,
+            "dropped": 0,
+            "affected_unique": 0,
+            "errors": 0,
+            "error_types": [],
+            "percent": "0.000000",
+            "result": "PASS",
+            "changed_ids": [],
+            "dropped_ids": [],
+            "affected_ids": []
+          },
+          "full_rule": {
+            "nonidempotent_ids": [],
+            "errors": []
+          },
+          "combined_gold": {
+            "rule": "combined",
+            "changed": 1,
+            "dropped": 0,
+            "affected_unique": 1,
+            "errors": 0,
+            "error_types": [],
+            "percent": "0.869565",
+            "result": "PASS",
+            "changed_ids": [
+              "51f68b9da172f3ae"
+            ],
+            "dropped_ids": [],
+            "affected_ids": [
+              "51f68b9da172f3ae"
+            ]
+          },
+          "combined_full": {
+            "nonidempotent_ids": [],
+            "errors": []
+          },
+          "result": "ACCEPTED",
+          "reasons": []
+        },
+        {
+          "rule_id": "DB-C2-008",
+          "source_pack": "ind-kn-sangraha-v",
+          "code": "C2",
+          "gold": {
+            "rule": "DB-C2-008",
+            "changed": 0,
+            "dropped": 0,
+            "affected_unique": 0,
+            "errors": 0,
+            "error_types": [],
+            "percent": "0.000000",
+            "result": "PASS",
+            "changed_ids": [],
+            "dropped_ids": [],
+            "affected_ids": []
+          },
+          "full_rule": {
+            "nonidempotent_ids": [],
+            "errors": []
+          },
+          "combined_gold": {
+            "rule": "combined",
+            "changed": 1,
+            "dropped": 0,
+            "affected_unique": 1,
+            "errors": 0,
+            "error_types": [],
+            "percent": "0.869565",
+            "result": "PASS",
+            "changed_ids": [
+              "51f68b9da172f3ae"
+            ],
+            "dropped_ids": [],
+            "affected_ids": [
+              "51f68b9da172f3ae"
+            ]
+          },
+          "combined_full": {
+            "nonidempotent_ids": [
+              "c472a3db00395ba6"
+            ],
+            "errors": []
+          },
+          "result": "REJECTED",
+          "reasons": [
+            "combined receiving-pack runtime/idempotence failure"
+          ]
+        },
+        {
+          "rule_id": "DB-C3-017",
+          "source_pack": "ind-kn-sangraha-s",
+          "code": "C3",
+          "gold": {
+            "rule": "DB-C3-017",
+            "changed": 3,
+            "dropped": 0,
+            "affected_unique": 3,
+            "errors": 0,
+            "error_types": [],
+            "percent": "2.608696",
+            "result": "FAIL",
+            "changed_ids": [
+              "2a971489e8068e9c",
+              "780c2ea64fce09d2",
+              "bb78d54f7477c6a2"
+            ],
+            "dropped_ids": [],
+            "affected_ids": [
+              "2a971489e8068e9c",
+              "780c2ea64fce09d2",
+              "bb78d54f7477c6a2"
+            ]
+          },
+          "result": "REJECTED",
+          "reasons": [
+            "receiving-pack gold: FAIL"
+          ]
+        },
+        {
+          "rule_id": "DB-D3-008",
+          "source_pack": "ind-kn-sangraha-s",
+          "code": "D3",
+          "gold": {
+            "rule": "DB-D3-008",
+            "changed": 0,
+            "dropped": 0,
+            "affected_unique": 0,
+            "errors": 0,
+            "error_types": [],
+            "percent": "0.000000",
+            "result": "PASS",
+            "changed_ids": [],
+            "dropped_ids": [],
+            "affected_ids": []
+          },
+          "full_rule": {
+            "nonidempotent_ids": [],
+            "errors": []
+          },
+          "combined_gold": {
+            "rule": "combined",
+            "changed": 1,
+            "dropped": 0,
+            "affected_unique": 1,
+            "errors": 0,
+            "error_types": [],
+            "percent": "0.869565",
+            "result": "PASS",
+            "changed_ids": [
+              "51f68b9da172f3ae"
+            ],
+            "dropped_ids": [],
+            "affected_ids": [
+              "51f68b9da172f3ae"
+            ]
+          },
+          "combined_full": {
+            "nonidempotent_ids": [],
+            "errors": []
+          },
+          "result": "ACCEPTED",
+          "reasons": []
+        },
+        {
+          "rule_id": "DB-B4-002",
+          "source_pack": "ind-kn-sangraha-v",
+          "code": "B4",
+          "gold": {
+            "rule": "DB-B4-002",
+            "changed": 0,
+            "dropped": 0,
+            "affected_unique": 0,
+            "errors": 0,
+            "error_types": [],
+            "percent": "0.000000",
+            "result": "PASS",
+            "changed_ids": [],
+            "dropped_ids": [],
+            "affected_ids": []
+          },
+          "full_rule": {
+            "nonidempotent_ids": [],
+            "errors": []
+          },
+          "combined_gold": {
+            "rule": "combined",
+            "changed": 1,
+            "dropped": 0,
+            "affected_unique": 1,
+            "errors": 0,
+            "error_types": [],
+            "percent": "0.869565",
+            "result": "PASS",
+            "changed_ids": [
+              "51f68b9da172f3ae"
+            ],
+            "dropped_ids": [],
+            "affected_ids": [
+              "51f68b9da172f3ae"
+            ]
+          },
+          "combined_full": {
+            "nonidempotent_ids": [],
+            "errors": []
+          },
+          "result": "ACCEPTED",
+          "reasons": []
+        }
+      ],
+      "result": "PASS",
+      "gold_n": 115,
+      "pack_sha256": "3859c21e3f715ff7c0fbe978dcd0719b48ead11cff58fe215afa23f1175fd3ee",
+      "gold_sha256": "3f8661f313b07d8e5f8aa598d32db591d6cd46ba939d22afe7d417ddeabbb381",
+      "combined_gold": {
+        "rule": "combined",
+        "changed": 1,
+        "dropped": 0,
+        "affected_unique": 1,
+        "errors": 0,
+        "error_types": [],
+        "percent": "0.869565",
+        "result": "PASS",
+        "changed_ids": [
+          "51f68b9da172f3ae"
+        ],
+        "dropped_ids": [],
+        "affected_ids": [
+          "51f68b9da172f3ae"
+        ]
+      },
+      "final_full": {
+        "nonidempotent_ids": [],
+        "errors": []
+      }
+    },
+    "ind-kn-sangraha-s": {
+      "native_rules": [
+        "DB-A3-005",
+        "DB-A6-006",
+        "DB-B2-003",
+        "DB-B3-001",
+        "DB-C1-010",
+        "DB-C3-017",
+        "DB-D3-008",
+        "DB-D4-014"
+      ],
+      "accepted": [
+        "DB-C5-003",
+        "DB-G1-011",
+        "DB-C2-008",
+        "DB-B4-002"
+      ],
+      "attempts": [
+        {
+          "rule_id": "DB-C5-003",
+          "source_pack": "ind-kn-sangraha-v",
+          "code": "C5",
+          "gold": {
+            "rule": "DB-C5-003",
+            "changed": 0,
+            "dropped": 0,
+            "affected_unique": 0,
+            "errors": 0,
+            "error_types": [],
+            "percent": "0.000000",
+            "result": "PASS",
+            "changed_ids": [],
+            "dropped_ids": [],
+            "affected_ids": []
+          },
+          "full_rule": {
+            "nonidempotent_ids": [],
+            "errors": []
+          },
+          "combined_gold": {
+            "rule": "combined",
+            "changed": 0,
+            "dropped": 0,
+            "affected_unique": 0,
+            "errors": 0,
+            "error_types": [],
+            "percent": "0.000000",
+            "result": "PASS",
+            "changed_ids": [],
+            "dropped_ids": [],
+            "affected_ids": []
+          },
+          "combined_full": {
+            "nonidempotent_ids": [],
+            "errors": []
+          },
+          "result": "ACCEPTED",
+          "reasons": []
+        },
+        {
+          "rule_id": "DB-G1-011",
+          "source_pack": "ind-kn-sangraha-v",
+          "code": "G1",
+          "gold": {
+            "rule": "DB-G1-011",
+            "changed": 0,
+            "dropped": 0,
+            "affected_unique": 0,
+            "errors": 0,
+            "error_types": [],
+            "percent": "0.000000",
+            "result": "PASS",
+            "changed_ids": [],
+            "dropped_ids": [],
+            "affected_ids": []
+          },
+          "full_rule": {
+            "nonidempotent_ids": [],
+            "errors": []
+          },
+          "combined_gold": {
+            "rule": "combined",
+            "changed": 0,
+            "dropped": 0,
+            "affected_unique": 0,
+            "errors": 0,
+            "error_types": [],
+            "percent": "0.000000",
+            "result": "PASS",
+            "changed_ids": [],
+            "dropped_ids": [],
+            "affected_ids": []
+          },
+          "combined_full": {
+            "nonidempotent_ids": [],
+            "errors": []
+          },
+          "result": "ACCEPTED",
+          "reasons": []
+        },
+        {
+          "rule_id": "DB-C2-008",
+          "source_pack": "ind-kn-sangraha-v",
+          "code": "C2",
+          "gold": {
+            "rule": "DB-C2-008",
+            "changed": 0,
+            "dropped": 0,
+            "affected_unique": 0,
+            "errors": 0,
+            "error_types": [],
+            "percent": "0.000000",
+            "result": "PASS",
+            "changed_ids": [],
+            "dropped_ids": [],
+            "affected_ids": []
+          },
+          "full_rule": {
+            "nonidempotent_ids": [],
+            "errors": []
+          },
+          "combined_gold": {
+            "rule": "combined",
+            "changed": 0,
+            "dropped": 0,
+            "affected_unique": 0,
+            "errors": 0,
+            "error_types": [],
+            "percent": "0.000000",
+            "result": "PASS",
+            "changed_ids": [],
+            "dropped_ids": [],
+            "affected_ids": []
+          },
+          "combined_full": {
+            "nonidempotent_ids": [],
+            "errors": []
+          },
+          "result": "ACCEPTED",
+          "reasons": []
+        },
+        {
+          "rule_id": "DB-B4-002",
+          "source_pack": "ind-kn-sangraha-v",
+          "code": "B4",
+          "gold": {
+            "rule": "DB-B4-002",
+            "changed": 0,
+            "dropped": 0,
+            "affected_unique": 0,
+            "errors": 0,
+            "error_types": [],
+            "percent": "0.000000",
+            "result": "PASS",
+            "changed_ids": [],
+            "dropped_ids": [],
+            "affected_ids": []
+          },
+          "full_rule": {
+            "nonidempotent_ids": [],
+            "errors": []
+          },
+          "combined_gold": {
+            "rule": "combined",
+            "changed": 0,
+            "dropped": 0,
+            "affected_unique": 0,
+            "errors": 0,
+            "error_types": [],
+            "percent": "0.000000",
+            "result": "PASS",
+            "changed_ids": [],
+            "dropped_ids": [],
+            "affected_ids": []
+          },
+          "combined_full": {
+            "nonidempotent_ids": [],
+            "errors": []
+          },
+          "result": "ACCEPTED",
+          "reasons": []
+        }
+      ],
+      "result": "PASS",
+      "gold_n": 22,
+      "pack_sha256": "a161966005c037a1bdb70245c2b6135520967c57c5fc618cba5f29d9e248f427",
+      "gold_sha256": "4aacabee4d5ab012f3041d63cd91310a7188cf68877692c644d7bc080c055556",
+      "combined_gold": {
+        "rule": "combined",
+        "changed": 0,
+        "dropped": 0,
+        "affected_unique": 0,
+        "errors": 0,
+        "error_types": [],
+        "percent": "0.000000",
+        "result": "PASS",
+        "changed_ids": [],
+        "dropped_ids": [],
+        "affected_ids": []
+      },
+      "final_full": {
+        "nonidempotent_ids": [],
+        "errors": []
+      }
+    },
+    "ind-kn-sangraha-v": {
+      "native_rules": [
+        "DB-A6-007",
+        "DB-A3-004",
+        "DB-C5-003",
+        "DB-D4-007",
+        "DB-G1-011",
+        "DB-C1-019",
+        "DB-C2-008",
+        "DB-D3-016",
+        "DB-B4-002"
+      ],
+      "accepted": [
+        "DB-B2-003",
+        "DB-B3-001"
+      ],
+      "attempts": [
+        {
+          "rule_id": "DB-B2-003",
+          "source_pack": "ind-kn-sangraha-s",
+          "code": "B2",
+          "gold": {
+            "rule": "DB-B2-003",
+            "changed": 0,
+            "dropped": 0,
+            "affected_unique": 0,
+            "errors": 0,
+            "error_types": [],
+            "percent": "0.000000",
+            "result": "PASS",
+            "changed_ids": [],
+            "dropped_ids": [],
+            "affected_ids": []
+          },
+          "full_rule": {
+            "nonidempotent_ids": [],
+            "errors": []
+          },
+          "combined_gold": {
+            "rule": "combined",
+            "changed": 0,
+            "dropped": 0,
+            "affected_unique": 0,
+            "errors": 0,
+            "error_types": [],
+            "percent": "0.000000",
+            "result": "PASS",
+            "changed_ids": [],
+            "dropped_ids": [],
+            "affected_ids": []
+          },
+          "combined_full": {
+            "nonidempotent_ids": [],
+            "errors": []
+          },
+          "result": "ACCEPTED",
+          "reasons": []
+        },
+        {
+          "rule_id": "DB-B3-001",
+          "source_pack": "ind-kn-sangraha-s",
+          "code": "B3",
+          "gold": {
+            "rule": "DB-B3-001",
+            "changed": 0,
+            "dropped": 0,
+            "affected_unique": 0,
+            "errors": 0,
+            "error_types": [],
+            "percent": "0.000000",
+            "result": "PASS",
+            "changed_ids": [],
+            "dropped_ids": [],
+            "affected_ids": []
+          },
+          "full_rule": {
+            "nonidempotent_ids": [],
+            "errors": []
+          },
+          "combined_gold": {
+            "rule": "combined",
+            "changed": 0,
+            "dropped": 0,
+            "affected_unique": 0,
+            "errors": 0,
+            "error_types": [],
+            "percent": "0.000000",
+            "result": "PASS",
+            "changed_ids": [],
+            "dropped_ids": [],
+            "affected_ids": []
+          },
+          "combined_full": {
+            "nonidempotent_ids": [],
+            "errors": []
+          },
+          "result": "ACCEPTED",
+          "reasons": []
+        },
+        {
+          "rule_id": "DB-C3-017",
+          "source_pack": "ind-kn-sangraha-s",
+          "code": "C3",
+          "gold": {
+            "rule": "DB-C3-017",
+            "changed": 2,
+            "dropped": 0,
+            "affected_unique": 2,
+            "errors": 0,
+            "error_types": [],
+            "percent": "2.020202",
+            "result": "FAIL",
+            "changed_ids": [
+              "25610ed9b6f46add",
+              "3e136bb24649eb48"
+            ],
+            "dropped_ids": [],
+            "affected_ids": [
+              "25610ed9b6f46add",
+              "3e136bb24649eb48"
+            ]
+          },
+          "result": "REJECTED",
+          "reasons": [
+            "receiving-pack gold: FAIL"
+          ]
+        }
+      ],
+      "result": "PASS",
+      "gold_n": 99,
+      "pack_sha256": "39d2bce100b2b2016fbe44d0f58ccbf5d2df8df24d8b3418051e691115d877fc",
+      "gold_sha256": "42b45e25c85f3c793a0e0de0740ed6d3352e74d81bb8e10f1d6af10684305645",
+      "combined_gold": {
+        "rule": "combined",
+        "changed": 0,
+        "dropped": 0,
+        "affected_unique": 0,
+        "errors": 0,
+        "error_types": [],
+        "percent": "0.000000",
+        "result": "PASS",
+        "changed_ids": [],
+        "dropped_ids": [],
+        "affected_ids": []
+      },
+      "final_full": {
+        "nonidempotent_ids": [],
+        "errors": []
+      }
+    },
+    "ind-ml-fw2": {
+      "native_rules": [],
+      "accepted": [],
+      "attempts": [],
+      "result": "NO SAME-LANGUAGE DONOR"
+    },
+    "ind-mr-fw2": {
+      "native_rules": [
+        "DB-A1-001",
+        "DB-A3-006",
+        "DB-A5-009",
+        "DB-A6-008",
+        "DB-G1-006",
+        "DB-G4-002",
+        "DB-C4-005",
+        "DB-C5-004",
+        "DB-C2-015",
+        "DB-C3-024",
+        "DB-D3-017",
+        "DB-B4-011"
+      ],
+      "accepted": [
+        "DB-D4-008"
+      ],
+      "attempts": [
+        {
+          "rule_id": "DB-D4-008",
+          "source_pack": "ind-mr-sangraha-v",
+          "code": "D4",
+          "gold": {
+            "rule": "DB-D4-008",
+            "changed": 0,
+            "dropped": 0,
+            "affected_unique": 0,
+            "errors": 0,
+            "error_types": [],
+            "percent": "0.000000",
+            "result": "PASS",
+            "changed_ids": [],
+            "dropped_ids": [],
+            "affected_ids": []
+          },
+          "full_rule": {
+            "nonidempotent_ids": [],
+            "errors": []
+          },
+          "combined_gold": {
+            "rule": "combined",
+            "changed": 1,
+            "dropped": 0,
+            "affected_unique": 1,
+            "errors": 0,
+            "error_types": [],
+            "percent": "0.632911",
+            "result": "PASS",
+            "changed_ids": [
+              "c85acdaeebe64599"
+            ],
+            "dropped_ids": [],
+            "affected_ids": [
+              "c85acdaeebe64599"
+            ]
+          },
+          "combined_full": {
+            "nonidempotent_ids": [],
+            "errors": []
+          },
+          "result": "ACCEPTED",
+          "reasons": []
+        },
+        {
+          "rule_id": "DB-C1-012",
+          "source_pack": "ind-mr-sangraha-v",
+          "code": "C1",
+          "gold": {
+            "rule": "DB-C1-012",
+            "changed": 1,
+            "dropped": 0,
+            "affected_unique": 1,
+            "errors": 0,
+            "error_types": [],
+            "percent": "0.632911",
+            "result": "PASS",
+            "changed_ids": [
+              "870fb0ffd8d7a041"
+            ],
+            "dropped_ids": [],
+            "affected_ids": [
+              "870fb0ffd8d7a041"
+            ]
+          },
+          "full_rule": {
+            "nonidempotent_ids": [],
+            "errors": []
+          },
+          "combined_gold": {
+            "rule": "combined",
+            "changed": 2,
+            "dropped": 0,
+            "affected_unique": 2,
+            "errors": 0,
+            "error_types": [],
+            "percent": "1.265823",
+            "result": "FAIL",
+            "changed_ids": [
+              "870fb0ffd8d7a041",
+              "c85acdaeebe64599"
+            ],
+            "dropped_ids": [],
+            "affected_ids": [
+              "870fb0ffd8d7a041",
+              "c85acdaeebe64599"
+            ]
+          },
+          "result": "REJECTED",
+          "reasons": [
+            "combined receiving-pack gold: FAIL"
+          ]
+        }
+      ],
+      "result": "PASS",
+      "gold_n": 158,
+      "pack_sha256": "94a1d14caa9a46f40c2212c6d2c436b9ebb03093ac60ec04658023adeb2d3e2b",
+      "gold_sha256": "401a155d5768b1e44cacdd6f5e813365bff625828a1ee7ebfbbed565512f65d0",
+      "combined_gold": {
+        "rule": "combined",
+        "changed": 1,
+        "dropped": 0,
+        "affected_unique": 1,
+        "errors": 0,
+        "error_types": [],
+        "percent": "0.632911",
+        "result": "PASS",
+        "changed_ids": [
+          "c85acdaeebe64599"
+        ],
+        "dropped_ids": [],
+        "affected_ids": [
+          "c85acdaeebe64599"
+        ]
+      },
+      "final_full": {
+        "nonidempotent_ids": [],
+        "errors": []
+      }
+    },
+    "ind-mr-sangraha-v": {
+      "native_rules": [
+        "DB-A5-006",
+        "DB-A6-021",
+        "DB-D4-008",
+        "DB-C1-012",
+        "DB-C2-010",
+        "DB-C3-010",
+        "DB-C4-009",
+        "DB-D3-022",
+        "DB-B4-003"
+      ],
+      "accepted": [
+        "DB-A1-001",
+        "DB-A3-006",
+        "DB-G1-006",
+        "DB-G4-002",
+        "DB-C5-004"
+      ],
+      "attempts": [
+        {
+          "rule_id": "DB-A1-001",
+          "source_pack": "ind-mr-fw2",
+          "code": "A1",
+          "gold": {
+            "rule": "DB-A1-001",
+            "changed": 0,
+            "dropped": 0,
+            "affected_unique": 0,
+            "errors": 0,
+            "error_types": [],
+            "percent": "0.000000",
+            "result": "PASS",
+            "changed_ids": [],
+            "dropped_ids": [],
+            "affected_ids": []
+          },
+          "full_rule": {
+            "nonidempotent_ids": [],
+            "errors": []
+          },
+          "combined_gold": {
+            "rule": "combined",
+            "changed": 0,
+            "dropped": 0,
+            "affected_unique": 0,
+            "errors": 0,
+            "error_types": [],
+            "percent": "0.000000",
+            "result": "PASS",
+            "changed_ids": [],
+            "dropped_ids": [],
+            "affected_ids": []
+          },
+          "combined_full": {
+            "nonidempotent_ids": [],
+            "errors": []
+          },
+          "result": "ACCEPTED",
+          "reasons": []
+        },
+        {
+          "rule_id": "DB-A3-006",
+          "source_pack": "ind-mr-fw2",
+          "code": "A3",
+          "gold": {
+            "rule": "DB-A3-006",
+            "changed": 0,
+            "dropped": 0,
+            "affected_unique": 0,
+            "errors": 0,
+            "error_types": [],
+            "percent": "0.000000",
+            "result": "PASS",
+            "changed_ids": [],
+            "dropped_ids": [],
+            "affected_ids": []
+          },
+          "full_rule": {
+            "nonidempotent_ids": [],
+            "errors": []
+          },
+          "combined_gold": {
+            "rule": "combined",
+            "changed": 0,
+            "dropped": 0,
+            "affected_unique": 0,
+            "errors": 0,
+            "error_types": [],
+            "percent": "0.000000",
+            "result": "PASS",
+            "changed_ids": [],
+            "dropped_ids": [],
+            "affected_ids": []
+          },
+          "combined_full": {
+            "nonidempotent_ids": [],
+            "errors": []
+          },
+          "result": "ACCEPTED",
+          "reasons": []
+        },
+        {
+          "rule_id": "DB-G1-006",
+          "source_pack": "ind-mr-fw2",
+          "code": "G1",
+          "gold": {
+            "rule": "DB-G1-006",
+            "changed": 0,
+            "dropped": 0,
+            "affected_unique": 0,
+            "errors": 0,
+            "error_types": [],
+            "percent": "0.000000",
+            "result": "PASS",
+            "changed_ids": [],
+            "dropped_ids": [],
+            "affected_ids": []
+          },
+          "full_rule": {
+            "nonidempotent_ids": [],
+            "errors": []
+          },
+          "combined_gold": {
+            "rule": "combined",
+            "changed": 0,
+            "dropped": 0,
+            "affected_unique": 0,
+            "errors": 0,
+            "error_types": [],
+            "percent": "0.000000",
+            "result": "PASS",
+            "changed_ids": [],
+            "dropped_ids": [],
+            "affected_ids": []
+          },
+          "combined_full": {
+            "nonidempotent_ids": [],
+            "errors": []
+          },
+          "result": "ACCEPTED",
+          "reasons": []
+        },
+        {
+          "rule_id": "DB-G4-002",
+          "source_pack": "ind-mr-fw2",
+          "code": "G4",
+          "gold": {
+            "rule": "DB-G4-002",
+            "changed": 0,
+            "dropped": 0,
+            "affected_unique": 0,
+            "errors": 0,
+            "error_types": [],
+            "percent": "0.000000",
+            "result": "PASS",
+            "changed_ids": [],
+            "dropped_ids": [],
+            "affected_ids": []
+          },
+          "full_rule": {
+            "nonidempotent_ids": [],
+            "errors": []
+          },
+          "combined_gold": {
+            "rule": "combined",
+            "changed": 0,
+            "dropped": 0,
+            "affected_unique": 0,
+            "errors": 0,
+            "error_types": [],
+            "percent": "0.000000",
+            "result": "PASS",
+            "changed_ids": [],
+            "dropped_ids": [],
+            "affected_ids": []
+          },
+          "combined_full": {
+            "nonidempotent_ids": [],
+            "errors": []
+          },
+          "result": "ACCEPTED",
+          "reasons": []
+        },
+        {
+          "rule_id": "DB-C5-004",
+          "source_pack": "ind-mr-fw2",
+          "code": "C5",
+          "gold": {
+            "rule": "DB-C5-004",
+            "changed": 0,
+            "dropped": 0,
+            "affected_unique": 0,
+            "errors": 0,
+            "error_types": [],
+            "percent": "0.000000",
+            "result": "PASS",
+            "changed_ids": [],
+            "dropped_ids": [],
+            "affected_ids": []
+          },
+          "full_rule": {
+            "nonidempotent_ids": [],
+            "errors": []
+          },
+          "combined_gold": {
+            "rule": "combined",
+            "changed": 0,
+            "dropped": 0,
+            "affected_unique": 0,
+            "errors": 0,
+            "error_types": [],
+            "percent": "0.000000",
+            "result": "PASS",
+            "changed_ids": [],
+            "dropped_ids": [],
+            "affected_ids": []
+          },
+          "combined_full": {
+            "nonidempotent_ids": [],
+            "errors": []
+          },
+          "result": "ACCEPTED",
+          "reasons": []
+        }
+      ],
+      "result": "PASS",
+      "gold_n": 99,
+      "pack_sha256": "ad598b6ac2330c00b423b26f826f6d120d8940f0eb7f5412fca2fcd045b4ef30",
+      "gold_sha256": "a38541f77304d18871b7fc30c275969452e5c74eea2a9f13ae4bbb0b4a6c3f61",
+      "combined_gold": {
+        "rule": "combined",
+        "changed": 0,
+        "dropped": 0,
+        "affected_unique": 0,
+        "errors": 0,
+        "error_types": [],
+        "percent": "0.000000",
+        "result": "PASS",
+        "changed_ids": [],
+        "dropped_ids": [],
+        "affected_ids": []
+      },
+      "final_full": {
+        "nonidempotent_ids": [],
+        "errors": []
+      }
+    },
+    "ind-or-fw2": {
+      "native_rules": [],
+      "accepted": [],
+      "attempts": [],
+      "result": "NO SAME-LANGUAGE DONOR"
+    },
+    "ind-sa-fw2": {
+      "native_rules": [
+        "DB-A5-007",
+        "DB-G1-007",
+        "DB-G2-003",
+        "DB-G4-003",
+        "DB-A4-001",
+        "DB-C3-004",
+        "DB-D4-009",
+        "DB-C1-013",
+        "DB-C4-010",
+        "DB-C5-014",
+        "DB-D2-002",
+        "DB-D3-012",
+        "DB-H3-001",
+        "DB-B4-004"
+      ],
+      "accepted": [],
+      "attempts": [],
+      "result": "PASS",
+      "gold_n": 71,
+      "pack_sha256": "95e08d6b9ef1c3baf2d98c7f6bef3a0d12236d6b7c54583e5d4565884b3108e0",
+      "gold_sha256": "bfa93e597a4ab341f2c597388ce8b7c8e3912e728283e867fca8fa5970046865",
+      "combined_gold": {
+        "rule": "combined",
+        "changed": 1,
+        "dropped": 0,
+        "affected_unique": 1,
+        "errors": 0,
+        "error_types": [],
+        "percent": "1.408451",
+        "result": "PASS",
+        "changed_ids": [
+          "1ece1474b414d6fe"
+        ],
+        "dropped_ids": [],
+        "affected_ids": [
+          "1ece1474b414d6fe"
+        ]
+      },
+      "final_full": {
+        "nonidempotent_ids": [],
+        "errors": []
+      }
+    },
+    "ind-ta-fw2": {
+      "native_rules": [],
+      "accepted": [],
+      "attempts": [],
+      "result": "NOT TESTABLE",
+      "missing": [
+        "gold"
+      ]
+    },
+    "ind-ta-sangraha-s": {
+      "native_rules": [],
+      "accepted": [],
+      "attempts": [],
+      "result": "NOT TESTABLE",
+      "missing": [
+        "pack",
+        "gold"
+      ]
+    },
+    "ind-ta-sangraha-v": {
+      "native_rules": [
+        "DB-G1-013",
+        "DB-G4-004",
+        "DB-C5-017",
+        "DB-F3-005",
+        "DB-C1-021",
+        "DB-C2-016",
+        "DB-C3-021",
+        "DB-C4-013",
+        "DB-D3-018",
+        "DB-D4-017",
+        "DB-B4-007"
+      ],
+      "accepted": [],
+      "attempts": [],
+      "result": "PASS",
+      "gold_n": 141,
+      "pack_sha256": "1df8e92c0f6a18d510ec8af5bf97d41aacf4834746fb9f24dc97821018057d78",
+      "gold_sha256": "da9e3ff4db5df66b3886dc957ea7db35828083d2c78ed8a7fc8760a386af6948",
+      "combined_gold": {
+        "rule": "combined",
+        "changed": 1,
+        "dropped": 0,
+        "affected_unique": 1,
+        "errors": 0,
+        "error_types": [],
+        "percent": "0.709220",
+        "result": "PASS",
+        "changed_ids": [
+          "2134d8e197faedf0"
+        ],
+        "dropped_ids": [],
+        "affected_ids": [
+          "2134d8e197faedf0"
+        ]
+      },
+      "final_full": {
+        "nonidempotent_ids": [],
+        "errors": []
+      }
+    },
+    "ind-te-fw2": {
+      "native_rules": [
+        "DB-A6-013",
+        "DB-G1-010",
+        "DB-B2-004",
+        "DB-C4-006",
+        "DB-C5-006",
+        "DB-F3-003",
+        "DB-C1-016",
+        "DB-C2-013",
+        "DB-D3-014"
+      ],
+      "accepted": [
+        "DB-A1-002",
+        "DB-C3-020",
+        "DB-D4-012",
+        "DB-D5-004",
+        "DB-B4-006"
+      ],
+      "attempts": [
+        {
+          "rule_id": "DB-A1-002",
+          "source_pack": "ind-te-sangraha-v",
+          "code": "A1",
+          "gold": {
+            "rule": "DB-A1-002",
+            "changed": 0,
+            "dropped": 0,
+            "affected_unique": 0,
+            "errors": 0,
+            "error_types": [],
+            "percent": "0.000000",
+            "result": "PASS",
+            "changed_ids": [],
+            "dropped_ids": [],
+            "affected_ids": []
+          },
+          "full_rule": {
+            "nonidempotent_ids": [],
+            "errors": []
+          },
+          "combined_gold": {
+            "rule": "combined",
+            "changed": 0,
+            "dropped": 0,
+            "affected_unique": 0,
+            "errors": 0,
+            "error_types": [],
+            "percent": "0.000000",
+            "result": "PASS",
+            "changed_ids": [],
+            "dropped_ids": [],
+            "affected_ids": []
+          },
+          "combined_full": {
+            "nonidempotent_ids": [],
+            "errors": []
+          },
+          "result": "ACCEPTED",
+          "reasons": []
+        },
+        {
+          "rule_id": "DB-C3-020",
+          "source_pack": "ind-te-sangraha-v",
+          "code": "C3",
+          "gold": {
+            "rule": "DB-C3-020",
+            "changed": 0,
+            "dropped": 0,
+            "affected_unique": 0,
+            "errors": 0,
+            "error_types": [],
+            "percent": "0.000000",
+            "result": "PASS",
+            "changed_ids": [],
+            "dropped_ids": [],
+            "affected_ids": []
+          },
+          "full_rule": {
+            "nonidempotent_ids": [],
+            "errors": []
+          },
+          "combined_gold": {
+            "rule": "combined",
+            "changed": 0,
+            "dropped": 0,
+            "affected_unique": 0,
+            "errors": 0,
+            "error_types": [],
+            "percent": "0.000000",
+            "result": "PASS",
+            "changed_ids": [],
+            "dropped_ids": [],
+            "affected_ids": []
+          },
+          "combined_full": {
+            "nonidempotent_ids": [],
+            "errors": []
+          },
+          "result": "ACCEPTED",
+          "reasons": []
+        },
+        {
+          "rule_id": "DB-D4-012",
+          "source_pack": "ind-te-sangraha-s",
+          "code": "D4",
+          "gold": {
+            "rule": "DB-D4-012",
+            "changed": 0,
+            "dropped": 0,
+            "affected_unique": 0,
+            "errors": 0,
+            "error_types": [],
+            "percent": "0.000000",
+            "result": "PASS",
+            "changed_ids": [],
+            "dropped_ids": [],
+            "affected_ids": []
+          },
+          "full_rule": {
+            "nonidempotent_ids": [],
+            "errors": []
+          },
+          "combined_gold": {
+            "rule": "combined",
+            "changed": 0,
+            "dropped": 0,
+            "affected_unique": 0,
+            "errors": 0,
+            "error_types": [],
+            "percent": "0.000000",
+            "result": "PASS",
+            "changed_ids": [],
+            "dropped_ids": [],
+            "affected_ids": []
+          },
+          "combined_full": {
+            "nonidempotent_ids": [],
+            "errors": []
+          },
+          "result": "ACCEPTED",
+          "reasons": []
+        },
+        {
+          "rule_id": "DB-D5-001",
+          "source_pack": "ind-te-sangraha-s",
+          "code": "D5",
+          "result": "REJECTED",
+          "reasons": [
+            "rule/pack scope excluded by review policy"
+          ]
+        },
+        {
+          "rule_id": "DB-D5-004",
+          "source_pack": "ind-te-sangraha-v",
+          "code": "D5",
+          "gold": {
+            "rule": "DB-D5-004",
+            "changed": 0,
+            "dropped": 0,
+            "affected_unique": 0,
+            "errors": 0,
+            "error_types": [],
+            "percent": "0.000000",
+            "result": "PASS",
+            "changed_ids": [],
+            "dropped_ids": [],
+            "affected_ids": []
+          },
+          "full_rule": {
+            "nonidempotent_ids": [],
+            "errors": []
+          },
+          "combined_gold": {
+            "rule": "combined",
+            "changed": 0,
+            "dropped": 0,
+            "affected_unique": 0,
+            "errors": 0,
+            "error_types": [],
+            "percent": "0.000000",
+            "result": "PASS",
+            "changed_ids": [],
+            "dropped_ids": [],
+            "affected_ids": []
+          },
+          "combined_full": {
+            "nonidempotent_ids": [],
+            "errors": []
+          },
+          "result": "ACCEPTED",
+          "reasons": []
+        },
+        {
+          "rule_id": "DB-B4-006",
+          "source_pack": "ind-te-sangraha-s",
+          "code": "B4",
+          "gold": {
+            "rule": "DB-B4-006",
+            "changed": 0,
+            "dropped": 0,
+            "affected_unique": 0,
+            "errors": 0,
+            "error_types": [],
+            "percent": "0.000000",
+            "result": "PASS",
+            "changed_ids": [],
+            "dropped_ids": [],
+            "affected_ids": []
+          },
+          "full_rule": {
+            "nonidempotent_ids": [],
+            "errors": []
+          },
+          "combined_gold": {
+            "rule": "combined",
+            "changed": 0,
+            "dropped": 0,
+            "affected_unique": 0,
+            "errors": 0,
+            "error_types": [],
+            "percent": "0.000000",
+            "result": "PASS",
+            "changed_ids": [],
+            "dropped_ids": [],
+            "affected_ids": []
+          },
+          "combined_full": {
+            "nonidempotent_ids": [],
+            "errors": []
+          },
+          "result": "ACCEPTED",
+          "reasons": []
+        }
+      ],
+      "result": "PASS",
+      "gold_n": 17,
+      "pack_sha256": "f893df548895804bd63f47b5d6405b51393d79f0647e4389665956198cdaf5bb",
+      "gold_sha256": "25c25c78467ce64f812582f46f2e27e2b15a2c78dc97fe7eaeb5167f3c25da3d",
+      "combined_gold": {
+        "rule": "combined",
+        "changed": 0,
+        "dropped": 0,
+        "affected_unique": 0,
+        "errors": 0,
+        "error_types": [],
+        "percent": "0.000000",
+        "result": "PASS",
+        "changed_ids": [],
+        "dropped_ids": [],
+        "affected_ids": []
+      },
+      "final_full": {
+        "nonidempotent_ids": [],
+        "errors": []
+      }
+    },
+    "ind-te-sangraha-s": {
+      "native_rules": [
+        "DB-B2-007",
+        "DB-D4-012",
+        "DB-D5-001",
+        "DB-C2-017",
+        "DB-B4-006"
+      ],
+      "accepted": [
+        "DB-A1-002",
+        "DB-A6-013",
+        "DB-G1-010",
+        "DB-C3-020",
+        "DB-C4-006",
+        "DB-C5-006",
+        "DB-F3-003",
+        "DB-C1-016",
+        "DB-D3-014"
+      ],
+      "attempts": [
+        {
+          "rule_id": "DB-A1-002",
+          "source_pack": "ind-te-sangraha-v",
+          "code": "A1",
+          "gold": {
+            "rule": "DB-A1-002",
+            "changed": 0,
+            "dropped": 0,
+            "affected_unique": 0,
+            "errors": 0,
+            "error_types": [],
+            "percent": "0.000000",
+            "result": "PASS",
+            "changed_ids": [],
+            "dropped_ids": [],
+            "affected_ids": []
+          },
+          "full_rule": {
+            "nonidempotent_ids": [],
+            "errors": []
+          },
+          "combined_gold": {
+            "rule": "combined",
+            "changed": 0,
+            "dropped": 0,
+            "affected_unique": 0,
+            "errors": 0,
+            "error_types": [],
+            "percent": "0.000000",
+            "result": "PASS",
+            "changed_ids": [],
+            "dropped_ids": [],
+            "affected_ids": []
+          },
+          "combined_full": {
+            "nonidempotent_ids": [],
+            "errors": []
+          },
+          "result": "ACCEPTED",
+          "reasons": []
+        },
+        {
+          "rule_id": "DB-A6-013",
+          "source_pack": "ind-te-fw2",
+          "code": "A6",
+          "gold": {
+            "rule": "DB-A6-013",
+            "changed": 0,
+            "dropped": 0,
+            "affected_unique": 0,
+            "errors": 0,
+            "error_types": [],
+            "percent": "0.000000",
+            "result": "PASS",
+            "changed_ids": [],
+            "dropped_ids": [],
+            "affected_ids": []
+          },
+          "full_rule": {
+            "nonidempotent_ids": [],
+            "errors": []
+          },
+          "combined_gold": {
+            "rule": "combined",
+            "changed": 0,
+            "dropped": 0,
+            "affected_unique": 0,
+            "errors": 0,
+            "error_types": [],
+            "percent": "0.000000",
+            "result": "PASS",
+            "changed_ids": [],
+            "dropped_ids": [],
+            "affected_ids": []
+          },
+          "combined_full": {
+            "nonidempotent_ids": [],
+            "errors": []
+          },
+          "result": "ACCEPTED",
+          "reasons": []
+        },
+        {
+          "rule_id": "DB-G1-010",
+          "source_pack": "ind-te-fw2",
+          "code": "G1",
+          "gold": {
+            "rule": "DB-G1-010",
+            "changed": 0,
+            "dropped": 0,
+            "affected_unique": 0,
+            "errors": 0,
+            "error_types": [],
+            "percent": "0.000000",
+            "result": "PASS",
+            "changed_ids": [],
+            "dropped_ids": [],
+            "affected_ids": []
+          },
+          "full_rule": {
+            "nonidempotent_ids": [],
+            "errors": []
+          },
+          "combined_gold": {
+            "rule": "combined",
+            "changed": 0,
+            "dropped": 0,
+            "affected_unique": 0,
+            "errors": 0,
+            "error_types": [],
+            "percent": "0.000000",
+            "result": "PASS",
+            "changed_ids": [],
+            "dropped_ids": [],
+            "affected_ids": []
+          },
+          "combined_full": {
+            "nonidempotent_ids": [],
+            "errors": []
+          },
+          "result": "ACCEPTED",
+          "reasons": []
+        },
+        {
+          "rule_id": "DB-C3-020",
+          "source_pack": "ind-te-sangraha-v",
+          "code": "C3",
+          "gold": {
+            "rule": "DB-C3-020",
+            "changed": 0,
+            "dropped": 0,
+            "affected_unique": 0,
+            "errors": 0,
+            "error_types": [],
+            "percent": "0.000000",
+            "result": "PASS",
+            "changed_ids": [],
+            "dropped_ids": [],
+            "affected_ids": []
+          },
+          "full_rule": {
+            "nonidempotent_ids": [],
+            "errors": []
+          },
+          "combined_gold": {
+            "rule": "combined",
+            "changed": 0,
+            "dropped": 0,
+            "affected_unique": 0,
+            "errors": 0,
+            "error_types": [],
+            "percent": "0.000000",
+            "result": "PASS",
+            "changed_ids": [],
+            "dropped_ids": [],
+            "affected_ids": []
+          },
+          "combined_full": {
+            "nonidempotent_ids": [],
+            "errors": []
+          },
+          "result": "ACCEPTED",
+          "reasons": []
+        },
+        {
+          "rule_id": "DB-C4-006",
+          "source_pack": "ind-te-fw2",
+          "code": "C4",
+          "gold": {
+            "rule": "DB-C4-006",
+            "changed": 0,
+            "dropped": 0,
+            "affected_unique": 0,
+            "errors": 0,
+            "error_types": [],
+            "percent": "0.000000",
+            "result": "PASS",
+            "changed_ids": [],
+            "dropped_ids": [],
+            "affected_ids": []
+          },
+          "full_rule": {
+            "nonidempotent_ids": [],
+            "errors": []
+          },
+          "combined_gold": {
+            "rule": "combined",
+            "changed": 0,
+            "dropped": 0,
+            "affected_unique": 0,
+            "errors": 0,
+            "error_types": [],
+            "percent": "0.000000",
+            "result": "PASS",
+            "changed_ids": [],
+            "dropped_ids": [],
+            "affected_ids": []
+          },
+          "combined_full": {
+            "nonidempotent_ids": [],
+            "errors": []
+          },
+          "result": "ACCEPTED",
+          "reasons": []
+        },
+        {
+          "rule_id": "DB-C5-006",
+          "source_pack": "ind-te-fw2",
+          "code": "C5",
+          "gold": {
+            "rule": "DB-C5-006",
+            "changed": 0,
+            "dropped": 0,
+            "affected_unique": 0,
+            "errors": 0,
+            "error_types": [],
+            "percent": "0.000000",
+            "result": "PASS",
+            "changed_ids": [],
+            "dropped_ids": [],
+            "affected_ids": []
+          },
+          "full_rule": {
+            "nonidempotent_ids": [],
+            "errors": []
+          },
+          "combined_gold": {
+            "rule": "combined",
+            "changed": 0,
+            "dropped": 0,
+            "affected_unique": 0,
+            "errors": 0,
+            "error_types": [],
+            "percent": "0.000000",
+            "result": "PASS",
+            "changed_ids": [],
+            "dropped_ids": [],
+            "affected_ids": []
+          },
+          "combined_full": {
+            "nonidempotent_ids": [],
+            "errors": []
+          },
+          "result": "ACCEPTED",
+          "reasons": []
+        },
+        {
+          "rule_id": "DB-F3-003",
+          "source_pack": "ind-te-fw2",
+          "code": "F3",
+          "gold": {
+            "rule": "DB-F3-003",
+            "changed": 0,
+            "dropped": 0,
+            "affected_unique": 0,
+            "errors": 0,
+            "error_types": [],
+            "percent": "0.000000",
+            "result": "PASS",
+            "changed_ids": [],
+            "dropped_ids": [],
+            "affected_ids": []
+          },
+          "full_rule": {
+            "nonidempotent_ids": [],
+            "errors": []
+          },
+          "combined_gold": {
+            "rule": "combined",
+            "changed": 0,
+            "dropped": 0,
+            "affected_unique": 0,
+            "errors": 0,
+            "error_types": [],
+            "percent": "0.000000",
+            "result": "PASS",
+            "changed_ids": [],
+            "dropped_ids": [],
+            "affected_ids": []
+          },
+          "combined_full": {
+            "nonidempotent_ids": [],
+            "errors": []
+          },
+          "result": "ACCEPTED",
+          "reasons": []
+        },
+        {
+          "rule_id": "DB-C1-016",
+          "source_pack": "ind-te-fw2",
+          "code": "C1",
+          "gold": {
+            "rule": "DB-C1-016",
+            "changed": 0,
+            "dropped": 0,
+            "affected_unique": 0,
+            "errors": 0,
+            "error_types": [],
+            "percent": "0.000000",
+            "result": "PASS",
+            "changed_ids": [],
+            "dropped_ids": [],
+            "affected_ids": []
+          },
+          "full_rule": {
+            "nonidempotent_ids": [],
+            "errors": []
+          },
+          "combined_gold": {
+            "rule": "combined",
+            "changed": 0,
+            "dropped": 0,
+            "affected_unique": 0,
+            "errors": 0,
+            "error_types": [],
+            "percent": "0.000000",
+            "result": "PASS",
+            "changed_ids": [],
+            "dropped_ids": [],
+            "affected_ids": []
+          },
+          "combined_full": {
+            "nonidempotent_ids": [],
+            "errors": []
+          },
+          "result": "ACCEPTED",
+          "reasons": []
+        },
+        {
+          "rule_id": "DB-D3-014",
+          "source_pack": "ind-te-fw2",
+          "code": "D3",
+          "gold": {
+            "rule": "DB-D3-014",
+            "changed": 0,
+            "dropped": 0,
+            "affected_unique": 0,
+            "errors": 0,
+            "error_types": [],
+            "percent": "0.000000",
+            "result": "PASS",
+            "changed_ids": [],
+            "dropped_ids": [],
+            "affected_ids": []
+          },
+          "full_rule": {
+            "nonidempotent_ids": [],
+            "errors": []
+          },
+          "combined_gold": {
+            "rule": "combined",
+            "changed": 0,
+            "dropped": 0,
+            "affected_unique": 0,
+            "errors": 0,
+            "error_types": [],
+            "percent": "0.000000",
+            "result": "PASS",
+            "changed_ids": [],
+            "dropped_ids": [],
+            "affected_ids": []
+          },
+          "combined_full": {
+            "nonidempotent_ids": [],
+            "errors": []
+          },
+          "result": "ACCEPTED",
+          "reasons": []
+        }
+      ],
+      "result": "PASS",
+      "gold_n": 24,
+      "pack_sha256": "feeb676e76dee102d132846c1af2a92c3ea4d1018e0fd5239f50fc0da0fb6069",
+      "gold_sha256": "410ce1d6483c56086e8c9f6d1f23265278246999520e2f6f20845010ebc0f3e3",
+      "combined_gold": {
+        "rule": "combined",
+        "changed": 0,
+        "dropped": 0,
+        "affected_unique": 0,
+        "errors": 0,
+        "error_types": [],
+        "percent": "0.000000",
+        "result": "PASS",
+        "changed_ids": [],
+        "dropped_ids": [],
+        "affected_ids": []
+      },
+      "final_full": {
+        "nonidempotent_ids": [],
+        "errors": []
+      }
+    },
+    "ind-te-sangraha-v": {
+      "native_rules": [
+        "DB-A1-002",
+        "DB-G1-014",
+        "DB-C3-020",
+        "DB-C5-018",
+        "DB-D4-016",
+        "DB-D5-004",
+        "DB-C1-022",
+        "DB-C2-018",
+        "DB-C4-014",
+        "DB-D3-019"
+      ],
+      "accepted": [
+        "DB-A6-013",
+        "DB-B2-004",
+        "DB-F3-003",
+        "DB-B4-006"
+      ],
+      "attempts": [
+        {
+          "rule_id": "DB-A6-013",
+          "source_pack": "ind-te-fw2",
+          "code": "A6",
+          "gold": {
+            "rule": "DB-A6-013",
+            "changed": 0,
+            "dropped": 0,
+            "affected_unique": 0,
+            "errors": 0,
+            "error_types": [],
+            "percent": "0.000000",
+            "result": "PASS",
+            "changed_ids": [],
+            "dropped_ids": [],
+            "affected_ids": []
+          },
+          "full_rule": {
+            "nonidempotent_ids": [],
+            "errors": []
+          },
+          "combined_gold": {
+            "rule": "combined",
+            "changed": 0,
+            "dropped": 0,
+            "affected_unique": 0,
+            "errors": 0,
+            "error_types": [],
+            "percent": "0.000000",
+            "result": "PASS",
+            "changed_ids": [],
+            "dropped_ids": [],
+            "affected_ids": []
+          },
+          "combined_full": {
+            "nonidempotent_ids": [],
+            "errors": []
+          },
+          "result": "ACCEPTED",
+          "reasons": []
+        },
+        {
+          "rule_id": "DB-B2-004",
+          "source_pack": "ind-te-fw2",
+          "code": "B2",
+          "gold": {
+            "rule": "DB-B2-004",
+            "changed": 0,
+            "dropped": 0,
+            "affected_unique": 0,
+            "errors": 0,
+            "error_types": [],
+            "percent": "0.000000",
+            "result": "PASS",
+            "changed_ids": [],
+            "dropped_ids": [],
+            "affected_ids": []
+          },
+          "full_rule": {
+            "nonidempotent_ids": [],
+            "errors": []
+          },
+          "combined_gold": {
+            "rule": "combined",
+            "changed": 0,
+            "dropped": 0,
+            "affected_unique": 0,
+            "errors": 0,
+            "error_types": [],
+            "percent": "0.000000",
+            "result": "PASS",
+            "changed_ids": [],
+            "dropped_ids": [],
+            "affected_ids": []
+          },
+          "combined_full": {
+            "nonidempotent_ids": [],
+            "errors": []
+          },
+          "result": "ACCEPTED",
+          "reasons": []
+        },
+        {
+          "rule_id": "DB-F3-003",
+          "source_pack": "ind-te-fw2",
+          "code": "F3",
+          "gold": {
+            "rule": "DB-F3-003",
+            "changed": 0,
+            "dropped": 0,
+            "affected_unique": 0,
+            "errors": 0,
+            "error_types": [],
+            "percent": "0.000000",
+            "result": "PASS",
+            "changed_ids": [],
+            "dropped_ids": [],
+            "affected_ids": []
+          },
+          "full_rule": {
+            "nonidempotent_ids": [],
+            "errors": []
+          },
+          "combined_gold": {
+            "rule": "combined",
+            "changed": 0,
+            "dropped": 0,
+            "affected_unique": 0,
+            "errors": 0,
+            "error_types": [],
+            "percent": "0.000000",
+            "result": "PASS",
+            "changed_ids": [],
+            "dropped_ids": [],
+            "affected_ids": []
+          },
+          "combined_full": {
+            "nonidempotent_ids": [],
+            "errors": []
+          },
+          "result": "ACCEPTED",
+          "reasons": []
+        },
+        {
+          "rule_id": "DB-B4-006",
+          "source_pack": "ind-te-sangraha-s",
+          "code": "B4",
+          "gold": {
+            "rule": "DB-B4-006",
+            "changed": 0,
+            "dropped": 0,
+            "affected_unique": 0,
+            "errors": 0,
+            "error_types": [],
+            "percent": "0.000000",
+            "result": "PASS",
+            "changed_ids": [],
+            "dropped_ids": [],
+            "affected_ids": []
+          },
+          "full_rule": {
+            "nonidempotent_ids": [],
+            "errors": []
+          },
+          "combined_gold": {
+            "rule": "combined",
+            "changed": 0,
+            "dropped": 0,
+            "affected_unique": 0,
+            "errors": 0,
+            "error_types": [],
+            "percent": "0.000000",
+            "result": "PASS",
+            "changed_ids": [],
+            "dropped_ids": [],
+            "affected_ids": []
+          },
+          "combined_full": {
+            "nonidempotent_ids": [],
+            "errors": []
+          },
+          "result": "ACCEPTED",
+          "reasons": []
+        }
+      ],
+      "result": "PASS",
+      "gold_n": 80,
+      "pack_sha256": "d3d928606d1fd0a7a81fcbce10db3e3d8f4b7df74486bc51c9a9d30299812817",
+      "gold_sha256": "f73858bf14d7d4d37537644f573b5d492c681a7a2f07644e7760202793ade075",
+      "combined_gold": {
+        "rule": "combined",
+        "changed": 0,
+        "dropped": 0,
+        "affected_unique": 0,
+        "errors": 0,
+        "error_types": [],
+        "percent": "0.000000",
+        "result": "PASS",
+        "changed_ids": [],
+        "dropped_ids": [],
+        "affected_ids": []
+      },
+      "final_full": {
+        "nonidempotent_ids": [],
+        "errors": []
+      }
+    }
+  },
+  "rule_scopes": {
+    "DB-A1-001": [
+      "ind-mr-fw2",
+      "ind-mr-sangraha-v"
+    ],
+    "DB-A1-002": [
+      "ind-te-fw2",
+      "ind-te-sangraha-s",
+      "ind-te-sangraha-v"
+    ],
+    "DB-A2-001": [
+      "ind-bn-fw2",
+      "ind-bn-sangraha-v"
+    ],
+    "DB-A3-001": [
+      "ind-bn-fw2"
+    ],
+    "DB-A3-007": [
+      "ind-bn-sangraha-v"
+    ],
+    "DB-A3-002": [
+      "ind-gu-fw2"
+    ],
+    "DB-A3-005": [
+      "ind-kn-fw2",
+      "ind-kn-sangraha-s"
+    ],
+    "DB-A3-006": [
+      "ind-mr-fw2",
+      "ind-mr-sangraha-v"
+    ],
+    "DB-A5-001": [
+      "ind-bn-fw2",
+      "ind-bn-sangraha-v"
+    ],
+    "DB-A5-003": [
+      "ind-gu-fw2"
+    ],
+    "DB-A5-009": [
+      "ind-mr-fw2"
+    ],
+    "DB-A5-006": [
+      "ind-mr-sangraha-v"
+    ],
+    "DB-A5-007": [
+      "ind-sa-fw2"
+    ],
+    "DB-A6-001": [
+      "ind-bn-fw2"
+    ],
+    "DB-A6-020": [
+      "ind-bn-sangraha-v"
+    ],
+    "DB-A6-003": [
+      "ind-gu-fw2"
+    ],
+    "DB-A6-017": [
+      "ind-hi-hplt",
+      "ind-hi-indiccorp",
+      "ind-hi-sangraha-v"
+    ],
+    "DB-A6-006": [
+      "ind-kn-fw2",
+      "ind-kn-sangraha-s"
+    ],
+    "DB-A6-007": [
+      "ind-kn-sangraha-v"
+    ],
+    "DB-A6-008": [
+      "ind-mr-fw2"
+    ],
+    "DB-A6-021": [
+      "ind-mr-sangraha-v"
+    ],
+    "DB-A6-013": [
+      "ind-te-fw2",
+      "ind-te-sangraha-s",
+      "ind-te-sangraha-v"
+    ],
+    "DB-G1-001": [
+      "ind-bn-fw2"
+    ],
+    "DB-G1-015": [
+      "ind-bn-sangraha-v"
+    ],
+    "DB-G1-003": [
+      "ind-gu-fw2"
+    ],
+    "DB-G1-016": [
+      "ind-hi-fw2",
+      "ind-hi-hplt",
+      "ind-hi-sangraha-s",
+      "ind-hi-sangraha-v"
+    ],
+    "DB-G1-006": [
+      "ind-mr-fw2",
+      "ind-mr-sangraha-v"
+    ],
+    "DB-G1-007": [
+      "ind-sa-fw2"
+    ],
+    "DB-G1-013": [
+      "ind-ta-sangraha-v"
+    ],
+    "DB-G1-010": [
+      "ind-te-fw2",
+      "ind-te-sangraha-s"
+    ],
+    "DB-G1-014": [
+      "ind-te-sangraha-v"
+    ],
+    "DB-G2-003": [
+      "ind-sa-fw2"
+    ],
+    "DB-G4-006": [
+      "ind-bn-fw2",
+      "ind-bn-sangraha-v"
+    ],
+    "DB-G4-007": [
+      "ind-hi-hplt",
+      "ind-hi-indiccorp",
+      "ind-hi-sangraha-s",
+      "ind-hi-sangraha-v"
+    ],
+    "DB-G4-002": [
+      "ind-mr-fw2",
+      "ind-mr-sangraha-v"
+    ],
+    "DB-G4-003": [
+      "ind-sa-fw2"
+    ],
+    "DB-G4-004": [
+      "ind-ta-sangraha-v"
+    ],
+    "DB-B2-001": [
+      "ind-hi-fw2",
+      "ind-hi-indiccorp",
+      "ind-hi-sangraha-v"
+    ],
+    "DB-B2-002": [
+      "ind-hi-hplt"
+    ],
+    "DB-B2-008": [
+      "ind-hi-sangraha-s"
+    ],
+    "DB-B2-003": [
+      "ind-kn-fw2",
+      "ind-kn-sangraha-s",
+      "ind-kn-sangraha-v"
+    ],
+    "DB-B2-004": [
+      "ind-te-fw2",
+      "ind-te-sangraha-v"
+    ],
+    "DB-B2-007": [
+      "ind-te-sangraha-s"
+    ],
+    "DB-B3-001": [
+      "ind-kn-fw2",
+      "ind-kn-sangraha-s",
+      "ind-kn-sangraha-v"
+    ],
+    "DB-A3-004": [
+      "ind-kn-sangraha-v"
+    ],
+    "DB-A4-001": [
+      "ind-sa-fw2"
+    ],
+    "DB-A6-019": [
+      "ind-hi-fw2",
+      "ind-hi-sangraha-s"
+    ],
+    "DB-B4-008": [
+      "ind-hi-fw2",
+      "ind-hi-hplt",
+      "ind-hi-indiccorp",
+      "ind-hi-sangraha-s",
+      "ind-hi-sangraha-v"
+    ],
+    "DB-C3-001": [
+      "ind-bn-fw2",
+      "ind-bn-sangraha-v"
+    ],
+    "DB-C3-002": [
+      "ind-hi-hplt",
+      "ind-hi-sangraha-v"
+    ],
+    "DB-C3-025": [
+      "ind-hi-indiccorp"
+    ],
+    "DB-C3-004": [
+      "ind-sa-fw2"
+    ],
+    "DB-C3-020": [
+      "ind-te-fw2",
+      "ind-te-sangraha-s",
+      "ind-te-sangraha-v"
+    ],
+    "DB-C4-001": [
+      "ind-bn-fw2"
+    ],
+    "DB-C4-002": [
+      "ind-hi-fw2",
+      "ind-hi-indiccorp",
+      "ind-hi-sangraha-s",
+      "ind-hi-sangraha-v"
+    ],
+    "DB-C4-003": [
+      "ind-hi-hplt"
+    ],
+    "DB-C4-005": [
+      "ind-mr-fw2"
+    ],
+    "DB-C4-006": [
+      "ind-te-fw2",
+      "ind-te-sangraha-s"
+    ],
+    "DB-C5-021": [
+      "ind-bn-sangraha-v"
+    ],
+    "DB-C5-016": [
+      "ind-hi-fw2",
+      "ind-hi-indiccorp",
+      "ind-hi-sangraha-s",
+      "ind-hi-sangraha-v"
+    ],
+    "DB-C5-001": [
+      "ind-hi-hplt"
+    ],
+    "DB-C5-003": [
+      "ind-kn-fw2",
+      "ind-kn-sangraha-s",
+      "ind-kn-sangraha-v"
+    ],
+    "DB-C5-004": [
+      "ind-mr-fw2",
+      "ind-mr-sangraha-v"
+    ],
+    "DB-C5-017": [
+      "ind-ta-sangraha-v"
+    ],
+    "DB-C5-006": [
+      "ind-te-fw2",
+      "ind-te-sangraha-s"
+    ],
+    "DB-C5-018": [
+      "ind-te-sangraha-v"
+    ],
+    "DB-D4-001": [
+      "ind-bn-fw2",
+      "ind-bn-sangraha-v"
+    ],
+    "DB-D4-003": [
+      "ind-gu-fw2"
+    ],
+    "DB-D4-013": [
+      "ind-hi-fw2",
+      "ind-hi-indiccorp",
+      "ind-hi-sangraha-v"
+    ],
+    "DB-D4-005": [
+      "ind-hi-hplt"
+    ],
+    "DB-D4-018": [
+      "ind-hi-sangraha-s"
+    ],
+    "DB-D4-007": [
+      "ind-kn-fw2",
+      "ind-kn-sangraha-v"
+    ],
+    "DB-D4-008": [
+      "ind-mr-fw2",
+      "ind-mr-sangraha-v"
+    ],
+    "DB-D4-009": [
+      "ind-sa-fw2"
+    ],
+    "DB-D4-012": [
+      "ind-te-fw2",
+      "ind-te-sangraha-s"
+    ],
+    "DB-D4-016": [
+      "ind-te-sangraha-v"
+    ],
+    "DB-D5-001": [
+      "ind-te-sangraha-s"
+    ],
+    "DB-D5-004": [
+      "ind-te-fw2",
+      "ind-te-sangraha-v"
+    ],
+    "DB-F3-001": [
+      "ind-bn-fw2",
+      "ind-bn-sangraha-v"
+    ],
+    "DB-F3-004": [
+      "ind-hi-fw2",
+      "ind-hi-hplt",
+      "ind-hi-indiccorp",
+      "ind-hi-sangraha-s",
+      "ind-hi-sangraha-v"
+    ],
+    "DB-F3-005": [
+      "ind-ta-sangraha-v"
+    ],
+    "DB-F3-003": [
+      "ind-te-fw2",
+      "ind-te-sangraha-s",
+      "ind-te-sangraha-v"
+    ],
+    "DB-G1-012": [
+      "ind-hi-indiccorp"
+    ],
+    "DB-G1-011": [
+      "ind-kn-fw2",
+      "ind-kn-sangraha-s",
+      "ind-kn-sangraha-v"
+    ],
+    "DB-G3-003": [
+      "ind-hi-fw2",
+      "ind-hi-hplt",
+      "ind-hi-indiccorp",
+      "ind-hi-sangraha-s",
+      "ind-hi-sangraha-v"
+    ],
+    "DB-C1-001": [
+      "ind-bn-fw2"
+    ],
+    "DB-C1-003": [
+      "ind-gu-fw2"
+    ],
+    "DB-C1-005": [
+      "ind-hi-fw2",
+      "ind-hi-sangraha-s",
+      "ind-hi-sangraha-v"
+    ],
+    "DB-C1-006": [
+      "ind-hi-hplt"
+    ],
+    "DB-C1-018": [
+      "ind-hi-indiccorp"
+    ],
+    "DB-C1-010": [
+      "ind-kn-fw2",
+      "ind-kn-sangraha-s"
+    ],
+    "DB-C1-019": [
+      "ind-kn-sangraha-v"
+    ],
+    "DB-C1-012": [
+      "ind-mr-sangraha-v"
+    ],
+    "DB-C1-013": [
+      "ind-sa-fw2"
+    ],
+    "DB-C1-021": [
+      "ind-ta-sangraha-v"
+    ],
+    "DB-C1-016": [
+      "ind-te-fw2",
+      "ind-te-sangraha-s"
+    ],
+    "DB-C1-022": [
+      "ind-te-sangraha-v"
+    ],
+    "DB-C2-001": [
+      "ind-bn-fw2"
+    ],
+    "DB-C2-023": [
+      "ind-bn-sangraha-v"
+    ],
+    "DB-C2-003": [
+      "ind-gu-fw2"
+    ],
+    "DB-C2-014": [
+      "ind-hi-fw2",
+      "ind-hi-indiccorp",
+      "ind-hi-sangraha-s",
+      "ind-hi-sangraha-v"
+    ],
+    "DB-C2-021": [
+      "ind-hi-hplt"
+    ],
+    "DB-C2-008": [
+      "ind-kn-sangraha-s",
+      "ind-kn-sangraha-v"
+    ],
+    "DB-C2-015": [
+      "ind-mr-fw2"
+    ],
+    "DB-C2-010": [
+      "ind-mr-sangraha-v"
+    ],
+    "DB-C2-016": [
+      "ind-ta-sangraha-v"
+    ],
+    "DB-C2-013": [
+      "ind-te-fw2"
+    ],
+    "DB-C2-017": [
+      "ind-te-sangraha-s"
+    ],
+    "DB-C2-018": [
+      "ind-te-sangraha-v"
+    ],
+    "DB-C3-006": [
+      "ind-hi-fw2"
+    ],
+    "DB-C3-023": [
+      "ind-hi-sangraha-s"
+    ],
+    "DB-C3-017": [
+      "ind-kn-sangraha-s"
+    ],
+    "DB-C3-024": [
+      "ind-mr-fw2"
+    ],
+    "DB-C3-010": [
+      "ind-mr-sangraha-v"
+    ],
+    "DB-C3-021": [
+      "ind-ta-sangraha-v"
+    ],
+    "DB-C4-015": [
+      "ind-bn-sangraha-v"
+    ],
+    "DB-C4-007": [
+      "ind-gu-fw2"
+    ],
+    "DB-C4-009": [
+      "ind-mr-sangraha-v"
+    ],
+    "DB-C4-010": [
+      "ind-sa-fw2"
+    ],
+    "DB-C4-013": [
+      "ind-ta-sangraha-v"
+    ],
+    "DB-C4-014": [
+      "ind-te-sangraha-v"
+    ],
+    "DB-C5-007": [
+      "ind-bn-fw2"
+    ],
+    "DB-C5-009": [
+      "ind-gu-fw2"
+    ],
+    "DB-C5-014": [
+      "ind-sa-fw2"
+    ],
+    "DB-D2-003": [
+      "ind-hi-fw2",
+      "ind-hi-hplt",
+      "ind-hi-indiccorp",
+      "ind-hi-sangraha-s",
+      "ind-hi-sangraha-v"
+    ],
+    "DB-D2-002": [
+      "ind-sa-fw2"
+    ],
+    "DB-D3-001": [
+      "ind-bn-fw2"
+    ],
+    "DB-D3-021": [
+      "ind-bn-sangraha-v"
+    ],
+    "DB-D3-003": [
+      "ind-gu-fw2"
+    ],
+    "DB-D3-005": [
+      "ind-hi-fw2",
+      "ind-hi-indiccorp",
+      "ind-hi-sangraha-s",
+      "ind-hi-sangraha-v"
+    ],
+    "DB-D3-020": [
+      "ind-hi-hplt"
+    ],
+    "DB-D3-008": [
+      "ind-kn-fw2",
+      "ind-kn-sangraha-s"
+    ],
+    "DB-D3-016": [
+      "ind-kn-sangraha-v"
+    ],
+    "DB-D3-017": [
+      "ind-mr-fw2"
+    ],
+    "DB-D3-022": [
+      "ind-mr-sangraha-v"
+    ],
+    "DB-D3-012": [
+      "ind-sa-fw2"
+    ],
+    "DB-D3-018": [
+      "ind-ta-sangraha-v"
+    ],
+    "DB-D3-014": [
+      "ind-te-fw2",
+      "ind-te-sangraha-s"
+    ],
+    "DB-D3-019": [
+      "ind-te-sangraha-v"
+    ],
+    "DB-D4-014": [
+      "ind-kn-sangraha-s"
+    ],
+    "DB-D4-017": [
+      "ind-ta-sangraha-v"
+    ],
+    "DB-D5-003": [
+      "ind-hi-fw2",
+      "ind-hi-indiccorp",
+      "ind-hi-sangraha-s"
+    ],
+    "DB-D5-002": [
+      "ind-hi-hplt",
+      "ind-hi-sangraha-v"
+    ],
+    "DB-H3-001": [
+      "ind-sa-fw2"
+    ],
+    "DB-B4-009": [
+      "ind-bn-fw2",
+      "ind-bn-sangraha-v"
+    ],
+    "DB-B4-001": [
+      "ind-gu-fw2"
+    ],
+    "DB-B4-002": [
+      "ind-kn-fw2",
+      "ind-kn-sangraha-s",
+      "ind-kn-sangraha-v"
+    ],
+    "DB-B4-011": [
+      "ind-mr-fw2"
+    ],
+    "DB-B4-003": [
+      "ind-mr-sangraha-v"
+    ],
+    "DB-B4-004": [
+      "ind-sa-fw2"
+    ],
+    "DB-B4-007": [
+      "ind-ta-sangraha-v"
+    ],
+    "DB-B4-006": [
+      "ind-te-fw2",
+      "ind-te-sangraha-s",
+      "ind-te-sangraha-v"
+    ]
+  }
+}

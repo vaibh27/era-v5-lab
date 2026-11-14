@@ -1,0 +1,12 @@
+# A1 smoke on L40S: the real OLMoE-1B-7B-0125-Instruct, HF batched sampler, 3 tiny steps. Synthetic token task (no data).
+seed: 1234
+device: cuda
+model:
+  kind: hf
+  path: /vol/hf/allenai/OLMoE-1B-7B-0125-Instruct
+  dtype: bfloat16
+  stop_at_eos: true
+task: {kind: toy, rule: parity, vocab: 50304, prompt_len: 8, n_train: 64, n_heldout: 8}
+train: {algo: grpo, steps: 3, prompts_per_step: 4, k: 4, max_new: 32, temperature: 1.0, lr: 1.0e-6, clip_eps: 0.2,
+        ppo_epochs: 1, kl_coef: 0.0, trainable: ['\.self_attn\.'], eval_every: 3, eval_k: 2, sampler: hf_batch,
+        routing_log: true, routing_probe: 4, kl_to_start: true}

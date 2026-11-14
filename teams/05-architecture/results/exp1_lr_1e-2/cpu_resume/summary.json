@@ -1,0 +1,10 @@
+{
+  "status": "SMOKE",
+  "steps": 4,
+  "wall_seconds": 42.080826699966565,
+  "timed_out": false,
+  "first_ce": 11.893760681152344,
+  "last_ce": 10.685356140136719,
+  "final_model_sha256": "5008e39a95a071f05fb416a1639ee73cd89db2c020bc270010ff46b03b85c11a",
+  "eligible_for_quality_comparison": false
+}

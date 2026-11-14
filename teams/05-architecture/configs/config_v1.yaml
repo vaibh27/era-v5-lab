@@ -1,0 +1,73 @@
+# Gate 2 proposal, 12 Nov 2026. TSAI signs this on 14 Nov.
+# optim.lr is 1e-3, provisional, for 245-step T1 runs only.
+# Every other open value stays the config v0 default.
+# Model sizes and embedding.ke2_output_dim stay empty.
+# The numbers are in experiments/results_v1.md. The reasons are in decisions.md.
+settings:
+  - key: run.seed
+    value: 1234
+    source: "G5 week-1 gate, 24 Oct 2026. Two runs with this seed must match."
+  - key: run.grad_clip
+    value: 1.0
+    source: "The harness sets the clip. DeepSpeed clips at 1.0 by default and plain DDP does not."
+  - key: optim.name
+    value: adamw
+    source: "No optimizer result. EXP-2 has no held-out bits per byte. Config v0 default stays. 12 Nov 2026."
+  - key: optim.lr
+    value: 0.001
+    open: true
+    source: "Provisional T1 rate, instructor 12 Nov 2026. 1e-3 has the lowest whole-file val/bpb on all three seeds and the smallest spread, mean 1.9686, SD 0.0070. The three-group, code, and Indic values were not measured. This choice holds for 245-step T1 runs only. EXP-2 and EXP-3 keep their own test of the rate."
+  - key: tokenizer.name
+    value: BrahmicTokenizer-131K
+    source: "G3 week-1 note. BrahmicTokenizer-131K is tokenizer v0. The file arrives 28 Oct."
+  - key: tokenizer.vocab_size
+    value: 131072
+    source: "G3 teams/03-tokenizer/v0/special_slots.md. Vocab 131,072, special ids frozen. Rajiv Seelam, CAP, 1 Nov 2026."
+  - key: embedding.type
+    value: kronecker
+    source: "https://github.com/theschoolofai/kronecker-embeddings and arXiv 2605.29459."
+  - key: embedding.pos_dim
+    value: 32
+    source: "kronecker-embeddings library default pos_dim. Paper 2605.29459 section 6.9 also reports pos_dim 16."
+  - key: embedding.ke2_output_dim
+    value: null
+    open: true
+    source: "TSAI decides the output head. The test models use the dense untied head. This stays empty. 12 Nov 2026."
+  - key: model.n_layer
+    value: null
+    open: true
+    source: "TSAI fills model sizes on 31 Oct. The test-size line is not copied in."
+  - key: model.d_model
+    value: null
+    open: true
+    source: "TSAI fills model sizes on 31 Oct. The test-size line is not copied in."
+  - key: model.n_head
+    value: null
+    open: true
+    source: "TSAI fills model sizes on 31 Oct. The test-size line is not copied in."
+  - key: model.d_ff
+    value: null
+    open: true
+    source: "TSAI fills model sizes on 31 Oct. The test-size line is not copied in."
+  - key: attention.impl
+    value: eager
+    source: "Attention has no official bits-per-byte result. RoPE and the window are not copied in. Eager stays. 12 Nov 2026."
+  - key: moe.n_expert
+    value: null
+    open: true
+    source: "EXP-3 has no bits per byte. The test-size line is not copied in. 12 Nov 2026."
+  - key: moe.top_k
+    value: null
+    open: true
+    source: "TSAI fills model sizes on 31 Oct. The test-size line is not copied in."
+  - key: loss.train_on
+    value: ntp
+    source: "The logged training loss is next-token loss. A second head is trained on t+2 and logged as loss_mtp."
+  - key: data.seq_len
+    value: null
+    open: true
+    source: "TSAI fills model sizes on 31 Oct. The test-size line is not copied in."
+  - key: precision
+    value: null
+    open: true
+    source: "Production precision is not chosen. The tiny run uses fp32 on CPU."

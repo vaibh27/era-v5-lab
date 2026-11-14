@@ -1,0 +1,2142 @@
+{
+ "schema": "g10-effort-manifest/1",
+ "suite": "g10-effort-dev-v1",
+ "frozen": true,
+ "note": "Declared development sample (G10_TRAINING.md section 4), not an official G9 weighting. It becomes development evidence once inspected. Prompt texts are not stored here: each slot points at a row of a pinned upstream file and holds the sha256 of its text.",
+ "labels": [
+  "1k",
+  "4k",
+  "16k",
+  "64k"
+ ],
+ "budgets": {
+  "1k": 1024,
+  "4k": 4096,
+  "16k": 16384,
+  "64k": 65536
+ },
+ "composition": {
+  "code": 30,
+  "math": 25,
+  "tool_agentic": 20,
+  "indic": 15,
+  "general": 10
+ },
+ "base_seed": 20261111,
+ "selection_seed": "g10-effort-dev-v1",
+ "selection": {
+  "pool": "RL v1 candidates (local build of 11 Nov: code_contests non-Codeforces after decontam v2; hendrycks MATH train after decontam v2 and the MATH-500 13-gram guard)",
+  "rl_v1_cc_sha256": "91ee99512f0411aea2de4ca5eaf10b87b2d8f785ca73747bf8deb45dd6ea9be0",
+  "rl_v1_math_sha256": "630c6dae44cd60ce8a35a6ce66ee391843a964e0dac8fab3b3e7eb5c7489a65c",
+  "excluded_id_files": {
+   "c_train_ids.txt": "63fe47f5a2bf3bd78a553b0f79ebb5e1ab22778759d7ae1cf48e977aababa70c",
+   "c_heldout_ids.txt": "a3e741382e60a9bea1df9e77163635289365ba1cbfe57e07126ca4956f1b074d",
+   "survey_math_ids.txt": "7540f38806a220148fa4618384b85bf3a6e0322dd6666c1c3dcb365d995470d0",
+   "survey_math_ids_300.txt": "e82d36e0293a642b8a0d57f65c377ee9f9af38b3ad8e6f09f666d06c0cc6811f",
+   "survey_cc_ids_300.txt": "562d0c496d821b27ec0fd72869ffbf006c55dcaa4c07f4916086f34cd5724aa4"
+  },
+  "excluded_ids": 1805,
+  "rule": "lowest sha256(selection_seed:id) per stratum; code 8 aizu/7 atcoder/7 codechef/8 hackerearth; math 5 per level 1-5"
+ },
+ "sources": {
+  "code_contests": {
+   "dataset": "deepmind/code_contests",
+   "revision": "802411c3010cb00d1b05bad57ca77365a3c699d6",
+   "split": "train",
+   "licence": "CC-BY-4.0"
+  },
+  "hendrycks_math": {
+   "dataset": "EleutherAI/hendrycks_math",
+   "revision": "21a5633873b6a120296cce3e2df9d5550074f4a3",
+   "split": "train",
+   "licence": "MIT"
+  }
+ },
+ "stages": {
+  "A": {
+   "slots": [
+    "code-00",
+    "code-08",
+    "code-15",
+    "code-22",
+    "code-01",
+    "math-00",
+    "math-05",
+    "math-10",
+    "math-15",
+    "math-20"
+   ],
+   "cap": 1024,
+   "note": "10-prompt canary, every label: first slot of each code judge and math level, plus the second aizu slot"
+  },
+  "B": {
+   "slots": "all resolved",
+   "cap": 1024,
+   "note": "every resolved prompt, every label"
+  },
+  "C": {
+   "slots": [
+    "code-00",
+    "code-08",
+    "code-15",
+    "code-22",
+    "math-05",
+    "math-10",
+    "math-15",
+    "math-20"
+   ],
+   "cap": "label budget + reply allowance, bounded by the real context",
+   "note": "preregistered subset (first slot of each code judge, first slot of math levels 2 to 5); runs only with --stage C"
+  }
+ },
+ "slots": [
+  {
+   "slot": "code-00",
+   "category": "code",
+   "status": "resolved",
+   "task_id": "cc-aizu-p01160_It_Prefokery_Pio",
+   "group": "code_contests/aizu/cc-aizu-p01160_It_Prefokery_Pio",
+   "source": "code_contests",
+   "dataset": "deepmind/code_contests",
+   "revision": "802411c3010cb00d1b05bad57ca77365a3c699d6",
+   "split": "train",
+   "file": "train-00009-of-00039-b8c920f6629b57b2.parquet",
+   "file_sha256": "11844dd410f284f8e4db32970bd3968db82280e2c2971f33699f61baccfa656f",
+   "row_index": 144,
+   "field": "description",
+   "checker_fields": [
+    "public_tests",
+    "private_tests",
+    "generated_tests"
+   ],
+   "text_sha256": "ba2f2d940ff45331c8120fa191c075c03d90bd0e600d53a5787ff40532d0a83f",
+   "checker": "stdio",
+   "max_tests": 20,
+   "time_limit_s": 4,
+   "tests_sha256": "e327d4eac6ec95f4a8ba72b60f65d46f2cabac60ee6510410a83543951404759",
+   "strata": {
+    "judge": "aizu",
+    "difficulty": 0
+   },
+   "licence": "CC-BY-4.0",
+   "licence_decision": "allowed (TSAI, 6 Nov): rl-code-code-contests",
+   "generator": "none (human problems and tests; extra tests are programmatic mutations)"
+  },
+  {
+   "slot": "code-01",
+   "category": "code",
+   "status": "resolved",
+   "task_id": "cc-aizu-p01173_Dig_or_Climb",
+   "group": "code_contests/aizu/cc-aizu-p01173_Dig_or_Climb",
+   "source": "code_contests",
+   "dataset": "deepmind/code_contests",
+   "revision": "802411c3010cb00d1b05bad57ca77365a3c699d6",
+   "split": "train",
+   "file": "train-00011-of-00039-5de236be5188959d.parquet",
+   "file_sha256": "facf7036a71d74cd8415dd2180deabc0d943b67219eb07b239e80af2d490dcdf",
+   "row_index": 189,
+   "field": "description",
+   "checker_fields": [
+    "public_tests",
+    "private_tests",
+    "generated_tests"
+   ],
+   "text_sha256": "5b89ef2634653cf72d490dfee700285966f388b2719b3398ccb3860027263ae3",
+   "checker": "stdio",
+   "max_tests": 20,
+   "time_limit_s": 4,
+   "tests_sha256": "b6cd60d111865a134b866900198d8dc3c91406ac35526bea44be37af39f23d86",
+   "strata": {
+    "judge": "aizu",
+    "difficulty": 0
+   },
+   "licence": "CC-BY-4.0",
+   "licence_decision": "allowed (TSAI, 6 Nov): rl-code-code-contests",
+   "generator": "none (human problems and tests; extra tests are programmatic mutations)"
+  },
+  {
+   "slot": "code-02",
+   "category": "code",
+   "status": "resolved",
+   "task_id": "cc-aizu-p01596_Magnum_Tornado",
+   "group": "code_contests/aizu/cc-aizu-p01596_Magnum_Tornado",
+   "source": "code_contests",
+   "dataset": "deepmind/code_contests",
+   "revision": "802411c3010cb00d1b05bad57ca77365a3c699d6",
+   "split": "train",
+   "file": "train-00023-of-00039-d078bcb55e45cbf0.parquet",
+   "file_sha256": "2aa78452a6a3306536b2f000a4431c048282426a47e7197210155bedbad82c49",
+   "row_index": 41,
+   "field": "description",
+   "checker_fields": [
+    "public_tests",
+    "private_tests",
+    "generated_tests"
+   ],
+   "text_sha256": "0909ed67d2202512d9a299d621005ae3ac38cc94467f8d8b525883c7119600d9",
+   "checker": "stdio",
+   "max_tests": 20,
+   "time_limit_s": 4,
+   "tests_sha256": "8a3a4ea54638decf5733d3756d9f31afc58a6e9619211e389d826797d7e25557",
+   "strata": {
+    "judge": "aizu",
+    "difficulty": 0
+   },
+   "licence": "CC-BY-4.0",
+   "licence_decision": "allowed (TSAI, 6 Nov): rl-code-code-contests",
+   "generator": "none (human problems and tests; extra tests are programmatic mutations)"
+  },
+  {
+   "slot": "code-03",
+   "category": "code",
+   "status": "resolved",
+   "task_id": "cc-aizu-p01009_Room_of_Time_and_Spirit",
+   "group": "code_contests/aizu/cc-aizu-p01009_Room_of_Time_and_Spirit",
+   "source": "code_contests",
+   "dataset": "deepmind/code_contests",
+   "revision": "802411c3010cb00d1b05bad57ca77365a3c699d6",
+   "split": "train",
+   "file": "train-00002-of-00039-9cea23812e920e41.parquet",
+   "file_sha256": "d67c9643019e632941b045f115c6bdf5925a4b32cd9f3fc991734970669b4a29",
+   "row_index": 243,
+   "field": "description",
+   "checker_fields": [
+    "public_tests",
+    "private_tests",
+    "generated_tests"
+   ],
+   "text_sha256": "70360e851ae87721c2d5ad050b8786e572bcc842bfab03ec846b72abc52258c6",
+   "checker": "stdio",
+   "max_tests": 20,
+   "time_limit_s": 4,
+   "tests_sha256": "060a838585ece7032f5b49dae9bf5881595942b3aa999450f7262b53eb6da3cb",
+   "strata": {
+    "judge": "aizu",
+    "difficulty": 0
+   },
+   "licence": "CC-BY-4.0",
+   "licence_decision": "allowed (TSAI, 6 Nov): rl-code-code-contests",
+   "generator": "none (human problems and tests; extra tests are programmatic mutations)"
+  },
+  {
+   "slot": "code-04",
+   "category": "code",
+   "status": "resolved",
+   "task_id": "cc-aizu-p00003_Is_it_a_Right_Triangle_",
+   "group": "code_contests/aizu/cc-aizu-p00003_Is_it_a_Right_Triangle_",
+   "source": "code_contests",
+   "dataset": "deepmind/code_contests",
+   "revision": "802411c3010cb00d1b05bad57ca77365a3c699d6",
+   "split": "train",
+   "file": "train-00035-of-00039-d28f9be60314601f.parquet",
+   "file_sha256": "4a7ed07e1f67ca32ed03a874b96dfc9f4f43be0563734b33085bf0b653c65c47",
+   "row_index": 307,
+   "field": "description",
+   "checker_fields": [
+    "public_tests",
+    "private_tests",
+    "generated_tests"
+   ],
+   "text_sha256": "440263779497d2f57c925bdae0bc672bef789068ca44b3e4585bfa72bdb4f40d",
+   "checker": "stdio",
+   "max_tests": 20,
+   "time_limit_s": 4,
+   "tests_sha256": "3b4c168ad99a5a9aac8001498b442068bb915780664a0f65b9862e4437ad6445",
+   "strata": {
+    "judge": "aizu",
+    "difficulty": 0
+   },
+   "licence": "CC-BY-4.0",
+   "licence_decision": "allowed (TSAI, 6 Nov): rl-code-code-contests",
+   "generator": "none (human problems and tests; extra tests are programmatic mutations)"
+  },
+  {
+   "slot": "code-05",
+   "category": "code",
+   "status": "resolved",
+   "task_id": "cc-aizu-p02365_Minimum_Cost_Arborescence",
+   "group": "code_contests/aizu/cc-aizu-p02365_Minimum_Cost_Arborescence",
+   "source": "code_contests",
+   "dataset": "deepmind/code_contests",
+   "revision": "802411c3010cb00d1b05bad57ca77365a3c699d6",
+   "split": "train",
+   "file": "train-00001-of-00039-e092fe56fda18715.parquet",
+   "file_sha256": "7bcc72d98a3d97f07be90ea70bf8db834c8f29ac2c7626d7cfc657bae6f5ddd9",
+   "row_index": 73,
+   "field": "description",
+   "checker_fields": [
+    "public_tests",
+    "private_tests",
+    "generated_tests"
+   ],
+   "text_sha256": "529cb600cc1bec2533abb50770c4d52ac9b4c3e50e64b249dc65124bb5fb43c0",
+   "checker": "stdio",
+   "max_tests": 20,
+   "time_limit_s": 4,
+   "tests_sha256": "6019f4b9f82b2dd7e175f80e56b05a641f398902bc02f5e693bb8e475e444811",
+   "strata": {
+    "judge": "aizu",
+    "difficulty": 0
+   },
+   "licence": "CC-BY-4.0",
+   "licence_decision": "allowed (TSAI, 6 Nov): rl-code-code-contests",
+   "generator": "none (human problems and tests; extra tests are programmatic mutations)"
+  },
+  {
+   "slot": "code-06",
+   "category": "code",
+   "status": "resolved",
+   "task_id": "cc-aizu-p01412_Power_of_Power",
+   "group": "code_contests/aizu/cc-aizu-p01412_Power_of_Power",
+   "source": "code_contests",
+   "dataset": "deepmind/code_contests",
+   "revision": "802411c3010cb00d1b05bad57ca77365a3c699d6",
+   "split": "train",
+   "file": "train-00006-of-00039-65184bb9f7d61fde.parquet",
+   "file_sha256": "8ab765a7f8595c3f24f2f12eaac0f2d03ac626f9218abce127aa9ab898d011ff",
+   "row_index": 234,
+   "field": "description",
+   "checker_fields": [
+    "public_tests",
+    "private_tests",
+    "generated_tests"
+   ],
+   "text_sha256": "51f0a67bac93bf45f0144e150fc28f11b0b8a70bbdbd1eaf9e624ae2821245fb",
+   "checker": "stdio",
+   "max_tests": 20,
+   "time_limit_s": 4,
+   "tests_sha256": "f99a7a03968e339507d7b228274825c28ebfad6032cf0fd1efb55be180caed97",
+   "strata": {
+    "judge": "aizu",
+    "difficulty": 0
+   },
+   "licence": "CC-BY-4.0",
+   "licence_decision": "allowed (TSAI, 6 Nov): rl-code-code-contests",
+   "generator": "none (human problems and tests; extra tests are programmatic mutations)"
+  },
+  {
+   "slot": "code-07",
+   "category": "code",
+   "status": "resolved",
+   "task_id": "cc-aizu-p02063_Is_Greedy_Optimal_",
+   "group": "code_contests/aizu/cc-aizu-p02063_Is_Greedy_Optimal_",
+   "source": "code_contests",
+   "dataset": "deepmind/code_contests",
+   "revision": "802411c3010cb00d1b05bad57ca77365a3c699d6",
+   "split": "train",
+   "file": "train-00011-of-00039-5de236be5188959d.parquet",
+   "file_sha256": "facf7036a71d74cd8415dd2180deabc0d943b67219eb07b239e80af2d490dcdf",
+   "row_index": 195,
+   "field": "description",
+   "checker_fields": [
+    "public_tests",
+    "private_tests",
+    "generated_tests"
+   ],
+   "text_sha256": "634866fc68d1f97df3b3d3d255ac5413254e33af80c40dc04aeac21b63195a48",
+   "checker": "stdio",
+   "max_tests": 20,
+   "time_limit_s": 4,
+   "tests_sha256": "3fb996159eab38828730010c17c77fe14ed4660e36c2e38556e47c948ab9a433",
+   "strata": {
+    "judge": "aizu",
+    "difficulty": 0
+   },
+   "licence": "CC-BY-4.0",
+   "licence_decision": "allowed (TSAI, 6 Nov): rl-code-code-contests",
+   "generator": "none (human problems and tests; extra tests are programmatic mutations)"
+  },
+  {
+   "slot": "code-08",
+   "category": "code",
+   "status": "resolved",
+   "task_id": "cc-atcoder-p03430_AtCoder_Grand_Contest_021___Reversed_LCS",
+   "group": "code_contests/atcoder/cc-atcoder-p03430_AtCoder_Grand_Contest_021___Reversed_LCS",
+   "source": "code_contests",
+   "dataset": "deepmind/code_contests",
+   "revision": "802411c3010cb00d1b05bad57ca77365a3c699d6",
+   "split": "train",
+   "file": "train-00013-of-00039-30b8c3829ee3b962.parquet",
+   "file_sha256": "a03f874674808641cf4b2a8ac1b13a9cd6a28b4ffda329bc60dd1804ec315186",
+   "row_index": 222,
+   "field": "description",
+   "checker_fields": [
+    "public_tests",
+    "private_tests",
+    "generated_tests"
+   ],
+   "text_sha256": "8c252e3b85de945f8e9bc391d67b0b40aa77b27bf6c62816eee9ae2302dfad03",
+   "checker": "stdio",
+   "max_tests": 20,
+   "time_limit_s": 4,
+   "tests_sha256": "fb0926ecb5e49d93d11cca44036276ed83fc84a7155ae25cad2b588c57896c7f",
+   "strata": {
+    "judge": "atcoder",
+    "difficulty": 0
+   },
+   "licence": "CC-BY-4.0",
+   "licence_decision": "allowed (TSAI, 6 Nov): rl-code-code-contests",
+   "generator": "none (human problems and tests; extra tests are programmatic mutations)"
+  },
+  {
+   "slot": "code-09",
+   "category": "code",
+   "status": "resolved",
+   "task_id": "cc-atcoder-p02586_AtCoder_Beginner_Contest_175___Picking_Goods",
+   "group": "code_contests/atcoder/cc-atcoder-p02586_AtCoder_Beginner_Contest_175___Picking_Goods",
+   "source": "code_contests",
+   "dataset": "deepmind/code_contests",
+   "revision": "802411c3010cb00d1b05bad57ca77365a3c699d6",
+   "split": "train",
+   "file": "train-00038-of-00039-96a59dd6a98cd075.parquet",
+   "file_sha256": "62a3f1e1a56485b7b8514d969e803a844fae89e29b985995109f860f50d042ed",
+   "row_index": 314,
+   "field": "description",
+   "checker_fields": [
+    "public_tests",
+    "private_tests",
+    "generated_tests"
+   ],
+   "text_sha256": "0ec2691af3d5af2f4b5b8ee86637beb80b28d6c6d9df7edaa32caf4678688579",
+   "checker": "stdio",
+   "max_tests": 20,
+   "time_limit_s": 4,
+   "tests_sha256": "1b21a5c8a9cb79cdeae5939dc422f81d78497442414bd267424f13d114e598bb",
+   "strata": {
+    "judge": "atcoder",
+    "difficulty": 0
+   },
+   "licence": "CC-BY-4.0",
+   "licence_decision": "allowed (TSAI, 6 Nov): rl-code-code-contests",
+   "generator": "none (human problems and tests; extra tests are programmatic mutations)"
+  },
+  {
+   "slot": "code-10",
+   "category": "code",
+   "status": "resolved",
+   "task_id": "cc-atcoder-p03185_Educational_DP_Contest___Frog_3",
+   "group": "code_contests/atcoder/cc-atcoder-p03185_Educational_DP_Contest___Frog_3",
+   "source": "code_contests",
+   "dataset": "deepmind/code_contests",
+   "revision": "802411c3010cb00d1b05bad57ca77365a3c699d6",
+   "split": "train",
+   "file": "train-00026-of-00039-7d4898300894cbbe.parquet",
+   "file_sha256": "cb60563bba14228dba3addd8a5be6a998654113bd734b3c54271dfe6e30e63c7",
+   "row_index": 40,
+   "field": "description",
+   "checker_fields": [
+    "public_tests",
+    "private_tests",
+    "generated_tests"
+   ],
+   "text_sha256": "3fd2dda1e3230e94830ad503aa92435bfbeb1c1c2f487107ab5bbb78645afffd",
+   "checker": "stdio",
+   "max_tests": 20,
+   "time_limit_s": 4,
+   "tests_sha256": "b979ee34c9f4642e15cdf2c39bdae50a3550aa39f98bf90338949a884c819e51",
+   "strata": {
+    "judge": "atcoder",
+    "difficulty": 0
+   },
+   "licence": "CC-BY-4.0",
+   "licence_decision": "allowed (TSAI, 6 Nov): rl-code-code-contests",
+   "generator": "none (human problems and tests; extra tests are programmatic mutations)"
+  },
+  {
+   "slot": "code-11",
+   "category": "code",
+   "status": "resolved",
+   "task_id": "cc-atcoder-p02725_AtCoder_Beginner_Contest_160___Traveling_Salesman_aro",
+   "group": "code_contests/atcoder/cc-atcoder-p02725_AtCoder_Beginner_Contest_160___Traveling_Salesman_aro",
+   "source": "code_contests",
+   "dataset": "deepmind/code_contests",
+   "revision": "802411c3010cb00d1b05bad57ca77365a3c699d6",
+   "split": "train",
+   "file": "train-00016-of-00039-bf38b0908b322307.parquet",
+   "file_sha256": "7528a2ee39b08a78c6f9ffe16d9a18fb3e4de24e34fe2e899c795fc31acf2c76",
+   "row_index": 23,
+   "field": "description",
+   "checker_fields": [
+    "public_tests",
+    "private_tests",
+    "generated_tests"
+   ],
+   "text_sha256": "fa0e2498f1a3d2c65b2267414fe0fe359f7ae36d7483d494c30ac881ea984c65",
+   "checker": "stdio",
+   "max_tests": 20,
+   "time_limit_s": 4,
+   "tests_sha256": "9d27c248a0310962875cd7ea3f26da51c38b3b4a9c62c76f7b7ebe59e5235984",
+   "strata": {
+    "judge": "atcoder",
+    "difficulty": 0
+   },
+   "licence": "CC-BY-4.0",
+   "licence_decision": "allowed (TSAI, 6 Nov): rl-code-code-contests",
+   "generator": "none (human problems and tests; extra tests are programmatic mutations)"
+  },
+  {
+   "slot": "code-12",
+   "category": "code",
+   "status": "resolved",
+   "task_id": "cc-atcoder-p02693_AtCoder_Beginner_Contest_165___We_Love_Golf",
+   "group": "code_contests/atcoder/cc-atcoder-p02693_AtCoder_Beginner_Contest_165___We_Love_Golf",
+   "source": "code_contests",
+   "dataset": "deepmind/code_contests",
+   "revision": "802411c3010cb00d1b05bad57ca77365a3c699d6",
+   "split": "train",
+   "file": "train-00030-of-00039-4135cc54050afc22.parquet",
+   "file_sha256": "fe9d77f481b639e21867942ad1061f8a3b7bfb82b3357e6c7ec96da55c6373cd",
+   "row_index": 25,
+   "field": "description",
+   "checker_fields": [
+    "public_tests",
+    "private_tests",
+    "generated_tests"
+   ],
+   "text_sha256": "90ef9ec71f72cf27c59e72df3b6ed55625276c89550731a0aa98a6916689bd0b",
+   "checker": "stdio",
+   "max_tests": 20,
+   "time_limit_s": 4,
+   "tests_sha256": "02419889cfe17c1efc4d81e8285ce280b15684b76e09d0c82d5464970c249923",
+   "strata": {
+    "judge": "atcoder",
+    "difficulty": 0
+   },
+   "licence": "CC-BY-4.0",
+   "licence_decision": "allowed (TSAI, 6 Nov): rl-code-code-contests",
+   "generator": "none (human problems and tests; extra tests are programmatic mutations)"
+  },
+  {
+   "slot": "code-13",
+   "category": "code",
+   "status": "resolved",
+   "task_id": "cc-atcoder-p02840_AtCoder_Beginner_Contest_147___Sum_Difference",
+   "group": "code_contests/atcoder/cc-atcoder-p02840_AtCoder_Beginner_Contest_147___Sum_Difference",
+   "source": "code_contests",
+   "dataset": "deepmind/code_contests",
+   "revision": "802411c3010cb00d1b05bad57ca77365a3c699d6",
+   "split": "train",
+   "file": "train-00027-of-00039-f8196766547533a2.parquet",
+   "file_sha256": "8b1464860f954fff785255b6f744aeaaba224c0e6b9ac2c74c6b832eedbbccbb",
+   "row_index": 322,
+   "field": "description",
+   "checker_fields": [
+    "public_tests",
+    "private_tests",
+    "generated_tests"
+   ],
+   "text_sha256": "e5c5be715d44386df0d1267bbda3089e545e372485c2efdcadf4e39b7f19f80a",
+   "checker": "stdio",
+   "max_tests": 20,
+   "time_limit_s": 4,
+   "tests_sha256": "d8fd6a435c653161520d0821decbdf81aea6f93330471007f9d026ee2fbba87b",
+   "strata": {
+    "judge": "atcoder",
+    "difficulty": 0
+   },
+   "licence": "CC-BY-4.0",
+   "licence_decision": "allowed (TSAI, 6 Nov): rl-code-code-contests",
+   "generator": "none (human problems and tests; extra tests are programmatic mutations)"
+  },
+  {
+   "slot": "code-14",
+   "category": "code",
+   "status": "resolved",
+   "task_id": "cc-atcoder-p03303_SoundHound_Inc__Programming_Contest_2018__Masters_Tou",
+   "group": "code_contests/atcoder/cc-atcoder-p03303_SoundHound_Inc__Programming_Contest_2018__Masters_Tou",
+   "source": "code_contests",
+   "dataset": "deepmind/code_contests",
+   "revision": "802411c3010cb00d1b05bad57ca77365a3c699d6",
+   "split": "train",
+   "file": "train-00036-of-00039-146e1a11c054aeab.parquet",
+   "file_sha256": "cb14ebff9529e89c5fd5659b7de0352858f6a514fc63e2111daed392511eafa8",
+   "row_index": 169,
+   "field": "description",
+   "checker_fields": [
+    "public_tests",
+    "private_tests",
+    "generated_tests"
+   ],
+   "text_sha256": "1bf664aa209bc3f35c1254fedc202ecec0674cc19df63e0301e5a5f6267b46d1",
+   "checker": "stdio",
+   "max_tests": 20,
+   "time_limit_s": 4,
+   "tests_sha256": "726e15b9acdc127b6039f9854e9a1c6300f38b0a6fc7bc64018534e8fd3b93da",
+   "strata": {
+    "judge": "atcoder",
+    "difficulty": 0
+   },
+   "licence": "CC-BY-4.0",
+   "licence_decision": "allowed (TSAI, 6 Nov): rl-code-code-contests",
+   "generator": "none (human problems and tests; extra tests are programmatic mutations)"
+  },
+  {
+   "slot": "code-15",
+   "category": "code",
+   "status": "resolved",
+   "task_id": "cc-codechef-ds15",
+   "group": "code_contests/codechef/cc-codechef-ds15",
+   "source": "code_contests",
+   "dataset": "deepmind/code_contests",
+   "revision": "802411c3010cb00d1b05bad57ca77365a3c699d6",
+   "split": "train",
+   "file": "train-00023-of-00039-d078bcb55e45cbf0.parquet",
+   "file_sha256": "2aa78452a6a3306536b2f000a4431c048282426a47e7197210155bedbad82c49",
+   "row_index": 154,
+   "field": "description",
+   "checker_fields": [
+    "public_tests",
+    "private_tests",
+    "generated_tests"
+   ],
+   "text_sha256": "afe4cab5e5a609cb0fb69ae68dbb22adad1dc5374a43d886a30c244a344fa498",
+   "checker": "stdio",
+   "max_tests": 20,
+   "time_limit_s": 4,
+   "tests_sha256": "ecf23bec6a753a2fe0f36e2e0762db6abe193404b32bd0b3b1bfff3197113399",
+   "strata": {
+    "judge": "codechef",
+    "difficulty": 6
+   },
+   "licence": "CC-BY-4.0",
+   "licence_decision": "allowed (TSAI, 6 Nov): rl-code-code-contests",
+   "generator": "none (human problems and tests; extra tests are programmatic mutations)"
+  },
+  {
+   "slot": "code-16",
+   "category": "code",
+   "status": "resolved",
+   "task_id": "cc-codechef-flow017",
+   "group": "code_contests/codechef/cc-codechef-flow017",
+   "source": "code_contests",
+   "dataset": "deepmind/code_contests",
+   "revision": "802411c3010cb00d1b05bad57ca77365a3c699d6",
+   "split": "train",
+   "file": "train-00034-of-00039-a36ff0bff7d2a76f.parquet",
+   "file_sha256": "5ea8c872ec944013b661f23203f8d4b82e46dc8dec204c32af89ba7153035171",
+   "row_index": 251,
+   "field": "description",
+   "checker_fields": [
+    "public_tests",
+    "private_tests",
+    "generated_tests"
+   ],
+   "text_sha256": "588e96a070b33911da99469607f7752193b7d172857c6de56c3e924126dab4da",
+   "checker": "stdio",
+   "max_tests": 20,
+   "time_limit_s": 4,
+   "tests_sha256": "a3556042e3ac1b3dea9de417dca19fcfcadceccd2c4a38ef03a273fd8b3466d5",
+   "strata": {
+    "judge": "codechef",
+    "difficulty": 1
+   },
+   "licence": "CC-BY-4.0",
+   "licence_decision": "allowed (TSAI, 6 Nov): rl-code-code-contests",
+   "generator": "none (human problems and tests; extra tests are programmatic mutations)"
+  },
+  {
+   "slot": "code-17",
+   "category": "code",
+   "status": "resolved",
+   "task_id": "cc-codechef-crancrd",
+   "group": "code_contests/codechef/cc-codechef-crancrd",
+   "source": "code_contests",
+   "dataset": "deepmind/code_contests",
+   "revision": "802411c3010cb00d1b05bad57ca77365a3c699d6",
+   "split": "train",
+   "file": "train-00012-of-00039-da9476a39a1bdbb7.parquet",
+   "file_sha256": "c4ec5429c2b920173f4662b5dc9ec0db40e9f3ddf5b139bad126d49ab598c635",
+   "row_index": 170,
+   "field": "description",
+   "checker_fields": [
+    "public_tests",
+    "private_tests",
+    "generated_tests"
+   ],
+   "text_sha256": "31ca065ca0fcf2eeb597262e9c0a46cebab2deb19a5d3d465aad8253f645ef72",
+   "checker": "stdio",
+   "max_tests": 20,
+   "time_limit_s": 4,
+   "tests_sha256": "bbc624d5da0bc11263e135a5138058deffbef91fbaa6680a4da36cedd4e5de11",
+   "strata": {
+    "judge": "codechef",
+    "difficulty": 6
+   },
+   "licence": "CC-BY-4.0",
+   "licence_decision": "allowed (TSAI, 6 Nov): rl-code-code-contests",
+   "generator": "none (human problems and tests; extra tests are programmatic mutations)"
+  },
+  {
+   "slot": "code-18",
+   "category": "code",
+   "status": "resolved",
+   "task_id": "cc-codechef-destroy",
+   "group": "code_contests/codechef/cc-codechef-destroy",
+   "source": "code_contests",
+   "dataset": "deepmind/code_contests",
+   "revision": "802411c3010cb00d1b05bad57ca77365a3c699d6",
+   "split": "train",
+   "file": "train-00028-of-00039-79a302af3c924863.parquet",
+   "file_sha256": "f32b70263520ba04d01efda103d8ddbbf2f158b60931caae83d67f5d49b6dc62",
+   "row_index": 319,
+   "field": "description",
+   "checker_fields": [
+    "public_tests",
+    "private_tests",
+    "generated_tests"
+   ],
+   "text_sha256": "ff21d973be7fcfa75fb978add50a238a68b8b45c5b280de3ac92b3cb3cfd425b",
+   "checker": "stdio",
+   "max_tests": 20,
+   "time_limit_s": 4,
+   "tests_sha256": "0b95ba8b926ff7d6e0fe2e656eda48951db07c1b902cb7753ee56fba5f3dfab5",
+   "strata": {
+    "judge": "codechef",
+    "difficulty": 2
+   },
+   "licence": "CC-BY-4.0",
+   "licence_decision": "allowed (TSAI, 6 Nov): rl-code-code-contests",
+   "generator": "none (human problems and tests; extra tests are programmatic mutations)"
+  },
+  {
+   "slot": "code-19",
+   "category": "code",
+   "status": "resolved",
+   "task_id": "cc-codechef-galactik",
+   "group": "code_contests/codechef/cc-codechef-galactik",
+   "source": "code_contests",
+   "dataset": "deepmind/code_contests",
+   "revision": "802411c3010cb00d1b05bad57ca77365a3c699d6",
+   "split": "train",
+   "file": "train-00004-of-00039-cefe355b4667b27e.parquet",
+   "file_sha256": "f28993a19d927561b30873a0adf26d5e06bc649fa2b14fc8223de8fecb0b68a9",
+   "row_index": 200,
+   "field": "description",
+   "checker_fields": [
+    "public_tests",
+    "private_tests",
+    "generated_tests"
+   ],
+   "text_sha256": "475286d755bbf60a4aa5954a05ce5670a0dbc7e95490a8b928e2608141c710e0",
+   "checker": "stdio",
+   "max_tests": 20,
+   "time_limit_s": 4,
+   "tests_sha256": "114de4d3bebea3375baed928375a93ec427bd1742c90712bebb9ee1030281d29",
+   "strata": {
+    "judge": "codechef",
+    "difficulty": 2
+   },
+   "licence": "CC-BY-4.0",
+   "licence_decision": "allowed (TSAI, 6 Nov): rl-code-code-contests",
+   "generator": "none (human problems and tests; extra tests are programmatic mutations)"
+  },
+  {
+   "slot": "code-20",
+   "category": "code",
+   "status": "resolved",
+   "task_id": "cc-codechef-wicq9",
+   "group": "code_contests/codechef/cc-codechef-wicq9",
+   "source": "code_contests",
+   "dataset": "deepmind/code_contests",
+   "revision": "802411c3010cb00d1b05bad57ca77365a3c699d6",
+   "split": "train",
+   "file": "train-00004-of-00039-cefe355b4667b27e.parquet",
+   "file_sha256": "f28993a19d927561b30873a0adf26d5e06bc649fa2b14fc8223de8fecb0b68a9",
+   "row_index": 307,
+   "field": "description",
+   "checker_fields": [
+    "public_tests",
+    "private_tests",
+    "generated_tests"
+   ],
+   "text_sha256": "8a45fb1e427e40ab7e3aa02b56c18238195cce6abf50b82b3708eba25acb18c2",
+   "checker": "stdio",
+   "max_tests": 20,
+   "time_limit_s": 4,
+   "tests_sha256": "6fda042ccb0f2bad0aacc824fa725ac1c21e07265e0ab5e2b35c7a959563d114",
+   "strata": {
+    "judge": "codechef",
+    "difficulty": 6
+   },
+   "licence": "CC-BY-4.0",
+   "licence_decision": "allowed (TSAI, 6 Nov): rl-code-code-contests",
+   "generator": "none (human problems and tests; extra tests are programmatic mutations)"
+  },
+  {
+   "slot": "code-21",
+   "category": "code",
+   "status": "resolved",
+   "task_id": "cc-codechef-cstrike3",
+   "group": "code_contests/codechef/cc-codechef-cstrike3",
+   "source": "code_contests",
+   "dataset": "deepmind/code_contests",
+   "revision": "802411c3010cb00d1b05bad57ca77365a3c699d6",
+   "split": "train",
+   "file": "train-00022-of-00039-1cfd39fa43c1917c.parquet",
+   "file_sha256": "63ff8266ec628a64417d7dda7754ed0366522c4cef5217e990487f83af2b1e53",
+   "row_index": 79,
+   "field": "description",
+   "checker_fields": [
+    "public_tests",
+    "private_tests",
+    "generated_tests"
+   ],
+   "text_sha256": "1303b182cb4d3f5d9f168d94462a14f299ee86ab9fd684d02d61e3bab992c2ae",
+   "checker": "stdio",
+   "max_tests": 20,
+   "time_limit_s": 4,
+   "tests_sha256": "7107ea0c0d057facb582de56ba3b1d9eda8143f8bf8bb051297b45a273f6779f",
+   "strata": {
+    "judge": "codechef",
+    "difficulty": 6
+   },
+   "licence": "CC-BY-4.0",
+   "licence_decision": "allowed (TSAI, 6 Nov): rl-code-code-contests",
+   "generator": "none (human problems and tests; extra tests are programmatic mutations)"
+  },
+  {
+   "slot": "code-22",
+   "category": "code",
+   "status": "resolved",
+   "task_id": "cc-hackerearth-super_string",
+   "group": "code_contests/hackerearth/cc-hackerearth-super_string",
+   "source": "code_contests",
+   "dataset": "deepmind/code_contests",
+   "revision": "802411c3010cb00d1b05bad57ca77365a3c699d6",
+   "split": "train",
+   "file": "train-00037-of-00039-995207c374a4e6f2.parquet",
+   "file_sha256": "bc6e40d8b2de70a52056f0d25d70cac57dd77b8671fa5d1e467e330156addca0",
+   "row_index": 29,
+   "field": "description",
+   "checker_fields": [
+    "public_tests",
+    "private_tests",
+    "generated_tests"
+   ],
+   "text_sha256": "f5b18efb19a4e1dbfbc0edce287b109268f469646fb82b39982e527eb78f6cbd",
+   "checker": "stdio",
+   "max_tests": 20,
+   "time_limit_s": 4,
+   "tests_sha256": "cb26427a6ebeb4abe07515ee5230e52de3de54e14141b842b12772a8a6d73fdf",
+   "strata": {
+    "judge": "hackerearth",
+    "difficulty": 0
+   },
+   "licence": "CC-BY-4.0",
+   "licence_decision": "allowed (TSAI, 6 Nov): rl-code-code-contests",
+   "generator": "none (human problems and tests; extra tests are programmatic mutations)"
+  },
+  {
+   "slot": "code-23",
+   "category": "code",
+   "status": "resolved",
+   "task_id": "cc-hackerearth-finding_numbers",
+   "group": "code_contests/hackerearth/cc-hackerearth-finding_numbers",
+   "source": "code_contests",
+   "dataset": "deepmind/code_contests",
+   "revision": "802411c3010cb00d1b05bad57ca77365a3c699d6",
+   "split": "train",
+   "file": "train-00021-of-00039-b257bf03d6876780.parquet",
+   "file_sha256": "444b82044438c76d6e2cf79000615349b1dd7ba165da9118924ebcb427e6febc",
+   "row_index": 282,
+   "field": "description",
+   "checker_fields": [
+    "public_tests",
+    "private_tests",
+    "generated_tests"
+   ],
+   "text_sha256": "2772725c5c928de2db08ab8e1d40a6f6f217c43b3ed45457956061e4d5cb86f2",
+   "checker": "stdio",
+   "max_tests": 20,
+   "time_limit_s": 4,
+   "tests_sha256": "9be1cbf0249d682f06d9725ff518e33f8b2a54d9b4be4057ec30c00adedbfb16",
+   "strata": {
+    "judge": "hackerearth",
+    "difficulty": 0
+   },
+   "licence": "CC-BY-4.0",
+   "licence_decision": "allowed (TSAI, 6 Nov): rl-code-code-contests",
+   "generator": "none (human problems and tests; extra tests are programmatic mutations)"
+  },
+  {
+   "slot": "code-24",
+   "category": "code",
+   "status": "resolved",
+   "task_id": "cc-hackerearth-simple_divison_1",
+   "group": "code_contests/hackerearth/cc-hackerearth-simple_divison_1",
+   "source": "code_contests",
+   "dataset": "deepmind/code_contests",
+   "revision": "802411c3010cb00d1b05bad57ca77365a3c699d6",
+   "split": "train",
+   "file": "train-00027-of-00039-f8196766547533a2.parquet",
+   "file_sha256": "8b1464860f954fff785255b6f744aeaaba224c0e6b9ac2c74c6b832eedbbccbb",
+   "row_index": 4,
+   "field": "description",
+   "checker_fields": [
+    "public_tests",
+    "private_tests",
+    "generated_tests"
+   ],
+   "text_sha256": "afa614e82b80a3d2f57c73dbf40c1c015e50b9d93f91b831b49f511e16dd55e8",
+   "checker": "stdio",
+   "max_tests": 20,
+   "time_limit_s": 4,
+   "tests_sha256": "ff5d30157d8ce468c88361df00ce61cda269602e5bbe23964eabd7d29fdd7358",
+   "strata": {
+    "judge": "hackerearth",
+    "difficulty": 0
+   },
+   "licence": "CC-BY-4.0",
+   "licence_decision": "allowed (TSAI, 6 Nov): rl-code-code-contests",
+   "generator": "none (human problems and tests; extra tests are programmatic mutations)"
+  },
+  {
+   "slot": "code-25",
+   "category": "code",
+   "status": "resolved",
+   "task_id": "cc-hackerearth-new_game_of_oz",
+   "group": "code_contests/hackerearth/cc-hackerearth-new_game_of_oz",
+   "source": "code_contests",
+   "dataset": "deepmind/code_contests",
+   "revision": "802411c3010cb00d1b05bad57ca77365a3c699d6",
+   "split": "train",
+   "file": "train-00031-of-00039-40309dd907c042b7.parquet",
+   "file_sha256": "2daeff73dc92b289ec9aeaa6f52af9e7665aae45ade8a172e5dad9a130a48fb2",
+   "row_index": 94,
+   "field": "description",
+   "checker_fields": [
+    "public_tests",
+    "private_tests",
+    "generated_tests"
+   ],
+   "text_sha256": "f99a196791aca01953b140e9560c4533cd5682162b4d76a6b20f8555b0902b94",
+   "checker": "stdio",
+   "max_tests": 20,
+   "time_limit_s": 4,
+   "tests_sha256": "00e6b5f362e62b407f2f05648cebc0744fd3a320a3a407dee5cff31b55637fbe",
+   "strata": {
+    "judge": "hackerearth",
+    "difficulty": 0
+   },
+   "licence": "CC-BY-4.0",
+   "licence_decision": "allowed (TSAI, 6 Nov): rl-code-code-contests",
+   "generator": "none (human problems and tests; extra tests are programmatic mutations)"
+  },
+  {
+   "slot": "code-26",
+   "category": "code",
+   "status": "resolved",
+   "task_id": "cc-hackerearth-come_to_me",
+   "group": "code_contests/hackerearth/cc-hackerearth-come_to_me",
+   "source": "code_contests",
+   "dataset": "deepmind/code_contests",
+   "revision": "802411c3010cb00d1b05bad57ca77365a3c699d6",
+   "split": "train",
+   "file": "train-00007-of-00039-05785de21e8b8429.parquet",
+   "file_sha256": "b9587e7767286768a039a316600232f49edbcdd6f645097db865f8e2ce262304",
+   "row_index": 176,
+   "field": "description",
+   "checker_fields": [
+    "public_tests",
+    "private_tests",
+    "generated_tests"
+   ],
+   "text_sha256": "315bd3d2ae69f8f9d4dd61f95bde78256ae7afdc11c34f2f1da556f4f06b4d43",
+   "checker": "stdio",
+   "max_tests": 20,
+   "time_limit_s": 4,
+   "tests_sha256": "0002313375a028f5d81f2cb9f858bc84525f1a37d942f1df325e47ab182a7393",
+   "strata": {
+    "judge": "hackerearth",
+    "difficulty": 0
+   },
+   "licence": "CC-BY-4.0",
+   "licence_decision": "allowed (TSAI, 6 Nov): rl-code-code-contests",
+   "generator": "none (human problems and tests; extra tests are programmatic mutations)"
+  },
+  {
+   "slot": "code-27",
+   "category": "code",
+   "status": "resolved",
+   "task_id": "cc-hackerearth-shil_and_square_sum_qualifier2",
+   "group": "code_contests/hackerearth/cc-hackerearth-shil_and_square_sum_qualifier2",
+   "source": "code_contests",
+   "dataset": "deepmind/code_contests",
+   "revision": "802411c3010cb00d1b05bad57ca77365a3c699d6",
+   "split": "train",
+   "file": "train-00023-of-00039-d078bcb55e45cbf0.parquet",
+   "file_sha256": "2aa78452a6a3306536b2f000a4431c048282426a47e7197210155bedbad82c49",
+   "row_index": 18,
+   "field": "description",
+   "checker_fields": [
+    "public_tests",
+    "private_tests",
+    "generated_tests"
+   ],
+   "text_sha256": "405a3984785cfd67f00cd57415d7ed9872cd6109e7d0b175ed5eb3da2765ca0c",
+   "checker": "stdio",
+   "max_tests": 20,
+   "time_limit_s": 4,
+   "tests_sha256": "9e46efe0ba13a88a7004a250be7a5e919c49bd94df7855da23e18d90eb76cc75",
+   "strata": {
+    "judge": "hackerearth",
+    "difficulty": 0
+   },
+   "licence": "CC-BY-4.0",
+   "licence_decision": "allowed (TSAI, 6 Nov): rl-code-code-contests",
+   "generator": "none (human problems and tests; extra tests are programmatic mutations)"
+  },
+  {
+   "slot": "code-28",
+   "category": "code",
+   "status": "resolved",
+   "task_id": "cc-hackerearth-appu_and_sugarcane_farm",
+   "group": "code_contests/hackerearth/cc-hackerearth-appu_and_sugarcane_farm",
+   "source": "code_contests",
+   "dataset": "deepmind/code_contests",
+   "revision": "802411c3010cb00d1b05bad57ca77365a3c699d6",
+   "split": "train",
+   "file": "train-00000-of-00039-e991a271dbfa9925.parquet",
+   "file_sha256": "950bfdefde1f274edf93963e7e23c93ab16034de344aa7b7c32d14145e8d5232",
+   "row_index": 67,
+   "field": "description",
+   "checker_fields": [
+    "public_tests",
+    "private_tests",
+    "generated_tests"
+   ],
+   "text_sha256": "ef467fa688c758e75681cac8189d134bc2307536dbbf90cb1a178c67813c2d55",
+   "checker": "stdio",
+   "max_tests": 20,
+   "time_limit_s": 4,
+   "tests_sha256": "05e8c71a630a0c23e9f03b3e3d962fce3d0a6a7712300169868ff713848965a6",
+   "strata": {
+    "judge": "hackerearth",
+    "difficulty": 0
+   },
+   "licence": "CC-BY-4.0",
+   "licence_decision": "allowed (TSAI, 6 Nov): rl-code-code-contests",
+   "generator": "none (human problems and tests; extra tests are programmatic mutations)"
+  },
+  {
+   "slot": "code-29",
+   "category": "code",
+   "status": "resolved",
+   "task_id": "cc-hackerearth-simple_math_1",
+   "group": "code_contests/hackerearth/cc-hackerearth-simple_math_1",
+   "source": "code_contests",
+   "dataset": "deepmind/code_contests",
+   "revision": "802411c3010cb00d1b05bad57ca77365a3c699d6",
+   "split": "train",
+   "file": "train-00010-of-00039-6de28ba20654f69b.parquet",
+   "file_sha256": "0b83e96a5a9717ea60c2e6fd44bde4ac2215834e78ba3b78f04b621a9b7b5cdc",
+   "row_index": 302,
+   "field": "description",
+   "checker_fields": [
+    "public_tests",
+    "private_tests",
+    "generated_tests"
+   ],
+   "text_sha256": "86fa86b9bcc453d426578d46229071f0184ed3c755fde670a2b586dea943b1d6",
+   "checker": "stdio",
+   "max_tests": 20,
+   "time_limit_s": 4,
+   "tests_sha256": "8dbf2577380d421635b6b979ba509f9412fc90348623fbef3acc4dbeb5b98e10",
+   "strata": {
+    "judge": "hackerearth",
+    "difficulty": 0
+   },
+   "licence": "CC-BY-4.0",
+   "licence_decision": "allowed (TSAI, 6 Nov): rl-code-code-contests",
+   "generator": "none (human problems and tests; extra tests are programmatic mutations)"
+  },
+  {
+   "slot": "math-00",
+   "category": "math",
+   "status": "resolved",
+   "task_id": "math-algebra-486",
+   "group": "hendrycks_math/algebra/486",
+   "source": "hendrycks_math",
+   "dataset": "EleutherAI/hendrycks_math",
+   "revision": "21a5633873b6a120296cce3e2df9d5550074f4a3",
+   "split": "train",
+   "file": "algebra/train-00000-of-00001.parquet",
+   "file_sha256": "73347f5b55869f21ff094361025dbd12d291e971aa4d72142eacee10438e449f",
+   "row_index": 486,
+   "field": "problem",
+   "checker_fields": [
+    "solution"
+   ],
+   "text_sha256": "c5ce917db4edd532cb2bc8efd6814f50e5fed9b6e4ac1cd28d637cea7d486181",
+   "checker": "math",
+   "answer_sha256": "6b51d431df5d7f141cbececcf79edf3dd861c3b4069f0b11661a3eefacbba918",
+   "strata": {
+    "level": "Level 1",
+    "subject": "algebra"
+   },
+   "licence": "MIT",
+   "licence_decision": "named eligible in the T2 brief (MIT); no row in licences/licence_table.md yet",
+   "generator": "none (human competition problems and solutions)"
+  },
+  {
+   "slot": "math-01",
+   "category": "math",
+   "status": "resolved",
+   "task_id": "math-prealgebra-305",
+   "group": "hendrycks_math/prealgebra/305",
+   "source": "hendrycks_math",
+   "dataset": "EleutherAI/hendrycks_math",
+   "revision": "21a5633873b6a120296cce3e2df9d5550074f4a3",
+   "split": "train",
+   "file": "prealgebra/train-00000-of-00001.parquet",
+   "file_sha256": "765b526fb5c0b8385cb7be2c16bf4f6f28cf71f2bc15c826abfbb5fa7f8616cc",
+   "row_index": 305,
+   "field": "problem",
+   "checker_fields": [
+    "solution"
+   ],
+   "text_sha256": "757ba5d710cdd638d70f59777631361a74d62ba87d15e4121c6e54bb602fcab3",
+   "checker": "math",
+   "answer_sha256": "15fa199dada96c39a095c83e816ef7ffb21ed751a7d0767597aa7a587dd186cb",
+   "strata": {
+    "level": "Level 1",
+    "subject": "prealgebra"
+   },
+   "licence": "MIT",
+   "licence_decision": "named eligible in the T2 brief (MIT); no row in licences/licence_table.md yet",
+   "generator": "none (human competition problems and solutions)"
+  },
+  {
+   "slot": "math-02",
+   "category": "math",
+   "status": "resolved",
+   "task_id": "math-algebra-131",
+   "group": "hendrycks_math/algebra/131",
+   "source": "hendrycks_math",
+   "dataset": "EleutherAI/hendrycks_math",
+   "revision": "21a5633873b6a120296cce3e2df9d5550074f4a3",
+   "split": "train",
+   "file": "algebra/train-00000-of-00001.parquet",
+   "file_sha256": "73347f5b55869f21ff094361025dbd12d291e971aa4d72142eacee10438e449f",
+   "row_index": 131,
+   "field": "problem",
+   "checker_fields": [
+    "solution"
+   ],
+   "text_sha256": "d1139b14639fdff20280a6f75d6c32b88f7a5f3b1dab87fb729ccfbe16ad3583",
+   "checker": "math",
+   "answer_sha256": "80c3cd40fa35f9088b8741bd8be6153de05f661cfeeb4625ffbf5f4a6c3c02c4",
+   "strata": {
+    "level": "Level 1",
+    "subject": "algebra"
+   },
+   "licence": "MIT",
+   "licence_decision": "named eligible in the T2 brief (MIT); no row in licences/licence_table.md yet",
+   "generator": "none (human competition problems and solutions)"
+  },
+  {
+   "slot": "math-03",
+   "category": "math",
+   "status": "resolved",
+   "task_id": "math-algebra-77",
+   "group": "hendrycks_math/algebra/77",
+   "source": "hendrycks_math",
+   "dataset": "EleutherAI/hendrycks_math",
+   "revision": "21a5633873b6a120296cce3e2df9d5550074f4a3",
+   "split": "train",
+   "file": "algebra/train-00000-of-00001.parquet",
+   "file_sha256": "73347f5b55869f21ff094361025dbd12d291e971aa4d72142eacee10438e449f",
+   "row_index": 77,
+   "field": "problem",
+   "checker_fields": [
+    "solution"
+   ],
+   "text_sha256": "aeece09e57b6f83c3b4898eb700e8d2b28ed1aa7f97578022222138e9c0e1d3c",
+   "checker": "math",
+   "answer_sha256": "580811fa95269f3ecd4f22d176e079d36093573680b6ef66fa341e687a15b5da",
+   "strata": {
+    "level": "Level 1",
+    "subject": "algebra"
+   },
+   "licence": "MIT",
+   "licence_decision": "named eligible in the T2 brief (MIT); no row in licences/licence_table.md yet",
+   "generator": "none (human competition problems and solutions)"
+  },
+  {
+   "slot": "math-04",
+   "category": "math",
+   "status": "resolved",
+   "task_id": "math-prealgebra-1062",
+   "group": "hendrycks_math/prealgebra/1062",
+   "source": "hendrycks_math",
+   "dataset": "EleutherAI/hendrycks_math",
+   "revision": "21a5633873b6a120296cce3e2df9d5550074f4a3",
+   "split": "train",
+   "file": "prealgebra/train-00000-of-00001.parquet",
+   "file_sha256": "765b526fb5c0b8385cb7be2c16bf4f6f28cf71f2bc15c826abfbb5fa7f8616cc",
+   "row_index": 1062,
+   "field": "problem",
+   "checker_fields": [
+    "solution"
+   ],
+   "text_sha256": "ae440e83f6ab05cedc8be942f6b6161b2527f9fc8eb3ea270dbbfd33d50b2784",
+   "checker": "math",
+   "answer_sha256": "b17ef6d19c7a5b1ee83b907c595526dcb1eb06db8227d650d5dda0a9f4ce8cd9",
+   "strata": {
+    "level": "Level 1",
+    "subject": "prealgebra"
+   },
+   "licence": "MIT",
+   "licence_decision": "named eligible in the T2 brief (MIT); no row in licences/licence_table.md yet",
+   "generator": "none (human competition problems and solutions)"
+  },
+  {
+   "slot": "math-05",
+   "category": "math",
+   "status": "resolved",
+   "task_id": "math-algebra-1399",
+   "group": "hendrycks_math/algebra/1399",
+   "source": "hendrycks_math",
+   "dataset": "EleutherAI/hendrycks_math",
+   "revision": "21a5633873b6a120296cce3e2df9d5550074f4a3",
+   "split": "train",
+   "file": "algebra/train-00000-of-00001.parquet",
+   "file_sha256": "73347f5b55869f21ff094361025dbd12d291e971aa4d72142eacee10438e449f",
+   "row_index": 1399,
+   "field": "problem",
+   "checker_fields": [
+    "solution"
+   ],
+   "text_sha256": "21ba445d045d14c75c0fd0c9dca383c105b5d8167d01373d89609d0323297ef0",
+   "checker": "math",
+   "answer_sha256": "b17ef6d19c7a5b1ee83b907c595526dcb1eb06db8227d650d5dda0a9f4ce8cd9",
+   "strata": {
+    "level": "Level 2",
+    "subject": "algebra"
+   },
+   "licence": "MIT",
+   "licence_decision": "named eligible in the T2 brief (MIT); no row in licences/licence_table.md yet",
+   "generator": "none (human competition problems and solutions)"
+  },
+  {
+   "slot": "math-06",
+   "category": "math",
+   "status": "resolved",
+   "task_id": "math-number_theory-683",
+   "group": "hendrycks_math/number_theory/683",
+   "source": "hendrycks_math",
+   "dataset": "EleutherAI/hendrycks_math",
+   "revision": "21a5633873b6a120296cce3e2df9d5550074f4a3",
+   "split": "train",
+   "file": "number_theory/train-00000-of-00001.parquet",
+   "file_sha256": "81c08649149b39811f2d1d7ddf5dfccf6c4c8044a2e169cfb24db09160c941f4",
+   "row_index": 683,
+   "field": "problem",
+   "checker_fields": [
+    "solution"
+   ],
+   "text_sha256": "8c05573456479373cf1a127cc16113d08cb83608d880c8fb5548e21648f134d2",
+   "checker": "math",
+   "answer_sha256": "19581e27de7ced00ff1ce50b2047e7a567c76b1cbaebabe5ef03f7c3017bb5b7",
+   "strata": {
+    "level": "Level 2",
+    "subject": "number_theory"
+   },
+   "licence": "MIT",
+   "licence_decision": "named eligible in the T2 brief (MIT); no row in licences/licence_table.md yet",
+   "generator": "none (human competition problems and solutions)"
+  },
+  {
+   "slot": "math-07",
+   "category": "math",
+   "status": "resolved",
+   "task_id": "math-algebra-778",
+   "group": "hendrycks_math/algebra/778",
+   "source": "hendrycks_math",
+   "dataset": "EleutherAI/hendrycks_math",
+   "revision": "21a5633873b6a120296cce3e2df9d5550074f4a3",
+   "split": "train",
+   "file": "algebra/train-00000-of-00001.parquet",
+   "file_sha256": "73347f5b55869f21ff094361025dbd12d291e971aa4d72142eacee10438e449f",
+   "row_index": 778,
+   "field": "problem",
+   "checker_fields": [
+    "solution"
+   ],
+   "text_sha256": "3de7a634a7524ed1bc7bde7e4a47add6355ea46b8aa56865e66bc808cdc1d892",
+   "checker": "math",
+   "answer_sha256": "39fa9ec190eee7b6f4dff1100d6343e10918d044c75eac8f9e9a2596173f80c9",
+   "strata": {
+    "level": "Level 2",
+    "subject": "algebra"
+   },
+   "licence": "MIT",
+   "licence_decision": "named eligible in the T2 brief (MIT); no row in licences/licence_table.md yet",
+   "generator": "none (human competition problems and solutions)"
+  },
+  {
+   "slot": "math-08",
+   "category": "math",
+   "status": "resolved",
+   "task_id": "math-precalculus-285",
+   "group": "hendrycks_math/precalculus/285",
+   "source": "hendrycks_math",
+   "dataset": "EleutherAI/hendrycks_math",
+   "revision": "21a5633873b6a120296cce3e2df9d5550074f4a3",
+   "split": "train",
+   "file": "precalculus/train-00000-of-00001.parquet",
+   "file_sha256": "28bb1ff95525c8d32521509bef91de76339659f5467a381e6e8deea204538f0e",
+   "row_index": 285,
+   "field": "problem",
+   "checker_fields": [
+    "solution"
+   ],
+   "text_sha256": "e96993d0a76def6ddd53b146a2f92c11980f51e251e078c15788b2f3a44c54e8",
+   "checker": "math",
+   "answer_sha256": "3b1edef63fdf4013bef88b4eb63b8a26ffb96e3a312b0e734ad6e5b2144e9214",
+   "strata": {
+    "level": "Level 2",
+    "subject": "precalculus"
+   },
+   "licence": "MIT",
+   "licence_decision": "named eligible in the T2 brief (MIT); no row in licences/licence_table.md yet",
+   "generator": "none (human competition problems and solutions)"
+  },
+  {
+   "slot": "math-09",
+   "category": "math",
+   "status": "resolved",
+   "task_id": "math-geometry-680",
+   "group": "hendrycks_math/geometry/680",
+   "source": "hendrycks_math",
+   "dataset": "EleutherAI/hendrycks_math",
+   "revision": "21a5633873b6a120296cce3e2df9d5550074f4a3",
+   "split": "train",
+   "file": "geometry/train-00000-of-00001.parquet",
+   "file_sha256": "9dbf5e5b55499e696e0ba72da9d85d4f0be3acbf7eaa6cb014b0fc78bb63784f",
+   "row_index": 680,
+   "field": "problem",
+   "checker_fields": [
+    "solution"
+   ],
+   "text_sha256": "13d9ce40ffb51eaef7a30ee651097dd511aff839d70cbb154a5750ecc3ee7f90",
+   "checker": "math",
+   "answer_sha256": "c3c28f8a73a421a0b8471a2c42a288fbb470b12c27afb76d293855c5537e16aa",
+   "strata": {
+    "level": "Level 2",
+    "subject": "geometry"
+   },
+   "licence": "MIT",
+   "licence_decision": "named eligible in the T2 brief (MIT); no row in licences/licence_table.md yet",
+   "generator": "none (human competition problems and solutions)"
+  },
+  {
+   "slot": "math-10",
+   "category": "math",
+   "status": "resolved",
+   "task_id": "math-algebra-1051",
+   "group": "hendrycks_math/algebra/1051",
+   "source": "hendrycks_math",
+   "dataset": "EleutherAI/hendrycks_math",
+   "revision": "21a5633873b6a120296cce3e2df9d5550074f4a3",
+   "split": "train",
+   "file": "algebra/train-00000-of-00001.parquet",
+   "file_sha256": "73347f5b55869f21ff094361025dbd12d291e971aa4d72142eacee10438e449f",
+   "row_index": 1051,
+   "field": "problem",
+   "checker_fields": [
+    "solution"
+   ],
+   "text_sha256": "f3fc627c9a422c4d4fce9507017d9c9936b9704ac7ce1b7d007ebcaef6fbfc8e",
+   "checker": "math",
+   "answer_sha256": "6f4b6612125fb3a0daecd2799dfd6c9c299424fd920f9b308110a2c1fbd8f443",
+   "strata": {
+    "level": "Level 3",
+    "subject": "algebra"
+   },
+   "licence": "MIT",
+   "licence_decision": "named eligible in the T2 brief (MIT); no row in licences/licence_table.md yet",
+   "generator": "none (human competition problems and solutions)"
+  },
+  {
+   "slot": "math-11",
+   "category": "math",
+   "status": "resolved",
+   "task_id": "math-number_theory-747",
+   "group": "hendrycks_math/number_theory/747",
+   "source": "hendrycks_math",
+   "dataset": "EleutherAI/hendrycks_math",
+   "revision": "21a5633873b6a120296cce3e2df9d5550074f4a3",
+   "split": "train",
+   "file": "number_theory/train-00000-of-00001.parquet",
+   "file_sha256": "81c08649149b39811f2d1d7ddf5dfccf6c4c8044a2e169cfb24db09160c941f4",
+   "row_index": 747,
+   "field": "problem",
+   "checker_fields": [
+    "solution"
+   ],
+   "text_sha256": "90cc86114ba87bc1f4d3b602ebf73dddd81cd7bdd99eb178ab7e16f276906877",
+   "checker": "math",
+   "answer_sha256": "a512db2741cd20693e4b16f19891e72b9ff12cead72761fc5e92d2aaf34740c1",
+   "strata": {
+    "level": "Level 3",
+    "subject": "number_theory"
+   },
+   "licence": "MIT",
+   "licence_decision": "named eligible in the T2 brief (MIT); no row in licences/licence_table.md yet",
+   "generator": "none (human competition problems and solutions)"
+  },
+  {
+   "slot": "math-12",
+   "category": "math",
+   "status": "resolved",
+   "task_id": "math-prealgebra-1039",
+   "group": "hendrycks_math/prealgebra/1039",
+   "source": "hendrycks_math",
+   "dataset": "EleutherAI/hendrycks_math",
+   "revision": "21a5633873b6a120296cce3e2df9d5550074f4a3",
+   "split": "train",
+   "file": "prealgebra/train-00000-of-00001.parquet",
+   "file_sha256": "765b526fb5c0b8385cb7be2c16bf4f6f28cf71f2bc15c826abfbb5fa7f8616cc",
+   "row_index": 1039,
+   "field": "problem",
+   "checker_fields": [
+    "solution"
+   ],
+   "text_sha256": "a061bf6b7650a49cdce918dc218600384744614d48b576e4b5fc020c792920d6",
+   "checker": "math",
+   "answer_sha256": "e7f6c011776e8db7cd330b54174fd76f7d0216b612387a5ffcfb81e6f0919683",
+   "strata": {
+    "level": "Level 3",
+    "subject": "prealgebra"
+   },
+   "licence": "MIT",
+   "licence_decision": "named eligible in the T2 brief (MIT); no row in licences/licence_table.md yet",
+   "generator": "none (human competition problems and solutions)"
+  },
+  {
+   "slot": "math-13",
+   "category": "math",
+   "status": "resolved",
+   "task_id": "math-number_theory-439",
+   "group": "hendrycks_math/number_theory/439",
+   "source": "hendrycks_math",
+   "dataset": "EleutherAI/hendrycks_math",
+   "revision": "21a5633873b6a120296cce3e2df9d5550074f4a3",
+   "split": "train",
+   "file": "number_theory/train-00000-of-00001.parquet",
+   "file_sha256": "81c08649149b39811f2d1d7ddf5dfccf6c4c8044a2e169cfb24db09160c941f4",
+   "row_index": 439,
+   "field": "problem",
+   "checker_fields": [
+    "solution"
+   ],
+   "text_sha256": "dff6faa72e6a56246c66b07106f3db2656fe4fb2a5f0f28ccde365c3ab6e0033",
+   "checker": "math",
+   "answer_sha256": "459535faa370a3b5f8b87203b089623c7aeb9325abf241ec8a685b9c325047a3",
+   "strata": {
+    "level": "Level 3",
+    "subject": "number_theory"
+   },
+   "licence": "MIT",
+   "licence_decision": "named eligible in the T2 brief (MIT); no row in licences/licence_table.md yet",
+   "generator": "none (human competition problems and solutions)"
+  },
+  {
+   "slot": "math-14",
+   "category": "math",
+   "status": "resolved",
+   "task_id": "math-intermediate_algebra-418",
+   "group": "hendrycks_math/intermediate_algebra/418",
+   "source": "hendrycks_math",
+   "dataset": "EleutherAI/hendrycks_math",
+   "revision": "21a5633873b6a120296cce3e2df9d5550074f4a3",
+   "split": "train",
+   "file": "intermediate_algebra/train-00000-of-00001.parquet",
+   "file_sha256": "0c87f3798ebdfb915b1f9b6fc13c1a8d064c3cb91631ccbe85b83ed5d71150f6",
+   "row_index": 418,
+   "field": "problem",
+   "checker_fields": [
+    "solution"
+   ],
+   "text_sha256": "51ed41607ffd40f74b63a0b0b1b0ee419d11a3f078489de42baf46aa25f3a9af",
+   "checker": "math",
+   "answer_sha256": "6f6a4e56098cfd9af29e3ae549503b370211a4e94421457fe4cfd39a38a1fa08",
+   "strata": {
+    "level": "Level 3",
+    "subject": "intermediate_algebra"
+   },
+   "licence": "MIT",
+   "licence_decision": "named eligible in the T2 brief (MIT); no row in licences/licence_table.md yet",
+   "generator": "none (human competition problems and solutions)"
+  },
+  {
+   "slot": "math-15",
+   "category": "math",
+   "status": "resolved",
+   "task_id": "math-geometry-810",
+   "group": "hendrycks_math/geometry/810",
+   "source": "hendrycks_math",
+   "dataset": "EleutherAI/hendrycks_math",
+   "revision": "21a5633873b6a120296cce3e2df9d5550074f4a3",
+   "split": "train",
+   "file": "geometry/train-00000-of-00001.parquet",
+   "file_sha256": "9dbf5e5b55499e696e0ba72da9d85d4f0be3acbf7eaa6cb014b0fc78bb63784f",
+   "row_index": 810,
+   "field": "problem",
+   "checker_fields": [
+    "solution"
+   ],
+   "text_sha256": "d45608158a5860e616810cf6844f198e572ee8e66e401af20a81a9a90fba6967",
+   "checker": "math",
+   "answer_sha256": "8722616204217eddb39e7df969e0698aed8e599ba62ed2de1ce49b03ade0fede",
+   "strata": {
+    "level": "Level 4",
+    "subject": "geometry"
+   },
+   "licence": "MIT",
+   "licence_decision": "named eligible in the T2 brief (MIT); no row in licences/licence_table.md yet",
+   "generator": "none (human competition problems and solutions)"
+  },
+  {
+   "slot": "math-16",
+   "category": "math",
+   "status": "resolved",
+   "task_id": "math-geometry-839",
+   "group": "hendrycks_math/geometry/839",
+   "source": "hendrycks_math",
+   "dataset": "EleutherAI/hendrycks_math",
+   "revision": "21a5633873b6a120296cce3e2df9d5550074f4a3",
+   "split": "train",
+   "file": "geometry/train-00000-of-00001.parquet",
+   "file_sha256": "9dbf5e5b55499e696e0ba72da9d85d4f0be3acbf7eaa6cb014b0fc78bb63784f",
+   "row_index": 839,
+   "field": "problem",
+   "checker_fields": [
+    "solution"
+   ],
+   "text_sha256": "c3238c75f9d47195964d51c0389ff5406c1f3191cd9707f9d50437ed24bd93fa",
+   "checker": "math",
+   "answer_sha256": "27b273d034549ca481bd8f0a7b8b468e0c48730fe85f7f21e2515f1dfee7c221",
+   "strata": {
+    "level": "Level 4",
+    "subject": "geometry"
+   },
+   "licence": "MIT",
+   "licence_decision": "named eligible in the T2 brief (MIT); no row in licences/licence_table.md yet",
+   "generator": "none (human competition problems and solutions)"
+  },
+  {
+   "slot": "math-17",
+   "category": "math",
+   "status": "resolved",
+   "task_id": "math-algebra-1601",
+   "group": "hendrycks_math/algebra/1601",
+   "source": "hendrycks_math",
+   "dataset": "EleutherAI/hendrycks_math",
+   "revision": "21a5633873b6a120296cce3e2df9d5550074f4a3",
+   "split": "train",
+   "file": "algebra/train-00000-of-00001.parquet",
+   "file_sha256": "73347f5b55869f21ff094361025dbd12d291e971aa4d72142eacee10438e449f",
+   "row_index": 1601,
+   "field": "problem",
+   "checker_fields": [
+    "solution"
+   ],
+   "text_sha256": "c488a4e75a302f47d795916619e522518b64f313f751a1c79a7c5704b1ee395d",
+   "checker": "math",
+   "answer_sha256": "a8f075883c25e5d39eb9db06f75a702732f7b6d372b77e5249883d80c77f31d5",
+   "strata": {
+    "level": "Level 4",
+    "subject": "algebra"
+   },
+   "licence": "MIT",
+   "licence_decision": "named eligible in the T2 brief (MIT); no row in licences/licence_table.md yet",
+   "generator": "none (human competition problems and solutions)"
+  },
+  {
+   "slot": "math-18",
+   "category": "math",
+   "status": "resolved",
+   "task_id": "math-intermediate_algebra-761",
+   "group": "hendrycks_math/intermediate_algebra/761",
+   "source": "hendrycks_math",
+   "dataset": "EleutherAI/hendrycks_math",
+   "revision": "21a5633873b6a120296cce3e2df9d5550074f4a3",
+   "split": "train",
+   "file": "intermediate_algebra/train-00000-of-00001.parquet",
+   "file_sha256": "0c87f3798ebdfb915b1f9b6fc13c1a8d064c3cb91631ccbe85b83ed5d71150f6",
+   "row_index": 761,
+   "field": "problem",
+   "checker_fields": [
+    "solution"
+   ],
+   "text_sha256": "bfe58cc9d8f1f363e969b69c5716e1e0187ba360b2afdc44085e07a12daa9ea6",
+   "checker": "math",
+   "answer_sha256": "b281bc2c616cb3c3a097215fdc9397ae87e6e06b156cc34e656be7a1a9ce8839",
+   "strata": {
+    "level": "Level 4",
+    "subject": "intermediate_algebra"
+   },
+   "licence": "MIT",
+   "licence_decision": "named eligible in the T2 brief (MIT); no row in licences/licence_table.md yet",
+   "generator": "none (human competition problems and solutions)"
+  },
+  {
+   "slot": "math-19",
+   "category": "math",
+   "status": "resolved",
+   "task_id": "math-intermediate_algebra-3",
+   "group": "hendrycks_math/intermediate_algebra/3",
+   "source": "hendrycks_math",
+   "dataset": "EleutherAI/hendrycks_math",
+   "revision": "21a5633873b6a120296cce3e2df9d5550074f4a3",
+   "split": "train",
+   "file": "intermediate_algebra/train-00000-of-00001.parquet",
+   "file_sha256": "0c87f3798ebdfb915b1f9b6fc13c1a8d064c3cb91631ccbe85b83ed5d71150f6",
+   "row_index": 3,
+   "field": "problem",
+   "checker_fields": [
+    "solution"
+   ],
+   "text_sha256": "099685a67023caee625a5a0beb0a2f50a8bf4773eb99b21741f2b12ebdd4c716",
+   "checker": "math",
+   "answer_sha256": "349caf8afdd65fe4488d396c4951c65d6f0c4e331e881e2c8994e19393d17f0a",
+   "strata": {
+    "level": "Level 4",
+    "subject": "intermediate_algebra"
+   },
+   "licence": "MIT",
+   "licence_decision": "named eligible in the T2 brief (MIT); no row in licences/licence_table.md yet",
+   "generator": "none (human competition problems and solutions)"
+  },
+  {
+   "slot": "math-20",
+   "category": "math",
+   "status": "resolved",
+   "task_id": "math-geometry-528",
+   "group": "hendrycks_math/geometry/528",
+   "source": "hendrycks_math",
+   "dataset": "EleutherAI/hendrycks_math",
+   "revision": "21a5633873b6a120296cce3e2df9d5550074f4a3",
+   "split": "train",
+   "file": "geometry/train-00000-of-00001.parquet",
+   "file_sha256": "9dbf5e5b55499e696e0ba72da9d85d4f0be3acbf7eaa6cb014b0fc78bb63784f",
+   "row_index": 528,
+   "field": "problem",
+   "checker_fields": [
+    "solution"
+   ],
+   "text_sha256": "b2fe5cc6a020a8b0958138d9714f1facb5000dfac90041e9c15b1e6f02555193",
+   "checker": "math",
+   "answer_sha256": "aae02129362d611717b6c00ad8d73bf820a0f6d88fca8e515cafe78d3a335965",
+   "strata": {
+    "level": "Level 5",
+    "subject": "geometry"
+   },
+   "licence": "MIT",
+   "licence_decision": "named eligible in the T2 brief (MIT); no row in licences/licence_table.md yet",
+   "generator": "none (human competition problems and solutions)"
+  },
+  {
+   "slot": "math-21",
+   "category": "math",
+   "status": "resolved",
+   "task_id": "math-geometry-629",
+   "group": "hendrycks_math/geometry/629",
+   "source": "hendrycks_math",
+   "dataset": "EleutherAI/hendrycks_math",
+   "revision": "21a5633873b6a120296cce3e2df9d5550074f4a3",
+   "split": "train",
+   "file": "geometry/train-00000-of-00001.parquet",
+   "file_sha256": "9dbf5e5b55499e696e0ba72da9d85d4f0be3acbf7eaa6cb014b0fc78bb63784f",
+   "row_index": 629,
+   "field": "problem",
+   "checker_fields": [
+    "solution"
+   ],
+   "text_sha256": "d1e8d8c7d126416de2beedb224bd182f8610a611d3cc26abd0c402e7a6e4b45e",
+   "checker": "math",
+   "answer_sha256": "8527a891e224136950ff32ca212b45bc93f69fbb801c3b1ebedac52775f99e61",
+   "strata": {
+    "level": "Level 5",
+    "subject": "geometry"
+   },
+   "licence": "MIT",
+   "licence_decision": "named eligible in the T2 brief (MIT); no row in licences/licence_table.md yet",
+   "generator": "none (human competition problems and solutions)"
+  },
+  {
+   "slot": "math-22",
+   "category": "math",
+   "status": "resolved",
+   "task_id": "math-number_theory-804",
+   "group": "hendrycks_math/number_theory/804",
+   "source": "hendrycks_math",
+   "dataset": "EleutherAI/hendrycks_math",
+   "revision": "21a5633873b6a120296cce3e2df9d5550074f4a3",
+   "split": "train",
+   "file": "number_theory/train-00000-of-00001.parquet",
+   "file_sha256": "81c08649149b39811f2d1d7ddf5dfccf6c4c8044a2e169cfb24db09160c941f4",
+   "row_index": 804,
+   "field": "problem",
+   "checker_fields": [
+    "solution"
+   ],
+   "text_sha256": "c4552dbf395eeb2371fbb5f4e77f9c7ab72d93714e5141d36a6c163592471d03",
+   "checker": "math",
+   "answer_sha256": "24b5b512af51996638b787383d3a34db28ec2ae4187b7b063527ee08b0f1f6d6",
+   "strata": {
+    "level": "Level 5",
+    "subject": "number_theory"
+   },
+   "licence": "MIT",
+   "licence_decision": "named eligible in the T2 brief (MIT); no row in licences/licence_table.md yet",
+   "generator": "none (human competition problems and solutions)"
+  },
+  {
+   "slot": "math-23",
+   "category": "math",
+   "status": "resolved",
+   "task_id": "math-precalculus-731",
+   "group": "hendrycks_math/precalculus/731",
+   "source": "hendrycks_math",
+   "dataset": "EleutherAI/hendrycks_math",
+   "revision": "21a5633873b6a120296cce3e2df9d5550074f4a3",
+   "split": "train",
+   "file": "precalculus/train-00000-of-00001.parquet",
+   "file_sha256": "28bb1ff95525c8d32521509bef91de76339659f5467a381e6e8deea204538f0e",
+   "row_index": 731,
+   "field": "problem",
+   "checker_fields": [
+    "solution"
+   ],
+   "text_sha256": "03c4c759f5dd7dcfe342b158d908d2a2ba8182b3720c554b8cc36966acb6e2d1",
+   "checker": "math",
+   "answer_sha256": "a43d208cb41d8e02a9cd2901a8ae688f72fe759d2f56d88fbe27b252d79793ee",
+   "strata": {
+    "level": "Level 5",
+    "subject": "precalculus"
+   },
+   "licence": "MIT",
+   "licence_decision": "named eligible in the T2 brief (MIT); no row in licences/licence_table.md yet",
+   "generator": "none (human competition problems and solutions)"
+  },
+  {
+   "slot": "math-24",
+   "category": "math",
+   "status": "resolved",
+   "task_id": "math-intermediate_algebra-632",
+   "group": "hendrycks_math/intermediate_algebra/632",
+   "source": "hendrycks_math",
+   "dataset": "EleutherAI/hendrycks_math",
+   "revision": "21a5633873b6a120296cce3e2df9d5550074f4a3",
+   "split": "train",
+   "file": "intermediate_algebra/train-00000-of-00001.parquet",
+   "file_sha256": "0c87f3798ebdfb915b1f9b6fc13c1a8d064c3cb91631ccbe85b83ed5d71150f6",
+   "row_index": 632,
+   "field": "problem",
+   "checker_fields": [
+    "solution"
+   ],
+   "text_sha256": "b1c6af0a018b11a1db195cccd4fbd5140edb766eb35d5615fd39d7f441804787",
+   "checker": "math",
+   "answer_sha256": "3fdba35f04dc8c462986c992bcf875546257113072a909c162f7e470e581e278",
+   "strata": {
+    "level": "Level 5",
+    "subject": "intermediate_algebra"
+   },
+   "licence": "MIT",
+   "licence_decision": "named eligible in the T2 brief (MIT); no row in licences/licence_table.md yet",
+   "generator": "none (human competition problems and solutions)"
+  },
+  {
+   "slot": "tool_agentic-00",
+   "category": "tool_agentic",
+   "status": "unavailable",
+   "reason": "No approved human-written tool-use prompt set with a tool-call checker is in licences/licence_table.md. The tool-use sets there (Nemotron-Agentic-v1, Nemotron-SFT-Agentic-v2 tool-calling) are model-simulated dialogues, not human-written. The 21 swe-envs (human issues, allowed by TSAI on 4 Nov) are RL training environments that need a multi-turn Docker agent harness; using them here needs a team decision and a hold-out from RL. No prompt was generated in their place."
+  },
+  {
+   "slot": "tool_agentic-01",
+   "category": "tool_agentic",
+   "status": "unavailable",
+   "reason": "No approved human-written tool-use prompt set with a tool-call checker is in licences/licence_table.md. The tool-use sets there (Nemotron-Agentic-v1, Nemotron-SFT-Agentic-v2 tool-calling) are model-simulated dialogues, not human-written. The 21 swe-envs (human issues, allowed by TSAI on 4 Nov) are RL training environments that need a multi-turn Docker agent harness; using them here needs a team decision and a hold-out from RL. No prompt was generated in their place."
+  },
+  {
+   "slot": "tool_agentic-02",
+   "category": "tool_agentic",
+   "status": "unavailable",
+   "reason": "No approved human-written tool-use prompt set with a tool-call checker is in licences/licence_table.md. The tool-use sets there (Nemotron-Agentic-v1, Nemotron-SFT-Agentic-v2 tool-calling) are model-simulated dialogues, not human-written. The 21 swe-envs (human issues, allowed by TSAI on 4 Nov) are RL training environments that need a multi-turn Docker agent harness; using them here needs a team decision and a hold-out from RL. No prompt was generated in their place."
+  },
+  {
+   "slot": "tool_agentic-03",
+   "category": "tool_agentic",
+   "status": "unavailable",
+   "reason": "No approved human-written tool-use prompt set with a tool-call checker is in licences/licence_table.md. The tool-use sets there (Nemotron-Agentic-v1, Nemotron-SFT-Agentic-v2 tool-calling) are model-simulated dialogues, not human-written. The 21 swe-envs (human issues, allowed by TSAI on 4 Nov) are RL training environments that need a multi-turn Docker agent harness; using them here needs a team decision and a hold-out from RL. No prompt was generated in their place."
+  },
+  {
+   "slot": "tool_agentic-04",
+   "category": "tool_agentic",
+   "status": "unavailable",
+   "reason": "No approved human-written tool-use prompt set with a tool-call checker is in licences/licence_table.md. The tool-use sets there (Nemotron-Agentic-v1, Nemotron-SFT-Agentic-v2 tool-calling) are model-simulated dialogues, not human-written. The 21 swe-envs (human issues, allowed by TSAI on 4 Nov) are RL training environments that need a multi-turn Docker agent harness; using them here needs a team decision and a hold-out from RL. No prompt was generated in their place."
+  },
+  {
+   "slot": "tool_agentic-05",
+   "category": "tool_agentic",
+   "status": "unavailable",
+   "reason": "No approved human-written tool-use prompt set with a tool-call checker is in licences/licence_table.md. The tool-use sets there (Nemotron-Agentic-v1, Nemotron-SFT-Agentic-v2 tool-calling) are model-simulated dialogues, not human-written. The 21 swe-envs (human issues, allowed by TSAI on 4 Nov) are RL training environments that need a multi-turn Docker agent harness; using them here needs a team decision and a hold-out from RL. No prompt was generated in their place."
+  },
+  {
+   "slot": "tool_agentic-06",
+   "category": "tool_agentic",
+   "status": "unavailable",
+   "reason": "No approved human-written tool-use prompt set with a tool-call checker is in licences/licence_table.md. The tool-use sets there (Nemotron-Agentic-v1, Nemotron-SFT-Agentic-v2 tool-calling) are model-simulated dialogues, not human-written. The 21 swe-envs (human issues, allowed by TSAI on 4 Nov) are RL training environments that need a multi-turn Docker agent harness; using them here needs a team decision and a hold-out from RL. No prompt was generated in their place."
+  },
+  {
+   "slot": "tool_agentic-07",
+   "category": "tool_agentic",
+   "status": "unavailable",
+   "reason": "No approved human-written tool-use prompt set with a tool-call checker is in licences/licence_table.md. The tool-use sets there (Nemotron-Agentic-v1, Nemotron-SFT-Agentic-v2 tool-calling) are model-simulated dialogues, not human-written. The 21 swe-envs (human issues, allowed by TSAI on 4 Nov) are RL training environments that need a multi-turn Docker agent harness; using them here needs a team decision and a hold-out from RL. No prompt was generated in their place."
+  },
+  {
+   "slot": "tool_agentic-08",
+   "category": "tool_agentic",
+   "status": "unavailable",
+   "reason": "No approved human-written tool-use prompt set with a tool-call checker is in licences/licence_table.md. The tool-use sets there (Nemotron-Agentic-v1, Nemotron-SFT-Agentic-v2 tool-calling) are model-simulated dialogues, not human-written. The 21 swe-envs (human issues, allowed by TSAI on 4 Nov) are RL training environments that need a multi-turn Docker agent harness; using them here needs a team decision and a hold-out from RL. No prompt was generated in their place."
+  },
+  {
+   "slot": "tool_agentic-09",
+   "category": "tool_agentic",
+   "status": "unavailable",
+   "reason": "No approved human-written tool-use prompt set with a tool-call checker is in licences/licence_table.md. The tool-use sets there (Nemotron-Agentic-v1, Nemotron-SFT-Agentic-v2 tool-calling) are model-simulated dialogues, not human-written. The 21 swe-envs (human issues, allowed by TSAI on 4 Nov) are RL training environments that need a multi-turn Docker agent harness; using them here needs a team decision and a hold-out from RL. No prompt was generated in their place."
+  },
+  {
+   "slot": "tool_agentic-10",
+   "category": "tool_agentic",
+   "status": "unavailable",
+   "reason": "No approved human-written tool-use prompt set with a tool-call checker is in licences/licence_table.md. The tool-use sets there (Nemotron-Agentic-v1, Nemotron-SFT-Agentic-v2 tool-calling) are model-simulated dialogues, not human-written. The 21 swe-envs (human issues, allowed by TSAI on 4 Nov) are RL training environments that need a multi-turn Docker agent harness; using them here needs a team decision and a hold-out from RL. No prompt was generated in their place."
+  },
+  {
+   "slot": "tool_agentic-11",
+   "category": "tool_agentic",
+   "status": "unavailable",
+   "reason": "No approved human-written tool-use prompt set with a tool-call checker is in licences/licence_table.md. The tool-use sets there (Nemotron-Agentic-v1, Nemotron-SFT-Agentic-v2 tool-calling) are model-simulated dialogues, not human-written. The 21 swe-envs (human issues, allowed by TSAI on 4 Nov) are RL training environments that need a multi-turn Docker agent harness; using them here needs a team decision and a hold-out from RL. No prompt was generated in their place."
+  },
+  {
+   "slot": "tool_agentic-12",
+   "category": "tool_agentic",
+   "status": "unavailable",
+   "reason": "No approved human-written tool-use prompt set with a tool-call checker is in licences/licence_table.md. The tool-use sets there (Nemotron-Agentic-v1, Nemotron-SFT-Agentic-v2 tool-calling) are model-simulated dialogues, not human-written. The 21 swe-envs (human issues, allowed by TSAI on 4 Nov) are RL training environments that need a multi-turn Docker agent harness; using them here needs a team decision and a hold-out from RL. No prompt was generated in their place."
+  },
+  {
+   "slot": "tool_agentic-13",
+   "category": "tool_agentic",
+   "status": "unavailable",
+   "reason": "No approved human-written tool-use prompt set with a tool-call checker is in licences/licence_table.md. The tool-use sets there (Nemotron-Agentic-v1, Nemotron-SFT-Agentic-v2 tool-calling) are model-simulated dialogues, not human-written. The 21 swe-envs (human issues, allowed by TSAI on 4 Nov) are RL training environments that need a multi-turn Docker agent harness; using them here needs a team decision and a hold-out from RL. No prompt was generated in their place."
+  },
+  {
+   "slot": "tool_agentic-14",
+   "category": "tool_agentic",
+   "status": "unavailable",
+   "reason": "No approved human-written tool-use prompt set with a tool-call checker is in licences/licence_table.md. The tool-use sets there (Nemotron-Agentic-v1, Nemotron-SFT-Agentic-v2 tool-calling) are model-simulated dialogues, not human-written. The 21 swe-envs (human issues, allowed by TSAI on 4 Nov) are RL training environments that need a multi-turn Docker agent harness; using them here needs a team decision and a hold-out from RL. No prompt was generated in their place."
+  },
+  {
+   "slot": "tool_agentic-15",
+   "category": "tool_agentic",
+   "status": "unavailable",
+   "reason": "No approved human-written tool-use prompt set with a tool-call checker is in licences/licence_table.md. The tool-use sets there (Nemotron-Agentic-v1, Nemotron-SFT-Agentic-v2 tool-calling) are model-simulated dialogues, not human-written. The 21 swe-envs (human issues, allowed by TSAI on 4 Nov) are RL training environments that need a multi-turn Docker agent harness; using them here needs a team decision and a hold-out from RL. No prompt was generated in their place."
+  },
+  {
+   "slot": "tool_agentic-16",
+   "category": "tool_agentic",
+   "status": "unavailable",
+   "reason": "No approved human-written tool-use prompt set with a tool-call checker is in licences/licence_table.md. The tool-use sets there (Nemotron-Agentic-v1, Nemotron-SFT-Agentic-v2 tool-calling) are model-simulated dialogues, not human-written. The 21 swe-envs (human issues, allowed by TSAI on 4 Nov) are RL training environments that need a multi-turn Docker agent harness; using them here needs a team decision and a hold-out from RL. No prompt was generated in their place."
+  },
+  {
+   "slot": "tool_agentic-17",
+   "category": "tool_agentic",
+   "status": "unavailable",
+   "reason": "No approved human-written tool-use prompt set with a tool-call checker is in licences/licence_table.md. The tool-use sets there (Nemotron-Agentic-v1, Nemotron-SFT-Agentic-v2 tool-calling) are model-simulated dialogues, not human-written. The 21 swe-envs (human issues, allowed by TSAI on 4 Nov) are RL training environments that need a multi-turn Docker agent harness; using them here needs a team decision and a hold-out from RL. No prompt was generated in their place."
+  },
+  {
+   "slot": "tool_agentic-18",
+   "category": "tool_agentic",
+   "status": "unavailable",
+   "reason": "No approved human-written tool-use prompt set with a tool-call checker is in licences/licence_table.md. The tool-use sets there (Nemotron-Agentic-v1, Nemotron-SFT-Agentic-v2 tool-calling) are model-simulated dialogues, not human-written. The 21 swe-envs (human issues, allowed by TSAI on 4 Nov) are RL training environments that need a multi-turn Docker agent harness; using them here needs a team decision and a hold-out from RL. No prompt was generated in their place."
+  },
+  {
+   "slot": "tool_agentic-19",
+   "category": "tool_agentic",
+   "status": "unavailable",
+   "reason": "No approved human-written tool-use prompt set with a tool-call checker is in licences/licence_table.md. The tool-use sets there (Nemotron-Agentic-v1, Nemotron-SFT-Agentic-v2 tool-calling) are model-simulated dialogues, not human-written. The 21 swe-envs (human issues, allowed by TSAI on 4 Nov) are RL training environments that need a multi-turn Docker agent harness; using them here needs a team decision and a hold-out from RL. No prompt was generated in their place."
+  },
+  {
+   "slot": "indic-00",
+   "category": "indic",
+   "status": "unavailable",
+   "reason": "No cleared human-written Indic prompt source. The human-written candidates in the licence table (CohereLabs/aya_dataset, OpenAssistant/oasst2) are 'TSAI reserves', not cleared, and no pinned copy is local. The allowed indic-align Dolly_T and OpenAssistant_T subsets are machine translations (IndicTrans2), not human-written Indic text. Free-form Indic output also needs the team's blinded human rubric. No prompt was generated in their place."
+  },
+  {
+   "slot": "indic-01",
+   "category": "indic",
+   "status": "unavailable",
+   "reason": "No cleared human-written Indic prompt source. The human-written candidates in the licence table (CohereLabs/aya_dataset, OpenAssistant/oasst2) are 'TSAI reserves', not cleared, and no pinned copy is local. The allowed indic-align Dolly_T and OpenAssistant_T subsets are machine translations (IndicTrans2), not human-written Indic text. Free-form Indic output also needs the team's blinded human rubric. No prompt was generated in their place."
+  },
+  {
+   "slot": "indic-02",
+   "category": "indic",
+   "status": "unavailable",
+   "reason": "No cleared human-written Indic prompt source. The human-written candidates in the licence table (CohereLabs/aya_dataset, OpenAssistant/oasst2) are 'TSAI reserves', not cleared, and no pinned copy is local. The allowed indic-align Dolly_T and OpenAssistant_T subsets are machine translations (IndicTrans2), not human-written Indic text. Free-form Indic output also needs the team's blinded human rubric. No prompt was generated in their place."
+  },
+  {
+   "slot": "indic-03",
+   "category": "indic",
+   "status": "unavailable",
+   "reason": "No cleared human-written Indic prompt source. The human-written candidates in the licence table (CohereLabs/aya_dataset, OpenAssistant/oasst2) are 'TSAI reserves', not cleared, and no pinned copy is local. The allowed indic-align Dolly_T and OpenAssistant_T subsets are machine translations (IndicTrans2), not human-written Indic text. Free-form Indic output also needs the team's blinded human rubric. No prompt was generated in their place."
+  },
+  {
+   "slot": "indic-04",
+   "category": "indic",
+   "status": "unavailable",
+   "reason": "No cleared human-written Indic prompt source. The human-written candidates in the licence table (CohereLabs/aya_dataset, OpenAssistant/oasst2) are 'TSAI reserves', not cleared, and no pinned copy is local. The allowed indic-align Dolly_T and OpenAssistant_T subsets are machine translations (IndicTrans2), not human-written Indic text. Free-form Indic output also needs the team's blinded human rubric. No prompt was generated in their place."
+  },
+  {
+   "slot": "indic-05",
+   "category": "indic",
+   "status": "unavailable",
+   "reason": "No cleared human-written Indic prompt source. The human-written candidates in the licence table (CohereLabs/aya_dataset, OpenAssistant/oasst2) are 'TSAI reserves', not cleared, and no pinned copy is local. The allowed indic-align Dolly_T and OpenAssistant_T subsets are machine translations (IndicTrans2), not human-written Indic text. Free-form Indic output also needs the team's blinded human rubric. No prompt was generated in their place."
+  },
+  {
+   "slot": "indic-06",
+   "category": "indic",
+   "status": "unavailable",
+   "reason": "No cleared human-written Indic prompt source. The human-written candidates in the licence table (CohereLabs/aya_dataset, OpenAssistant/oasst2) are 'TSAI reserves', not cleared, and no pinned copy is local. The allowed indic-align Dolly_T and OpenAssistant_T subsets are machine translations (IndicTrans2), not human-written Indic text. Free-form Indic output also needs the team's blinded human rubric. No prompt was generated in their place."
+  },
+  {
+   "slot": "indic-07",
+   "category": "indic",
+   "status": "unavailable",
+   "reason": "No cleared human-written Indic prompt source. The human-written candidates in the licence table (CohereLabs/aya_dataset, OpenAssistant/oasst2) are 'TSAI reserves', not cleared, and no pinned copy is local. The allowed indic-align Dolly_T and OpenAssistant_T subsets are machine translations (IndicTrans2), not human-written Indic text. Free-form Indic output also needs the team's blinded human rubric. No prompt was generated in their place."
+  },
+  {
+   "slot": "indic-08",
+   "category": "indic",
+   "status": "unavailable",
+   "reason": "No cleared human-written Indic prompt source. The human-written candidates in the licence table (CohereLabs/aya_dataset, OpenAssistant/oasst2) are 'TSAI reserves', not cleared, and no pinned copy is local. The allowed indic-align Dolly_T and OpenAssistant_T subsets are machine translations (IndicTrans2), not human-written Indic text. Free-form Indic output also needs the team's blinded human rubric. No prompt was generated in their place."
+  },
+  {
+   "slot": "indic-09",
+   "category": "indic",
+   "status": "unavailable",
+   "reason": "No cleared human-written Indic prompt source. The human-written candidates in the licence table (CohereLabs/aya_dataset, OpenAssistant/oasst2) are 'TSAI reserves', not cleared, and no pinned copy is local. The allowed indic-align Dolly_T and OpenAssistant_T subsets are machine translations (IndicTrans2), not human-written Indic text. Free-form Indic output also needs the team's blinded human rubric. No prompt was generated in their place."
+  },
+  {
+   "slot": "indic-10",
+   "category": "indic",
+   "status": "unavailable",
+   "reason": "No cleared human-written Indic prompt source. The human-written candidates in the licence table (CohereLabs/aya_dataset, OpenAssistant/oasst2) are 'TSAI reserves', not cleared, and no pinned copy is local. The allowed indic-align Dolly_T and OpenAssistant_T subsets are machine translations (IndicTrans2), not human-written Indic text. Free-form Indic output also needs the team's blinded human rubric. No prompt was generated in their place."
+  },
+  {
+   "slot": "indic-11",
+   "category": "indic",
+   "status": "unavailable",
+   "reason": "No cleared human-written Indic prompt source. The human-written candidates in the licence table (CohereLabs/aya_dataset, OpenAssistant/oasst2) are 'TSAI reserves', not cleared, and no pinned copy is local. The allowed indic-align Dolly_T and OpenAssistant_T subsets are machine translations (IndicTrans2), not human-written Indic text. Free-form Indic output also needs the team's blinded human rubric. No prompt was generated in their place."
+  },
+  {
+   "slot": "indic-12",
+   "category": "indic",
+   "status": "unavailable",
+   "reason": "No cleared human-written Indic prompt source. The human-written candidates in the licence table (CohereLabs/aya_dataset, OpenAssistant/oasst2) are 'TSAI reserves', not cleared, and no pinned copy is local. The allowed indic-align Dolly_T and OpenAssistant_T subsets are machine translations (IndicTrans2), not human-written Indic text. Free-form Indic output also needs the team's blinded human rubric. No prompt was generated in their place."
+  },
+  {
+   "slot": "indic-13",
+   "category": "indic",
+   "status": "unavailable",
+   "reason": "No cleared human-written Indic prompt source. The human-written candidates in the licence table (CohereLabs/aya_dataset, OpenAssistant/oasst2) are 'TSAI reserves', not cleared, and no pinned copy is local. The allowed indic-align Dolly_T and OpenAssistant_T subsets are machine translations (IndicTrans2), not human-written Indic text. Free-form Indic output also needs the team's blinded human rubric. No prompt was generated in their place."
+  },
+  {
+   "slot": "indic-14",
+   "category": "indic",
+   "status": "unavailable",
+   "reason": "No cleared human-written Indic prompt source. The human-written candidates in the licence table (CohereLabs/aya_dataset, OpenAssistant/oasst2) are 'TSAI reserves', not cleared, and no pinned copy is local. The allowed indic-align Dolly_T and OpenAssistant_T subsets are machine translations (IndicTrans2), not human-written Indic text. Free-form Indic output also needs the team's blinded human rubric. No prompt was generated in their place."
+  },
+  {
+   "slot": "general-00",
+   "category": "general",
+   "status": "unavailable",
+   "reason": "databricks/databricks-dolly-15k is allowed (CC-BY-SA-3.0, human-written) in the licence table, but no pinned copy is local and none was fetched for this build. It is also in the SFT mix, so prompts taken from it would need a hold-out from SFT. Free-form output needs the team's blinded human rubric. No prompt was generated in their place."
+  },
+  {
+   "slot": "general-01",
+   "category": "general",
+   "status": "unavailable",
+   "reason": "databricks/databricks-dolly-15k is allowed (CC-BY-SA-3.0, human-written) in the licence table, but no pinned copy is local and none was fetched for this build. It is also in the SFT mix, so prompts taken from it would need a hold-out from SFT. Free-form output needs the team's blinded human rubric. No prompt was generated in their place."
+  },
+  {
+   "slot": "general-02",
+   "category": "general",
+   "status": "unavailable",
+   "reason": "databricks/databricks-dolly-15k is allowed (CC-BY-SA-3.0, human-written) in the licence table, but no pinned copy is local and none was fetched for this build. It is also in the SFT mix, so prompts taken from it would need a hold-out from SFT. Free-form output needs the team's blinded human rubric. No prompt was generated in their place."
+  },
+  {
+   "slot": "general-03",
+   "category": "general",
+   "status": "unavailable",
+   "reason": "databricks/databricks-dolly-15k is allowed (CC-BY-SA-3.0, human-written) in the licence table, but no pinned copy is local and none was fetched for this build. It is also in the SFT mix, so prompts taken from it would need a hold-out from SFT. Free-form output needs the team's blinded human rubric. No prompt was generated in their place."
+  },
+  {
+   "slot": "general-04",
+   "category": "general",
+   "status": "unavailable",
+   "reason": "databricks/databricks-dolly-15k is allowed (CC-BY-SA-3.0, human-written) in the licence table, but no pinned copy is local and none was fetched for this build. It is also in the SFT mix, so prompts taken from it would need a hold-out from SFT. Free-form output needs the team's blinded human rubric. No prompt was generated in their place."
+  },
+  {
+   "slot": "general-05",
+   "category": "general",
+   "status": "unavailable",
+   "reason": "databricks/databricks-dolly-15k is allowed (CC-BY-SA-3.0, human-written) in the licence table, but no pinned copy is local and none was fetched for this build. It is also in the SFT mix, so prompts taken from it would need a hold-out from SFT. Free-form output needs the team's blinded human rubric. No prompt was generated in their place."
+  },
+  {
+   "slot": "general-06",
+   "category": "general",
+   "status": "unavailable",
+   "reason": "databricks/databricks-dolly-15k is allowed (CC-BY-SA-3.0, human-written) in the licence table, but no pinned copy is local and none was fetched for this build. It is also in the SFT mix, so prompts taken from it would need a hold-out from SFT. Free-form output needs the team's blinded human rubric. No prompt was generated in their place."
+  },
+  {
+   "slot": "general-07",
+   "category": "general",
+   "status": "unavailable",
+   "reason": "databricks/databricks-dolly-15k is allowed (CC-BY-SA-3.0, human-written) in the licence table, but no pinned copy is local and none was fetched for this build. It is also in the SFT mix, so prompts taken from it would need a hold-out from SFT. Free-form output needs the team's blinded human rubric. No prompt was generated in their place."
+  },
+  {
+   "slot": "general-08",
+   "category": "general",
+   "status": "unavailable",
+   "reason": "databricks/databricks-dolly-15k is allowed (CC-BY-SA-3.0, human-written) in the licence table, but no pinned copy is local and none was fetched for this build. It is also in the SFT mix, so prompts taken from it would need a hold-out from SFT. Free-form output needs the team's blinded human rubric. No prompt was generated in their place."
+  },
+  {
+   "slot": "general-09",
+   "category": "general",
+   "status": "unavailable",
+   "reason": "databricks/databricks-dolly-15k is allowed (CC-BY-SA-3.0, human-written) in the licence table, but no pinned copy is local and none was fetched for this build. It is also in the SFT mix, so prompts taken from it would need a hold-out from SFT. Free-form output needs the team's blinded human rubric. No prompt was generated in their place."
+  }
+ ],
+ "training_exclusion": {
+  "rule": "These tasks are held out of every SFT/RL training artifact while this suite is in use; RL v1 must drop them before training. Run `effort_suite.py guard` on each training file.",
+  "task_ids": [
+   "cc-aizu-p01160_It_Prefokery_Pio",
+   "cc-aizu-p01173_Dig_or_Climb",
+   "cc-aizu-p01596_Magnum_Tornado",
+   "cc-aizu-p01009_Room_of_Time_and_Spirit",
+   "cc-aizu-p00003_Is_it_a_Right_Triangle_",
+   "cc-aizu-p02365_Minimum_Cost_Arborescence",
+   "cc-aizu-p01412_Power_of_Power",
+   "cc-aizu-p02063_Is_Greedy_Optimal_",
+   "cc-atcoder-p03430_AtCoder_Grand_Contest_021___Reversed_LCS",
+   "cc-atcoder-p02586_AtCoder_Beginner_Contest_175___Picking_Goods",
+   "cc-atcoder-p03185_Educational_DP_Contest___Frog_3",
+   "cc-atcoder-p02725_AtCoder_Beginner_Contest_160___Traveling_Salesman_aro",
+   "cc-atcoder-p02693_AtCoder_Beginner_Contest_165___We_Love_Golf",
+   "cc-atcoder-p02840_AtCoder_Beginner_Contest_147___Sum_Difference",
+   "cc-atcoder-p03303_SoundHound_Inc__Programming_Contest_2018__Masters_Tou",
+   "cc-codechef-ds15",
+   "cc-codechef-flow017",
+   "cc-codechef-crancrd",
+   "cc-codechef-destroy",
+   "cc-codechef-galactik",
+   "cc-codechef-wicq9",
+   "cc-codechef-cstrike3",
+   "cc-hackerearth-super_string",
+   "cc-hackerearth-finding_numbers",
+   "cc-hackerearth-simple_divison_1",
+   "cc-hackerearth-new_game_of_oz",
+   "cc-hackerearth-come_to_me",
+   "cc-hackerearth-shil_and_square_sum_qualifier2",
+   "cc-hackerearth-appu_and_sugarcane_farm",
+   "cc-hackerearth-simple_math_1",
+   "math-algebra-486",
+   "math-prealgebra-305",
+   "math-algebra-131",
+   "math-algebra-77",
+   "math-prealgebra-1062",
+   "math-algebra-1399",
+   "math-number_theory-683",
+   "math-algebra-778",
+   "math-precalculus-285",
+   "math-geometry-680",
+   "math-algebra-1051",
+   "math-number_theory-747",
+   "math-prealgebra-1039",
+   "math-number_theory-439",
+   "math-intermediate_algebra-418",
+   "math-geometry-810",
+   "math-geometry-839",
+   "math-algebra-1601",
+   "math-intermediate_algebra-761",
+   "math-intermediate_algebra-3",
+   "math-geometry-528",
+   "math-geometry-629",
+   "math-number_theory-804",
+   "math-precalculus-731",
+   "math-intermediate_algebra-632"
+  ],
+  "text_sha256": [
+   "ba2f2d940ff45331c8120fa191c075c03d90bd0e600d53a5787ff40532d0a83f",
+   "5b89ef2634653cf72d490dfee700285966f388b2719b3398ccb3860027263ae3",
+   "0909ed67d2202512d9a299d621005ae3ac38cc94467f8d8b525883c7119600d9",
+   "70360e851ae87721c2d5ad050b8786e572bcc842bfab03ec846b72abc52258c6",
+   "440263779497d2f57c925bdae0bc672bef789068ca44b3e4585bfa72bdb4f40d",
+   "529cb600cc1bec2533abb50770c4d52ac9b4c3e50e64b249dc65124bb5fb43c0",
+   "51f0a67bac93bf45f0144e150fc28f11b0b8a70bbdbd1eaf9e624ae2821245fb",
+   "634866fc68d1f97df3b3d3d255ac5413254e33af80c40dc04aeac21b63195a48",
+   "8c252e3b85de945f8e9bc391d67b0b40aa77b27bf6c62816eee9ae2302dfad03",
+   "0ec2691af3d5af2f4b5b8ee86637beb80b28d6c6d9df7edaa32caf4678688579",
+   "3fd2dda1e3230e94830ad503aa92435bfbeb1c1c2f487107ab5bbb78645afffd",
+   "fa0e2498f1a3d2c65b2267414fe0fe359f7ae36d7483d494c30ac881ea984c65",
+   "90ef9ec71f72cf27c59e72df3b6ed55625276c89550731a0aa98a6916689bd0b",
+   "e5c5be715d44386df0d1267bbda3089e545e372485c2efdcadf4e39b7f19f80a",
+   "1bf664aa209bc3f35c1254fedc202ecec0674cc19df63e0301e5a5f6267b46d1",
+   "afe4cab5e5a609cb0fb69ae68dbb22adad1dc5374a43d886a30c244a344fa498",
+   "588e96a070b33911da99469607f7752193b7d172857c6de56c3e924126dab4da",
+   "31ca065ca0fcf2eeb597262e9c0a46cebab2deb19a5d3d465aad8253f645ef72",
+   "ff21d973be7fcfa75fb978add50a238a68b8b45c5b280de3ac92b3cb3cfd425b",
+   "475286d755bbf60a4aa5954a05ce5670a0dbc7e95490a8b928e2608141c710e0",
+   "8a45fb1e427e40ab7e3aa02b56c18238195cce6abf50b82b3708eba25acb18c2",
+   "1303b182cb4d3f5d9f168d94462a14f299ee86ab9fd684d02d61e3bab992c2ae",
+   "f5b18efb19a4e1dbfbc0edce287b109268f469646fb82b39982e527eb78f6cbd",
+   "2772725c5c928de2db08ab8e1d40a6f6f217c43b3ed45457956061e4d5cb86f2",
+   "afa614e82b80a3d2f57c73dbf40c1c015e50b9d93f91b831b49f511e16dd55e8",
+   "f99a196791aca01953b140e9560c4533cd5682162b4d76a6b20f8555b0902b94",
+   "315bd3d2ae69f8f9d4dd61f95bde78256ae7afdc11c34f2f1da556f4f06b4d43",
+   "405a3984785cfd67f00cd57415d7ed9872cd6109e7d0b175ed5eb3da2765ca0c",
+   "ef467fa688c758e75681cac8189d134bc2307536dbbf90cb1a178c67813c2d55",
+   "86fa86b9bcc453d426578d46229071f0184ed3c755fde670a2b586dea943b1d6",
+   "c5ce917db4edd532cb2bc8efd6814f50e5fed9b6e4ac1cd28d637cea7d486181",
+   "757ba5d710cdd638d70f59777631361a74d62ba87d15e4121c6e54bb602fcab3",
+   "d1139b14639fdff20280a6f75d6c32b88f7a5f3b1dab87fb729ccfbe16ad3583",
+   "aeece09e57b6f83c3b4898eb700e8d2b28ed1aa7f97578022222138e9c0e1d3c",
+   "ae440e83f6ab05cedc8be942f6b6161b2527f9fc8eb3ea270dbbfd33d50b2784",
+   "21ba445d045d14c75c0fd0c9dca383c105b5d8167d01373d89609d0323297ef0",
+   "8c05573456479373cf1a127cc16113d08cb83608d880c8fb5548e21648f134d2",
+   "3de7a634a7524ed1bc7bde7e4a47add6355ea46b8aa56865e66bc808cdc1d892",
+   "e96993d0a76def6ddd53b146a2f92c11980f51e251e078c15788b2f3a44c54e8",
+   "13d9ce40ffb51eaef7a30ee651097dd511aff839d70cbb154a5750ecc3ee7f90",
+   "f3fc627c9a422c4d4fce9507017d9c9936b9704ac7ce1b7d007ebcaef6fbfc8e",
+   "90cc86114ba87bc1f4d3b602ebf73dddd81cd7bdd99eb178ab7e16f276906877",
+   "a061bf6b7650a49cdce918dc218600384744614d48b576e4b5fc020c792920d6",
+   "dff6faa72e6a56246c66b07106f3db2656fe4fb2a5f0f28ccde365c3ab6e0033",
+   "51ed41607ffd40f74b63a0b0b1b0ee419d11a3f078489de42baf46aa25f3a9af",
+   "d45608158a5860e616810cf6844f198e572ee8e66e401af20a81a9a90fba6967",
+   "c3238c75f9d47195964d51c0389ff5406c1f3191cd9707f9d50437ed24bd93fa",
+   "c488a4e75a302f47d795916619e522518b64f313f751a1c79a7c5704b1ee395d",
+   "bfe58cc9d8f1f363e969b69c5716e1e0187ba360b2afdc44085e07a12daa9ea6",
+   "099685a67023caee625a5a0beb0a2f50a8bf4773eb99b21741f2b12ebdd4c716",
+   "b2fe5cc6a020a8b0958138d9714f1facb5000dfac90041e9c15b1e6f02555193",
+   "d1e8d8c7d126416de2beedb224bd182f8610a611d3cc26abd0c402e7a6e4b45e",
+   "c4552dbf395eeb2371fbb5f4e77f9c7ab72d93714e5141d36a6c163592471d03",
+   "03c4c759f5dd7dcfe342b158d908d2a2ba8182b3720c554b8cc36966acb6e2d1",
+   "b1c6af0a018b11a1db195cccd4fbd5140edb766eb35d5615fd39d7f441804787"
+  ]
+ },
+ "manifest_sha256": "d6190b2d7b013222e767cdb7c50f66231769385ce1dfb729eaa9530b9ebf9226"
+}

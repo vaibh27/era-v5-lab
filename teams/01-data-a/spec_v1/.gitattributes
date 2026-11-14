@@ -1,0 +1,8 @@
+# Data A: check out code and sheets with LF on every system. The build writes clean.py with LF and a test compares it
+# byte for byte, and sheet hashes are taken over LF bytes, so a Windows CRLF checkout fails both. spec_v1 only
+# (pr-guard allows only .md files directly in the team folder).
+# The gold CSVs are left out on purpose: they are stored with CRLF, and their sha256 is recorded in the harm reports.
+*.py    text eol=lf
+*.md    text eol=lf
+*.json  text eol=lf
+*.parquet binary

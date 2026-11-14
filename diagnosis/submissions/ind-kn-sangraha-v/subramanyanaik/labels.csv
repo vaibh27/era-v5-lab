@@ -1,0 +1,104 @@
+doc_id,read,verdict,diseases,evidence,hex,note
+57ce2d9b66db5303,full,clean,,,,"News report; each paragraph starts with a space (pack layout, not a disease)."
+1fcda2803f7461f9,full,clean,,,,Astrology article; section headings run into the paragraph text.
+bed136d5f732d37e,full,clean,D3,'SIT' at offset 1475,,News report; one English acronym in brackets.
+9c2149f2f02437d7,full,clean,,,,Health article.
+f4d1cc28b367049f,full,clean,,,,"Health tips; opens with ಇದರಿಂದ, so an intro sentence may be missing (not coded)."
+fd6c00c13966aa91,full,clean,,,,Political news teaser; promises details that the text does not contain (not coded).
+0755c0243a89ae35,full,clean,,,,Short viewer comments on a film festival.
+ea913105627f1442,full,clean,,,,"News report; two missing spaces after ಟ್ಟ (ಸಂಕಷ್ಟಉಂಟಾಗುವ, ಸಂಬಂಧಪಟ್ಟಅಧಿಕಾರಿಗಳೊಂದಿಗೆ), treated as typos."
+b69e981078525025,full,clean,,,,"Three reader stories about marriage under one article, with subheadings."
+4876880292eb023a,full,clean,D3,'SAST' at offset 642,,News report; one English acronym.
+d7b808583f272285,full,clean,,,,Community event report.
+588bc9a9857ca23c,full,clean,D3,'WHOನ' at offset 483,,News report; one English acronym with a Kannada suffix (not A6: no look-alike letters).
+0c5774c76d7406af,full,clean,,,,News report.
+a824c159e5813278,full,clean,,,,News report.
+71bbdc9a237d9db9,full,clean,,,,News report on a poet's funeral.
+5eb0a6711f8494a7,full,clean,,,,"News report; a few typos where a word lost its first vowel letter (ತ್ತಮ, ಡಳಿತ), treated as typos."
+c8e7d6ce5b620101,full,clean,,,,Short news teaser for an interview video; the interview itself is not in the text (not coded).
+8fa3e3e34a9c5466,full,clean,,,,News report.
+d415acd09eda466d,full,clean,,,,Film news quoting an actor's social media post.
+b414eb66202967e2,full,clean,,,,News report.
+7de083d57d0e82c3,full,clean,D3,'PS -1' at offset 0 + 'Ponniyan selvan 1' at offset 194,,"Film news; spaced repeated punctuation ("". ."", ""! ! !"") as in other docs of the pack (not coded)."
+bbf82a5bce35099f,full,clean,,,,News report.
+3f32df641418626c,full,clean,D3,'shark curry' at offset 762 + 'dog meat' at offset 1486,,Food article with English glosses in brackets.
+40fdc8a8d6def2f1,full,clean,,,,News report.
+17b85d09ab36583e,full,fix,D4;D3,'ಫಿಂಚ್ಗೆ ಕ್ಯಾಚ್ ನೀಡಿದರು' at offset 6106 + 'ನ್ಯೂಜಿಲೆಂಡ್ ಆರ್ಥಿಕ ಆರಂಭವನ್ನು ಮಾಡಿದೆ' at offset 6466 + 'ಪವರ್ಪ್ಲೇಯ ಆರ್ಥಿಕ ಓವರ್' at offset 11998 | 'AUS' at offset 3470 + 'NZ' at offset 7303,,"Cricket live blog that reads as machine translation: economical is rendered as ಆರ್ಥಿಕ (financial), and the Finch dismissal is told with the wrong case and contradicts the first-over entry. Four orphan lines of the playing XI lists remain near the end."
+490944fa0d0b1d38,full,clean,,,,News report.
+55dd6abdba5f523a,full,clean,D3,'Pitru Paksha' at offset 831 + 'Crow' at offset 1175 + 'Dog' at offset 1555,,Article with English glosses in brackets.
+dbe76700029d8691,full,clean,D3,'IFFKನಲ್ಲೂ' at offset 1845,,Film news; one English acronym with a Kannada suffix.
+fdfe2c7312ddf3ac,full,clean,D3,'Mahalakshmi' at offset 18 + 'Honeymoon' at offset 250,,Film news with English glosses in brackets.
+26875c719f57e191,full,clean,,,,Essay on Deepavali.
+3f9a5d5775e6b53a,full,clean,,,,"News story; the writer took the region Lower Franconia for the woman's name (a source error, not coded)."
+a727a818a6d375ea,full,clean,,,,News report.
+9e3995d5ad1405d1,full,clean,,,,"News report; four words split by a space, likely old print line ends (ಕಂಗಾಲಾ ಗಿದ್ದ, ನೆರವಾ ಗಿದ್ದಾರೆ, ಎಂಬು ವವರು, ಮಹ ದೇವ್ಪ್ರಸಾದ್); not G1 under the TSAI rule, so not coded."
+feb5b2202db31c0f,full,clean,,,,Crime news report.
+d61c4ba6b6bb5d01,full,clean,,,,Short political opinion paragraph.
+ae4ecbe307c76650,full,clean,,,,Sports news.
+cdeebbfe05bed4bd,full,clean,,,,Short accident report.
+65b3b18d6c26d5da,full,fix,C1,'»' at offset 0,,"Sports news; the headline starts with the web page's » bullet, a page marker."
+80d5ce44b3134829,full,clean,,,,News report.
+c6bfd7be73cb1bd0,full,clean,,,,News report.
+3caea4b1c01536fc,full,clean,,,,Film news with several typos.
+a2287a8ebc88c6fa,full,clean,D3,'BBM' at offset 261 + '1st' at offset 398,,Short actor profile.
+58d6ca8f67c3e28f,full,clean,,,,News report.
+9bfcec388580a255,full,clean,,,,"Call for logo entries; the address is an organisation's office, not personal data."
+20f395b4b7278bdd,full,fix,C3,'ಒರೆಸಿ ಮೈದಡವಿ' at offset 2054,,"OCR text of a novel excerpt: a sentence is cut at a page break, letters misread (ಸೊನೆ for ಸೊಸೆ, ನರೂ and ಗರೂ for ಸರೂ, ವ ಗಳನ್ನು), and words split by spaces at old line ends (ವೇದನೆ ಯಿಂದ, ತಂದೆ ಯವರನ್ನು). No code fits OCR letter errors exactly."
+37e066d342e3735c,full,clean,,,,News report.
+595f49cbe3a085a5,full,clean,,,,News report.
+9ae41e2d540b10c9,full,clean,,,,News report.
+d73a1189022ca612,full,clean,,,,"Suicide news report. Sensitive words are written with spaces between letters (ಆ ತ್ಮ ಹ ತ್ಯೆ, ಪ್ರಾ ಣ, ಹಿಂ ಸೆ; 8 words), likely to avoid filters."
+66a8e7e8a631b67c,full,clean,,,,Short news report.
+9c9232a57fa26725,full,clean,,,,Sports news; a few missing spaces after full stops.
+e4cd46beca6887ad,full,clean,,,,News analysis in a numbered list.
+044373c8f094871a,full,clean,,,,News report; names a 17-year-old student by first name only (not F1: no contact or ID data).
+f39ee6797288063c,full,clean,,,,News report.
+7dd5f7e7e9c3a32a,full,clean,,,,News report.
+a5a4f4ccdc282067,full,clean,,,,Short political news teaser for a video (not coded).
+8006212e70e5e2b6,full,clean,,,,Opinion post on student deaths at a college.
+49a9a1fcbf07ff1a,full,clean,,,,News report.
+ccddbaa332ac34ed,full,clean,,,,Film news.
+7528a33459577b08,full,clean,,,,Explainer on Aadhaar card updates.
+bd646f113e0b07c3,full,clean,,,,News report; two subheadings run into the text (ಪಾಟೀಲ್ಇನ್ನು).
+399bfbb7dc658818,full,clean,D3,'KGF Chapter 2' at offset 177 + 'Toofan Song' at offset 215,,Film news with English titles in brackets; quotes a Hindi lyric in Kannada script.
+e75ae1a78be13bb5,full,clean,,,,News report.
+fe1afe848b5e07a9,full,clean,,,,News report.
+3f94b4a8adc23051,full,clean,,,,Festival food article with dash bullets.
+1eed5f9ee253b81e,full,clean,,,,News report.
+873a900cec802826,full,clean,,,,Association meeting report listing office bearers.
+b2a8bca677e023c4,full,clean,,,,Health article.
+aa1522d999feb8c2,full,clean,,,,Biography excerpt that starts mid-story at the marriage (the person is named only later; not coded); missing spaces after full stops and doubled full stops.
+9faa1d2d415493ec,full,clean,,,,News report.
+2f7a77b1adc5c6ba,full,clean,,,,News report.
+7f79f8a11fef33d6,full,clean,,,,Short film news.
+b2b3ba22aece7ae7,full,clean,,,,News report.
+08ff49ffbd98e91c,full,clean,,,,Film gossip about a well-known actress.
+ab7cc592406c6d16,full,clean,,,,"News report; ends with the news site's credit line in brackets (like an agency credit, not coded as C1)."
+a3c26d8de09cb7ac,full,clean,,,,News report.
+8fe6e21f9afe4475,full,clean,,,,"Sports interview: only one of the interviewer's questions survives, the others are gone (likely bold text lost in extraction), and 13 words are split by a space at old print line ends (ಪಸ ರಿಸುವ, ಆಯೋಜ ಕರು, ಬೆಂಗ ಳೂರು); not G1 under the TSAI rule, so not coded."
+ecf9deb79a8b4bbe,full,clean,,,,"Crime news report; names the accused from the police case, the victim is not named (not F1)."
+9e71f7a52ad87583,full,clean,,,,Film news teaser for a fan video that is not in the text (not coded).
+d402ec24cdf0d9db,full,clean,,,,Opinion essay on urban flooding; one typo (ಪ್ರವಾಸ for ಪ್ರವಾಹ).
+1f65058e4c044908,full,clean,,,,News report; amounts in Kannada digits (source style).
+a31a62a785e583a3,full,clean,,,,"Short news items on one topic (a minister's death: the rites, the mourning days, a postponed party event, condolences); each item is complete."
+fb2d1535d176bebf,full,clean,,,,"News report on a pilot killed in a crash; gives his birth date and family names as part of the story (public figure in the news, not F1 under the DISEASES.md list)."
+0dd2fa78b304d3d5,full,clean,,,,"Sports news; the second match lists three set scores for a four-set win (a source error, not coded)."
+cd3267c4996b20ae,full,clean,,,,Book blurb about a Kannada poet.
+cfabab384bd4cf2d,full,clean,,,,"Political news; the speaker is named only in the last paragraph, so the intro is likely missing (not coded); spaced repeated punctuation ("". ."")."
+0fb02c951978c272,full,clean,,,,Village news report.
+03d6af9549cd8d57,full,clean,D3,'#JustAsking' at offset 17,,Short political news with one English hashtag.
+3e136bb24649eb48,full,clean,,,,"Romantic prose letter with short verse lines; spaced repeated punctuation ("". ."")."
+fe20ddf0c73787ce,full,clean,,,,"Essay excerpt on giving in Hindu thought; starts mid-argument (not coded), with a book footnote number after a full stop (ಯಜ್ಞಗಳಾಗುವವು.15) and an opening `` quote that is never closed."
+dbe6e020b197eb7b,full,clean,D3,'US open 2022- Carlos Alcaraz' at offset 0,,Sports news with an English headline prefix.
+5944f7e4c33caac7,full,clean,,,,"Health listicle on beer; 13 words split by a space at old print line ends (ಅಭಿ ವೃದ್ಧಿಪಡಿಸುತ್ತದೆ, ಹೊಂ ದಿದೆ, ಪ್ರಮಾ ಣದಲ್ಲಿ; not G1 under the TSAI rule, so not coded); one bullet ends with a comma; tells non-drinkers they can start drinking beer (health claim, not coded as F3)."
+2044a905f23b0422,full,clean,,,,"Crime news report; names the 8-year-old victim and the teacher, as the news report does (not F1 under the DISEASES.md list)."
+b2d52c6a66049a78,full,clean,,,,Film news; two opening quote marks are never closed.
+7b75879073dd0b4a,full,clean,,,,News report.
+fccdd9f447e1100c,full,clean,,,,News report about a named senior official.
+22cd98453cccb645,full,clean,,,,Literary news report.
+acf44e9d27815841,full,clean,,,,Sports news report.
+f948ac2c4d878204,full,fix,D4;D3,'ಸಿಟ್ರಸ್ ಹಣ್ಣು ಆದರೆ ಹೊಂದಿದ್ದು ಅವು ಪ್ರಮುಖ ಹಸಿರು ಬಣ್ಣದಲ್ಲಿರುತ್ತವೆ' at offset 457 | 'Citrus maxima or Citrus grandis' at offset 128 + 'LDL' at offset 1621 + 'HDL' at offset 1691,,"Health article that reads as translated from English: one sentence has lost the thing it describes (the leaves), and several phrases are word-for-word calques. Also two shifted-key typos for brackets (9Chakotha) and grandis0) and a subheading run into the text (ಕಾಪಾಡುತ್ತದೆಪೊಟ್ಯಾಸಿಯಮ್)."
+25610ed9b6f46add,full,clean,,,,"OCR text of an old book preface, complete with invocation and signature: words split by a space at old print line ends (ಪರಿ ಣಾಮ, ಸಂದ ರ್ಭದಲ್ಲಿ, ಗ್ರಂಥ ವನ್ನು; 12 or more), OCR letter errors (ಹತ್ತೂರ್ವಕವಾಗಿ for ಹೃತ್ಪೂರ್ವಕವಾಗಿ, ಮಹಾವಿರ್ದ್ಯಾ) and a line break inside a sentence. No code fits split words or OCR letter errors, so not coded."
+078bd0ae291234ec,full,clean,,,,Business news on gold prices.
+a1f598da63f8cbe8,full,clean,D3,'(A+)' at offset 518 + '(AB-)' at offset 1758,,"Light-hearted article on blood groups and personality, with blood group labels in Latin letters; one opening bracket is missing (O-))."
+37568ff932f20dff,full,clean,,,,"Sports news on a racism complaint; it starts with the player's quote, so the intro is likely missing (not coded); the slur is reported, not used."

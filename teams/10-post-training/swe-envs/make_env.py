@@ -7,7 +7,9 @@ tests flip.
 
 Steps:
   1. Read the PR, its linked issues and its commits with `gh api`. Refuse PRs or issues that mention an
-     AI coding tool (TSAI 3 Nov rule: closed-model output is out; an unknown generator is out).
+     AI coding tool (TSAI 3 Nov rule: closed-model output is out; an unknown generator is out). Refuse a PR
+     merged on or after 2023-01-01 and a linked issue whose GitHub creation date is missing, unreadable or
+     on or after 2023-01-01 (`check_dates`).
   2. Clone the repo into a cache, take base_commit = merge-base(PR base, PR head), and split
      `git diff base_commit PR-head` into gold.patch (non-test files) and test.patch (test files).
   3. Resolve dependencies as of the merge date (`uv pip install --exclude-newer`) in a throwaway image,
@@ -19,7 +21,7 @@ Steps:
 
 Usage:
     python make_env.py --repo pallets/click --pr 1934 [--python 3.9] [--deps "pytest==6.2.4"]
-           [--targets tests/test_options.py] [--allow-markers] [--force]
+           [--targets tests/test_options.py] [--platform linux/amd64] [--out-dir DIR] [--allow-markers] [--force]
 """
 from __future__ import annotations
 
@@ -68,6 +70,25 @@ def gh_graphql_issues(owner: str, name: str, number: int) -> list[dict]:
     out = json.loads(sh(["gh", "api", "graphql", "-f", f"query={q}", "-F", f"o={owner}", "-F", f"n={name}",
                          "-F", f"p={number}"]))
     return out["data"]["repository"]["pullRequest"]["closingIssuesReferences"]["nodes"]
+
+
+def check_dates(pr: dict, issues: list[dict], cutoff: str = import_pool.CUTOFF) -> list[str]:
+    """Problems with the PR merge date and the linked issues' creation dates (empty list = all before cutoff).
+
+    A missing or unreadable date is a problem, never a pass."""
+    problems = []
+    merged = import_pool.parse_date(pr.get("merged_at"))
+    if merged is None:
+        problems.append(f"PR merged_at missing or invalid: {pr.get('merged_at')!r}")
+    elif merged.isoformat() >= cutoff:
+        problems.append(f"PR merged on {merged} (cutoff {cutoff})")
+    for i in issues:
+        created = import_pool.parse_date(i.get("createdAt"))
+        if created is None:
+            problems.append(f"issue #{i.get('number')} createdAt missing or invalid: {i.get('createdAt')!r}")
+        elif created.isoformat() >= cutoff:
+            problems.append(f"issue #{i.get('number')} opened on {created} (cutoff {cutoff})")
+    return problems
 
 
 def python_for(year: int) -> str:
@@ -119,8 +140,13 @@ def install_spec(cache: Path, sha: str, extra: list[str]) -> list[str]:
     return spec + ["pytest"] + extra
 
 
+def platform_args() -> list[str]:
+    return ["--platform", verify.PLATFORM] if verify.PLATFORM else []
+
+
 def build(tag: str, context: Path) -> None:
-    proc = subprocess.run(["docker", "build", "--progress=plain", "-t", tag, str(context)], capture_output=True, text=True)
+    proc = subprocess.run(["docker", "build", "--progress=plain", *platform_args(), "-t", tag, str(context)],
+                          capture_output=True, text=True)
     if proc.returncode != 0:
         raise SystemExit(f"docker build failed for {tag}:\n{proc.stderr[-3000:]}")
 
@@ -134,7 +160,7 @@ def lock_dependencies(base_image: str, repo: str, sha: str, date: str, spec: lis
     with tempfile.TemporaryDirectory() as tmp:
         Path(tmp, "Dockerfile").write_text(dockerfile(base_image, repo, sha, install), encoding="utf-8")
         build(tag, Path(tmp))
-    frozen = sh(["docker", "run", "--rm", "--network=none", tag, "uv", "pip", "freeze"])
+    frozen = sh(["docker", "run", "--rm", "--network=none", *platform_args(), tag, "uv", "pip", "freeze"])
     keep = [line for line in frozen.splitlines() if line.strip() and not line.startswith("-e") and "file:///repo" not in line
             and not line.startswith(("uv==", "pip=="))]
     subprocess.run(["docker", "rmi", "-f", tag], capture_output=True)
@@ -172,10 +198,12 @@ def main(argv: list[str] | None = None) -> int:
     ap.add_argument("--licence", default="", help="SPDX id of the repo licence (default: from GitHub)")
     ap.add_argument("--build-tools-date", default=BUILD_TOOLS_DATE,
                     help="newest setuptools/wheel allowed for building the project (default %(default)s)")
+    ap.add_argument("--platform", help="e.g. linux/amd64: build, lock and run for this platform (default: host)")
     ap.add_argument("--allow-markers", action="store_true", help="build even if an AI-tool marker is found")
     ap.add_argument("--out-dir", type=Path, help="where to write the env folder (default: swe-envs/)")
     ap.add_argument("--force", action="store_true", help="overwrite an existing env folder")
     args = ap.parse_args(argv)
+    verify.PLATFORM = args.platform
 
     owner, name = args.repo.split("/")
     pr = gh_json(f"repos/{args.repo}/pulls/{args.pr}")
@@ -190,6 +218,9 @@ def main(argv: list[str] | None = None) -> int:
     hits = sorted({m.group(0).lower() for m in AI_MARKERS.finditer(scan)})
     if hits and not args.allow_markers:
         raise SystemExit(f"AI-tool markers found in the PR, commits or issue: {hits}")
+    date_problems = check_dates(pr, issues)
+    if date_problems:
+        raise SystemExit("date check failed: " + "; ".join(date_problems))
 
     instance_id = f"{owner}__{name}-{args.pr}".lower()
     env_dir = (args.out_dir or HERE) / instance_id
@@ -268,6 +299,7 @@ def main(argv: list[str] | None = None) -> int:
         "merge_commit": pr.get("merge_commit_sha"),
         "pr_url": pr["html_url"],
         "issue_urls": [i["url"] for i in issues],
+        "issue_created_at": [i["createdAt"] for i in issues],
         "merged_at": pr["merged_at"],
         "provenance": {
             "problem_statement": "human: upstream GitHub issue text, unchanged (issue.md)",
@@ -291,7 +323,7 @@ def main(argv: list[str] | None = None) -> int:
         "quality_verdict": "unreviewed",  # set to keep / keep-flagged after a SWE-bench Verified style review
     }
     (env_dir / "env.json").write_text(json.dumps(env, indent=1) + "\n", encoding="utf-8")
-    subprocess.run(["docker", "rmi", "-f", env["image"]], capture_output=True)
+    subprocess.run(["docker", "rmi", "-f", verify.image_ref(env)], capture_output=True)
     verify.ensure_image(env_dir, env)
     f2p, p2p, notes = flips(env_dir, env, gold)
     if not f2p:

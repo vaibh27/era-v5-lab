@@ -1,0 +1,1074 @@
+{
+  "actions": {
+    "drop": 474,
+    "fix": 10782,
+    "keep": 13501
+  },
+  "clean_sha256": "97c1a55b89f4a15ef4985928ef124f29f04a37c21038eb0ea4977598767ae58f",
+  "completed_parts": 2,
+  "config_sha256": "56e59b8b739de80e0bc927c7e2aa01eec20d624e10e73648bf361e0d5f0e3a98",
+  "errors": 0,
+  "expected_parts": 86,
+  "input_rows": 24757,
+  "manifest_sha256": "7fd647c8d4662d17e2310efbcc20981d70656fdad2fabb7663c266a2153a1b7e",
+  "optional_f2": false,
+  "output_rows": 24283,
+  "packages": {
+    "ftfy": "6.3.1",
+    "pyarrow": "23.0.1",
+    "tree-sitter": "0.26.0",
+    "tree-sitter-language-pack": "1.22.1"
+  },
+  "parts": [
+    {
+      "actions": {
+        "drop": 259,
+        "fix": 9828,
+        "keep": 4342
+      },
+      "errors": 0,
+      "input_rows": 14429,
+      "input_sha256": "0a4ff1232dcf7f4af2f79476294063714a029054b553690bb8e84da3d88608f2",
+      "language_tags": [
+        "code"
+      ],
+      "output_rows": 14170,
+      "output_sha256": "b98f1f7f56a2a731c6e551c7489c9667805a457783d28704653fb8c0c0f31b72",
+      "pack_id": "code-cpp",
+      "part": "train/code-cpp/part-00001.parquet",
+      "rule_counts": {
+        "DA-A1-001": {
+          "drop": 0,
+          "eligible_by_pack": 14429,
+          "error": 0,
+          "fix": 217,
+          "invocations": 14429,
+          "keep": 14212,
+          "not_reached": 0
+        },
+        "DA-A2-007": {
+          "drop": 0,
+          "eligible_by_pack": 14429,
+          "error": 0,
+          "fix": 1223,
+          "invocations": 14429,
+          "keep": 13206,
+          "not_reached": 0
+        },
+        "DA-A4-002": {
+          "drop": 0,
+          "eligible_by_pack": 14429,
+          "error": 0,
+          "fix": 2,
+          "invocations": 14429,
+          "keep": 14427,
+          "not_reached": 0
+        },
+        "DA-A6-001": {
+          "drop": 0,
+          "eligible_by_pack": 14429,
+          "error": 0,
+          "fix": 3,
+          "invocations": 14429,
+          "keep": 14426,
+          "not_reached": 0
+        },
+        "DA-B3-001": {
+          "drop": 0,
+          "eligible_by_pack": 14429,
+          "error": 0,
+          "fix": 6987,
+          "invocations": 14429,
+          "keep": 7442,
+          "not_reached": 0
+        },
+        "DA-B4-009": {
+          "drop": 0,
+          "eligible_by_pack": 14429,
+          "error": 0,
+          "fix": 1996,
+          "invocations": 14170,
+          "keep": 12174,
+          "not_reached": 259
+        },
+        "DA-E1-005": {
+          "drop": 206,
+          "eligible_by_pack": 14429,
+          "error": 0,
+          "fix": 0,
+          "invocations": 14429,
+          "keep": 14223,
+          "not_reached": 0
+        },
+        "DA-E1-007": {
+          "drop": 44,
+          "eligible_by_pack": 14429,
+          "error": 0,
+          "fix": 0,
+          "invocations": 14223,
+          "keep": 14179,
+          "not_reached": 206
+        },
+        "DA-E2-001": {
+          "drop": 9,
+          "eligible_by_pack": 14429,
+          "error": 0,
+          "fix": 0,
+          "invocations": 14179,
+          "keep": 14170,
+          "not_reached": 250
+        },
+        "DA-E3-003": {
+          "drop": 0,
+          "eligible_by_pack": 14429,
+          "error": 0,
+          "fix": 0,
+          "invocations": 14170,
+          "keep": 14170,
+          "not_reached": 259
+        },
+        "DA-E3-004": {
+          "drop": 0,
+          "eligible_by_pack": 14429,
+          "error": 0,
+          "fix": 0,
+          "invocations": 14170,
+          "keep": 14170,
+          "not_reached": 259
+        },
+        "DA-E4-010": {
+          "drop": 0,
+          "eligible_by_pack": 14429,
+          "error": 0,
+          "fix": 2819,
+          "invocations": 14170,
+          "keep": 11351,
+          "not_reached": 259
+        },
+        "f1_rule.py": {
+          "drop": 0,
+          "eligible_by_pack": 14429,
+          "error": 0,
+          "fix": 0,
+          "invocations": 14170,
+          "keep": 14170,
+          "not_reached": 259
+        }
+      },
+      "seconds": 22.777,
+      "split": "train",
+      "status": "cleaned"
+    },
+    {
+      "actions": {
+        "drop": 215,
+        "fix": 954,
+        "keep": 9159
+      },
+      "errors": 0,
+      "input_rows": 10328,
+      "input_sha256": "84a59d8676186cdd4676e65cd8d00ce5dde23a3abb76be66c1d9389a163194ed",
+      "language_tags": [
+        "bn"
+      ],
+      "output_rows": 10113,
+      "output_sha256": "1d1b94ae7a0dcc7f37b83e16ea6e862421ba279e4c2e1867d64bc168d32a4127",
+      "pack_id": "ind-bn-sangraha-v",
+      "part": "train/ind-bn-sangraha-v/part-00000.parquet",
+      "rule_counts": {
+        "DB-A3-001": {
+          "drop": 0,
+          "eligible_by_pack": 10328,
+          "error": 0,
+          "fix": 127,
+          "invocations": 10328,
+          "keep": 10201,
+          "not_reached": 0
+        },
+        "DB-A5-001": {
+          "drop": 0,
+          "eligible_by_pack": 10328,
+          "error": 0,
+          "fix": 302,
+          "invocations": 10328,
+          "keep": 10026,
+          "not_reached": 0
+        },
+        "DB-A6-001": {
+          "drop": 0,
+          "eligible_by_pack": 10328,
+          "error": 0,
+          "fix": 2,
+          "invocations": 10328,
+          "keep": 10326,
+          "not_reached": 0
+        },
+        "DB-C1-001": {
+          "drop": 0,
+          "eligible_by_pack": 10328,
+          "error": 0,
+          "fix": 130,
+          "invocations": 10149,
+          "keep": 10019,
+          "not_reached": 179
+        },
+        "DB-C2-001": {
+          "drop": 0,
+          "eligible_by_pack": 10328,
+          "error": 0,
+          "fix": 160,
+          "invocations": 10149,
+          "keep": 9989,
+          "not_reached": 179
+        },
+        "DB-C3-001": {
+          "drop": 6,
+          "eligible_by_pack": 10328,
+          "error": 0,
+          "fix": 0,
+          "invocations": 10328,
+          "keep": 10322,
+          "not_reached": 0
+        },
+        "DB-C4-001": {
+          "drop": 1,
+          "eligible_by_pack": 10328,
+          "error": 0,
+          "fix": 0,
+          "invocations": 10322,
+          "keep": 10321,
+          "not_reached": 6
+        },
+        "DB-C5-007": {
+          "drop": 0,
+          "eligible_by_pack": 10328,
+          "error": 0,
+          "fix": 1,
+          "invocations": 10149,
+          "keep": 10148,
+          "not_reached": 179
+        },
+        "DB-D3-001": {
+          "drop": 36,
+          "eligible_by_pack": 10328,
+          "error": 0,
+          "fix": 0,
+          "invocations": 10149,
+          "keep": 10113,
+          "not_reached": 179
+        },
+        "DB-D4-001": {
+          "drop": 160,
+          "eligible_by_pack": 10328,
+          "error": 0,
+          "fix": 0,
+          "invocations": 10321,
+          "keep": 10161,
+          "not_reached": 7
+        },
+        "DB-F3-001": {
+          "drop": 12,
+          "eligible_by_pack": 10328,
+          "error": 0,
+          "fix": 0,
+          "invocations": 10161,
+          "keep": 10149,
+          "not_reached": 167
+        },
+        "DB-G1-001": {
+          "drop": 0,
+          "eligible_by_pack": 10328,
+          "error": 0,
+          "fix": 11,
+          "invocations": 10328,
+          "keep": 10317,
+          "not_reached": 0
+        },
+        "DB-G2-001": {
+          "drop": 0,
+          "eligible_by_pack": 10328,
+          "error": 0,
+          "fix": 341,
+          "invocations": 10328,
+          "keep": 9987,
+          "not_reached": 0
+        },
+        "f1_rule.py": {
+          "drop": 0,
+          "eligible_by_pack": 10328,
+          "error": 0,
+          "fix": 10,
+          "invocations": 10113,
+          "keep": 10103,
+          "not_reached": 215
+        }
+      },
+      "seconds": 10.974,
+      "split": "train",
+      "status": "cleaned"
+    }
+  ],
+  "peak_rss_mib": 182.891,
+  "python": "3.12.12",
+  "rule_count_semantics": "sequential invocations inside actual clean.clean/_run; fixes on later-dropped docs still count; not independent rule hits",
+  "rule_scope": {
+    "DA-A1-001": [
+      "code-cpp",
+      "code-go",
+      "code-java",
+      "code-js-ts",
+      "code-python",
+      "code-rust"
+    ],
+    "DA-A1-004": [
+      "en-dclm",
+      "en-fineweb-edu",
+      "en-nemotroncc",
+      "en-nemotroncc-synth"
+    ],
+    "DA-A1-005": [
+      "math-finemath"
+    ],
+    "DA-A1-006": [
+      "sci-finepdfs"
+    ],
+    "DA-A2-007": [
+      "code-cpp",
+      "code-go",
+      "code-java",
+      "code-js-ts",
+      "code-python",
+      "code-rust"
+    ],
+    "DA-A2-008": [
+      "en-dclm",
+      "en-fineweb-edu",
+      "en-nemotroncc",
+      "en-nemotroncc-synth"
+    ],
+    "DA-A3-001": [
+      "math-finemath",
+      "math-megamath"
+    ],
+    "DA-A3-002": [
+      "en-dclm",
+      "en-fineweb-edu",
+      "en-nemotroncc",
+      "en-nemotroncc-synth"
+    ],
+    "DA-A4-002": [
+      "code-cpp",
+      "code-go",
+      "code-java",
+      "code-js-ts",
+      "code-python",
+      "code-rust"
+    ],
+    "DA-A4-003": [
+      "code-java"
+    ],
+    "DA-A5-001": [
+      "en-dclm",
+      "en-fineweb-edu",
+      "en-nemotroncc",
+      "en-nemotroncc-synth"
+    ],
+    "DA-A5-002": [
+      "math-finemath",
+      "math-megamath"
+    ],
+    "DA-A6-001": [
+      "code-cpp",
+      "code-go",
+      "code-java",
+      "code-js-ts",
+      "code-python",
+      "code-rust"
+    ],
+    "DA-A6-002": [
+      "sci-finepdfs"
+    ],
+    "DA-A6-003": [
+      "math-finemath"
+    ],
+    "DA-B1-002": [
+      "en-dclm",
+      "en-fineweb-edu",
+      "en-nemotroncc",
+      "en-nemotroncc-synth"
+    ],
+    "DA-B2-001": [
+      "math-finemath",
+      "math-megamath"
+    ],
+    "DA-B2-002": [
+      "en-dclm",
+      "en-fineweb-edu",
+      "en-nemotroncc",
+      "en-nemotroncc-synth"
+    ],
+    "DA-B2-003": [
+      "sci-finepdfs"
+    ],
+    "DA-B3-001": [
+      "code-cpp",
+      "code-go",
+      "code-java",
+      "code-js-ts",
+      "code-python",
+      "code-rust"
+    ],
+    "DA-B4-001": [
+      "math-finemath",
+      "math-megamath"
+    ],
+    "DA-B4-007": [
+      "en-dclm",
+      "en-fineweb-edu",
+      "en-nemotroncc",
+      "en-nemotroncc-synth"
+    ],
+    "DA-B4-008": [
+      "en-dclm",
+      "en-fineweb-edu",
+      "en-nemotroncc",
+      "en-nemotroncc-synth"
+    ],
+    "DA-B4-009": [
+      "code-cpp",
+      "code-go",
+      "code-java",
+      "code-js-ts",
+      "code-python",
+      "code-rust"
+    ],
+    "DA-B4-010": [
+      "en-dclm",
+      "en-fineweb-edu",
+      "en-nemotroncc",
+      "en-nemotroncc-synth"
+    ],
+    "DA-B4-011": [
+      "en-dclm",
+      "en-fineweb-edu",
+      "en-nemotroncc",
+      "en-nemotroncc-synth"
+    ],
+    "DA-B4-012": [
+      "en-dclm",
+      "en-fineweb-edu",
+      "en-nemotroncc",
+      "en-nemotroncc-synth"
+    ],
+    "DA-B4-013": [
+      "sci-finepdfs"
+    ],
+    "DA-B5-001": [
+      "math-finemath",
+      "math-megamath"
+    ],
+    "DA-B5-002": [
+      "sci-finepdfs"
+    ],
+    "DA-C1-001": [
+      "math-finemath"
+    ],
+    "DA-C1-004": [
+      "code-go"
+    ],
+    "DA-C1-005": [
+      "code-java"
+    ],
+    "DA-C1-006": [
+      "en-dclm",
+      "en-fineweb-edu",
+      "en-nemotroncc",
+      "en-nemotroncc-synth"
+    ],
+    "DA-C1-007": [
+      "sci-finepdfs"
+    ],
+    "DA-C2-001": [
+      "math-finemath"
+    ],
+    "DA-C2-003": [
+      "en-dclm",
+      "en-fineweb-edu",
+      "en-nemotroncc",
+      "en-nemotroncc-synth"
+    ],
+    "DA-C2-004": [
+      "sci-finepdfs"
+    ],
+    "DA-C3-001": [
+      "en-dclm",
+      "en-fineweb-edu",
+      "en-nemotroncc",
+      "en-nemotroncc-synth"
+    ],
+    "DA-C3-002": [
+      "code-go"
+    ],
+    "DA-C3-003": [
+      "en-dclm",
+      "en-fineweb-edu",
+      "en-nemotroncc",
+      "en-nemotroncc-synth"
+    ],
+    "DA-C3-004": [
+      "math-finemath"
+    ],
+    "DA-C3-005": [
+      "math-finemath"
+    ],
+    "DA-C3-006": [
+      "sci-finepdfs"
+    ],
+    "DA-C4-002": [
+      "code-java"
+    ],
+    "DA-C4-003": [
+      "sci-finepdfs"
+    ],
+    "DA-C5-001": [
+      "math-megamath"
+    ],
+    "DA-C5-002": [
+      "en-dclm",
+      "en-fineweb-edu",
+      "en-nemotroncc",
+      "en-nemotroncc-synth"
+    ],
+    "DA-C5-005": [
+      "en-dclm",
+      "en-fineweb-edu",
+      "en-nemotroncc",
+      "en-nemotroncc-synth"
+    ],
+    "DA-C5-006": [
+      "math-finemath",
+      "math-megamath"
+    ],
+    "DA-D1-001": [
+      "sci-finepdfs"
+    ],
+    "DA-D3-003": [
+      "en-dclm",
+      "en-fineweb-edu",
+      "en-nemotroncc",
+      "en-nemotroncc-synth"
+    ],
+    "DA-D3-004": [
+      "sci-finepdfs"
+    ],
+    "DA-D3-005": [
+      "math-finemath",
+      "math-megamath"
+    ],
+    "DA-D4-001": [
+      "en-dclm",
+      "en-fineweb-edu",
+      "en-nemotroncc",
+      "en-nemotroncc-synth"
+    ],
+    "DA-E1-001": [
+      "code-go"
+    ],
+    "DA-E1-004": [
+      "code-python",
+      "code-rust"
+    ],
+    "DA-E1-005": [
+      "code-cpp"
+    ],
+    "DA-E1-006": [
+      "code-java"
+    ],
+    "DA-E1-007": [
+      "code-cpp"
+    ],
+    "DA-E1-008": [
+      "code-js-ts"
+    ],
+    "DA-E2-001": [
+      "code-cpp",
+      "code-go",
+      "code-java",
+      "code-js-ts",
+      "code-python",
+      "code-rust"
+    ],
+    "DA-E3-003": [
+      "code-cpp",
+      "code-go",
+      "code-java",
+      "code-js-ts",
+      "code-python",
+      "code-rust"
+    ],
+    "DA-E3-004": [
+      "code-cpp",
+      "code-go",
+      "code-java",
+      "code-js-ts",
+      "code-python",
+      "code-rust"
+    ],
+    "DA-E4-005": [
+      "code-go"
+    ],
+    "DA-E4-007": [
+      "code-js-ts"
+    ],
+    "DA-E4-009": [
+      "code-java"
+    ],
+    "DA-E4-010": [
+      "code-cpp",
+      "code-go",
+      "code-java",
+      "code-python",
+      "code-rust"
+    ],
+    "DA-F1-005": [
+      "en-dclm",
+      "en-fineweb-edu",
+      "en-nemotroncc",
+      "en-nemotroncc-synth"
+    ],
+    "DA-F1-006": [
+      "sci-finepdfs"
+    ],
+    "DB-A3-001": [
+      "ind-bn-fw2",
+      "ind-bn-sangraha-v"
+    ],
+    "DB-A3-002": [
+      "ind-gu-fw2"
+    ],
+    "DB-A3-004": [
+      "ind-kn-fw2",
+      "ind-kn-sangraha-s",
+      "ind-kn-sangraha-v"
+    ],
+    "DB-A4-001": [
+      "ind-sa-fw2"
+    ],
+    "DB-A5-001": [
+      "ind-bn-fw2",
+      "ind-bn-sangraha-v"
+    ],
+    "DB-A5-003": [
+      "ind-gu-fw2"
+    ],
+    "DB-A5-006": [
+      "ind-mr-fw2",
+      "ind-mr-sangraha-v"
+    ],
+    "DB-A5-008": [
+      "ind-sa-fw2"
+    ],
+    "DB-A6-001": [
+      "ind-bn-fw2",
+      "ind-bn-sangraha-v"
+    ],
+    "DB-A6-003": [
+      "ind-gu-fw2"
+    ],
+    "DB-A6-004": [
+      "ind-hi-fw2",
+      "ind-hi-hplt",
+      "ind-hi-indiccorp"
+    ],
+    "DB-A6-006": [
+      "ind-kn-fw2",
+      "ind-kn-sangraha-s"
+    ],
+    "DB-A6-007": [
+      "ind-kn-sangraha-v"
+    ],
+    "DB-A6-008": [
+      "ind-mr-fw2"
+    ],
+    "DB-A6-009": [
+      "ind-mr-sangraha-v"
+    ],
+    "DB-A6-012": [
+      "ind-ta-sangraha-v"
+    ],
+    "DB-A6-013": [
+      "ind-te-fw2",
+      "ind-te-sangraha-v"
+    ],
+    "DB-A6-014": [
+      "ind-te-sangraha-s"
+    ],
+    "DB-B2-001": [
+      "ind-hi-fw2",
+      "ind-hi-indiccorp"
+    ],
+    "DB-B2-002": [
+      "ind-hi-hplt"
+    ],
+    "DB-B2-003": [
+      "ind-kn-fw2",
+      "ind-kn-sangraha-s",
+      "ind-kn-sangraha-v"
+    ],
+    "DB-B2-004": [
+      "ind-te-fw2",
+      "ind-te-sangraha-v"
+    ],
+    "DB-B2-005": [
+      "ind-te-sangraha-s"
+    ],
+    "DB-B3-001": [
+      "ind-kn-fw2",
+      "ind-kn-sangraha-s",
+      "ind-kn-sangraha-v"
+    ],
+    "DB-B4-001": [
+      "ind-gu-fw2"
+    ],
+    "DB-B4-002": [
+      "ind-kn-fw2",
+      "ind-kn-sangraha-s",
+      "ind-kn-sangraha-v"
+    ],
+    "DB-B4-003": [
+      "ind-mr-fw2",
+      "ind-mr-sangraha-v"
+    ],
+    "DB-B4-004": [
+      "ind-sa-fw2"
+    ],
+    "DB-B4-005": [
+      "ind-ta-sangraha-v"
+    ],
+    "DB-B4-006": [
+      "ind-te-fw2",
+      "ind-te-sangraha-s",
+      "ind-te-sangraha-v"
+    ],
+    "DB-C1-001": [
+      "ind-bn-fw2",
+      "ind-bn-sangraha-v"
+    ],
+    "DB-C1-003": [
+      "ind-gu-fw2"
+    ],
+    "DB-C1-005": [
+      "ind-hi-fw2",
+      "ind-hi-indiccorp"
+    ],
+    "DB-C1-006": [
+      "ind-hi-hplt"
+    ],
+    "DB-C1-008": [
+      "ind-kn-fw2"
+    ],
+    "DB-C1-010": [
+      "ind-kn-sangraha-s",
+      "ind-kn-sangraha-v"
+    ],
+    "DB-C1-012": [
+      "ind-mr-fw2",
+      "ind-mr-sangraha-v"
+    ],
+    "DB-C1-013": [
+      "ind-sa-fw2"
+    ],
+    "DB-C1-015": [
+      "ind-ta-sangraha-v"
+    ],
+    "DB-C1-016": [
+      "ind-te-fw2",
+      "ind-te-sangraha-s",
+      "ind-te-sangraha-v"
+    ],
+    "DB-C2-001": [
+      "ind-bn-fw2",
+      "ind-bn-sangraha-v"
+    ],
+    "DB-C2-003": [
+      "ind-gu-fw2"
+    ],
+    "DB-C2-004": [
+      "ind-hi-hplt",
+      "ind-hi-indiccorp"
+    ],
+    "DB-C2-006": [
+      "ind-kn-fw2",
+      "ind-kn-sangraha-s"
+    ],
+    "DB-C2-008": [
+      "ind-kn-sangraha-v"
+    ],
+    "DB-C2-010": [
+      "ind-mr-sangraha-v"
+    ],
+    "DB-C2-012": [
+      "ind-ta-sangraha-v"
+    ],
+    "DB-C2-013": [
+      "ind-te-fw2",
+      "ind-te-sangraha-s",
+      "ind-te-sangraha-v"
+    ],
+    "DB-C3-001": [
+      "ind-bn-fw2",
+      "ind-bn-sangraha-v"
+    ],
+    "DB-C3-002": [
+      "ind-hi-hplt",
+      "ind-hi-indiccorp"
+    ],
+    "DB-C3-004": [
+      "ind-sa-fw2"
+    ],
+    "DB-C3-006": [
+      "ind-hi-fw2"
+    ],
+    "DB-C3-010": [
+      "ind-mr-fw2",
+      "ind-mr-sangraha-v"
+    ],
+    "DB-C4-001": [
+      "ind-bn-fw2",
+      "ind-bn-sangraha-v"
+    ],
+    "DB-C4-002": [
+      "ind-hi-fw2",
+      "ind-hi-indiccorp"
+    ],
+    "DB-C4-003": [
+      "ind-hi-hplt"
+    ],
+    "DB-C4-005": [
+      "ind-mr-fw2"
+    ],
+    "DB-C4-006": [
+      "ind-te-fw2",
+      "ind-te-sangraha-s",
+      "ind-te-sangraha-v"
+    ],
+    "DB-C4-007": [
+      "ind-gu-fw2"
+    ],
+    "DB-C4-009": [
+      "ind-mr-sangraha-v"
+    ],
+    "DB-C4-010": [
+      "ind-sa-fw2"
+    ],
+    "DB-C5-001": [
+      "ind-hi-fw2",
+      "ind-hi-hplt",
+      "ind-hi-indiccorp"
+    ],
+    "DB-C5-003": [
+      "ind-kn-sangraha-s",
+      "ind-kn-sangraha-v"
+    ],
+    "DB-C5-004": [
+      "ind-mr-fw2",
+      "ind-mr-sangraha-v"
+    ],
+    "DB-C5-005": [
+      "ind-ta-sangraha-v"
+    ],
+    "DB-C5-006": [
+      "ind-te-fw2",
+      "ind-te-sangraha-s",
+      "ind-te-sangraha-v"
+    ],
+    "DB-C5-007": [
+      "ind-bn-fw2",
+      "ind-bn-sangraha-v"
+    ],
+    "DB-C5-009": [
+      "ind-gu-fw2"
+    ],
+    "DB-C5-011": [
+      "ind-kn-fw2"
+    ],
+    "DB-C5-014": [
+      "ind-sa-fw2"
+    ],
+    "DB-D2-001": [
+      "ind-hi-fw2",
+      "ind-hi-hplt",
+      "ind-hi-indiccorp"
+    ],
+    "DB-D2-002": [
+      "ind-sa-fw2"
+    ],
+    "DB-D3-001": [
+      "ind-bn-fw2",
+      "ind-bn-sangraha-v"
+    ],
+    "DB-D3-003": [
+      "ind-gu-fw2"
+    ],
+    "DB-D3-005": [
+      "ind-hi-fw2",
+      "ind-hi-indiccorp"
+    ],
+    "DB-D3-006": [
+      "ind-hi-hplt"
+    ],
+    "DB-D3-008": [
+      "ind-kn-fw2",
+      "ind-kn-sangraha-s"
+    ],
+    "DB-D3-009": [
+      "ind-kn-sangraha-v"
+    ],
+    "DB-D3-010": [
+      "ind-mr-fw2"
+    ],
+    "DB-D3-011": [
+      "ind-mr-sangraha-v"
+    ],
+    "DB-D3-012": [
+      "ind-sa-fw2"
+    ],
+    "DB-D3-014": [
+      "ind-te-fw2",
+      "ind-te-sangraha-s",
+      "ind-te-sangraha-v"
+    ],
+    "DB-D4-001": [
+      "ind-bn-fw2",
+      "ind-bn-sangraha-v"
+    ],
+    "DB-D4-003": [
+      "ind-gu-fw2"
+    ],
+    "DB-D4-005": [
+      "ind-hi-fw2",
+      "ind-hi-hplt",
+      "ind-hi-indiccorp"
+    ],
+    "DB-D4-007": [
+      "ind-kn-fw2",
+      "ind-kn-sangraha-s",
+      "ind-kn-sangraha-v"
+    ],
+    "DB-D4-008": [
+      "ind-mr-fw2",
+      "ind-mr-sangraha-v"
+    ],
+    "DB-D4-009": [
+      "ind-sa-fw2"
+    ],
+    "DB-D4-011": [
+      "ind-te-fw2",
+      "ind-te-sangraha-v"
+    ],
+    "DB-D4-012": [
+      "ind-te-sangraha-s"
+    ],
+    "DB-D5-001": [
+      "ind-te-fw2",
+      "ind-te-sangraha-s",
+      "ind-te-sangraha-v"
+    ],
+    "DB-D5-002": [
+      "ind-hi-fw2",
+      "ind-hi-hplt",
+      "ind-hi-indiccorp"
+    ],
+    "DB-F3-001": [
+      "ind-bn-fw2",
+      "ind-bn-sangraha-v"
+    ],
+    "DB-F3-003": [
+      "ind-te-fw2",
+      "ind-te-sangraha-s",
+      "ind-te-sangraha-v"
+    ],
+    "DB-G1-001": [
+      "ind-bn-fw2",
+      "ind-bn-sangraha-v"
+    ],
+    "DB-G1-003": [
+      "ind-gu-fw2"
+    ],
+    "DB-G1-004": [
+      "ind-hi-fw2",
+      "ind-hi-hplt",
+      "ind-hi-indiccorp"
+    ],
+    "DB-G1-005": [
+      "ind-kn-fw2",
+      "ind-kn-sangraha-s"
+    ],
+    "DB-G1-006": [
+      "ind-mr-fw2"
+    ],
+    "DB-G1-007": [
+      "ind-sa-fw2"
+    ],
+    "DB-G1-010": [
+      "ind-te-fw2",
+      "ind-te-sangraha-s",
+      "ind-te-sangraha-v"
+    ],
+    "DB-G1-011": [
+      "ind-kn-sangraha-v"
+    ],
+    "DB-G2-001": [
+      "ind-bn-fw2",
+      "ind-bn-sangraha-v"
+    ],
+    "DB-G2-003": [
+      "ind-sa-fw2"
+    ],
+    "DB-G4-002": [
+      "ind-mr-fw2",
+      "ind-mr-sangraha-v"
+    ],
+    "DB-G4-003": [
+      "ind-sa-fw2"
+    ],
+    "DB-G4-004": [
+      "ind-ta-sangraha-v"
+    ],
+    "DB-H3-001": [
+      "ind-sa-fw2"
+    ],
+    "f1_rule.py": [
+      "code-cpp",
+      "code-go",
+      "code-java",
+      "code-js-ts",
+      "code-python",
+      "code-rust",
+      "ind-bn-fw2",
+      "ind-bn-sangraha-v",
+      "ind-gu-fw2",
+      "ind-hi-fw2",
+      "ind-hi-hplt",
+      "ind-hi-indiccorp",
+      "ind-kn-fw2",
+      "ind-kn-sangraha-s",
+      "ind-kn-sangraha-v",
+      "ind-mr-fw2",
+      "ind-mr-sangraha-v",
+      "ind-sa-fw2",
+      "ind-ta-sangraha-v",
+      "ind-te-fw2",
+      "ind-te-sangraha-s",
+      "ind-te-sangraha-v",
+      "math-finemath",
+      "math-megamath",
+      "sci-finepdfs"
+    ]
+  },
+  "runner_sha256": "52707c438058fd885e618e2c57a1e6234d98869685b94c34a9b499624091f6d7",
+  "sample": "era-v5-lab tokenizer sample v0",
+  "scope": "partial smoke test",
+  "unsupported_parts": [],
+  "wall_seconds": 33.793
+}

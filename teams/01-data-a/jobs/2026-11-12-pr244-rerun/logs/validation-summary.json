@@ -1,0 +1,323 @@
+{
+  "date": "2026-11-12",
+  "base_commit": "f0aafd60c27461e918b41e598cc67c539b1abcbb",
+  "tsai_comment": "https://github.com/theschoolofai/era-v5-lab/pull/244#issuecomment-6822762492",
+  "data_b_approval": "https://github.com/theschoolofai/era-v5-lab/pull/244#pullrequestreview-5877858544",
+  "clean_sha256": "22d818c72c9f30bf338de344a0fcda230e2d1de30a1aaec5d92bc525bae99179",
+  "runner_sha256": "fc1609a23a6498b0d732b9e479fa9c240e4fea35d867cba705bfda790e4c9119",
+  "config_sha256": "8c58030f51e3d9f338f59719daa91b6ab59614f3ffdb9c60bb35997b35ea63ec",
+  "manifest_sha256": "7fd647c8d4662d17e2310efbcc20981d70656fdad2fabb7663c266a2153a1b7e",
+  "packages": {
+    "ftfy": "6.3.1",
+    "pyarrow": "23.0.1",
+    "tree-sitter": "0.26.0",
+    "tree-sitter-language-pack": "1.22.1"
+  },
+  "pytest": {
+    "passed": 2117,
+    "skipped": 1,
+    "subtests_passed": 42
+  },
+  "supported_packs": 31,
+  "indic_packs": 18,
+  "indic_gold": 2193,
+  "indic_diagnosis_documents": 9000,
+  "indic_runtime_errors": 0,
+  "indic_second_pass_changes": 0,
+  "nonindic_comparison_documents": 6500,
+  "nonindic_changed": 0,
+  "nonindic_errors": 0,
+  "harm": {
+    "packs": 31,
+    "gold": 4162,
+    "result": "PASS",
+    "per_pack": [
+      {
+        "pack": "code-cpp",
+        "gold_n": 122,
+        "result": "PASS",
+        "report": "teams/01-data-a/results/spec_v1/cleaner/specv1_code-cpp_harm.json",
+        "sha256": "11244bfb3ac562ab7b41c934cfb7696e4419e5da033924a7fe8b4c18c850cc73"
+      },
+      {
+        "pack": "code-go",
+        "gold_n": 163,
+        "result": "PASS",
+        "report": "teams/01-data-a/results/spec_v1/cleaner/specv1_code-go_harm.json",
+        "sha256": "ff90be7f3956b8c9faef93f3df388ad80d1c0be9d1b52f9d9203bd565de7adb4"
+      },
+      {
+        "pack": "code-java",
+        "gold_n": 116,
+        "result": "PASS",
+        "report": "teams/01-data-a/results/spec_v1/cleaner/specv1_code-java_harm.json",
+        "sha256": "a29db26723626a9ea005fc98c5863b77eabc4c785e27e3c9520b5991a74a6134"
+      },
+      {
+        "pack": "code-js-ts",
+        "gold_n": 204,
+        "result": "PASS",
+        "report": "teams/01-data-a/results/spec_v1/cleaner/specv1_code-js-ts_harm.json",
+        "sha256": "c61430a80d0ef8e0a20d9dd09ee57bae27f3a0c180c35cee51ba240a0b6d3859"
+      },
+      {
+        "pack": "code-python",
+        "gold_n": 141,
+        "result": "PASS",
+        "report": "teams/01-data-a/results/spec_v1/cleaner/specv1_code-python_harm.json",
+        "sha256": "20ba59826ca05dfe3919f4799c42fbfe82ed01c5f991df80ab002dd3d1f72e0a"
+      },
+      {
+        "pack": "code-rust",
+        "gold_n": 234,
+        "result": "PASS",
+        "report": "teams/01-data-a/results/spec_v1/cleaner/specv1_code-rust_harm.json",
+        "sha256": "b07a24c13e286d716c37fac0fbc1e0d0dcd00eae6c95f6dac89b43dd5f9981c1"
+      },
+      {
+        "pack": "en-dclm",
+        "gold_n": 62,
+        "result": "PASS",
+        "report": "teams/01-data-a/results/spec_v1/cleaner/specv1_en-dclm_harm.json",
+        "sha256": "56902cd28caa8484cb75a82a2f9560b277994548665e13c7e1691fc6746f8bd3"
+      },
+      {
+        "pack": "en-fineweb-edu",
+        "gold_n": 158,
+        "result": "PASS",
+        "report": "teams/01-data-a/results/spec_v1/cleaner/specv1_en-fineweb-edu_harm.json",
+        "sha256": "161075230d62b85d0266fbc6823d2d8014ecf1dd2881a10cb509fa00abd272a7"
+      },
+      {
+        "pack": "en-nemotroncc-synth",
+        "gold_n": 326,
+        "result": "PASS",
+        "report": "teams/01-data-a/results/spec_v1/cleaner/specv1_en-nemotroncc-synth_harm.json",
+        "sha256": "9a8b13f0282d44850a2300033d0f666b6b0b1c94406ce99fb8d2944a299a405b"
+      },
+      {
+        "pack": "en-nemotroncc",
+        "gold_n": 129,
+        "result": "PASS",
+        "report": "teams/01-data-a/results/spec_v1/cleaner/specv1_en-nemotroncc_harm.json",
+        "sha256": "0b227eb0caf83d59657ab369982eb2dd47c5b9fa86a6490af4c27f8dafd0aa3d"
+      },
+      {
+        "pack": "ind-bn-fw2",
+        "gold_n": 227,
+        "result": "PASS",
+        "report": "teams/01-data-a/results/spec_v1/cleaner/specv1_ind-bn-fw2_harm.json",
+        "sha256": "dcf4f5e7b719a881bb489b1f277bd126bc06633caf5d5311e9012cc612004a8d"
+      },
+      {
+        "pack": "ind-bn-sangraha-v",
+        "gold_n": 137,
+        "result": "PASS",
+        "report": "teams/01-data-a/results/spec_v1/cleaner/specv1_ind-bn-sangraha-v_harm.json",
+        "sha256": "47ee3b91a9f09bf7fa61c0ff98bbd3ea6f719d7ff0b55f9c0d31e86a245e68e0"
+      },
+      {
+        "pack": "ind-gu-fw2",
+        "gold_n": 80,
+        "result": "PASS",
+        "report": "teams/01-data-a/results/spec_v1/cleaner/specv1_ind-gu-fw2_harm.json",
+        "sha256": "7e1b34cdde9e0c204bffa43b8a25dcc62f3a148cdcac941c4f6e780b381dcc1d"
+      },
+      {
+        "pack": "ind-hi-fw2",
+        "gold_n": 218,
+        "result": "PASS",
+        "report": "teams/01-data-a/results/spec_v1/cleaner/specv1_ind-hi-fw2_harm.json",
+        "sha256": "adffe83a36170882d589a3acc0ad57bd1bcb88475e8eec0bd19036056db002f1"
+      },
+      {
+        "pack": "ind-hi-hplt",
+        "gold_n": 37,
+        "result": "PASS",
+        "report": "teams/01-data-a/results/spec_v1/cleaner/specv1_ind-hi-hplt_harm.json",
+        "sha256": "277ffaca6fae33d2304a4fa2d17ebc77c8e28f4afc6386112fbfebf8b3ebbd98"
+      },
+      {
+        "pack": "ind-hi-indiccorp",
+        "gold_n": 425,
+        "result": "PASS",
+        "report": "teams/01-data-a/results/spec_v1/cleaner/specv1_ind-hi-indiccorp_harm.json",
+        "sha256": "1019f7e8f8ab3f6897a520c3e784a0361dee4288f9110e5ea804875845a21a95"
+      },
+      {
+        "pack": "ind-hi-sangraha-s",
+        "gold_n": 24,
+        "result": "PASS",
+        "report": "teams/01-data-a/results/spec_v1/cleaner/specv1_ind-hi-sangraha-s_harm.json",
+        "sha256": "1b1d797a54d9888f67774efc0396967e7a649f7ba4ad899274786e30227db275"
+      },
+      {
+        "pack": "ind-hi-sangraha-v",
+        "gold_n": 219,
+        "result": "PASS",
+        "report": "teams/01-data-a/results/spec_v1/cleaner/specv1_ind-hi-sangraha-v_harm.json",
+        "sha256": "8b20fecc75a0548b0154f379d558b0192876f1ebaeb8511be34c6be5c6e3a09f"
+      },
+      {
+        "pack": "ind-kn-fw2",
+        "gold_n": 115,
+        "result": "PASS",
+        "report": "teams/01-data-a/results/spec_v1/cleaner/specv1_ind-kn-fw2_harm.json",
+        "sha256": "7a69bde24ea585f7e042642b1775a67fdb5a4a4f1e6f53278c00d7d7bd1b56e8"
+      },
+      {
+        "pack": "ind-kn-sangraha-s",
+        "gold_n": 22,
+        "result": "PASS",
+        "report": "teams/01-data-a/results/spec_v1/cleaner/specv1_ind-kn-sangraha-s_harm.json",
+        "sha256": "af95559bdd2847bc4cdffda2a4421a2997e178f5e0dfe17a6bd0771f57c59dd0"
+      },
+      {
+        "pack": "ind-kn-sangraha-v",
+        "gold_n": 99,
+        "result": "PASS",
+        "report": "teams/01-data-a/results/spec_v1/cleaner/specv1_ind-kn-sangraha-v_harm.json",
+        "sha256": "a86633d53a97966398fec5e00c3fb41148b72b5cf40f5a25d681191764c144fc"
+      },
+      {
+        "pack": "ind-mr-fw2",
+        "gold_n": 158,
+        "result": "PASS",
+        "report": "teams/01-data-a/results/spec_v1/cleaner/specv1_ind-mr-fw2_harm.json",
+        "sha256": "d29a915fcbd7c6bf1a4e19206c7ddb808ce5d1d49d2ccc14ca3fe3def5adf1bb"
+      },
+      {
+        "pack": "ind-mr-sangraha-v",
+        "gold_n": 99,
+        "result": "PASS",
+        "report": "teams/01-data-a/results/spec_v1/cleaner/specv1_ind-mr-sangraha-v_harm.json",
+        "sha256": "c77762b4e4dc8f7a846c68897c1ddf2c4d4079ee0068c978213c1a0e08c07e62"
+      },
+      {
+        "pack": "ind-sa-fw2",
+        "gold_n": 71,
+        "result": "PASS",
+        "report": "teams/01-data-a/results/spec_v1/cleaner/specv1_ind-sa-fw2_harm.json",
+        "sha256": "acfd19193eed1d94f7cac3969c5aa9cae96883d30aefea00a36442569a0e4890"
+      },
+      {
+        "pack": "ind-ta-sangraha-v",
+        "gold_n": 141,
+        "result": "PASS",
+        "report": "teams/01-data-a/results/spec_v1/cleaner/specv1_ind-ta-sangraha-v_harm.json",
+        "sha256": "df71e69a401542f9f328eb6fcf8fe88c024e310d1e0d094c6d23169a9d2b02e5"
+      },
+      {
+        "pack": "ind-te-fw2",
+        "gold_n": 17,
+        "result": "PASS",
+        "report": "teams/01-data-a/results/spec_v1/cleaner/specv1_ind-te-fw2_harm.json",
+        "sha256": "2fd4e0fba72683909e8cb8906afe11d6dd711d985731d247bbfee1a6b9f423aa"
+      },
+      {
+        "pack": "ind-te-sangraha-s",
+        "gold_n": 24,
+        "result": "PASS",
+        "report": "teams/01-data-a/results/spec_v1/cleaner/specv1_ind-te-sangraha-s_harm.json",
+        "sha256": "4202c699295b9d73ea3f5ca2ea1380fed08a0f637f0e9a0130b25c780beca599"
+      },
+      {
+        "pack": "ind-te-sangraha-v",
+        "gold_n": 80,
+        "result": "PASS",
+        "report": "teams/01-data-a/results/spec_v1/cleaner/specv1_ind-te-sangraha-v_harm.json",
+        "sha256": "3d62fab0083313e0426697223237e34b122e8177f4f7cf6ab85e23840a69079c"
+      },
+      {
+        "pack": "math-finemath",
+        "gold_n": 86,
+        "result": "PASS",
+        "report": "teams/01-data-a/results/spec_v1/cleaner/specv1_math-finemath_harm.json",
+        "sha256": "5eb03807ab6923873b2b85f0ca75f7512c5f65916560bb6f136f29bc0eb3ca4b"
+      },
+      {
+        "pack": "math-megamath",
+        "gold_n": 26,
+        "result": "PASS",
+        "report": "teams/01-data-a/results/spec_v1/cleaner/specv1_math-megamath_harm.json",
+        "sha256": "38d6c4f7038a655d9c9ebe37c9a5bea3e1d1aa34674024a866121287c3fa86f3"
+      },
+      {
+        "pack": "sci-finepdfs",
+        "gold_n": 202,
+        "result": "PASS",
+        "report": "teams/01-data-a/results/spec_v1/cleaner/specv1_sci-finepdfs_harm.json",
+        "sha256": "b78166576728e871562a893604a93a5d12322f2917a0dee16b0ea3fdf4f7e878"
+      }
+    ]
+  },
+  "fresh_reports_identical_to_committed_evidence": true,
+  "smoke": {
+    "scope": "partial smoke test",
+    "completed_parts": 2,
+    "input_rows": 20706,
+    "output_rows": 20199,
+    "actions": {
+      "drop": 507,
+      "fix": 2101,
+      "keep": 18098
+    },
+    "errors": 0,
+    "wall_seconds": 52.902,
+    "peak_rss_mib": 173.504
+  },
+  "input_preflight": {
+    "verified_parts": 80,
+    "expected_parts": 86,
+    "missing_or_mismatched_parts": [
+      "train/cadj-commits/part-00000.parquet",
+      "heldout/cadj-commits/part-00000.parquet",
+      "train/cadj-notebooks/part-00000.parquet",
+      "heldout/cadj-notebooks/part-00000.parquet",
+      "train/cadj-stackexchange/part-00000.parquet",
+      "heldout/cadj-stackexchange/part-00000.parquet"
+    ]
+  },
+  "full_sample_run_locally": false,
+  "optional_f2_in_job": false,
+  "f2_v2_evidence": "teams/01-data-a/results/spec_v1/f2/v2_validation.json",
+  "f2_v2_evidence_sha256": "f1f7ebcb9b364fb73d30d05ef33a74b3fc89f91643e36b07e53f7ddebc39004b",
+  "tsai_review_items": {
+    "excluded_rules": [
+      "DB-A6-012",
+      "DB-A6-014",
+      "DB-G2-001"
+    ],
+    "trimmed_rule_status": {
+      "DB-A6-004": "source retained with trims, deferred overlap alternative",
+      "DB-G1-006": "active with trims"
+    },
+    "DB-D4-011": "URL-aware archived candidate; deferred for full-pipeline non-idempotence",
+    "DB-D5-001_scope": [
+      "ind-te-sangraha-s"
+    ],
+    "ind-te-sangraha-v_native_rules": [
+      "DB-D4-016",
+      "DB-D5-004"
+    ]
+  },
+  "artifacts": {
+    "cleaned_manifest.json": "7d7ce2faaf7a17b493e1df0d75783a05e7219c4965f308450d13bcd97f8fe8d4",
+    "input_preflight.json": "7425b1c7e968e332bece04f8a10d02595c1b3f3a64f81a2ff7fbe04a01170521",
+    "job_summary.json": "bcc5edf89eb8c1187c5f970d1162ada65baedec82d22cc66fa75e8bf7a02b54a",
+    "pytest.txt": "6fdc0d9b1c32ccbbb27c6ae06317ebe8600663dd1a61b877090875d0182ee22e",
+    "rule-activity.json": "dc7a80348f0cfda6b77428363e8d1619dfdd0603731d18459ad06f4775b9e36d",
+    "rule_counts.csv": "33f6b461d3de0d56cb2008bdfbd813e96d22e047faf797c0a5ae466d0743a49d",
+    "sample-smoke.txt": "b8ede35c7b99e3ce2ff61b3291931f85f4482c8da43dff2cea6b7c9cebb7c41d",
+    "validation.txt": "e85da49ddee513b3358e1ab1e0b126a02254d2a197dddd0c7aada6ca76e79a17"
+  },
+  "obsolete_unsubmitted_job_required": false,
+  "artifact_normalization": {
+    "rule_counts.csv": {
+      "source_line_endings": "CRLF",
+      "committed_line_endings": "LF",
+      "source_sha256": "c3df2d05fb0c654da7982b098dd8350a2fb52c47a40580449dc84e49045886b1",
+      "counts_unchanged": true
+    }
+  }
+}

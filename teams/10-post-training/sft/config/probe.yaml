@@ -1,0 +1,20 @@
+# CPU smoke probe for sft/train_probe.py (G10 Package T1). Tiny random model, synthetic integer rows.
+# These values make a randomly initialised toy model overfit fast on CPU. They are NOT the OLMoE or G5
+# probe settings: G10_TRAINING.md section 3 starts an open checkpoint at lr 1e-5 with a 5-update warmup.
+seed: 0
+vocab_size: 64        # ids 0..8 are reserved markers in the synthetic fixture
+d_model: 32
+n_heads: 4
+n_layers: 2
+max_len: 64
+pad_id: 0
+eos_id: 1
+lr: 3.0e-3
+weight_decay: 0.0
+betas: [0.9, 0.95]
+warmup_steps: 5
+max_steps: 30         # spec cap: at most 30 updates for the overfit diagnostic
+grad_clip: 1.0
+microbatch_size: 3    # 8 rows -> microbatches of 3, 3, 2 (uneven accumulation on purpose)
+fixture_rows: 8
+overfit_ratio: 0.5    # pass if the final eval-mode loss on the fixed batch is below half the first loss

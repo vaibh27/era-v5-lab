@@ -38,7 +38,7 @@ Each pack is tested with the team's `harm_test.py --rule all` on its own gold se
 ### What changed in this round
 
 1. **Packaged as Spec v1.** The sheet is `medicine_english.md`, in the form of `medicine_code.md`: the gold and pack digests and the harm test of the whole sheet are added. Each code block is that of the earlier English sheet, unchanged; only the order in stage 10 changed (item 6).
-2. **`clean.py` is the one cleaner.** `spec_v1/tools/build_clean.py` builds it from `specv1.md`, which collates the four family sheets, with a `SCOPE` table of the packs each rule applies to; `run_clean.py` runs it on a pack. `clean_english.py`, the English cleaner made before `specv1.md`, has been removed; `scripts/clean_english.py` is kept but not used: no script or test loads it.
+2. **`clean.py` is the one cleaner.** `spec_v1/tools/build_clean.py` builds it from `sheets/specv1.md`, which consolidates the five family sheets, with a `SCOPE` table of the packs each rule applies to; `run_clean.py` runs it on a pack. The retired English-only cleaner and its builder have been removed.
 3. **F1 on English is `DA-F1-005`.** `spec_v1/tools/build_clean.py` used to leave every sheet's F1 out for the shared `spec_v1/tools/f1_rule.py`, which does not run on `en` or `eng`. In `clean.py` each family runs its own sheet's F1 on its own packs: `DA-F1-005` on the English packs, and the shared rule on the code, math and science packs (`SCOPE`; TSAI, 1 Nov).
 4. **Personal names are out of the text.** `AUTHOR` stays as a code field because the team's `medicine_conflicts.py` reads it.
 5. **F1 checked as `spec_v1/tools/f1_eval.py` checks it**, by `scripts/f1_eval_english.py`: see F1 below.
@@ -156,7 +156,7 @@ Made-up details on a line of their own at the end of up to 40 real gold docs per
 
 - **`spec_v1/tools/build_clean.py` was changed.** The tool's owner should review it. It now writes one `clean.py` from `specv1.md`, with the `SCOPE` table at the top.
 - **`spec_v1/tools/make_harm_tests.py` rewrites `harm_tests.md` for every family at once**, and lists a family whose packs are not on the machine as NOT RUN. Run where the code packs are missing, it would drop the code results, so the English results are in `harm_tests_english.md`, made by `spec_v1/tools/make_harm_tests_english.py`.
-- **`clean_english.py` has been removed, and `scripts/clean_english.py` is not used.** `scripts/clean_english.py` is kept for the record; `clean.py` is the one cleaner, and no script or test loads it.
+- **The English-only cleaner has been removed.** Use the consolidated `clean.py` and `run_clean.py`; English rules remain in `medicine_english.md` and the reviewed consolidated spec.
 - **`spec_v1/tools/f1_eval.py` covers the code packs only** (tree-sitter, `code-*`). English has `spec_v1/tools/f1_eval_english.py`.
 - **`README.md` names the English sheet `medicine_en.md`.** It is `medicine_english.md` here, so the family in `clean.py` is `english` and its rules are `_english_*`.
 

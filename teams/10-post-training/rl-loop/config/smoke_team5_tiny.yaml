@@ -1,0 +1,25 @@
+# Laptop smoke test on Team 5's own model code (harness/week2), shrunk to a tiny size, router frozen.
+# The KE2 code table is a seeded stand-in; swap in Team 5's real checkpoint when it lands (18 Nov).
+seed: 1234
+device: cpu
+out_dir: out/smoke_team5_tiny
+model:
+  kind: team5
+  arm: configs/arms/t1.yaml
+  resolution: configs/small/smoke_resolution.yaml
+  overrides: {vocab_size: 16, n_embd: 32, n_layer: 2, n_head: 4, n_kv_head: 2, block_size: 16, mtp: false,
+              mtp_weight: 0.0, moe: {num_experts: 4, top_k: 2, num_shared: 1, ffn_hidden: 32}}
+task: {kind: toy, vocab: 16, prompt_len: 4, offset: 3, n_train: 256, n_heldout: 64}
+train:
+  algo: grpo
+  steps: 40
+  prompts_per_step: 16
+  k: 8
+  max_new: 2
+  temperature: 1.0
+  lr: 0.01
+  clip_eps: 0.2
+  ppo_epochs: 2
+  kl_coef: 0.0
+  eval_every: 10
+  eval_k: 4

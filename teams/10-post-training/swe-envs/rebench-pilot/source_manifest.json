@@ -1,0 +1,213 @@
+{
+ "dataset": "nebius/SWE-rebench",
+ "revision": "89cdfbab4ab1bd8f5a658bb212d1b63624f4f881",
+ "split": "test",
+ "files": [
+  {
+   "path": "data/test-00000-of-00002.parquet",
+   "sha256": "39d4791f12cf5ee2a2e56d47eeef559642a800534ff053e1ae3acab0a0c87067",
+   "size": 101556119
+  },
+  {
+   "path": "data/test-00001-of-00002.parquet",
+   "sha256": "c50af8bffbfe70fc3a89b2e47825f299bc04c1058318fe2263b7e4857f8193d7",
+   "size": 109723276
+  }
+ ],
+ "licence": "CC-BY-4.0 (dataset); each repo keeps its own licence, recorded in env.json",
+ "discovery": {
+  "tool": "swe-envs/import_pool.py --local-dir <dir> --per-repo 3 --max-patch-chars 3000",
+  "rows_read": 21336,
+  "kept": 2741,
+  "dropped": {
+   "created 2023 or later": 6884,
+   "patch too large": 4791,
+   "repo is in a SWE benchmark": 3228,
+   "per-repo cap": 1672,
+   "empty FAIL_TO_PASS or PASS_TO_PASS": 1454,
+   "licence not accepted": 555,
+   "AI-tool marker in the issue": 11
+  },
+  "cutoff": "2023-01-01",
+  "shortlist": "small pure-Python libraries from the kept rows, not among the 21 existing G10 env repos; each vetted with the GitHub API (PR merged, linked issue, dates, licence, AI-tool markers)"
+ },
+ "fields_used": [
+  "instance_id",
+  "repo",
+  "base_commit",
+  "created_at",
+  "license_name",
+  "FAIL_TO_PASS",
+  "PASS_TO_PASS"
+ ],
+ "fields_not_used": "install_config, requirements, environment, meta.llm_score and the other Qwen2.5-72B install recipes and quality labels; problem_statement, patch and test_patch are taken from GitHub instead",
+ "protected_sets": {
+  "benchmark_repos": "swe-envs/benchmark_repos.txt",
+  "g9_fingerprints": "teams/09-evaluation/fingerprints/v2 (set_sha256 2826a3b883210c653979103c09ce1c79e40fc4f7034b54027f2836482370d22a), lab main 5f73fb9513beaf98421a99a95920178e9b77016a",
+  "check": "all 181 repos named in the swe_bench_verified, swe_bench_live and swe_bench_pro item ids of fingerprints v2 are in benchmark_repos.txt; none of the selected repos is"
+ },
+ "selected": [
+  {
+   "instance_id": "keis__base58-46",
+   "repo": "keis/base58",
+   "pr": 46,
+   "base_commit": "9418945639480b9a428ccabe6cd0c9becac24df6",
+   "created_at": "2020-01-14",
+   "licence": "MIT",
+   "split": "test"
+  },
+  {
+   "instance_id": "andialbrecht__sqlparse-676",
+   "repo": "andialbrecht/sqlparse",
+   "pr": 676,
+   "base_commit": "9d2cb6fc950386e9e59f29faf0d3742c4b12572c",
+   "created_at": "2022-08-16",
+   "licence": "BSD-3-Clause",
+   "split": "test"
+  },
+  {
+   "instance_id": "astanin__python-tabulate-139",
+   "repo": "astanin/python-tabulate",
+   "pr": 139,
+   "base_commit": "b2c26bcb70e497f674b38aa7e29de12c0123708a",
+   "created_at": "2021-08-19",
+   "licence": "MIT",
+   "split": "test"
+  },
+  {
+   "instance_id": "h2non__filetype.py-135",
+   "repo": "h2non/filetype.py",
+   "pr": 135,
+   "base_commit": "436ade4e8d70bdda6846843ef46e07d51fd30bb4",
+   "created_at": "2022-08-05",
+   "licence": "MIT",
+   "split": "test"
+  },
+  {
+   "instance_id": "lark-parser__lark-1120",
+   "repo": "lark-parser/lark",
+   "pr": 1120,
+   "base_commit": "5772e1878729fe07d50fe3b80b8f360ac8f8d050",
+   "created_at": "2022-02-26",
+   "licence": "MIT",
+   "split": "test"
+  }
+ ],
+ "rejected": [
+  {
+   "instance_id": "jaraco__inflect-138",
+   "stage": "discovery (GitHub)",
+   "reason": "GitHub reports the repo licence as None; not pursued for the pilot (needs a manual LICENSE read before any build)"
+  },
+  {
+   "instance_id": "kjd__idna-112",
+   "stage": "discovery (GitHub)",
+   "reason": "the PR closes no GitHub issue, so there is no human issue text for the problem statement"
+  },
+  {
+   "instance_id": "ahawker__ulid-455",
+   "stage": "build",
+   "reason": "dependency footprint: the repo's requirements/test.txt pins mypy 0.780, which pulls typed-ast 1.4.1; it has no linux/arm64 wheel for Python 3.8 and the lock build failed without a C compiler"
+  },
+  {
+   "instance_id": "kjd__idna-83",
+   "stage": "discovery (GitHub)",
+   "reason": "the PR closes no GitHub issue, so there is no human issue text for the problem statement"
+  },
+  {
+   "instance_id": "jd__tenacity-179",
+   "stage": "build",
+   "reason": "build configuration: pbr with a flat layout (packages 'tenacity' and 'releasenotes'); setuptools 61+ refuses the automatic package discovery and the editable install needs setuptools 64+, so there is no build without changing upstream files"
+  },
+  {
+   "instance_id": "jaraco__inflect-137",
+   "stage": "discovery (GitHub)",
+   "reason": "GitHub reports the repo licence as None; not pursued for the pilot (needs a manual LICENSE read before any build)"
+  },
+  {
+   "instance_id": "kiorky__croniter-13",
+   "stage": "discovery (GitHub)",
+   "reason": "the PR closes no GitHub issue, so there is no human issue text for the problem statement"
+  },
+  {
+   "instance_id": "astanin__python-tabulate-21",
+   "stage": "discovery (GitHub)",
+   "reason": "the PR closes no GitHub issue, so there is no human issue text for the problem statement"
+  },
+  {
+   "instance_id": "jd__tenacity-201",
+   "stage": "discovery (GitHub)",
+   "reason": "passed the discovery checks; not built because the pilot stops at 5 admitted environments"
+  },
+  {
+   "instance_id": "jaraco__zipp-60",
+   "stage": "discovery (GitHub)",
+   "reason": "GitHub reports the repo licence as None; not pursued for the pilot (needs a manual LICENSE read before any build)"
+  },
+  {
+   "instance_id": "Turbo87__utm-62",
+   "stage": "build passed, held",
+   "reason": "built (FAIL_TO_PASS 1, PASS_TO_PASS 17), but gold.patch carries AUTHORS context lines with an email address; held for the same reason as dgilland__pydash-164"
+  },
+  {
+   "instance_id": "eliben__pycparser-346",
+   "stage": "discovery (GitHub)",
+   "reason": "GitHub reports the repo licence as 'NOASSERTION'; not pursued for the pilot (needs a manual LICENSE read before any build)"
+  },
+  {
+   "instance_id": "alecthomas__voluptuous-380",
+   "stage": "discovery (GitHub)",
+   "reason": "the PR closes no GitHub issue, so there is no human issue text for the problem statement"
+  },
+  {
+   "instance_id": "Infinidat__munch-54",
+   "stage": "discovery (GitHub)",
+   "reason": "the PR closes no GitHub issue, so there is no human issue text for the problem statement"
+  },
+  {
+   "instance_id": "lark-parser__lark-1013",
+   "stage": "discovery (GitHub)",
+   "reason": "passed the discovery checks; not built because the pilot stops at 5 admitted environments"
+  },
+  {
+   "instance_id": "coady__multimethod-26",
+   "stage": "discovery (GitHub)",
+   "reason": "GitHub reports the repo licence as 'NOASSERTION'; not pursued for the pilot (needs a manual LICENSE read before any build)"
+  },
+  {
+   "instance_id": "dgilland__pydash-164",
+   "stage": "build passed, held",
+   "reason": "built (FAIL_TO_PASS 1, PASS_TO_PASS 255), but gold.patch carries AUTHORS.rst context lines with an email address and real names; the lab rules allow GitHub handles only and pr-guard rejects email addresses. The upstream patch is not edited, so the env is held"
+  },
+  {
+   "instance_id": "kvesteri__intervals-54",
+   "stage": "discovery (GitHub)",
+   "reason": "passed the discovery checks; not built because the pilot stops at 5 admitted environments"
+  },
+  {
+   "instance_id": "carpedm20__emoji-128",
+   "stage": "discovery (GitHub)",
+   "reason": "GitHub reports the repo licence as 'NOASSERTION'; not pursued for the pilot (needs a manual LICENSE read before any build)"
+  },
+  {
+   "instance_id": "SethMMorton__natsort-146",
+   "stage": "build",
+   "reason": "tests/conftest.py imports hypothesis, which no requirements file of the repo lists; pytest exits with code 4 before any test runs. Adding the dependency by hand would be a guess, not the repo's own configuration"
+  },
+  {
+   "instance_id": "cdown__srt-53",
+   "stage": "discovery (GitHub)",
+   "reason": "the PR closes no GitHub issue, so there is no human issue text for the problem statement"
+  },
+  {
+   "instance_id": "devsnd__tinytag-156",
+   "stage": "discovery (GitHub)",
+   "reason": "passed the discovery checks; not built because the pilot stops at 5 admitted environments"
+  },
+  {
+   "instance_id": "eliben__pycparser-364",
+   "stage": "discovery (GitHub)",
+   "reason": "the PR closes no GitHub issue, so there is no human issue text for the problem statement"
+  }
+ ]
+}

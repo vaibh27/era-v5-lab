@@ -1,0 +1,274 @@
+{
+ "instance_id": "lark-parser__lark-1120",
+ "checked_at": "2026-11-11T22:49:35+0530",
+ "source": {
+  "found": true,
+  "source_instance_id": "lark-parser__lark-1120",
+  "source_created_at": "2022-02-26 19:24:45",
+  "source_licence_name": "MIT License",
+  "base_commit_matches": true,
+  "source_base_commit": "5772e1878729fe07d50fe3b80b8f360ac8f8d050",
+  "f2p_same": true,
+  "f2p_only_source": [],
+  "f2p_only_rebuild": [],
+  "p2p_source_total": 6,
+  "p2p_source_in_rebuild_files": 6,
+  "p2p_in_files_only_source": [],
+  "p2p_only_rebuild": [],
+  "differences": [],
+  "variant": "same base, FAIL_TO_PASS and in-file PASS_TO_PASS as the source row"
+ },
+ "platforms": [
+  {
+   "platform": "native",
+   "image_platform": "linux/arm64",
+   "image": "g10-swe/lark-parser__lark-1120:v1",
+   "image_id": "sha256:72ba7ef09e0098875ef10fae502b616d35a151f2ae83c7a1d4f21328b7704c6e",
+   "build_seconds_if_built": 0.0,
+   "runs": 5,
+   "no_patch_fails": "5/5",
+   "gold_passes": "5/5",
+   "before": [
+    {
+     "run": 1,
+     "ok": true,
+     "problems": [],
+     "seconds": 0.6
+    },
+    {
+     "run": 2,
+     "ok": true,
+     "problems": [],
+     "seconds": 0.6
+    },
+    {
+     "run": 3,
+     "ok": true,
+     "problems": [],
+     "seconds": 0.6
+    },
+    {
+     "run": 4,
+     "ok": true,
+     "problems": [],
+     "seconds": 0.5
+    },
+    {
+     "run": 5,
+     "ok": true,
+     "problems": [],
+     "seconds": 0.5
+    }
+   ],
+   "after": [
+    {
+     "run": 1,
+     "ok": true,
+     "problems": [],
+     "seconds": 0.5
+    },
+    {
+     "run": 2,
+     "ok": true,
+     "problems": [],
+     "seconds": 0.6
+    },
+    {
+     "run": 3,
+     "ok": true,
+     "problems": [],
+     "seconds": 0.5
+    },
+    {
+     "run": 4,
+     "ok": true,
+     "problems": [],
+     "seconds": 0.5
+    },
+    {
+     "run": 5,
+     "ok": true,
+     "problems": [],
+     "seconds": 0.5
+    }
+   ],
+   "negative_control": {
+    "patch": "diff --git a/lark/utils.py b/lark/utils.py\n--- a/lark/utils.py\n+++ b/lark/utils.py\n@@ -1,3 +1,4 @@\n+# g10 negative control: comment only, no behaviour change\n import unicodedata\n import os\n from functools import reduce\n",
+    "reward": {
+     "instance_id": "lark-parser__lark-1120",
+     "reward": 0,
+     "failed": [
+      "tests.test_cache.TestCache::test_recursive_pattern"
+     ],
+     "n_failed": 1,
+     "seconds": 0.5
+    }
+   },
+   "gold_reward": {
+    "instance_id": "lark-parser__lark-1120",
+    "reward": 1,
+    "failed": [],
+    "n_failed": 0,
+    "seconds": 0.5
+   },
+   "isolation_probe": {
+    "interfaces_up": [
+     "lo"
+    ],
+    "interfaces_down": [
+     "erspan0",
+     "gre0",
+     "gretap0",
+     "ip6_vti0",
+     "ip6gre0",
+     "ip6tnl0",
+     "ip_vti0",
+     "sit0",
+     "tunl0"
+    ],
+    "ipv4_routes": 0,
+    "uid": 1000,
+    "tcp_connect": "failed: OSError",
+    "dns": "failed: gaierror",
+    "commits": 1,
+    "ok": true
+   },
+   "leftover_containers": [],
+   "docker_flags": [
+    "--network=none",
+    "--memory=2g",
+    "--cpus=2",
+    "--pids-limit=256",
+    "--cap-drop=ALL",
+    "--security-opt=no-new-privileges"
+   ],
+   "ok": true
+  },
+  {
+   "platform": "linux/amd64",
+   "image_platform": "linux/amd64",
+   "image": "g10-swe/lark-parser__lark-1120:v1-amd64",
+   "image_id": "sha256:abf5ce64080bd01c994b8121ea0fb5a9840069b7e11c2267dc88c078a15fb060",
+   "build_seconds_if_built": 13.1,
+   "runs": 5,
+   "no_patch_fails": "5/5",
+   "gold_passes": "5/5",
+   "before": [
+    {
+     "run": 1,
+     "ok": true,
+     "problems": [],
+     "seconds": 1.8
+    },
+    {
+     "run": 2,
+     "ok": true,
+     "problems": [],
+     "seconds": 1.0
+    },
+    {
+     "run": 3,
+     "ok": true,
+     "problems": [],
+     "seconds": 1.1
+    },
+    {
+     "run": 4,
+     "ok": true,
+     "problems": [],
+     "seconds": 1.0
+    },
+    {
+     "run": 5,
+     "ok": true,
+     "problems": [],
+     "seconds": 1.0
+    }
+   ],
+   "after": [
+    {
+     "run": 1,
+     "ok": true,
+     "problems": [],
+     "seconds": 1.0
+    },
+    {
+     "run": 2,
+     "ok": true,
+     "problems": [],
+     "seconds": 1.0
+    },
+    {
+     "run": 3,
+     "ok": true,
+     "problems": [],
+     "seconds": 1.1
+    },
+    {
+     "run": 4,
+     "ok": true,
+     "problems": [],
+     "seconds": 1.0
+    },
+    {
+     "run": 5,
+     "ok": true,
+     "problems": [],
+     "seconds": 1.0
+    }
+   ],
+   "negative_control": {
+    "patch": "diff --git a/lark/utils.py b/lark/utils.py\n--- a/lark/utils.py\n+++ b/lark/utils.py\n@@ -1,3 +1,4 @@\n+# g10 negative control: comment only, no behaviour change\n import unicodedata\n import os\n from functools import reduce\n",
+    "reward": {
+     "instance_id": "lark-parser__lark-1120",
+     "reward": 0,
+     "failed": [
+      "tests.test_cache.TestCache::test_recursive_pattern"
+     ],
+     "n_failed": 1,
+     "seconds": 1.0
+    }
+   },
+   "gold_reward": {
+    "instance_id": "lark-parser__lark-1120",
+    "reward": 1,
+    "failed": [],
+    "n_failed": 0,
+    "seconds": 1.1
+   },
+   "isolation_probe": {
+    "interfaces_up": [
+     "lo"
+    ],
+    "interfaces_down": [
+     "erspan0",
+     "gre0",
+     "gretap0",
+     "ip6_vti0",
+     "ip6gre0",
+     "ip6tnl0",
+     "ip_vti0",
+     "sit0",
+     "tunl0"
+    ],
+    "ipv4_routes": 0,
+    "uid": 1000,
+    "tcp_connect": "failed: OSError",
+    "dns": "failed: gaierror",
+    "commits": 1,
+    "ok": true
+   },
+   "leftover_containers": [],
+   "docker_flags": [
+    "--network=none",
+    "--memory=2g",
+    "--cpus=2",
+    "--pids-limit=256",
+    "--cap-drop=ALL",
+    "--security-opt=no-new-privileges"
+   ],
+   "ok": true
+  }
+ ],
+ "admitted": true
+}

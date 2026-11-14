@@ -1,0 +1,87 @@
+doc_id,kind,code,offsets,quote,why,source
+b109a58675c8efe4,new,NEW-missing-spaces,17-29,HydrogenWhen,Title and following sentence joined without a separating space.,ai
+b109a58675c8efe4,missed,C1,735-742,Go Back,Repeated page navigation/link label remains in educational text.,ai
+cdfd72f2378bce40,new,NEW-missing-spaces,36-49,harbourthours,Variable t and prose are glued together after the harbour description.,ai
+cdfd72f2378bce40,new,NEW-flattened-formulas,113-122,15cos0.5t,Cosine expression lost mathematical grouping/multiplication notation in extraction.,ai
+92af8a34e2277b29,missed,C1,665-710,This post imported from StackExchange Physics,Website import metadata remains after the actual math discussion.,ai
+e8df6ab0114ce01a,missed,C1,136-150,Printable View,Forum print/navigation control remains in the article text.,ai
+e8df6ab0114ce01a,missed,C2,0-32,"Suppose a,b>0. Does the sequence",Question text is repeated in the printable forum thread.,ai
+b5d94d9f3b5ce7e4,missed,C1,0-21,Subject: Angles Name:,Q&A form header fields are embedded in the content.,ai
+7b60768f817aab9d,new,NEW-template-pages,0-40,The answer is one Megaampere is equal to,Boilerplate unit-converter page repeats templated statements and conversions.,ai
+7b60768f817aab9d,missed,C1,4966-4980,Privacy Policy,Site footer/legal navigation remains appended to mathematical content.,ai
+e915676c7a499a9e,missed,C1,0-44,"Last Updated on August 31, 2021 by Thinkster",Website publication metadata carried into the cleaned document.,ai
+e915676c7a499a9e,missed,C1,3710-3719,Read More,Cross-page teaser/navigation links remain in the body.,ai
+9bb621d8a0109e88,new,NEW-seo-filler,128-160,Road distance Maladzyechna Pskov,Generic route-distance/calculator SEO page rather than a coherent math lesson.,ai
+9bb621d8a0109e88,missed,C1,3196-3219,- Distance Maladzyechna,Repeated site destination-navigation links remain at the end.,ai
+0e2b9cc0beb5fb11,missed,C5,129-156,Related East Chicago Tutors,"Long location/topic tutor-directory list is retained, not educational prose.",ai
+0e2b9cc0beb5fb11,new,NEW-seo-filler,89-126,Find an East Chicago Prealgebra Tutor,Commercial tutoring landing text dominates the mathematical topic.,ai
+c653ba40a72ae6a4,new,NEW-merged-documents,416-459,"For this calculation, we will use 160 hours",ILS aviation/polarization procedures are interleaved with salary/tax calculator prose.,ai
+1e6794a405e417bc,missed,C1,9-23,posted by sush,Forum author metadata appears before the question.,ai
+1e6794a405e417bc,new,NEW-flattened-formulas,344-347,90A,Angle formula at the end has lost the operator or symbol separating 90 and A.,ai
+6234eb526d1b557f,new,NEW-missing-formulas,0-34,Use Binet's formula to show that .,Mathematical target after “show that” is missing entirely.,ai
+6234eb526d1b557f,new,NEW-missing-formulas,458-468,write as .,A later formula referenced in the solution is also absent.,ai
+6234eb526d1b557f,missed,C1,469-483,View Tag Cloud,Site tag-cloud navigation remains after the response.,ai
+5d8a4e048b58b77b,missed,C1,4180-4214,"Subscribe to:Post Comments (Atom)",Blog comments subscription control remains after article.,ai
+3bba0803064abf48,new,NEW-orphan-footnote-markers,0-4,^{1},Orphan superscript reference precedes the research paper text.,ai
+2fd88179ccda81c5,new,NEW-missing-spaces,151-165,ZakharovShabat,A hyphen or separator between parts of a scientific name is missing.,ai
+8489105dd8ce9c39,new,NEW-missing-spaces,77-87,notationby,Forum title and author attribution were concatenated.,ai
+8489105dd8ce9c39,missed,C1,97-105,(Curate),Forum interface/action token remains in the content header.,ai
+5c01c771f7f6c5a5,missed,C1,647-697,Learn more about our online math practice software,Promotional site footer remains attached to practice questions.,ai
+5c01c771f7f6c5a5,new,NEW-missing-spaces,141-152,ProblemsThe,Adjacent section heading and sentence were merged.,ai
+e3308d611d2f995a,new,NEW-aggregated-questions,28714-28738,I have a financial sheet,Long worksheet/tutorial followed by many unrelated reader questions in one document.,ai
+55298032cdb687cc,missed,C5,0-21,4 results authored by,"Search-results/listing page with snippets, not a complete solved math document.",ai
+7c9fc7cb4cf0abc2,missed,A3,1169-1172,â€ś,UTF-8 quotation mark is visibly misdecoded; multiple occurrences persist.,ai
+a4ba0e437a4f83b7,new,NEW-orphan-footnote-markers,544-549,^{[]},Repeated empty reference/superscript markers after units in a physics syllabus.,ai
+1797bf0bd4dcaddb,missed,C3,1762-1771,Example 1,Document ends at a dangling example heading with no worked problem.,ai
+1364327b4a0afb15,missed,C1,109-131,You are not logged in.,Forum login and navigation controls remain before the worked discussion.,ai
+ea5127ac0114999b,new,NEW-seo-filler,0-55,Wyzant is the world's leading network of private tutors,"Commercial tutoring landing page is mainly advertising, not instructional material.",ai
+a1f9ff1e77420780,missed,C1,30-47,pop up ad killers,Unrelated website promotion precedes the scientific article.,ai
+2a77c711219ae876,new,NEW-missing-formulas,199-260,"Simple (but biased) estimators of *a* and *b* are, of course,",Text introduces mathematical estimators but leaves both expressions blank.,ai
+bd99ef08cf1a9e40,missed,C1,887-918,[Privacy Policy] [Terms of Use],Navigation/legal links remain after the original math Q&A.,ai
+c4ebacf9726dabf0,missed,C5,139-156,367 math teachers,"Directory of hundreds of tutor listings/reviews, not one educational document.",ai
+c4ebacf9726dabf0,new,NEW-seo-filler,29-65,Find your perfect private math tutor,Lead-generation landing content dominates the document.,ai
+6abbd5acb98679aa,missed,C1,0-42,"[Date Index] [Thread Index][Author Index]",Archive navigation toolbar remains before a technical thread.,ai
+eb63a97816f5fbf5,missed,B4,682-687,{moe},Unfilled margin-of-error template variable remains in the explanation.,ai
+eb63a97816f5fbf5,missed,C2,334-396,Only adjust this value if you expect an extraordinary variance,Exactly repeated advisory sentence appears twice consecutively.,ai
+efd3fb8487371128,missed,C1,4726-4777,No discussion on this note yet. Be first to comment,Comment widget text remains after the lesson.,ai
+aa3d833ed62e1d80,new,NEW-missing-spaces,234-253,Continue ReadingSet,Website read-more prompt and article sentence have been glued together.,ai
+03aeffcf72c72418,new,NEW-missing-figures,97-126,Figure P9.26 shows the thrust,Problem requires a force-time plot that is not present in the cleaned text.,ai
+03aeffcf72c72418,missed,A3,433-435,ยท,Misdecoded Thai-script characters appear in a physics unit expression.,ai
+03aeffcf72c72418,new,NEW-missing-spaces,85-95,itsengines,Rocket description contains concatenated words.,ai
+362faf2a9b7861f9,missed,C5,1-28,Abendland (Occident) (2007),"Very long catalog of fictional books involving mathematicians, not a coherent math document.",ai
+c12731538fd49dc1,missed,C5,130-144,"57,068 results",Search-results page containing many unrelated physics problems/snippets.,ai
+92332b39392821f5,missed,C5,10-26,I - INTRODUCTION,Bare table-of-contents listing lacks the referenced teaching sections.,ai
+0ab64ed894610ef7,missed,C1,1923-1938,Other Versions:,Site-specific worksheet controls and navigation remain after the preview text.,ai
+0ab64ed894610ef7,new,NEW-missing-figures,1241-1255,preview images,Worksheet content exists only in preview imagery; text lacks the actual problems.,ai
+af77b2b619f87b0e,new,NEW-missing-figures,67-84,truss shown below,Mechanics question requires geometry drawing absent from cleaned text.,ai
+4cefaf2b18e1d8f5,missed,C1,2349-2390,"Desktop version, switch to mobile version",Codeforces footer and device-view navigation retained.,ai
+2a062df14b5b83a9,new,NEW-aggregated-questions,0-34,Question about SoftMath Algebrator,Many distinct rectangular/perimeter problem snippets concatenated in one page.,ai
+380db5207dc7f47c,missed,C5,3-18,Browse by Theme,Search/filter UI and publisher filters dominate the document.,ai
+8141c9a74a964872,missed,C5,2-51,"Resources tagged with: Spheres, cylinders & cones",Topic search-results list rather than one educational article.,ai
+51f2d859f79bc925,missed,C5,34-67,"Full-timeProfessor and Chairman",Faculty biography/esearch-area directory with multiple entries.,ai
+0246631d18a6ee21,missed,C1,5149-5160,ReplyDelete,Repeated blog-comment action buttons merged into discussion text.,ai
+bf7bebb6c74a660f,missed,C1,0-15,# Blog Archives,Archive wrapper precedes an embedded external article summary.,ai
+827108cc9357c8c5,missed,C1,417-434,Related Questions,Forum recommendations and question links remain in answer text.,ai
+ea37d46cbd5f339c,new,NEW-missing-figures,3285-3315,Here is the gradient magnitude,Image/plot described in the computer-vision exercise is absent from extracted text.,ai
+905f8b2a2c459bac,missed,C1,1347-1357,Loading...,Answer-page loading/interface residue retained after the response.,ai
+99d9b817f8c74cdf,new,NEW-aggregated-questions,0-13,Just per hour,"Unrelated automobile, battery, and appliance Q&A stitched into one long document.",ai
+99d9b817f8c74cdf,new,NEW-seo-filler,20-64,a 6ya expert can help you resolve that issue,Paid-help solicitation and promotional copy mixed with answers.,ai
+ebe7396e6712181d,missed,C1,104-148,You can earn $20 for every friend you invite,Promotional/referral widget dominates a short question.,ai
+ebe7396e6712181d,new,NEW-missing-formulas,0-35,how we can find this inverse matrix,"Matrix referenced in the question is absent, preventing the problem from being solved.",ai
+2c3cb9502e41cc15,missed,C1,6-26,"EXPLORE LATEST ABOUT",Wolfram site navigation/chrome appears ahead of explanatory text.,ai
+2c3cb9502e41cc15,new,NEW-missing-interactive-content,178-226,Select the two factors using the slider controls,Math interaction depends on an applet/player absent from the plain-text dataset.,ai
+7dd5c0e1365d04dc,missed,C1,988-1004,© BrainMass Inc.,Copyright/timestamp and product metadata embedded mid-solution.,ai
+167ef4a340862a0e,new,NEW-missing-spaces,56-81,Exercises:30 minQuestions,Learning-module section labels were joined by extraction.,ai
+2c58af66b7d3bfe8,new,NEW-aggregated-questions,0-42,This problem is called a rational equation,"Unrelated rational-equation, radical-function, inequalities and geometry answer excerpts combined.",ai
+2581a275cbb83d16,missed,C5,8-28,Complementary angles,Large collection of independently titled and dated geometry questions rather than one article.,ai
+e11bb3d07abca5e6,missed,C1,69-101,"502 Views Download Presentation",Presentation download and view-count controls remain.,ai
+e11bb3d07abca5e6,new,NEW-merged-table-cells,1058-1078,**Contingency Tables,Statistics slide-table values are collapsed into run-on prose without row/column boundaries.,ai
+efe267fe695e9834,missed,C5,0-17,Scott's HP48 Page,Catalog of downloadable calculator programs; limited actual program explanations.,ai
+019fda08843696eb,new,NEW-missing-figures,9-75,"Figure 3.12. Comparison of ""basic"" and ""approximate"" design curves",Referenced structural-engineering figures cannot be inspected from text-only output.,ai
+019fda08843696eb,missed,C1,1672-1689,## Post a comment,Page discussion interface remains after article.,ai
+3d0c0e3284e57c48,new,NEW-offtopic-poll,25-66,Which kind of mount you want to see next?,Game-creature popularity poll unrelated to mathematics survived domain sampling.,ai
+3d0c0e3284e57c48,missed,C1,163-175,Share answer,Repeated interactive voting/share controls included as prose.,ai
+3abc0b94ff60aced,missed,C1,0-14,Upgrade to Pro,SpeakerDeck pricing/navigation header remains before lesson transcript.,ai
+3abc0b94ff60aced,missed,C5,79-100,"Speaker Deck Features",Large site feature/navigation and unrelated deck recommendations embedded in document.,ai
+0e0f204b1378b7ab,missed,C1,5196-5227,Start learning 29% faster today,Subscription/upsell footer remains after statistics assignment excerpt.,ai
+0e0f204b1378b7ab,new,NEW-truncated-previews,2032-2045,...read more.,Repeated preview truncation markers interrupt the source assignment and tables.,ai

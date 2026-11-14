@@ -12,6 +12,8 @@ from pathlib import Path
 
 import pytest
 
+parametrize = pytest.mark.parametrize
+
 HERE = Path(__file__).resolve().parent
 
 
@@ -26,6 +28,7 @@ def _load(name: str, path: Path):
 verify = _load("g10_swe_verify", HERE / "verify.py")
 make_env = _load("g10_swe_make_env", HERE / "make_env.py")
 import_pool = _load("g10_swe_import_pool", HERE / "import_pool.py")
+rebench_pilot = _load("g10_swe_rebench_pilot", HERE / "rebench_pilot.py")
 
 DIFF = """diff --git a/pkg/core.py b/pkg/core.py
 index 1111111..2222222 100644
@@ -415,6 +418,59 @@ def test_import_pool_filters_rows():
     assert import_pool.keep_row({**row, "problem_statement": "Generated with Claude Code"}, bench)[0] is False
 
 
+@parametrize("value", [None, "", "not a date", "2021-13-40", "21-05-01", 0])
+def test_import_pool_rejects_missing_or_invalid_dates(value):
+    row = {"instance_id": "o__r-1", "repo": "o/r", "created_at": value, "license_name": "MIT License",
+           "FAIL_TO_PASS": ["t1"], "PASS_TO_PASS": ["t2"], "patch": "x", "problem_statement": "Bug in r"}
+    ok, why = import_pool.keep_row(row, set())
+    assert ok is False and why.startswith("missing or invalid created_at")
+
+
+@parametrize("value, expected", [
+    ("2020-10-12 13:21:50", "2020-10-12"), ("2022-12-31T23:59:59Z", "2022-12-31"), ("2021-05-01", "2021-05-01"),
+])
+def test_parse_date_reads_the_formats_in_use(value, expected):
+    assert import_pool.parse_date(value).isoformat() == expected
+
+
+def test_read_rows_refuses_a_file_whose_sha256_differs(tmp_path, monkeypatch):
+    (tmp_path / "test-00000-of-00001.parquet").write_bytes(b"not the pinned bytes")
+    monkeypatch.setattr(import_pool, "split_files", lambda *a: [
+        {"path": "data/test-00000-of-00001.parquet", "sha256": "0" * 64, "size": 20}])
+    with pytest.raises(SystemExit, match="does not match the Hub record"):
+        import_pool.read_rows("o/d", "test", ["instance_id"], "a" * 40, tmp_path)
+
+
+def test_make_env_date_check_rejects_late_or_missing_dates():
+    pr = {"merged_at": "2022-08-16T13:50:38Z"}
+    ok_issue = {"number": 1, "createdAt": "2020-06-25T20:09:56Z"}
+    assert make_env.check_dates(pr, [ok_issue]) == []
+    assert make_env.check_dates({"merged_at": "2023-01-01T00:00:00Z"}, [ok_issue])
+    assert make_env.check_dates({"merged_at": None}, [ok_issue])
+    assert make_env.check_dates(pr, [{"number": 2, "createdAt": "2023-02-01T00:00:00Z"}])
+    assert make_env.check_dates(pr, [{"number": 3, "createdAt": None}])
+
+
+@parametrize("source, junit", [
+    ("tests/test_regressions.py::test_issue562_tzcasts", "tests.test_regressions::test_issue562_tzcasts"),
+    ("tests/test_types.py::TestFileType::test_guess_jpeg", "tests.test_types.TestFileType::test_guess_jpeg"),
+    ("test_base58.py::test_check_str", "test_base58::test_check_str"),
+    ("tests/test_objects.py::test_merge_with[case0-expected0]", "tests.test_objects::test_merge_with[case0-expected0]"),
+])
+def test_rebench_test_ids_match_junit_ids(source, junit):
+    assert rebench_pilot.norm_test_id(source) == junit
+
+
+def test_rebench_side_check_needs_every_listed_test_reported():
+    env = {"FAIL_TO_PASS": ["m::f"], "PASS_TO_PASS": ["m::p"]}
+    assert rebench_pilot.side_check(env, {"results": {"m::f": False, "m::p": True}}, after=False) == []
+    assert rebench_pilot.side_check(env, {"results": {"m::f": True, "m::p": True}}, after=True) == []
+    assert "missing" in rebench_pilot.side_check(env, {"results": {"m::p": True}}, after=False)[0]
+    assert "collection error" in rebench_pilot.side_check(
+        env, {"results": {"::tests.test_x": False, "m::f": False, "m::p": True}}, after=False)[0]
+    assert rebench_pilot.side_check(env, {"error": "timeout"}, after=True) == ["timeout"]
+
+
 # --- the shipped environments -----------------------------------------------------------------
 
 ENV_DIRS = sorted(p.parent for p in HERE.glob("*/env.json"))
@@ -439,6 +495,45 @@ def test_shipped_env_is_complete_and_human_sourced(env_dir):
     assert "@sha256:" in env["base_image"]
     assert env["quality_verdict"] in ("keep", "keep-flagged")
     assert (env["quality_verdict"] == "keep-flagged") == bool(env.get("quality_note"))
+
+
+# --- the SWE-rebench pilot environments --------------------------------------------------------
+
+PILOT_DIRS = sorted(p.parent for p in (HERE / "rebench-pilot").glob("*/env.json"))
+
+
+def test_pilot_has_five_environments():
+    assert len(PILOT_DIRS) == 5
+
+
+@parametrize("env_dir", PILOT_DIRS, ids=[d.name for d in PILOT_DIRS])
+def test_pilot_env_is_pinned_human_sourced_and_admitted(env_dir):
+    env = json.loads((env_dir / "env.json").read_text(encoding="utf-8"))
+    manifest = json.loads((HERE / "rebench-pilot" / "source_manifest.json").read_text(encoding="utf-8"))
+    for f in ("Dockerfile", "gold.patch", "test.patch", "issue.md", "requirements.lock", "admission.json"):
+        assert (env_dir / f).is_file(), f
+    assert env["instance_id"] == env_dir.name
+    assert len(env["base_commit"]) == 40 and env["base_commit"] in (env_dir / "Dockerfile").read_text()
+    assert len(env["pr_head_commit"]) == 40 and len(env["merge_commit"]) == 40
+    assert env["provenance"]["generator"] == "none" and "no AI-tool markers" in env["provenance"]["ai_marker_scan"]
+    assert env["merged_at"] < "2023-01-01" and env["issue_created_at"]
+    assert all(d < "2023-01-01" for d in env["issue_created_at"])
+    assert env["licence"] in import_pool.PERMISSIVE_SPDX
+    assert env["repo"].lower() not in import_pool.benchmark_repos()
+    assert "@sha256:" in env["base_image"]
+    assert env["FAIL_TO_PASS"] and not set(env["FAIL_TO_PASS"]) & set(env["PASS_TO_PASS"])
+    assert env["instance_id"] in {s["instance_id"].lower() for s in manifest["selected"]}
+    assert len(manifest["revision"]) == 40 and all(len(f["sha256"]) == 64 for f in manifest["files"])
+    adm = json.loads((env_dir / "admission.json").read_text(encoding="utf-8"))
+    assert adm["admitted"] is True and adm["source"]["found"] is True
+    for plat in adm["platforms"]:
+        assert plat["no_patch_fails"] == plat["gold_passes"] == f"{plat['runs']}/{plat['runs']}"
+        assert plat["runs"] >= 5
+        assert plat["negative_control"]["reward"]["reward"] == 0 and plat["gold_reward"]["reward"] == 1
+        iso = plat["isolation_probe"]
+        assert iso["ok"] and iso["interfaces_up"] == ["lo"] and iso["ipv4_routes"] == 0
+        assert iso["tcp_connect"].startswith("failed") and iso["dns"].startswith("failed") and iso["commits"] == 1
+        assert "--network=none" in plat["docker_flags"]
 
 
 def test_flagged_envs_match_the_review():

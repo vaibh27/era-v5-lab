@@ -23,9 +23,10 @@ def g5_train_row(step, norm_clipped=False):
             "train/utf8_bytes": 4800, "perf/step_ms": 250.0, "tokens_per_second": 6144.0, "gpu_alloc_gb": 12.5}
 
 
-def g5_eval(nll=3000.0, tokens=1000):
+def g5_eval(nll=3000.0, tokens=1000, nbytes=4000):
     """The keys G5's week2.evaluation.evaluate() returns."""
-    return {"val/nll_nats": nll, "val/scored_tokens": tokens, "val/bpb": 1.1, "val/perplexity": math.exp(nll / tokens)}
+    return {"val/nll_nats": nll, "val/utf8_bytes": nbytes, "val/scored_tokens": tokens,
+            "val/bpb": nll / math.log(2) / nbytes, "val/perplexity": math.exp(nll / tokens)}
 
 
 def test_factory_as_train_week2_calls_it(tmp_path):
@@ -60,8 +61,10 @@ def test_validation_step(tmp_path):
     writer.write({**g5_train_row(10), **g5_eval(2500.0, 1000)})   # eval_every_steps row
     writer.close()
     r0, r10 = rows(tmp_path / "g8" / "metrics.jsonl")
-    assert r0 == {"step": 0, "time": r0["time"], "validation_loss": pytest.approx(3.0)}
+    assert r0 == {"step": 0, "time": r0["time"], "validation_loss": pytest.approx(3.0),
+                  "validation_bpb": pytest.approx(g5_eval()["val/bpb"])}
     assert r10["validation_loss"] == pytest.approx(2.5)
+    assert r10["validation_bpb"] == pytest.approx(2500.0 / math.log(2) / 4000)
     assert r10["validation_loss"] == pytest.approx(math.log(g5_eval(2500.0, 1000)["val/perplexity"]))
     assert not any(k.startswith("val/") for k in r10)
 

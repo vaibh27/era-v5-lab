@@ -45,7 +45,7 @@ Stores per-step training metrics (`loss_ntp`, `loss_mtp`, `lr`, `tokens_per_seco
 
 ## 3. Load Team 5, Team 6 & Team 9 Runs (`load_jsonl.py`)
 
-`load_jsonl.py` loads Team 5's `run_a/` (baseline) and `run_b/` (reversible midpoint) `metrics.jsonl` files, Team 6's benchmark run JSONs (`h200_v1.json` from PR #135, `baseline_v0.json`), Team 6's live `step_timing` / `gpu_sample` JSONL streams, and Team 9's `eval_mini_v1.json` (`{"schema_version": "eval_mini_v1", "records": [...]}` or `.jsonl`):
+`load_jsonl.py` loads Team 5's `run_a/` (baseline) and `run_b/` (reversible midpoint) `metrics.jsonl` files, Team 6's benchmark run JSONs (`h200_v1.json` from PR #135, `baseline_v0.json`), Team 6's live `step_timing` / `gpu_sample` JSONL streams, and Team 9's `eval_mini_v1.json` (`{"schema_version": "eval_mini_v1", "records": [...]}` or `.jsonl`). For Team 6 run JSONs, `metrics.mfu_method` and `metrics.mfu_scope` are stored as indicator rows `mfu_method.<method> = 1.0` and `mfu_scope.<scope> = 1.0` (defaulting legacy files without those keys to `mfu_method.g6-v1` and `mfu_scope.selected_gpu` per `METRICS.md`), and non-null `metrics.ke2_mean_support_len` is stored as `ke2_mean_support_len`:
 
 ```bash
 # Load default Team 5 (run_a, run_b) and Team 6 (h200_v1.json) runs
@@ -76,7 +76,7 @@ Output on the loaded Team 5 (`run_a`, `run_b`) and Team 6 (`h200_v1`) runs:
 
 ```text
   [PASS] selftest: jsonl_lines=3 == ch_lines=3, metric_rows=9, null_rows=4 (stored as NULL)
-[PASS] run_id='h200_v1' source=teams/06-performance/results/modal_gpu/h200_v1.json | lines: file=150 ch=150 | metric_rows: file=218 ch=218 | null_rows: file=0 ch=0
+[PASS] run_id='h200_v1' source=teams/06-performance/results/modal_gpu/h200_v1.json | lines: file=150 ch=150 | metric_rows: file=220 ch=220 | null_rows: file=0 ch=0
 [PASS] run_id='run_a' source=teams/05-architecture/experiments/evidence/run_a/metrics.jsonl | lines: file=40 ch=40 | metric_rows: file=240 ch=240 | null_rows: file=0 ch=0
 [PASS] run_id='run_b' source=teams/05-architecture/experiments/evidence/run_b/metrics.jsonl | lines: file=40 ch=40 | metric_rows: file=240 ch=240 | null_rows: file=0 ch=0
 ```

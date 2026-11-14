@@ -1,0 +1,28 @@
+{
+  "pack": "en-nemotroncc.parquet",
+  "pack_sha256": "6eae1507bc689c79ec8b73011b264f5b4558ef8eb3ddbf866a598588b7cf0fbb",
+  "gold": "en-nemotroncc_gold.csv",
+  "gold_sha256": "955598fb766f49633d0ea4c5a9621bc5f4b8e1bff8f4121c69438118685de735",
+  "gold_count": 129,
+  "rules": "teams/01-data-a/spec_v1/tools/f2_rule.py",
+  "rules_file_sha256": "0f6968be84b136574ffb5c6f566088baa1b7b4dfd3b2c74cd0eab153d52ab402",
+  "code_sha256": "0f6968be84b136574ffb5c6f566088baa1b7b4dfd3b2c74cd0eab153d52ab402",
+  "limit_percent": "1",
+  "limit_documents": 1,
+  "status": "PASS",
+  "results": [
+    {
+      "rule": "F2",
+      "changed": 0,
+      "dropped": 0,
+      "affected_unique": 0,
+      "errors": 0,
+      "error_types": [],
+      "percent": "0.000000",
+      "result": "PASS",
+      "changed_ids": [],
+      "dropped_ids": [],
+      "affected_ids": []
+    }
+  ]
+}

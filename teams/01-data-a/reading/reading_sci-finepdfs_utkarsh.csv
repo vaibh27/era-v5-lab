@@ -1,0 +1,48 @@
+doc_id,kind,code,offsets,quote,why,source
+69bec7d4c7c5b24a,new,NEW-page-artifact,1851-1852,1,PDF page number left as the last line,manual
+3f77b536af11bdbd,missed,C2,4127-4141,26 August 2015,date footer line repeated on every page (x4); running-header removal DA-C1-007 is ID-gated and needs 15+ chars and 5+ repeats,manual
+3f77b536af11bdbd,new,NEW-page-artifact,6503-6509,Page 1,'Page N' footer lines (x3),manual
+6bd9cff2867dde6b,new,NEW-form-blanks,8350-8391,_________________________________________,signature line left as a run of underscores,manual
+323d03a0c69a993a,new,NEW-form-blanks,607-660,_____________________________________________________,underscore rule lines (x5) from the PDF form,manual
+75d3197ef1eebe14,missed,D1,2-53,CONVENIO ENTRE EL GOBIERNO DE LA REPUBLICA DEL PERU,first ~18k chars are the Spanish half of a bilingual treaty in an en pack; DA-D1-001 only quarantines 2 listed IDs,manual
+75d3197ef1eebe14,missed,C1,35711-35739,The University of Manchester,repository watermark line at the very end; DA-C1-007 only strips archive covers at the start,manual
+ceea9671dd61d0b1,new,NEW-latex-residue,73-93,\textsuperscript{a*},"LaTeX \textsuperscript commands (x6) left in prose; well-formed, so not B5",manual
+ceea9671dd61d0b1,new,NEW-missing-figures,8475-8529,![Particle size distribution of CSP by LD](image1.png),image links with no image (x4); figure content lost,manual
+bf7287e7e6c32f33,new,NEW-form-blanks,2408-2429,NAME:…………………………………………,dotted fill-in fields of a registration form,manual
+fefc24dc3b193463,new,NEW-form-blanks,2617-2627,Voted Yes:,empty vote-tally template fields,manual
+1644d240cedb1491,new,NEW-huge-tables,147-154,| Topic,"PARTIAL READ (1.86M chars). ~3,700 markdown table lines (index tables) dominate the doc",manual
+1644d240cedb1491,missed,D1,14463-14503,یارالیمنتری سهگرثی سم نے جواب میں بھی بھ,PARTIAL READ (1.86M chars). ~380k Arabic-script chars of Urdu debate text in an en pack; DA-D1-001 only quarantines 2 listed IDs,manual
+e54d3904f1e15ffb,new,NEW-page-artifact,4842-4843,2,stray page number on its own line,manual
+d20e4affc1d318fe,new,NEW-page-artifact,2491-2501,10/21/2011,slide date footer left between slides (x2),manual
+e58d6a06c9323550,new,NEW-page-artifact,61-63,53,contents-page numbers as bare lines,manual
+e58d6a06c9323550,missed,A5,314-318,ﬁrst,"ligature chars (x136); A5 ligature folding exists only for math (DA-A5-002), not in the sci scope",manual
+e5c998e626aeaef9,new,NEW-near-empty,0-44,adidas Waseda Futures Tennis Tournament 2010,233 chars: a form header with no body,manual
+469a6695b57d9130,new,NEW-missing-figures,13521-13576,![Figure 1-1: Power path of the LTC4061 charger](image),image placeholders (x15); figures lost,manual
+94f54a2af0a8c897,new,NEW-drop-cap-split,0-1,D,drop cap 'D' split from 'eveloping' onto its own line,manual
+92c5a95d0a91a30f,missed,B4,35-49,<<First Name>>,mail-merge field left unexpanded; DA-B4-013 matches only a few converter labels,manual
+eadf39964af0daef,missed,A5,373-374,ﬂ,"ligature chars (x12), some split from the word; A5 folding is math-only (DA-A5-002)",manual
+c700ec66afb3d047,new,NEW-page-artifact,0-2,14,page number as the first line,manual
+e77b0eeab987db14,missed,A1,836-847,recog­ nize,soft hyphens U+00AD (x19); sci A1 rule DA-A1-006 removes only ZWSP and BOM,manual
+762ce1e85df1342d,new,NEW-empty-table-rows,62540-62553,|   |   |   |,empty markdown table rows (x14),manual
+af56bfd768132ef9,missed,A1,32624-32639,devil-may­ care,soft hyphen U+00AD; DA-A1-006 does not remove it,manual
+f8dbaec0629f41c8,new,NEW-personal-names-ages,3776-3788,,"names of private members with ages or birthdays, no contact data; F1 rules target contact details and IDs",manual
+5379152bb87b7ecf,new,NEW-form-blanks,183-218,Last name _________________________,blank form fields,manual
+e21c6a671baba032,missed,F1,542-556,,phone numbers of private people next to names (20+); emails were masked but phones kept,manual
+24bebaf6ee460f90,missed,F1,513-532,,donor home addresses (x3) in a filing table,manual
+ded2213a089b6cec,new,NEW-prose-in-code-fence,11191-11194,```,"two balanced code fences wrap prose lists (a CV), not code",manual
+4a6a549c3ead2ceb,new,NEW-missing-spaces,33-70,MACEDuration:  On-goingCurrent Value:,field labels glued to values,manual
+fa41800a38a7ef77,new,NEW-scrambled-vertical-text,0-3,LLP,"vertical letterhead came out one word or letter per line, out of order",manual
+48ffcdfea0bdbaf7,new,NEW-missing-spaces,0-23,NEILABERCROMBIEGOVERNOR,letterhead words run together; OCR junk at the end too,manual
+d14d57d2f7ae06c9,missed,A5,3720-3724,ﬃce.,ligature chars (x25); A5 folding is math-only (DA-A5-002),manual
+d14d57d2f7ae06c9,missed,F1,24101-24114,,private mobile number,manual
+6431e058711852b7,new,NEW-page-artifact,8481-8482,3,PDF page number left as the last line,manual
+b128a5439be2b15d,missed,F1,26-56,,home address of a private child-care provider,manual
+24eaaeb743718ed2,missed,C2,627-754,"The Refurbishment, Expansion, Financing And Operation Of The Vereeniging Fresh Produce Market Through A PPP Procurement Process",bid title repeated as a running header (x49); DA-C1-007 running-header removal is ID-gated,manual
+feaaf0b7ad58777d,new,NEW-small-caps-split,133-148,F OODS L IMITED,small caps split: first letter cut off each word,manual
+5b348d724c744d07,new,NEW-small-caps-split,0-31,L AKEVILLE S OUTH H IGH S CHOOL,small caps split: first letter cut off each word,manual
+768ce30e6fac2306,new,NEW-drop-cap-split,55-72,t. Thomas Aquinas,drop cap 'S' lost: 'St. Thomas' reads 't. Thomas',manual
+766c83b5e63a0192,new,NEW-near-empty,0-41,Rutland Riding Club Unaffiliated Dressage,96 chars: title and date only,manual
+28b7763d4a13a37e,new,NEW-page-artifact,26872-26885,Page 10 of 11,'Page N of 11' footers left (x2),manual
+77f152ce4336c6d9,new,NEW-page-artifact,25957-26126,Novel Dyes Based on Extended Fulvene Motifs: Synthesis via Redox Reactions of Naphthoquinones with Donor-Acceptor Cyclopropanes and Their Spectroelectrochemical Behavior,"paper title repeated once at the end, a PDF page artifact, not a running header",manual
+35041611f4dc7ec5,missed,C1,45-83,How to navigate this document onscreen,PDF navigation instructions are boilerplate; DA-C1-007 only strips archive covers,manual
+2f28fd430f65033c,missed,A5,51-54,ﬁrm,ligature chars (x14); A5 folding is math-only (DA-A5-002),manual

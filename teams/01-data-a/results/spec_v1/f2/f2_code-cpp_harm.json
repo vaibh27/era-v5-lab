@@ -1,0 +1,28 @@
+{
+  "pack": "code-cpp.parquet",
+  "pack_sha256": "2aa25660b81ccaea5e153ab30c0abd80df2a0cf42531421094c5ff9c96401bd5",
+  "gold": "code-cpp_gold.csv",
+  "gold_sha256": "143d6cbdc97684d8baa2efa515a2de838be101b87f4bff63073c344e22ac8120",
+  "gold_count": 122,
+  "rules": "teams/01-data-a/spec_v1/tools/f2_rule.py",
+  "rules_file_sha256": "0f6968be84b136574ffb5c6f566088baa1b7b4dfd3b2c74cd0eab153d52ab402",
+  "code_sha256": "0f6968be84b136574ffb5c6f566088baa1b7b4dfd3b2c74cd0eab153d52ab402",
+  "limit_percent": "1",
+  "limit_documents": 1,
+  "status": "PASS",
+  "results": [
+    {
+      "rule": "F2",
+      "changed": 0,
+      "dropped": 0,
+      "affected_unique": 0,
+      "errors": 0,
+      "error_types": [],
+      "percent": "0.000000",
+      "result": "PASS",
+      "changed_ids": [],
+      "dropped_ids": [],
+      "affected_ids": []
+    }
+  ]
+}

@@ -1,0 +1,3 @@
+# Same as spec_v1/.gitattributes had for these reports: LF on every system (pr-guard allows only .md directly in the team folder).
+*.json text eol=lf
+*.md text eol=lf

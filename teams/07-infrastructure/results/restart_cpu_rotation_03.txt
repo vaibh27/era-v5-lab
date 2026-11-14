@@ -1,0 +1,25 @@
+Independent CPU restart evidence
+Source commit: ddfe977ea8f771ba6fa9137c1e9f46aade0125d1
+Date: 4 November 2026 IST
+$ python teams/07-infrastructure/jobs/restart_test/restart_test.py --out $SCRATCH/restart --also-kill-at 31,99,164 --report $SCRATCH/restart_cpu_rotation_03.txt
+
+Requested kill / actual kill / actual restore / replayed steps / bit-equal steps / A seconds / B seconds
+140 / 141 / 125 / 16 / 200 of 200 / 1.7 / 2.6
+restore.done: {"branch": "main", "checks_s": 0.0087, "download_s": 0.0017, "env_override": [], "event": "restore.done", "from_path": "main/step_00000125-e1", "load_s": 0.0158, "probe_recorded": true, "resharded": false, "restore_s": 0.0354, "run_id": "restart", "saved_world": 1, "schema": "v5-event/1", "skip": 0, "step": 125, "store": "local", "time": "2026-11-04T16:30:08.442Z", "tokens": 0, "verify_s": 0.0007, "world": 1}
+supervisor: {"action": "restart", "attempt": 0, "meaning": "crash: killed by SIGKILL", "pointer": {"epoch": 1, "path": "main/step_00000125-e1", "step": 125}, "pointer_step": 125, "rc": -9, "reason": "crash: retry", "seconds": 1.278}
+supervisor: {"action": "stop", "attempt": 1, "exit": 0, "meaning": "done", "rc": 0, "reason": "finished", "seconds": 1.294}
+31 / 33 / 25 / 8 / 200 of 200 / 1.8 / 2.5
+restore.done: {"branch": "main", "checks_s": 0.0086, "download_s": 0.0017, "env_override": [], "event": "restore.done", "from_path": "main/step_00000025-e1", "load_s": 0.0153, "probe_recorded": true, "resharded": false, "restore_s": 0.035, "run_id": "restart_kill31", "saved_world": 1, "schema": "v5-event/1", "skip": 0, "step": 25, "store": "local", "time": "2026-11-04T16:29:55.289Z", "tokens": 0, "verify_s": 0.0007, "world": 1}
+supervisor: {"action": "restart", "attempt": 0, "meaning": "crash: killed by SIGKILL", "pointer": {"epoch": 1, "path": "main/step_00000025-e1", "step": 25}, "pointer_step": 25, "rc": -9, "reason": "crash: retry", "seconds": 0.944}
+supervisor: {"action": "stop", "attempt": 1, "exit": 0, "meaning": "done", "rc": 0, "reason": "finished", "seconds": 1.594}
+99 / 99 / 75 / 24 / 200 of 200 / 1.7 / 2.6
+restore.done: {"branch": "main", "checks_s": 0.0088, "download_s": 0.0016, "env_override": [], "event": "restore.done", "from_path": "main/step_00000075-e1", "load_s": 0.0216, "probe_recorded": true, "resharded": false, "restore_s": 0.0418, "run_id": "restart_kill99", "saved_world": 1, "schema": "v5-event/1", "skip": 0, "step": 75, "store": "local", "time": "2026-11-04T16:29:59.712Z", "tokens": 0, "verify_s": 0.0008, "world": 1}
+supervisor: {"action": "restart", "attempt": 0, "meaning": "crash: killed by SIGKILL", "pointer": {"epoch": 1, "path": "main/step_00000075-e1", "step": 75}, "pointer_step": 75, "rc": -9, "reason": "crash: retry", "seconds": 1.128}
+supervisor: {"action": "stop", "attempt": 1, "exit": 0, "meaning": "done", "rc": 0, "reason": "finished", "seconds": 1.476}
+164 / 166 / 150 / 16 / 200 of 200 / 1.7 / 2.6
+restore.done: {"branch": "main", "checks_s": 0.0085, "download_s": 0.0015, "env_override": [], "event": "restore.done", "from_path": "main/step_00000150-e1", "load_s": 0.0152, "probe_recorded": true, "resharded": false, "restore_s": 0.0346, "run_id": "restart_kill164", "saved_world": 1, "schema": "v5-event/1", "skip": 0, "step": 150, "store": "local", "time": "2026-11-04T16:30:04.251Z", "tokens": 0, "verify_s": 0.0007, "world": 1}
+supervisor: {"action": "restart", "attempt": 0, "meaning": "crash: killed by SIGKILL", "pointer": {"epoch": 1, "path": "main/step_00000150-e1", "step": 150}, "pointer_step": 150, "rc": -9, "reason": "crash: retry", "seconds": 1.359}
+supervisor: {"action": "stop", "attempt": 1, "exit": 0, "meaning": "done", "rc": 0, "reason": "finished", "seconds": 1.23}
+
+All four tests PASS. Each has one SIGKILL restart (-9), then exit 0; both loss bit fields and data IDs match at all 200 final steps.
+This is local CPU evidence. No queue check-out or GPU execution is claimed.

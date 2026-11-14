@@ -1,7 +1,7 @@
 doc_id,read,verdict,diseases,evidence,hex,note
 73edc87d0fe145a4,full,clean,,,,
 b671c23be750f5e0,full,fix,C1,'(source : IANS)' at offset 0; 'कोई भी जिम्मेदारी न्यूज एजेंसी की ही होगी' at offset 2151,,agency credit + disclaimer
-70212045c3378b0a,full,fix,A6,OCR letter errors e.g. 'मैंग्रेजी पहने' at offset 96; title garbled 'रतन मेत्युपल थाफ' at offset 0,,scanned-book OCR; ask if A6 fits
+70212045c3378b0a,full,fix,,,,scanned-book OCR letter errors (no code fits): 'मैंग्रेजी पहने' at offset 96 + title garbled 'रतन मेत्युपल थाफ' at offset 0
 2945dc492be15c69,full,fix,C1,'विकास एआई द्वारा संचालित' at offset 0; 'कृपया उन्हें यहां पोस्ट करें' at offset 15238,,
 569dff1b80deaeea,full,clean,,,,
 cbf9d075cfdd413c,full,fix,C3,starts mid-sentence 'क्योंकि एक वो ही हैं' at offset 0,,
@@ -82,7 +82,7 @@ b387ff4a38ea0074,full,clean,,,,
 e3640031a837c276,full,clean,,,,
 f2851e765a224aa4,full,fix,C1,'Facebook page पर पाएं' at offset 1661,,
 4a302021652a3239,full,fix,C1,English video blurb 'Governor of West Bengal' at offset 422,,
-1f1eb43c8f95ea56,full,fix,A6,OCR letter errors e.g. 'निथय मेरे विस्तार' at offset 28,,scanned Gita commentary
+1f1eb43c8f95ea56,full,fix,,,,"scanned Gita commentary, OCR letter errors (no code fits): 'निथय मेरे विस्तार' at offset 28"
 f23d05194b381416,full,clean,,,,
 d199a9bb8a31fbc9,full,drop,C5,headline list 'जानिये सुप्रिम कोर्ट' at offset 0,,323 chars
 6c2209287e1ea05f,full,clean,,,,
@@ -116,7 +116,7 @@ de1f3cfeeb4a2c35,full,clean,,,,
 773d0386dc8e0be3,full,clean,,,,
 45849879d22c81e5,full,drop,D4,MT of Turkish news; names garbled 'हक्तंकामाज़ ने बयान दिया' at offset 1620,,
 20e1c47118df9baa,full,clean,,,,
-7c8432bf9ebc4574,full,fix,A6,digits garbled ब्0 for 30 'ब्0 स्कूलों' at offset 96; 'ख्8 स्कूलों' at offset 160,,font-conversion damage
+7c8432bf9ebc4574,full,fix,A6,digits garbled ब्0 for 30 'ब्0 स्कूलों' at offset 96; 'ख्8 स्कूलों' at offset 160,98 U+0030 DIGIT ZERO | 162 U+0038 DIGIT EIGHT,font-conversion damage
 84c68dc7c0ed4d76,full,clean,,,,
 4f15309747026ba4,full,clean,,,,
 2964c2dd74525343,full,clean,,,,

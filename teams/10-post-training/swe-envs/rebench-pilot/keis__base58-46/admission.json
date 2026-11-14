@@ -1,0 +1,274 @@
+{
+ "instance_id": "keis__base58-46",
+ "checked_at": "2026-11-11T22:47:54+0530",
+ "source": {
+  "found": true,
+  "source_instance_id": "keis__base58-46",
+  "source_created_at": "2020-01-14 10:05:45",
+  "source_licence_name": "MIT License",
+  "base_commit_matches": true,
+  "source_base_commit": "9418945639480b9a428ccabe6cd0c9becac24df6",
+  "f2p_same": true,
+  "f2p_only_source": [],
+  "f2p_only_rebuild": [],
+  "p2p_source_total": 15,
+  "p2p_source_in_rebuild_files": 15,
+  "p2p_in_files_only_source": [],
+  "p2p_only_rebuild": [],
+  "differences": [],
+  "variant": "same base, FAIL_TO_PASS and in-file PASS_TO_PASS as the source row"
+ },
+ "platforms": [
+  {
+   "platform": "native",
+   "image_platform": "linux/arm64",
+   "image": "g10-swe/keis__base58-46:v1",
+   "image_id": "sha256:92dc48bcd90bb407be58f1324c8af7a1e3dcc0a8113fcb40dd737ae6b616e9ac",
+   "build_seconds_if_built": 0.0,
+   "runs": 5,
+   "no_patch_fails": "5/5",
+   "gold_passes": "5/5",
+   "before": [
+    {
+     "run": 1,
+     "ok": true,
+     "problems": [],
+     "seconds": 0.5
+    },
+    {
+     "run": 2,
+     "ok": true,
+     "problems": [],
+     "seconds": 0.5
+    },
+    {
+     "run": 3,
+     "ok": true,
+     "problems": [],
+     "seconds": 0.5
+    },
+    {
+     "run": 4,
+     "ok": true,
+     "problems": [],
+     "seconds": 0.5
+    },
+    {
+     "run": 5,
+     "ok": true,
+     "problems": [],
+     "seconds": 0.5
+    }
+   ],
+   "after": [
+    {
+     "run": 1,
+     "ok": true,
+     "problems": [],
+     "seconds": 0.5
+    },
+    {
+     "run": 2,
+     "ok": true,
+     "problems": [],
+     "seconds": 0.5
+    },
+    {
+     "run": 3,
+     "ok": true,
+     "problems": [],
+     "seconds": 0.5
+    },
+    {
+     "run": 4,
+     "ok": true,
+     "problems": [],
+     "seconds": 0.5
+    },
+    {
+     "run": 5,
+     "ok": true,
+     "problems": [],
+     "seconds": 0.5
+    }
+   ],
+   "negative_control": {
+    "patch": "diff --git a/base58.py b/base58.py\n--- a/base58.py\n+++ b/base58.py\n@@ -1,3 +1,4 @@\n+# g10 negative control: comment only, no behaviour change\n '''Base58 encoding\n \n Implementations of Base58 and Base58Check endcodings that are compatible\n",
+    "reward": {
+     "instance_id": "keis__base58-46",
+     "reward": 0,
+     "failed": [
+      "test_base58::test_check_str"
+     ],
+     "n_failed": 1,
+     "seconds": 0.5
+    }
+   },
+   "gold_reward": {
+    "instance_id": "keis__base58-46",
+    "reward": 1,
+    "failed": [],
+    "n_failed": 0,
+    "seconds": 0.5
+   },
+   "isolation_probe": {
+    "interfaces_up": [
+     "lo"
+    ],
+    "interfaces_down": [
+     "erspan0",
+     "gre0",
+     "gretap0",
+     "ip6_vti0",
+     "ip6gre0",
+     "ip6tnl0",
+     "ip_vti0",
+     "sit0",
+     "tunl0"
+    ],
+    "ipv4_routes": 0,
+    "uid": 1000,
+    "tcp_connect": "failed: OSError",
+    "dns": "failed: gaierror",
+    "commits": 1,
+    "ok": true
+   },
+   "leftover_containers": [],
+   "docker_flags": [
+    "--network=none",
+    "--memory=2g",
+    "--cpus=2",
+    "--pids-limit=256",
+    "--cap-drop=ALL",
+    "--security-opt=no-new-privileges"
+   ],
+   "ok": true
+  },
+  {
+   "platform": "linux/amd64",
+   "image_platform": "linux/amd64",
+   "image": "g10-swe/keis__base58-46:v1-amd64",
+   "image_id": "sha256:a47302e7155752f85e3a4ad490221986c6c842e26a3833cfc105597146d898b6",
+   "build_seconds_if_built": 80.5,
+   "runs": 5,
+   "no_patch_fails": "5/5",
+   "gold_passes": "5/5",
+   "before": [
+    {
+     "run": 1,
+     "ok": true,
+     "problems": [],
+     "seconds": 2.5
+    },
+    {
+     "run": 2,
+     "ok": true,
+     "problems": [],
+     "seconds": 1.0
+    },
+    {
+     "run": 3,
+     "ok": true,
+     "problems": [],
+     "seconds": 1.0
+    },
+    {
+     "run": 4,
+     "ok": true,
+     "problems": [],
+     "seconds": 1.0
+    },
+    {
+     "run": 5,
+     "ok": true,
+     "problems": [],
+     "seconds": 1.0
+    }
+   ],
+   "after": [
+    {
+     "run": 1,
+     "ok": true,
+     "problems": [],
+     "seconds": 1.0
+    },
+    {
+     "run": 2,
+     "ok": true,
+     "problems": [],
+     "seconds": 1.0
+    },
+    {
+     "run": 3,
+     "ok": true,
+     "problems": [],
+     "seconds": 1.0
+    },
+    {
+     "run": 4,
+     "ok": true,
+     "problems": [],
+     "seconds": 1.0
+    },
+    {
+     "run": 5,
+     "ok": true,
+     "problems": [],
+     "seconds": 1.0
+    }
+   ],
+   "negative_control": {
+    "patch": "diff --git a/base58.py b/base58.py\n--- a/base58.py\n+++ b/base58.py\n@@ -1,3 +1,4 @@\n+# g10 negative control: comment only, no behaviour change\n '''Base58 encoding\n \n Implementations of Base58 and Base58Check endcodings that are compatible\n",
+    "reward": {
+     "instance_id": "keis__base58-46",
+     "reward": 0,
+     "failed": [
+      "test_base58::test_check_str"
+     ],
+     "n_failed": 1,
+     "seconds": 1.0
+    }
+   },
+   "gold_reward": {
+    "instance_id": "keis__base58-46",
+    "reward": 1,
+    "failed": [],
+    "n_failed": 0,
+    "seconds": 1.0
+   },
+   "isolation_probe": {
+    "interfaces_up": [
+     "lo"
+    ],
+    "interfaces_down": [
+     "erspan0",
+     "gre0",
+     "gretap0",
+     "ip6_vti0",
+     "ip6gre0",
+     "ip6tnl0",
+     "ip_vti0",
+     "sit0",
+     "tunl0"
+    ],
+    "ipv4_routes": 0,
+    "uid": 1000,
+    "tcp_connect": "failed: OSError",
+    "dns": "failed: gaierror",
+    "commits": 1,
+    "ok": true
+   },
+   "leftover_containers": [],
+   "docker_flags": [
+    "--network=none",
+    "--memory=2g",
+    "--cpus=2",
+    "--pids-limit=256",
+    "--cap-drop=ALL",
+    "--security-opt=no-new-privileges"
+   ],
+   "ok": true
+  }
+ ],
+ "admitted": true
+}

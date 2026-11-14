@@ -88,8 +88,17 @@ metrics:
   cadence: Every training step
   source: Not written yet. Proposed for G5 to count which experts the router picks in train.py.
   notes: Each token picks top-k experts. Proposed value is each expert's share of all these picks (tokens x k), so
-    the shares add up to 1 for each expert layer. This is a list of values, not one number. To agree - this
-    definition, and a single summary number for alarms, such as busiest expert / average expert.
+    the shares add up to 1 for each expert layer. This is a list of values, not one number. Its single summary
+    number for alarms and tracking is expert_load_imbalance (busiest expert / average expert), below.
+- name: expert_load_imbalance
+  unit: ratio (1.0 = balanced)
+  cadence: Every training step that logs expert_load
+  source: metrics_logger/metrics_writer.py expert_load_imbalance(expert_load), worked out by MetricsWriter.write()
+    from expert_load in the same row unless the trainer passes it.
+  notes: Busiest expert / average expert, max_i(s_i) / mean_i(s_i) = max(shares) * num_experts, for the worst
+    (largest) MoE layer. 1.0 means every expert gets the same share; num_experts means every pick goes to one
+    expert. Equals router_max_vio + 1. No value when expert_load is empty, a layer has no picks, or a value is
+    negative or not finite. Grafana panel 27 (orange from 1.5, red from 2.0).
 # The main check in this list that the model improves on data it has not trained on. Helps spot overfitting.
 - name: validation_loss
   unit: nats
@@ -102,6 +111,18 @@ metrics:
     loss_ntp on training batches, so the two are compared on one axis (Grafana panel 20). Equal to
     ln(val/perplexity). G5's main held-out number is val/bpb (bits per byte), which does not depend on the
     tokenizer; validation_loss does, so compare it only between runs with the same tokenizer.
+
+# The held-out number to compare runs with different G3 tokenizers: it counts bytes, not tokens.
+- name: validation_bpb
+  unit: bits per byte
+  cadence: Each validation run - the same rows as validation_loss (step 0, every run.eval_every_steps steps and the
+    last step)
+  source: G5 train_week2.py, from week2.evaluation.evaluate() in the same metrics.jsonl row, as val/nll_nats (the
+    summed loss) and val/utf8_bytes. metrics_writer.py works out validation_bpb = val/nll_nats / (ln(2) *
+    val/utf8_bytes); when those two are missing it takes G5's own val/bpb, which is the same number.
+  notes: Held-out bits per UTF-8 byte on G5's fixed held-out set, G5's main held-out metric (val/bpb). The bytes are
+    the same whatever the tokenizer, so unlike validation_loss it can be compared between runs with different G3
+    tokenizers. Lower is better. Grafana panel 25.
 
 # --- System metrics; G6 to supply ---
 # Are the GPUs busy? Low values may mean GPU time is being wasted.

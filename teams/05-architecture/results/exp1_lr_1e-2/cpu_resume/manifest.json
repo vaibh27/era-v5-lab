@@ -1,0 +1,159 @@
+{
+  "config": {
+    "intended": {
+      "arm": "exp1-lr-1e-2",
+      "official_step_time": true,
+      "instructor_expert_ffn": 512,
+      "loaded_expert_ffn": 512,
+      "activation_intended": "SwiGLU",
+      "position_intended": "RoPE",
+      "tied_embeddings_intended": true,
+      "owner": "Varshith Chennuru",
+      "test_size": "T1",
+      "seeds": [
+        1234,
+        1235,
+        1236
+      ],
+      "max_time_min": 30,
+      "metric": "bits_per_byte",
+      "profile": "T1",
+      "lead_intent": {
+        "arm": "exp1-lr-1e-2",
+        "official_step_time": true,
+        "instructor_expert_ffn": 512,
+        "loaded_expert_ffn": 512,
+        "activation_intended": "SwiGLU",
+        "position_intended": "RoPE",
+        "tied_embeddings_intended": true,
+        "owner": "Varshith Chennuru",
+        "test_size": "T1",
+        "seeds": [
+          1234,
+          1235,
+          1236
+        ],
+        "max_time_min": 30,
+        "metric": "bits_per_byte"
+      }
+    },
+    "model": {
+      "activation": "swiglu",
+      "position": "rope",
+      "rope_theta": 10000.0,
+      "rotary_fraction": 1.0,
+      "norm_eps": 1e-05,
+      "mtp_weight": 0.0,
+      "moe": {
+        "bias": false,
+        "bias_gamma": 0.0,
+        "num_experts": 8,
+        "top_k": 2,
+        "num_shared": 1,
+        "dispatch": "loop",
+        "ffn_hidden": 512
+      },
+      "embedding": "ke1",
+      "attn_impl": "eager",
+      "mtp": false,
+      "reversible": false,
+      "ce_impl": "torch",
+      "vocab_size": 131072,
+      "block_size": 64,
+      "n_layer": 6,
+      "n_head": 4,
+      "n_kv_head": 2,
+      "n_embd": 256,
+      "ke_max_pos": 32
+    },
+    "optim": {
+      "betas": [
+        0.9,
+        0.999
+      ],
+      "eps": 1e-08,
+      "schedule": "constant",
+      "name": "adamw",
+      "lr": 0.01,
+      "weight_decay": 0.0
+    },
+    "run": {
+      "micro_batch_size": 2,
+      "eval_every_steps": 50,
+      "compile": false,
+      "flush_every_steps": 10,
+      "steps": 4,
+      "max_time_min": 30,
+      "seed": 1234,
+      "batch_size": 2,
+      "grad_clip": 1.0,
+      "dtype": "fp32"
+    },
+    "approval": {
+      "status": "pending",
+      "reference": null
+    },
+    "evaluation": {
+      "boundary_policy": "bos_then_all_text_tokens_document_isolated",
+      "approved": false
+    },
+    "provenance": {
+      "arm_sources": [
+        {
+          "path": "configs/arms/exp1/lr_1e-2.yaml",
+          "sha256": "f941f2c03135049ff8762883324f5800c131b2c93b28693f8e6d5b7001f03f00"
+        },
+        {
+          "path": "configs/arms/t1.yaml",
+          "sha256": "706b315400fd98e3b472b64bafb72078cbb4020d79ebf7f8878ea63e73589ca0"
+        }
+      ],
+      "runtime_sha256": "05b7c635c2fa3e08e269631eacca10568d1fd2843f66a02b0b7e7be85751ffd4",
+      "plan_sha256": "b9edabe7696d5e33ed1e885bcba02d5cb2db61724007306e63966c8d11a3f0c5",
+      "plan_hash_normalization": "UTF-8 with LF newlines",
+      "lead_snapshot": "3a2f898b990d253d8422419f31e147ae65ec1747",
+      "expert_width_source": "intended.instructor_expert_ffn",
+      "lead_explicit_choices": {
+        "model.reversible": false,
+        "model.mtp": false
+      },
+      "g6_inheritance": "not loaded; explicit G5 declarations only"
+    }
+  },
+  "artifacts": {
+    "tokenizer_sha256": "2de039f20d17afd17615095c406c43087359673b767ed0fe2c480b995f2af8e5",
+    "table_file_sha256": "0b2b499e58ae644362c6ef7f6413aef833cf4707d41433931f47bc4990ad72b0",
+    "table_content_sha256": "47d411a9c6cae6fa2075935567243e51f4efbc377ccef3eef42c32fce66f869f",
+    "vocab_size": 131072,
+    "pos_dim": 32,
+    "bos_id": 130725,
+    "pad_id": 130726
+  },
+  "train_sha256": "7bc1cc61877917bb655e5db06be7192f7738d2604b57fc539194511deb35f42d",
+  "heldout_sha256": "a5009b47b389ff5909206b1a2d539fb1390fb7edb369764512990533ceb0018d",
+  "heldout_sources_sha256": "2c78bbc441c11bd8c46a9a85b630c77aaf0c058c077e566ecd0b7e53a829d2d9",
+  "heldout_checksum_sha256": null,
+  "sources": {
+    "train_week2.py": "68d34779185a4835d83a2f0bb141864071b918288417571fb6d5ab1a5403e4c9",
+    "artifacts.py": "04323c0bcf9c53a347b8fcea8956aa31472258180607f6ff890e97bb618a1ae0",
+    "config.py": "ecfb316bb2d9f237f2ebad2a41e7f1006682ea7f8cdbdef67cbda6c97f867f62",
+    "data.py": "65354d07a1f5b6caf922eb7ad390ba5b88f1bcf847004dfab7934378d6892d46",
+    "evaluation.py": "a8a2d19b76d22b32519b24d6ba9ce542a9fe1d1fe3b717121d62936a8e8727bb",
+    "model.py": "b4a432386ab8d9549e9e462ca7eb1a4ea9e82643119e02acec2d89a13ce91f5a",
+    "scoring.py": "e19a93b8766c971470330a53c00e6cd46da879668eda0e197415810640eab9da",
+    "__init__.py": "7df6cb65c461da9498d38962670e74f923d01d718a36f244d7e7711a4f34ea26"
+  },
+  "device": "cpu",
+  "torch": "2.13.0+cpu",
+  "smoke": true,
+  "identity_sha256": "255e96b9d83b81b6c8069fab299bc31405e8929939a73509708edf43f281ddcb",
+  "baseline_commit": "3a2f898b990d253d8422419f31e147ae65ec1747",
+  "parameters": 58080512,
+  "gpu": null,
+  "status": "SMOKE_NOT_A_QUALITY_RESULT",
+  "heldout_provenance": null,
+  "g8_external_writer": false,
+  "token_budget_note": "Input positions include right padding; scored tokens/bytes reported separately",
+  "train_documents": 50,
+  "heldout_documents": 15
+}

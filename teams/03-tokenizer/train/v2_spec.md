@@ -102,6 +102,8 @@ Ordered by expected value. Each becomes its own `[G3]` issue when it starts.
    their ids to script merges would improve Indic, the Dravidian scripts most: on dev, +1,536 merges lowers
    Ta/Te/Kn/Ml by roughly 8–10%. This breaks "one contiguous id block per script", so it needs a team decision.
    The verify scripts don't require contiguous blocks.
+   Done for the freeze test (TSAI, 12 Nov): `slots_p1536.json` / `slots_p768.json`, see COMPARE.md
+   "Pruned-o200k candidates".
 2. **More and cleaner training text.** Use Data A/B's cleaned output, and drop boilerplate (C1) and machine-
    translated spam (D4) with the diagnosis medicines: in the Bengali FineWeb-2 diagnosis pack, 95 of 500 docs had
    boilerplate and 36 were MT spam. Then go from 20–60 MB to 100 MB or more per language.

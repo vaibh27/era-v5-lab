@@ -1,0 +1,24 @@
+[
+  {
+    "doc_id": "870fb0ffd8d7a041",
+    "events": [
+      {
+        "rule": "DB-C1-012",
+        "action": "fix",
+        "before_sha256": "870fb0ffd8d7a0416126123f2d73341e3d3e4568235321ef581f4662becda9d5",
+        "after_sha256": "2883b3d4f82f3b245b7145c35db327d53b5b5463d62a8025d2538ec1a01e5c34"
+      }
+    ]
+  },
+  {
+    "doc_id": "c85acdaeebe64599",
+    "events": [
+      {
+        "rule": "DB-C3-024",
+        "action": "fix",
+        "before_sha256": "c85acdaeebe645993fccfc1064ced280b775c3fad9c009c61925bd59e5aeb1d0",
+        "after_sha256": "da5132e9836c623f5363a7fb717839523a8d2fdc75ad4b666dcd118903f4b146"
+      }
+    ]
+  }
+]

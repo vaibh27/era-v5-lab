@@ -1,0 +1,14 @@
+# A2 realistic size: 16 prompts x k 8 x 512 new tokens per step (about the C design), sampler hf_batch, 4 steps.
+# stop_at_eos false: every completion is exactly 512 tokens, so tokens/s and memory are the worst case.
+seed: 1234
+device: cuda
+model:
+  kind: hf
+  path: /vol/hf/allenai/OLMoE-1B-7B-0125-Instruct
+  dtype: bfloat16
+  stop_at_eos: false
+task: {kind: toy, rule: parity, vocab: 50304, prompt_len: 8, n_train: 256, n_heldout: 16}
+train: {algo: grpo, steps: 4, prompts_per_step: 16, k: 8, max_new: 512, temperature: 1.0, lr: 1.0e-6,
+        clip_eps: 0.2, ppo_epochs: 1, kl_coef: 0.0, trainable: ['\.self_attn\.'], eval_every: 4, eval_k: 2,
+        sampler: hf_batch, vllm: {gpu_memory_utilization: 0.3, max_model_len: 2048}, tis_clip: 2.0, routing_log: true,
+        routing_probe: 4, kl_to_start: true}

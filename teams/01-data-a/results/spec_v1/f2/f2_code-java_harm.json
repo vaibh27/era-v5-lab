@@ -1,0 +1,28 @@
+{
+  "pack": "code-java.parquet",
+  "pack_sha256": "739dc95cdb4241847b051e8c55f5a723a4597919c62f9d6e4ebb9a957d445b00",
+  "gold": "code-java_gold.csv",
+  "gold_sha256": "223d555f68e1bd7ecc93f4d3510e7b3425401539729443b2bff8ed1b0212e869",
+  "gold_count": 116,
+  "rules": "teams/01-data-a/spec_v1/tools/f2_rule.py",
+  "rules_file_sha256": "0f6968be84b136574ffb5c6f566088baa1b7b4dfd3b2c74cd0eab153d52ab402",
+  "code_sha256": "0f6968be84b136574ffb5c6f566088baa1b7b4dfd3b2c74cd0eab153d52ab402",
+  "limit_percent": "1",
+  "limit_documents": 1,
+  "status": "PASS",
+  "results": [
+    {
+      "rule": "F2",
+      "changed": 0,
+      "dropped": 0,
+      "affected_unique": 0,
+      "errors": 0,
+      "error_types": [],
+      "percent": "0.000000",
+      "result": "PASS",
+      "changed_ids": [],
+      "dropped_ids": [],
+      "affected_ids": []
+    }
+  ]
+}

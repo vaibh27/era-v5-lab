@@ -12,6 +12,8 @@ with. Compares <new> with <old> (v1) and fails unless
   - every id below --base-end maps to the same token string, except the ids that
     the build swapped (o200k pruning by usage: manifest "o200k_swap.swapped_ids",
     passed with --manifest); those must all hold a new token,
+  - with --old-has-swap (<old> already has the o200k swap, e.g. C3 sample-v0), the swapped ids must be
+    identical too, and only the extra script ids (manifest layout "extra_id_ranges") may differ,
   - the kept base merges are identical and in the same order,
   - the vocab size is the same.
 
@@ -21,6 +23,7 @@ reports how many tokens there kept their id.
 Usage
 -----
     python check_ids.py /path/to/v1/tokenizer.json /path/to/v2/tokenizer.json --manifest v2_manifest.json
+    python check_ids.py c3_s0/tokenizer.json p1536_s0/tokenizer.json --manifest p1536_s0_manifest.json --old-has-swap
 """
 import argparse
 import json
@@ -36,6 +39,7 @@ def main():
     ap.add_argument("new")
     ap.add_argument("--base-end", type=int, default=114333, help="first id after the base block (v1: 114333)")
     ap.add_argument("--manifest", help="train_bpe.py manifest of <new>; its o200k_swap.swapped_ids may differ")
+    ap.add_argument("--old-has-swap", action="store_true", help="<old> already has the swap: only extra ids may differ")
     args = ap.parse_args()
 
     old, new = (json.load(open(p, encoding="utf-8")) for p in (args.old, args.new))
@@ -57,7 +61,13 @@ def main():
     n_id = {i: t for t, i in new["model"]["vocab"].items()}
     swapped = set()
     if args.manifest:
-        swapped = set(json.load(open(args.manifest, encoding="utf-8")).get("o200k_swap", {}).get("swapped_ids", []))
+        m = json.load(open(args.manifest, encoding="utf-8"))
+        swapped = set() if args.old_has_swap else set(m.get("o200k_swap", {}).get("swapped_ids", []))
+        # Extra script merges on more pruned base ids (slots "extra"): those ids also hold a new token.
+        for spec in m.get("layout", {}).values():
+            for part in spec[2:] if isinstance(spec, list) else []:
+                for lo, hi in part.get("extra_id_ranges", []) if isinstance(part, dict) else []:
+                    swapped.update(range(lo, hi))
     base_ids = [i for i in o_id if i < args.base_end]
     diff = [i for i in base_ids if n_id.get(i) != o_id[i] and i not in swapped]
     if diff:

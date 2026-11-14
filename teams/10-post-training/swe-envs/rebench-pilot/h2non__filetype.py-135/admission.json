@@ -1,0 +1,276 @@
+{
+ "instance_id": "h2non__filetype.py-135",
+ "checked_at": "2026-11-11T22:47:15+0530",
+ "source": {
+  "found": true,
+  "source_instance_id": "h2non__filetype.py-135",
+  "source_created_at": "2022-08-05 19:27:00",
+  "source_licence_name": "MIT License",
+  "base_commit_matches": false,
+  "source_base_commit": "436ade4e8d70bdda6846843ef46e07d51fd30bb4",
+  "f2p_same": true,
+  "f2p_only_source": [],
+  "f2p_only_rebuild": [],
+  "p2p_source_total": 17,
+  "p2p_source_in_rebuild_files": 17,
+  "p2p_in_files_only_source": [],
+  "p2p_only_rebuild": [],
+  "differences": [
+   "base is merge-base(PR base, PR head) `3bd71d081207`, source row has `436ade4e8d70`"
+  ],
+  "variant": "G10 rebuilt variant: base is merge-base(PR base, PR head) `3bd71d081207`, source row has `436ade4e8d70`"
+ },
+ "platforms": [
+  {
+   "platform": "native",
+   "image_platform": "linux/arm64",
+   "image": "g10-swe/h2non__filetype.py-135:v1",
+   "image_id": "sha256:4682a8179cc364b92df06ba8fcde80a5c177440ef5a553c7c48bb76215855e30",
+   "build_seconds_if_built": 0.0,
+   "runs": 5,
+   "no_patch_fails": "5/5",
+   "gold_passes": "5/5",
+   "before": [
+    {
+     "run": 1,
+     "ok": true,
+     "problems": [],
+     "seconds": 0.5
+    },
+    {
+     "run": 2,
+     "ok": true,
+     "problems": [],
+     "seconds": 0.5
+    },
+    {
+     "run": 3,
+     "ok": true,
+     "problems": [],
+     "seconds": 0.5
+    },
+    {
+     "run": 4,
+     "ok": true,
+     "problems": [],
+     "seconds": 0.5
+    },
+    {
+     "run": 5,
+     "ok": true,
+     "problems": [],
+     "seconds": 0.5
+    }
+   ],
+   "after": [
+    {
+     "run": 1,
+     "ok": true,
+     "problems": [],
+     "seconds": 0.5
+    },
+    {
+     "run": 2,
+     "ok": true,
+     "problems": [],
+     "seconds": 0.5
+    },
+    {
+     "run": 3,
+     "ok": true,
+     "problems": [],
+     "seconds": 0.5
+    },
+    {
+     "run": 4,
+     "ok": true,
+     "problems": [],
+     "seconds": 0.5
+    },
+    {
+     "run": 5,
+     "ok": true,
+     "problems": [],
+     "seconds": 0.5
+    }
+   ],
+   "negative_control": {
+    "patch": "diff --git a/filetype/utils.py b/filetype/utils.py\n--- a/filetype/utils.py\n+++ b/filetype/utils.py\n@@ -1,3 +1,4 @@\n+# g10 negative control: comment only, no behaviour change\n # -*- coding: utf-8 -*-\n \n # Python 2.7 workaround\n",
+    "reward": {
+     "instance_id": "h2non__filetype.py-135",
+     "reward": 0,
+     "failed": [
+      "tests.test_types.TestFileType::test_guess_jpeg"
+     ],
+     "n_failed": 1,
+     "seconds": 0.5
+    }
+   },
+   "gold_reward": {
+    "instance_id": "h2non__filetype.py-135",
+    "reward": 1,
+    "failed": [],
+    "n_failed": 0,
+    "seconds": 0.5
+   },
+   "isolation_probe": {
+    "interfaces_up": [
+     "lo"
+    ],
+    "interfaces_down": [
+     "erspan0",
+     "gre0",
+     "gretap0",
+     "ip6_vti0",
+     "ip6gre0",
+     "ip6tnl0",
+     "ip_vti0",
+     "sit0",
+     "tunl0"
+    ],
+    "ipv4_routes": 0,
+    "uid": 1000,
+    "tcp_connect": "failed: OSError",
+    "dns": "failed: gaierror",
+    "commits": 1,
+    "ok": true
+   },
+   "leftover_containers": [],
+   "docker_flags": [
+    "--network=none",
+    "--memory=2g",
+    "--cpus=2",
+    "--pids-limit=256",
+    "--cap-drop=ALL",
+    "--security-opt=no-new-privileges"
+   ],
+   "ok": true
+  },
+  {
+   "platform": "linux/amd64",
+   "image_platform": "linux/amd64",
+   "image": "g10-swe/h2non__filetype.py-135:v1-amd64",
+   "image_id": "sha256:b9cf386ef5bec26740c3d697624145a1ad51ff287d297fdad5068796e6f2042e",
+   "build_seconds_if_built": 17.6,
+   "runs": 5,
+   "no_patch_fails": "5/5",
+   "gold_passes": "5/5",
+   "before": [
+    {
+     "run": 1,
+     "ok": true,
+     "problems": [],
+     "seconds": 1.6
+    },
+    {
+     "run": 2,
+     "ok": true,
+     "problems": [],
+     "seconds": 1.1
+    },
+    {
+     "run": 3,
+     "ok": true,
+     "problems": [],
+     "seconds": 1.1
+    },
+    {
+     "run": 4,
+     "ok": true,
+     "problems": [],
+     "seconds": 1.2
+    },
+    {
+     "run": 5,
+     "ok": true,
+     "problems": [],
+     "seconds": 1.1
+    }
+   ],
+   "after": [
+    {
+     "run": 1,
+     "ok": true,
+     "problems": [],
+     "seconds": 1.1
+    },
+    {
+     "run": 2,
+     "ok": true,
+     "problems": [],
+     "seconds": 1.1
+    },
+    {
+     "run": 3,
+     "ok": true,
+     "problems": [],
+     "seconds": 1.2
+    },
+    {
+     "run": 4,
+     "ok": true,
+     "problems": [],
+     "seconds": 1.2
+    },
+    {
+     "run": 5,
+     "ok": true,
+     "problems": [],
+     "seconds": 1.2
+    }
+   ],
+   "negative_control": {
+    "patch": "diff --git a/filetype/utils.py b/filetype/utils.py\n--- a/filetype/utils.py\n+++ b/filetype/utils.py\n@@ -1,3 +1,4 @@\n+# g10 negative control: comment only, no behaviour change\n # -*- coding: utf-8 -*-\n \n # Python 2.7 workaround\n",
+    "reward": {
+     "instance_id": "h2non__filetype.py-135",
+     "reward": 0,
+     "failed": [
+      "tests.test_types.TestFileType::test_guess_jpeg"
+     ],
+     "n_failed": 1,
+     "seconds": 1.1
+    }
+   },
+   "gold_reward": {
+    "instance_id": "h2non__filetype.py-135",
+    "reward": 1,
+    "failed": [],
+    "n_failed": 0,
+    "seconds": 1.2
+   },
+   "isolation_probe": {
+    "interfaces_up": [
+     "lo"
+    ],
+    "interfaces_down": [
+     "erspan0",
+     "gre0",
+     "gretap0",
+     "ip6_vti0",
+     "ip6gre0",
+     "ip6tnl0",
+     "ip_vti0",
+     "sit0",
+     "tunl0"
+    ],
+    "ipv4_routes": 0,
+    "uid": 1000,
+    "tcp_connect": "failed: OSError",
+    "dns": "failed: gaierror",
+    "commits": 1,
+    "ok": true
+   },
+   "leftover_containers": [],
+   "docker_flags": [
+    "--network=none",
+    "--memory=2g",
+    "--cpus=2",
+    "--pids-limit=256",
+    "--cap-drop=ALL",
+    "--security-opt=no-new-privileges"
+   ],
+   "ok": true
+  }
+ ],
+ "admitted": true
+}

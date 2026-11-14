@@ -1,0 +1,433 @@
+candidate,extraction,P,script_class,n_tokens,n_colliding_tokens,n_excess_tokens,rate_colliding
+C1-s0,decode,32,Bengali,3100,0,0,0.0
+C1-s0,decode,32,Code/Structure,3685,0,0,0.0
+C1-s0,decode,32,Devanagari,5249,0,0,0.0
+C1-s0,decode,32,Digits,1170,0,0,0.0
+C1-s0,decode,32,Gujarati,2398,0,0,0.0
+C1-s0,decode,32,Gurmukhi,1439,0,0,0.0
+C1-s0,decode,32,Kannada,2453,0,0,0.0
+C1-s0,decode,32,Latin,91201,0,0,0.0
+C1-s0,decode,32,Malayalam,2912,0,0,0.0
+C1-s0,decode,32,Mixed,461,0,0,0.0
+C1-s0,decode,32,Oriya,1242,0,0,0.0
+C1-s0,decode,32,Other,9445,3,3,0.000318
+C1-s0,decode,32,Partial-UTF8[2-byte(Latin-ext/Greek/Cyrillic)],75,48,47,0.64
+C1-s0,decode,32,Partial-UTF8[3-byte(CJK remnant)],504,492,492,0.97619
+C1-s0,decode,32,"Partial-UTF8[3-byte(E0: Brahmic, block unknown)]",2,2,2,1.0
+C1-s0,decode,32,Partial-UTF8[3-byte(E0: Sinhala/Thai/Tibetan remnant)],22,13,13,0.590909
+C1-s0,decode,32,Partial-UTF8[3-byte(E1: Georgian/Cherokee/ext)],103,34,29,0.330097
+C1-s0,decode,32,Partial-UTF8[3-byte(E2: punctuation/math symbols)],41,38,38,0.926829
+C1-s0,decode,32,Partial-UTF8[3-byte(E3: Kana/CJK punct)],12,10,10,0.833333
+C1-s0,decode,32,Partial-UTF8[3-byte(EE: private use)],4,4,4,1.0
+C1-s0,decode,32,Partial-UTF8[3-byte(EF: fullwidth/specials)],17,17,17,1.0
+C1-s0,decode,32,Partial-UTF8[3-byte(Hangul remnant)],221,220,220,0.995475
+C1-s0,decode,32,Partial-UTF8[4-byte(emoji/supp)],36,36,36,1.0
+C1-s0,decode,32,Partial-UTF8[Bengali],31,7,6,0.225806
+C1-s0,decode,32,Partial-UTF8[Devanagari],24,4,4,0.166667
+C1-s0,decode,32,Partial-UTF8[Gujarati],33,5,4,0.151515
+C1-s0,decode,32,Partial-UTF8[Gurmukhi],15,3,3,0.2
+C1-s0,decode,32,Partial-UTF8[Kannada],14,3,3,0.214286
+C1-s0,decode,32,Partial-UTF8[Malayalam],24,6,5,0.25
+C1-s0,decode,32,Partial-UTF8[Oriya],58,6,6,0.103448
+C1-s0,decode,32,Partial-UTF8[Tamil],18,5,4,0.277778
+C1-s0,decode,32,Partial-UTF8[Telugu],50,9,7,0.18
+C1-s0,decode,32,Partial-UTF8[continuation-only],143,142,141,0.993007
+C1-s0,decode,32,Special/Control,356,0,0,0.0
+C1-s0,decode,32,Tamil,2059,0,0,0.0
+C1-s0,decode,32,Telugu,2455,0,0,0.0
+C1-s0,decode,64,Bengali,3100,0,0,0.0
+C1-s0,decode,64,Code/Structure,3685,0,0,0.0
+C1-s0,decode,64,Devanagari,5249,0,0,0.0
+C1-s0,decode,64,Digits,1170,0,0,0.0
+C1-s0,decode,64,Gujarati,2398,0,0,0.0
+C1-s0,decode,64,Gurmukhi,1439,0,0,0.0
+C1-s0,decode,64,Kannada,2453,0,0,0.0
+C1-s0,decode,64,Latin,91201,0,0,0.0
+C1-s0,decode,64,Malayalam,2912,0,0,0.0
+C1-s0,decode,64,Mixed,461,0,0,0.0
+C1-s0,decode,64,Oriya,1242,0,0,0.0
+C1-s0,decode,64,Other,9445,3,3,0.000318
+C1-s0,decode,64,Partial-UTF8[2-byte(Latin-ext/Greek/Cyrillic)],75,48,47,0.64
+C1-s0,decode,64,Partial-UTF8[3-byte(CJK remnant)],504,492,492,0.97619
+C1-s0,decode,64,"Partial-UTF8[3-byte(E0: Brahmic, block unknown)]",2,2,2,1.0
+C1-s0,decode,64,Partial-UTF8[3-byte(E0: Sinhala/Thai/Tibetan remnant)],22,13,13,0.590909
+C1-s0,decode,64,Partial-UTF8[3-byte(E1: Georgian/Cherokee/ext)],103,34,29,0.330097
+C1-s0,decode,64,Partial-UTF8[3-byte(E2: punctuation/math symbols)],41,38,38,0.926829
+C1-s0,decode,64,Partial-UTF8[3-byte(E3: Kana/CJK punct)],12,10,10,0.833333
+C1-s0,decode,64,Partial-UTF8[3-byte(EE: private use)],4,4,4,1.0
+C1-s0,decode,64,Partial-UTF8[3-byte(EF: fullwidth/specials)],17,17,17,1.0
+C1-s0,decode,64,Partial-UTF8[3-byte(Hangul remnant)],221,220,220,0.995475
+C1-s0,decode,64,Partial-UTF8[4-byte(emoji/supp)],36,36,36,1.0
+C1-s0,decode,64,Partial-UTF8[Bengali],31,7,6,0.225806
+C1-s0,decode,64,Partial-UTF8[Devanagari],24,4,4,0.166667
+C1-s0,decode,64,Partial-UTF8[Gujarati],33,5,4,0.151515
+C1-s0,decode,64,Partial-UTF8[Gurmukhi],15,3,3,0.2
+C1-s0,decode,64,Partial-UTF8[Kannada],14,3,3,0.214286
+C1-s0,decode,64,Partial-UTF8[Malayalam],24,6,5,0.25
+C1-s0,decode,64,Partial-UTF8[Oriya],58,6,6,0.103448
+C1-s0,decode,64,Partial-UTF8[Tamil],18,5,4,0.277778
+C1-s0,decode,64,Partial-UTF8[Telugu],50,9,7,0.18
+C1-s0,decode,64,Partial-UTF8[continuation-only],143,142,141,0.993007
+C1-s0,decode,64,Special/Control,356,0,0,0.0
+C1-s0,decode,64,Tamil,2059,0,0,0.0
+C1-s0,decode,64,Telugu,2455,0,0,0.0
+C1-s0,raw,32,Bengali,3100,0,0,0.0
+C1-s0,raw,32,Code/Structure,3685,0,0,0.0
+C1-s0,raw,32,Devanagari,5249,0,0,0.0
+C1-s0,raw,32,Digits,1170,0,0,0.0
+C1-s0,raw,32,Gujarati,2398,0,0,0.0
+C1-s0,raw,32,Gurmukhi,1439,0,0,0.0
+C1-s0,raw,32,Kannada,2453,0,0,0.0
+C1-s0,raw,32,Latin,91201,0,0,0.0
+C1-s0,raw,32,Malayalam,2912,0,0,0.0
+C1-s0,raw,32,Mixed,461,0,0,0.0
+C1-s0,raw,32,Oriya,1242,0,0,0.0
+C1-s0,raw,32,Other,9445,0,0,0.0
+C1-s0,raw,32,Partial-UTF8[2-byte(Latin-ext/Greek/Cyrillic)],75,0,0,0.0
+C1-s0,raw,32,Partial-UTF8[3-byte(CJK remnant)],504,0,0,0.0
+C1-s0,raw,32,"Partial-UTF8[3-byte(E0: Brahmic, block unknown)]",2,0,0,0.0
+C1-s0,raw,32,Partial-UTF8[3-byte(E0: Sinhala/Thai/Tibetan remnant)],22,0,0,0.0
+C1-s0,raw,32,Partial-UTF8[3-byte(E1: Georgian/Cherokee/ext)],103,0,0,0.0
+C1-s0,raw,32,Partial-UTF8[3-byte(E2: punctuation/math symbols)],41,0,0,0.0
+C1-s0,raw,32,Partial-UTF8[3-byte(E3: Kana/CJK punct)],12,0,0,0.0
+C1-s0,raw,32,Partial-UTF8[3-byte(EE: private use)],4,0,0,0.0
+C1-s0,raw,32,Partial-UTF8[3-byte(EF: fullwidth/specials)],17,0,0,0.0
+C1-s0,raw,32,Partial-UTF8[3-byte(Hangul remnant)],221,0,0,0.0
+C1-s0,raw,32,Partial-UTF8[4-byte(emoji/supp)],36,0,0,0.0
+C1-s0,raw,32,Partial-UTF8[Bengali],31,0,0,0.0
+C1-s0,raw,32,Partial-UTF8[Devanagari],24,0,0,0.0
+C1-s0,raw,32,Partial-UTF8[Gujarati],33,0,0,0.0
+C1-s0,raw,32,Partial-UTF8[Gurmukhi],15,0,0,0.0
+C1-s0,raw,32,Partial-UTF8[Kannada],14,0,0,0.0
+C1-s0,raw,32,Partial-UTF8[Malayalam],24,0,0,0.0
+C1-s0,raw,32,Partial-UTF8[Oriya],58,0,0,0.0
+C1-s0,raw,32,Partial-UTF8[Tamil],18,0,0,0.0
+C1-s0,raw,32,Partial-UTF8[Telugu],50,0,0,0.0
+C1-s0,raw,32,Partial-UTF8[continuation-only],143,0,0,0.0
+C1-s0,raw,32,Special/Control,356,0,0,0.0
+C1-s0,raw,32,Tamil,2059,0,0,0.0
+C1-s0,raw,32,Telugu,2455,0,0,0.0
+C1-s0,raw,64,Bengali,3100,0,0,0.0
+C1-s0,raw,64,Code/Structure,3685,0,0,0.0
+C1-s0,raw,64,Devanagari,5249,0,0,0.0
+C1-s0,raw,64,Digits,1170,0,0,0.0
+C1-s0,raw,64,Gujarati,2398,0,0,0.0
+C1-s0,raw,64,Gurmukhi,1439,0,0,0.0
+C1-s0,raw,64,Kannada,2453,0,0,0.0
+C1-s0,raw,64,Latin,91201,0,0,0.0
+C1-s0,raw,64,Malayalam,2912,0,0,0.0
+C1-s0,raw,64,Mixed,461,0,0,0.0
+C1-s0,raw,64,Oriya,1242,0,0,0.0
+C1-s0,raw,64,Other,9445,0,0,0.0
+C1-s0,raw,64,Partial-UTF8[2-byte(Latin-ext/Greek/Cyrillic)],75,0,0,0.0
+C1-s0,raw,64,Partial-UTF8[3-byte(CJK remnant)],504,0,0,0.0
+C1-s0,raw,64,"Partial-UTF8[3-byte(E0: Brahmic, block unknown)]",2,0,0,0.0
+C1-s0,raw,64,Partial-UTF8[3-byte(E0: Sinhala/Thai/Tibetan remnant)],22,0,0,0.0
+C1-s0,raw,64,Partial-UTF8[3-byte(E1: Georgian/Cherokee/ext)],103,0,0,0.0
+C1-s0,raw,64,Partial-UTF8[3-byte(E2: punctuation/math symbols)],41,0,0,0.0
+C1-s0,raw,64,Partial-UTF8[3-byte(E3: Kana/CJK punct)],12,0,0,0.0
+C1-s0,raw,64,Partial-UTF8[3-byte(EE: private use)],4,0,0,0.0
+C1-s0,raw,64,Partial-UTF8[3-byte(EF: fullwidth/specials)],17,0,0,0.0
+C1-s0,raw,64,Partial-UTF8[3-byte(Hangul remnant)],221,0,0,0.0
+C1-s0,raw,64,Partial-UTF8[4-byte(emoji/supp)],36,0,0,0.0
+C1-s0,raw,64,Partial-UTF8[Bengali],31,0,0,0.0
+C1-s0,raw,64,Partial-UTF8[Devanagari],24,0,0,0.0
+C1-s0,raw,64,Partial-UTF8[Gujarati],33,0,0,0.0
+C1-s0,raw,64,Partial-UTF8[Gurmukhi],15,0,0,0.0
+C1-s0,raw,64,Partial-UTF8[Kannada],14,0,0,0.0
+C1-s0,raw,64,Partial-UTF8[Malayalam],24,0,0,0.0
+C1-s0,raw,64,Partial-UTF8[Oriya],58,0,0,0.0
+C1-s0,raw,64,Partial-UTF8[Tamil],18,0,0,0.0
+C1-s0,raw,64,Partial-UTF8[Telugu],50,0,0,0.0
+C1-s0,raw,64,Partial-UTF8[continuation-only],143,0,0,0.0
+C1-s0,raw,64,Special/Control,356,0,0,0.0
+C1-s0,raw,64,Tamil,2059,0,0,0.0
+C1-s0,raw,64,Telugu,2455,0,0,0.0
+C2-s0,decode,32,Bengali,3100,0,0,0.0
+C2-s0,decode,32,Code/Structure,3685,0,0,0.0
+C2-s0,decode,32,Devanagari,5249,0,0,0.0
+C2-s0,decode,32,Digits,1170,0,0,0.0
+C2-s0,decode,32,Gujarati,1887,0,0,0.0
+C2-s0,decode,32,Gurmukhi,1184,0,0,0.0
+C2-s0,decode,32,Kannada,2581,0,0,0.0
+C2-s0,decode,32,Latin,91201,0,0,0.0
+C2-s0,decode,32,Malayalam,2912,0,0,0.0
+C2-s0,decode,32,Mixed,462,0,0,0.0
+C2-s0,decode,32,Oriya,1491,0,0,0.0
+C2-s0,decode,32,Other,9445,3,3,0.000318
+C2-s0,decode,32,Partial-UTF8[2-byte(Latin-ext/Greek/Cyrillic)],75,48,47,0.64
+C2-s0,decode,32,Partial-UTF8[3-byte(CJK remnant)],504,492,492,0.97619
+C2-s0,decode,32,"Partial-UTF8[3-byte(E0: Brahmic, block unknown)]",2,2,2,1.0
+C2-s0,decode,32,Partial-UTF8[3-byte(E0: Sinhala/Thai/Tibetan remnant)],22,13,13,0.590909
+C2-s0,decode,32,Partial-UTF8[3-byte(E1: Georgian/Cherokee/ext)],103,34,29,0.330097
+C2-s0,decode,32,Partial-UTF8[3-byte(E2: punctuation/math symbols)],41,38,38,0.926829
+C2-s0,decode,32,Partial-UTF8[3-byte(E3: Kana/CJK punct)],12,10,10,0.833333
+C2-s0,decode,32,Partial-UTF8[3-byte(EE: private use)],4,4,4,1.0
+C2-s0,decode,32,Partial-UTF8[3-byte(EF: fullwidth/specials)],17,17,17,1.0
+C2-s0,decode,32,Partial-UTF8[3-byte(Hangul remnant)],221,220,220,0.995475
+C2-s0,decode,32,Partial-UTF8[4-byte(emoji/supp)],36,36,36,1.0
+C2-s0,decode,32,Partial-UTF8[Bengali],31,7,6,0.225806
+C2-s0,decode,32,Partial-UTF8[Devanagari],24,4,4,0.166667
+C2-s0,decode,32,Partial-UTF8[Gujarati],32,5,4,0.15625
+C2-s0,decode,32,Partial-UTF8[Gurmukhi],14,3,3,0.214286
+C2-s0,decode,32,Partial-UTF8[Kannada],14,3,3,0.214286
+C2-s0,decode,32,Partial-UTF8[Malayalam],24,6,5,0.25
+C2-s0,decode,32,Partial-UTF8[Oriya],64,8,7,0.125
+C2-s0,decode,32,Partial-UTF8[Tamil],18,5,4,0.277778
+C2-s0,decode,32,Partial-UTF8[Telugu],51,9,7,0.176471
+C2-s0,decode,32,Partial-UTF8[continuation-only],143,142,141,0.993007
+C2-s0,decode,32,Special/Control,356,0,0,0.0
+C2-s0,decode,32,Tamil,2315,0,0,0.0
+C2-s0,decode,32,Telugu,2582,0,0,0.0
+C2-s0,decode,64,Bengali,3100,0,0,0.0
+C2-s0,decode,64,Code/Structure,3685,0,0,0.0
+C2-s0,decode,64,Devanagari,5249,0,0,0.0
+C2-s0,decode,64,Digits,1170,0,0,0.0
+C2-s0,decode,64,Gujarati,1887,0,0,0.0
+C2-s0,decode,64,Gurmukhi,1184,0,0,0.0
+C2-s0,decode,64,Kannada,2581,0,0,0.0
+C2-s0,decode,64,Latin,91201,0,0,0.0
+C2-s0,decode,64,Malayalam,2912,0,0,0.0
+C2-s0,decode,64,Mixed,462,0,0,0.0
+C2-s0,decode,64,Oriya,1491,0,0,0.0
+C2-s0,decode,64,Other,9445,3,3,0.000318
+C2-s0,decode,64,Partial-UTF8[2-byte(Latin-ext/Greek/Cyrillic)],75,48,47,0.64
+C2-s0,decode,64,Partial-UTF8[3-byte(CJK remnant)],504,492,492,0.97619
+C2-s0,decode,64,"Partial-UTF8[3-byte(E0: Brahmic, block unknown)]",2,2,2,1.0
+C2-s0,decode,64,Partial-UTF8[3-byte(E0: Sinhala/Thai/Tibetan remnant)],22,13,13,0.590909
+C2-s0,decode,64,Partial-UTF8[3-byte(E1: Georgian/Cherokee/ext)],103,34,29,0.330097
+C2-s0,decode,64,Partial-UTF8[3-byte(E2: punctuation/math symbols)],41,38,38,0.926829
+C2-s0,decode,64,Partial-UTF8[3-byte(E3: Kana/CJK punct)],12,10,10,0.833333
+C2-s0,decode,64,Partial-UTF8[3-byte(EE: private use)],4,4,4,1.0
+C2-s0,decode,64,Partial-UTF8[3-byte(EF: fullwidth/specials)],17,17,17,1.0
+C2-s0,decode,64,Partial-UTF8[3-byte(Hangul remnant)],221,220,220,0.995475
+C2-s0,decode,64,Partial-UTF8[4-byte(emoji/supp)],36,36,36,1.0
+C2-s0,decode,64,Partial-UTF8[Bengali],31,7,6,0.225806
+C2-s0,decode,64,Partial-UTF8[Devanagari],24,4,4,0.166667
+C2-s0,decode,64,Partial-UTF8[Gujarati],32,5,4,0.15625
+C2-s0,decode,64,Partial-UTF8[Gurmukhi],14,3,3,0.214286
+C2-s0,decode,64,Partial-UTF8[Kannada],14,3,3,0.214286
+C2-s0,decode,64,Partial-UTF8[Malayalam],24,6,5,0.25
+C2-s0,decode,64,Partial-UTF8[Oriya],64,8,7,0.125
+C2-s0,decode,64,Partial-UTF8[Tamil],18,5,4,0.277778
+C2-s0,decode,64,Partial-UTF8[Telugu],51,9,7,0.176471
+C2-s0,decode,64,Partial-UTF8[continuation-only],143,142,141,0.993007
+C2-s0,decode,64,Special/Control,356,0,0,0.0
+C2-s0,decode,64,Tamil,2315,0,0,0.0
+C2-s0,decode,64,Telugu,2582,0,0,0.0
+C2-s0,raw,32,Bengali,3100,0,0,0.0
+C2-s0,raw,32,Code/Structure,3685,0,0,0.0
+C2-s0,raw,32,Devanagari,5249,0,0,0.0
+C2-s0,raw,32,Digits,1170,0,0,0.0
+C2-s0,raw,32,Gujarati,1887,0,0,0.0
+C2-s0,raw,32,Gurmukhi,1184,0,0,0.0
+C2-s0,raw,32,Kannada,2581,0,0,0.0
+C2-s0,raw,32,Latin,91201,0,0,0.0
+C2-s0,raw,32,Malayalam,2912,0,0,0.0
+C2-s0,raw,32,Mixed,462,0,0,0.0
+C2-s0,raw,32,Oriya,1491,0,0,0.0
+C2-s0,raw,32,Other,9445,0,0,0.0
+C2-s0,raw,32,Partial-UTF8[2-byte(Latin-ext/Greek/Cyrillic)],75,0,0,0.0
+C2-s0,raw,32,Partial-UTF8[3-byte(CJK remnant)],504,0,0,0.0
+C2-s0,raw,32,"Partial-UTF8[3-byte(E0: Brahmic, block unknown)]",2,0,0,0.0
+C2-s0,raw,32,Partial-UTF8[3-byte(E0: Sinhala/Thai/Tibetan remnant)],22,0,0,0.0
+C2-s0,raw,32,Partial-UTF8[3-byte(E1: Georgian/Cherokee/ext)],103,0,0,0.0
+C2-s0,raw,32,Partial-UTF8[3-byte(E2: punctuation/math symbols)],41,0,0,0.0
+C2-s0,raw,32,Partial-UTF8[3-byte(E3: Kana/CJK punct)],12,0,0,0.0
+C2-s0,raw,32,Partial-UTF8[3-byte(EE: private use)],4,0,0,0.0
+C2-s0,raw,32,Partial-UTF8[3-byte(EF: fullwidth/specials)],17,0,0,0.0
+C2-s0,raw,32,Partial-UTF8[3-byte(Hangul remnant)],221,0,0,0.0
+C2-s0,raw,32,Partial-UTF8[4-byte(emoji/supp)],36,0,0,0.0
+C2-s0,raw,32,Partial-UTF8[Bengali],31,0,0,0.0
+C2-s0,raw,32,Partial-UTF8[Devanagari],24,0,0,0.0
+C2-s0,raw,32,Partial-UTF8[Gujarati],32,0,0,0.0
+C2-s0,raw,32,Partial-UTF8[Gurmukhi],14,0,0,0.0
+C2-s0,raw,32,Partial-UTF8[Kannada],14,0,0,0.0
+C2-s0,raw,32,Partial-UTF8[Malayalam],24,0,0,0.0
+C2-s0,raw,32,Partial-UTF8[Oriya],64,0,0,0.0
+C2-s0,raw,32,Partial-UTF8[Tamil],18,0,0,0.0
+C2-s0,raw,32,Partial-UTF8[Telugu],51,0,0,0.0
+C2-s0,raw,32,Partial-UTF8[continuation-only],143,0,0,0.0
+C2-s0,raw,32,Special/Control,356,0,0,0.0
+C2-s0,raw,32,Tamil,2315,0,0,0.0
+C2-s0,raw,32,Telugu,2582,0,0,0.0
+C2-s0,raw,64,Bengali,3100,0,0,0.0
+C2-s0,raw,64,Code/Structure,3685,0,0,0.0
+C2-s0,raw,64,Devanagari,5249,0,0,0.0
+C2-s0,raw,64,Digits,1170,0,0,0.0
+C2-s0,raw,64,Gujarati,1887,0,0,0.0
+C2-s0,raw,64,Gurmukhi,1184,0,0,0.0
+C2-s0,raw,64,Kannada,2581,0,0,0.0
+C2-s0,raw,64,Latin,91201,0,0,0.0
+C2-s0,raw,64,Malayalam,2912,0,0,0.0
+C2-s0,raw,64,Mixed,462,0,0,0.0
+C2-s0,raw,64,Oriya,1491,0,0,0.0
+C2-s0,raw,64,Other,9445,0,0,0.0
+C2-s0,raw,64,Partial-UTF8[2-byte(Latin-ext/Greek/Cyrillic)],75,0,0,0.0
+C2-s0,raw,64,Partial-UTF8[3-byte(CJK remnant)],504,0,0,0.0
+C2-s0,raw,64,"Partial-UTF8[3-byte(E0: Brahmic, block unknown)]",2,0,0,0.0
+C2-s0,raw,64,Partial-UTF8[3-byte(E0: Sinhala/Thai/Tibetan remnant)],22,0,0,0.0
+C2-s0,raw,64,Partial-UTF8[3-byte(E1: Georgian/Cherokee/ext)],103,0,0,0.0
+C2-s0,raw,64,Partial-UTF8[3-byte(E2: punctuation/math symbols)],41,0,0,0.0
+C2-s0,raw,64,Partial-UTF8[3-byte(E3: Kana/CJK punct)],12,0,0,0.0
+C2-s0,raw,64,Partial-UTF8[3-byte(EE: private use)],4,0,0,0.0
+C2-s0,raw,64,Partial-UTF8[3-byte(EF: fullwidth/specials)],17,0,0,0.0
+C2-s0,raw,64,Partial-UTF8[3-byte(Hangul remnant)],221,0,0,0.0
+C2-s0,raw,64,Partial-UTF8[4-byte(emoji/supp)],36,0,0,0.0
+C2-s0,raw,64,Partial-UTF8[Bengali],31,0,0,0.0
+C2-s0,raw,64,Partial-UTF8[Devanagari],24,0,0,0.0
+C2-s0,raw,64,Partial-UTF8[Gujarati],32,0,0,0.0
+C2-s0,raw,64,Partial-UTF8[Gurmukhi],14,0,0,0.0
+C2-s0,raw,64,Partial-UTF8[Kannada],14,0,0,0.0
+C2-s0,raw,64,Partial-UTF8[Malayalam],24,0,0,0.0
+C2-s0,raw,64,Partial-UTF8[Oriya],64,0,0,0.0
+C2-s0,raw,64,Partial-UTF8[Tamil],18,0,0,0.0
+C2-s0,raw,64,Partial-UTF8[Telugu],51,0,0,0.0
+C2-s0,raw,64,Partial-UTF8[continuation-only],143,0,0,0.0
+C2-s0,raw,64,Special/Control,356,0,0,0.0
+C2-s0,raw,64,Tamil,2315,0,0,0.0
+C2-s0,raw,64,Telugu,2582,0,0,0.0
+C3-s0,decode,32,Bengali,3101,0,0,0.0
+C3-s0,decode,32,Code/Structure,3685,0,0,0.0
+C3-s0,decode,32,Devanagari,5249,0,0,0.0
+C3-s0,decode,32,Digits,1170,0,0,0.0
+C3-s0,decode,32,Gujarati,1887,0,0,0.0
+C3-s0,decode,32,Gurmukhi,1183,0,0,0.0
+C3-s0,decode,32,Kannada,2581,0,0,0.0
+C3-s0,decode,32,Latin,91201,0,0,0.0
+C3-s0,decode,32,Malayalam,2912,0,0,0.0
+C3-s0,decode,32,Mixed,462,0,0,0.0
+C3-s0,decode,32,Oriya,1491,0,0,0.0
+C3-s0,decode,32,Other,9445,3,3,0.000318
+C3-s0,decode,32,Partial-UTF8[2-byte(Latin-ext/Greek/Cyrillic)],75,48,47,0.64
+C3-s0,decode,32,Partial-UTF8[3-byte(CJK remnant)],504,492,492,0.97619
+C3-s0,decode,32,"Partial-UTF8[3-byte(E0: Brahmic, block unknown)]",2,2,2,1.0
+C3-s0,decode,32,Partial-UTF8[3-byte(E0: Sinhala/Thai/Tibetan remnant)],22,13,13,0.590909
+C3-s0,decode,32,Partial-UTF8[3-byte(E1: Georgian/Cherokee/ext)],103,34,29,0.330097
+C3-s0,decode,32,Partial-UTF8[3-byte(E2: punctuation/math symbols)],41,38,38,0.926829
+C3-s0,decode,32,Partial-UTF8[3-byte(E3: Kana/CJK punct)],12,10,10,0.833333
+C3-s0,decode,32,Partial-UTF8[3-byte(EE: private use)],4,4,4,1.0
+C3-s0,decode,32,Partial-UTF8[3-byte(EF: fullwidth/specials)],17,17,17,1.0
+C3-s0,decode,32,Partial-UTF8[3-byte(Hangul remnant)],221,220,220,0.995475
+C3-s0,decode,32,Partial-UTF8[4-byte(emoji/supp)],36,36,36,1.0
+C3-s0,decode,32,Partial-UTF8[Bengali],30,6,5,0.2
+C3-s0,decode,32,Partial-UTF8[Devanagari],24,4,4,0.166667
+C3-s0,decode,32,Partial-UTF8[Gujarati],32,5,4,0.15625
+C3-s0,decode,32,Partial-UTF8[Gurmukhi],15,4,4,0.266667
+C3-s0,decode,32,Partial-UTF8[Kannada],14,3,3,0.214286
+C3-s0,decode,32,Partial-UTF8[Malayalam],24,6,5,0.25
+C3-s0,decode,32,Partial-UTF8[Oriya],64,8,7,0.125
+C3-s0,decode,32,Partial-UTF8[Tamil],18,5,4,0.277778
+C3-s0,decode,32,Partial-UTF8[Telugu],51,9,7,0.176471
+C3-s0,decode,32,Partial-UTF8[continuation-only],143,142,141,0.993007
+C3-s0,decode,32,Special/Control,356,0,0,0.0
+C3-s0,decode,32,Tamil,2315,0,0,0.0
+C3-s0,decode,32,Telugu,2582,0,0,0.0
+C3-s0,decode,64,Bengali,3101,0,0,0.0
+C3-s0,decode,64,Code/Structure,3685,0,0,0.0
+C3-s0,decode,64,Devanagari,5249,0,0,0.0
+C3-s0,decode,64,Digits,1170,0,0,0.0
+C3-s0,decode,64,Gujarati,1887,0,0,0.0
+C3-s0,decode,64,Gurmukhi,1183,0,0,0.0
+C3-s0,decode,64,Kannada,2581,0,0,0.0
+C3-s0,decode,64,Latin,91201,0,0,0.0
+C3-s0,decode,64,Malayalam,2912,0,0,0.0
+C3-s0,decode,64,Mixed,462,0,0,0.0
+C3-s0,decode,64,Oriya,1491,0,0,0.0
+C3-s0,decode,64,Other,9445,3,3,0.000318
+C3-s0,decode,64,Partial-UTF8[2-byte(Latin-ext/Greek/Cyrillic)],75,48,47,0.64
+C3-s0,decode,64,Partial-UTF8[3-byte(CJK remnant)],504,492,492,0.97619
+C3-s0,decode,64,"Partial-UTF8[3-byte(E0: Brahmic, block unknown)]",2,2,2,1.0
+C3-s0,decode,64,Partial-UTF8[3-byte(E0: Sinhala/Thai/Tibetan remnant)],22,13,13,0.590909
+C3-s0,decode,64,Partial-UTF8[3-byte(E1: Georgian/Cherokee/ext)],103,34,29,0.330097
+C3-s0,decode,64,Partial-UTF8[3-byte(E2: punctuation/math symbols)],41,38,38,0.926829
+C3-s0,decode,64,Partial-UTF8[3-byte(E3: Kana/CJK punct)],12,10,10,0.833333
+C3-s0,decode,64,Partial-UTF8[3-byte(EE: private use)],4,4,4,1.0
+C3-s0,decode,64,Partial-UTF8[3-byte(EF: fullwidth/specials)],17,17,17,1.0
+C3-s0,decode,64,Partial-UTF8[3-byte(Hangul remnant)],221,220,220,0.995475
+C3-s0,decode,64,Partial-UTF8[4-byte(emoji/supp)],36,36,36,1.0
+C3-s0,decode,64,Partial-UTF8[Bengali],30,6,5,0.2
+C3-s0,decode,64,Partial-UTF8[Devanagari],24,4,4,0.166667
+C3-s0,decode,64,Partial-UTF8[Gujarati],32,5,4,0.15625
+C3-s0,decode,64,Partial-UTF8[Gurmukhi],15,4,4,0.266667
+C3-s0,decode,64,Partial-UTF8[Kannada],14,3,3,0.214286
+C3-s0,decode,64,Partial-UTF8[Malayalam],24,6,5,0.25
+C3-s0,decode,64,Partial-UTF8[Oriya],64,8,7,0.125
+C3-s0,decode,64,Partial-UTF8[Tamil],18,5,4,0.277778
+C3-s0,decode,64,Partial-UTF8[Telugu],51,9,7,0.176471
+C3-s0,decode,64,Partial-UTF8[continuation-only],143,142,141,0.993007
+C3-s0,decode,64,Special/Control,356,0,0,0.0
+C3-s0,decode,64,Tamil,2315,0,0,0.0
+C3-s0,decode,64,Telugu,2582,0,0,0.0
+C3-s0,raw,32,Bengali,3101,0,0,0.0
+C3-s0,raw,32,Code/Structure,3685,0,0,0.0
+C3-s0,raw,32,Devanagari,5249,0,0,0.0
+C3-s0,raw,32,Digits,1170,0,0,0.0
+C3-s0,raw,32,Gujarati,1887,0,0,0.0
+C3-s0,raw,32,Gurmukhi,1183,0,0,0.0
+C3-s0,raw,32,Kannada,2581,0,0,0.0
+C3-s0,raw,32,Latin,91201,0,0,0.0
+C3-s0,raw,32,Malayalam,2912,0,0,0.0
+C3-s0,raw,32,Mixed,462,0,0,0.0
+C3-s0,raw,32,Oriya,1491,0,0,0.0
+C3-s0,raw,32,Other,9445,0,0,0.0
+C3-s0,raw,32,Partial-UTF8[2-byte(Latin-ext/Greek/Cyrillic)],75,0,0,0.0
+C3-s0,raw,32,Partial-UTF8[3-byte(CJK remnant)],504,0,0,0.0
+C3-s0,raw,32,"Partial-UTF8[3-byte(E0: Brahmic, block unknown)]",2,0,0,0.0
+C3-s0,raw,32,Partial-UTF8[3-byte(E0: Sinhala/Thai/Tibetan remnant)],22,0,0,0.0
+C3-s0,raw,32,Partial-UTF8[3-byte(E1: Georgian/Cherokee/ext)],103,0,0,0.0
+C3-s0,raw,32,Partial-UTF8[3-byte(E2: punctuation/math symbols)],41,0,0,0.0
+C3-s0,raw,32,Partial-UTF8[3-byte(E3: Kana/CJK punct)],12,0,0,0.0
+C3-s0,raw,32,Partial-UTF8[3-byte(EE: private use)],4,0,0,0.0
+C3-s0,raw,32,Partial-UTF8[3-byte(EF: fullwidth/specials)],17,0,0,0.0
+C3-s0,raw,32,Partial-UTF8[3-byte(Hangul remnant)],221,0,0,0.0
+C3-s0,raw,32,Partial-UTF8[4-byte(emoji/supp)],36,0,0,0.0
+C3-s0,raw,32,Partial-UTF8[Bengali],30,0,0,0.0
+C3-s0,raw,32,Partial-UTF8[Devanagari],24,0,0,0.0
+C3-s0,raw,32,Partial-UTF8[Gujarati],32,0,0,0.0
+C3-s0,raw,32,Partial-UTF8[Gurmukhi],15,0,0,0.0
+C3-s0,raw,32,Partial-UTF8[Kannada],14,0,0,0.0
+C3-s0,raw,32,Partial-UTF8[Malayalam],24,0,0,0.0
+C3-s0,raw,32,Partial-UTF8[Oriya],64,0,0,0.0
+C3-s0,raw,32,Partial-UTF8[Tamil],18,0,0,0.0
+C3-s0,raw,32,Partial-UTF8[Telugu],51,0,0,0.0
+C3-s0,raw,32,Partial-UTF8[continuation-only],143,0,0,0.0
+C3-s0,raw,32,Special/Control,356,0,0,0.0
+C3-s0,raw,32,Tamil,2315,0,0,0.0
+C3-s0,raw,32,Telugu,2582,0,0,0.0
+C3-s0,raw,64,Bengali,3101,0,0,0.0
+C3-s0,raw,64,Code/Structure,3685,0,0,0.0
+C3-s0,raw,64,Devanagari,5249,0,0,0.0
+C3-s0,raw,64,Digits,1170,0,0,0.0
+C3-s0,raw,64,Gujarati,1887,0,0,0.0
+C3-s0,raw,64,Gurmukhi,1183,0,0,0.0
+C3-s0,raw,64,Kannada,2581,0,0,0.0
+C3-s0,raw,64,Latin,91201,0,0,0.0
+C3-s0,raw,64,Malayalam,2912,0,0,0.0
+C3-s0,raw,64,Mixed,462,0,0,0.0
+C3-s0,raw,64,Oriya,1491,0,0,0.0
+C3-s0,raw,64,Other,9445,0,0,0.0
+C3-s0,raw,64,Partial-UTF8[2-byte(Latin-ext/Greek/Cyrillic)],75,0,0,0.0
+C3-s0,raw,64,Partial-UTF8[3-byte(CJK remnant)],504,0,0,0.0
+C3-s0,raw,64,"Partial-UTF8[3-byte(E0: Brahmic, block unknown)]",2,0,0,0.0
+C3-s0,raw,64,Partial-UTF8[3-byte(E0: Sinhala/Thai/Tibetan remnant)],22,0,0,0.0
+C3-s0,raw,64,Partial-UTF8[3-byte(E1: Georgian/Cherokee/ext)],103,0,0,0.0
+C3-s0,raw,64,Partial-UTF8[3-byte(E2: punctuation/math symbols)],41,0,0,0.0
+C3-s0,raw,64,Partial-UTF8[3-byte(E3: Kana/CJK punct)],12,0,0,0.0
+C3-s0,raw,64,Partial-UTF8[3-byte(EE: private use)],4,0,0,0.0
+C3-s0,raw,64,Partial-UTF8[3-byte(EF: fullwidth/specials)],17,0,0,0.0
+C3-s0,raw,64,Partial-UTF8[3-byte(Hangul remnant)],221,0,0,0.0
+C3-s0,raw,64,Partial-UTF8[4-byte(emoji/supp)],36,0,0,0.0
+C3-s0,raw,64,Partial-UTF8[Bengali],30,0,0,0.0
+C3-s0,raw,64,Partial-UTF8[Devanagari],24,0,0,0.0
+C3-s0,raw,64,Partial-UTF8[Gujarati],32,0,0,0.0
+C3-s0,raw,64,Partial-UTF8[Gurmukhi],15,0,0,0.0
+C3-s0,raw,64,Partial-UTF8[Kannada],14,0,0,0.0
+C3-s0,raw,64,Partial-UTF8[Malayalam],24,0,0,0.0
+C3-s0,raw,64,Partial-UTF8[Oriya],64,0,0,0.0
+C3-s0,raw,64,Partial-UTF8[Tamil],18,0,0,0.0
+C3-s0,raw,64,Partial-UTF8[Telugu],51,0,0,0.0
+C3-s0,raw,64,Partial-UTF8[continuation-only],143,0,0,0.0
+C3-s0,raw,64,Special/Control,356,0,0,0.0
+C3-s0,raw,64,Tamil,2315,0,0,0.0
+C3-s0,raw,64,Telugu,2582,0,0,0.0

@@ -1,0 +1,9 @@
+{
+  "source": "HuggingFaceFW/fineweb (sample-10BT, split=train)",
+  "docs": 3247,
+  "utf8_bytes": 10001358,
+  "sha256": "3647da224420ef7b53d2d0ae4cf9150914519e31a2f373c156f1657f5e26fc77",
+  "heldout_overlap": 0,
+  "shared_exp1_training_file": false,
+  "note": "Local 3,247-document FineWeb sample used for pre-agreement T1 H200 bf16 verification; the shared EXP-1 training file across all five arms is not named yet."
+}

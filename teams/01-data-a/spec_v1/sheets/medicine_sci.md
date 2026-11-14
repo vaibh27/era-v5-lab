@@ -4,6 +4,8 @@
 
 **Sources:** `medicine_sci.md` (patilvijay23 consolidation) and `medicine.md` (jssunil). Each contributor's original medicine remains unchanged. This merged file retains each source's distinct disease coverage, but runs only one selected rule per disease code.
 
+Review evidence and unresolved adjudication items: [science clash resolution and harm report](medicine_sci_clash_resolution_and_harm_report.md).
+
 **Diagnosis scope:** The latest attached combined labels have 500 unique IDs, 493 `full` and 7 `partial`. Individual contributors disagree materially on classifications (particularly F1, C1, B4), so prevalence estimates are **not pooled or asserted as a consensus**. The counts below refer to the latest combined labels only; see the separate clash report for contributor differences.
 
 **Decision principles:** minimize deletion of actual scientific content; preserve licences/attribution, Indic joiners and natural multilingual material; mask/private-data values never appear in this public medicine. ID-scoped remedies below are **specific to this diagnosis pack**, not transferable generic cleaning rules. The unused broad alternatives are discussed in the accompanying comparison report, not silently combined.

@@ -1,0 +1,80 @@
+Independent G7 rotation evidence. Source commit: ddfe977ea8f771ba6fa9137c1e9f46aade0125d1
+Public log paths replace member-specific paths with $REPO, $VENV and $SCRATCH.
+Execution used OMP_NUM_THREADS=1, MKL_NUM_THREADS=1, CUDA_VISIBLE_DEVICES empty.
+Note: repeated PyTorch macOS redirect notices were omitted; they did not affect the results.
+
+=== restore_1p_1 ===
+$ python teams/07-infrastructure/jobs/restore_test/restore_test.py --nproc 1 --out $SCRATCH/restore_1p_1
+exit=0 whole_command_wall_s=6.675465
+PASS restore_test nproc=1 cpu: steps 101-200: loss_ntp and loss_mtp bit-equal, data ids equal
+
+=== restore_1p_2 ===
+$ python teams/07-infrastructure/jobs/restore_test/restore_test.py --nproc 1 --out $SCRATCH/restore_1p_2
+exit=0 whole_command_wall_s=4.993043
+PASS restore_test nproc=1 cpu: steps 101-200: loss_ntp and loss_mtp bit-equal, data ids equal
+
+=== restore_1p_3 ===
+$ python teams/07-infrastructure/jobs/restore_test/restore_test.py --nproc 1 --out $SCRATCH/restore_1p_3
+exit=0 whole_command_wall_s=5.086259
+PASS restore_test nproc=1 cpu: steps 101-200: loss_ntp and loss_mtp bit-equal, data ids equal
+
+=== restore_2p_1 ===
+$ python teams/07-infrastructure/jobs/restore_test/restore_test.py --nproc 2 --out $SCRATCH/restore_2p_1
+exit=0 whole_command_wall_s=6.059611
+PASS restore_test nproc=2 cpu: steps 101-200: loss_ntp and loss_mtp bit-equal, data ids equal
+
+=== restore_2p_2 ===
+$ python teams/07-infrastructure/jobs/restore_test/restore_test.py --nproc 2 --out $SCRATCH/restore_2p_2
+exit=0 whole_command_wall_s=6.026267
+PASS restore_test nproc=2 cpu: steps 101-200: loss_ntp and loss_mtp bit-equal, data ids equal
+
+=== restore_2p_3 ===
+$ python teams/07-infrastructure/jobs/restore_test/restore_test.py --nproc 2 --out $SCRATCH/restore_2p_3
+exit=0 whole_command_wall_s=5.984553
+PASS restore_test nproc=2 cpu: steps 101-200: loss_ntp and loss_mtp bit-equal, data ids equal
+
+=== restart ===
+$ python teams/07-infrastructure/jobs/restart_test/restart_test.py --out $SCRATCH/restart --also-kill-at 31,99,164 --report $SCRATCH/restart_cpu_rotation_03.txt
+exit=0 whole_command_wall_s=18.065728
+[supervisor] attempt 0: exit -9 (crash: killed by SIGKILL) -> restart (crash: retry), latest.json at step 25
+[supervisor] attempt 1: exit 0 (done) -> stop (finished)
+[supervisor] attempt 0: exit -9 (crash: killed by SIGKILL) -> restart (crash: retry), latest.json at step 75
+[supervisor] attempt 1: exit 0 (done) -> stop (finished)
+[supervisor] attempt 0: exit -9 (crash: killed by SIGKILL) -> restart (crash: retry), latest.json at step 150
+[supervisor] attempt 1: exit 0 (done) -> stop (finished)
+restart_test: run restart, device cpu, steps 200, save every 25, kill after step 140, torch 2.14.1
+[supervisor] attempt 0: exit -9 (crash: killed by SIGKILL) -> restart (crash: retry), latest.json at step 125
+[supervisor] attempt 1: exit 0 (done) -> stop (finished)
+PASS restart_test cpu: SIGKILL after step 141, restarted from COMPLETE checkpoint step 125, steps 1-200: loss_ntp and loss_mtp bit-equal, data ids equal
+
+=== pytest ===
+$ python -m pytest -q -ra -p no:cacheprovider --basetemp $SCRATCH/pytest_tmp --junitxml $SCRATCH/pytest.xml teams/07-infrastructure/support/tests teams/07-infrastructure/ckpt/test_supervisor.py teams/07-infrastructure/layout/test_parallel_layout.py
+exit=0 whole_command_wall_s=63.141395
+.............s.....sssssssss............................................ [ 55%]
+.........................................................                [100%]
+=============================== warnings summary ===============================
+teams/07-infrastructure/support/tests/test_ckpt.py::test_t8_export_safetensors
+teams/07-infrastructure/support/tests/test_ckpt.py::test_t24_old_attempt_cannot_commit_after_takeover
+teams/07-infrastructure/support/tests/test_ckpt.py::test_t27_async_save_owns_its_copy
+teams/07-infrastructure/support/tests/test_ckpt.py::test_t28_frozen_change_refused_at_save
+teams/07-infrastructure/support/tests/test_ckpt.py::test_t30_other_data_manifest_refused
+  $VENV/lib/python3.12/site-packages/torch/distributed/checkpoint/utils.py:488: UserWarning: torch.distributed is disabled, unavailable or uninitialized, assuming the intent is to load in a single process.
+    return func(*args, **kwargs)
+
+teams/07-infrastructure/support/tests/test_ckpt.py::test_t24_old_attempt_cannot_commit_after_takeover
+teams/07-infrastructure/support/tests/test_ckpt.py::test_t27_async_save_owns_its_copy
+teams/07-infrastructure/support/tests/test_ckpt.py::test_t28_frozen_change_refused_at_save
+teams/07-infrastructure/support/tests/test_ckpt.py::test_t30_other_data_manifest_refused
+  $VENV/lib/python3.12/site-packages/torch/distributed/checkpoint/utils.py:488: UserWarning: torch.distributed is disabled, unavailable or uninitialized, assuming the intent is to save in a single process.
+    return func(*args, **kwargs)
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+=========================== short test summary info ============================
+SKIPPED [1] teams/07-infrastructure/support/tests/test_ckpt.py:244: FSDP2 needs 2 CUDA GPUs (runs on Kaggle (2 GPUs))
+SKIPPED [3] teams/07-infrastructure/support/tests/test_ckpt.py:329: needs deepspeed and 2 ranks
+SKIPPED [1] teams/07-infrastructure/support/tests/test_ckpt.py:351: needs deepspeed and 2 ranks
+SKIPPED [1] teams/07-infrastructure/support/tests/test_ckpt.py:368: needs deepspeed and 2 ranks
+SKIPPED [1] teams/07-infrastructure/support/tests/test_ckpt.py:379: needs deepspeed and 2 ranks
+SKIPPED [2] teams/07-infrastructure/support/tests/test_ckpt.py:393: needs deepspeed and 2 ranks
+SKIPPED [1] teams/07-infrastructure/support/tests/test_ckpt.py:403: DeepSpeed fp16 needs 2 CUDA GPUs (Kaggle (2 GPUs))
+119 passed, 10 skipped, 9 warnings in 62.67s (0:01:02)

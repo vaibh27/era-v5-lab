@@ -1,0 +1,346 @@
+{
+ "artifact": "g10-effort-eval-output",
+ "do_not_train": true,
+ "manifest_sha256": "d6190b2d7b013222e767cdb7c50f66231769385ce1dfb729eaa9530b9ebf9226",
+ "stage": "A",
+ "cells_ran": [
+  [
+   "code-00",
+   "16k"
+  ],
+  [
+   "code-00",
+   "1k"
+  ],
+  [
+   "code-00",
+   "4k"
+  ],
+  [
+   "code-00",
+   "64k"
+  ],
+  [
+   "code-01",
+   "16k"
+  ],
+  [
+   "code-01",
+   "1k"
+  ],
+  [
+   "code-01",
+   "4k"
+  ],
+  [
+   "code-01",
+   "64k"
+  ],
+  [
+   "code-08",
+   "16k"
+  ],
+  [
+   "code-08",
+   "1k"
+  ],
+  [
+   "code-08",
+   "4k"
+  ],
+  [
+   "code-08",
+   "64k"
+  ],
+  [
+   "code-15",
+   "16k"
+  ],
+  [
+   "code-15",
+   "1k"
+  ],
+  [
+   "code-15",
+   "4k"
+  ],
+  [
+   "code-15",
+   "64k"
+  ],
+  [
+   "code-22",
+   "16k"
+  ],
+  [
+   "code-22",
+   "1k"
+  ],
+  [
+   "code-22",
+   "4k"
+  ],
+  [
+   "code-22",
+   "64k"
+  ],
+  [
+   "math-00",
+   "16k"
+  ],
+  [
+   "math-00",
+   "1k"
+  ],
+  [
+   "math-00",
+   "4k"
+  ],
+  [
+   "math-00",
+   "64k"
+  ],
+  [
+   "math-05",
+   "16k"
+  ],
+  [
+   "math-05",
+   "1k"
+  ],
+  [
+   "math-05",
+   "4k"
+  ],
+  [
+   "math-05",
+   "64k"
+  ],
+  [
+   "math-10",
+   "16k"
+  ],
+  [
+   "math-10",
+   "1k"
+  ],
+  [
+   "math-10",
+   "4k"
+  ],
+  [
+   "math-10",
+   "64k"
+  ],
+  [
+   "math-15",
+   "16k"
+  ],
+  [
+   "math-15",
+   "1k"
+  ],
+  [
+   "math-15",
+   "4k"
+  ],
+  [
+   "math-15",
+   "64k"
+  ],
+  [
+   "math-20",
+   "16k"
+  ],
+  [
+   "math-20",
+   "1k"
+  ],
+  [
+   "math-20",
+   "4k"
+  ],
+  [
+   "math-20",
+   "64k"
+  ]
+ ],
+ "cells_unsupported": [],
+ "per_label": {
+  "1k": {
+   "cells": 10,
+   "ran": 10,
+   "unsupported": 0,
+   "functional_success": {
+    "k": 0,
+    "n": 10,
+    "rate": 0.0
+   },
+   "functional_success_censored_in_denominator": 0,
+   "no_checker": 0,
+   "parse_ok": {
+    "k": 10,
+    "n": 10,
+    "rate": 1.0
+   },
+   "parse_malformed": 0,
+   "empty": 0,
+   "censored_at_cap": {
+    "k": 0,
+    "n": 10,
+    "rate": 0.0
+   },
+   "tool_call_valid": {
+    "k": 0,
+    "n": 0,
+    "rate": null
+   },
+   "generated_tokens_mean": 451.6,
+   "generated_tokens_median": 372.0,
+   "trace_tokens_median_parsed_only": 0.0,
+   "wall_s_total": 8.08
+  },
+  "4k": {
+   "cells": 10,
+   "ran": 10,
+   "unsupported": 0,
+   "functional_success": {
+    "k": 0,
+    "n": 10,
+    "rate": 0.0
+   },
+   "functional_success_censored_in_denominator": 0,
+   "no_checker": 0,
+   "parse_ok": {
+    "k": 10,
+    "n": 10,
+    "rate": 1.0
+   },
+   "parse_malformed": 0,
+   "empty": 0,
+   "censored_at_cap": {
+    "k": 0,
+    "n": 10,
+    "rate": 0.0
+   },
+   "tool_call_valid": {
+    "k": 0,
+    "n": 0,
+    "rate": null
+   },
+   "generated_tokens_mean": 446.9,
+   "generated_tokens_median": 490.0,
+   "trace_tokens_median_parsed_only": 0.0,
+   "wall_s_total": 8.0
+  },
+  "16k": {
+   "cells": 10,
+   "ran": 10,
+   "unsupported": 0,
+   "functional_success": {
+    "k": 1,
+    "n": 10,
+    "rate": 0.1
+   },
+   "functional_success_censored_in_denominator": 0,
+   "no_checker": 0,
+   "parse_ok": {
+    "k": 10,
+    "n": 10,
+    "rate": 1.0
+   },
+   "parse_malformed": 0,
+   "empty": 0,
+   "censored_at_cap": {
+    "k": 0,
+    "n": 10,
+    "rate": 0.0
+   },
+   "tool_call_valid": {
+    "k": 0,
+    "n": 0,
+    "rate": null
+   },
+   "generated_tokens_mean": 509.2,
+   "generated_tokens_median": 446.0,
+   "trace_tokens_median_parsed_only": 0.0,
+   "wall_s_total": 9.13
+  },
+  "64k": {
+   "cells": 10,
+   "ran": 10,
+   "unsupported": 0,
+   "functional_success": {
+    "k": 1,
+    "n": 10,
+    "rate": 0.1
+   },
+   "functional_success_censored_in_denominator": 0,
+   "no_checker": 0,
+   "parse_ok": {
+    "k": 10,
+    "n": 10,
+    "rate": 1.0
+   },
+   "parse_malformed": 0,
+   "empty": 0,
+   "censored_at_cap": {
+    "k": 0,
+    "n": 10,
+    "rate": 0.0
+   },
+   "tool_call_valid": {
+    "k": 0,
+    "n": 0,
+    "rate": null
+   },
+   "generated_tokens_mean": 427.3,
+   "generated_tokens_median": 384.0,
+   "trace_tokens_median_parsed_only": 0.0,
+   "wall_s_total": 7.68
+  }
+ },
+ "matched_vs_1k": {
+  "4k_vs_1k": {
+   "success_changes": {
+    "gained": 0,
+    "lost": 0,
+    "same": 10
+   },
+   "pairs": 10,
+   "generated_tokens_delta_median": -12.0
+  },
+  "16k_vs_1k": {
+   "success_changes": {
+    "gained": 1,
+    "lost": 0,
+    "same": 9
+   },
+   "pairs": 10,
+   "generated_tokens_delta_median": 12.0
+  },
+  "64k_vs_1k": {
+   "success_changes": {
+    "gained": 1,
+    "lost": 0,
+    "same": 9
+   },
+   "pairs": 10,
+   "generated_tokens_delta_median": -80.5
+  }
+ },
+ "unavailable_slots": 45,
+ "unavailable_by_category": {
+  "tool_agentic": 20,
+  "indic": 15,
+  "general": 10
+ },
+ "interpretation": "A plain-text effort label is not budget enforcement. Stage A/B use one common cap, so they test the effect of the label text at a fixed cap, not four-tier compliance.",
+ "backend": "vllm",
+ "template": "native",
+ "model_id": "allenai/OLMoE-1B-7B-0924-Instruct@7f1c97f440f06ce36705e4f2b843edb5925f4498",
+ "context": 4096,
+ "temperature": 0.7,
+ "base_seed": 1235,
+ "scored_locally": true
+}

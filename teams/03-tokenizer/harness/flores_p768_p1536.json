@@ -1,0 +1,102 @@
+{
+  "BrahmicTokenizer-131K": {
+    "source": "BrahmicTokenizer-131K/tokenizer.json",
+    "revision": null,
+    "flores": {
+      "En": 1.2352,
+      "Hi": 1.6429,
+      "Bn": 2.3295,
+      "Ta": 3.1166,
+      "Te": 3.0292,
+      "Kn": 3.2734,
+      "Ml": 3.4738,
+      "Mr": 2.5723,
+      "Gu": 2.2748,
+      "Pa": 2.5955,
+      "Or": 4.1287,
+      "As": 2.7535,
+      "Mean": 2.8355
+    },
+    "code": {
+      "HumanEval": 0.2951,
+      "MBPP": 0.3195,
+      "GSM8K": 0.301
+    },
+    "sha256": "01d968a7970b029c071b29f060abf6104b66168dedf2ff3b1a0290a545739fff"
+  },
+  "c3": {
+    "source": "c3-sample-v0/tokenizer.json",
+    "revision": null,
+    "flores": {
+      "En": 1.2334,
+      "Hi": 1.6193,
+      "Bn": 2.2293,
+      "Ta": 2.5927,
+      "Te": 2.5531,
+      "Kn": 2.7469,
+      "Ml": 3.0324,
+      "Mr": 2.0943,
+      "Gu": 2.2092,
+      "Pa": 2.0129,
+      "Or": 2.4861,
+      "As": 2.2788,
+      "Mean": 2.3505
+    },
+    "code": {
+      "HumanEval": 0.2953,
+      "MBPP": 0.3203,
+      "GSM8K": 0.3006
+    },
+    "sha256": "15468e66457b43af79f695cbe585c0d03e3cfe7a4a5d04d189dd3c6b9f02ddc3"
+  },
+  "p768": {
+    "source": "p768-sample-v0/tokenizer.json",
+    "revision": null,
+    "flores": {
+      "En": 1.2335,
+      "Hi": 1.5835,
+      "Bn": 2.1239,
+      "Ta": 2.4478,
+      "Te": 2.4214,
+      "Kn": 2.6091,
+      "Ml": 2.8928,
+      "Mr": 2.0322,
+      "Gu": 2.0617,
+      "Pa": 1.8387,
+      "Or": 2.256,
+      "As": 2.182,
+      "Mean": 2.2226
+    },
+    "code": {
+      "HumanEval": 0.2953,
+      "MBPP": 0.3204,
+      "GSM8K": 0.3006
+    },
+    "sha256": "2cbd1a3b354aa900d9506a5d7f160763f65ffe0d5ec5d438292dfcd30dab498b"
+  },
+  "p1536": {
+    "source": "p1536-sample-v0/tokenizer.json",
+    "revision": null,
+    "flores": {
+      "En": 1.2338,
+      "Hi": 1.5542,
+      "Bn": 2.0482,
+      "Ta": 2.3455,
+      "Te": 2.3256,
+      "Kn": 2.5063,
+      "Ml": 2.7875,
+      "Mr": 1.9811,
+      "Gu": 1.9625,
+      "Pa": 1.7197,
+      "Or": 2.1136,
+      "As": 2.1065,
+      "Mean": 2.1319
+    },
+    "code": {
+      "HumanEval": 0.2953,
+      "MBPP": 0.3204,
+      "GSM8K": 0.3006
+    },
+    "sha256": "e6b93a93a60520d7b1af2e9242485f443b5596a1e116b8f8798d83bbad25a64b"
+  }
+}
