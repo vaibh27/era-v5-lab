@@ -1,0 +1,15 @@
+{
+  "run_id": "dryrun1_ckpt_smoke",
+  "device": "cpu",
+  "save_ms": 60.817229037638754,
+  "to_cpu_ms": 1.2489375658333302,
+  "write_ms": 59.56829147180542,
+  "size_mb": 111.0622205734253,
+  "warmup_steps": 1,
+  "state_coverage_complete": true,
+  "wall_s": 0.7682874168967828,
+  "output": "/Users/siva/Downloads/era-v5-lab-g6-ckpt/teams/06-performance/out/dryrun1_ckpt_smoke.json"
+}
+real 7.10
+user 3.77
+sys 0.53
