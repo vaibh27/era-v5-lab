@@ -104,9 +104,10 @@ When `mfu` or `hfu` is `null`, its reason field (`mfu_unavailable_reason`, `hfu_
 
 The reason is `null` when the metric is present.
 
-**New, additive:** `metrics.mfu_method` (`g6-v1` today) and `metrics.mfu_scope` (`selected_gpu` from `bench`). A file
-without them means `g6-v1` / `selected_gpu`, so the ingested baselines stay valid. `bench`'s values stay per GPU. The
-proposed `g6-v2` method and the run-level formula, with `run` scope, are in `METRICS.md` sections 2.1 and 2.2.
+**Method and scope:** this branch's `bench` writes `metrics.mfu_method=g6-v2`,
+`metrics.mfu_scope=selected_gpu`, and the measured `metrics.ke2_mean_support_len` (null without KE2).
+A file without method/scope still means `g6-v1` / `selected_gpu`, so ingested baselines stay valid.
+The formulas are in `METRICS.md` sections 2.1 and 2.2. The team rollout remains held as described in section 6.
 
 ## 4. Run identity and scope
 
@@ -143,17 +144,24 @@ Other runs:
 4. G8 owns the N-second rollups and the MiB-to-bytes conversion.
 5. All 8 final baseline files load with no missing fields. The format stays the run JSON and JSONL.
 
-**Proposed, waiting for G6 and G8 lead approval:**
+**G8 ready; G6 rollout held through Gate 3.** G8 approved all seven rows on
+[PR #50, 5 Nov](https://github.com/vaibh27/era-v5-lab/pull/50#issuecomment-6651626839).
+G6 accepted measuring the support length from the run's clean batches in
+[PR #61, 7 Nov](https://github.com/vaibh27/era-v5-lab/pull/61#issuecomment-6709005538).
+G8 confirmed the loader change (#415) merged and legacy/v2 ClickHouse checks passed on
+[14 Nov](https://github.com/vaibh27/era-v5-lab/pull/61#issuecomment-6878195029).
+The G6 column below refers to the rollout decision: [the 15 Nov review](https://github.com/vaibh27/era-v5-lab/pull/61#issuecomment-6897929362)
+keeps #61 draft and `g6-v1` in use through Gate 3 / dry run 1. Re-ping after Gate 3 (21 Nov).
 
 | # | Decision | Proposal | G6 | G8 |
 |---|---|---|---|---|
-| 1 | KE2 in N | Projection out of `6 * N`, real lookup cost in; about 5% lower MFU (`METRICS.md` 2.1) | pending | pending |
-| 2 | MTP | Head counted on T-1 positions (`METRICS.md` 2.1) | pending | pending |
-| 3 | RoPE | The rotation is elementwise, so it is not counted (`METRICS.md` 2) | pending | pending |
-| 4 | Scope | `mfu` stays per GPU; run level is a separate value, global tokens/s over the sum of peaks. G8's message calls `metrics.mfu` run-level; it is not (`METRICS.md` 2.2) | pending | pending |
-| 5 | Combining | Never average percentages (`METRICS.md` 2.2) | pending | pending |
-| 6 | New fields and codes | `mfu_method`, `mfu_scope`, `participants`, `global_tokens_per_s`, 4 reason codes | pending | pending |
-| 7 | Above 1 | Stored, not clipped; `report` warns. G8 describes the range as `[0, 1]` | pending | pending |
+| 1 | KE2 in N | Projection out of `6 * N`, real lookup cost in; about 5% lower MFU (`METRICS.md` 2.1) | hold through Gate 3 | approved |
+| 2 | MTP | Head counted on T-1 positions (`METRICS.md` 2.1) | hold through Gate 3 | approved |
+| 3 | RoPE | The rotation is elementwise, so it is not counted (`METRICS.md` 2) | hold through Gate 3 | approved |
+| 4 | Scope | `mfu` stays per GPU; run level is a separate value, global tokens/s over the sum of peaks. G8's message calls `metrics.mfu` run-level; it is not (`METRICS.md` 2.2) | hold through Gate 3 | approved |
+| 5 | Combining | Never average percentages (`METRICS.md` 2.2) | hold through Gate 3 | approved |
+| 6 | New fields and codes | `mfu_method`, `mfu_scope`, `participants`, `global_tokens_per_s`, 4 reason codes | hold through Gate 3 | approved |
+| 7 | Above 1 | Stored, not clipped; `report` warns. G8 describes the range as `[0, 1]` | hold through Gate 3 | approved |
 
 Still to confirm: the shared `run_id` + one collector per node convention (pending G5 adopting `--run-id`).
 
