@@ -6,7 +6,7 @@
 Muon takes the 2D block weights (routers included); AdamW takes the embedding parameters (KE projection too), head,
 norm gains and biases. Weight decay applies to AdamW matrices only. A parameter with grad=None is skipped.
 muon: momentum 0.95 nesterov, NS5 (3.4445, -4.7750, 2.0315) in bf16 (fp32 without bf16), scaled by
-max(1, rows / cols) ** 0.5. muon_impl loop | batched (same-shaped matrices stacked); adamw_impl loop | foreach.
+max(1, rows / cols) ** 0.5. muon_impl loop | batched (same-shaped matrices stacked) | triton (standalone kernel); adamw_impl loop | foreach.
 flops(): Newton-Schulz FLOPs per step, sum of 5 * (4 m^2 n + 2 m^3), m <= n.
 Regions: level 2 "opt.muon", "opt.adamw", "opt.polar_muon_adamw"; level 3 "opt.muon.ns", "opt.zero_grad".
 """
@@ -16,6 +16,7 @@ import math
 
 import torch
 
+from kernels.muon import muon_update_
 from perfkit.regions import region
 
 # Quintic Newton-Schulz coefficients of the original Muon (5 steps).
@@ -78,8 +79,8 @@ class Muon(torch.optim.Optimizer):
 
     def __init__(self, params, lr=0.02, momentum=0.95, nesterov=True, ns_steps=5,
                  weight_decay=0.0, impl="loop"):
-        if impl not in ("loop", "batched"):
-            raise ValueError(f"Muon impl {impl!r}: loop | batched")
+        if impl not in ("loop", "batched", "triton"):
+            raise ValueError(f"Muon impl {impl!r}: loop | batched | triton")
         super().__init__(params, dict(lr=lr, momentum=momentum, nesterov=nesterov,
                                       ns_steps=ns_steps, weight_decay=weight_decay, impl=impl))
 
@@ -89,6 +90,12 @@ class Muon(torch.optim.Optimizer):
             return
         if "buf" not in state:
             state["buf"] = torch.zeros_like(p.grad)
+        if group.get("impl", "loop") == "triton":
+            with region("opt.muon.ns", 3):
+                muon_update_(p, p.grad, state["buf"], lr=group["lr"], momentum=group["momentum"],
+                             nesterov=group["nesterov"], weight_decay=group["weight_decay"],
+                             ns_steps=group["ns_steps"])
+            return
         buf = state["buf"]
         buf.lerp_(p.grad, 1 - group["momentum"])
         g = p.grad.lerp(buf, group["momentum"]) if group["nesterov"] else buf
@@ -119,7 +126,7 @@ class Muon(torch.optim.Optimizer):
     @torch.no_grad()
     def step(self, closure=None):
         for group in self.param_groups:
-            if group.get("impl", "loop") == "loop":
+            if group.get("impl", "loop") in ("loop", "triton"):
                 for p in group["params"]:
                     # Match AdamW: an unused expert receives no update and its moments stay unchanged.
                     self._update_one(p, group, self.state[p])
