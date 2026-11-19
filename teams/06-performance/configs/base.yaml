@@ -26,23 +26,27 @@ model:                  # fields of models.config.ModelConfig, nothing else
   n_head: 8
   n_kv_head: null       # GQA key/value heads; null = n_head (plain multi-head)
   n_embd: 256
-  ln_impl: torch_ln    # torch_ln | triton_ln (CUDA/Triton)
-  attn_impl: eager      # sdpa | eager (explicit softmax, G5 config_v0: two seeds match)
+  norm: layernorm       # layernorm | rmsnorm (G5 form; a model change: G5 decides)
+  norm_eps: 1.0e-5      # eps of either norm
+  ln_impl: triton_ln    # torch_ln | triton_ln (CUDA/Triton): backend of model.norm
+  attn_impl: triton     # sdpa | eager (explicit softmax, G5 config_v0: two seeds match) | triton (deterministic flash)
   position: learned     # learned (position table) | rope (rotary q and k, full head dim)
+  rope_impl: triton     # torch | triton (one kernel each way; position: rope only)
   rope_theta: null      # RoPE base; required with position: rope (no default: G5 to confirm), ignored by learned
   mlp_ratio: 4
   activation: gelu      # gelu | swiglu (SiLU(gate) * up, 3 matrices, no biases): dense MLP and every expert
+  swiglu_impl: triton   # torch | triton (SiLU(gate) * up in one kernel; activation: swiglu only)
   embedding: ke2        # table | ke1 | ke2 (G4 raw table, teams/04-ke2)
   tie_embeddings: false # null: tie iff embedding=table; true: require table; false: never tie
   ke_max_pos: 32
   ke_mode: dynamic      # dynamic | cached
   ffn: mlp              # mlp | moe
-  moe: {num_experts: 8, top_k: 2, num_shared: 1, bias_gamma: 0.01, dispatch: loop, ffn_hidden: null}
+  moe: {num_experts: 8, top_k: 2, num_shared: 1, bias_gamma: 0.01, dispatch: loop, ffn_hidden: null, router_impl: triton}
   reversible: true
   rev_h: 1.0
   rev_impl: two_pass    # two_pass (invert + recompute) | one_pass (single f in backward)
-  ce_impl: torch        # torch | chunked | fused | triton_liger | triton_cce
-  ce_chunks: 8          # token chunk count for chunked / fused (need not divide B*T)
+  ce_impl: torch        # torch | chunked | fused | triton_liger | triton_cce | fused_triton
+  ce_chunks: 8          # token chunk count for chunked / fused / fused_triton (need not divide B*T)
   mtp: false            # true: second untied head on token t+2 (G5 config_v0); trained loss = ntp + mtp
 
 optim:
@@ -78,6 +82,7 @@ report:
   gate_level: 2         # parts at this level or coarser must agree within tol_pct
   tol_pct: 5.0
   abs_tol_ms: 0.05      # TSAI 30 Oct: a part also passes when the two runs differ by less than this (timer noise)
+  compare_clean_step: true  # false: --against / report.compare skip step (clean); job uses this under SwPowerCap
   # Needed because each part's time is the median over bench.steps measured steps: a part well under 1 ms
   # (data, one forward block) moves 10%+ between runs on GPU-timer and host-launch jitter when that median
   # comes from few calls. TSAI 30 Oct: time very small parts over many repeats (e.g. the median of 100 calls)

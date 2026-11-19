@@ -34,6 +34,10 @@ IMPL_SWITCHES = [
     ("model", "moe", "dispatch"),
     ("model", "ce_impl"),
     ("model", "ln_impl"),
+    ("model", "attn_impl"),          # sdpa | eager | triton: the same causal softmax attention
+    ("model", "rope_impl"),
+    ("model", "swiglu_impl"),
+    ("model", "moe", "router_impl"),
     ("model", "rev_impl"),  # two_pass vs one_pass: same update, different backward
     ("model", "vocab_pad_mode"),      # slice vs mask of the padded columns (B2)
     ("model", "vocab_pad_multiple"),  # head rows rounded up (B2): same loss, padded logits sliced off
@@ -432,7 +436,11 @@ def compare(a: dict, b: dict, tol_pct: float, gate_level: int, abs_tol_ms: float
     rows = []
     ok = not problems
 
-    pairs = [("step (clean)", _step_ms(a), _step_ms(b))]
+    # Mirror bench.quick_compare: skip clean step when report.compare_clean_step is false.
+    pairs = []
+    rep = (a.get("config") or {}).get("report") or {}
+    if rep.get("compare_clean_step", True):
+        pairs.append(("step (clean)", _step_ms(a), _step_ms(b)))
     ra, rb = _regions(a), _regions(b)
     gated_names = [n for n, r in ra.items() if r["level"] <= gate_level]
     gated_names += [n for n, r in rb.items() if r["level"] <= gate_level and n not in ra]
