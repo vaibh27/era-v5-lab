@@ -22,7 +22,7 @@ Test log:        teams/06-performance/jobs/2026-11-20-dryrun1-tsai.log (own mach
 
 | Item | Value |
 | :--- | :--- |
-| Tip pin (code + config) | tip `vaibh27/era-v5-lab` branch `g6/job-w3-dryrun1-tsai` (includes `configs/g5_t2_base.yaml` from tip #89 / class #688 and this job script; pin the merge SHA on `g6/dev` after merge) |
+| Tip pin (code + config) | tip `vaibh27/era-v5-lab` @ `7e255df2` (`g6/job-w3-dryrun1-tsai`; includes `configs/g5_t2_base.yaml` from tip #89 / class #688 and this job script) |
 | Class shape SoT | `#447` / `aec75af` — MoE 16+1, top-2, eager, muon (dispatch **not** in config_v1) |
 | Config | `teams/06-performance/configs/g5_t2_base.yaml` |
 | `moe.dispatch` | **`loop`** (explicit in g5_t2_base; matches G5 dry run 1 `#620`, not tip `#486` sorted mapper) |
