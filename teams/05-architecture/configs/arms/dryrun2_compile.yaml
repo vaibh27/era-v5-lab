@@ -1,0 +1,11 @@
+# Dry run 2 recipe with each transformer block compiled (torch.compile, inductor), for the eager vs compiled
+# A/B only. Compiling fuses the small elementwise ops (RMSNorm, RoPE, router softmax, SwiGLU) and cuts kernel
+# launches, which dominate at micro_batch_size 1. It changes the numeric trace (fused kernels round differently),
+# so the loss trace and model hash will not match the eager run. The first steps include compile time.
+inherit: dryrun2.yaml
+intended:
+  arm: dryrun2-compile
+  owner: Team 6
+  comparison_final: false
+run:
+  compile: true
