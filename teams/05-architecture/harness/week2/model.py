@@ -211,6 +211,8 @@ class MoE(nn.Module):
         self.shared = nn.ModuleList(
             SwiGLU(w, h, cfg["bias"]) for _ in range(cfg["num_shared"])
         )
+        # "loop" is the config name of the dense path below; "grouped_mm" runs only the routed experts.
+        self.dispatch = cfg.get("dispatch", "loop")
 
     def forward(self, x, valid):
         shape = x.shape
@@ -224,11 +226,6 @@ class MoE(nn.Module):
             selected.scatter_(-1, choice, True)
             self.expert_load.add_((selected & active[:, None]).sum(dim=0))
         gates = gates / gates.sum(-1, keepdim=True)
-        output = torch.zeros_like(flat)
-        # Execution-only fast path (TSAI): every expert runs on every token in one batched product, then each
-        # token keeps only its selected experts with their normalised gates. Same value as the loop below,
-        # with no data-dependent shapes and no host synchronisation. Padding rows get gate 0.
-        gate_dense = torch.zeros_like(scores).scatter(-1, choice, gates) * active[:, None]
         Wg = torch.stack([e.gate.weight for e in self.experts])   # [E, h, w]
         Wu = torch.stack([e.up.weight for e in self.experts])
         Wd = torch.stack([e.down.weight for e in self.experts])   # [E, w, h]
@@ -236,13 +233,46 @@ class MoE(nn.Module):
         if torch.is_autocast_enabled():
             dt = torch.get_autocast_dtype("cuda")
         xe = flat.to(dt)
-        hg = torch.einsum("td,ehd->teh", xe, Wg.to(dt))
-        hu = torch.einsum("td,ehd->teh", xe, Wu.to(dt))
-        y = torch.einsum("teh,edh->ted", F.silu(hg) * hu, Wd.to(dt))
-        output = torch.einsum("te,ted->td", gate_dense.float(), y.float()).to(flat.dtype)
+        if self.dispatch == "grouped_mm":
+            output = self.grouped_experts(xe, active, choice, gates, Wg.to(dt), Wu.to(dt), Wd.to(dt))
+            output = output.to(flat.dtype)
+        else:
+            # Execution-only fast path (TSAI): every expert runs on every token in one batched product, then each
+            # token keeps only its selected experts with their normalised gates. Same value as the loop below,
+            # with no data-dependent shapes and no host synchronisation. Padding rows get gate 0.
+            gate_dense = torch.zeros_like(scores).scatter(-1, choice, gates) * active[:, None]
+            hg = torch.einsum("td,ehd->teh", xe, Wg.to(dt))
+            hu = torch.einsum("td,ehd->teh", xe, Wu.to(dt))
+            y = torch.einsum("teh,edh->ted", F.silu(hg) * hu, Wd.to(dt))
+            output = torch.einsum("te,ted->td", gate_dense.float(), y.float()).to(flat.dtype)
         for expert in self.shared:
             output = output + expert(flat) * active[:, None]
         return output.reshape(shape)
+
+    def grouped_experts(self, xe, active, choice, gates, Wg, Wu, Wd):
+        """Run each token only through its top-k experts: one grouped GEMM per projection.
+
+        All N x top_k routes are kept, padding tokens included with gate 0, so the row count is
+        fixed: no capacity readback, no padding to the busiest expert and no host synchronisation.
+        Idle experts get exact zero gradients, as on the dense path. Returns fp32 [N, d].
+        """
+        if xe.is_cuda and xe.dtype != torch.bfloat16:
+            raise ValueError("grouped_mm dispatch needs bf16 autocast on CUDA (torch grouped GEMM)")
+        n_experts = Wg.shape[0]
+        routes = choice.flatten()                                    # [N * k], token-major
+        order = routes.argsort(stable=True)                          # routes grouped by expert
+        offsets = torch.searchsorted(
+            routes[order], torch.arange(n_experts, device=routes.device), right=True
+        ).to(torch.int32)                                            # end row of each expert's group
+        packed = xe[order // self.topk]
+        hg = F.grouped_mm(packed, Wg.transpose(-2, -1), offs=offsets)
+        hu = F.grouped_mm(packed, Wu.transpose(-2, -1), offs=offsets)
+        y = F.grouped_mm(F.silu(hg) * hu, Wd.transpose(-2, -1), offs=offsets)
+        weight = (gates * active[:, None]).flatten()[order]
+        # Back to (token, slot) order with a permutation copy, then sum the k slots in fp32.
+        weighted = y.float() * weight[:, None]
+        unsorted = torch.empty_like(weighted).index_copy(0, order, weighted)
+        return unsorted.view(-1, self.topk, unsorted.shape[-1]).sum(1)
 
 
 class Block(nn.Module):
