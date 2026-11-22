@@ -98,6 +98,7 @@ class GQA(nn.Module):
         self.o = nn.Linear(w, w, bias=False)
         self.theta = m["rope_theta"]
         self.rotary_dim = 2 * math.floor(m.get("rotary_fraction", 1.0) * self.d / 2)
+        self._rotary_cache = {}
         pattern = m.get("attn_pattern", ["G"] * m["n_layer"])
         self.local = pattern[layer_index] == "L"
         self.window = m.get("attn_window") if self.local else None
@@ -122,24 +123,32 @@ class GQA(nn.Module):
             elif m["attn_gate_init"] != "linear_default":
                 raise ValueError("Invalid gate initialization")
 
+    def rotary_angles(self, t, device):
+        """cos and sin of the RoPE angles for positions 0..t-1, built once per length and device.
+
+        Same ops as computing them per call, so the values are bit-identical. Inference-mode
+        tensors cannot enter autograd, so they are cached separately.
+        """
+        key = (t, device, torch.is_inference_mode_enabled())
+        cache = self._rotary_cache
+        if key not in cache:
+            inv = self.theta ** (
+                -torch.arange(0, self.rotary_dim, 2, device=device).float()
+                / self.rotary_dim
+            )
+            angle = torch.arange(t, device=device).float()[:, None] * inv[None, :]
+            cache[key] = (angle.cos(), angle.sin())
+        return cache[key]
+
     def rotary(self, x):
         # One window per document; position offset zero for each independent window.
-        inv = self.theta ** (
-            -torch.arange(0, self.rotary_dim, 2, device=x.device).float()
-            / self.rotary_dim
-        )
-        angle = (
-            torch.arange(x.shape[-2], device=x.device).float()[:, None] * inv[None, :]
-        )
+        cos, sin = self.rotary_angles(x.shape[-2], x.device)
         a, b = (
             x.float()[..., : self.rotary_dim : 2],
             x.float()[..., 1 : self.rotary_dim : 2],
         )
         rotated = (
-            torch.stack(
-                (a * angle.cos() - b * angle.sin(), a * angle.sin() + b * angle.cos()),
-                -1,
-            )
+            torch.stack((a * cos - b * sin, a * sin + b * cos), -1)
             .flatten(-2)
             .to(x.dtype)
         )
@@ -196,6 +205,23 @@ class SwiGLU(nn.Module):
         return self.down(F.silu(self.gate(x)) * self.up(x))
 
 
+class _StackedWeights(torch.autograd.Function):
+    """Hand back a cached [E, ...] stack of expert weights; route its gradient to each weight.
+
+    Backward is the one of torch.stack(weights).to(dtype): cast the gradient back to the
+    weights' dtype and unbind it, so parameter gradients are bit-identical.
+    """
+
+    @staticmethod
+    def forward(ctx, stacked, *weights):
+        ctx.weight_dtype = weights[0].dtype
+        return stacked
+
+    @staticmethod
+    def backward(ctx, grad):
+        return (None, *grad.to(ctx.weight_dtype).unbind(0))
+
+
 class MoE(nn.Module):
     def __init__(self, m):
         super().__init__()
@@ -211,6 +237,27 @@ class MoE(nn.Module):
         self.shared = nn.ModuleList(
             SwiGLU(w, h, cfg["bias"]) for _ in range(cfg["num_shared"])
         )
+        self._stack_cache = {}
+
+    def stacked(self, name, dtype):
+        """[E, out, in] expert weights in dtype, stacked and cast once per weight update.
+
+        The dense path used to stack and cast all expert weights in every call (every layer,
+        every microbatch). The cache key holds each weight's version counter, which every
+        in-place update (optimizer step, load_state_dict) bumps, so a changed weight rebuilds it.
+        """
+        weights = [getattr(e, name).weight for e in self.experts]
+        key = (
+            dtype,
+            torch.is_inference_mode_enabled(),
+            tuple((w._version, w.data_ptr()) for w in weights),
+        )
+        cached = self._stack_cache.get(name)
+        if cached is None or cached[0] != key:
+            with torch.no_grad():
+                cached = (key, torch.stack(weights).to(dtype))
+            self._stack_cache[name] = cached
+        return _StackedWeights.apply(cached[1], *weights)
 
     def forward(self, x, valid):
         shape = x.shape
@@ -224,21 +271,20 @@ class MoE(nn.Module):
             selected.scatter_(-1, choice, True)
             self.expert_load.add_((selected & active[:, None]).sum(dim=0))
         gates = gates / gates.sum(-1, keepdim=True)
-        output = torch.zeros_like(flat)
         # Execution-only fast path (TSAI): every expert runs on every token in one batched product, then each
         # token keeps only its selected experts with their normalised gates. Same value as the loop below,
         # with no data-dependent shapes and no host synchronisation. Padding rows get gate 0.
         gate_dense = torch.zeros_like(scores).scatter(-1, choice, gates) * active[:, None]
-        Wg = torch.stack([e.gate.weight for e in self.experts])   # [E, h, w]
-        Wu = torch.stack([e.up.weight for e in self.experts])
-        Wd = torch.stack([e.down.weight for e in self.experts])   # [E, w, h]
         dt = flat.dtype
         if torch.is_autocast_enabled():
             dt = torch.get_autocast_dtype("cuda")
+        Wg = self.stacked("gate", dt)   # [E, h, w]
+        Wu = self.stacked("up", dt)
+        Wd = self.stacked("down", dt)   # [E, w, h]
         xe = flat.to(dt)
-        hg = torch.einsum("td,ehd->teh", xe, Wg.to(dt))
-        hu = torch.einsum("td,ehd->teh", xe, Wu.to(dt))
-        y = torch.einsum("teh,edh->ted", F.silu(hg) * hu, Wd.to(dt))
+        hg = torch.einsum("td,ehd->teh", xe, Wg)
+        hu = torch.einsum("td,ehd->teh", xe, Wu)
+        y = torch.einsum("teh,edh->ted", F.silu(hg) * hu, Wd)
         output = torch.einsum("te,ted->td", gate_dense.float(), y.float()).to(flat.dtype)
         for expert in self.shared:
             output = output + expert(flat) * active[:, None]
