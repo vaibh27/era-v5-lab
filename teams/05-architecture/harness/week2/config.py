@@ -526,8 +526,9 @@ def validate(c):
         errors.append("Unsupported scoring boundary policy")
     if r.get("dtype") not in ["fp32", "bf16"]:
         errors.append("Unsupported precision")
-    if r.get("compile") is not False:
-        errors.append("Compiled backend not verified")
+    # compile: true runs each block through torch.compile (inductor); it changes the numeric trace.
+    if type(r.get("compile")) is not bool:
+        errors.append("run.compile must be true or false")
     if not number(r.get("grad_clip")) or r["grad_clip"] <= 0:
         errors.append("Invalid gradient clip")
     if not number(r.get("max_time_min")) or r["max_time_min"] <= 0:

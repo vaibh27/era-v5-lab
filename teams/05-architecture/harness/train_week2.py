@@ -66,6 +66,15 @@ def checked_step_losses(micro_losses, grad_norm):
     return tuple(sum(losses[i::3]) for i in range(3))
 
 
+def compile_blocks(model):
+    """Compile each transformer block in place (inductor): fuses the many small elementwise ops of
+    norm, RoPE, router and SwiGLU, and cuts kernel launches. In-place Module.compile keeps the
+    parameter names, so checkpoints and model hashes use the same keys as an eager run."""
+    for block in model.blocks:
+        block.compile()
+    return model
+
+
 def model_hash(model):
     h = hashlib.sha256()
     for name, value in sorted(model.state_dict().items()):
@@ -392,6 +401,8 @@ def main():
                 "Heldout report must bind this file/document count to full-set zero matches"
             )
     model = LanguageModel(cfg["model"], artifacts.bytes, artifacts.lengths).to(device)
+    if cfg["run"]["compile"]:
+        compile_blocks(model)
     # Use the optimizer selected by the resolved arm configuration.
     optimizer = build_optimizer(model, cfg["optim"])
     stream = BatchStream(train, cfg["run"]["batch_size"], seed)
