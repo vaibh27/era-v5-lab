@@ -1,0 +1,12 @@
+# Dry run 2 recipe with routed-only MoE experts (torch grouped GEMM), for the dense vs grouped_mm A/B only.
+# The dense path runs all 16 experts on every token and keeps the top 2; grouped_mm runs each token through its
+# top 2 only, with no host synchronisation and no capacity padding. It changes the numeric trace (expert sums in a
+# different order); loss trace and model hash will not match the dense run. Needs bf16 on an SM80+ CUDA GPU.
+inherit: dryrun2.yaml
+intended:
+  arm: dryrun2-grouped-mm
+  owner: Team 6
+  comparison_final: false
+model:
+  moe:
+    dispatch: grouped_mm

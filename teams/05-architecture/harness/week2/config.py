@@ -389,8 +389,9 @@ def validate(c):
         errors.append(
             "Only explicit bias-free expert implementation is supported; pending/bias=true must not be ignored"
         )
-    if e.get("dispatch") != "loop":
-        errors.append("Only loop dispatch is supported")
+    # loop: the dense every-expert path; grouped_mm: routed experts only (changes the numeric trace).
+    if e.get("dispatch") not in ("loop", "grouped_mm"):
+        errors.append("Only loop or grouped_mm dispatch is supported")
     gamma = e.get("bias_gamma")
     if type(gamma) not in (int, float) or isinstance(gamma, bool) or not math.isfinite(gamma) or gamma < 0:
         errors.append("bias_gamma must be 0 or a positive finite number")
