@@ -8,6 +8,7 @@ import math
 import torch
 from torch import nn
 from torch.nn import functional as F
+from .swiglu_triton import swiglu
 
 
 def codec(rows, lengths):
@@ -71,12 +72,16 @@ class KE2(nn.Module):
 
 
 class RMSNorm(nn.Module):
-    def __init__(self, width, eps):
+    def __init__(self, width, eps, fused=False):
         super().__init__()
         self.weight = nn.Parameter(torch.ones(width))
         self.eps = eps
+        self.fused = fused
 
     def forward(self, x):
+        if self.fused:
+            # Same fp32 math in torch's fused kernel (norm_impl: fused); one launch instead of five.
+            return F.rms_norm(x.float(), (x.shape[-1],), self.weight, self.eps).to(x.dtype)
         return (
             x.float()
             * torch.rsqrt(x.float().square().mean(-1, keepdim=True) + self.eps)
@@ -202,15 +207,21 @@ class GQA(nn.Module):
         return a @ v
 
 
+def silu_mul(g, u, triton):
+    """SiLU(g) * u; with swiglu_impl: triton one CUDA kernel each way (fp32 math, one rounding)."""
+    return swiglu(g, u) if triton else F.silu(g) * u
+
+
 class SwiGLU(nn.Module):
-    def __init__(self, w, h, bias=False):
+    def __init__(self, w, h, bias=False, triton=False):
         super().__init__()
         self.gate = nn.Linear(w, h, bias=bias)
         self.up = nn.Linear(w, h, bias=bias)
         self.down = nn.Linear(h, w, bias=bias)
+        self.triton = triton
 
     def forward(self, x):
-        return self.down(F.silu(self.gate(x)) * self.up(x))
+        return self.down(silu_mul(self.gate(x), self.up(x), self.triton))
 
 
 class _StackedWeights(torch.autograd.Function):
@@ -237,13 +248,14 @@ class MoE(nn.Module):
         h = m["moe"]["ffn_hidden"]
         cfg = m["moe"]
         self.topk = cfg["top_k"]
+        self.triton = m.get("swiglu_impl", "torch") == "triton"
         self.expert_load = None
         self.router = nn.Linear(w, cfg["num_experts"], bias=False)
         self.experts = nn.ModuleList(
             SwiGLU(w, h, cfg["bias"]) for _ in range(cfg["num_experts"])
         )
         self.shared = nn.ModuleList(
-            SwiGLU(w, h, cfg["bias"]) for _ in range(cfg["num_shared"])
+            SwiGLU(w, h, cfg["bias"], self.triton) for _ in range(cfg["num_shared"])
         )
         self._stack_cache = {}
         # "loop" is the config name of the dense path below; "grouped_mm" runs only the routed experts.
@@ -298,7 +310,7 @@ class MoE(nn.Module):
             gate_dense = torch.zeros_like(scores).scatter(-1, choice, gates) * active[:, None]
             hg = torch.einsum("td,ehd->teh", xe, Wg)
             hu = torch.einsum("td,ehd->teh", xe, Wu)
-            y = torch.einsum("teh,edh->ted", F.silu(hg) * hu, Wd)
+            y = torch.einsum("teh,edh->ted", silu_mul(hg, hu, self.triton), Wd)
             output = torch.einsum("te,ted->td", gate_dense.float(), y.float()).to(flat.dtype)
         for expert in self.shared:
             output = output + expert(flat) * active[:, None]
@@ -333,8 +345,9 @@ class MoE(nn.Module):
 class Block(nn.Module):
     def __init__(self, m, layer_index=0):
         super().__init__()
-        self.n1 = RMSNorm(m["n_embd"], m["norm_eps"])
-        self.n2 = RMSNorm(m["n_embd"], m["norm_eps"])
+        fused = m.get("norm_impl", "torch") == "fused"
+        self.n1 = RMSNorm(m["n_embd"], m["norm_eps"], fused)
+        self.n2 = RMSNorm(m["n_embd"], m["norm_eps"], fused)
         self.attn = GQA(m, layer_index)
         self.moe = MoE(m)
 
@@ -351,7 +364,7 @@ class LanguageModel(nn.Module):
         self.spec = m
         self.embedding = KE2(rows, lengths, m["n_embd"])
         self.blocks = nn.ModuleList(Block(m, i) for i in range(m["n_layer"]))
-        self.norm = RMSNorm(m["n_embd"], m["norm_eps"])
+        self.norm = RMSNorm(m["n_embd"], m["norm_eps"], m.get("norm_impl", "torch") == "fused")
         self.mtp_head = (
             nn.Linear(m["n_embd"], m["vocab_size"], bias=False) if m["mtp"] else None
         )

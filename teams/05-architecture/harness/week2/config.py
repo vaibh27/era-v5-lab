@@ -174,6 +174,8 @@ def load_runtime(arm_path, runtime_path=None):
             "attn_gate_input",
             "attn_gate_bias",
             "attn_gate_init",
+            "norm_impl",
+            "swiglu_impl",
         ],
         "lead model",
     )
@@ -274,6 +276,8 @@ def load_runtime(arm_path, runtime_path=None):
         "attn_gate_input",
         "attn_gate_bias",
         "attn_gate_init",
+        "norm_impl",
+        "swiglu_impl",
     ]:
         if key in src:
             model[key] = (
@@ -445,6 +449,11 @@ def validate(c):
     # sdpa changes the numeric trace (fused softmax, bf16 scores); local layers stay eager.
     if m.get("attn_impl") not in ("eager", "sdpa"):
         errors.append("attn_impl must be eager or sdpa")
+    # Kernel choices; both change the numeric trace slightly (fp32 math, fewer roundings).
+    if m.get("norm_impl", "torch") not in ("torch", "fused"):
+        errors.append("norm_impl must be torch or fused")
+    if m.get("swiglu_impl", "torch") not in ("torch", "triton"):
+        errors.append("swiglu_impl must be torch or triton")
     if "head_mode" in m or "tie_embeddings" in m:
         errors.append("Output head is fixed dense untied; head switches are removed")
     if m.get("embedding") not in KE2_EMBEDDING_NAMES:
