@@ -174,6 +174,8 @@ def load_runtime(arm_path, runtime_path=None):
             "attn_gate_input",
             "attn_gate_bias",
             "attn_gate_init",
+            "norm_impl",
+            "swiglu_impl",
             "head_mode",
             "kas_prior",
         ],
@@ -276,8 +278,10 @@ def load_runtime(arm_path, runtime_path=None):
         "attn_gate_input",
         "attn_gate_bias",
         "attn_gate_init",
-            "head_mode",
-            "kas_prior",
+        "norm_impl",
+        "swiglu_impl",
+        "head_mode",
+        "kas_prior",
     ]:
         if key in src:
             model[key] = (
@@ -451,6 +455,11 @@ def validate(c):
     # sdpa changes the numeric trace (fused softmax, bf16 scores); local layers stay eager.
     if m.get("attn_impl") not in ("eager", "sdpa"):
         errors.append("attn_impl must be eager or sdpa")
+    # Kernel choices; both change the numeric trace slightly (fp32 math, fewer roundings).
+    if m.get("norm_impl", "torch") not in ("torch", "fused"):
+        errors.append("norm_impl must be torch or fused")
+    if m.get("swiglu_impl", "torch") not in ("torch", "triton"):
+        errors.append("swiglu_impl must be torch or triton")
     if "tie_embeddings" in m or ("head_mode" in m and m["head_mode"] != "kas_v2"):
         errors.append("Output head must be legacy dense untied or explicit kas_v2; tying is unsupported")
     if "kas_prior" in m and (m.get("head_mode") != "kas_v2" or not isinstance(m["kas_prior"], dict)):

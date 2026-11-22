@@ -1,0 +1,11 @@
+# Dry run 2 recipe with fused RMSNorm (torch F.rms_norm) and the Triton SwiGLU kernel, for the A/B only.
+# Both keep fp32 math but round fewer times than the eager ops, so the loss trace and model hash will not match
+# the dry run 2 run. Without CUDA or Triton, SwiGLU falls back to torch.
+inherit: dryrun2.yaml
+intended:
+  arm: dryrun2-fused
+  owner: Team 6
+  comparison_final: false
+model:
+  norm_impl: fused
+  swiglu_impl: triton
