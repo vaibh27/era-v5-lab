@@ -1,4 +1,5 @@
-# Copied unchanged (apart from this header) from teams/06-performance/kernels/swiglu.py @ 2c122815, Team 6.
+# Copied from teams/06-performance/kernels/swiglu.py @ 2c122815, Team 6; changed only in this header and in
+# swiglu() stepping aside under torch.compile.
 # Kept as a copy, like team7_checkpoints.py, so the G5 harness has no import path into another team's tree
 # and the run identity's source hashes (week2/*.py) cover the kernel that ran.
 """SwiGLU activation h = SiLU(g) * u in one CUDA kernel each way (model.swiglu_impl=triton).
@@ -102,8 +103,12 @@ def supported(g: torch.Tensor, u: torch.Tensor) -> bool:
 
 
 def swiglu(g: torch.Tensor, u: torch.Tensor) -> torch.Tensor:
-    """SiLU(g) * u: the Triton kernel where supported, else torch. Without grad, no autograd.Function."""
-    if not supported(g, u):
+    """SiLU(g) * u: the Triton kernel where supported, else torch. Without grad, no autograd.Function.
+
+    Under torch.compile the torch ops are used: Dynamo cannot trace the once_differentiable backward or the
+    torch.cuda.device context (a graph break at every MoE layer), and inductor fuses SiLU(g) * u itself.
+    """
+    if torch.compiler.is_compiling() or not supported(g, u):
         return F.silu(g) * u
     if torch.is_grad_enabled() and (g.requires_grad or u.requires_grad):
         return _SwiGLU.apply(g, u)
