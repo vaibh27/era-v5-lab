@@ -4,6 +4,7 @@ import copy
 from pathlib import Path
 import sys
 import unittest
+from unittest.mock import patch
 import torch
 from torch.nn import functional as F
 
@@ -86,6 +87,23 @@ class FusedCpuTests(unittest.TestCase):
         self.assertTrue(torch.equal(swiglu_triton.swiglu(g, u), F.silu(g) * u))
 
 
+class FusedCompileTests(unittest.TestCase):
+    """Under torch.compile the SwiGLU wrapper uses the torch ops, so the kernel adds no graph breaks."""
+
+    def tearDown(self):
+        torch._dynamo.reset()
+
+    def test_block_traces_as_one_graph_with_the_kernel_enabled(self):
+        torch._dynamo.reset()
+        _, new = model_pair(norm_impl="fused", swiglu_impl="triton")
+        ids = torch.arange(24).reshape(3, 8) % 31
+        valid = torch.ones_like(ids, dtype=torch.bool)
+        # Pretend the kernel is available (CPU has no Triton path), so tracing would reach it without the guard.
+        with patch.object(swiglu_triton, "supported", lambda g, u: True):
+            explained = torch._dynamo.explain(new.blocks[0])(new.embedding(ids).detach(), valid)
+        self.assertEqual((explained.graph_count, explained.graph_break_count), (1, 0), explained.break_reasons)
+
+
 @unittest.skipUnless(torch.cuda.is_available() and swiglu_triton.triton is not None, "CUDA + Triton only")
 class FusedCudaTests(unittest.TestCase):
     def test_swiglu_kernel_close_to_torch_on_3d_expert_activations(self):
@@ -107,6 +125,18 @@ class FusedCudaTests(unittest.TestCase):
         ref_loss, _ = loss_and_grads(ref, ids, valid, amp=True)
         loss, _ = loss_and_grads(new, ids, valid, amp=True)
         torch.testing.assert_close(loss, ref_loss, rtol=1e-2, atol=1e-2)
+
+    def test_compiled_block_has_no_graph_breaks_on_cuda(self):
+        torch._dynamo.reset()
+        try:
+            _, new = model_pair("cuda", norm_impl="fused", swiglu_impl="triton")
+            ids = (torch.arange(24).reshape(3, 8) % 31).cuda()
+            valid = torch.ones_like(ids, dtype=torch.bool)
+            with torch.autocast("cuda", dtype=torch.bfloat16):
+                explained = torch._dynamo.explain(new.blocks[0])(new.embedding(ids).detach(), valid)
+        finally:
+            torch._dynamo.reset()
+        self.assertEqual(explained.graph_break_count, 0, explained.break_reasons)
 
     def test_bf16_model_repeats_bitwise_under_deterministic_mode(self):
         torch.use_deterministic_algorithms(True)
