@@ -14,7 +14,7 @@
 - The SwiGLU kernel is Team 6's `kernels/swiglu.py` (`@ 2c122815`, tested on A100 under torch 2.11 and 2.14), copied into `harness/week2/swiglu_triton.py` like `team7_checkpoints.py`. The G5 harness keeps no import path into another team's tree, and the run identity's source hashes cover the copy.
 - Without CUDA or Triton, SwiGLU falls back to the torch ops; the default for both keys is `torch` (unchanged behaviour).
 - No new parameters: checkpoints load with either setting.
-- If `run.compile: true` lands, inductor fuses both ops anyway; then these switches matter only for eager runs.
+- If `run.compile: true` lands, inductor fuses both ops anyway; then these switches matter only for eager runs. Under `torch.compile` the SwiGLU wrapper uses the torch ops: the kernel's `once_differentiable` backward and `torch.cuda.device` context are not traceable and split every compiled block at each MoE layer (11 graph breaks in the merged A100 run).
 
 ## Expected numeric change
 
@@ -31,11 +31,13 @@
 | `test_fused_rms_norm_forward_is_bit_identical_on_cpu` | fp32 and bf16 | PASS (CPU) |
 | `test_fused_model_matches_torch_ops` | whole-model loss equal, gradients within 1e-5 | PASS (CPU) |
 | `test_swiglu_falls_back_to_torch_without_cuda` | fallback is exactly the torch ops | PASS (CPU) |
+| `test_block_traces_as_one_graph_with_the_kernel_enabled` | under Dynamo the kernel path is never traced: 1 graph, 0 breaks | PASS (CPU) |
 | `test_swiglu_kernel_close_to_torch_on_3d_expert_activations` | `[256, 16, 768]` bf16, forward and both gradients | pending (CUDA) |
 | `test_bf16_model_close_to_torch_ops` | whole model under bf16 autocast | pending (CUDA) |
+| `test_compiled_block_has_no_graph_breaks_on_cuda` | bf16 block under Dynamo on CUDA: 0 breaks | pending (CUDA) |
 | `test_bf16_model_repeats_bitwise_under_deterministic_mode` | trainer's deterministic settings | pending (CUDA) |
 
-Full G5 suite on CPU (torch 2.14.1): 212 passed, 7 skipped.
+Full G5 suite on CPU (torch 2.14.1): 213 passed, 8 skipped.
 
 ## Expected gain (not measured)
 
