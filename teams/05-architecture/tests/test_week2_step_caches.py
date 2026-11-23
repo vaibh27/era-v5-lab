@@ -148,6 +148,30 @@ class StepCacheTests(unittest.TestCase):
         self.assertEqual(set(model.state_dict()), before)
 
 
+class StepCacheCompileTests(unittest.TestCase):
+    """Under torch.compile both caches step aside, so they add no graph breaks or recompiles."""
+
+    def tearDown(self):
+        torch._dynamo.reset()
+
+    def test_block_traces_as_one_graph(self):
+        torch._dynamo.reset()
+        _, model, _ = pair()
+        ids = torch.arange(24).reshape(3, 8) % 31
+        valid = torch.ones_like(ids, dtype=torch.bool)
+        explained = torch._dynamo.explain(model.blocks[0])(model.embedding(ids).detach(), valid)
+        self.assertEqual((explained.graph_count, explained.graph_break_count), (1, 0), explained.break_reasons)
+
+    def test_optimizer_steps_cause_no_recompiles(self):
+        torch._dynamo.reset()
+        c, model, _ = pair()
+        for block in model.blocks:
+            block.compile(backend="eager", fullgraph=True)
+        train(model, c, 1, "cpu")
+        with torch._dynamo.config.patch(error_on_recompile=True):
+            train(model, c, 3, "cpu")
+
+
 @unittest.skipUnless(torch.cuda.is_available(), "CUDA only")
 class StepCacheCudaTests(unittest.TestCase):
     def test_bf16_training_is_bit_identical_to_the_per_call_code(self):

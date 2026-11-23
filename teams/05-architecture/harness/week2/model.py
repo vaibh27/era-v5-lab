@@ -129,18 +129,25 @@ class GQA(nn.Module):
         """cos and sin of the RoPE angles for positions 0..t-1, built once per length and device.
 
         Same ops as computing them per call, so the values are bit-identical. Inference-mode
-        tensors cannot enter autograd, so they are cached separately.
+        tensors cannot enter autograd, so they are cached separately. Under torch.compile the
+        cache is skipped: Dynamo cannot trace the inference-mode query, and inductor folds the
+        angles into the graph anyway.
         """
+        if torch.compiler.is_compiling():
+            return self.rotary_values(t, device)
         key = (t, device, torch.is_inference_mode_enabled())
         cache = self._rotary_cache
         if key not in cache:
-            inv = self.theta ** (
-                -torch.arange(0, self.rotary_dim, 2, device=device).float()
-                / self.rotary_dim
-            )
-            angle = torch.arange(t, device=device).float()[:, None] * inv[None, :]
-            cache[key] = (angle.cos(), angle.sin())
+            cache[key] = self.rotary_values(t, device)
         return cache[key]
+
+    def rotary_values(self, t, device):
+        inv = self.theta ** (
+            -torch.arange(0, self.rotary_dim, 2, device=device).float()
+            / self.rotary_dim
+        )
+        angle = torch.arange(t, device=device).float()[:, None] * inv[None, :]
+        return angle.cos(), angle.sin()
 
     def rotary(self, x):
         # One window per document; position offset zero for each independent window.
@@ -260,6 +267,10 @@ class MoE(nn.Module):
         in-place update (optimizer step, load_state_dict) bumps, so a changed weight rebuilds it.
         """
         weights = [getattr(e, name).weight for e in self.experts]
+        if torch.compiler.is_compiling():
+            # Dynamo cannot trace the cache key (inference-mode query, data pointers); inductor
+            # fuses the stack and cast into the graph instead.
+            return torch.stack(weights).to(dtype)
         key = (
             dtype,
             torch.is_inference_mode_enabled(),
