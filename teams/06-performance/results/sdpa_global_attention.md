@@ -1,6 +1,6 @@
 # Global SDPA attention for the G5 trainer (follow-up to #536)
 
-**Status:** done in `g5_switches/`. CPU and CUDA tests pass on A100; speed check through the launcher below.
+**Status:** done in `g5_switches/`. CPU and CUDA tests pass on A100. Dry run 2 numbers come from the lab job (pending).
 **Default:** unchanged. G5's trainer and configs are not edited; dry run 2 stays eager. SDPA runs only through the
 G6 launcher with `--g6 attn_impl=sdpa`. Switching any run is a Team 5/TSAI call.
 **Scope:** WO2 is the G5 trainer that dry run 2 runs. The G6 perfkit default stays eager (perfkit supports
@@ -42,41 +42,22 @@ full score matrix in fp32 and runs a separate softmax; the fused SDPA kernel nev
 differently. A same-seed SDPA run repeats bitwise under the trainer's deterministic settings
 (`test_bf16_sdpa_backward_repeats_bitwise`, CUDA).
 
-## Speed check through the launcher (Modal A100-SXM4-80GB, torch 2.14.1, 25 Nov 2026)
+## Evidence
 
-`dryrun2.yaml` (KAS V2 head), G5's `g5_speed_bench` step through `g5_switches`, one container, cases alternated
-(eager, SDPA, eager, SDPA), 20 timed steps after 3 warm-up, synthetic tokens. Speed only, not a held-out result.
-
-| case | median step | peak memory | model hash |
-| :--- | ---: | ---: | :--- |
-| eager, run 1 | 1,761 ms | 10.39 GB | `31c04857` |
-| SDPA, run 1 | 1,709 ms | 8.85 GB | `e840e9b9` |
-| eager, run 2 | 1,771 ms | 10.39 GB | `31c04857` |
-| SDPA, run 2 | 1,644 ms | 8.85 GB | `e840e9b9` |
-
-- About 1.05x faster and 1.5 GB less peak memory, as measured before as a G5 code change.
-- The eager hash equals G5's own code without the launcher (`31c04857`, same bench, same day), so with no switch
-  the launcher runs G5 unchanged. The SDPA hash repeats between runs.
-
-## Earlier evidence (same math, measured when it was a G5 code change)
-
-Official Gate 2 A/B by TSAI (#536 at `91e00cd`, T2 Muon arm, seed 1234, bf16, steps 6-20; `gate2_speedup_ab.md`):
+Lab speed (TSAI's official Gate 2 A/B, #536 at `91e00cd`, T2 Muon arm, seed 1234, bf16, steps 6-20;
+`gate2_speedup_ab.md`):
 
 | variant | median step | baseline / variant | peak GPU allocation |
 | :--- | ---: | ---: | ---: |
 | eager | 2,088.1 ms | 1.000x | 11.12 GiB |
 | SDPA | 1,902.3 ms | 1.098x | 9.56 GiB |
 
-Speed check on `dryrun2.yaml` (KAS V2 head, Muon lr 0.006, router default): 20 timed steps after 3 warm-up on
-synthetic tokens, one A100-80GB on Modal, torch 2.14.1+cu130, both arms in the same container. This is a speed
-check only, not a held-out result; the loss and held-out bpb comparison is the TSAI job beside dry run 2, not run yet:
+Dry run 2 (speed, loss and held-out bpb): from the TSAI job `dryrun2-sdpa-1234` beside the eager `dryrun2-1234`;
+pending.
 
-| variant | median step | baseline / variant | peak allocation | first step |
-| :--- | ---: | ---: | ---: | ---: |
-| eager | 1,378 ms | 1.000x | 10.39 GB | 3,563 ms |
-| SDPA | 1,315 ms | 1.049x | 8.85 GB | 2,744 ms |
-
-The loss traces of the two arms differ by at most 4.8e-4. Method and raw results: `speed_dryrun2.md`.
+Launcher checks (Modal A100, G5's step on `dryrun2.yaml`, no timing claimed): with no switch the model hash is the
+same as G5's own code without the launcher, so the launcher runs G5 unchanged; two SDPA runs give the same model
+hash.
 
 ## Tests (`correctness/test_g5_sdpa.py`)
 
