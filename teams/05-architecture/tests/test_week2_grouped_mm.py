@@ -138,6 +138,8 @@ class GroupedMmCudaTests(unittest.TestCase):
         for name in ref_grads:
             torch.testing.assert_close(grads[name], ref_grads[name], rtol=5e-2, atol=5e-2, msg=name)
 
+    # torch 2.14 has the fused grouped GEMM only on SM90+; below it falls back to a loop that syncs.
+    @unittest.skipUnless(torch.cuda.is_available() and torch.cuda.get_device_capability() >= (9, 0), "SM90+ only")
     def test_no_host_synchronisation(self):
         forward_backward(self.grouped, self.x, self.valid, amp=True)  # warm up allocator and kernels
         torch.cuda.synchronize()
