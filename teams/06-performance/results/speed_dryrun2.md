@@ -19,7 +19,7 @@ All five branch from `g6/dev @ 369fd0d1`. Every switch defaults to the current b
 | `g6/w4-g5-launch-overhead` | `817e5ed3` | `run.compile: true` (blocks only); `run.micro_batch_size` (resolution key, no code) | changes |
 | `g6/w4-g5-fused-norm-swiglu` | `fec6d164` | `model.norm_impl: fused`, `model.swiglu_impl: triton` | changes (small) |
 
-Per-branch write-ups: `teams/05-architecture/results/{sdpa_global_attention,step_caches,moe_grouped_mm,launch_overhead,fused_norm_swiglu}.md`. Dry run 1 counterparts: `speed_dryrun1.md`, `profile_dryrun1.md`.
+These branches were measured as edits to G5's trainer. They now move to `g5_switches/` (a G6 launcher that runs G5's trainer unchanged, with `--g6 key=value` switches), so no file under `teams/05-architecture` changes; SDPA is the first (`results/sdpa_global_attention.md`), the others follow with their write-ups. Dry run 1 counterparts: `speed_dryrun1.md`, `profile_dryrun1.md`.
 
 ## Method
 
