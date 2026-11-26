@@ -10,7 +10,11 @@ rejected. Logits are computed only at target positions (same value, less memory)
 
 Weights: FP32 master weights in FP32 storage (AdamW), FP32 compute. On Apple MPS and CPU no autocast is used (M1 has no
 BF16 units). On CUDA `--autocast bf16` runs forward/backward under BF16 autocast while weights, gradients and AdamW
-state stay FP32 (the plan's GPU setting); the report records the compute dtype. Step 1 records a stored-weight writeback check on one trainable tensor:
+state stay FP32 (the plan's GPU setting); the report records the compute dtype. With `--frozen-bf16` (bf16
+checkpoints only) frozen nn.Linear weights are stored in bf16 during training, which autocast feeds to every matmul
+anyway, and back in FP32 before the end-of-run checks and the save. `--train-marker-rows` trains the marker rows as
+their own small tensors (MarkerRows), not the whole embedding / LM head.
+Step 1 records a stored-weight writeback check on one trainable tensor:
 the change actually stored versus the AdamW step-1 update recomputed in FP32 from the clipped gradient, the
 fraction of entries that moved, and the fraction that would have moved had the tensor been stored in BF16.
 After the last step the model is saved (FP32 safetensors, Hugging Face layout, so `evaluate.py` and Team 9's
@@ -38,6 +42,7 @@ from pathlib import Path
 
 import torch
 import torch.nn as nn
+from torch.nn.utils import parametrize
 
 HERE = Path(__file__).resolve().parent
 
@@ -140,7 +145,12 @@ def target_nll_sum(model: nn.Module, batch: probe.Batch) -> tuple[torch.Tensor, 
     return masked_nll_sum(logits[None], batch.labels[sel][None])
 
 
-AUTOCAST = {"dtype": None}
+# "device": a test seam (the CPU tests run the bf16 path on CPU autocast).
+# "cache": torch.autocast keeps the BF16 cast of every FP32 weight that requires grad until the context exits. With
+# gradient checkpointing nothing else holds those casts, so by the end of a microbatch's forward a BF16 copy of every
+# trainable Linear weight is resident (2 B per weight: 14.1 GiB at Qwen3-8B, what put 8B full FT over an H200). Off,
+# each matmul casts its weight when it runs: the same rounding, so the same numbers (bit-identical on CPU).
+AUTOCAST = {"dtype": None, "device": "cuda", "cache": False}
 
 
 def autocast_ctx(device: str):
@@ -148,7 +158,7 @@ def autocast_ctx(device: str):
 
     if AUTOCAST["dtype"] is None:
         return contextlib.nullcontext()
-    return torch.autocast(device_type="cuda", dtype=AUTOCAST["dtype"])
+    return torch.autocast(device_type=AUTOCAST["device"], dtype=AUTOCAST["dtype"], cache_enabled=AUTOCAST["cache"])
 
 
 def accumulate(model: nn.Module, mbs: list[probe.Batch], device) -> tuple[float, int]:
@@ -269,23 +279,86 @@ def untie_head(model: nn.Module, trainable: bool = False) -> None:
     model.config.tie_word_embeddings = False
 
 
+class MarkerRows(nn.Module):
+    """Parametrization behind --train-marker-rows: the frozen embedding / LM-head matrix with the rows `ids` replaced
+    by `marker_rows`, a small trainable tensor that starts as a copy of those rows. The module's own forward and
+    backward run on that matrix, so the values it sees, and the gradient of the marker rows, are the ones the earlier
+    whole-matrix-with-gradient-mask version produced. merge_marker_rows() writes the rows back before saving.
+
+    Memory: the whole-matrix .grad, AdamW's two moments and the foreach step temporary are now len(ids) rows instead of
+    the matrix (2 x 622M values at Qwen3-8B with an untied head). New: one transient full-size copy of each
+    parametrized matrix per micro-batch forward (index_put; gradient checkpointing does not re-run it). Without
+    autocast the LM-head copy is held until the LM-head backward."""
+
+    def __init__(self, ids: list[int], init: torch.Tensor):
+        """init: a fresh copy of the rows (it becomes the trained tensor)."""
+        super().__init__()
+        self.register_buffer("ids", torch.tensor(ids, dtype=torch.long, device=init.device), persistent=False)
+        self.marker_rows = nn.Parameter(init)
+
+    def forward(self, w: torch.Tensor) -> torch.Tensor:
+        return w.index_put((self.ids,), self.marker_rows)
+
+
 def enable_marker_rows(model: nn.Module, ids: list[int], scope: str = "both") -> list[nn.Parameter]:
-    """HYBRID control (label it): make only the embedding rows `ids` trainable. The tied LM head shares the tensor, so
-    the same rows move on the output side. A gradient hook zeroes every other row; with weight decay 0, AdamW then
-    leaves those rows bit-identical (zero first and second moments give an exact zero update).
+    """HYBRID control (label it): train only the rows `ids` of the embedding and/or LM head, as MarkerRows tensors; the
+    matrices themselves stay frozen. A tied LM head shares one MarkerRows, so the same rows move on the output side.
     scope (untied head only): "input" = embedding rows, "output" = LM-head rows, "both"."""
-    emb, head = model.get_input_embeddings().weight, model.lm_head.weight
-    if scope != "both" and emb is head:
+    emb_mod, head_mod = model.get_input_embeddings(), model.lm_head
+    tied = emb_mod.weight is head_mod.weight
+    if scope != "both" and tied:
         raise SystemExit("--marker-scope input/output needs --untie-head (tied rows cannot be trained separately)")
-    chosen = {"both": (emb, head), "input": (emb,), "output": (head,)}[scope]
-    out = []
-    for w in {id(t): t for t in chosen}.values():
-        rowmask = torch.zeros(w.shape[0], 1, dtype=w.dtype, device=w.device)
-        rowmask[ids] = 1
-        w.requires_grad_(True)
-        w.register_hook(lambda g, m=rowmask: g * m)
-        out.append(w)
+    chosen = {"both": (emb_mod, head_mod), "input": (emb_mod,), "output": (head_mod,)}[scope]
+    out, shared = [], None
+    for mod in chosen:
+        rows = shared if shared is not None else MarkerRows(ids, mod.weight.detach()[ids])
+        parametrize.register_parametrization(mod, "weight", rows)
+        if shared is None:
+            out.append(rows.marker_rows)
+        shared = rows if tied else None
     return out
+
+
+def merge_marker_rows(model: nn.Module) -> None:
+    """Write the trained marker rows into the embedding / LM head (in place, values unchanged) and remove the
+    parametrizations, so state_dict keys are the usual ones and a tied head stays tied."""
+    for mod in (model.get_input_embeddings(), model.lm_head):
+        if parametrize.is_parametrized(mod, "weight"):
+            parametrize.remove_parametrizations(mod, "weight", leave_parametrized=True)
+
+
+def frozen_linears_to_bf16(model: nn.Module) -> dict:
+    """--frozen-bf16 (bench only): store every frozen plain nn.Linear weight in bf16. Under --autocast bf16 those
+    weights are cast to bf16 for every matmul anyway, so when the FP32 values are exactly representable in bf16 (a bf16
+    checkpoint) the computation is unchanged and 2 B per weight are saved. Every weight is checked first; one inexact
+    weight stops the run (SystemExit) before anything is converted. Left in FP32: embeddings (a bf16 lookup would change
+    the residual stream's dtype) and a head tied to them, norms, every trainable tensor, marker-row matrices, and DT's
+    MaskedLinear layers (MaskedLinear multiplies W by the mask in W's dtype). frozen_linears_to_fp32() restores FP32
+    before the end-of-run checks. Not for G5 code: LoRALinear.merged_weight would then be bf16 under autocast."""
+    emb = model.get_input_embeddings().weight
+    picked = []
+    for name, mod in model.named_modules():
+        if type(mod) is not nn.Linear or parametrize.is_parametrized(mod):
+            continue
+        w = mod.weight
+        if w.requires_grad or w is emb or w.dtype != torch.float32:
+            continue
+        if not torch.equal(w.detach().to(torch.bfloat16).float(), w.detach()):
+            raise SystemExit(f"--frozen-bf16: {name}.weight is not exactly representable in bf16 (an FP32 checkpoint?)")
+        picked.append(mod)
+    for mod in picked:
+        mod.weight.data = mod.weight.data.to(torch.bfloat16)
+    n = sum(m.weight.numel() for m in picked)
+    model._g10_frozen_bf16 = picked
+    return {"linears": len(picked), "weights": n, "bytes_saved": 2 * n, "exact": True,
+            "kept_fp32": "embeddings and a tied head, norms, trainable tensors, marker-row matrices, DT MaskedLinear"}
+
+
+def frozen_linears_to_fp32(model: nn.Module) -> None:
+    """Undo frozen_linears_to_bf16 (exact: every converted value was representable in bf16)."""
+    for mod in getattr(model, "_g10_frozen_bf16", []):
+        mod.weight.data = mod.weight.data.float()
+    model._g10_frozen_bf16 = []
 
 
 def frozen_sha256(model: nn.Module, marker_ids: list[int] | None = None) -> str:
@@ -295,7 +368,7 @@ def frozen_sha256(model: nn.Module, marker_ids: list[int] | None = None) -> str:
     tensors are excluded (they are the trained state)."""
     h = hashlib.sha256()
     for name, p in sorted(model.named_parameters(remove_duplicate=True), key=lambda kv: kv[0]):
-        if name.endswith(".gate") or "lora_" in name:
+        if name.endswith(".gate") or "lora_" in name or name.endswith(".marker_rows"):
             continue
         t = p.detach()
         if p.requires_grad:
@@ -384,7 +457,8 @@ def sync(device: str) -> None:
 
 def resume_key(args) -> str:
     """What a resumed run must share with the run that saved the state (everything but paths and logging)."""
-    return json.dumps({k: v for k, v in sorted(vars(args).items()) if k not in ("out", "log_every", "save_every")})
+    return json.dumps({k: v for k, v in sorted(vars(args).items())
+                       if k not in ("out", "log_every", "save_every") and not (k == "frozen_bf16" and not v)})
 
 
 def take_by_targets(order: list[int], n_tgt: list[int], budget: int, rng: random.Random) -> list[int]:
@@ -425,14 +499,17 @@ def train(args) -> dict:
     if args.method == "markers" and not args.train_marker_rows:
         raise SystemExit("--method markers trains only the marker rows: pass --train-marker-rows")
     if args.train_marker_rows and args.wd != 0:
-        raise SystemExit("--train-marker-rows needs --wd 0: decoupled weight decay would move the unselected embedding rows")
+        raise SystemExit("--train-marker-rows needs --wd 0 (as before, so runs stay comparable: weight decay "
+                         "would shrink the marker rows)")
+    if args.frozen_bf16 and (args.autocast != "bf16" or args.method == "full"):
+        raise SystemExit("--frozen-bf16 needs --autocast bf16 and a method with frozen weights (dt, lora, markers)")
     random.seed(args.seed)
     torch.manual_seed(args.seed)
     device = args.device
     if args.autocast == "bf16":
-        if not device.startswith("cuda"):
+        if not device.startswith(AUTOCAST["device"]):
             raise SystemExit("--autocast bf16 is for CUDA only (MPS/CPU train in FP32)")
-        AUTOCAST["dtype"] = torch.bfloat16
+    AUTOCAST["dtype"] = torch.bfloat16 if args.autocast == "bf16" else None
     if device.startswith("cuda"):
         torch.backends.cuda.matmul.allow_tf32 = False
         torch.backends.cudnn.allow_tf32 = False
@@ -463,6 +540,8 @@ def train(args) -> dict:
         method_info["band_at_init"] = dtmask.band_stats(model)
         del scores
     frozen_before = frozen_sha256(model, marker_ids) if args.method != "full" else None
+    if args.frozen_bf16:
+        method_info["frozen_bf16"] = frozen_linears_to_bf16(model)
     if args.grad_checkpointing:
         model.gradient_checkpointing_enable(gradient_checkpointing_kwargs={"use_reentrant": False})
         model.config.use_cache = False
@@ -486,8 +565,7 @@ def train(args) -> dict:
         watch_name, watch = watch_name + ".gate", layer0.gate
     elif args.method == "markers":  # watch a tensor that trains: with --marker-scope output only the head rows move
         watch = marker_params[0]
-        watch_name = ("input embedding (marker rows)" if watch is model.get_input_embeddings().weight
-                      else "lm_head (marker rows)")
+        watch_name = "lm_head (marker rows)" if args.marker_scope == "output" else "input embedding (marker rows)"
     else:
         watch_name, watch = "model.layers.0.self_attn.q_proj.lora_B", model.model.layers[0].self_attn.q_proj.lora_B
     rng = random.Random(args.seed)
@@ -538,20 +616,20 @@ def train(args) -> dict:
         reg_val = None
         if args.method == "dt" and args.dt_lambda > 0:
             lam = dtmask.lambda_at(step, args.steps, args.dt_lambda)
-            reg = dtmask.regulariser(model)
-            (-lam * reg).backward()  # once per optimizer step: the official per-microbatch term averaged over accumulation
-            reg_val = float(reg.detach())
+            # once per optimizer step (the official per-microbatch term averaged over accumulation); same gradient as
+            # (-lam * regulariser(model)).backward() bit for bit, without holding 8 B per masked weight for it
+            reg_val = dtmask.regulariser_backward_(model, lam)
         gn = torch.nn.utils.clip_grad_norm_(params, args.clip)
         if step == 0:
-            sel = (lambda t: t[marker_ids]) if args.method == "markers" else (lambda t: t)  # only these rows train
-            p0, g0 = sel(watch.detach()).clone(), sel(watch.grad.detach()).clone()
+            p0, g0 = watch.detach().clone(), watch.grad.detach().clone()
         opt.step()
         if args.method == "dt":
             dtmask.step_all(model)
         if step == 0:
             wlr = lr * args.marker_lr / args.lr if args.method == "markers" else lr  # the watched tensor's group LR
             checks["writeback_step1"] = {"tensor": watch_name, "lr": wlr, "storage_dtype": str(watch.dtype),
-                                         **writeback_check(p0.cpu(), g0.cpu(), sel(watch.detach()).cpu(), wlr, args.wd, 1e-8)}
+                                         **writeback_check(p0.cpu(), g0.cpu(), watch.detach().cpu(), wlr, args.wd,
+                                                           1e-8)}
             del p0, g0
         seen_rows += len(take)
         rec = {"step": step + 1, "loss": loss, "targets": count, "lr": lr, "grad_norm": float(gn), **({"reg": reg_val} if reg_val is not None else {}),
@@ -579,6 +657,7 @@ def train(args) -> dict:
             os.replace(tmp, ckpt)
     sync(device)
     train_seconds = prior_s + time.perf_counter() - t_start
+    frozen_linears_to_fp32(model)  # before every check below, so they see the FP32 model as before
     out = Path(args.out)
     out.mkdir(parents=True, exist_ok=True)
     model.eval()
@@ -591,7 +670,8 @@ def train(args) -> dict:
     if frozen_before is not None:
         frozen_after = frozen_sha256(model, marker_ids)
         checks["frozen_weights_unchanged"] = {"sha256_before": frozen_before, "sha256_after": frozen_after,
-                                              "scope": "every frozen tensor" + (" + non-marker embedding rows" if marker_ids else ""),
+                                              "scope": "every frozen tensor" + (
+                                                  " (marker rows train as their own tensors)" if marker_ids else ""),
                                               "pass": frozen_before == frozen_after}
     if args.method == "dt":
         method_info["deletion_final"] = dtmask.deletion_stats(model)
@@ -610,6 +690,7 @@ def train(args) -> dict:
         lora_state = {k: v.detach().cpu().clone() for k, v in model.state_dict().items() if "lora_" in k}
         torch.save(lora_state, out / "lora_adapter.pt")
         merge_lora(model)
+    merge_marker_rows(model)
     model.save_pretrained(out / "model", safe_serialization=True)
     tok_src = Path(args.tokenizer_dir) if args.tokenizer_dir else None
     if tok_src is None:
@@ -640,7 +721,8 @@ def train(args) -> dict:
         "schema": "g10-bench-train/1", "args": vars(args), "method": method_info, "rows": len(rows),
         "rejected": rejected, "rows_seen": seen_rows, "epochs": round(seen_rows / len(rows), 3),
         "train_sha256": hashlib.sha256(Path(args.train).read_bytes()).hexdigest(),
-        "device": device, "adam_impl": "fused" if args.adam_fused else "torch default (foreach on CUDA)", "hardware": hardware_label(device), "dtype": "float32 weights/grads/AdamW state; compute " + ("bf16 autocast (CUDA)" if AUTOCAST["dtype"] else "float32 (TF32 off)"),
+        "device": device, "adam_impl": "fused" if args.adam_fused else "torch default (foreach on CUDA)", "hardware": hardware_label(device), "dtype": "float32 weights/grads/AdamW state; compute " + ("bf16 autocast (CUDA)" if AUTOCAST["dtype"] else "float32 (TF32 off)")
+        + ("; frozen nn.Linear weights stored in bf16 during training (exact)" if args.frozen_bf16 else ""),
         "torch": torch.__version__, "train_seconds": round(train_seconds, 1), "seconds_per_100_steps": per100,
         "peak_rss_mb": round(peak_rss_mb(), 1), "checks": checks,
         "first_loss": log[0]["loss"], "last_loss": log[-1]["loss"],
@@ -698,6 +780,9 @@ def parse_args(argv=None):
                     help="copy the tied embedding matrix into a separate LM head before training (capstone-like head)")
     ap.add_argument("--marker-scope", choices=("both", "input", "output"), default="both",
                     help="with --untie-head: train the marker rows of the embedding, of the LM head, or of both")
+    ap.add_argument("--frozen-bf16", action="store_true",
+                    help="with --autocast bf16: store frozen nn.Linear weights in bf16 (2 B per weight less); stops if "
+                         "any is not exact in bf16")
     ap.add_argument("--device", default="mps" if torch.backends.mps.is_available() else "cpu")
     ap.add_argument("--log-every", type=int, default=10)
     ap.add_argument("--save-every", type=int, default=0, help="write resumable state every N updates (0 = off)")

@@ -1,28 +1,37 @@
-# Offline Task 11 canary. Stage this config's inputs before running.
-# Use a fixed, disjoint held-out subset and keep task IDs and generations private.
-seed: 1234
+# Dry run 2 Task 11 trainer template.
+# Submit through capstone/rl_job_v1.py as documented in the job request.
+# The wrapper pins and filters the pools, then writes out/task11-code-canary/rl_config.yaml.
+# Paths, hashes and deadline below are filled by the wrapper after staging.
+seed: 1
 device: cuda
-out_dir: out/task11-code-canary
+out_dir: out/task11-code-canary/rl
 model:
   kind: team5_adapter
-  adapter_config: inputs/task11/adapter.yaml
-  init_state: inputs/task11/dt_sft/model.safetensors
-  # Fill in the SHA-256 from the DT SFT export before submitting.
-  init_state_sha256: REPLACE_WITH_DT_SFT_CHECKPOINT_SHA256
+  # Dry run 2 manifest must specify head_mode kas_v2 and moe.bias_gamma 0.001.
+  adapter_config: out/task11-code-canary/adapter.yaml
+  init_state: keep_canary/dt/model.safetensors
+  init_state_sha256: FROM_KEEP_CANARY_DT_SHA256SUMS
   kv_cache: true
 task:
   kind: stdio
   require_verifier: true
   tasks: inputs/task11/cc.jsonl
-  train_ids: inputs/task11/canary_train_ids.txt
-  heldout_ids: inputs/task11/canary_heldout_ids.txt
+  # Wrapper removes the pinned 66 free-reward and 55 effort-suite IDs from train.
+  # Held-out keeps file order and receives no reward-based filtering.
+  train_ids: out/task11-code-canary/train_ids.txt
+  heldout_ids: out/task11-code-canary/heldout_ids.txt
 train:
   algo: objective_v1
-  sampler: policy
+  sampler: g5_batch
+  sampler_max_rows: 128
+  micro_rows: 1
+  update_mode: auto
+  logprob_gate: true
+  time_sync: true
   steps: 3
-  prompts_per_step: 4
+  prompts_per_step: 16
   k: 8
-  max_new: 512
+  max_new: 1536
   temperature: 1.0
   lr: 1.0e-5
   ppo_epochs: 1
@@ -33,12 +42,15 @@ train:
   fp32_master: true
   autocast: bf16
   eval_every: 3
-  eval_k: 8
+  eval_k: 4
   reward_workers: 4
-  screen: {n: 16, k: 8, min_mixed: 4}
+  reward_pool: 16
+  screen: {n: 64, k: 8, min_mixed: 4}
+  state_dir: out/task11-code-canary/rl_state
+  state_every: 1
+  deadline_unix: FROM_JOB_START_PLUS_25_MINUTES
   keep_zero:
-    path: inputs/task11/dt_sft/dt_keep_masks.bin
-    # Fill in the hashes of the binary mask and its adjacent .bin.json file.
-    sha256: REPLACE_WITH_KEEP_MASK_SHA256
-    metadata_sha256: REPLACE_WITH_KEEP_MASK_METADATA_SHA256
+    path: keep_canary/dt/dt_keep_masks.bin
+    sha256: FROM_KEEP_CANARY_DT_SHA256SUMS
+    metadata_sha256: FROM_KEEP_CANARY_DT_SHA256SUMS
     enforce: false

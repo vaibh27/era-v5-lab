@@ -37,7 +37,7 @@ The draft of the model card is `model_card_v0.md`. Each section there has the te
 | Training data | The public data sources, and the problems we found in them | Data A, Data B | in progress | Data A OK @patilvijay23; Data B OK @shankarpandala |
 | Data cleaning | How we cleaned the data and removed duplicates | Data A, Data B | empty | Data A OK @patilvijay23; Data B OK @shankarpandala |
 | Tokenizer | How the model splits text into pieces | Tokenizer | empty | OK @rjvim |
-| KE2 | Whether the model uses KE2, in general terms, with no design details. This includes the KE2 output head, which replaced the dense untied head on 21 Nov 2026 | KE2 | empty | pending |
+| KE2 | Whether the model uses KE2, in general terms, with no design details. This includes the KE2 output head, which replaced the dense untied head on 21 Nov 2026 | KE2 | in progress | OK @swatibansal |
 | Architecture | The shape of the model, in general terms | Architecture | empty | OK @shivman |
 | Training | How the lab trained the model | Performance, Architecture | empty | Performance OK @raj-harit-v2; Architecture OK @shivman |
 | Training infrastructure | How the run saves, restores and restarts after a crash | Infrastructure | empty | pending |
@@ -47,17 +47,26 @@ The draft of the model card is `model_card_v0.md`. Each section there has the te
 | Alignment | How the lab trained the model on checked scores of its own answers, and how it scores tasks with no test | Post-training | empty | OK @saitej123 |
 | Quantized versions | The smaller versions of the model, and what they lose | Quantization | empty | OK @SreekanthZipsy |
 | Serving | How to run the model and chat with it in the lab's chat format, and how the smaller formats were checked against the full model | Quantization | empty | OK @SreekanthZipsy |
-| Evaluation | The benchmarks, and the scores that TSAI approves | Evaluation | in progress | OK @rahulni |
-| Limitations and risks | What the model gets wrong, and the known risks | Evaluation, Release | empty | Evaluation OK @rahulni; Release OK @pyru |
+| Evaluation | The benchmarks, the scores that TSAI approves, and what the scores do not show, such as the size of the question sets | Evaluation | in progress | pending |
+| Limitations and risks | What the model gets wrong, and the known risks. The limits of the scores go in Evaluation | Evaluation, Release | empty | Evaluation pending; Release OK @pyru |
+| What this card does not claim | The claims that the card does not make about the model as a whole, so that readers do not read too much into it. The limits of the scores go in Evaluation, and the errors of the model in Limitations and risks | Evaluation, Release | empty | Evaluation pending; Release OK @pyru |
 | Licence and attribution | The licence of the model, and credit for each data source | Post-training, Data A, Data B | empty | Post-training OK @saitej123; Data A OK @patilvijay23; Data B OK @shankarpandala |
 | Contributors | The teams that did the work, with no person names | Release | in progress | Release OK @pyru |
 | How to find more | A link to the public lab repository | Release | in progress | Release OK @pyru |
+| What is released | What the lab makes public, and what it does not. TSAI decides what is released | Release | empty | Release OK @pyru |
+| Sources | A link for each fact in the card, so that readers can check it. The links go to the public lab repository, and to other public pages, such as dataset pages, only if TSAI agrees | Release | empty | Release OK @pyru |
+| How to cite | How to cite the model, once TSAI names the model and approves the text. The citation names TSAI or the lab, and no person | Release | empty | Release OK @pyru |
 
 ## Changes to this outline
 
 - 21 Nov 2026: TSAI chose the KE2 output head in place of the dense untied head
   (`teams/04-ke2/gate3.md`, [#694](https://github.com/theschoolofai/era-v5-lab/pull/694)). The KE2 section now covers the output head too, in
   general terms. The KE2 lead confirms the new scope in the Lead OK column. The Gate 3 update records the decision.
+- 25 Nov 2026: Release compared this outline with the V4 run report (https://lightninglm.theschoolofai.in/), a public
+  model report of The School of AI, for its format only. The Evaluation section now also says what the scores do not
+  show. Evaluation, Limitations and risks, and What this card does not claim each say what goes there, so that no
+  sentence is written twice. The Evaluation lead confirms the new scopes. Four sections are new: What this card does
+  not claim, What is released, Sources and How to cite. TSAI decides what is released and how to cite the model.
 
 ## Rules for every section
 

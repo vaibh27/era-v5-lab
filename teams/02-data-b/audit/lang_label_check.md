@@ -1,7 +1,8 @@
 # Language labels of script-sharing packs (Week-3 task 5)
 
-**Status: 20 Nov.** The Sanskrit reader check is done (9 rows, two readers; both flags confirmed, section 3.3).
-**Pending:** the Marathi (4), Hindi (4) and Bengali (3) rows of `lang_label_review_sample.csv`, with their readers.
+**Status: 24 Nov.** The Sanskrit reader check is done (9 rows, two readers; both flags confirmed, section 3.3), and the
+Bengali rows are read (3 rows, one reader; one document is Assamese, section 3.3).
+**Pending:** the Marathi (4) and Hindi (4) rows of `lang_label_review_sample.csv`, with their readers.
 
 Task (Week-3 work order, task 5): "Check the language labels of script-sharing pairs (Hindi and Marathi, for example).
 Flag each filter that drops over 20%." Owner: @keshavamurali. Scope as agreed with the lead (16 Nov): labels that are
@@ -24,6 +25,7 @@ re-runs unchanged on the full corpus.
   The 2 flagged are marked as another language, both in `ind-bn-sangraha-v`, where the marker words name Sanskrit in Bengali
   script; a Sanskrit reader confirms both (section 3.3). 114 are uncertain; no pack has more than 0.3% uncertain. Of 7
   uncertain ones where IndicLID said Sanskrit, both Sanskrit readers find none Sanskrit alone (mixed pages or Hindi).
+  Of 3 uncertain ones in `ind-bn-sangraha-v` where IndicLID said Assamese, the Bengali reader finds 1 Assamese.
 - **No filter drops over 20%.** clean.py does not record which filter dropped a document, so the lead's shard audit
   (#523, `audit_v1.csv`) gives drop rates per pack. The highest is 9.82% (`ind-hi-sangraha-s`), so no single filter in
   any pack can be over 20%. Four packs have no shard (ml, or, ta-fw2, ta-sangraha-s); they were not cleaned, so their
@@ -167,7 +169,25 @@ answer against the text. Answers are copied word for word into
   garbled Hindi that IndicLID called Sanskrit with a full vote. Requiring the marker words to agree kept them out of
   the flags.
 - Both readers name Prakrit or Apabhramsha in Jain texts, which IndicLID has no class for (section 5).
-- **Pending:** the Marathi (4), Hindi (4) and Bengali (3) rows of `lang_label_review_sample.csv`, with their readers.
+
+**Bengali rows (24 Nov), one reader.** @sourav-dhar read the 3 rows from the raw text of the tokenizer-sample part (the
+check's input). Answers are copied word for word into `lang_label_review_sample.csv` (`reader_*` columns, #793).
+
+| doc_id | pack | tool verdict | tool found | vote share | markers | reader | reader note |
+|---|---|---|---|---|---|---|---|
+| `d116a11a80d694c6` | ind-bn-sangraha-v | uncertain | as | 0.5 | unknown | bn | Bengali verse in sadhu bhasha: a devotional yoga poem (the thousand-petalled lotus, the mind as a bee drinking its nectar), lines jumbled, OCR noise; Bengali grammar throughout, no Assamese forms |
+| `9faa1216d9932ee4` | ind-bn-sangraha-v | uncertain | as | 0.508 | as | as | Assamese: Bible, 1 Thessalonians 5:1-12, Assamese grammar throughout, with verse numbers and cross-references, OCR noise; no Bengali |
+| `80dd3165318f9018` | ind-bn-sangraha-v | uncertain | as | 0.5587 | unknown | mixed | Brajabuli+bn: Vaishnava songs by Govindadas on Radha's pride (mana), in Brajabuli, with Bengali raga headings and footnotes of variant readings; no Assamese |
+
+- **One of the 3 is Assamese.** `9faa1216d9932ee4` is an Assamese Bible passage in the Bengali pack. IndicLID and the
+  marker words both said Assamese; the tool kept it `uncertain` only because the vote share (0.508) is under 0.6. The
+  pack has 4 uncertain documents, all "IndicLID: Assamese" (section 3.2); 3 were read.
+- **The other two are not Assamese:** a Bengali verse in sadhu bhasha, and Vaishnava songs in Brajabuli with Bengali
+  headings. Both have a few ৰ, which is no evidence on its own (Assamese writes those same words with it); the grammar
+  decides.
+- Brajabuli, the literary language of the Vaishnava songs, has no IndicLID class, like Prakrit and Apabhramsha
+  (section 5). As the Sanskrit readers did for those, the reader marks it `mixed`.
+- **Pending:** the Marathi (4) and Hindi (4) rows of `lang_label_review_sample.csv`, with their readers.
 
 ## 4. Filters that drop over 20%
 
@@ -194,7 +214,8 @@ drop.
 ## 5. Limits
 
 - **IndicLID's label list** has no class for Kumaoni or other Pahari languages, nor for Sanskrit outside Devanagari, nor for
-  Prakrit or Apabhramsha (found by both Sanskrit readers in Jain texts, section 3.3).
+  Prakrit or Apabhramsha (found by both Sanskrit readers in Jain texts, section 3.3), nor for Brajabuli (found by the
+  Bengali reader in Vaishnava songs, section 3.3).
   Hindi against its dialects (Maithili, Bhojpuri, Awadhi, Kumaoni) cannot be checked with it.
 - **Short documents:** IndicLID is unreliable under about 100 letters. These are `short_disagree`, not flags.
 - **Mixed documents** get one label per document; paragraph votes make them `uncertain`, not split.
@@ -209,7 +230,7 @@ drop.
 - **The same-script rule** (90% in the pack's script) counts documents a reader may have marked D1 for another reason.
   A D1 sub-code for "same script, other language" in the readers' labels would replace it.
 - **Few positives:** 6 same-script documents by the rule. Recall is unknown.
-  **Pending:** the Marathi, Hindi and Bengali reader rows (section 3.3).
+  **Pending:** the Marathi and Hindi reader rows (section 3.3).
 - The CAP-1 run includes the Heldout parts (about 1% of each pack); the shard audit's counts are Part_1 only.
 
 ## 6. How to run it

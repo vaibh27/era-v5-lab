@@ -501,9 +501,7 @@ def run(args) -> dict:
         loss, count = bench.accumulate(wrapper, mbs, device)
         reg_val = None
         if args.method == "dt" and args.dt_lambda > 0:
-            reg = dtmask.regulariser(lm)
-            (-dtmask.lambda_at(step, args.steps, args.dt_lambda) * reg).backward()
-            reg_val = float(reg.detach())
+            reg_val = dtmask.regulariser_backward_(lm, dtmask.lambda_at(step, args.steps, args.dt_lambda))
         gn = torch.nn.utils.clip_grad_norm_(params, args.clip)
         sel = (lambda t: t[marker_ids]) if args.method == "markers" else (lambda t: t)
         if step == 0:

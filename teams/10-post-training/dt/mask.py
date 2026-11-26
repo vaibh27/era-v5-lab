@@ -155,12 +155,48 @@ def step_all(model: nn.Module) -> None:
 
 
 def regulariser(model: nn.Module) -> torch.Tensor:
-    """sum over masked layers of ||W * soft_mask||^2 (FP32), the term the loss subtracts with weight lambda_t."""
+    """sum over masked layers of ||W * soft_mask||^2 (FP32), the term the loss subtracts with weight lambda_t.
+    Training calls regulariser_backward_ (same gradient, no graph); this autograd form is kept as its reference."""
     total = None
     for _, m in masked_layers(model):
         t = (m.base_weight.detach().float() * m.soft_mask()).pow(2).sum()
         total = t if total is None else total + t
     return total
+
+
+@_no_grad()
+def regulariser_backward_(model: nn.Module, lam_t: float) -> float:
+    """Add the gradient of `-lam_t * regulariser(model)` to every logit's .grad, one layer at a time, and return
+    regulariser(model) as a float. Same result as `(-lam_t * regulariser(model)).backward()` bit for bit (each step
+    below is the op autograd runs, in its order: pow -> mul -> sigmoid -> mul by alpha), but no autograd graph is kept.
+
+    Why: `regulariser(model)` sums one term per masked layer before a single backward, so autograd holds every layer's
+    sigmoid output and W * mask at once (8 B per masked weight with an FP32-stored W, 12 B with a bf16-stored W, whose
+    FP32 copy is held too). Here only one layer's temporaries exist at a time, so the regulariser's memory no longer
+    grows with the number of masked weights: by that arithmetic about 14.5 GB less at Qwen3-8B (1.81B gate weights,
+    FP32 W) and 22.8 GB less on the rl-loop 7B DT run (1.90B, bf16 W).
+
+    Assumes what `convert` builds: FP32 logits. A frozen logit (requires_grad False) gets no gradient, as in autograd;
+    its term still counts in the returned value."""
+    total = None
+    for _, m in masked_layers(model):
+        s = m.soft_mask()                     # sigmoid(G * alpha), FP32
+        wf = m.base_weight.detach().float()   # a copy only when W is stored in bf16, as in the autograd path
+        p = wf * s
+        t = p.pow(2).sum()
+        total = t if total is None else total + t
+        if m.gate.requires_grad:
+            g = (p * 2).mul_(-lam_t)          # pow backward: grad * (2 * p), grad = 1.0 * (-lam_t) in FP32
+            g.mul_(wf)                        # mul backward (p = wf * s): grad * wf
+            g.mul_(1 - s).mul_(s)             # sigmoid backward: grad * (1 - s) * s
+            g.mul_(m.alpha)                   # mul backward (G * alpha): grad * alpha
+            if m.gate.grad is None:
+                m.gate.grad = g.contiguous()  # the parameter's own layout, whatever W's strides are
+            else:
+                m.gate.grad.add_(g)           # AccumulateGrad: grad += new
+            del g
+        del s, wf, p                          # free this layer's temporaries before the next layer's
+    return float(total) if total is not None else 0.0
 
 
 def lambda_at(step: int, total_steps: int, lam: float) -> float:
@@ -177,14 +213,25 @@ def fused_moe_layers(model: nn.Module) -> list[tuple[str, nn.Module]]:
             and any(isinstance(c, MaskedLinear) for c in m.experts.modules())]
 
 
+def g5_expert_choice(mod: nn.Module, scores: torch.Tensor) -> torch.Tensor:
+    """The experts G5's MoE.forward chooses for router softmax `scores` [N, E]: the top-k of `scores + router_bias`
+    when its loss-free balancer is on (`balance_gamma != 0`, set from `moe.bias_gamma`), else the top-k of `scores`.
+    The bias changes only which experts are chosen, never the gate values. A G5 model.py from before the balancer
+    has neither attribute, so this is the plain top-k there, as its forward is."""
+    if float(getattr(mod, "balance_gamma", 0.0) or 0.0) != 0.0:
+        scores = scores + mod.router_bias.to(scores.dtype)
+    return scores.topk(mod.topk, dim=-1).indices
+
+
 @_no_grad()
 def wanda_scores(model: nn.Module, batches: Iterable[dict], device) -> dict[str, torch.Tensor]:
     """|W_ij| * ||X_j||_2 per masked layer, with the masks switched off (official compute_wanda_scores).
 
     Routed experts of a fused MoE (never called as modules): after the MoE runs, every masked expert that no hook saw
-    during that call is run on exactly the rows MoE.forward would route to it (router softmax, top-k, padding rows
-    excluded: the old per-expert loop's gathered rows), so the same per-layer hooks record its inputs, including the
-    hidden input of `down`, computed with the unmasked weights. A MoE that still calls its experts (the old loop)
+    during that call is run on exactly the rows MoE.forward would route to it (router softmax, top-k with the
+    loss-free balancer's router_bias when it is on, see g5_expert_choice; padding rows excluded: the old per-expert
+    loop's gathered rows), so the same per-layer hooks record its inputs, including the hidden input of `down`,
+    computed with the unmasked weights. A MoE that still calls its experts (the old loop)
     triggers no extra call, so nothing is counted twice; an expert with no routed row gets no score, as before."""
     layers = dict(masked_layers(model))
     norms: dict[str, torch.Tensor] = {}
@@ -222,7 +269,7 @@ def wanda_scores(model: nn.Module, batches: Iterable[dict], device) -> dict[str,
         active = valid.reshape(-1).bool()
         with torch.autocast(device_type=x.device.type, enabled=False):
             scores = F.linear(flat.float(), mod.router.weight.float()).softmax(-1)
-        choice = scores.topk(mod.topk, dim=-1).indices
+        choice = g5_expert_choice(mod, scores)
         for e, expert in enumerate(mod.experts):
             parts = [c for c in expert.modules() if isinstance(c, MaskedLinear)]
             if not parts or any(id(c) in called for c in parts):
@@ -301,9 +348,9 @@ def deletion_stats(model: nn.Module) -> dict:
         targeted += m.gate.numel()
         per_layer[name] = d / m.gate.numel()
     seen, total = set(), 0
-    for p in model.parameters():
-        if p.data_ptr() in seen:
-            continue  # tied embeddings counted once
+    for n, p in model.named_parameters():
+        if p.data_ptr() in seen or n.endswith(".marker_rows"):
+            continue  # tied embeddings counted once; the bench's marker rows are rows of the embedding / LM head
         seen.add(p.data_ptr())
         total += p.numel()
     total -= sum(m.gate.numel() for _, m in masked_layers(model))  # logits are not model weights

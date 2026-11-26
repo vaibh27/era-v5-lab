@@ -137,8 +137,10 @@ def validate(run, *, trusted_checkpoint=False, expected_steps=None, verify_inven
     identity = None
     try:
         fields = {key: manifest[key] for key in IDENTITY_FIELDS}
-        if "bpb_policy" in manifest:
-            fields["bpb_policy"] = manifest["bpb_policy"]
+        # Include optional fields exactly when recorded by that trainer version.
+        for key in ("bpb_policy", "consolidate_step_checks", "kas_v2"):
+            if key in manifest:
+                fields[key] = manifest[key]
         identity = hashlib.sha256(json.dumps(fields, sort_keys=True).encode()).hexdigest()
         if manifest.get("identity_sha256") != identity:
             errors.append("manifest.json: identity_sha256 differs from recorded inputs")

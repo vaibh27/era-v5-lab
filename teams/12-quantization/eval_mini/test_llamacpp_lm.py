@@ -13,6 +13,12 @@ they hold for any GGUF, not only one model's numbers:
   2. it is NOT the off-by-one value (the generated token's log-probability one position later);
   3. scoring with the prefix cache equals scoring every request from scratch;
   4. the most likely continuation of an easy multiple-choice item is the right one.
+
+Checks 1 and 2 need the answer in the model's top-5 after the prompt. A base model may continue the default prompt
+differently (gemma-2-2b ranks " Paris" 8th, behind " a", " the", " one", ...; Hugging Face transformers agrees), so
+another prompt can be set for such a model; the checks and TOL stay the same:
+
+    EVAL_GUARD_CONTEXT="The capital of France is the city of" python test_llamacpp_lm.py <model.gguf>
 """
 from __future__ import annotations
 
@@ -24,7 +30,8 @@ import numpy as np
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 from llamacpp_lm import LlamaCppLM  # noqa: E402
 
-CONTEXT, ANSWER = "The capital of France is", " Paris"
+CONTEXT = os.environ.get("EVAL_GUARD_CONTEXT") or "The capital of France is"   # unset: unchanged default
+ANSWER = os.environ.get("EVAL_GUARD_ANSWER") or " Paris"
 TOL = 0.05   # nats; GPU kernels for different batch shapes differ by ~0.004
 
 
@@ -78,7 +85,8 @@ def check(gguf: str) -> list[str]:
         failures.append(f"4. easy item answered wrong: {[round(c[0], 2) for c in cached]}")
 
     print(f"{Path(gguf).name}: log p({answer!r}) = {lp:.3f}, generation {lp_gen:.3f}, off-by-one value {after:.3f}; "
-          f"cache max diff {worst:.4f}")
+          f"cache max diff {worst:.4f}"
+          + (f"; guard prompt {CONTEXT!r} (EVAL_GUARD_CONTEXT)" if os.environ.get("EVAL_GUARD_CONTEXT") else ""))
     return failures
 
 

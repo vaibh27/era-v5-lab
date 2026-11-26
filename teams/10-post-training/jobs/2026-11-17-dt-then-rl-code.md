@@ -1,32 +1,38 @@
-# Job request draft — Deletion Tuning SFT followed by code RL
+# Job request draft — dry run 2 DT SFT followed by code RL
 
-**Status:** Pending private inputs, local verification of the staged configuration, and lead approval. The request has not been sent. The three-step canary checks integration and RL signal. The full run measures held-out reward change.
+Status as of 24 November 2026. This canary uses the DT arm exported by the [dry run 2 SFT comparison](2026-11-26-g10-dryrun2-dt-vs-fft.md). The run needs the delivered dry run 2 checkpoint and its DT SFT output, staged pool files, and lead approval. Code-verifier reward before and after RL remains unmeasured on dry run 2.
 
 ```text
 Team:            10-post-training
 Owner:           Hema Varshini Palpandian (Hemaaaa04)
-Lead approval:   pending saitej123
-Question:        After Deletion Tuning SFT, can the delivered Team 5 model take code-verifier RL updates while its deleted weights stay zero?
-Script:          teams/10-post-training/rl-loop/train.py
-Command:         G10_STDIO_RUNNER=docker python teams/10-post-training/rl-loop/train.py --config teams/10-post-training/rl-loop/config/task11_code_canary.yaml
-Config:          teams/10-post-training/rl-loop/config/task11_code_canary.yaml (stage inputs and fill checkpoint and mask SHA-256 pins)
-Inputs:          Team 5 delivered run folder and adapter dependencies, DT+marker-row SFT model.safetensors with dt_keep_masks.bin and dt_keep_masks.bin.json, screened RL data v1 Code Contests cc.jsonl and disjoint canary ID lists
-Hardware:        1 GPU, requested >=40 GB, Python verifier image preloaded
-Max time:        Proposed 30 minutes for the canary, subject to lead review
-Precision:       bf16 compute, fp32 master weights
-Measures:        Mixed groups, verifier failure reasons, optimizer updates and stored-update share, deleted nonzero count, held-out reward at step 0 and at the last completed step, per-step keep_zero_checks time, peak GPU memory, and persistent mask tensor bytes
-Expected result: Mixed groups and code reward are unknown. The mask check should see a positive deletion count and zero regrowth.
-Outputs:         under out/task11-code-canary/. Return aggregate status, counts, rewards and timing. Per-problem records, IDs, paths and generations stay private.
-Test log:        CPU trainer and mask handoff checks in ../results/dt_then_rl_evidence/validation.md. Staged end-to-end test log pending. Attach the exact staged command, final output lines, exit status, and wall time before submission.
+Lead approval:   pending saitej123 for this DT-then-RL canary
+Question:        Can the dry run 2 DT SFT checkpoint take code-verifier RL updates with its deleted weights held at zero, and does held-out reward rise?
+Script:          teams/10-post-training/capstone/rl_job_v1.py (calls rl-loop/train.py)
+Command:         G10_STDIO_RUNNER=docker G10_STDIO_SECRET_PATHS=<POOL>/out/v1/cc.jsonl python teams/10-post-training/capstone/rl_job_v1.py --g5-root <G5> --run-folder <RUN> --tokenizer <TOKENIZER> --byte-table <TABLE> --probe-file <PROBE> --origin g5_delivery --expected-head-mode kas_v2 --expected-bias-gamma 0.001 --rl-tasks <POOL>/out/v1/cc.jsonl --train-pool <POOL>/pool/rl-code-v1-train.pool.jsonl --heldout-pool <POOL>/pool/rl-code-v1-heldout.pool.jsonl --sft-arm none --start-weights keep_canary/dt/model.safetensors --keep-mask keep_canary/dt/dt_keep_masks.bin --sampler g5_batch --sampler-max-rows 128 --micro-rows 1 --update-mode auto --time-sync --updates 3 --state-every 1 --screen-n 64 --min-mixed 4 --prompts-per-step 16 --k 8 --max-new 1536 --heldout-n 64 --eval-k 4 --lr 1e-5 --seed 1 --deadline-minutes 25 --device cuda --out out/task11-code-canary
+Config:          rl-loop/config/task11_code_canary.yaml is the trainer template. The wrapper writes the staged config to out/task11-code-canary/rl_config.yaml with actual artifact hashes and deadline.
+Inputs:          dryrun2-1234 run folder or Team 7 store reconstruction, p1536 tokenizer and KE2 table bound to its manifest, validated probe, keep_canary/dt/{model.safetensors,dt_keep_masks.bin,dt_keep_masks.bin.json,SHA256SUMS}, pinned RL data v1 cc.jsonl and train/held-out pool files
+Hardware:        1 GPU, preloaded Python verifier image; use the delivered run's GPU class when rebuilding the run folder from the store
+Max time:        Proposed 30 minutes; wrapper deadline 25 minutes leaves time for final evaluation and reporting. TSAI must enforce the outer limit on the process group.
+Precision:       bf16 compute and fp32 master weights, g5_batch native sampler, one row per log-prob/update forward
+Measures:        Input hashes and exclusion counts; mixed groups; step-0/final held-out reward and paired prompt bootstrap; wrong-answer and literal-print counts; stored optimizer updates; frozen router and router_bias checks; keep_zero deletion counts; phase seconds, mask-check seconds, mask bytes, peak GPU memory
+Expected result: Unknown code reward and mixed groups. A useful update run has a positive initial deletion count, at least one stored optimizer update, zero deleted-weight regrowth, and unchanged router state.
+Outputs:         out/task11-code-canary/{pins,pool,plan,screen_survey,report,summary}.json as available, rl_config.yaml and rl/{evals,metrics}.jsonl plus summary.json. Keep paused rl_state/ private for resume. Return aggregate reports; task text, generations and model weights stay private.
+Test log:        results/dt_then_rl_evidence/week4_validation.md covers local integration tests. Before sending, attach the exact fully staged command, final output lines, exit status, wall time, and hardware from an end-to-end run of this wrapper.
 ```
 
-## Staging and acceptance
+## Dry run 2 handoff
 
-- TSAI holds the [completed dry-run-1 checkpoint](https://github.com/theschoolofai/era-v5-lab/pull/475) and approved a [separate day-one probe](https://github.com/theschoolofai/era-v5-lab/pull/558). Use the p1536 tokenizer and KE2 table recorded in the actual run manifest. Produce the DT SFT checkpoint with [the Team 5 SFT driver](../capstone/sft_g5.py) on the approved slice. Stage the baked state, both mask files, and verified adapter config together. Fill in all three SHA-256 pins. The adapter selection must include the masked parameters and keep the router frozen.
-- Stage 16 training prompts from the rebuilt RL data v1 training pool and an 8-prompt subset of its designated RL held-out pool fixed before sampling. Confirm admission, check that the lists are disjoint, and check that each rendered prompt plus completion allowance fits the delivered model. The [RL pool job](2026-11-18-rl-data-v1-pool.md) defines the evaluation firewall. This path uses the same [Python stdio verifier](../rl-data/stdio_check.py) as Task 6 with the Team 5 sampler.
-- The canary first verifies that the scorer accepts a known correct answer and rejects a known wrong answer. Any verifier runner failure aborts scoring. The screen then uses eight samples per training prompt. Fewer than four mixed groups yields `NO_GO_MIXED_BAND`. With enough signal, check that at least one optimizer update changes stored weights, the initial deletion count is positive, the maximum deleted-nonzero count is zero, and the router checksum stays fixed. Return the failure breakdown if the canary stops.
-- Report the post-step scan time from `times_s.keep_zero_checks`, the run's peak GPU memory, and the estimated persistent storage for the Boolean masks and gradient-hook copies from `keep_zero.persistent_mask_tensor_bytes`.
-- After a successful canary and lead approval, set the training budget and time cap for the full run. Freeze the held-out split and sampling settings before that run. Record step-0 and final rewards on the DT SFT checkpoint, their paired prompt-level difference and interval, optimizer updates, and deletion integrity. Task 6's Qwen 7B result used a different model and sampler. Use its protocol as a reference and interpret Task 11's gain against its own step 0.
+1. Run the preceding SFT comparison with `--keep-canary-state-dir keep_canary/`. Use its `dt/` export with all four files together. The wrapper verifies the checkpoint, mask binary and metadata against `SHA256SUMS` and sends those pins to the trainer. Keep the export read-only until RL finishes. A separate manifest can be passed with `--canary-sha256s`.
+2. Use the run folder and probe produced by `capstone/dryrun2_job_chain.sh`. The staged adapter must resolve dry run 2 settings `head_mode: kas_v2` (KE2/KAS `a10_kas_tokdrop`) and `moe.bias_gamma: 0.001`, with p1536 and table hashes from the actual manifest. Team 5 #717 and G10 integration #778 have merged. The two expected-model flags refuse mismatched head or router-bias settings before model work.
+3. Pool staging follows the existing RL job pins. The committed 66-ID free-reward list has SHA-256 `c97568952d2374be473e747184ea2b23098601797c936aad35363d8e0539aa2e`. The wrapper excludes those IDs and the 55 effort-suite IDs from training, checks train/held-out overlap, and keeps the first 64 held-out pool IDs in file order. It does not choose held-out prompts based on model scores. The current pinned pools give 3,199 training IDs after exclusions.
+4. The wrapper verifies a correct answer, wrong answer and secret-read attack before loading the model. It records a no-skill baseline, checks the time budget, and screens 64 training prompts with eight samples each. Fewer than four mixed groups yields `NO_GO_MIXED_BAND`; an insufficient budget gives a screen-only result. Neither outcome establishes a learning gain.
+   Two of the 64 screened ids can never score: `cc-hackerearth-cypher` (index 13) and `cc-hackerearth-generating_sequence_5` (index 16). Each has a test whose expected output, written with one space between tokens, is longer than the scorer's 65,536-character cap per test (`rl-data/stdio_check.py` `MAX_OUTPUT_CHARS`; 75,879 and 92,956 characters), so even a correct program is cut short and fails. In the pinned pool (`cc.jsonl` SHA-256 `91ee9951...`) 15 tasks are like this: 14 of the 3,199 training ids and one held-out id (`cc-aizu-p01246_Land_Mark`, index 201 of 255, outside the first 64 this canary evaluates). The pins stay as they are. Read the screen as at most 62 possible mixed groups out of 64, and keep the held-out item in the denominator of any evaluation that includes it.
+5. `g5_batch`, `micro_rows: 1`, and the identical-weight log-probability gate use the existing Week 4 path. `update_mode: auto` resolves KAS dropout behavior and is recorded in the report. The DT mask stays baked; RL trains surviving weights with AdamW and keeps router weights and bias fixed. `keep_zero` checks run at every step. The wrapper reports deletion integrity alongside the held-out change.
+6. After the canary, the lead chooses the full-run budget. Use the same held-out split and sampler settings for that run's before/after comparison, record the completed update count and confidence interval, and fill `results/dt_then_rl.md` from returned logs. Three steps validate the handoff; the reward gain can be positive, flat or negative.
+
+## Historical CPU rehearsal
+
+The following 20 November notes describe the earlier dry-run-1 stand-in. The new dry run 2 results are pending.
 
 
 ## Update 20 Nov 2026 (f20201351h-maker): staged local test log on a stand-in (CPU)

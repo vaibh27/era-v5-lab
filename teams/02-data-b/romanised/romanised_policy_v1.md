@@ -1,8 +1,11 @@
 # Romanised Indic (D2) policy, v1
 
 Issue #213, part 2. How romanised Indic text (an Indian language in Latin letters, D2 in `diagnosis/DISEASES.md`)
-is measured and capped in the training corpus. The cap value is a Gate 2 decision (14 Nov); this file gives the
-measurements and the options.
+is measured and capped in the training corpus. This file gives the measurements and the options.
+
+> **Decided (16 Nov 2026).** TSAI set the cap at Gate 2: romanised Indic is capped at **1% of tokens per language**, a
+> ceiling and not a target (#481, option B below), with native-script Indic a fixed **8% of every batch**
+> (`mix/indic_share_v1.md`). TSAI restated both numbers on 21 Nov.
 
 ## Rules (TSAI in G2, 5 Nov)
 
@@ -105,6 +108,7 @@ corpus, where a source not in the sample (for example a forum or chat crawl) cou
 
 Proposal: **B, 1% per language.** It is about 34 times the romanised share seen inside native documents in the sample,
 so it will not bind unless a new source is heavy in romanised text, and it still bounds what such a source can add.
+TSAI chose B at Gate 2 (16 Nov).
 
 ## How the cap is applied
 

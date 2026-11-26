@@ -565,3 +565,34 @@ def test_eval_mini_block_names_the_dtype_it_ran_in(tmp_path, monkeypatch):
     for dtype in ("float32", "bfloat16"):
         out = evaluate.eval_mini("m", "python", runs, "cpu", ["arc_challenge"], dtype=dtype)
         assert out["dtype"] == dtype and out["returncode"] == 0 and out["records"][0]["task"] == "arc_challenge"
+
+
+def test_bench_autocast_runs_without_the_weight_cast_cache(monkeypatch):
+    """GPL4: train.autocast_ctx (SFT through bench.accumulate, incl. sft_g5) must not keep autocast's BF16 copy of every
+    trainable weight (14.1 GiB at Qwen3-8B with checkpointing). Fails if the cache comes back."""
+    monkeypatch.setitem(train.AUTOCAST, "dtype", torch.bfloat16)
+    monkeypatch.setitem(train.AUTOCAST, "device", "cpu")
+    with train.autocast_ctx("cpu"):
+        assert torch.is_autocast_enabled("cpu")
+        assert torch.is_autocast_cache_enabled() is False
+
+
+def test_bench_autocast_cache_off_gives_bit_identical_weights(tiny_setup, monkeypatch):
+    """GPL4: cache on vs off on the bf16 autocast path with checkpointing and 2+ microbatches: same losses, grad norms and
+    saved weights after 3 steps."""
+    def run(out, cache):
+        monkeypatch.setitem(train.AUTOCAST, "dtype", torch.bfloat16)
+        monkeypatch.setitem(train.AUTOCAST, "device", "cpu")
+        monkeypatch.setitem(train.AUTOCAST, "cache", cache)
+        args = train.parse_args(["--train", str(tiny_setup / "train.tok.jsonl"), "--model", str(tiny_setup / "base"),
+                                 "--revision", "main", "--tokenizer-dir", str(tiny_setup / "tokdir"), "--method", "full",
+                                 "--steps", "3", "--warmup", "2", "--lr", "1e-3", "--seed", "5", "--device", "cpu",
+                                 "--micro-tokens", "64", "--grad-checkpointing", "--out", str(tiny_setup / out),
+                                 "--log-every", "100"])
+        args.revision = None
+        return train.train(args)
+
+    on, off = run("ac_on", True), run("ac_off", False)
+    assert all(r["microbatches"] >= 2 for r in off["log"])
+    assert [(r["loss"], r["grad_norm"]) for r in on["log"]] == [(r["loss"], r["grad_norm"]) for r in off["log"]]
+    assert on["saved_state_sha256"] == off["saved_state_sha256"]

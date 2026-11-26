@@ -469,6 +469,19 @@ class Bundle:
 
     __call__ = forward
 
+    def hidden(self, ids: torch.Tensor, valid: torch.Tensor) -> torch.Tensor:
+        """Final hidden states [B, T, n_embd], the input of G5's head: forward(ids, valid) == head(hidden(ids, valid))
+        (LanguageModel.forward is `self.head(self.hidden(ids, valid))`; the head maps each position on its own)."""
+        self.check_batch(ids, valid)
+        return self.model.hidden(ids.to(self.device), valid.to(self.device))
+
+    def head(self, h: torch.Tensor) -> torch.Tensor:
+        """Main-head logits [..., V] from hidden states [..., n_embd] (any subset of positions)."""
+        out = head_logits(self.model, h)
+        if not isinstance(out, torch.Tensor) or out.shape != (*h.shape[:-1], self.spec["vocab_size"]):
+            raise RuntimeError(f"G5 head returned {type(out)} {getattr(out, 'shape', None)}, expected [..., V]")
+        return out
+
     # labels --------------------------------------------------------------------------------------
     @staticmethod
     def causal_targets(ids: torch.Tensor, valid: torch.Tensor):
@@ -627,7 +640,8 @@ class Bundle:
                 return [(seq, cmask) for seq, cmask, _ in rolls]
 
         return Team5Policy(self.model, lambda m, ids, mask: bundle.forward(ids, mask),
-                           self.special["tokens"]["end_of_turn"]["id"], self.device)
+                           self.special["tokens"]["end_of_turn"]["id"], self.device,
+                           hidden=lambda m, ids, mask: bundle.hidden(ids, mask), head=lambda m, h: bundle.head(h))
 
     def codec(self, effort: str = "4k") -> "G10Codec":
         return G10Codec(self, effort)

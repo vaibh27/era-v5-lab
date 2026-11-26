@@ -6,6 +6,8 @@ from __future__ import annotations
 
 import importlib.util
 import sys
+
+import pytest
 from pathlib import Path
 
 HERE = Path(__file__).resolve().parent
@@ -72,3 +74,27 @@ def test_sweep_covers_all_three_layer_targets_and_deletion_fractions():
         elif r["method"] == "fft":
             assert r["base_changed"] is True
 
+
+def test_compare_feeds_the_regulariser_gradient_through_the_mask_chain_once(monkeypatch):
+    """compare() with the task gradient set to zero: the logit gradient it applies must be the gradient of
+    -lambda * ||W * sigmoid(alpha G)||^2 with respect to G (torch autograd as the reference)."""
+    torch = pytest.importorskip("torch")
+    seen = []
+    real_pack = compare_mod._pack_grad
+
+    def recording_pack(method, grad_weight, state):
+        out = real_pack(method, grad_weight, state)
+        if method == "dt":
+            seen.append(([row[:] for row in state["base"]], list(state["logits"]), state["alpha"], out))
+        return out
+
+    monkeypatch.setattr(compare_mod, "_task_grad", lambda w, *_: [[0.0] * len(w[0]) for _ in w])
+    monkeypatch.setattr(compare_mod, "_pack_grad", recording_pack)
+    compare_mod.compare(steps=2, seed=0)
+    assert len(seen) == 2
+    for base, logits, alpha, got in seen:
+        g = torch.tensor(logits, dtype=torch.float64, requires_grad=True)
+        w = torch.tensor(base, dtype=torch.float64).reshape(-1)
+        (-dt.LAMBDA_SFT * (w * torch.sigmoid(alpha * g)).pow(2).sum()).backward()
+        for a, b in zip(got, g.grad.tolist()):
+            assert abs(a - b) <= 1e-12 * max(1.0, abs(b)), (a, b)

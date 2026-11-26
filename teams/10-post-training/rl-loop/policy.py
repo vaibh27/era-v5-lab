@@ -14,12 +14,23 @@ from typing import Callable
 
 import torch
 from torch import nn
+from torch.utils.checkpoint import checkpoint
 
 
 class Policy:
-    def __init__(self, model: nn.Module, forward: Callable, eos_id: int | None = None, device: str = "cpu"):
+    def __init__(self, model: nn.Module, forward: Callable, eos_id: int | None = None, device: str = "cpu",
+                 hidden: Callable | None = None, head: Callable | None = None):
+        """hidden(model, ids, mask) -> final hidden states [B, T, d] and head(model, h) -> logits [..., V], given together
+        only when forward(model, ids, mask) == head(model, hidden(model, ids, mask)) and the head maps each position on
+        its own (Team 5's LanguageModel). Then the update runs the head on the completion positions only."""
+        if (hidden is None) != (head is None):
+            raise ValueError("give hidden and head together, or neither")
         self.model = model.to(device)
         self._forward = forward
+        self._hidden, self._head = hidden, head
+        # memory mode (train.head_checkpoint, rl_job_v1 --head-checkpoint): under autograd run the head in checkpointed
+        # chunks of HEAD_CHUNK tokens. Off by default: one head call is faster when the row fits (job RLM2).
+        self.head_checkpoint = False
         self.eos_id = eos_id
         self.device = device
         self.amp_dtype: torch.dtype | None = None  # set by use_fp32_master(); None = no autocast
@@ -35,6 +46,16 @@ class Policy:
             mask = torch.ones_like(ids, dtype=torch.bool)
         with self.autocast():
             return self._forward(self.model, ids, mask)
+
+    def completion_logits(self, seq: torch.Tensor, prompt_len: int) -> torch.Tensor:
+        """Logits [B, T - prompt_len, V] at the positions that predict seq[:, prompt_len:]. With hidden/head the output
+        head runs on those positions only (the prompt's share of the [T, V] logits is never built); otherwise the full
+        forward is sliced."""
+        mask = torch.ones_like(seq, dtype=torch.bool)
+        with self.autocast():
+            if self._hidden is None:
+                return self._forward(self.model, seq, mask)[:, prompt_len - 1:-1, :]
+            return self._head(self.model, self._hidden(self.model, seq, mask)[:, prompt_len - 1:-1, :])
 
     @torch.no_grad()
     def sample(self, prompt: list[int], k: int, max_new: int, temperature: float = 1.0,
@@ -63,10 +84,48 @@ class Policy:
         return seq, cmask
 
 
+def token_logprobs(logits: torch.Tensor, targets: torch.Tensor) -> torch.Tensor:
+    """log p(target) from logits [..., V] fp32 and targets [...]."""
+    return torch.log_softmax(logits, -1).gather(-1, targets[..., None]).squeeze(-1)
+
+
+HEAD_CHUNK = 512  # completion tokens per head call in the chunked paths (all rows flattened)
+NOGRAD_CHUNKS = True  # no_grad scoring in chunks of HEAD_CHUNK (set from the RLM2 T4 timing; see completion_logprobs)
+
+
+def _head_logprobs(policy: Policy, h: torch.Tensor, targets: torch.Tensor) -> torch.Tensor:
+    with policy.autocast():
+        logits = policy._head(policy.model, h)
+    return token_logprobs(logits.float(), targets)
+
+
 def completion_logprobs(policy: Policy, seq: torch.Tensor, prompt_len: int) -> torch.Tensor:
-    """Log-probability of each completion token under the policy: [k, T_completion]."""
-    logits = policy.logits(seq)[:, prompt_len - 1:-1, :].float()
-    return torch.log_softmax(logits, -1).gather(-1, seq[:, prompt_len:, None]).squeeze(-1)
+    """Log-probability of each completion token under the policy: [k, T_completion].
+
+    With hidden/head (Team 5's policy) the trunk runs once over the whole sequence and the head only on the completion
+    positions. Under autograd that is one head call, unless policy.head_checkpoint is on: then the head + log-prob run in
+    chunks of HEAD_CHUNK tokens, each checkpointed, so the head's [n, V] tensors (Team 5's KAS head builds about four)
+    exist for one chunk at a time and are rebuilt in backward (one extra head forward per chunk; job RLM: -41% per-row
+    peak on a T4). NOGRAD_CHUNKS decides the no_grad path (old_lp, the gate, kl_to_start), where chunks cost no extra
+    forward. The head maps each position on its own, so chunking changes no value beyond float rounding."""
+    if policy._hidden is None:
+        return token_logprobs(policy.completion_logits(seq, prompt_len).float(), seq[:, prompt_len:])
+    mask = torch.ones_like(seq, dtype=torch.bool)
+    with policy.autocast():
+        h = policy._hidden(policy.model, seq, mask)[:, prompt_len - 1:-1, :]
+    targets = seq[:, prompt_len:]
+    grad = torch.is_grad_enabled() and h.requires_grad
+    if (grad and not policy.head_checkpoint) or (not grad and not NOGRAD_CHUNKS):
+        return _head_logprobs(policy, h, targets)
+    hf, tf = h.reshape(-1, h.shape[-1]), targets.reshape(-1)
+    parts = []
+    for i in range(0, hf.shape[0], HEAD_CHUNK):
+        if grad:
+            parts.append(checkpoint(_head_logprobs, policy, hf[i:i + HEAD_CHUNK], tf[i:i + HEAD_CHUNK],
+                                    use_reentrant=False))
+        else:
+            parts.append(_head_logprobs(policy, hf[i:i + HEAD_CHUNK], tf[i:i + HEAD_CHUNK]))
+    return torch.cat(parts).reshape(targets.shape)
 
 
 class HFPolicy(Policy):
@@ -120,6 +179,11 @@ def hf_policy(model: nn.Module, eos_id: int | None = None, device: str = "cpu") 
     return HFPolicy(model, lambda m, ids, mask: m(input_ids=ids, attention_mask=mask.long()).logits, eos_id, device)
 
 
-def module_policy(model: nn.Module, eos_id: int | None = None, device: str = "cpu") -> Policy:
-    """For models called as model(ids, valid) -> logits, like Team 5's LanguageModel."""
-    return Policy(model, lambda m, ids, mask: m(ids, mask), eos_id, device)
+def module_policy(model: nn.Module, eos_id: int | None = None, device: str = "cpu", split_head: bool = False) -> Policy:
+    """For models called as model(ids, valid) -> logits, like Team 5's LanguageModel. split_head=True only for a model
+    whose forward is head(hidden(ids, valid)) with a per-position head (Team 5's LanguageModel): the update then runs
+    the head on the completion positions only."""
+    if not split_head:
+        return Policy(model, lambda m, ids, mask: m(ids, mask), eos_id, device)
+    return Policy(model, lambda m, ids, mask: m(ids, mask), eos_id, device,
+                  hidden=lambda m, ids, mask: m.hidden(ids, mask), head=lambda m, h: m.head(h))

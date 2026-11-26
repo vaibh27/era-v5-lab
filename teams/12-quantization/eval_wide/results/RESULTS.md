@@ -5,7 +5,10 @@ reading task, Kannada worst.** The 200-item stand-in set showed no loss for eith
 the evidence supports serving **Q8_0, not Q4_K_M**.
 
 **Granite 3.0 3B-A800M (MoE) shows the same pattern in English:** Q8_0 −0.04 on MMLU (no loss), Q4_K_M −2.31
-(p < 0.001), section 6. On both models Q4_K_M fails the proposal's MMLU test and Q8_0 passes everything.
+(p < 0.001), section 6. On all three models (with gemma-2-2b, below) Q4_K_M fails the proposal's MMLU test and Q8_0 passes everything.
+
+**gemma-2-2b (base) loses less at Q4_K_M:** MMLU −1.46 (p < 0.001, so it still fails the proposal's p < 0.01 rule),
+no Indic task significant at p < 0.01, Q8_0 within ±0.8 points of bf16 on all 12 tasks (section 7).
 
 Scope and sample sizes: [`../../docs/wide_benchmark_scope.md`](../../docs/wide_benchmark_scope.md). Approved job
 requests: [`../../jobs/2026-11-22-wide-bench-sarvam1.md`](../../jobs/2026-11-22-wide-bench-sarvam1.md),
@@ -143,7 +146,53 @@ truncated. English tasks only: Granite 3.0 is not trained on Indic languages. Fu
 - **The guard margin on this MoE held:** prefix-cache diff 0.0434 (bf16), 0.0097 (Q8_0), 0.0424 (Q4_K_M), all under
   0.05, as the lab asked us to watch. Q3_K_M was left out of this run (sarvam-1 Q3_K_M failed the same check, section 4).
 
-## 7. Both models together
+## 7. gemma-2-2b (base)
+
+`google/gemma-2-2b` @ `c5ebcd40d208`, same pipeline as sarvam-1 (llama.cpp b11669 GGUF files, llama-cpp-python 0.3.36
+in-process, runner `66f9de0b6b168f49`, notebook `ed6d96a75919`), one committed Kaggle run per format (2 × Tesla T4,
+24 and 25 Nov), all 12 tasks, MILU capped at 2,500 items per language as for sarvam-1, nothing truncated. Full paired
+table: [`paired_gemma-2-2b.md`](paired_gemma-2-2b.md).
+
+**Guard prompt.** Base gemma-2-2b ranks " Paris" 8th after "The capital of France is", so the guard test's checks 1
+and 2 cannot run on the default prompt. These runs set `EVAL_GUARD_CONTEXT="The capital of France is the city of"`
+(theschoolofai/era-v5-lab#789, open); the four checks and the 0.05 tolerance are unchanged.
+
+| | bf16 | Q8_0 | Q4_K_M |
+|---|---:|---:|---:|
+| GGUF size | 5.24 GB | 2.78 GB | 1.85 GB |
+| Guard test: log p(' Paris'), prefix-cache diff | PASS, −0.349, 0.0000 | PASS, −0.370, 0.0000 | PASS, −0.535, 0.0000 |
+| Scoring time, all 12 tasks | 5.7 h | 3.1 h | 3.0 h |
+
+Accuracy in % (ARC-C `acc_norm`, every other task `acc`), and each format against bf16 on the same items. **Bold**:
+p < 0.01.
+
+| Task | Items | bf16 | Q8_0 | Q4_K_M | Q8_0 against bf16 | p | Q4_K_M against bf16 | p |
+|---|---:|---:|---:|---:|---|---:|---|---:|
+| MMLU | 14,042 | 49.57 | 49.58 | 48.11 | +0.01 (−0.21 to +0.22) | 1.000 | **−1.46** (−2.00 to −0.92) | < 0.001 |
+| ARC-C | 1,172 | 49.57 | 49.74 | 48.38 | +0.17 (−0.24 to +0.58) | 0.688 | −1.19 (−2.47 to +0.08) | 0.087 |
+| Belebele Kannada | 900 | 40.89 | 41.22 | 38.56 | +0.33 (−0.56 to +1.23) | 0.629 | −2.33 (−4.97 to +0.30) | 0.099 |
+| Belebele Hindi | 900 | 48.89 | 49.00 | 49.56 | +0.11 (−0.61 to +0.83) | 1.000 | +0.67 (−1.30 to +2.64) | 0.581 |
+| Belebele Telugu | 900 | 38.78 | 38.78 | 38.56 | +0.00 (−0.97 to +0.97) | 1.000 | −0.22 (−2.65 to +2.20) | 0.928 |
+| Belebele Tamil | 900 | 45.44 | 45.11 | 44.33 | −0.33 (−1.28 to +0.62) | 0.648 | −1.11 (−3.54 to +1.31) | 0.419 |
+| Belebele Bengali | 900 | 46.89 | 46.11 | 44.89 | −0.78 (−1.99 to +0.43) | 0.281 | −2.00 (−4.52 to +0.52) | 0.142 |
+| MILU Kannada (control) | 2,500 | 29.52 | 29.80 | 29.28 | +0.28 (−0.26 to +0.82) | 0.382 | −0.24 (−1.60 to +1.12) | 0.773 |
+| MILU Hindi (control) | 2,500 | 30.48 | 30.28 | 30.24 | −0.20 (−0.84 to +0.44) | 0.625 | −0.24 (−1.61 to +1.13) | 0.775 |
+| MILU Telugu (control) | 2,500 | 29.48 | 29.60 | 28.04 | +0.12 (−0.47 to +0.71) | 0.791 | −1.44 (−2.79 to −0.09) | 0.042 |
+| MILU Tamil (control) | 2,500 | 30.04 | 29.84 | 28.84 | −0.20 (−0.76 to +0.36) | 0.576 | −1.20 (−2.58 to +0.18) | 0.100 |
+| MILU Bengali (control) | 2,500 | 30.16 | 30.48 | 29.96 | +0.32 (−0.31 to +0.95) | 0.382 | −0.20 (−1.52 to +1.12) | 0.812 |
+
+- **Q8_0 is indistinguishable from bf16 on every task** (no p under 0.28; 0.5% to 3.4% of items change answer). On
+  MMLU the interval is ±0.2 points.
+- **Q4_K_M fails gemma-2-2b on MMLU by the proposal's p < 0.01 rule**, though the point estimate (−1.46) is half of
+  sarvam-1's and well inside the −3 limit. 10.6% of MMLU items change answer (sarvam-1 15%, Granite 18%). It loses 6%
+  of its MMLU margin above chance (sarvam-1 12%, Granite 10%).
+- **No Indic task drops significantly at p < 0.01.** Kannada and Bengali Belebele lose about 2 points (15% and 9% of
+  their margin above chance), but with 900 items neither interval excludes zero. Unlike sarvam-1, gemma-2-2b's Indic
+  reading at bf16 is 13.8 to 23.9 points above chance, against 26.2 to 34.2 for sarvam-1, so there is less to lose.
+- **MILU is again only a control:** gemma-2-2b scores 29.5 to 30.5% at bf16. Q4_K_M's Telugu drop (p 0.042) is the
+  only one under 0.05.
+
+## 8. All three models together
 
 | Model | Format | MMLU against bf16 | Indic (Belebele, 5 languages) | Under the proposal |
 |---|---|---|---|---|
@@ -151,18 +200,21 @@ truncated. English tasks only: Granite 3.0 is not trained on Indic languages. Fu
 | sarvam-1 | Q4_K_M | −2.94, p < 0.001 | −4.00 to −7.56, all p ≤ 0.002 | fail |
 | Granite 3.0 3B-A800M (MoE, English) | Q8_0 | −0.04, p 0.84 | not run | pass |
 | Granite 3.0 3B-A800M | Q4_K_M | −2.31, p < 0.001 | not run | fail |
+| gemma-2-2b (dense, multilingual) | Q8_0 | +0.01, p 1.00 | −0.78 to +0.33, all p ≥ 0.28 | pass |
+| gemma-2-2b | Q4_K_M | −1.46, p < 0.001 | −2.33 to +0.67, all p ≥ 0.099 | fail (MMLU) |
 
-On both architectures Q4_K_M's loss is real and large enough to see once the benchmark has enough items, and Q8_0's
-is not measurable. On the Indic model the Indic tasks lose the most.
+On all three models Q4_K_M's MMLU loss is real once the benchmark has enough items, and Q8_0's is not measurable. On
+the Indic model the Indic tasks lose the most; on gemma-2-2b, a general model with weaker Indic reading, they do not
+drop significantly.
 
-## 8. Files and rerun
+## 9. Files and rerun
 
 | Path | What |
 |---|---|
 | `raw/<model>/<format>/<task>.samples.jsonl` | per-item results (task, doc_id, filter, metric) |
 | `raw/<model>/<format>/summary*.json` | run metadata and one record per task (sarvam-1 Q4_K_M: one file per run) |
-| [`paired_sarvam-1.md`](paired_sarvam-1.md), [`paired_granite-3.0-3b-a800m.md`](paired_granite-3.0-3b-a800m.md) | the paired tables, written by `../paired.py` |
+| [`paired_sarvam-1.md`](paired_sarvam-1.md), [`paired_granite-3.0-3b-a800m.md`](paired_granite-3.0-3b-a800m.md), [`paired_gemma-2-2b.md`](paired_gemma-2-2b.md) | the paired tables, written by `../paired.py` |
 
 Rebuild a paired table, from this folder: `python ../paired.py raw/sarvam-1 --base bf16 --out paired_sarvam-1.md`
-(Granite: `raw/granite-3.0-3b-a800m`). Rerun a format: `../eval_wide.ipynb` on Kaggle, `CAP = 2500`, the model and revision above, and `TASKS` for
+(Granite: `raw/granite-3.0-3b-a800m`; gemma-2-2b: `raw/gemma-2-2b`). Rerun a format: `../eval_wide.ipynb` on Kaggle, `CAP = 2500`, the model and revision above, and `TASKS` for
 a subset.

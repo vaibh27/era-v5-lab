@@ -72,9 +72,12 @@ def main():
                 "forgetting": {"val/bpb": round(1.0981 + delta, 4)},
                 "generation": {"format_validity": fmt_val, "closed_im_end": 0.92, "hit_budget": 0.0, "mean_gen_tokens": 45.0},
             },
-            "method_info": {
-                "band_at_init": {"in_band_frac": 0.992},
-                "deletion_final": {"deleted_frac": 0.148, "target": "g5_gate"},
+            "method": {  # the key and block shape sft_g5.py writes (dt/mask.py band_stats / deletion_stats keys)
+                "method": "dt", "targets": "g5_gate",
+                "band_at_init": {"live_share": 1.0, "band_share": 0.992, "soft_hard_gap": 0.03},
+                "deletion_final": {"deleted": 1480, "targeted": 10000, "model_weights": 40000,
+                                   "deleted_frac_of_targeted": 0.148, "deleted_frac_of_all_weights": 0.037,
+                                   "per_layer_min": 0.12, "per_layer_max": 0.17},
             },
         }
         (d / "sft_report.json").write_text(json.dumps(rep, indent=2), encoding="utf-8")
@@ -84,7 +87,7 @@ def main():
             canary_dest.mkdir(parents=True, exist_ok=True)
             (canary_dest / "model.safetensors").write_bytes(b"MOCK_STANDIN_DT_WEIGHTS")
             (canary_dest / "dt_keep_masks.bin").write_bytes(b"MOCK_STANDIN_DT_MASKS")
-            (canary_dest / "dt_keep_masks.bin.json").write_text(json.dumps(rep["method_info"]), encoding="utf-8")
+            (canary_dest / "dt_keep_masks.bin.json").write_text(json.dumps(rep["method"]), encoding="utf-8")
             (canary_dest / "SHA256SUMS").write_text(
                 "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855  model.safetensors\n"
             )

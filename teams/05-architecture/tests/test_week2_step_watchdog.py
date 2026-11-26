@@ -2,6 +2,7 @@
 
 from contextlib import ExitStack
 import json
+import itertools
 import os
 from pathlib import Path
 import subprocess
@@ -81,10 +82,17 @@ def run_fixture(root, mode):
             ])
             from ckpt.ckpt import Checkpointer
 
+            # This test targets a stalled save, not wall-clock scheduling. Guarantee
+            # that step 1 reaches the interval save even on a fast toy model.
+            # The watchdog itself still uses its real monotonic clock.
+            checkpoint_ticks = itertools.count()
+            stack.enter_context(patch.object(train_week2, "checkpoint_clock",
+                                             side_effect=lambda: next(checkpoint_ticks)))
             save = Checkpointer.save
 
             def stalled_save(checkpointer, *args, **kwargs):
                 if kwargs["reason"] == "interval":
+                    (root / "save-stall-entered").write_text("interval", encoding="utf8")
                     time.sleep(8)
                 return save(checkpointer, *args, **kwargs)
 
@@ -116,6 +124,9 @@ class StepWatchdogTests(unittest.TestCase):
         with TemporaryDirectory() as temp:
             root = Path(temp)
             result = self.launch(root, mode)
+            if mode == "save":
+                self.assertTrue((root / "save-stall-entered").exists(),
+                                "The test did not reach the injected periodic-save stall")
             self.assertEqual(result.returncode, 75, result.stderr)
             self.assertIn("G5 step watchdog", result.stderr)
             self.assertIn(frame, result.stderr)

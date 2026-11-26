@@ -54,6 +54,14 @@ def test_run_matches_steps_across_all_three_arms_and_writes_compare_md(tmp_path,
 
     seen_cmds: dict[str, list[str]] = {}
     canary_dests: dict[str, Path | None] = {}
+    # The DT block as sft_g5.py builds it (report["method"] = method_info), from the real dt/mask.py statistics.
+    dtm = sft_g5.dtmask
+    tiny = nn.Sequential(nn.Linear(8, 8))
+    dtm.convert(tiny, ("re:0",), total_steps=10)
+    with torch.no_grad():
+        tiny[0].gate.fill_(1.0)
+        tiny[0].gate.view(-1)[:3] = -1.0  # exactly three deleted weights
+    dt_method = {"method": "dt", "band_at_init": dtm.band_stats(tiny), "deletion_final": dtm.deletion_stats(tiny)}
 
     def fake_build(packs, tok, tab, max_tokens, out, dev_rows, check_hashes=True):
         out.mkdir(parents=True)
@@ -77,8 +85,9 @@ def test_run_matches_steps_across_all_three_arms_and_writes_compare_md(tmp_path,
                 "forgetting": {"val/bpb": 1.50 + delta},
                 "generation": {"format_validity": 0.8, "closed_im_end": 0.9, "hit_budget": 0.0, "mean_gen_tokens": 20.0},
             },
-            "method_info": {"band_at_init": {"in_band_frac": 0.99}, "deletion_final": {"deleted_frac": 0.03}},
         }
+        if arm == "dt":
+            rep["method"] = dt_method  # the key and block shape sft_g5.py writes
         (d / "sft_report.json").write_text(json.dumps(rep), encoding="utf-8")
         return {"ok": True, "steps_completed": n_steps, "before": rep["before"]}
 
@@ -115,6 +124,10 @@ def test_run_matches_steps_across_all_three_arms_and_writes_compare_md(tmp_path,
     assert comp["steps_matched"] is True
     assert comp["arms"]["full"]["forgetting_verdict"] == "FORGET (at limit)"
     assert comp["arms"]["dt"]["forgetting_verdict"] == "ok"
+    # the DT block reaches compare.json (it was always null when the wrapper read a key sft_g5.py never writes)
+    assert comp["arms"]["dt"]["dt_band_at_init"] == dt_method["band_at_init"]
+    assert comp["arms"]["dt"]["dt_deletion_final"] == dt_method["deletion_final"]
+    assert comp["arms"]["dt"]["dt_deletion_final"]["deleted"] == 3
     md = (out / "compare.md").read_text(encoding="utf-8")
     assert "| dt | 42 |" in md and "| lora | 42 |" in md and "| full | 42 |" in md
 

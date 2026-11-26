@@ -93,6 +93,8 @@ none is D2) the detector flags 0. Gold cannot measure recall, but it shows the d
   with the project tokenizer when it is final.
 - **Cap options** for the Gate 2 decision (14 Nov): 0%, 1% (proposed) or 2% of each language's tokens; over the cap,
   whole romanised documents are dropped at random with seed 0.
+- **Decided (16 Nov):** TSAI set the cap at **1% of tokens per language**, a ceiling and not a target (#481, option B),
+  with native-script Indic a fixed 8% of every batch (`mix/indic_share_v1.md`).
 
 ## Reproduce
 

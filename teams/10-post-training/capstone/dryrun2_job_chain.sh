@@ -23,6 +23,16 @@ export PYTHONPATH="$G5/teams/07-infrastructure${PYTHONPATH:+:$PYTHONPATH}"
 mkdir -p "$WORK"
 log() { echo "[dryrun2_job_chain $(date -u +%H:%M:%SZ)] $*"; }
 
+# 0. Team 5's code for this run (capstone/g5_source_resolver.py). The run folder records the sha256 of Team 5's sources;
+#    the adapter refuses a checkout whose files differ (right: wrong code on a checkpoint is a silent error). Team 5's
+#    main moves, so when $G5 differs, the resolver finds the commit in the same repository with exactly the recorded
+#    files, makes a detached worktree of it under $WORK and prints one loud block; every Team 5 load below uses it, and
+#    the adapter's pin is still checked against it. No match, or not a git checkout: the job stops here with the fix.
+#    Our own code ($C) stays the job checkout's.
+[ -f "$T5_OUT/manifest.json" ] || { log "no $T5_OUT/manifest.json"; exit 2; }
+G5R="$("$PY" "$C/g5_source_resolver.py" --g5-root "$G5" --manifest "$T5_OUT/manifest.json" --work "$WORK")"
+log "Team 5 code root: $G5R"
+
 if [ -f "$T5_OUT/checkpoint.pt" ]; then
   RF="$T5_OUT"; log "run folder: $RF (Team 5's own checkpoint.pt)"
 else
@@ -31,19 +41,19 @@ else
     log "run folder: $RF (rebuilt earlier, reused)"
   else
     log "rebuild from store $STORE (run id from $T5_OUT/manifest.json)"
-    "$PY" "$C/run_folder_from_store.py" --g5-root "$G5" --run-folder "$T5_OUT" --store "$STORE" --tokenizer "$TOKENIZER" \
+    "$PY" "$C/run_folder_from_store.py" --g5-root "$G5R" --run-folder "$T5_OUT" --store "$STORE" --tokenizer "$TOKENIZER" \
       --byte-table "$TABLE" --heldout-data "$HELDOUT" --heldout-sources "$HELDOUT_SOURCES" --device "$DEVICE" --out "$RF"
   fi
 fi
 PF="$WORK/probe.json"
-[ -f "$PF" ] || "$PY" "$C/make_probe_file.py" --g5-root "$G5" --run "$RF" --tokenizer "$TOKENIZER" --byte-table "$TABLE" \
+[ -f "$PF" ] || "$PY" "$C/make_probe_file.py" --g5-root "$G5R" --run "$RF" --tokenizer "$TOKENIZER" --byte-table "$TABLE" \
   --device "$DEVICE" --out "$PF"
-"$PY" "$C/router_bias_reach.py" --g5-root "$G5" --run-folder "$RF" --tokenizer "$TOKENIZER" --byte-table "$TABLE" \
+"$PY" "$C/router_bias_reach.py" --g5-root "$G5R" --run-folder "$RF" --tokenizer "$TOKENIZER" --byte-table "$TABLE" \
   --heldout "$HELDOUT" --windows 8 --device "$DEVICE" --out "$WORK/router_bias_reach.json" \
   || log "router_bias_reach failed (report only; the job continues)"
 log "wrapper: dryrun2_dt_compare.py --run-folder $RF --probe-file $PF --origin g5_delivery $*"
 set +e
-"$PY" "$C/dryrun2_dt_compare.py" --g5-root "$G5" --run-folder "$RF" --tokenizer "$TOKENIZER" --byte-table "$TABLE" \
+"$PY" "$C/dryrun2_dt_compare.py" --g5-root "$G5R" --run-folder "$RF" --tokenizer "$TOKENIZER" --byte-table "$TABLE" \
   --probe-file "$PF" --origin g5_delivery "$@"
 RC=$?
 set -e

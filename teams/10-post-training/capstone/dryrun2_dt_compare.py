@@ -92,7 +92,7 @@ def summarise_comparison(reps: dict[str, dict], before: dict | None) -> tuple[di
         m["eval_nll"] = (after.get("eval_loss") or {}).get("nll_per_target")
         m["forgetting_verdict"] = _forgetting_tag(m.get("forgetting_delta_bpb"))
         if arm == "dt":
-            mi = rep.get("method_info") or {}
+            mi = rep.get("method") or {}  # sft_g5.py writes the DT block (band_at_init, deletion_final) here
             m["dt_band_at_init"] = mi.get("band_at_init")
             m["dt_deletion_final"] = mi.get("deletion_final")
         arms_out[arm] = m

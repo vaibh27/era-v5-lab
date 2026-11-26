@@ -14,8 +14,9 @@ The same tokens are then re-scored under four settings of the training forward:
 and pairs of them are compared the way objective_v1 would: share of real tokens whose ratio exp(lp_a - lp_b) lies
 outside [1 - eps, 1 + eps], quantiles of |log ratio|, and the share of (token, layer) pairs whose top-k expert set
 differs. Expert sets are read from G5's own routing rule, recomputed in a pre-hook on each `MoE` from the exact input
-it receives (`F.linear(x.float(), router.weight.float()).softmax(-1).topk(k)`, model.py), because G5 calls the router
-weight functionally and a module hook on `router` never fires.
+it receives (`F.linear(x.float(), router.weight.float()).softmax(-1).topk(k)`, plus `router_bias` before the top-k
+when the loss-free balancer is on, model.py), because G5 calls the router weight functionally and a module hook on
+`router` never fires.
 
 With the native sampler the trainer's ratio at epoch 1 is exactly 1 (it recomputes the sampler log-probabilities
 itself); these pairs measure what a different engine (vLLM in bf16, other batch shapes) would add. Writes aggregates
@@ -67,6 +68,10 @@ class RouteRecorder:
             flat = x.reshape(-1, x.shape[-1])
             with torch.autocast(device_type=x.device.type, enabled=False):
                 scores = F.linear(flat.float(), mod.router.weight.float()).softmax(-1)
+            if float(getattr(mod, "balance_gamma", 0.0) or 0.0) != 0.0:
+                # loss-free balancer on: G5 chooses experts by scores + router_bias (same rule as dt/mask.py
+                # g5_expert_choice); the gate values stay the unbiased softmax
+                scores = scores + mod.router_bias.to(scores.dtype)
             choice = scores.topk(mod.topk, dim=-1).indices.sort(-1).values
             self.current[i] = choice.reshape(*x.shape[:-1], mod.topk).detach().cpu()
         return hook

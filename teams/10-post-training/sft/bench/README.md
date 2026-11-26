@@ -44,6 +44,12 @@ python $B/evaluate.py --eval-mini --model <run>/model --eval-mini-python <team9 
 G10_BENCH_SLICE=<slice> python -m pytest $B/tests -q
 ```
 
+With `--autocast bf16` on a bf16 checkpoint, `--frozen-bf16` stores the frozen nn.Linear weights in bf16 during
+training (exact; the computation is unchanged and they are FP32 again before the checks and the save), about 2 B per
+frozen weight less. `--train-marker-rows` keeps optimizer state for the marker rows only, not the whole embedding or
+head.
+
+
 On Apple MPS use `--device mps --micro-tokens 2048 --grad-checkpointing` and set `PYTORCH_MPS_HIGH_WATERMARK_RATIO=0.7
 PYTORCH_MPS_LOW_WATERMARK_RATIO=0.5`; it trains in FP32 at about 15 s per update on an M1 Pro 16 GB (measured over 6 steps).
 Slices, generations, checkpoints and exec tasks hold training or evaluation data: keep them out of Git.

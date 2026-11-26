@@ -127,5 +127,8 @@ python teams/10-post-training/rl/jsts/build_tasks.py --track javascript --clone 
 - Exercism exercises are public and may have been seen by the base model. This was not measured. Where it would show
   is the pass rate of the base model on these tasks before RL use: a rate near the ceiling on unseen-style tasks would
   point to memorisation.
-- TypeScript is stripped by babel and not type-checked: a type error scores like valid code.
+- TypeScript is stripped by babel and not type-checked: a type error scores like valid code. This is deliberate for
+  v1 (G10 decision, 24 Nov): the reward is "passes the hidden jest tests". A `tsc --noEmit` step would add about 1 to
+  3 s to each scoring (now about 4.3 s) and could give false 0s on correct answers under strict settings. An opt-in
+  type check can be revisited in v2, after Gate 4.
 - One test framework (jest) and one source (Exercism); a few tasks per language.

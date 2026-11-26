@@ -444,3 +444,100 @@ def test_masked_linear_checkpoint_keys_and_old_checkpoint_loads():
     other.eval(); lm.eval()
     with torch.no_grad():
         assert torch.equal(other(G5_IDS, G5_VALID), lm(G5_IDS, G5_VALID))
+
+
+# --- Wanda calibration must route each expert as many rows as G5's own MoE.forward routes to it -------------------
+# G5's loss-free balancer (Session 14; on when `moe.bias_gamma` != 0, as in dry run 2's arm) chooses experts by the
+# router softmax plus `router_bias`. Calibration re-derives the choice in `moe_post`, so it must apply the same rule,
+# or a routed expert is calibrated on rows it never receives (and an expert the model does use can look unseen).
+
+
+class G5Wrap(torch.nn.Module):  # the call shape wanda_scores uses
+    def __init__(self, lm):
+        super().__init__()
+        self.lm = lm
+
+    def forward(self, input_ids, attention_mask):
+        return self.lm(input_ids, attention_mask.bool())
+
+
+def model_routed_rows(lm):
+    """Valid tokens per (block, expert) that G5's own MoE.forward routes, from its public start/finish_expert_load
+    counter (it counts the choice the forward actually made, router bias included; it counts in train mode only, and
+    routing does not depend on the mode). Masks are off, as in wanda_scores, so each block sees the calibration
+    input."""
+    layers = [m for _, m in dtmask.masked_layers(lm)]
+    was = lm.training
+    lm.train()
+    try:
+        for m in layers:
+            m.unmasked = True
+        lm.start_expert_load()
+        with torch.no_grad():
+            lm(G5_IDS, G5_VALID)
+        return lm.finish_expert_load()
+    finally:
+        for m in layers:
+            m.unmasked = False
+        lm.train(was)
+        for b in lm.blocks:
+            if hasattr(b.moe, "_balance_load"):
+                b.moe._balance_load = None  # what the balancer collected in train mode; no update is applied here
+
+
+def calibration_routed_rows(lm):
+    """Rows per (block, expert) that wanda_scores feeds to each routed expert's masked gate projection."""
+    counts = [[0] * len(b.moe.experts) for b in lm.blocks]
+
+    def counter(li, e):
+        def hook(_mod, inp, _out):
+            counts[li][e] += inp[0].reshape(-1, inp[0].shape[-1]).shape[0]
+        return hook
+
+    hooks = [expert.gate.register_forward_hook(counter(li, e))
+             for li, b in enumerate(lm.blocks) for e, expert in enumerate(b.moe.experts)]
+    try:
+        dtmask.wanda_scores(G5Wrap(lm), [{"input_ids": G5_IDS, "attention_mask": G5_VALID.long()}], "cpu")
+    finally:
+        for h in hooks:
+            h.remove()
+    return counts
+
+
+def test_g5_expert_choice_is_team5s_rule():
+    """Runs on any model.py: top-k of scores + router_bias when balance_gamma != 0, else of scores (G5 ignores the
+    buffer when gamma is 0), and the plain top-k on a model.py from before the balancer (no attributes)."""
+    from types import SimpleNamespace  # noqa: PLC0415
+    scores = torch.tensor([[0.40, 0.35, 0.15, 0.10], [0.30, 0.27, 0.23, 0.20]])
+    bias = torch.tensor([-0.2, 0.0, 0.1, 0.0])
+    plain = scores.topk(2, dim=-1).indices
+    biased = (scores + bias).topk(2, dim=-1).indices
+    assert not torch.equal(plain, biased)
+    assert torch.equal(dtmask.g5_expert_choice(SimpleNamespace(topk=2, balance_gamma=1e-3, router_bias=bias), scores),
+                       biased)
+    assert torch.equal(dtmask.g5_expert_choice(SimpleNamespace(topk=2, balance_gamma=0.0, router_bias=bias), scores),
+                       plain)
+    assert torch.equal(dtmask.g5_expert_choice(SimpleNamespace(topk=2), scores), plain)
+
+
+def test_g5_calibration_routes_each_expert_as_many_rows_as_the_model():
+    lm = g5_dt()
+    want, got = model_routed_rows(lm), calibration_routed_rows(lm)
+    assert got == want
+    assert sum(map(sum, want)) == len(lm.blocks) * int(G5_VALID.sum()) * lm.blocks[0].moe.topk
+
+
+def test_g5_calibration_follows_the_loss_free_balancer_router_bias():
+    lm = g5_dt()
+    if not hasattr(lm.blocks[0].moe, "router_bias"):
+        pytest.skip("this checkout's G5 model.py predates the loss-free balancer (router_bias); "
+                    "the test runs once main's teams/05-architecture is merged")
+    unbiased = model_routed_rows(lm)
+    for b in lm.blocks:  # a moderate bias: it reorders experts, it does not just force one (as a trained bias does)
+        b.moe.router_bias.copy_(torch.tensor([0.05, -0.02, 0.01, -0.04]))
+    assert model_routed_rows(lm) == unbiased and calibration_routed_rows(lm) == unbiased  # gamma 0: bias unused
+    for b in lm.blocks:
+        b.moe.balance_gamma = 1e-3  # what dry run 2 trains with
+    want = model_routed_rows(lm)
+    assert want != unbiased  # the bias moved the choice
+    assert calibration_routed_rows(lm) == want

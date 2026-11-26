@@ -203,6 +203,46 @@ set) and `canary_scan.py`. It calls the three scripts unchanged, so the result i
   benchmark text and the lab canary planted in documents of different parts are flagged with their doc_id, and
   nothing else (as check 3 of `results/decontam_shards.md`).
 
+## Training text as JSONL (`check_jsonl.py`)
+
+Use this when the training text is staged as JSONL and not as token shards. An example is
+`train_week2.py --train-data ./inputs/train.jsonl`, with one JSON object per line: `"text"` and an optional `"id"`.
+`check_shards.py` reads only shard folders, so it cannot check such a file.
+
+```bash
+# no network, no tokenizer: on a job host use --work ./out
+python -I teams/09-evaluation/decontam/check_jsonl.py ./inputs/train.jsonl --work <dir>
+```
+
+`check_jsonl.py` runs `decontam_check.py` (full set) and `canary_scan.py` on each file, with the scripts unchanged.
+
+- **Speed:** the file is cut into parts of whole lines, copied as they are. By default a part is the total size of
+  the files divided by `--jobs`, at most 64 MB, so a small file still uses every worker (`--part-bytes` sets a fixed
+  size). `decontam_check.py` runs on each part in its own process, in one pool of `--jobs` worker processes (default
+  as in `check_shards.py`). Each document is checked alone, so the parts give the same result as one run on the file.
+- **Document IDs:** `--id-field` (default `id`, as `train_week2.py`) and `--text-field` (default `text`). A line
+  without an ID is named `<file name>:<line index>` (0-based, blank lines counted), the same name that the two
+  scripts give when they read the whole file.
+- **Pass rule:** exit code 0 only when every file has 0 flagged and 0 canary hits. Do not use the exit code of
+  `decontam_check.py` alone: it is 0 also when it flags documents. Run the two scripts with `python`, not
+  `python -I`: under `-I` they cannot import their own modules. `check_jsonl.py` itself works under `-I`.
+- **Text copies:** the parts are copies of the training text in `<work>/text`. They are deleted after each file,
+  and at the start and the end of each run. One run at a time can use a `--work` folder. Never commit `<work>`.
+- **Output:** `<work>/results/<file name>.json` (sha256 of the file, bytes, docs, flagged doc IDs, canary hits, no
+  text), a markdown table, the set_sha256 and the canary count.
+- **Tested** on a 604 MB file of 124,844 documents of 6 sample-v0 packs (text before F2, so it has real hits), with a
+  GSM8K test item planted in one document and in one line without an ID, and the lab canary in a third. Laptop CPU
+  (14 cores, 24 GB), `--jobs 10`, 10 parts: 53 s, against 315 s for one `decontam_check.py` on the whole file. Both
+  flag the same 188 doc IDs, which include the two planted items (`train.jsonl:90000` for the line without an ID).
+  The canary is found in its document. No text is left in `<work>/text`.
+  A 100 MB file (about the size of dry run 2's training text), `--jobs 10`: 7 s with the default part size (10
+  parts), against 23 s with fixed 64 MB parts (2 parts, so only 2 workers busy). Same flagged IDs.
+- **Tests:** `pytest teams/09-evaluation/decontam/tests/test_check_jsonl.py -q` (no tokenizer or network needed):
+  the cut into parts (whole lines, `\r` inside a line, a last line without a newline, lines longer than one read),
+  planted leaks through the parts with the real scripts, the same flagged IDs as one run on the file, a bad line,
+  text left by a stopped run, the work-folder lock, `python -I`, the default part size, a file with no documents,
+  invalid UTF-8, many files with few workers, and more than 9,999 parts.
+
 ## Normalize
 
 Before the cut into runs, the text of an item and of a document is normalized, so that

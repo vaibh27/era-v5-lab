@@ -395,3 +395,149 @@ def test_micro_rows_defaults_to_1_and_0_means_the_whole_group(tmp_path):
     assert t["micro_rows"] == 2
     t = yaml.safe_load(job.write_train_config(_full_args(tmp_path, micro_rows=0), tmp_path, None, None, 1234.0, 64).read_text())["train"]
     assert "micro_rows" not in t
+
+
+def _dt_export(tmp_path):
+    dest = tmp_path / "keep_canary" / "dt"
+    dest.mkdir(parents=True)
+    weights = dest / "model.safetensors"
+    mask = dest / "dt_keep_masks.bin"
+    metadata = Path(str(mask) + ".json")
+    weights.write_bytes(b"fixture weights")
+    mask.write_bytes(b"fixture binary mask")
+    metadata.write_text('{"fixture": true}')
+    sums = {p.name: job.probe.sha256_file(p) for p in (weights, mask, metadata)}
+    (dest / "SHA256SUMS").write_text("".join(f"{digest}  {name}\n" for name, digest in sums.items()))
+    return weights, mask, metadata, sums
+
+
+def test_dt_canary_requires_start_weights_and_explicit_mask_for_manifest(tmp_path):
+    with pytest.raises(SystemExit):
+        _full_args(tmp_path, keep_mask="mask.bin")
+    with pytest.raises(SystemExit):
+        _full_args(tmp_path, canary_sha256s="SHA256SUMS")
+
+
+def test_expected_dryrun2_head_and_router_bias_are_checked_before_model_work(tmp_path):
+    a = _full_args(tmp_path, expected_head_mode="kas_v2", expected_bias_gamma=0.001)
+    a.run_folder = tmp_path / "run"
+    a.run_folder.mkdir()
+    (a.run_folder / "checkpoint.pt").write_bytes(b"fixture")
+    for key in ("rl_tasks", "train_pool", "heldout_pool"):
+        path = tmp_path / key
+        path.write_text("")
+        setattr(a, key, path)
+    a.no_pack_check = True
+    manifest = a.run_folder / "manifest.json"
+    for model, error in (
+        ({"block_size": 2048}, "head_mode"),
+        ({"block_size": 2048, "head_mode": "kas_v2"}, "bias_gamma"),
+    ):
+        manifest.write_text(json.dumps({"config": {"model": model}}))
+        with pytest.raises(ValueError, match=error):
+            job.check_inputs(a)
+    manifest.write_text(json.dumps({"config": {"model": {
+        "block_size": 2048, "head_mode": "kas_v2", "moe": {"bias_gamma": 0.001},
+    }}}))
+    pins = job.check_inputs(a)
+    assert pins["head_mode"] == "kas_v2" and pins["bias_gamma"] == 0.001
+
+
+def test_dt_canary_config_pins_all_export_bytes_and_uses_mask_with_batch_sampler(tmp_path):
+    weights, mask, metadata, sums = _dt_export(tmp_path)
+    a = _full_args(tmp_path, start_weights=weights, keep_mask=mask, sampler="g5_batch")
+    pins = job.dt_canary_pins(a)  # check_inputs binds these before the model is loaded
+    cfg = yaml.safe_load(job.write_train_config(a, tmp_path, weights, sums[weights.name], 1234.0, 64).read_text())
+    assert cfg["model"]["init_state_sha256"] == sums[weights.name]
+    assert cfg["train"]["sampler"] == "g5_batch"
+    assert cfg["train"]["keep_zero"] == {
+        "path": str(mask), "sha256": sums[mask.name], "metadata_sha256": sums[metadata.name], "enforce": False}
+    assert pins == {"start_weights_sha256": sums[weights.name], "sha256": sums[mask.name],
+                    "metadata_sha256": sums[metadata.name]}
+    for path in (weights, mask, metadata):
+        original = path.read_bytes()
+        path.write_bytes(original + b"changed")
+        with pytest.raises(ValueError, match="differs from its pinned SHA-256"):
+            job.write_train_config(a, tmp_path, weights, sums[weights.name], 1234.0, 64)
+        path.write_bytes(original)
+    with pytest.raises(ValueError, match="initialization differs"):
+        job.write_train_config(a, tmp_path, weights, "0" * 64, 1234.0, 64)
+
+
+def test_dt_canary_pins_refuse_corrupt_or_missing_export_manifest(tmp_path):
+    weights, mask, metadata, sums = _dt_export(tmp_path)
+    a = _full_args(tmp_path, start_weights=weights, keep_mask=mask)
+    manifest = mask.parent / "SHA256SUMS"
+    manifest.write_text(f"{sums[weights.name]}  {weights.name}\n")
+    with pytest.raises(ValueError, match="SHA256SUMS missing"):
+        job.dt_canary_pins(a)
+    manifest.write_text("0" * 64 + f"  {weights.name}\n" +
+                        "".join(f"{sums[p.name]}  {p.name}\n" for p in (mask, metadata)))
+    with pytest.raises(ValueError, match="model.safetensors differs"):
+        job.dt_canary_pins(a)
+
+
+def test_documented_task11_command_matches_the_canary_training_settings(tmp_path):
+    import shlex
+
+    request = (job.TEAM10 / "jobs" / "2026-11-17-dt-then-rl-code.md").read_text()
+    command = next(line.split("Command:", 1)[1].strip() for line in request.splitlines()
+                   if line.startswith("Command:"))
+    args = shlex.split(command)
+    a = job.parse_args(args[args.index("--g5-root"):])
+    weights, mask, metadata, sums = _dt_export(tmp_path)
+    a.start_weights, a.keep_mask = weights, mask
+    generated = yaml.safe_load(job.write_train_config(a, tmp_path, weights, sums[weights.name], 1234.0, 64).read_text())
+    template = yaml.safe_load((job.TEAM10 / "rl-loop" / "config" / "task11_code_canary.yaml").read_text())
+    for key, value in template["train"].items():
+        if key not in ("state_dir", "deadline_unix", "keep_zero", "update_mode"):
+            assert generated["train"][key] == value, key
+    assert generated["train"].get("update_mode", "auto") == template["train"]["update_mode"]
+    assert generated["model"]["init_state"] == str(weights)
+    assert generated["train"]["keep_zero"]["sha256"] == sums[mask.name]
+
+
+def test_dt_report_keeps_mask_integrity_and_fails_invalid_deletion_summary(tmp_path, monkeypatch):
+    import train
+
+    weights, mask, metadata, sums = _dt_export(tmp_path)
+    a = _full_args(tmp_path, start_weights=weights, keep_mask=mask, sampler="g5_batch")
+    a.rl_tasks = tmp_path / "tasks.jsonl"
+    a.rl_tasks.write_text("")
+    rl = tmp_path / "rl"
+    rl.mkdir()
+    (rl / "evals.jsonl").write_text("".join(json.dumps({
+        "name": "heldout", "step": step, "pass": reward, "problems": 2, "k": 4,
+        "reasons": {"wrong_answer": wrong}
+    }) + "\n" for step, reward, wrong in ((0, 0.0, 8), (10, 0.5, 4))))
+    (rl / "metrics.jsonl").write_text(json.dumps({"groups_used": 4}) + "\n")
+    (tmp_path / "literal_sample.jsonl").write_text("".join(json.dumps({
+        "eval_index": index, "pass": passes, "literal": 0
+    }) + "\n" for index, passes in ((0, 0), (1, 4))))
+    summary = {
+        "keep_zero": {"deleted_at_start": 10, "max_deleted_nonzero": 0, "deleted_nonzero_end": 0},
+        "heldout_change": {"diff": 0.5, "ci_low": 0.1}, "heldout_curve": [[0, 0.0], [10, 0.5]],
+        "objective": {"steps_with_optimizer_update": 10}, "peak_gpu_memory_gb": 2.0,
+    }
+    monkeypatch.setattr(job, "install_detector", lambda *args: None)
+    monkeypatch.setattr(train, "train", lambda cfg: summary)
+    result = job.rl_step(a, tmp_path, weights, sums[weights.name], 1234.0, 64)
+    assert result["keep_zero"] == summary["keep_zero"] and result["peak_gpu_memory_gb"] == 2.0
+    assert result.get("ok", True)
+    for bad in ({"deleted_at_start": 0, "max_deleted_nonzero": 0, "deleted_nonzero_end": 0},
+                {"deleted_at_start": 10, "max_deleted_nonzero": 1, "deleted_nonzero_end": 0}, {}):
+        summary["keep_zero"] = bad
+        result = job.rl_step(a, tmp_path, weights, sums[weights.name], 1234.0, 64)
+        assert result["ok"] is False and "deletion integrity" in result["error"]
+
+
+def test_head_checkpoint_is_off_unless_the_job_asks(tmp_path):
+    """Job RLM2: the checkpointed head chunks cost update time, so the config carries head_checkpoint only with
+    --head-checkpoint."""
+    t = yaml.safe_load(job.write_train_config(_full_args(tmp_path), tmp_path, None, None, 1234.0, 64).read_text())["train"]
+    assert "head_checkpoint" not in t
+    a = job.parse_args(["--g5-root", "g", "--run-folder", "r", "--tokenizer", "t", "--byte-table", "b", "--rl-tasks",
+                        "cc.jsonl", "--train-pool", "tp", "--heldout-pool", "hp", "--device", "cpu", "--out", str(tmp_path),
+                        "--head-checkpoint"])
+    t = yaml.safe_load(job.write_train_config(a, tmp_path, None, None, 1234.0, 64).read_text())["train"]
+    assert t["head_checkpoint"] is True

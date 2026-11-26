@@ -110,6 +110,11 @@ def _effective(method, base, state, step, total_steps):
     return masked
 
 
+def _dt_reg_grad_weight(effective):
+    """d/dW_eff of -LAMBDA_SFT * ||W_eff||^2 (the DT regulariser), i.e. -2 * lambda * W_eff, before the mask chain."""
+    return [[-2.0 * DT.LAMBDA_SFT * value for value in row] for row in effective]
+
+
 def _pack_grad(method, grad_weight, state):
     rows = len(grad_weight)
     cols = len(grad_weight[0])
@@ -196,17 +201,12 @@ def compare(steps: int = 30, seed: int = 0, rows: int = 4, cols: int = 4, sample
             current = _effective(method, base, state, step, steps)
             grad = _task_grad(current, inputs, targets)
             if method == "dt":
-                # d/dG of -lambda * ||W * mask||^2, through the soft mask.
-                alpha = state["alpha"]
-                mask = DT.soft_mask(state["logits"], alpha)
-                flat = _flatten(current)
-                cursor = 0
+                # -lambda * ||W_eff||^2 enters as its gradient with respect to W_eff; _pack_grad then applies the
+                # chain through the soft mask (W * alpha * s * (1 - s)) once, to the task and regulariser parts alike.
+                reg = _dt_reg_grad_weight(current)
                 for row in range(rows):
                     for col in range(cols):
-                        bit = mask[cursor]
-                        extra = -2.0 * DT.LAMBDA_SFT * flat[cursor] * base[row][col] * alpha * bit * (1.0 - bit)
-                        grad[row][col] += extra
-                        cursor += 1
+                        grad[row][col] += reg[row][col]
             packed = _pack_grad(method, grad, state)
             values = _params(method, state)
             _set_params(method, state, [value - lr * part for value, part in zip(values, packed)])

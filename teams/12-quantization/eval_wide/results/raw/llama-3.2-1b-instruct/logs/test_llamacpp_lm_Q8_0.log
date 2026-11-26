@@ -1,0 +1,4 @@
+Llama-3.2-1B-Instruct-Q8_0.gguf: log p(' Paris') = -0.327, generation -0.327, off-by-one value -10.586; cache max diff 0.0000
+PASS
+Llama-3.2-1B-Instruct-Q8_0.gguf: log p(' Paris') = -0.352, generation -0.352, off-by-one value -10.713; cache max diff 0.0002
+PASS

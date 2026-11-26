@@ -66,7 +66,7 @@ How to fill it:
 |---|---|---|
 | Dataset and Shard Composition | Monitoring list, section 2.3 (Data A) | Monitoring: no; Data A: no |
 | Eval-Mini Scores Alongside Training Loss | Monitoring list, section 2.4 (Evaluation) | Monitoring: no; Evaluation: no |
-| Training Pace | Monitoring list, sections 2.1 and 2.2 (Architecture, Performance). Architecture sent this sentence: the run does not log context length ([comment on #760](https://github.com/theschoolofai/era-v5-lab/pull/760#issuecomment-7109890552)) | Monitoring: no; Architecture: yes; Performance: no |
+| Training Pace: public as two panels since [#779](https://github.com/theschoolofai/era-v5-lab/pull/779), "Training Pace: Tokens per Second" and "Training Pace: Step Time". Their rows moved to `dashboard_text.md`. If a later run logs one value for each GPU, the sentence needs a change | Monitoring list, sections 2.1 and 2.2 (Architecture, Performance). Architecture sent this sentence: the run does not log context length ([comment on #760](https://github.com/theschoolofai/era-v5-lab/pull/760#issuecomment-7109890552)) | Monitoring: built the two panels in #779, OK on the sentences: no; Architecture: yes; Performance: no; Release: yes ([comment on #779](https://github.com/theschoolofai/era-v5-lab/pull/779#issuecomment-7127285302)) |
 | Open Infrastructure Health | Monitoring list, section 3 | Monitoring: no |
 | What This Shows and What It Doesn't | Monitoring list, section 3 | Monitoring: no; TSAI: no |
 | New glossary terms | `glossary.md` | Monitoring: no |

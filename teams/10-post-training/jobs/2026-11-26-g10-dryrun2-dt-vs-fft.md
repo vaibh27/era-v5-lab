@@ -31,7 +31,7 @@ Test log:        REQUIRED before sending. Offline unit tests pass (`capstone/tes
 
 - `<T5_OUT>` (Team 5): where is the dry run 2 job's `./out/dryrun2-1234` (manifest.json, summary.json) on the job machine, and is its checkpoint.pt kept? Without manifest + summary the weights cannot be bound to the run.
 - `<HELDOUT>`, `<HELDOUT_SOURCES>`, `<TOKENIZER>` (Team 5 / TSAI): the exact `./inputs/heldout_v1.jsonl`, `heldout_v1_sources.jsonl` and `tokenizer_p1536.json` the run used (their hashes are in its manifest; the chain checks them).
-- `<G5>` (TSAI): the lab checkout on the job machine, at a commit that has #717 and #748 (main eef1834d or later, same train_week2.py as the run).
+- `<G5>` (TSAI): the lab checkout on the job machine, at a commit that has #717 and #748 (main eef1834d or later). It must be a full git clone, not a shallow one or a copy: if its Team 5 files differ from the ones recorded in the run folder's manifest, step 0 of the chain finds the commit with exactly those files in this clone and loads Team 5's code from a worktree of it; if that commit is not in the clone the job stops at step 0 and names it.
 - GPU class (TSAI): the same GPU model as the training run, so step 1 compares Team 7's probe bits instead of skipping them.
 - Store (Team 7): `/shared/ckpt` with run id `dryrun2-1234` is read through Team 7's export by store root + run id; we do not call `ckpt.py pin`. Confirm no retention prunes the final step before this job.
 - `<PACK>`, `<POOL>` (TSAI staging): the pinned OCR-2 shards 0-3 and RL data v1, as in dry run 1.

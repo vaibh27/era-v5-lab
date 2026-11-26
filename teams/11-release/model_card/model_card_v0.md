@@ -7,7 +7,12 @@
 The ERA V5 lab of The School of AI (TSAI) builds and trains its own language model. Students of the lab work in
 teams, and each team owns one part of the work. The work is in a public repository, so anyone can follow it.
 
-[text: waiting for Release, what the model is]
+The model is a mixture-of-experts language model. A token is a piece of text that the model reads or predicts, such
+as part of a word or a punctuation mark. The model has many small parts, called experts, and uses only a few of them
+for each token. Each token goes to two of its 16 routed experts, and to one shared expert. The last part of the model
+is the KE2 output head, which scores each token as the next token. KE2 is the lab team that tests its embedding
+method on the lab's tokenizer. Architecture proposes the exact size of the model once the lab knows the real token
+count of its first full corpus. TSAI decides it.
 
 ## Intended use
 
@@ -50,7 +55,17 @@ The readers found these problems:
   at 1% of the tokens of each language.
 - Malayalam and Odia had no second reader, so Data B could not measure their clean share.
 
-[text: waiting for Data B, the problems in the code-adjacent text]
+In the code-adjacent text, the readers found these problems:
+
+- Commit messages are mostly clean. Their main problem is personal data: the e-mail addresses of the people who
+  wrote the commits, in author and sign-off lines. Cleaning replaces these addresses with a placeholder. Long licence
+  headers also repeat in many commits.
+- Many notebooks have text around the code that is not part of the work, such as headers and links, and leftover
+  template text.
+- Every question-and-answer post has format markers left in its text. Some posts also contain HTML tags, carry a
+  thread from another question, or repeat in other posts.
+- Only the commit messages have a gold set, so no cleaning rule was tested on the notebooks and the posts.
+  [text: waiting for TSAI, whether the notebooks and the posts are cleaned before training]
 
 Indian scripts break easily. Data B looked for invisible characters, text in the wrong script, words cut before a vowel
 sign, and lost joiner characters (ZWJ and ZWNJ). In the cleaned training shards, no joiner was lost from the text that
@@ -68,7 +83,9 @@ Text in Indian languages, in their own scripts, is 8% of every training batch.
 
 ## KE2
 
-[text: waiting for KE2]
+The model uses the KE2 output head, the last part of the model, which scores each token as the next token. TSAI
+chose this head on 21 Nov 2026, in place of the dense untied head, the standard output head. Architecture added the
+head to the training code on 24 Nov 2026.
 
 ## Architecture
 
@@ -183,13 +200,14 @@ How to fill it:
 
 | Section | Owner team | Text in this draft | Source | Lead OK |
 |---|---|---|---|---|
-| Overview | Release | who made the model: yes. What the model is: no | `launch/launch_announcement_v0.md` ([#600](https://github.com/theschoolofai/era-v5-lab/pull/600), [#603](https://github.com/theschoolofai/era-v5-lab/pull/603)) | yes (the Release lead wrote this draft) |
-| Training data: the Indian-language and code-adjacent text | Data B | yes, with no edit. The problems in the code-adjacent text: no, Data B adds them later | `teams/02-data-b/model_card/training_data.md` ([#525](https://github.com/theschoolofai/era-v5-lab/pull/525)). Its source table gives the TSAI approval of each number | Data B: yes ([comment on #759](https://github.com/theschoolofai/era-v5-lab/pull/759#issuecomment-7108567909)) |
+| Overview | Release | who made the model: yes. What the model is: yes, from the Gate 2 and Gate 3 updates and the launch announcement. The short forms KE2 and token: yes, from the Gate 3 update and the dashboard glossary. The size sentence describes work that is not done (style rule 6), so TSAI approves its wording in this pull request. Before publishing, it changes to the size that TSAI approves | `launch/launch_announcement_v0.md` ([#600](https://github.com/theschoolofai/era-v5-lab/pull/600), [#603](https://github.com/theschoolofai/era-v5-lab/pull/603), [#753](https://github.com/theschoolofai/era-v5-lab/pull/753)). What the model is: `updates/gate2.md` (first model configuration), `updates/gate3.md` (attention and experts, model layout and size, the output head, short forms), `dashboard/glossary.md` (token) | Release: yes (the Release lead wrote this draft); Architecture: yes, and Architecture sent the sentence on the size ([comment on #791](https://github.com/theschoolofai/era-v5-lab/pull/791#issuecomment-7135447264)) |
+| Training data: the Indian-language and code-adjacent text | Data B | yes, with no edit, and the problems in the code-adjacent text, with no edit. One open point waits for TSAI: whether the notebooks and the posts are cleaned before training | `teams/02-data-b/model_card/training_data.md` ([#525](https://github.com/theschoolofai/era-v5-lab/pull/525); the code-adjacent problems: [#782](https://github.com/theschoolofai/era-v5-lab/pull/782), from the Data B lead). Its source table gives the TSAI approval of each number and the source of each problem | Data B: yes for the first part ([comment on #759](https://github.com/theschoolofai/era-v5-lab/pull/759#issuecomment-7108567909)); the code-adjacent problems: no, waiting for the OK |
 | Training data: the general text and code | Data A | no | waiting for Data A | Data A: no |
 | Licence and attribution | Post-training, Data A, Data B | no | waiting for the Post-training text. Facts so far: `teams/10-post-training/licences/licence_table.md`. MILU is under CC BY 4.0, so this section credits its authors ([comment on #770](https://github.com/theschoolofai/era-v5-lab/pull/770#issuecomment-7123142597)) | no |
-| Evaluation | Evaluation | what Evaluation does: yes, from text that TSAI approved. The benchmarks, the table rows and the check of the training text: yes, from the Evaluation lead, with no edit. The scores: no, TSAI approves each score. Before a score from an early step goes in, check with Evaluation, because early scores can be above a random guess without any learning | the Evaluation line of `launch/launch_announcement_v0.md` ([#753](https://github.com/theschoolofai/era-v5-lab/pull/753)); the Eval-Mini panel text in `dashboard/dashboard_text_new_panels.md` and the format in `dashboard/score_text_format.md` ([#760](https://github.com/theschoolofai/era-v5-lab/pull/760)). Benchmarks and table rows: [comment on #770](https://github.com/theschoolofai/era-v5-lab/pull/770#issuecomment-7123142597). Plan: `teams/09-evaluation/eval_schedule.md` | Evaluation: yes ([comment on #770](https://github.com/theschoolofai/era-v5-lab/pull/770#issuecomment-7121407240)); the Evaluation lead sent the benchmark text |
+| Evaluation | Evaluation | what Evaluation does: yes, from text that TSAI approved. The benchmarks, the table rows and the check of the training text: yes, from the Evaluation lead, with no edit. The scores: no, TSAI approves each score. Before a score from an early step goes in, check with Evaluation, because early scores can be above a random guess without any learning | the Evaluation line of `launch/launch_announcement_v0.md` ([#753](https://github.com/theschoolofai/era-v5-lab/pull/753)); the Eval-Mini panel text in `dashboard/dashboard_text_new_panels.md` and the format in `dashboard/score_text_format.md` ([#760](https://github.com/theschoolofai/era-v5-lab/pull/760)). Benchmarks and table rows: [comment on #770](https://github.com/theschoolofai/era-v5-lab/pull/770#issuecomment-7123142597). Plan: `teams/09-evaluation/eval_schedule.md` | Evaluation: yes ([comment on #770](https://github.com/theschoolofai/era-v5-lab/pull/770#issuecomment-7121407240)); the Evaluation lead sent the benchmark text and confirmed the paste ([comment on #784](https://github.com/theschoolofai/era-v5-lab/pull/784#issuecomment-7129730898)) |
 | Contributors | Release | yes | `launch/launch_announcement_v0.md` ([#600](https://github.com/theschoolofai/era-v5-lab/pull/600), [#603](https://github.com/theschoolofai/era-v5-lab/pull/603)) | yes (the Release lead wrote this draft) |
 | How to find more | Release | yes | the public lab repository | yes (the Release lead wrote this draft) |
+| KE2 | KE2 | the output head: yes, from text that TSAI approved. The dates now have the year, and the text no longer says Gate 3 (style rules 10 and 11). The placeholder on how the lab tested its embedding method is gone: it was wider than the scope in `model_card_outline.md` | `updates/gate3.md` (the output head, short forms; [#701](https://github.com/theschoolofai/era-v5-lab/pull/701)), the KE2 line of `launch/launch_announcement_v0.md` ([#753](https://github.com/theschoolofai/era-v5-lab/pull/753)), the training code: [#717](https://github.com/theschoolofai/era-v5-lab/pull/717), merged 24 Nov | KE2: yes for the text before the date edit ([comment on #791](https://github.com/theschoolofai/era-v5-lab/pull/791#issuecomment-7142627011)); the date edit: no, waiting for the OK |
 | Every other section | the owner team in `model_card_outline.md` | no | waiting for the owner team | no |
 
 - [ ] `check_style.py` gives 0 errors
@@ -197,6 +215,7 @@ How to fill it:
 - [ ] The text names teams only, and no person
 - [ ] Nothing from the internal list in `public_internal.md`
 - [ ] No `waiting for` placeholder left in the text
+- [ ] The size sentence in the Overview gives the size that TSAI approved
 - [ ] A team member commented on this pull request
 - [ ] TSAI approved on: [DD Mon YYYY]
 - [ ] Merged after TSAI approved

@@ -5,13 +5,17 @@ import json
 from pathlib import Path
 import sys
 from tempfile import TemporaryDirectory
+from types import SimpleNamespace
 import unittest
 from unittest.mock import patch
 
+import numpy as np
 import torch
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "harness"))
 from validate_week2_run import main, validate
+from test_week2_model import fixture
+import train_week2
 
 
 class RunEvidenceTests(unittest.TestCase):
@@ -24,7 +28,8 @@ class RunEvidenceTests(unittest.TestCase):
     def write_json(self, name, value):
         (self.run_dir / name).write_text(json.dumps(value), encoding="utf8")
 
-    def write_run(self, *, smoke=False, completed=3, status="COMPLETED", timed_out=False):
+    def write_run(self, *, smoke=False, completed=3, status="COMPLETED", timed_out=False,
+                  extra_identity=None):
         identity = {
             "config": {"run": {"steps": 3}},
             "artifacts": {},
@@ -37,6 +42,7 @@ class RunEvidenceTests(unittest.TestCase):
             "torch": "test",
             "smoke": smoke,
         }
+        identity.update(extra_identity or {})
         self.identity = hashlib.sha256(json.dumps(identity, sort_keys=True).encode()).hexdigest()
         self.write_json("manifest.json", {
             **identity,
@@ -118,16 +124,77 @@ class RunEvidenceTests(unittest.TestCase):
         self.assertIn("completed 3 steps against a budget of 4", errors)
         self.assertIn("checkpoint.pt: missing", errors)
 
-    def test_normalized_tokenizer_identity_from_current_trainer(self):
-        manifest = json.loads((self.run_dir / "manifest.json").read_text(encoding="utf8"))
-        manifest["bpb_policy"] = "original UTF-8 bytes, with p1536 tokenizer normalization"
-        identity = {key: value for key, value in manifest.items() if key not in ("identity_sha256", "status")}
-        digest = hashlib.sha256(json.dumps(identity, sort_keys=True).encode()).hexdigest()
-        manifest["identity_sha256"] = digest
-        self.write_json("manifest.json", manifest)
-        torch.save({"identity_sha256": digest, "step": 3}, self.run_dir / "checkpoint.pt")
-        result = validate(self.run_dir, trusted_checkpoint=True)
-        self.assertTrue(result["quality_ready"], result["errors"])
+    def test_optional_trainer_identity_fields(self):
+        bpb = "original UTF-8 bytes, with p1536 tokenizer normalization"
+        kas = {"codec_fixture_sha256": "d" * 64, "prior": {"mode": "zeros"}}
+        for extra in (
+            {"bpb_policy": bpb},
+            {"consolidate_step_checks": False},
+            {"consolidate_step_checks": True},
+            {"kas_v2": kas},
+            {"bpb_policy": bpb, "consolidate_step_checks": True, "kas_v2": kas},
+        ):
+            with self.subTest(fields=extra):
+                self.write_run(extra_identity=extra)
+                result = validate(self.run_dir, trusted_checkpoint=True)
+                self.assertTrue(result["quality_ready"], result["errors"])
+
+    def test_optional_identity_changes_and_removals_are_rejected(self):
+        self.write_run(extra_identity={
+            "consolidate_step_checks": True,
+            "kas_v2": {"codec_fixture_sha256": "d" * 64, "prior": {"mode": "zeros"}},
+        })
+        original = (self.run_dir / "manifest.json").read_text(encoding="utf8")
+        for field in ("consolidate_step_checks", "kas_v2"):
+            for remove in (False, True):
+                with self.subTest(field=field, remove=remove):
+                    manifest = json.loads(original)
+                    if remove:
+                        del manifest[field]
+                    elif field == "consolidate_step_checks":
+                        manifest[field] = False
+                    else:
+                        manifest[field]["codec_fixture_sha256"] = "e" * 64
+                    self.write_json("manifest.json", manifest)
+                    result = validate(self.run_dir, trusted_checkpoint=True)
+                    self.assertFalse(result["quality_ready"])
+                    self.assertIn(
+                        "manifest.json: identity_sha256 differs from recorded inputs",
+                        result["errors"],
+                    )
+
+    def test_actual_trainer_smoke_has_valid_evidence_but_is_not_quality(self):
+        cfg, byte_rows, _ = fixture()
+        cfg["model"]["ke_max_pos"] = byte_rows.shape[1]
+        artifacts = SimpleNamespace(
+            bytes=byte_rows, lengths=np.ones(len(byte_rows), dtype=np.int16),
+            pos_dim=byte_rows.shape[1], bos_id=0, pad_id=1, normalize_input=False,
+            encode=lambda text: [ord(char) - ord("a") + 2 for char in text],
+            identity=lambda: {},
+        )
+        train, heldout = self.run_dir / "train.jsonl", self.run_dir / "heldout.jsonl"
+        train.write_text('{"text":"aaaa"}\n', encoding="utf8")
+        heldout.write_text('{"text":"bbbb"}\n', encoding="utf8")
+        out = self.run_dir / "native"
+        args = [
+            "train_week2.py", "--config", "fixture.yaml",
+            "--tokenizer", "fixture.json", "--byte-table", "fixture.npz",
+            "--train-data", str(train), "--heldout-data", str(heldout),
+            "--out", str(out), "--smoke", "--smoke-steps", "2",
+            "--smoke-batch-size", "1", "--device", "cpu", "--watchdog-s", "0",
+        ]
+        with (
+            patch.object(sys, "argv", args),
+            patch.object(train_week2, "load_runtime", return_value=cfg),
+            patch.object(train_week2, "Artifacts", return_value=artifacts),
+        ):
+            train_week2.main()
+        result = validate(out, trusted_checkpoint=True)
+        self.assertTrue(result["valid"], result["errors"])
+        self.assertTrue(result["checkpoint_checked"])
+        self.assertEqual(result["classification"], "smoke")
+        self.assertFalse(result["quality_ready"])
+        self.assertEqual(result["verdict"], "FAIL")
 
     def test_manifest_identity_is_recomputed(self):
         manifest = json.loads((self.run_dir / "manifest.json").read_text(encoding="utf8"))
