@@ -1,0 +1,6 @@
+# Lane weights, test set 1 (PLACEHOLDER until the 5 Dec decisions): the non-Indic 92% split equally by lane.
+# Inside a lane, packs share by token count. Relative paths are relative to this file.
+lanes: {code: 1, code-adjacent: 1, english: 1, math: 1, science: 1}
+indic:
+  share: 0.08                        # native Indic, fixed share of every batch (TSAI, 16 Nov)
+  split_csv: ../../../02-data-b/mix/indic_share_v1.csv   # Team 2 v1; rounded column renormalised to 8%
