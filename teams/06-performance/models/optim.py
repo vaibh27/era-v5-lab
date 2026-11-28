@@ -165,8 +165,9 @@ class MuonAdamW(torch.optim.Optimizer):
 
     @staticmethod
     def _muon_step(p, grad, state, group):
-        if not state:
+        if "momentum_buffer" not in state:
             state["momentum_buffer"] = torch.zeros_like(p)
+        if "second_momentum_buffer" not in state:
             rows, cols = p.shape
             state_shape = (rows, 1) if rows >= cols else (1, cols)
             state["second_momentum_buffer"] = torch.zeros(state_shape, device=p.device, dtype=p.dtype)
@@ -219,8 +220,9 @@ class MuonAdamW(torch.optim.Optimizer):
         decay terms are skipped when weight_decay is 0. Same math; rounding differs slightly from the loop."""
         rows, cols = params[0].shape
         for p, state in zip(params, states):
-            if not state:
+            if "momentum_buffer" not in state:
                 state["momentum_buffer"] = torch.zeros_like(p)
+            if "second_momentum_buffer" not in state:
                 state_shape = (rows, 1) if rows >= cols else (1, cols)
                 state["second_momentum_buffer"] = torch.zeros(state_shape, device=p.device, dtype=p.dtype)
         momentum = group["momentum"]
