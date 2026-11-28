@@ -1,0 +1,6 @@
+# Lane weights, test set 2 (PLACEHOLDER, for the share test only): a skewed split of the non-Indic 92%.
+# Inside a lane, packs share by token count. Relative paths are relative to this file.
+lanes: {code: 0.60, code-adjacent: 0.05, english: 0.20, math: 0.10, science: 0.05}
+indic:
+  share: 0.08
+  split_csv: ../../../02-data-b/mix/indic_share_v1.csv

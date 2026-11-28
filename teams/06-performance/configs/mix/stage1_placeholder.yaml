@@ -1,0 +1,28 @@
+# G6 mixture loader, stage 1. PLACEHOLDER values where marked: swap in the real ones when they are given.
+# Relative paths are relative to this file. Read by dataio.mix_loader (MixLoader, contract_factory via G6_MIX_CONFIG).
+seed: 1234
+
+shards:
+  roots: [$G6_SHARD_ROOT]            # PLACEHOLDER: Team 3's shard-v1 release (or synthetic shards for the proofs)
+  split: train
+  tokenizer_sha256: e6b93a93a60520d7b1af2e9242485f443b5596a1e116b8f8798d83bbad25a64b   # p1536
+  eos_id: 130822
+  verify: size                       # size | full (full also hashes every .bin)
+  missing: error                     # error | renormalise (renormalise only for partial sample sets; logged)
+
+stages:                              # one stage; seq_len from config (V4: 4096 x 32; 8k planned)
+  - {from_batch: 0, seq_len: 4096, rows: 32}
+
+total_batches: null                  # set for a real run: init refuses it if the caps allow fewer batches
+
+weights:
+  file: weights_equal.yaml           # PLACEHOLDER until the 5 Dec decisions; weights_skewed.yaml is the second test set
+
+sources_file: ../../../01-data-a/jobs/2026-11-19-first-training/approved_inputs.json   # Team 1: packs[].source
+                                     # a pack in neither this file nor its manifest is its own source (noted in the log)
+
+caps:                                # per source, counted on its most-read pack (Admin, 28 Nov)
+  max_source_passes: 3               # reads in total in this run: "3 repeats" = 3 reads
+  max_dataset_epochs: 4              # pre-training and mid-training together
+  prior_epochs: {}                   # source -> epochs read by earlier phases (mid-training: source_epochs from the
+                                     # last line of pre-training's composition log)
