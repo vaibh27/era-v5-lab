@@ -558,7 +558,14 @@ def rl_step(a, out: Path, init_state, init_sha, deadline_unix, screen_n) -> dict
     if getattr(a, "keep_mask", None):
         res["keep_zero"] = summary.get("keep_zero")
     if getattr(a, "keep_weights_dir", None) and summary.get("status") not in ("NO_GO_MIXED_BAND", "PAUSED_AT_DEADLINE"):
-        res["kept_weights"] = keep_final_weights(a, out, init_state, int(summary["steps"]))
+        a.keep_rl_state = True  # until the weights are saved, main() leaves rl_state: a rerun resumes it and saves again
+        try:
+            res["kept_weights"] = keep_final_weights(a, out, init_state, int(summary["steps"]))
+            a.keep_rl_state = False
+        except Exception as e:  # noqa: BLE001  the step fails, the report is still written
+            why = (f"final weights not saved as a run folder: {type(e).__name__}: {e}; rl_state is kept, "
+                   "rerun the same command to resume it and save again")
+            res.update(ok=False, error=why, keep_weights_error=why)
     if (rl_out / "screen.json").is_file():
         screen = json.loads((rl_out / "screen.json").read_text())
         res["screen_survey"] = screen_survey(screen)
@@ -869,7 +876,7 @@ def main(argv=None) -> int:
             if f.is_file():
                 status = json.loads(f.read_text()).get("status") or "COMPLETE"
                 break
-        if status in ("COMPLETE", "NO_GO_MIXED_BAND", "FIXTURE_SMOKE_NOT_A_RESULT"):
+        if status in ("COMPLETE", "NO_GO_MIXED_BAND", "FIXTURE_SMOKE_NOT_A_RESULT") and not getattr(a, "keep_rl_state", False):
             shutil.rmtree(out / "rl_state", ignore_errors=True)  # a paused run keeps its state: rerun the same command to resume
 
 if __name__ == "__main__":

@@ -2280,7 +2280,7 @@
           "editorType": "sql",
           "format": 0,
           "queryType": "timeseries",
-          "rawSql": "SELECT checked_at AS time, concat(run_id, ' lag') AS series, lag_s AS value FROM eval_lag_checks WHERE run_id IN ($lag_run) AND $__timeFilter(checked_at) ORDER BY checked_at",
+          "rawSql": "SELECT checked_at AS time, concat(run_id, ' lag') AS series, lag_s AS value FROM eval_lag_checks WHERE live = 1 AND run_id IN ($lag_run) AND $__timeFilter(checked_at) ORDER BY checked_at",
           "refId": "A"
         },
         {
@@ -2291,7 +2291,7 @@
           "editorType": "sql",
           "format": 0,
           "queryType": "timeseries",
-          "rawSql": "SELECT checked_at AS time, concat(run_id, ' limit') AS series, threshold_s AS value FROM eval_lag_checks WHERE run_id IN ($lag_run) AND $__timeFilter(checked_at) ORDER BY checked_at",
+          "rawSql": "SELECT checked_at AS time, concat(run_id, ' limit') AS series, threshold_s AS value FROM eval_lag_checks WHERE live = 1 AND run_id IN ($lag_run) AND $__timeFilter(checked_at) ORDER BY checked_at",
           "refId": "B"
         }
       ],
@@ -2339,7 +2339,7 @@
         "type": "grafana-clickhouse-datasource",
         "uid": "${ds}"
       },
-      "description": "Seconds since the lag alarm last checked these runs. It writes a row every poll (60 s) only while a run trains, so during training a number that keeps growing, or 'no check yet', means the alarm is not running. Red after 300 s (5 polls). After a run ends the number grows by design.",
+      "description": "Alarm: seconds since the lag alarm last checked these runs. It writes a row every poll (60 s) for every run, training or not, so a number that keeps growing, or 'no check yet', means the alarm is not running. Training data: seconds since watch_jsonl.py loaded the newest batch of these runs, as the alarm last saw it. A growing number while the alarm still checks means the run, or its watch_jsonl.py, stopped: while watch_jsonl.py is down the alarm cannot see the lag. Red after 300 s (5 polls). After a run ends the training data number grows by design.",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -2361,7 +2361,32 @@
           },
           "unit": "s"
         },
-        "overrides": []
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byFrameRefID",
+              "options": "A"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "alarm"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byFrameRefID",
+              "options": "B"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "training data"
+              }
+            ]
+          }
+        ]
       },
       "gridPos": {
         "h": 8,
@@ -2380,7 +2405,7 @@
           "fields": "",
           "values": false
         },
-        "textMode": "value"
+        "textMode": "value_and_name"
       },
       "targets": [
         {
@@ -2393,9 +2418,20 @@
           "queryType": "table",
           "rawSql": "SELECT dateDiff('second', max(checked_at), now64(3)) AS value FROM eval_lag_checks WHERE run_id IN ($lag_run) HAVING count() > 0",
           "refId": "A"
+        },
+        {
+          "datasource": {
+            "type": "grafana-clickhouse-datasource",
+            "uid": "${ds}"
+          },
+          "editorType": "sql",
+          "format": 1,
+          "queryType": "table",
+          "rawSql": "SELECT dateDiff('second', max(train_seen_at), now64(3)) AS value FROM eval_lag_checks WHERE run_id IN ($lag_run) HAVING count() > 0",
+          "refId": "B"
         }
       ],
-      "title": "Lag alarm: seconds since last check",
+      "title": "Lag alarm: seconds since last check and newest batch",
       "type": "stat"
     },
     {

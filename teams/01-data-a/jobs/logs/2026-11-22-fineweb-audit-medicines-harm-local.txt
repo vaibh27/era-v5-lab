@@ -1,0 +1,11 @@
+note: no SIGALRM on this platform; a rule call over --timeout 5s ends the whole test (exit code 1) instead of being reported for one document. Add --debug to see which document it was.
+pack: en-fineweb-edu.parquet   gold: en-fineweb-edu_gold.csv (158 documents)   rules: 4
+rules file: en-fineweb-edu-audit-Deepjyoti_Saha.md   code sha256: d53913b8137f20714e6d1cbf9f6e9e4f672d89206863a630e4f522a4af7ebcf0
+limit: 1 document changed or dropped (max(1, 1% of 158))
+rule               changed dropped  percent  result
+DA-C1-015                0       0    0.00%  PASS
+DA-C3-009                0       0    0.00%  PASS
+DA-C5-008                0       0    0.00%  PASS
+DA-F1-010                0       0    0.00%  PASS
+ALL IN ORDER             0       0    0.00%  PASS
+result: PASS

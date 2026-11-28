@@ -1,0 +1,11 @@
+doc_id,read,verdict,diseases,evidence,hex,note
+5716019c1d54b86c,full,,C3,,,"No matching doc_id (dropped by clean, DA-C3-003). Drop looks wrong: railway-track manual text (switches and frogs) cut off at the end ('That'); trim the last partial sentence instead of dropping 2.3k chars of good text"
+14b97eccfa4af1cd,full,,C5,,,"No matching doc_id (dropped by clean, DA-C3-003). Drop looks right: a list of clickbait link titles"
+877b806f626e1edb,full,clean,,,,Mojibake apostrophes repaired by DA-A3-002; looks right
+a2202508fb45a88e,full,,C5,,,"No matching doc_id (dropped by clean, DA-C3-003). Drop looks right: a list of search-style link titles"
+2fee6f5ca1c102bf,full,,C3;C5,,,"No matching doc_id (dropped by clean, DA-C3-003). Drop looks right: dictionary teaser snippets, the last one cut off with '[…]'"
+ffe9a2072a43aa0e,full,fix,,,,"DA-C2-003 removed 2 of the 3 'Geology and landforms' section headings in a multi-unit wilderness proposal; the later sections lost their headings; minor: only the two subheadings (42 chars) were lost, all text is kept"
+312941c93050131c,full,,C3,,,"No matching doc_id (dropped by clean, DA-C3-003). Drop acceptable: quiz questions with no answers; the blank in 'made up of______' read as a dangling word; low value either way"
+97cc11bc7799273a,full,fix,D3,,,"Bilingual UPSC answer page: the Hindi question lines were removed by DA-D3-003 (fine), but DA-C2-003 also removed 2 of the 3 'Demand of the question:' headings, so the later answers lost their header"
+a9962509b3f11f6f,full,clean,,,,Stray </P> tags removed by DA-B2-002; looks right
+5fbc8b949d34abb0,full,fix,,,,DA-F1-005 masked two runs of years (like '1933 1934 1935') as <PHONE>

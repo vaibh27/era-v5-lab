@@ -1,0 +1,7 @@
+doc_id,read,verdict,diseases,evidence,hex,note
+c31993065f746189,full,fix,C1,,,CC licence line at L1; '(Continued on next page)' L103
+079ce87c3d323ea7,full,fix,A1;C1,,,"5 soft hyphens U+00AD ('cola­ boradores' L274); running footer 'Rev Panam Salud Publica' L165-167, L195-197; CC licence para L34"
+f5332b3e8dc5894a,full,drop,C1,,,"Catering menu: all-caps item lists L23-100, only L13-19 is prose"
+c52dd9e603defa7d,full,fix,C1,,,Repository cover L1-25 ('Download date: 21. apr.. 2021'); stray header L27; page marker '1 3' L199; licence and Publisher's Note L184/L216
+335a56d0e87a73a9,full,fix,C2,,,"Same wine note repeated 3 times (L1-3, L5-6, L9-10), third copy has no heading (L8 blank); keep one copy, remove the others"
+29c7e818ebe025b0,full,drop,D1,,,Japanese (1914 diplomatic telegrams) labelled en

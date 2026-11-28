@@ -10,6 +10,9 @@ the evidence supports serving **Q8_0, not Q4_K_M**.
 **gemma-2-2b (base) loses less at Q4_K_M:** MMLU −1.46 (p < 0.001, so it still fails the proposal's p < 0.01 rule),
 no Indic task significant at p < 0.01, Q8_0 within ±0.8 points of bf16 on all 12 tasks (section 7).
 
+**sarvam-1 at Q6_K and Q5_K_M (section 10):** Q6_K passes the proposal (MMLU −0.01, no task at p < 0.01). Q5_K_M
+fails on MMLU by the p < 0.01 rule (−0.70, p 0.002), a quarter of Q4_K_M's loss, and passes every Indic task.
+
 Scope and sample sizes: [`../../docs/wide_benchmark_scope.md`](../../docs/wide_benchmark_scope.md). Approved job
 requests: [`../../jobs/2026-11-22-wide-bench-sarvam1.md`](../../jobs/2026-11-22-wide-bench-sarvam1.md),
 [`../../jobs/2026-11-22-wide-bench-granite30-3b.md`](../../jobs/2026-11-22-wide-bench-granite30-3b.md). The runs were
@@ -145,6 +148,14 @@ truncated. English tasks only: Granite 3.0 is not trained on Indic languages. Fu
 - **ARC-C does not move** at either format. With 1,172 items it cannot rule out a drop of about 2 points.
 - **The guard margin on this MoE held:** prefix-cache diff 0.0434 (bf16), 0.0097 (Q8_0), 0.0424 (Q4_K_M), all under
   0.05, as the lab asked us to watch. Q3_K_M was left out of this run (sarvam-1 Q3_K_M failed the same check, section 4).
+- **Q6_K and Q5_K_M (26 Nov): not scored, guard test.** Run with `../eval_wide.ipynb` on Kaggle 2 × T4 (MMLU and ARC-C,
+  no cap), as assigned by the Team 12 lead. Checks 1 and 2 pass for both, so the shifted-logprob bug is not back.
+  - **Q6_K fails check 3:** the prefix cache moves a score by **0.0784** nats (limit 0.05), above bf16's 0.0434 and
+    Q4_K_M's 0.0424, so the margin above does not hold at Q6_K. It also fails check 4: the easy item's right answer
+    scores −1.60 and a wrong one −1.53.
+  - **Q5_K_M passes check 3 just under the limit (0.0498)** and fails check 4: right answer −1.84, a wrong one −1.84 at two
+    decimals, and the wrong one is higher.
+  - The guard was not loosened (as in section 4). Logs: `raw/granite-3.0-3b-a800m/logs/`.
 
 ## 7. gemma-2-2b (base)
 
@@ -192,15 +203,52 @@ p < 0.01.
 - **MILU is again only a control:** gemma-2-2b scores 29.5 to 30.5% at bf16. Q4_K_M's Telugu drop (p 0.042) is the
   only one under 0.05.
 
+### gemma-2-2b at Q6_K and Q5_K_M (26 Nov)
+
+Assigned by the Team 12 lead on 26 Nov. Same model and revision, runner (`66f9de0b…`), guard prompt
+(`EVAL_GUARD_CONTEXT`), `CAP = 2500`, `n_ctx` 4,096, seed 42 and Kaggle 2 × Tesla T4 as the rows above; output layer
+(the tied token embedding) Q8_0; nothing truncated. Run on a member's own Kaggle quota with `../eval_wide.ipynb`.
+
+| | Q6_K | Q5_K_M |
+|---|---:|---:|
+| GGUF size | 2.29 GB | 2.07 GB |
+| Guard test: log p(' Paris'), prefix-cache diff | PASS, −0.420, 0.0000 | PASS, −0.437, 0.0000 |
+| Scoring time, all 12 tasks | 3.2 h | 3.2 h |
+
+| Task | Items | bf16 | Q8_0 | Q6_K | Q5_K_M | Q4_K_M | Q6_K against bf16 | p | Q5_K_M against bf16 | p |
+|---|---:|---:|---:|---:|---:|---:|---|---:|---|---:|
+| MMLU | 14,042 | 49.57 | 49.58 | 49.46 | 49.66 | 48.11 | −0.11 (−0.40 to +0.18) | 0.472 | +0.09 (−0.29 to +0.46) | 0.682 |
+| ARC-C | 1,172 | 49.57 | 49.74 | 50.34 | 49.06 | 48.38 | +0.77 (+0.04 to +1.50) | 0.064 | −0.51 (−1.49 to +0.46) | 0.392 |
+| Belebele Kannada | 900 | 40.89 | 41.22 | 40.33 | 39.22 | 38.56 | −0.56 (−1.69 to +0.58) | 0.442 | −1.67 (−3.52 to +0.19) | 0.101 |
+| Belebele Hindi | 900 | 48.89 | 49.00 | 48.89 | 48.44 | 49.56 | +0.00 (−1.19 to +1.19) | 1.000 | −0.44 (−1.95 to +1.06) | 0.665 |
+| Belebele Telugu | 900 | 38.78 | 38.78 | 38.67 | 38.11 | 38.56 | −0.11 (−1.28 to +1.06) | 1.000 | −0.67 (−2.44 to +1.10) | 0.539 |
+| Belebele Tamil | 900 | 45.44 | 45.11 | 45.78 | 44.44 | 44.33 | +0.33 (−0.80 to +1.46) | 0.701 | −1.00 (−2.67 to +0.67) | 0.298 |
+| Belebele Bengali | 900 | 46.89 | 46.11 | 47.33 | 45.44 | 44.89 | +0.44 (−0.93 to +1.82) | 0.636 | −1.44 (−3.35 to +0.46) | 0.171 |
+| MILU Kannada (control) | 2,500 | 29.52 | 29.80 | 29.24 | 30.28 | 29.28 | −0.28 (−1.10 to +0.54) | 0.566 | +0.76 (−0.30 to +1.82) | 0.183 |
+| MILU Hindi (control) | 2,500 | 30.48 | 30.28 | 30.60 | 30.92 | 30.24 | +0.12 (−0.63 to +0.87) | 0.834 | +0.44 (−0.54 to +1.42) | 0.425 |
+| MILU Telugu (control) | 2,500 | 29.48 | 29.60 | 29.60 | 28.80 | 28.04 | +0.12 (−0.73 to +0.97) | 0.853 | −0.68 (−1.73 to +0.37) | 0.234 |
+| MILU Tamil (control) | 2,500 | 30.04 | 29.84 | 29.84 | 29.44 | 28.84 | −0.20 (−1.00 to +0.60) | 0.694 | −0.60 (−1.62 to +0.42) | 0.284 |
+| MILU Bengali (control) | 2,500 | 30.16 | 30.48 | 30.88 | 29.84 | 29.96 | +0.72 (−0.10 to +1.54) | 0.105 | −0.32 (−1.35 to +0.71) | 0.594 |
+
+- **Both pass the proposal:** no task is under p 0.01 at either format, and no drop comes near a limit. MMLU moves
+  −0.11 (Q6_K) and +0.09 (Q5_K_M), against Q4_K_M's −1.46.
+- **Q5_K_M passes on gemma-2-2b.** Its largest drop is Belebele Kannada −1.67 (p 0.101); the lowest p at either format
+  is Q6_K's ARC-C gain (+0.77, p 0.064).
+- Q6_K is 82% and Q5_K_M 74% of Q8_0's size (2.29 and 2.07 against 2.78 GB). Logs: `raw/gemma-2-2b/logs/`.
+
 ## 8. All three models together
 
 | Model | Format | MMLU against bf16 | Indic (Belebele, 5 languages) | Under the proposal |
 |---|---|---|---|---|
 | sarvam-1 (dense, Indic) | Q8_0 | −0.24, p 0.19 | −1.22 to +0.00, all p ≥ 0.07 | pass |
+| sarvam-1 | Q6_K | −0.01, p 1.00 | −1.78 to −0.11, all p ≥ 0.029 | pass |
+| sarvam-1 | Q5_K_M | −0.70, p 0.002 | −1.89 to +0.89, all p ≥ 0.057 | fail (MMLU) |
 | sarvam-1 | Q4_K_M | −2.94, p < 0.001 | −4.00 to −7.56, all p ≤ 0.002 | fail |
 | Granite 3.0 3B-A800M (MoE, English) | Q8_0 | −0.04, p 0.84 | not run | pass |
 | Granite 3.0 3B-A800M | Q4_K_M | −2.31, p < 0.001 | not run | fail |
 | gemma-2-2b (dense, multilingual) | Q8_0 | +0.01, p 1.00 | −0.78 to +0.33, all p ≥ 0.28 | pass |
+| gemma-2-2b | Q6_K | −0.11, p 0.47 | −0.56 to +0.44, all p ≥ 0.44 | pass |
+| gemma-2-2b | Q5_K_M | +0.09, p 0.68 | −1.67 to −0.44, all p ≥ 0.10 | pass |
 | gemma-2-2b | Q4_K_M | −1.46, p < 0.001 | −2.33 to +0.67, all p ≥ 0.099 | fail (MMLU) |
 
 On all three models Q4_K_M's MMLU loss is real once the benchmark has enough items, and Q8_0's is not measurable. On
@@ -213,8 +261,64 @@ drop significantly.
 |---|---|
 | `raw/<model>/<format>/<task>.samples.jsonl` | per-item results (task, doc_id, filter, metric) |
 | `raw/<model>/<format>/summary*.json` | run metadata and one record per task (sarvam-1 Q4_K_M: one file per run) |
+| `raw/sarvam-1/logs/` | guard-test and quantize logs of the sarvam-1 Q6_K / Q5_K_M run (section 10) |
 | [`paired_sarvam-1.md`](paired_sarvam-1.md), [`paired_granite-3.0-3b-a800m.md`](paired_granite-3.0-3b-a800m.md), [`paired_gemma-2-2b.md`](paired_gemma-2-2b.md) | the paired tables, written by `../paired.py` |
 
 Rebuild a paired table, from this folder: `python ../paired.py raw/sarvam-1 --base bf16 --out paired_sarvam-1.md`
 (Granite: `raw/granite-3.0-3b-a800m`; gemma-2-2b: `raw/gemma-2-2b`). Rerun a format: `../eval_wide.ipynb` on Kaggle, `CAP = 2500`, the model and revision above, and `TASKS` for
 a subset.
+
+## 10. sarvam-1: Q6_K and Q5_K_M (26 Nov)
+
+Assigned by the Team 12 lead on 26 Nov. Same model and revision, llama.cpp b11669 GGUF files (output layer Q8_0),
+llama-cpp-python 0.3.36 in-process on Kaggle 2 × Tesla T4, `n_ctx` 4,096 (no request truncated), seed 42,
+`CAP = 2500`, runner `run_wide_gguf.py` `66f9de0b…` (as Q8_0; bf16's MMLU, ARC-C and MILU were scored by `46190a8a…`,
+which scores them the same way, section 5). Run on a member's own Kaggle quota with `../eval_wide.ipynb`. Accuracy
+in %; the other columns are from section 1.
+
+| Task | Items | Shots | bf16 | Q8_0 | Q6_K | Q5_K_M | Q4_K_M |
+|---|---:|---:|---:|---:|---:|---:|---:|
+| MMLU | 14,042 | 0 | 48.89 | 48.65 | 48.88 | 48.19 | 45.95 |
+| ARC-C | 1,172 | 0 | 51.11 | 50.26 | 51.45 | 50.34 | 49.74 |
+| Belebele Kannada | 900 | 5 | 57.67 | 57.11 | 57.56 | 56.67 | 50.11 |
+| Belebele Hindi | 900 | 5 | 59.22 | 58.89 | 58.56 | 57.33 | 54.56 |
+| Belebele Telugu | 900 | 5 | 52.22 | 52.22 | 51.67 | 53.11 | 47.22 |
+| Belebele Tamil | 900 | 5 | 56.11 | 56.11 | 55.78 | 55.44 | 51.89 |
+| Belebele Bengali | 900 | 5 | 51.22 | 50.00 | 49.44 | 49.67 | 47.22 |
+| MILU Kannada (control) | 2,500 | 5 | 27.96 | 28.00 | 28.48 | 27.16 | 27.44 |
+| MILU Hindi (control) | 2,500 | 5 | 29.96 | 29.68 | 29.76 | 29.56 | 28.96 |
+| MILU Telugu (control) | 2,500 | 5 | 28.92 | 28.44 | 27.88 | 27.72 | 26.88 |
+| MILU Tamil (control) | 2,500 | 5 | 29.24 | 29.44 | 28.76 | 29.00 | 27.08 |
+| MILU Bengali (control) | 2,500 | 5 | 28.52 | 28.32 | 28.84 | 27.92 | 27.44 |
+
+| | Q6_K | Q5_K_M |
+|---|---:|---:|
+| GGUF size | 2.11 GB | 1.84 GB |
+| Guard test (`test_llamacpp_lm.py`), prefix-cache diff | PASS, 0.0232 | PASS, 0.0347 |
+| Scoring time, all 12 tasks | 1.5 h | 1.4 h |
+
+Against bf16 on the same items (statistics as in section 2; full table in [`paired_sarvam-1.md`](paired_sarvam-1.md)).
+**Bold**: p < 0.01.
+
+| Task | Q6_K | p | Q5_K_M | p |
+|---|---|---:|---|---:|
+| MMLU | −0.01 (−0.38 to +0.36) | 1.000 | **−0.70** (−1.14 to −0.25) | 0.002 |
+| ARC-C | +0.34 (−0.69 to +1.37) | 0.627 | −0.77 (−1.96 to +0.43) | 0.262 |
+| Belebele Kannada | −0.11 (−1.40 to +1.18) | 1.000 | −1.00 (−2.98 to +0.98) | 0.380 |
+| Belebele Hindi | −0.67 (−1.86 to +0.53) | 0.362 | −1.89 (−3.72 to −0.06) | 0.057 |
+| Belebele Telugu | −0.56 (−1.92 to +0.80) | 0.522 | +0.89 (−1.08 to +2.86) | 0.440 |
+| Belebele Tamil | −0.33 (−1.62 to +0.95) | 0.736 | −0.67 (−2.61 to +1.28) | 0.576 |
+| Belebele Bengali | −1.78 (−3.28 to −0.27) | 0.029 | −1.56 (−3.35 to +0.24) | 0.114 |
+| MILU Kannada (control) | +0.52 (−0.24 to +1.28) | 0.213 | −0.80 (−1.75 to +0.15) | 0.118 |
+| MILU Hindi (control) | −0.20 (−1.03 to +0.63) | 0.704 | −0.40 (−1.31 to +0.51) | 0.440 |
+| MILU Telugu (control) | −1.04 (−1.85 to −0.23) | 0.015 | −1.20 (−2.22 to −0.18) | 0.026 |
+| MILU Tamil (control) | −0.48 (−1.32 to +0.36) | 0.307 | −0.24 (−1.25 to +0.77) | 0.698 |
+| MILU Bengali (control) | +0.32 (−0.49 to +1.13) | 0.501 | −0.60 (−1.56 to +0.36) | 0.255 |
+
+- **Q6_K passes the proposal.** MMLU does not move (−0.01, p 1.000). Two tasks are under 0.05 and none under 0.01:
+  Belebele Bengali −1.78 (p 0.029; Q8_0 also loses 1.22 there, p 0.071) and MILU Telugu −1.04 (p 0.015).
+- **Q5_K_M fails on MMLU by the p < 0.01 rule:** −0.70 (−1.14 to −0.25), p 0.002, well inside the −3 point limit and
+  a quarter of Q4_K_M's −2.94. Every other task has p ≥ 0.026, so it passes the Indic tasks.
+- On MMLU the loss grows Q8_0 −0.24, Q6_K −0.01, Q5_K_M −0.70, Q4_K_M −2.94; on the five Belebele languages the
+  worst drop is Q8_0 −1.22, Q6_K −1.78, Q5_K_M −1.89, Q4_K_M −7.56. Q6_K is 78% of Q8_0's size (2.11 against 2.69 GB).
+- One model and one seed, as in section 3.

@@ -36,15 +36,15 @@
 
 - id: ta_appalam_sub
   author: ranjani-cse
-  team2_reviewer: ""
-  eligibility: eval
+  team2_reviewer: "truesrini"
+  eligibility: train
   language: ta
   script: Taml
   answer_type: integer
   difficulty: easy
   prompt: |
-    ஒரு கடையில் {a} அப்பளங்கள் இருந்தன. வாடிக்கையாளர் {b} அப்பளங்களை வாங்கினார்.
-    மீதம் எத்தனை அப்பளங்கள் உள்ளன? உங்கள் இறுதி விடையை <answer>எண்</answer> வடிவில் மட்டும் எழுதுங்கள்.
+    ஒரு கடையில் {a} அப்பளங்கள் இருந்தன. ஒரு வாடிக்கையாளர் {b} அப்பளங்களை வாங்கினார்.
+    கடையில் இப்பொழுது மீதம் எத்தனை அப்பளங்கள் உள்ளன? உங்கள் இறுதி விடையை இலக்கங்களில் மட்டும் <answer>எண்</answer> வடிவில் எழுதுங்கள்.
   params:
     a: {int: [20, 90]}
     b: {int: [1, 19]}
@@ -54,15 +54,15 @@
 
 - id: ta_pen_mult
   author: ranjani-cse
-  team2_reviewer: ""
-  eligibility: eval
+  team2_reviewer: "truesrini"
+  eligibility: train
   language: ta
   script: Taml
   answer_type: integer
   difficulty: easy
   prompt: |
-    ஒரு பேனாவின் விலை {a} ரூபாய். {b} பேனாக்களை வாங்கினால் மொத்த விலை எவ்வளவு?
-    உங்கள் இறுதி விடையை <answer>எண்</answer> வடிவில் மட்டும் எழுதுங்கள்.
+    ஒரு பேனாவின் விலை {a} ரூபாய். ஒருவர் {b} பேனாக்களை வாங்கினால், அவர் மொத்தம் எத்தனை ரூபாய் கொடுக்க வேண்டும்?
+    உங்கள் இறுதி விடையை இலக்கங்களில் மட்டும் <answer>எண்</answer> வடிவில் எழுதுங்கள்.
   params:
     a: {int: [10, 40]}
     b: {int: [3, 9]}
@@ -71,8 +71,8 @@
 
 - id: hi_f1_left                     # F1: one subtraction
   author: gmrammohan15
-  team2_reviewer: ""
-  eligibility: eval
+  team2_reviewer: riteshverma
+  eligibility: train
   language: hi
   script: Deva
   answer_type: integer
@@ -90,14 +90,14 @@
 
 - id: hi_f1_change                   # F1/F6: two steps with rupees (buy, then change from a note)
   author: gmrammohan15
-  team2_reviewer: ""
-  eligibility: eval
+  team2_reviewer: "riteshverma"
+  eligibility: train
   language: hi
   script: Deva
   answer_type: integer
   difficulty: medium
   prompt: |
-    {person} ने {x} वस्तुएं खरीदीं प्रति वस्तु {p} रुपये में। उसने {note} रुपये का नोट दिया। उसे कितने रुपये बचे?
+    {person} ने {p} रुपये प्रति वस्तु के भाव से {x} वस्तुएँ खरीदीं। उसने {note} रुपये का नोट दिया। उसे कितने रुपये वापस मिलेंगे?
     अंतिम उत्तर लिखिए, <answer>संख्या</answer> में
   params:
     x: {int: [2, 9]}
@@ -112,14 +112,14 @@
 
 - id: hi_f6_minutes                  # F6: hours and minutes to minutes
   author: gmrammohan15
-  team2_reviewer: ""
-  eligibility: eval
+  team2_reviewer: "riteshverma"
+  eligibility: train
   language: hi
   script: Deva
   answer_type: integer
   difficulty: easy
   prompt: |
-    राम ने {h} घंटा {m} मिनट का ट्रेन यात्रा की। उसकी यात्रा कितने मिनट की थी?
+    राम ने {h} घंटे {m} मिनट की ट्रेन यात्रा की। उसकी यात्रा कितने मिनट की थी?
     अंतिम उत्तर लिखिए, <answer>संख्या</answer> में
   params:
     h: {int: [1, 6]}
@@ -129,15 +129,15 @@
 
 - id: hi_f3_weekday                  # F3: weekday n days from today (text answer)
   author: gmrammohan15
-  team2_reviewer: ""
-  eligibility: eval
+  team2_reviewer: "riteshverma"
+  eligibility: train
   language: hi
   script: Deva
   answer_type: text
   difficulty: easy
   prompt: |
-    राम को आज के दिन का नाम ({today}) दिया गया है। उसे आज से {n} दिन बाद का दिन कौनसा सप्ताह का दिन होगा?
-    केवल दिन का नाम ही लिखिए, <answer>दिन का नाम</answer>
+    आज {today} है। आज से {n} दिन बाद कौन-सा दिन होगा?
+    केवल दिन का नाम लिखिए, <answer>दिन का नाम</answer> में
   params:
     start: {int: [0, 6]}
     n: {int: [2, 45]}

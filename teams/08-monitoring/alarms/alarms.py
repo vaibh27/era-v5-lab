@@ -16,6 +16,11 @@ using the rules from Session 15:
 Usage:
   python -I alarms.py --synthetic 3000
   python -I alarms.py --jsonl path/to/metrics.jsonl
+  python -I alarms.py --jsonl path/to/metrics.jsonl --moe-patience 10 --bound gpu_alloc_gib::40
+
+--moe-patience and --bound apply only with --jsonl. Omitting them leaves
+moe_patience at 1,000 and static_bound off. --bound is name:lo:hi; an empty
+side is open, and the flag may be repeated once per metric.
 """
 from collections import deque
 import argparse, json, math, random, sys
@@ -522,15 +527,72 @@ def run_synthetic(steps=3000, seed=15):
     }
 
 
+def parse_bound(spec):
+    """Parse one --bound value `name:lo:hi`. An empty side is open (None)."""
+    parts = spec.split(":")
+    if len(parts) != 3 or parts[0] == "":
+        raise argparse.ArgumentTypeError(
+            f"--bound {spec!r} must be name:lo:hi, with an empty side left open")
+    name, lo_s, hi_s = parts
+
+    def side(raw):
+        if raw == "":
+            return None
+        try:
+            value = float(raw)
+        except ValueError:
+            raise argparse.ArgumentTypeError(
+                f"--bound {spec!r} has a non-numeric side {raw!r}") from None
+        if not math.isfinite(value):
+            raise argparse.ArgumentTypeError(
+                f"--bound {spec!r} has a non-finite side {raw!r}")
+        return value
+
+    lo, hi = side(lo_s), side(hi_s)
+    if lo is None and hi is None:
+        raise argparse.ArgumentTypeError(f"--bound {spec!r} needs at least one side")
+    if lo is not None and hi is not None and lo > hi:
+        raise argparse.ArgumentTypeError(f"--bound {spec!r} has lo {lo} above hi {hi}")
+    return name, (lo, hi)
+
+
+def _moe_patience_arg(raw):
+    try:
+        n = int(raw)
+    except ValueError:
+        raise argparse.ArgumentTypeError(
+            f"--moe-patience must be an integer >= 1, got {raw!r}") from None
+    if n < 1:
+        raise argparse.ArgumentTypeError(f"--moe-patience must be an integer >= 1, got {n}")
+    return n
+
+
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--synthetic", type=int, nargs="?", const=3000,
                     help="run on N synthetic steps (default 3,000) and verify planted faults")
     ap.add_argument("--jsonl", help="run AlarmMonitor on a metrics.jsonl file")
+    ap.add_argument("--moe-patience", type=_moe_patience_arg, default=None,
+                    help="consecutive bad expert_load steps before moe_routing on --jsonl (default 1,000)")
+    ap.add_argument("--bound", action="append", type=parse_bound, default=None, metavar="NAME:LO:HI",
+                    help="static bound for one metric on --jsonl; an empty side is open; repeat once per metric")
     a = ap.parse_args()
 
+    if not a.jsonl and (a.moe_patience is not None or a.bound):
+        ap.error("--bound and --moe-patience apply only with --jsonl")
+
     if a.jsonl:
-        mon = AlarmMonitor()
+        bounds = {}
+        for name, pair in a.bound or []:
+            if name in bounds:
+                ap.error(f"--bound metric {name!r} given twice")
+            bounds[name] = pair
+        kwargs = {}
+        if a.moe_patience is not None:
+            kwargs["moe_patience"] = a.moe_patience
+        if bounds:
+            kwargs["bounds"] = bounds
+        mon = AlarmMonitor(**kwargs)
         total, count = 0, 0
         for line in open(a.jsonl, encoding="utf-8"):
             if not line.strip():

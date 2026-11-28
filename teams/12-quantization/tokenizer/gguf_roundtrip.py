@@ -185,10 +185,15 @@ def make_tiny_model(tok_json: Path, out: Path, bos: str, eos: str) -> int:
 
 
 def convert(llama_cpp: Path, model_dir: Path, pre: str, outfile: Path, outtype: str = "f16", python=None):
-    """Run llama.cpp's converter in a child process (`python`, default this one) with get_vocab_base_pre forced to `pre`."""
+    """Run llama.cpp's converter in a child process (`python`, default this one) with get_vocab_base_pre forced to `pre`.
+    An Ernie4_5_MoeForCausalLM folder (export_hf.py --target ernie4_5_moe) also gets the BPE vocabulary step: the
+    converter's ERNIE class reads only SentencePiece, and the frozen tokenizer is a BPE tokenizer.json. Other
+    architectures are unchanged."""
     code = ("import sys, runpy; L = sys.argv[1]; sys.path[:0] = [L, L + '/gguf-py']\n"
             "import conversion.base as b; pre = sys.argv[2]\n"
             "b.TextModel.get_vocab_base_pre = lambda self, tokenizer: pre\n"
+            "try:\n    import conversion.ernie as e\nexcept ImportError:\n    e = None\n"
+            "if e is not None:\n    e.Ernie4_5Model.set_vocab = b.TextModel._set_vocab_gpt2\n"
             "sys.argv = [L + '/convert_hf_to_gguf.py'] + sys.argv[3:]\n"
             "runpy.run_path(sys.argv[0], run_name='__main__')")
     r = subprocess.run([str(python or sys.executable), "-c", code, str(llama_cpp), pre, str(model_dir),

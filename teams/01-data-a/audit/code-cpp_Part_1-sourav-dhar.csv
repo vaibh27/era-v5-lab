@@ -1,0 +1,26 @@
+doc_id,read,verdict,diseases,evidence,hex,note
+bc68caf67a793b60,full,clean,,,,filename line removed; StarCoder name placeholder replaced; code unchanged
+6b62f72553395907,full,clean,,,,"Qt LGPL/GPL licence header (38 lines) removed correctly by DA-E4-010"
+d4cfeb3895114793,full,clean,,,,header removed correctly
+1489ff1ec9752563,full,clean,,,,header removed correctly
+8ccfc55ea93cfad6,full,clean,,,,header removed correctly
+6ea924d13a56dee2,full,clean,,,,"header removed correctly; the source itself is unfinished (one line does not compile), not a cleaning issue"
+7025f4ccbf5b3967,full,clean,,,,header removed correctly
+d30759909ad18890,full,clean,,,,"BSD licence header removed correctly"
+8b809556924c3ebc,full,clean,,,,header removed correctly
+bbedf0d42656ea06,full,clean,,,,"header removed; name placeholder replaced; the 2-line copyright/BSD note in the file's doc comment stays, as DA-E4-010 intends (5+ line licence blocks only)"
+ed04d3888710f8f6,full,clean,,,,header removed correctly
+237f370b9566c911,full,clean,,,,"header and Apache licence header removed correctly"
+1bef216c1ecf3d79,full,clean,,,,header removed correctly
+ac4c41e55330239e,full,clean,,,,"header removed; its Chinese path text went with it; code unchanged"
+44f16636926a09fe,full,clean,,,,header removed correctly
+01756bd5d11d9883,full,clean,,,,"Apache licence header removed correctly"
+bfb4e3b5db49c1ff,full,fix,E4,,,"15-line Apache licence block kept: a one-line Emacs modeline comment comes first and DA-E4-010 only tests that first comment; same result with main's spec_v1_1 rule"
+a1f2584776fdb86e,full,clean,,,,"name placeholder replaced; institute name (an organisation) kept"
+579eed50abc89e4a,partial,fix,E5,,,"header and BOM removed correctly; 5 Japanese comment lines (2 blocks) are mojibake from the source: EUC-JP text read as GBK; encoding them back as GBK and decoding as EUC-JP restores the Japanese exactly, but the code rules have no E5 medicine; the rest is real code incl. lookup tables (9.6% of the file, just under DA-E2-001's 10% drop bar); 1134 lines, about 650 read"
+7c3532018f56493e,full,clean,,,,"header removed; CRLF line endings normalised to LF"
+e9922dff328dcff6,full,clean,,,,"name placeholders replaced; one-line Boost licence note stays, as DA-E4-010 intends"
+fd21046d82410dae,full,clean,,,,"Apache licence header removed correctly"
+3cbb0492fcf87cbd,full,clean,,,,header removed correctly
+4545922f9d37bf4d,full,clean,,,,"ASF header (""Licensed to the Apache Software Foundation"") removed correctly by DA-E4-010; name placeholder replaced; <EMAIL> tag kept by design"
+4ebf670e6b11c085,full,clean,,,,"header removed; name placeholder replaced; one-line MIT note stays, as DA-E4-010 intends"

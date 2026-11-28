@@ -123,3 +123,44 @@ def test_parse_json_packs_manifest_and_csv(tmp_path: Path):
     assert len(crows) == 1
     assert crows[0]["stage"] == "stage1"
     assert crows[0]["drop_rate_pct"] == 10.0
+
+
+def test_team1_rehearsal_adapter_matches_recorded_totals():
+    from clickhouse.adapt_team1_composition import adapt
+    root = Path(__file__).resolve().parents[3] / "01-data-a" / "jobs" / "logs" / "2026-11-19-first-training-rehearsal-38packs"
+    def read(path):
+        return json.loads(path.read_text(encoding="utf-8"))
+    summary = root / "inventory-run" / "summaries"
+    rows = adapt(read(summary / "ledger_summary.json"), read(summary / "shards_summary.json"),
+                 read(root / "config" / "pack_table_job_shaped.json"), "first-training-v1-rehearsal",
+                 read(summary / "reconcile_summary.json"))
+    reconciliation = read(summary / "reconcile_summary.json")
+    assert (reconciliation["ledger_rows"], reconciliation["kept"], reconciliation["in_shards"]) == (1444766, 1407358, 1385709)
+    reconciliation["in_shards"] += 1
+    with pytest.raises(ValueError, match="reconcile summary does not match ledger/shard summary"):
+        adapt(read(summary / "ledger_summary.json"), read(summary / "shards_summary.json"),
+              read(root / "config" / "pack_table_job_shaped.json"), "first-training-v1-rehearsal", reconciliation)
+    assert len(rows) == 38
+    assert sum(r["token_count"] for r in rows) == 1132509915
+    assert all(r["stage"] == "train" and r["dataset_version"] == "first-training-v1-rehearsal" for r in rows)
+    go = next(r for r in rows if r["pack_id"] == "code-go")
+    assert (go["docs_in"], go["docs_kept"], go["drop_rate_pct"]) == (83267, 76955, 7.5804)
+
+
+def test_team1_adapter_rejects_incomplete_or_inconsistent_inputs():
+    from clickhouse.adapt_team1_composition import adapt
+    ledger = {"by_pack": {"p": {"train": {"rows": 10, "rows_cleaned": 8, "dropped_by_clean": 2, "kept": 7}}}}
+    shards = {"parts": {"train/p/part": {"pack_id": "p", "status": "written", "tokens": 42, "docs": 7}}}
+    metadata = {"packs": {"p": {"domain": "code", "language": "en"}}}
+    assert adapt(ledger, shards, metadata, "rehearsal")[0]["drop_rate_pct"] == 20
+    del shards["parts"]["train/p/part"]["tokens"]
+    with pytest.raises(ValueError, match="missing shard totals"):
+        adapt(ledger, shards, metadata, "rehearsal")
+
+
+def test_team1_adapter_rejects_failed_checks():
+    from clickhouse.adapt_team1_composition import adapt
+    with pytest.raises(ValueError, match="shard summary reports problems"):
+        adapt({}, {"problems": ["x"]}, {}, "rehearsal")
+    with pytest.raises(ValueError, match="reconcile check did not pass"):
+        adapt({}, {}, {}, "rehearsal", {"ok": False})

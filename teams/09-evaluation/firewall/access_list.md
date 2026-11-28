@@ -1,6 +1,6 @@
 # Eval access list
 
-Who may read the eval folder, as defined in [eval_firewall.md](eval_firewall.md), section 2. Last updated Sat 21 Nov 2026.
+Who may read the eval folder, as defined in [eval_firewall.md](eval_firewall.md), section 2. Last updated Thu 26 Nov 2026.
 
 This list is a record, not a lock. It sets no permission. On the lab compute, TSAI places eval files only for an
 approved Team 9 job (`eval_firewall.md`, section 3, rule 4). Everyone listed follows the handling rules in section 4 of
@@ -70,6 +70,7 @@ TSAI accepted the first three on 4 Nov and the Codeforces read on 21 Nov. They a
 |---|---|---|---|
 | Team 12: `s9k96`, `SreekanthZipsy`, `therahulbhati` | Eval-mini items, for quantized formats | `teams/12-quantization/eval_mini/README.md`, #219 | Named exception under section 4 of `eval_firewall.md` (section 7, point 2) |
 | Rotators and others on Team 12 runs: `TharunSivamani`, `ranjani-cse`, `shishir13` | Eval-mini items | #236, #259 and `TharunSivamani`'s rotation PRs | Same |
+| Team 12 rotator: `sourav-dhar`, also Team 1 (Data A) | Wide-pass items (MMLU, ARC-C, Belebele, MILU), for the Q6_K and Q5_K_M runs the Team 12 lead assigned on 26 Nov | `teams/12-quantization/eval_wide/`, #830; runs in #840, #843, #844 | Same as the row above. Accepted by the Team 9 lead on 26 Nov. Kaggle only, never on the machine that holds corpus data; no item text in any Data A work (section 4, rule 5) |
 | Whoever runs Team 3's scripts | FLORES-200, HumanEval, MBPP; also GSM8K's train split, which the fingerprints do not cover | `teams/03-tokenizer/harness/run_harness.py`, `teams/03-tokenizer/train/fetch_heldout.py` | Allowed as measuring reads (`eval_firewall.md`, section 7, point 3) |
 | Team 10's OCR-2 pack job, run by TSAI | `open-r1/codeforces` @ `fbe3f6e9`, test split only, to build the protected-family index; matching training problems are removed. No scoring | `teams/10-post-training/jobs/2026-11-17-ocr2-pack-v1-p1536.md` (#565); the older C3 record `2026-11-16-ocr2-pack-v1-c3.md` (#524) | Decontamination read, accepted by TSAI on 21 Nov (G9) |
 

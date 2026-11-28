@@ -16,6 +16,10 @@ The new KAS integration test constructs Team 5's actual KE2/KAS V2 classes with 
 
 Before submission to TSAI, append the exact staged wrapper command, input pins, hardware, exit status, final output and wall time from an end-to-end run. The current job request remains a draft pending those inputs and lead approval.
 
+Update, 26 November. The [staged wrapper log](../../jobs/2026-11-26-dt-then-rl-staged.log) now supplies those details
+for a reduced CPU KAS V2 fixture, including a real Docker verifier screen and a separate scripted-reward update run.
+The kept export from the real dry run 2 comparison and lead approval are still required for the delivered-checkpoint job.
+
 After merging the concurrent Week 4 update (base `8e5f5389`), the wrapper test additions were combined and the completion-log-probability suite was included to cover the updated trainer path:
 
 ```text

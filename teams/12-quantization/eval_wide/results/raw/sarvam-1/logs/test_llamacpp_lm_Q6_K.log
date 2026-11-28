@@ -1,0 +1,4 @@
+Error in sitecustomize; set PYTHONVERBOSE for traceback:
+ModuleNotFoundError: No module named 'wrapt'
+sarvam-1-Q6_K.gguf: log p(' Paris') = -0.615, generation -0.615, off-by-one value -7.315; cache max diff 0.0232
+PASS

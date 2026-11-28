@@ -1,0 +1,22 @@
+pack: math-finemath.parquet   gold: math-finemath_gold.csv (86 documents)   rules: 2
+rules file: math-audit-Aneesha_Das.md   code sha256: d4a121e924393611dacbd82c0858eb5b0846194216ab3e0bac9b7542ea5e8ecb
+limit: 1 document changed or dropped (max(1, 1% of 86))
+rule               changed dropped  percent  result
+DA-C1-012                0       0    0.00%  PASS
+  affected doc_ids: 
+DA-C2-007                0       0    0.00%  PASS
+  affected doc_ids: 
+ALL IN ORDER             0       0    0.00%  PASS
+  affected doc_ids: 
+result: PASS
+pack: math-megamath.parquet   gold: math-megamath_gold.csv (26 documents)   rules: 2
+rules file: math-audit-Aneesha_Das.md   code sha256: d4a121e924393611dacbd82c0858eb5b0846194216ab3e0bac9b7542ea5e8ecb
+limit: 1 document changed or dropped (max(1, 1% of 26))
+rule               changed dropped  percent  result
+DA-C1-012                0       0    0.00%  PASS
+  affected doc_ids: 
+DA-C2-007                0       0    0.00%  PASS
+  affected doc_ids: 
+ALL IN ORDER             0       0    0.00%  PASS
+  affected doc_ids: 
+result: PASS

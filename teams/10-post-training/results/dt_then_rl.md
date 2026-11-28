@@ -1,11 +1,8 @@
 # Deletion Tuning SFT followed by RL
 
-## Dry run 2 status — 24 November 2026
+## Dry run 2 status — 27 November 2026
 
-The Gate 4 run starts from `keep_canary/dt/model.safetensors` and the matching baked masks exported by
-the dry run 2 SFT comparison. Its Team 5 manifest supplies the KE2/KAS V2 model and p1536 inputs.
-The [job request](../jobs/2026-11-17-dt-then-rl-code.md) uses the existing RL wrapper with `g5_batch`,
-one row per update forward, and the pinned 66 free-reward and 55 effort-suite exclusions.
+`dryrun2-1234` pretraining has completed (`1,221/1,221` steps, `final_model_sha256: 8d1600b278a3d8e15c3d7af408a86e7c47acd987a899bf5eeee6b2c72192eb47`). The Gate 4 run starts from `keep_canary/dt/model.safetensors` and the matching baked masks exported by the dry run 2 SFT comparison. Its Team 5 manifest supplies the KE2/KAS V2 model and p1536 inputs. The [job request](../jobs/2026-11-17-dt-then-rl-code.md) is 27 Nov lead-approved and uses the existing RL wrapper with `g5_batch`, one row per update forward, `--keep-weights-dir keep_t7/` (`g10-rl-final`), `rl_state/` preservation on failed save, and the pinned 66 free-reward and 55 effort-suite exclusions.
 
 | Dry run 2 measure | Status |
 | --- | --- |
@@ -18,7 +15,12 @@ one row per update forward, and the pinned 66 free-reward and 55 effort-suite ex
 Local verification is recorded in [week4_validation.md](dt_then_rl_evidence/week4_validation.md).
 It checks artifact pins, generated configuration, exclusions, mask preservation, and the real KAS V2 model
 classes with batched sampling on CPU. Scripted fixture rewards exercise optimizer updates in that test.
-Code-verifier learning on the delivered checkpoint remains pending its DT SFT export, staged inputs, and job approval.
+Code-verifier learning on the delivered checkpoint remains pending its DT SFT export (`keep_canary/dt/`) and TSAI execution on `dryrun2-1234` (27 Nov job updates and [pre-run rehearsal log](../jobs/2026-11-27-g10-dryrun2-prerun-rehearsal.log) lead-approved 27 Nov 2026).
+
+The [26 November staged wrapper log](../jobs/2026-11-26-dt-then-rl-staged.log) adds two end-to-end CPU runs.
+The real Docker verifier found no mixed-reward groups on the tiny KAS fixture. A separately labelled scripted-reward
+run completed three updates with all 283 DT-deleted entries kept zero. Those fixture results validate execution and
+mask preservation; the dry run 2 accuracy table above remains awaiting the delivered-checkpoint run.
 
 ## CPU rehearsal — 16–17 November 2026
 

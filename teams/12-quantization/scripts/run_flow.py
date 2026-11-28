@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""The dry run 1 job as one command: quantize_eval.py, then flow_fixed_prompts.py on the GGUFs it built. Stops at the first non-zero exit.
+"""The dry run job as one command: quantize_eval.py, then flow_fixed_prompts.py on the GGUFs it built. Stops at the first non-zero exit.
 
     python teams/12-quantization/scripts/run_flow.py --checkpoint ./out/dryrun1-1234 --tokenizer ./inputs/tokenizer.json \\
         --eval teams/12-quantization/prompts/eval_own_20.json --work ./work --out ./out \\
@@ -19,12 +19,15 @@ FORMATS = ["bf16", "Q8_0", "Q4_K_M"]
 
 def commands(a: argparse.Namespace, extra: list[str]) -> list[list[str]]:
     py, out = sys.executable, Path(a.out)
+    formats = getattr(a, "formats", None) or FORMATS
+    if formats[0] != "bf16" or len(formats) < 2:   # the prompts are compared with bf16, so it comes first
+        sys.exit(f"--formats must start with bf16 and name at least one other format, not {','.join(formats)}")
     qe = [py, str(HERE / "quantize_eval.py"), "--checkpoint", a.checkpoint, "--tokenizer", a.tokenizer, "--eval", a.eval,
-          "--formats", ",".join(FORMATS), "--work", a.work, "--runs-csv", str(out / "runs.csv"),
+          "--formats", ",".join(formats), "--work", a.work, "--runs-csv", str(out / "runs.csv"),
           "--scores-out", str(out / "scores.json"), *extra]
     if a.tokenizer_sha256:
         qe += ["--tokenizer-sha256", a.tokenizer_sha256]
-    flow = [py, str(HERE / "flow_fixed_prompts.py"), "--gguf-dir", a.work, "--formats", ",".join(FORMATS[1:]),
+    flow = [py, str(HERE / "flow_fixed_prompts.py"), "--gguf-dir", a.work, "--formats", ",".join(formats[1:]),
             "--scores", str(out / "scores.json"), "--out", str(out / "prompts"), "--delete-ggufs"]
     if a.manifest:
         flow += ["--manifest", a.manifest, *[x for d in a.source_dir for x in ("--source-dir", d)]]
@@ -49,6 +52,8 @@ def main() -> None:
     ap.add_argument("--eval", required=True, help="eval items JSON for the scores")
     ap.add_argument("--work", required=True, help="quantize_eval.py's --work (llama.cpp-b11669/, .venv-convert/ prepared)")
     ap.add_argument("--out", default="out")
+    ap.add_argument("--formats", type=lambda s: s.split(","), default=FORMATS,
+                    help=f"comma list, bf16 first (default {','.join(FORMATS)}); the prompts compare each other format with bf16")
     ap.add_argument("--manifest", help="Team 10's effort_manifest.json (needs --source-dir)")
     ap.add_argument("--source-dir", action="append", default=[], metavar="KEY=DIR")
     ap.add_argument("--qe-args", nargs=argparse.REMAINDER, default=[], help="the rest of the line goes to quantize_eval.py")

@@ -23,13 +23,13 @@ Made by `lang_label_check.py report` from the CSV files in this folder. Counts a
 | ind-hi-fw2 | b64bd6512a79ebbf | 1 | 0.8969 | 0 | agree | hin_Deva | 1.0 | hi |  |
 | ind-hi-hplt | ea08837da929d92e | 4 | 1.0 | 1 | agree | hin_Deva | 1.0 | hi |  |
 | ind-hi-sangraha-v | 086a0ded5e57ab37 | 1 | 1.0 | 1 | agree | hin_Deva | 0.6166 | hi | mr(ळ):1;sa(ऽ):1 |
-| ind-hi-sangraha-v | 4456ad657bbe6741 | 1 | 1.0 | 1 | agree | hin_Deva | 0.675 | hi | vedic_accent(॑):9;vedic_accent(॒):9 |
+| ind-hi-sangraha-v | 4456ad657bbe6741 | 1 | 1.0 | 1 | agree | hin_Deva | 0.675 | unknown | vedic_accent(॑):9;vedic_accent(॒):9 |
 | ind-hi-sangraha-v | e9d916f88e246a48 | 1 | 1.0 | 1 | agree | hin_Deva | 0.7591 | hi |  |
 | ind-sa-fw2 | 03335864ad554e39 | 1 | 0.445 | 0 | other_script |  |  |  |  |
 | ind-sa-fw2 | 1a70e9add5363d50 | 1 | 0.5007 | 0 | agree | san_Deva | 1.0 | sa | sa(ऽ):1 |
 | ind-sa-fw2 | 7625ac472b005f22 | 1 | 0.9452 | 1 | agree | san_Deva | 0.7852 | unknown |  |
 | ind-sa-fw2 | 7bc67301a58f3aec | 1 | 0.4938 | 0 | other_script |  |  |  |  |
-| ind-sa-fw2 | b7d0ec485aed0bd6 | 1 | 0.8286 | 0 | agree | san_Deva | 0.8035 | unknown | sa(ऽ):2 |
+| ind-sa-fw2 | b7d0ec485aed0bd6 | 1 | 0.8286 | 0 | agree | san_Deva | 0.8035 | sa | sa(ऽ):2 |
 | ind-sa-fw2 | ba33ff38890a9be3 | 1 | 0.5176 | 0 | agree | san_Deva | 1.0 | sa |  |
 | ind-bn-fw2 | 3f0c89c1bc69537e | 2 | 0.4331 | 0 | other_script |  |  |  | bn(র):224 |
 | ind-bn-sangraha-v | 7160f28b914f8629 | 1 | 1.0 | 1 | agree | ben_Beng | 0.9652 | unknown | as(ৰ):2;bn(র):53 |
@@ -42,7 +42,7 @@ Made by `lang_label_check.py report` from the CSV files in this folder. Counts a
 | ind-hi-hplt | 8840 | 0 | 19 | 8821 | 100.00 | 0 | 0.00 |  | 0 | 0.00 |  | 0 |
 | ind-hi-indiccorp | 111930 | 2881 | 11 | 109038 | 98.99 | 0 | 0.00 |  | 30 | 0.03 | ne:11; other:brx_Deva:11; mr:3; other:kas_Deva:3; sa:2 | 1066 |
 | ind-hi-sangraha-s | 8368 | 251 | 4 | 8113 | 97.93 | 0 | 0.00 |  | 23 | 0.28 | sa:16; ne:3; other:kas_Deva:3; other:brx_Deva:1 | 145 |
-| ind-hi-sangraha-v | 14831 | 1 | 22 | 14808 | 99.72 | 0 | 0.00 |  | 41 | 0.28 | sa:39; other:doi_Deva:1; ne:1 | 0 |
+| ind-hi-sangraha-v | 14831 | 1 | 22 | 14808 | 99.72 | 1 | 0.01 | sa:1 | 40 | 0.27 | sa:38; other:doi_Deva:1; ne:1 | 0 |
 | ind-mr-fw2 | 11555 | 0 | 13 | 11542 | 99.98 | 0 | 0.00 |  | 2 | 0.02 | hi:1; kok:1 | 0 |
 | ind-mr-sangraha-v | 12299 | 3 | 5 | 12291 | 99.89 | 0 | 0.00 |  | 13 | 0.11 | hi:10; kok:2; sa:1 | 0 |
 | ind-sa-fw2 | 5963 | 0 | 18 | 5945 | 100.00 | 0 | 0.00 |  | 0 | 0.00 |  | 0 |

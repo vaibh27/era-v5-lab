@@ -1,0 +1,26 @@
+doc_id,read,verdict,diseases,evidence,hex,note
+7e774e95e602476e,full,,,,,No matching doc_id (dropped by clean). Drop looks right: spun SEO article promoting an essay-writing service
+bfa86fe32d00c663,full,fix,B5;C1,,,"Cleaner cut the multiples lists inside $...$, leaving stray $ signs and no numbers; 'Update this answer!' lines kept"
+c8c3820547a7ab6f,full,fix,C1,,,"Author footer kept (About Me / Contact Me / Facebook Fan Page / Call, Message, Whatsapp / Leave a Response); cleaner removed only the name"
+b61794200f81acab,full,fix,C1,,,"StackExchange chrome kept: 'Take the 2-minute tour', 'share|improve this question', one 'share|improve this answer', vote line, 'Your Answer'"
+8da43001d1c5ea60,full,fix,C1,,,"Accessibility/nav menu at top (Exit WCAG Theme ... Close Menu), 'Facebook Twitter LinkedIn' and 'Skip footer...' kept; only 'Skip to main content' removed"
+852d6c991a0ed3ed,full,fix,C1,,,Call-to-action header kept: phone masked to <PHONE> but the business booking email on the same line left as is
+a9a7821bb3d942d0,full,fix,A2;C1,,,"Raw has cp1252 quotes as U+0092/U+0093/U+0094; cleaner deleted them instead of mapping to curly quotes, giving 'childrens', 'thats', 'Youve'; 'Find a Chiropractor' nav kept"
+5fed88b562dff56f,full,fix,C1,,,"Page header kept (printable banner, Great Seal, Diplomacy in Action); report body is fine"
+dff5216e6f15c4dd,full,fix,C1;C4,,,"'Connect with us', photo credits and related-article teasers with many blank lines kept after the article"
+7ccb72daa2438a76,full,fix,C1;C5,,,One SEO keyword line 'which eye did odin lose' left (two others removed); title repeated; comment section and 'Leave a comment' kept
+8bc5cc927d1c4095,full,fix,C1,,,"BOM removed correctly; blog widgets kept at the end (Related Posts Plugin..., Twitter Instagram Write Bookmark this page More)"
+b3abeb4533becb1d,full,,,,,"No matching doc_id (dropped by clean). Drop looks wrong: public-domain Epictetus Discourses Book Two, chapters 1-15; only the site nav lines at the top are junk and the text stops mid-sentence at the end, so trim rather than drop"
+c241159e7ee00f17,full,,,,,"No matching doc_id (dropped by clean). Drop looks right: virtual-assistant marketing page, duplicated title, 'Source link / Leave a Reply / Share This'"
+c733a2499740aff8,full,fix,C4;C1,,,"Blog index page: four posts joined (Etruscans, High Noon, air battle report, 2021 goals); the 'follow us' block (Facebook page, website, Messageboard, Wargames Vault) kept once, its second copy removed"
+b86875f06abe649a,full,fix,B3;C1,,,"Wiki strikethrough tags <s> and </s> kept (read as BOS/EOS ghost markers); 'Jump to: navigation, search' and 'Personal tools' kept"
+ad11cf73e258fd95,full,fix,A3;C1,,,"PDF/Scribd extract: 'You are on page 1of 6', U+00FF bullet glyphs on 16 lines, split words ('pro ject', 'thei r'), list items missing their first word in the source; repeated running title removed correctly"
+1e811184b12bc962,full,fix,C1,,,'Return to Top' and 'content last reviewed' line kept; legal text and footnotes fine
+9edbebb5cf7fc415,full,,,,,No matching doc_id (dropped by clean). Drop looks wrong: complete humour column; only the last 'Contact ... Follow him on Facebook' line is boilerplate
+06f1063ec1748884,full,clean,,,,"Empty 'Tags: , ,' line removed correctly"
+e670f86abf48520d,full,,,,,"No matching doc_id (dropped by clean). Drop acceptable: OCR scan ('Scanned text contains errors') with garbled Greek, soft hyphens and site footer"
+beb5d368db86fb5e,full,clean,,,,Keywords line removed; abstract intact
+b8a0a886678197f6,full,fix,C1,,,"'Contact the writer: <PHONE> or' line, copyright and 'Privacy Policy | User Agreement | Site Map' footer kept"
+28e2db94666d860f,full,fix,C1,,,"Forum chrome kept: 'Last Updated:', title glued to 'Support', 'Share This Page'; duplicate username lines removed correctly"
+0086c20deb34c1ec,full,,,,,No matching doc_id (dropped by clean). Drop acceptable: 361-char fragment that ends mid-sentence
+ecbf55aa8452ab45,full,,,,,No matching doc_id (dropped by clean). Short joke blog post; drop acceptable if a minimum-length rule applies

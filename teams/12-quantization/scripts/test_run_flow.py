@@ -25,6 +25,16 @@ class RunFlowTests(unittest.TestCase):
         self.assertEqual(flow[flow.index("--manifest"):][:6], ["--manifest", "m.json", "--source-dir", "a=1", "--source-dir", "b=2"])
         self.assertIn("--roundtrip", qe); self.assertEqual(qe[qe.index("--tokenizer-sha256") + 1], "f" * 64)
 
+    def test_formats_go_to_both_commands_with_bf16_only_in_the_first(self):
+        qe, flow = r.commands(ns(formats=["bf16", "Q8_0", "Q6_K", "Q4_K_M"]), [])
+        self.assertEqual(qe[qe.index("--formats") + 1], "bf16,Q8_0,Q6_K,Q4_K_M")
+        self.assertEqual(flow[flow.index("--formats") + 1], "Q8_0,Q6_K,Q4_K_M")
+
+    def test_formats_without_bf16_first_are_refused(self):
+        for bad in (["Q8_0", "Q4_K_M"], ["bf16"]):
+            with self.assertRaises(SystemExit):
+                r.commands(ns(formats=bad), [])
+
     def test_stops_at_the_first_non_zero_exit(self):
         seen = []
         def runner(c, code):

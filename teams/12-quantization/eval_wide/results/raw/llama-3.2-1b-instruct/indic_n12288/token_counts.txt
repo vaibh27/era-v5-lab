@@ -1,0 +1,5 @@
+belebele_hin_Deva {"requests": 3600, "mean": 2319, "p50": 2312, "p95": 2473, "max": 2853, "over4096": 0, "over8192": 0, "over12288": 0, "over16384": 0}
+belebele_kan_Knda {"requests": 3600, "mean": 7867, "p50": 7842, "p95": 8416, "max": 9727, "over4096": 3600, "over8192": 540, "over12288": 0, "over16384": 0}
+belebele_tel_Telu {"requests": 3600, "mean": 7057, "p50": 7022, "p95": 7583, "max": 8793, "over4096": 3600, "over8192": 16, "over12288": 0, "over16384": 0}
+belebele_tam_Taml {"requests": 3600, "mean": 6562, "p50": 6534, "p95": 7020, "max": 8111, "over4096": 3600, "over8192": 0, "over12288": 0, "over16384": 0}
+belebele_ben_Beng {"requests": 3600, "mean": 4704, "p50": 4687, "p95": 5054, "max": 5856, "over4096": 3600, "over8192": 0, "over12288": 0, "over16384": 0}

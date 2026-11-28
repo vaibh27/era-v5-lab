@@ -1,0 +1,102 @@
+Task 11 staged local wrapper test, 26 November 2026
+Build: 2e1e21692617e8e5bb6ae231243962c32636c894
+CPU, fp32, Python 3.12.14, torch 2.14.1; OMP_NUM_THREADS=2.
+Docker 29.9.2; python@sha256:b18b261e1b4974b4f321451ad5251ded85abb22c2b8b262da527dda1d031ab30.
+REPO denotes the lab checkout, STAGE the private fixture input/output directory, PY the Python interpreter.
+Paths below were normalized from the absolute paths used in the run. Numeric output is unchanged.
+All pretraining, SFT and code-task inputs were synthetic test fixtures. No delivered checkpoint was used.
+Model: head_mode=kas_v2, moe.bias_gamma=0.001, vocab=131072, block_size=128, n_layer=1, n_embd=16, experts=2+1, top_k=1.
+Flags --origin g10_rehearsal, --allow-fixture-smoke, --no-pack-check, --no-git label the reduced test and permit fixture pools.
+DT preparation: one real SFT step, g5_gate, eta=0.05 (fixture setting), two calibration rows, 283 deleted weights; reload parity passed.
+The production request retains the dry-run-2 settings and pinned data checks.
+
+Input and export hashes:
+{
+  "files": {
+    "tokenizer_p1536.json": "e6b93a93a60520d7b1af2e9242485f443b5596a1e116b8f8798d83bbad25a64b",
+    "raw_table_P32.npz": "e19a6cae8a6e9e5f74c47748f459df4b156bb61b8cec2af485b439c7132a39b0",
+    "cc_fixture.jsonl": "dbb2d7964e394ab702e31eacf2925db595e9a632f3f3a65869d5b82dcf2819b0",
+    "train_pool.jsonl": "4052d9c018a898ba49aee6d3058dc06ca12c2b98eebb3343ca4207c7ca62ded8",
+    "heldout_pool.jsonl": "bdab1a9aa65a0f340ebe4431c74315995d380805b44f216635dd8a33bb38179b"
+  },
+  "dt_export": {
+    "model.safetensors": "3029ff50946992cbd42df7c924520f5585ee465f394ac3da787fef4fca045987",
+    "dt_keep_masks.bin": "2af64c3eac784692ab8a9ac146b291fcbe44d259ce810fad66776fef6af36085",
+    "dt_keep_masks.bin.json": "ded6ff7e23a495821b5e4925eb2684a89c185c05d6d8394db63a5dad824c6243"
+  }
+}
+
+Preparation commands and final lines:
+$ "$PY" "$REPO/teams/05-architecture/harness/train_week2.py" --config "$STAGE/overlay/configs/arms/task11_fixture.yaml" --runtime "$STAGE/overlay/configs/runtime.yaml" --tokenizer "$STAGE/tokenizer_p1536.json" --tokenizer-release frozen-p1536 --byte-table "$REPO/teams/04-ke2/results/tables/p1536-s0/raw_table_P32.npz" --train-data "$STAGE/pretrain_train.jsonl" --heldout-data "$STAGE/pretrain_heldout.jsonl" --device cpu --smoke --smoke-steps 1 --out "$STAGE/run_folder"
+Exit 0; wall_seconds=4.319
+$ "$PY" "$REPO/teams/10-post-training/capstone/sft_g5.py" --adapter-config "$STAGE/adapter.yaml" --train "$STAGE/sft_train.jsonl" --eval "$STAGE/sft_eval.jsonl" --method dt --dt-targets g5_gate --steps 1 --batch 2 --warmup 0 --lr 0.0005 --dt-eta 0.05 --dt-calib-rows 2 --gen-limit 1 --gen-max-new 4 --no-before --device cpu --out "$STAGE/sft_dt"
+{"step": 1, "loss": 12.408228874206543, "targets": 10, "lr": 0.0005, "grad_norm": 0.29129117727279663, "reg": 22.462007522583008, "elapsed_s": 0.1}
+Exit 0; wall_seconds=2.519
+
+Wrapper case: real_verifier
+$ PYTHONDONTWRITEBYTECODE=1 OMP_NUM_THREADS=2 G10_STDIO_RUNNER=docker G10_STDIO_SECRET_PATHS="$STAGE/cc_fixture.jsonl" "$REPO/../g7-test-env/bin/python" "$REPO/teams/10-post-training/capstone/rl_job_v1.py" --g5-root "$REPO" --run-folder "$STAGE/run_folder" --tokenizer "$STAGE/tokenizer_p1536.json" --byte-table "$REPO/teams/04-ke2/results/tables/p1536-s0/raw_table_P32.npz" --rl-tasks "$STAGE/cc_fixture.jsonl" --train-pool "$STAGE/train_pool.jsonl" --heldout-pool "$STAGE/heldout_pool.jsonl" --sft-arm none --start-weights "$STAGE/keep_canary/dt/model.safetensors" --keep-mask "$STAGE/keep_canary/dt/dt_keep_masks.bin" --expected-head-mode kas_v2 --expected-bias-gamma 0.001 --origin g10_rehearsal --allow-fixture-smoke --no-pack-check --no-git --sampler g5_batch --micro-rows 1 --update-mode auto --updates 3 --state-every 1 --screen-n 2 --min-mixed 1 --prompts-per-step 1 --k 8 --max-tokens 128 --max-new 4 --heldout-n 1 --eval-k 2 --reward-pool 1 --tricks-limit 1 --rate-probe-prompts 2 --rate-probe-seconds 30 --deadline-minutes 10 --device cpu --seed 1 --out "$STAGE/real_verifier"
+{"runner": "docker", "env": {"python": "3.12.14", "platform": "macOS-15.7.4-arm64-arm-64bit", "runner": "docker", "torch": "2.14.1"}}
+{"step": "env", "ok": true, "seconds": 0.9}
+{"step": "guard", "ok": true, "seconds": 0.7}
+[g5_source_resolver] --g5-root matches the run's recorded Team 5 sources (8 files); using it as is
+{"step": "g5_source", "ok": true, "seconds": 0.0}
+{"pins": {"tokenizer_sha256": ["e6b93a93a60520d7b1af2e9242485f443b5596a1e116b8f8798d83bbad25a64b", "e6b93a93a60520d7b1af2e9242485f443b5596a1e116b8f8798d83bbad25a64b"], "table_content_sha256": ["21072027b19ef6f05d57ead7a2fc9fb4c52129e491186bf38d0ba079e8d5168a", "21072027b19ef6f05d57ead7a2fc9fb4c52129e491186bf38d0ba079e8d5168a"], "table_file_sha256": ["e19a6cae8a6e9e5f74c47748f459df4b156bb61b8cec2af485b439c7132a39b0", "e19a6cae8a6e9e5f74c47748f459df4b156bb61b8cec2af485b439c7132a39b0"]}}
+{"step": "pins", "ok": true, "seconds": 0.1}
+{"pool_counts": {"train_pool_file": 2, "removed_free": 0, "removed_effort": 0, "trained_pool": 2, "heldout_pool_file": 1, "heldout_subset": 1, "easy_ids": 48, "easy_in_trained_pool": 0, "easy_not_in_trained_pool": 48, "easy_in_heldout_pool_file": 0, "overlap_trained_free": 0, "overlap_trained_effort": 0, "overlap_trained_heldout": 0, "heldout_subset_free": 0, "heldout_subset_effort": 0}}
+{"step": "pool", "ok": true, "seconds": 0.0}
+{"step": "tricks", "ok": true, "seconds": 4.0}
+{"step": "rate", "ok": true, "seconds": 0.9}
+  time table: fixed (guard, pins, tricks, model load): 6.7 s
+  time table: SFT rebuild of one arm: 0.0 s
+  time table: screen 2 prompts: 1.1 s
+  time table: 3 updates (1 prompts x 8 samples each): 49.7 s
+  time table: 2 evaluations (1 prompts x 2): 0.3 s
+{"plan": {"decode_seconds_per_prompt": 0.07, "rate_basis": "measured", "screen": {"n": 2, "fits": null, "basis": "fixed by --screen-n"}, "time_left": {"remaining_s": 593.3, "needed_s": 51.0, "ok": true}}}
+{"step": "plan", "ok": true, "seconds": 0.0}
+{"update_mode": {"requested": "auto", "resolved": "eval", "train_mode_randomness": ["head: KASHead.tok_dropout=0.05"], "reason": "train-mode randomness would add noise to the ratio: eval"}}
+{"logprob_gate": {"tokens": 32, "max_abs": 0.0, "mean_abs": 0.0, "outside_frac": 0.0, "finite": true, "eps": 0.2, "update_mode": "eval", "reference": ["eval_forward"], "mean_abs_tol": 0.01, "outside_frac_tol": 0.005, "ok": true, "prompts": 1, "k": 8, "max_new": 4, "seconds": 0.203}}
+{"screen": {"n": 2, "k": 8, "min_mixed": 1, "mixed": 0, "all_pass": 0, "all_fail": 2, "pass_rate": 0.0, "histogram": {"0": 2, "1": 0, "2": 0, "3": 0, "4": 0, "5": 0, "6": 0, "7": 0, "8": 0}, "sampled_tokens": 64, "rollout_s": 0.13, "score_s": 0.0, "reasons": {"no_code": 16}, "reward_workers": 4, "truncated": 1.0, "mean_tokens": 4.0}}
+{"step": "rl", "ok": true, "seconds": 3.3}
+{"ok": true, "steps": 9, "failed_steps": []}
+exit=0
+wall_seconds=10.409
+
+Wrapper case: scripted_reward
+$ PYTHONDONTWRITEBYTECODE=1 OMP_NUM_THREADS=2 G10_STDIO_RUNNER=docker G10_STDIO_SECRET_PATHS="$STAGE/cc_fixture.jsonl" "$REPO/../g7-test-env/bin/python" "$REPO/teams/10-post-training/capstone/rl_job_v1.py" --g5-root "$REPO" --run-folder "$STAGE/run_folder" --tokenizer "$STAGE/tokenizer_p1536.json" --byte-table "$REPO/teams/04-ke2/results/tables/p1536-s0/raw_table_P32.npz" --rl-tasks "$STAGE/cc_fixture.jsonl" --train-pool "$STAGE/train_pool.jsonl" --heldout-pool "$STAGE/heldout_pool.jsonl" --sft-arm none --start-weights "$STAGE/keep_canary/dt/model.safetensors" --keep-mask "$STAGE/keep_canary/dt/dt_keep_masks.bin" --expected-head-mode kas_v2 --expected-bias-gamma 0.001 --origin g10_rehearsal --allow-fixture-smoke --no-pack-check --no-git --sampler g5_batch --micro-rows 1 --update-mode auto --updates 3 --state-every 1 --screen-n 2 --min-mixed 1 --prompts-per-step 1 --k 8 --max-tokens 128 --max-new 4 --heldout-n 1 --eval-k 2 --reward-pool 1 --tricks-limit 1 --rate-probe-prompts 2 --rate-probe-seconds 30 --deadline-minutes 10 --device cpu --seed 1 --stand-in-reward 0.4 --out "$STAGE/scripted_reward"
+{"runner": "docker", "env": {"python": "3.12.14", "platform": "macOS-15.7.4-arm64-arm-64bit", "runner": "docker", "torch": "2.14.1"}}
+{"step": "env", "ok": true, "seconds": 0.7}
+{"step": "guard", "ok": true, "seconds": 0.7}
+[g5_source_resolver] --g5-root matches the run's recorded Team 5 sources (8 files); using it as is
+{"step": "g5_source", "ok": true, "seconds": 0.0}
+{"pins": {"tokenizer_sha256": ["e6b93a93a60520d7b1af2e9242485f443b5596a1e116b8f8798d83bbad25a64b", "e6b93a93a60520d7b1af2e9242485f443b5596a1e116b8f8798d83bbad25a64b"], "table_content_sha256": ["21072027b19ef6f05d57ead7a2fc9fb4c52129e491186bf38d0ba079e8d5168a", "21072027b19ef6f05d57ead7a2fc9fb4c52129e491186bf38d0ba079e8d5168a"], "table_file_sha256": ["e19a6cae8a6e9e5f74c47748f459df4b156bb61b8cec2af485b439c7132a39b0", "e19a6cae8a6e9e5f74c47748f459df4b156bb61b8cec2af485b439c7132a39b0"]}}
+{"step": "pins", "ok": true, "seconds": 0.1}
+{"pool_counts": {"train_pool_file": 2, "removed_free": 0, "removed_effort": 0, "trained_pool": 2, "heldout_pool_file": 1, "heldout_subset": 1, "easy_ids": 48, "easy_in_trained_pool": 0, "easy_not_in_trained_pool": 48, "easy_in_heldout_pool_file": 0, "overlap_trained_free": 0, "overlap_trained_effort": 0, "overlap_trained_heldout": 0, "heldout_subset_free": 0, "heldout_subset_effort": 0}}
+{"step": "pool", "ok": true, "seconds": 0.0}
+{"step": "tricks", "ok": true, "seconds": 3.8}
+{"step": "rate", "ok": true, "seconds": 0.7}
+  time table: fixed (guard, pins, tricks, model load): 6.2 s
+  time table: SFT rebuild of one arm: 0.0 s
+  time table: screen 2 prompts: 1.1 s
+  time table: 3 updates (1 prompts x 8 samples each): 49.7 s
+  time table: 2 evaluations (1 prompts x 2): 0.3 s
+{"plan": {"decode_seconds_per_prompt": 0.06, "rate_basis": "measured", "screen": {"n": 2, "fits": null, "basis": "fixed by --screen-n"}, "time_left": {"remaining_s": 593.8, "needed_s": 51.0, "ok": true}}}
+{"step": "plan", "ok": true, "seconds": 0.0}
+{"update_mode": {"requested": "auto", "resolved": "eval", "train_mode_randomness": ["head: KASHead.tok_dropout=0.05"], "reason": "train-mode randomness would add noise to the ratio: eval"}}
+{"logprob_gate": {"tokens": 32, "max_abs": 0.0, "mean_abs": 0.0, "outside_frac": 0.0, "finite": true, "eps": 0.2, "update_mode": "eval", "reference": ["eval_forward"], "mean_abs_tol": 0.01, "outside_frac_tol": 0.005, "ok": true, "prompts": 1, "k": 8, "max_new": 4, "seconds": 0.167}}
+{"screen": {"n": 2, "k": 8, "min_mixed": 1, "mixed": 2, "all_pass": 0, "all_fail": 0, "pass_rate": 0.3125, "histogram": {"0": 0, "1": 0, "2": 1, "3": 1, "4": 0, "5": 0, "6": 0, "7": 0, "8": 0}, "sampled_tokens": 64, "rollout_s": 0.12, "score_s": 0.0, "reasons": {}, "reward_workers": 4, "truncated": 1.0, "mean_tokens": 4.0}}
+{"state_saved": {"step": 0, "file": "state.step000000.pt", "bytes": 34401557, "identity_sha256": "382773f6d0efd2b91f4546d1bcfc6c7a4fb35def6e759fbf5f45edb26176b95a", "saved_unix": 1795677190.46793, "write_s": 0.04}}
+{"step": 0, "heldout_reward": 0.5, "truncated": 1.0, "mean_tokens": 4.0}
+{"state_saved": {"step": 1, "file": "state.step000001.pt", "bytes": 103153511, "identity_sha256": "382773f6d0efd2b91f4546d1bcfc6c7a4fb35def6e759fbf5f45edb26176b95a", "saved_unix": 1795677191.281389, "write_s": 0.12}}
+{"step": 1, "train_reward": 0.5, "groups_used": 1, "groups_dropped": 0, "loss": -0.06981903314590454, "tr_epsilon": 0.2, "group_kinds": {"all_one": 0, "all_zero": 0, "tied_other": 0, "singleton": 0, "mixed": 1}, "tokens": 32, "passes": 4, "rollouts": 8, "ratio_source": "old_lp", "optimizer_stepped": true, "tokens_inside": 32, "masked_frac": 0.0, "masked_frac_pos": 0.0, "masked_frac_neg": 0.0, "grad_norm": 1.027, "stored_update_share": 0.785581, "grad_nonzero_share": 0.801921, "deleted_nonzero": 0, "zero_share": 3.3e-05, "sampled_tokens": 32, "rollout_tokens_per_s": 460.4, "times_s": {"rollout": 0.069, "reward": 0.0, "old_logprobs": 0.053, "train": 0.526, "keep_zero_checks": 0.011, "sync": 0.0}, "step_s": 0.659, "sync_mb": 0.0, "seconds": 1.0, "reasons": {}, "subgroups": {"unknown": {"groups": 1, "kept": 1, "tokens": 32, "kept_tokens": 32, "rollouts": 8, "passes": 4}}}
+{"state_saved": {"step": 2, "file": "state.step000002.pt", "bytes": 103153511, "identity_sha256": "382773f6d0efd2b91f4546d1bcfc6c7a4fb35def6e759fbf5f45edb26176b95a", "saved_unix": 1795677192.053021, "write_s": 0.15}}
+{"step": 2, "train_reward": 0.625, "groups_used": 1, "groups_dropped": 0, "loss": 0.0019498467445373535, "tr_epsilon": 0.2, "group_kinds": {"all_one": 0, "all_zero": 0, "tied_other": 0, "singleton": 0, "mixed": 1}, "tokens": 32, "passes": 5, "rollouts": 8, "ratio_source": "old_lp", "optimizer_stepped": true, "tokens_inside": 32, "masked_frac": 0.0, "masked_frac_pos": 0.0, "masked_frac_neg": 0.0, "grad_norm": 0.8049, "stored_update_share": 0.785955, "grad_nonzero_share": 0.801921, "deleted_nonzero": 0, "zero_share": 3.3e-05, "sampled_tokens": 32, "rollout_tokens_per_s": 460.5, "times_s": {"rollout": 0.069, "reward": 0.0, "old_logprobs": 0.051, "train": 0.494, "keep_zero_checks": 0.007, "sync": 0.0}, "step_s": 0.622, "sync_mb": 0.0, "seconds": 1.8, "reasons": {}, "subgroups": {"unknown": {"groups": 1, "kept": 1, "tokens": 32, "kept_tokens": 32, "rollouts": 8, "passes": 5}}}
+{"state_saved": {"step": 3, "file": "state.step000003.pt", "bytes": 103153511, "identity_sha256": "382773f6d0efd2b91f4546d1bcfc6c7a4fb35def6e759fbf5f45edb26176b95a", "saved_unix": 1795677192.813646, "write_s": 0.12}}
+{"step": 3, "train_reward": 0.375, "groups_used": 1, "groups_dropped": 0, "loss": -0.02999025583267212, "tr_epsilon": 0.2, "group_kinds": {"all_one": 0, "all_zero": 0, "tied_other": 0, "singleton": 0, "mixed": 1}, "tokens": 32, "passes": 3, "rollouts": 8, "ratio_source": "old_lp", "optimizer_stepped": true, "tokens_inside": 32, "masked_frac": 0.0, "masked_frac_pos": 0.0, "masked_frac_neg": 0.0, "grad_norm": 0.8483, "stored_update_share": 0.784957, "grad_nonzero_share": 0.801921, "deleted_nonzero": 0, "zero_share": 3.3e-05, "sampled_tokens": 32, "rollout_tokens_per_s": 406.4, "times_s": {"rollout": 0.079, "reward": 0.0, "old_logprobs": 0.062, "train": 0.482, "keep_zero_checks": 0.014, "sync": 0.0}, "step_s": 0.636, "sync_mb": 0.0, "seconds": 2.5, "reasons": {}, "subgroups": {"unknown": {"groups": 1, "kept": 1, "tokens": 32, "kept_tokens": 32, "rollouts": 8, "passes": 3}}, "heldout_reward": 1.0}
+{"step": "rl", "ok": true, "seconds": 5.4}
+{"ok": true, "steps": 9, "failed_steps": []}
+exit=0
+wall_seconds=11.922
+
+Verified outcome: actual Docker verifier stopped at NO_GO_MIXED_BAND (0/2 mixed groups); no optimizer updates.
+Scripted reward case: 3 optimizer updates; deleted_nonzero=0 at every step, router and router_bias unchanged.
+These timings and integrity checks are CPU fixture evidence. Dry-run-2 code accuracy, GPU/bf16 behavior, full-size cost and approved pool admission remain unmeasured here.

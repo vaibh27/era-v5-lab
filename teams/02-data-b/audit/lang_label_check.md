@@ -3,6 +3,8 @@
 **Status: 24 Nov.** The Sanskrit reader check is done (9 rows, two readers; both flags confirmed, section 3.3), and the
 Bengali rows are read (3 rows, one reader; one document is Assamese, section 3.3).
 **Pending:** the Marathi (4) and Hindi (4) rows of `lang_label_review_sample.csv`, with their readers.
+**v3 (26 Nov, #675):** the Sanskrit marker words are extended from grammar tables (section 3.4). The counts below are
+from the v3 run: 1 more document flagged (Jain Prakrit in a Hindi pack), 1 fewer uncertain; the rest is unchanged.
 
 Task (Week-3 work order, task 5): "Check the language labels of script-sharing pairs (Hindi and Marathi, for example).
 Flag each filter that drops over 20%." Owner: @keshavamurali. Scope as agreed with the lead (16 Nov): labels that are
@@ -19,11 +21,12 @@ re-runs unchanged on the full corpus.
   language: 99.36% of the 206,571 judged documents, 97.77% of all 209,926. Not judged: 3,138 `short` and 217
   `other_script`. The marker words are consulted only when IndicLID disagrees with the pack, so a language that IndicLID
   absorbs into Hindi or Bengali cannot be flagged. The check catches 0 of the 6 same-script documents readers marked D1,
-  and in `ind-sa-fw2` the 6 rows where IndicLID says Sanskrit but the marker words say Hindi (4) or Marathi (2) all
-  come out `agree`. Of the judged documents that do not agree: 1,211 are `short_disagree` (too short to trust
-  IndicLID, so unresolved), 114 uncertain, 2 flagged.
-  The 2 flagged are marked as another language, both in `ind-bn-sangraha-v`, where the marker words name Sanskrit in Bengali
-  script; a Sanskrit reader confirms both (section 3.3). 114 are uncertain; no pack has more than 0.3% uncertain. Of 7
+  and in `ind-sa-fw2` the 6 rows where IndicLID says Sanskrit but the v2 marker words said Hindi (4) or Marathi (2) all
+  come out `agree` (with the v3 words, the markers have no vote on them). Of the judged documents that do not agree: 1,211 are `short_disagree` (too short to trust
+  IndicLID, so unresolved), 113 uncertain, 3 flagged.
+  2 of the flagged are in `ind-bn-sangraha-v`, where the marker words name Sanskrit in Bengali script; a Sanskrit
+  reader confirms both (section 3.3). The third (v3) is in `ind-hi-sangraha-v`: not Hindi, but Jain Prakrit, which
+  both signals call Sanskrit, as neither has a Prakrit class (section 3.4). 113 are uncertain; no pack has more than 0.3% uncertain. Of 7
   uncertain ones where IndicLID said Sanskrit, both Sanskrit readers find none Sanskrit alone (mixed pages or Hindi).
   Of 3 uncertain ones in `ind-bn-sangraha-v` where IndicLID said Assamese, the Bengali reader finds 1 Assamese.
 - **No filter drops over 20%.** clean.py does not record which filter dropped a document, so the lead's shard audit
@@ -120,19 +123,19 @@ check about 20 flags from the large run instead (section 3.3).
 | ind-hi-hplt | 8,840 | 8,821 | 100.00% | 0 | 0 | 0 | |
 | ind-hi-indiccorp | 111,930 | 109,038 | 98.99% | 0 | 30 | 1,066 | ne 11, brx 11, mr 3, kas 3, sa 2 |
 | ind-hi-sangraha-s | 8,368 | 8,113 | 97.93% | 0 | 23 | 145 | sa 16, ne 3, kas 3, brx 1 |
-| ind-hi-sangraha-v | 14,831 | 14,808 | 99.72% | 0 | 41 | 0 | sa 39, doi 1, ne 1 |
+| ind-hi-sangraha-v | 14,831 | 14,808 | 99.72% | 1 (Sanskrit; reader: Jain Prakrit) | 40 | 0 | sa 38, doi 1, ne 1 |
 | ind-mr-fw2 | 11,555 | 11,542 | 99.98% | 0 | 2 | 0 | hi 1, kok 1 |
 | ind-mr-sangraha-v | 12,299 | 12,291 | 99.89% | 0 | 13 | 0 | hi 10, kok 2, sa 1 |
 | ind-sa-fw2 | 5,963 | 5,945 | 100.00% | 0 | 0 | 0 | |
 | ind-bn-fw2 | 11,317 | 11,279 | 100.00% | 0 | 0 | 0 | |
 | ind-bn-sangraha-v | 10,430 | 10,421 | 99.94% | 2 (Sanskrit, Bengali script) | 4 | 0 | as 4 |
-| **All** | **209,926** | **206,571** | **99.36%** | **2** | **114** | **1,211** | |
+| **All** | **209,926** | **206,571** | **99.36%** | **3** | **113** | **1,211** | |
 
 Not judged: 3,138 `short` (2,881 of them in `ind-hi-indiccorp`) and 217 `other_script`. Full tables:
 `lang_label_tables.md`. Flagged IDs: `lang_label_mislabelled_ids.csv`.
 
-The largest uncertain groups are "IndicLID: Sanskrit" in the Hindi packs (58) and "IndicLID: Hindi" in the Marathi packs
-(11). In 43 of the 58, the marker words say Hindi; in the rest they are too few to decide. In the Marathi packs the marker
+The largest uncertain groups are "IndicLID: Sanskrit" in the Hindi packs (57) and "IndicLID: Hindi" in the Marathi packs
+(11). In 36 of the 57, the marker words say Hindi (43 of 58 with the v2 words); in the rest they are too few to decide. In the Marathi packs the marker
 words mostly say Marathi. So the two signals disagree, and which one is right is for the readers (section 3.3).
 
 ### 3.3 Reader check
@@ -189,6 +192,54 @@ check's input). Answers are copied word for word into `lang_label_review_sample.
   (section 5). As the Sanskrit readers did for those, the reader marks it `mixed`.
 - **Pending:** the Marathi (4) and Hindi (4) rows of `lang_label_review_sample.csv`, with their readers.
 
+### 3.4 Sanskrit markers from grammar (v3, #675)
+
+The v2 Sanskrit marker list has 21 prose words. In `ind-sa-fw2`, 62 reader rows (31 documents), mostly verse and stotras,
+got no marker vote. v3 adds Sanskrit forms built from grammar tables, not picked from the corpus:
+
+1. **Sanskrit side, from grammar** (`sa_paradigms.py`):
+   - full declensions of tad, yad, etad, kim, sarva, anya, idam, asmad, yushmad;
+   - 20 common thematic roots in present, imperfect, optative, imperative and future;
+   - 7 atmanepada stems and 10 passive stems;
+   - hand tables for अस्, कृ, दा, ज्ञा, श्रु;
+   - a few perfect forms, absolutives, infinitives and indeclinables;
+   - the anusvara spelling of every final म्.
+
+   1,983 forms.
+2. **Safety filter, from data** (`sa_marker_build.py`):
+   - a form found in 2 or more of the 3,500 Hindi and Marathi diagnosis documents is dropped (74, for example ते, सा,
+     ये, यदि, तथा);
+   - plus a hand exclusion list with a reason each (`लिखत`, a Hindi noun).
+
+   1,908 forms are kept, in `sa_marker_words.txt`.
+3. The 21 v2 words stay unchanged. Thresholds and the rest of the method are as in v2.
+
+The tables were drafted with AI (Claude) and reviewed by @keshavamurali. A second Sanskrit reader is asked to check them
+(#675).
+
+| | v2 | v3 |
+|---|---|---|
+| `ind-sa-fw2` reader rows with no marker vote | 62 (31 documents) | 20 |
+| of those 62, now a Sanskrit vote | | 48 (24 documents) |
+| `ind-sa-fw2` rows where the markers said Hindi or Marathi | 6 | 0 (no vote now) |
+| Reader and gold scores (`lang_label_eval_summary.csv`) | | unchanged: no gold document flagged, D1 found 0 of 6 |
+| CAP-1 packs: mislabelled / uncertain | 2 / 114 | 3 / 113 |
+| Hindi-pack uncertain where IndicLID says Sanskrit: markers say Hindi | 43 of 58 | 36 of 57 |
+
+The 20 rows still without a vote:
+- 14 are left from the 62. Their documents are very short, mixed with Hindi (readers marked D3), or have a reader's
+  D1. One is Vedic text whose `ळ` counts as a Marathi marker letter.
+- 6 are the rows above, where the v2 markers said Hindi or Marathi.
+
+The one new flag, `037a63321c3b687c` in `ind-hi-sangraha-v`:
+- IndicLID says Sanskrit (0.91), and the markers now do too: 3 hits, all v3 forms that Prakrit spells the same way.
+- Reader (@keshavamurali): **Jain Prakrit** (Ardhamagadhi prayers) with a line of Hindi. So the flag is right that
+  the document is not Hindi, but the language it names is wrong.
+- IndicLID has no Prakrit class, the same limit as the Kumaoni and Prakrit pages in section 3.1.
+
+One more case: `b7d0ec485aed0bd6` (`ind-sa-fw2`; one reader D1, the other D3, mixed) now has a Sanskrit marker vote
+(sa 70, hi 32; v2 a tie). Its verdict stays `agree`.
+
 ## 4. Filters that drop over 20%
 
 From the lead's shard audit (#523, `audit_v1.csv`; `docs_raw` is the Part_1 part only):
@@ -239,7 +290,8 @@ From `teams/02-data-b/audit`, with the IndicLID environment of `../romanised` (s
 
 ```bash
 PY=../romanised/.venv-lid/bin/python
-$PY -m unittest test_lang_label_check                       # 23 tests, made-up text, no model needed
+$PY -m unittest test_lang_label_check                       # 27 tests, made-up text, no model needed
+$PY sa_marker_build.py                                      # v3: Sanskrit words from sa_paradigms.py (diagnosis packs)
 $PY lang_label_check.py evaluate                            # reader labels and gold
 $PY lang_label_check.py run --cap1-dir <Cap1-packs folder> --work-dir <scratch folder>   # about 11 minutes
 $PY lang_label_check.py flag                                # audit_v1.csv, drop_threshold 0.20
@@ -263,3 +315,5 @@ labels and doc IDs are committed, never document text. The per-document results 
 | `lang_label_review_sample.csv` | section 3.3, for the readers |
 | `lang_label_filter_flags.csv` | section 4 |
 | `lang_label_tables.md` | all tables, generated |
+| `sa_paradigms.py` | v3: the Sanskrit grammar tables (pronouns, verbs, indeclinables) |
+| `sa_marker_build.py`, `sa_marker_words.txt`, `sa_marker_words.csv` | v3: the Hindi/Marathi filter, the kept words (`markers.sa.words_file`), and every form with its counts and decision |

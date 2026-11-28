@@ -116,9 +116,11 @@ def test_cli_refuses_a_missing_or_broken_file(tmp_path, capsys):
     assert "refused" in capsys.readouterr().err
 
 
-def test_a_real_run_lab_ckpt_document_goes_through(tmp_path):
+def test_a_real_run_lab_ckpt_document_goes_through(tmp_path, monkeypatch):
     """The document Team 9's own build_records / build_doc write, with the two benchmark tasks scored."""
     torch = pytest.importorskip("torch")
+    # run_lab_ckpt puts Team 5's harness first on sys.path; left there, a later `import train` finds the wrong train.py
+    monkeypatch.setattr(sys, "path", list(sys.path))
     spec = importlib.util.spec_from_file_location("run_lab_ckpt", HERE.parents[1] / "09-evaluation" / "harness_lab" / "run_lab_ckpt.py")
     rl = importlib.util.module_from_spec(spec)
     spec.loader.exec_module(rl)
@@ -135,3 +137,41 @@ def test_a_real_run_lab_ckpt_document_goes_through(tmp_path):
     b = w.convert(d)["eval_mini"]
     assert b["dtype"] == "bfloat16" and [r["value"] for r in b["records"]] == [0.25, 0.3]
     fg._records({"eval_mini": b}, "after")
+
+
+def _team9_rows(arc_primary="acc_norm"):
+    """The two benchmark tasks as Team 9's own records_for writes them: an acc and an acc_norm record each."""
+    spec = importlib.util.spec_from_file_location("lm_eval_lab_for_rows",
+                                                  HERE.parents[1] / "09-evaluation" / "harness_lab" / "lm_eval_lab.py")
+    lab = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(lab)
+    common = {"model_revision": "a" * 64, "dtype": "bfloat16", "format": "bf16"}
+    group = {"items": "limit", "profile": "mini", "seed": {"random": 42}}
+    label = {"diagnostic": "diagnostic", "freeze": "freeze"}
+    rows = []
+    for task, base in (("arc_challenge", 0.20), ("hellaswag", 0.30)):
+        res = {"results": {task: {"acc,none": base, "acc_stderr,none": 0.01, "acc_norm,none": base + 0.05,
+                                  "acc_norm_stderr,none": 0.02}},
+               "n": {task: {"effective": 400, "original": 1000}}}
+        entry = {"task": task, "num_fewshot": 0, "limit": 400, "role": "diagnostic", "primary": arc_primary}
+        rows += lab.records_for(entry, res, group, "s" * 64, label, None, [], common)
+    return rows
+
+
+@pytest.mark.parametrize("primary,values", [("acc_norm", [0.25, 0.35]), ("acc", [0.2, 0.3])])
+def test_team9s_two_metrics_per_task_are_read_from_the_primary_one(primary, values):
+    pytest.importorskip("torch")
+    rows = _team9_rows(primary)
+    assert len(rows) == 4
+    for ordered in (rows, rows[::-1]):
+        got = {r["task"]: r for r in w.convert(doc(records=ordered))["eval_mini"]["records"]}
+        assert [got[t]["value"] for t in w.DEFAULT_TASKS] == values
+        assert {r["metric"] for r in got.values()} == {primary}
+
+
+def test_two_primary_records_or_none_among_several_are_refused():
+    pytest.importorskip("torch")
+    for mark in (True, False):
+        rows = [dict(r, primary=mark) for r in _team9_rows()]
+        with pytest.raises(w.WatcherRowsError, match="not exactly one record is marked primary"):
+            w.convert(doc(records=rows))

@@ -535,7 +535,11 @@ def main():
 
     scores_path = Path(args.scores_out).expanduser() if args.scores_out else work / f'{name}-scores.json'
     scores = dict(model=model, revision=revision, checkpoint=str(args.checkpoint or ''), tokenizer_sha256=tok_sha,
-                  gguf=info, export_a1=(export or {}).get('verify'), gguf_a3=a3, tokenizer_roundtrip=trip, runtime=runtime, machine=machine,
+                  gguf=info, export_a1=(export or {}).get('verify'),
+                  # with --drop-router-bias: A1 against G5 with router_bias zeroed (the wiring), and what was dropped
+                  export_a1_zero_router_bias=(export or {}).get('verify_zero_router_bias'),
+                  export_router_bias=(export or {}).get('router_bias'), export_head_bias=((export or {}).get('kas_v2') or {}).get('head_bias'),
+                  gguf_a3=a3, tokenizer_roundtrip=trip, runtime=runtime, machine=machine,
                   eval_set=eval_name, n_items=len(items), prompt_mode=args.prompt_mode, context=ctx, formats=[])
     n_params = None
     for fmt in [f.strip() for f in args.formats.split(',') if f.strip()]:

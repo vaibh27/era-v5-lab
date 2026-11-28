@@ -166,37 +166,37 @@ Sharpness settings after the 19 Nov merge (note added by PR 114, 19 Nov; the sen
 ## 8. Dry Run 2 Capstone Comparison (Full FT vs LoRA vs Deletion Tuning)
 
 **Owner / Track:** Lead (`saitej123`) & DT Table Track (`thinkTinkerGreen`)  
-**Status (Week 4, Gate 3 Item 7 Closure):** Formal protocol locked in `capstone/dryrun2_dt_compare.py` and queued via TSAI job request `jobs/2026-11-26-g10-dryrun2-dt-vs-fft.md`. Replaces surrogate/toy evidence with real, capstone-scale evaluation upon Dry Run 2 completion on D5 (Thu 26 Nov 2026).
+**Status (Updated 27 Nov 2026, Gate 3 Item 7 Closure):** `dryrun2-1234` (eager arm) pretraining **COMPLETED** (`1,221 / 1,221` steps, `79.8 min` inside the `90 min` cap, `0` NaN/inf, training loss `10.27 -> 5.25`, max grad norm before clipping `26.9`, checkpoint saved at step `1,221`, `final_model_sha256: 8d1600b278a3d8e15c3d7af408a86e7c47acd987a899bf5eeee6b2c72192eb47`). Team 10's matched-step SFT comparison (`capstone/dryrun2_dt_compare.py` via `capstone/dryrun2_job_chain.sh` and `jobs/2026-11-26-g10-dryrun2-dt-vs-fft.md`, including chain step 6 `forget_bpb_kept.py --dtype auto` and `jobs/2026-11-27-g10-dryrun2-prerun-rehearsal.log`) is 27 Nov lead-approved and ready for TSAI launch against `dryrun2-1234`.
 
 ### 8.1 Model Architecture & Ingestion Setup
-- **Checkpoint & Model Code:** Team 5 Dry Run 2 large capstone checkpoint (`LanguageModel` via `teams/10-post-training/rl-loop/team5_adapter.py`).
-- **Untied Head Architecture:** Untied KE2/KAS output head (`a10_kas_tokdrop`) with token-drop regularization and Team 7 `Checkpointer` wiring (`#608`).
-- **MoE Router Invariant:** MoE router weights (`blocks.N.moe.router.weight`) are **strictly frozen** across all three training arms. Monitored via `assert_router_frozen`; pre/post SHA-256 router checksums must be byte-identical.
-- **SFT Slice & Budget:** Matched 243 optimizer steps at batch size 16 on OCR-2 slice A4 (pinned firewalled pack shards 0–3, `#565`), matching the step budget determined by Full FT.
+- **Base Checkpoint (`dryrun2-1234`, eager arm):** Step `1,221`, `final_model_sha256: 8d1600b278a3d8e15c3d7af408a86e7c47acd987a899bf5eeee6b2c72192eb47` (`LanguageModel` via `teams/10-post-training/rl-loop/team5_adapter.py`).
+- **Untied Head Architecture:** Untied KE2/KAS output head (`a10_kas_tokdrop`) and Team 7 `Checkpointer` wiring (`#608`).
+- **MoE Router & Bias Invariant:** MoE router weights (`blocks.N.moe.router.weight`) are **strictly frozen** and `router_bias` (`bias_gamma: 0.001`) stays **unchanged as delivered** (`update_router_bias()` is never called). Enforced by `assert_router_frozen` and `router_bias_unchanged: true` in every arm's `sft_report.json` (`dryrun2_job_chain.sh` step 5).
+- **SFT Slice & Budget:** Matched up to `243` optimizer steps at batch size `16` on OCR-2 slice `a4` (pinned firewalled pack shards 0–3, `#565`), matching the completed step budget determined by Full FT within the `1,200 s` per-arm cap (`125 min` outer job cap).
 
 ### 8.2 Matched-Step Arm Configurations
 
 | Method | Learning Rate | Trainable Parameter Scope | Sparsity / Deletion | Specific Hyperparameters |
 | :--- | :---: | :--- | :---: | :--- |
-| **Base (Untuned)** | — | Zero parameters updated | 0% | Zero-shot evaluation baseline. |
-| **Full FT** | `1e-4` | 100% of non-router parameters; AdamW FP32 master weights | 0% | Sets the completed step budget (243 steps). |
-| **LoRA** | `1e-3` | Low-rank adapters on attention & FFN; marker rows at `1e-3` | ~0.8% | $r=16, \alpha=32$, `weight_decay=0.0`. |
-| **Deletion Tuning (DT)** | `5e-4` | Pruning masks on attention & FFN (`g5_gate`); marker rows at `1e-3` | 10–20% | Paper-repo settings: $\alpha: 100 \to 1000$, $\eta = 1/2048$ (`0.00048828125`), $\lambda: 1\text{e-}5 \to 0$, prior strength 3.0. |
+| **Base (Untuned)** | — | Zero parameters updated | 0% | Zero-shot `dryrun2-1234` step `1,221` baseline. |
+| **Full FT** | `1e-4` | 100% of non-router parameters; AdamW FP32 master weights | 0% | Sets the completed step budget (up to `243` steps within `1,200 s` cap). |
+| **LoRA** | `1e-3` | Low-rank adapters on attention & FFN; marker rows at `1e-2` | ~0.8% | $r=16, \alpha=32$, `weight_decay=0.0`, `--marker-lr 1e-2`. |
+| **Deletion Tuning (DT)** | `5e-4` | Pruning masks on MoE/FFN gate layers (`g5_gate`); marker rows at `1e-2` | Measured at run | Paper-repo settings: $\alpha: 100 \to 1000$, $\eta = 1/2048$ (`0.00048828125`), $\lambda: 1\text{e-}5 \to 0$, prior strength `3.0`, `--marker-lr 1e-2`. |
 
-### 8.3 Comparison Metrics & Live Tracking Table
+### 8.3 Comparison Metrics & Dry Run 2 Baseline
 
-*Awaiting Dry Run 2 return on D5 (Thu 26 Nov 2026). The table below records the evaluation criteria and stand-in preflight bounds.*
+*Base `heldout_v1` metrics below come from TSAI's completed `dryrun2-1234` result (`549,042` scored tokens: step 0 `2.1607` $\to$ step `1,221` `2.0561`; by group: English `1.769`, Code `3.407`, Indic mean `1.957`, Three-group `2.378`; by slice: `as 2.23, bn 2.16, code 3.41, en 1.77, gu 2.06, hi 1.90, kn 1.88, math 2.48, ml 1.71, mr 1.86, or 1.79, pa 2.26, sci 1.61, ta 1.78, te 1.89`). Read with TSAI's two caveats: (1) single seed (`1234`), with `heldout_v1` moving by ~`0.1` between evals (`2.07`–`2.36` in the last 350 steps); (2) trained on one 25M-token English web shard rather than `sample-v0`, so Code and Indic scores reflect an English-only model. SFT arm cells will be populated from `out/compare.md`, `out/forget/forget_*.json`, and `forgetting.py` after TSAI returns the GPU run.*
 
-| Model & Arm | Steps | Test Target NLL ↓ | Test Target bpb ↓ | Format Valid (/110) ↑ | RL Pass Rate (Probe) | Held-Out v1 bpb Δ vs Base ↓ | Peak VRAM (GB) | Step Time (ms) | MoE Router Checksum |
-| :--- | :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: |
-| **DR2 Base** (Untuned) | 0 | *evaluating* | *evaluating* | 0 / 110 | 0.0% | 0.0000 (ref) | — | — | LOCKED (Match) |
-| **DR2 Full FT** | 243 | *evaluating* | *evaluating* | $\ge 90$ | *evaluating* | $\le +0.0500$ | ~38.4 GB | ~410 ms | LOCKED (Match) |
-| **DR2 LoRA** ($r=16$) | 243 | *evaluating* | *evaluating* | $\ge 80$ | *evaluating* | $\le +0.0400$ | ~26.2 GB | ~340 ms | LOCKED (Match) |
-| **DR2 Deletion Tuning** | 243 | *evaluating* | *evaluating* | $\ge 75$ | *evaluating* | $\le \mathbf{+0.0250}$ | **~24.8 GB** | **~325 ms** | **LOCKED (Match)** |
+| Model & Arm | Steps | Eval NLL ↓ | Held-Out v1 bpb (Δ vs Base) ↓ | Verdict (`forgetting.py`) | Format Valid ↑ | Closed Turns ↑ | RL Mixed / Pass | Router & Bias Invariant |
+| :--- | :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: |
+| **DR2 Base** (`dryrun2-1234` @ 1,221) | 0 | *pending SFT eval* | `2.0561` (`+0.0000` ref) | base | *pending* | *pending* | *pending* | LOCKED (ref) |
+| **DR2 Full FT** | $\le 243$ | *pending* | *pending* ($\le +0.0500$) | *pending* | *pending* | *pending* | *pending* | *pending* |
+| **DR2 LoRA** ($r=16$) | Matched | *pending* | *pending* ($\le +0.0500$) | *pending* | *pending* | *pending* | *pending* | *pending* |
+| **DR2 Deletion Tuning** (`g5_gate`) | Matched | *pending* | *pending* ($\le +0.0500$) | *pending* | *pending* | *pending* | *pending* | *pending* |
 
-*Guard Limits:* Held-out forgetting limit is $\Delta\text{bpb} \le 0.0500$ (with at-limit alert margin at $0.0100$). Any arm exceeding $+0.0500$ bpb drift is rejected.
+*Guard Limits:* Held-out forgetting limit is $\Delta\text{bpb} \le 0.0500$ (with at-limit alert margin at $\pm 0.0100$). Any arm exceeding $+0.0500$ bpb drift is rejected (`FORGET`).
 
 ### 8.4 Downstream Deliverables & Hand-offs
-1. **DT-then-RL Canary Hand-off:** The DT arm copies `model.safetensors`, `dt_keep_masks.bin`, `dt_keep_masks.bin.json`, and `SHA256SUMS` to `keep_canary/dt/` before workspace cleanup. This unblocks the immediate execution of `jobs/2026-11-17-dt-then-rl-code.md` (Task 11).
-2. **Team 7 & Team 9 Watcher Hand-off:** Checkpointed weights for all three arms are emitted to `keep_t7/g10-dr2-{full,lora,dt}/` for automated scoring by Team 9's eval watcher (`ARC-Challenge`, `HellaSwag` in native BF16).
-3. **Gate 4 Sign-Off:** Final numbers are populated directly from `out/compare.md` upon TSAI job completion on D5/D6, closing Gate 3 Item 7 ahead of the Friday 27 Nov 11:59 PM IST deadline.
+1. **DT-then-RL Canary Hand-off:** The DT arm copies `model.safetensors`, `dt_keep_masks.bin`, `dt_keep_masks.bin.json`, and `SHA256SUMS` to `keep_canary/dt/` before workspace cleanup. This unblocks immediate execution of `jobs/2026-11-17-dt-then-rl-code.md`.
+2. **Team 7 & Team 9 Watcher Hand-off:** Checkpointed weights for all three arms are emitted to `keep_t7/g10-dr2-{full,lora,dt}/` (plus `g10-rl-final` from DT-then-RL) for automated scoring by Team 9's eval watcher (`ARC-Challenge`, `HellaSwag` in `bfloat16`), combined with `out/forget/forget_*.json` via `capstone/watcher_rows_to_report.py` and `sft/tests/forgetting.py`.
+3. **Gate 4 Sign-Off:** Final numbers are populated directly from `out/compare.md` and `forgetting.py` upon TSAI job completion.

@@ -4,6 +4,7 @@ and the real shard_writer.py with G6's baseline tokenizer (--any-tokenizer, as i
   python -m pytest teams/01-data-a/shards/tests/test_run_shards.py
 """
 import json
+import os
 import sys
 from pathlib import Path
 
@@ -33,6 +34,18 @@ def rows(pack, tag):
     return [{"doc_id": f"{tag}{k}", "text": t, "url": "", "lang_label": "en", "pack_id": pack} for k, t in enumerate(TEXTS)]
 
 
+def without_times(parts):
+    return {k: {f: v for f, v in e.items() if f not in ("seconds", "peak_rss_mb")} for k, e in parts.items()}
+
+
+@pytest.fixture(autouse=True)
+def fork_children(monkeypatch):
+    """The writer processes are forked here (they then see the tests' monkeypatches, and skip the 4 s of imports each); the
+    test of the real start method (spawn) says so."""
+    if "fork" in rs.mp.get_all_start_methods():
+        monkeypatch.setattr(rs, "START_METHOD", "fork")
+
+
 @pytest.fixture
 def run(tmp_path, monkeypatch):
     """A finished run over pk-a part-00000 and part-00001, pk-b part-00000, pk-nolane part-00000 and a held-out pk-a part."""
@@ -49,10 +62,11 @@ def table(tmp_path):
     return path
 
 
-def go(run, tmp_path, table, *extra, out="shards"):
+def go(run, tmp_path, table, *extra, out="shards", in_process=False):
+    """in_process: the tests that break shard_writer from inside (monkeypatch) need it in this process, not in a child."""
     out = tmp_path / out
     code = rs.main(["--input", str(run / "final"), "--manifest", str(run / "pipeline_manifest.json"), "--tokenizer", str(BASE),
-                    "--any-tokenizer", "--pack-table", str(table), "--out", str(out), *extra])
+                    "--any-tokenizer", "--pack-table", str(table), "--out", str(out), *extra, *(["--in-process"] if in_process else [])])
     return code, out, json.loads((out / "shards_summary.json").read_text(encoding="utf-8"))
 
 
@@ -225,7 +239,7 @@ def test_no_verify_does_not_hide_a_part_the_writer_itself_failed(run, tmp_path, 
 
 def test_a_shard_that_fails_verification_fails_its_part_alone(run, tmp_path, table, monkeypatch):
     break_after_writing(monkeypatch, flip_a_token_byte)
-    code, out, s = go(run, tmp_path, table, "--pack", "pk-a", "--pack", "pk-b")
+    code, out, s = go(run, tmp_path, table, "--pack", "pk-a", "--pack", "pk-b", in_process=True)
     e = s["parts"]["train/pk-b/part-00000.parquet"]
     assert code == 1 and e["status"] == "failed" and e["shards"][0]["shard_id"] == "pk-b-train-000000"
     assert e["reason"].startswith("verify_shards: pk-b-train-000000: pk-b-train-000000.bin: sha256")
@@ -235,7 +249,7 @@ def test_a_shard_that_fails_verification_fails_its_part_alone(run, tmp_path, tab
 
 def test_a_problem_that_belongs_to_no_part_goes_to_the_summary_and_fails_the_run(run, tmp_path, table, monkeypatch):
     break_after_writing(monkeypatch, lambda out, m: (out / "cleaning_pipeline.json").unlink() if m["pack_id"] == "pk-b" else None)
-    code, out, s = go(run, tmp_path, table, "--pack", "pk-a", "--pack", "pk-b")
+    code, out, s = go(run, tmp_path, table, "--pack", "pk-a", "--pack", "pk-b", in_process=True)
     assert code == 1 and s["verified"] is False and s["counts"]["written"] == 3
     assert any("cleaning_pipeline.json is missing" in p for p in s["problems"])
 
@@ -256,7 +270,7 @@ def test_a_long_list_of_problems_is_cut_in_the_reason(run, tmp_path, table, monk
             for ext in (".idx.npy", ".docs.parquet", ".dump.md"):
                 (out / f"{m['shard_id']}{ext}").unlink()
     break_after_writing(monkeypatch, damage)
-    code, out, s = go(run, tmp_path, table, "--pack", "pk-b")
+    code, out, s = go(run, tmp_path, table, "--pack", "pk-b", in_process=True)
     reason = s["parts"]["train/pk-b/part-00000.parquet"]["reason"]
     assert reason.count("; ") == 2 and "(and 1 more)" in reason  # four problems: three are shown
 def licensed(tmp_path, change=None):
@@ -355,11 +369,11 @@ def test_a_run_stopped_part_way_and_run_again_ends_as_one_clean_run(run, tmp_pat
     with monkeypatch.context() as m:
         stop_at(m, where, 4)
         with pytest.raises(KeyboardInterrupt):
-            go(run, tmp_path, table, *args, out="again")
+            go(run, tmp_path, table, *args, out="again", in_process=True)
     out = tmp_path / "again"
     kept = {p.name: p.stat().st_mtime_ns for p in out.glob("pk-a-train-00000[0-2].bin")}
     code, out, got = go(run, tmp_path, table, *args, out="again")
-    assert code == 0 and got["parts"] == want["parts"] and got["counts"] == want["counts"]
+    assert code == 0 and without_times(got["parts"]) == without_times(want["parts"]) and got["counts"] == want["counts"]
     assert {p.name: p.stat().st_mtime_ns for p in out.glob("pk-a-train-00000[0-2].bin")} == kept and len(kept) == 3
 
 
@@ -371,9 +385,9 @@ def test_a_run_stopped_in_its_first_part_can_be_run_again(run, tmp_path, table, 
     with monkeypatch.context() as m:
         stop_at(m, "publish", 2)
         with pytest.raises(KeyboardInterrupt):
-            go(run, tmp_path, table, *args, out="again")
+            go(run, tmp_path, table, *args, out="again", in_process=True)
     code, out, got = go(run, tmp_path, table, *args, out="again")
-    assert code == 0 and got["parts"] == want["parts"] and got["counts"] == want["counts"]
+    assert code == 0 and without_times(got["parts"]) == without_times(want["parts"]) and got["counts"] == want["counts"]
     assert {p.name: p.read_bytes() for p in out.glob("pk-b-*.bin")} == {p.name: p.read_bytes() for p in clean.glob("pk-b-*.bin")} != {}
     names = lambda d: sorted(p.name for p in d.iterdir() if p.suffix != ".md" and p.name != "shards_summary.json")
     assert names(out) == names(clean) and not list(out.glob("*.tmp"))
@@ -385,3 +399,204 @@ def test_a_rerun_with_other_settings_is_refused(run, tmp_path, table):
     go(run, tmp_path, table, "--pack", "pk-a", "--tokens", "40")
     with pytest.raises(SystemExit, match="was made with"):
         go(run, tmp_path, table, "--pack", "pk-a", "--tokens", "80")
+
+
+def test_every_written_part_records_its_time_and_memory(run, tmp_path, table):
+    code, out, s = go(run, tmp_path, table, "--pack", "pk-a", "--pack", "pk-b")
+    for name, e in s["parts"].items():
+        if e["status"] == "written":
+            assert e["seconds"] > 0 and (e["peak_rss_mb"] is None or e["peak_rss_mb"] > 0), name
+        if e["status"] == "not_sharded":
+            assert "seconds" not in e
+    kept = go(run, tmp_path, table, "--pack", "pk-a", "--pack", "pk-b")[2]["parts"]   # a rerun keeps what it did not redo
+    assert {k: (e["seconds"], e["peak_rss_mb"]) for k, e in kept.items() if e["status"] == "written"} == \
+        {k: (e["seconds"], e["peak_rss_mb"]) for k, e in s["parts"].items() if e["status"] == "written"}
+
+
+needs_fork = pytest.mark.skipif("fork" not in rs.mp.get_all_start_methods(),
+                                reason="the monkeypatch has to reach the child process, which only a forked one inherits")
+
+
+@needs_fork
+def test_each_part_is_written_by_a_process_of_its_own(run, tmp_path, table, monkeypatch):
+    seen = tmp_path / "pids.txt"
+    real = rs.run_writer
+
+    def noting(argv):
+        with open(seen, "a") as f:
+            f.write(f"{os.getpid()}\n")
+        return real(argv)
+    monkeypatch.setattr(rs, "run_writer", noting)
+    go(run, tmp_path, table, "--pack", "pk-a", "--pack", "pk-b")
+    pids = seen.read_text().split()
+    assert len(pids) == 3 and len(set(pids)) == 3 and str(os.getpid()) not in pids
+    seen.unlink()
+    go(run, tmp_path, table, "--pack", "pk-a", "--pack", "pk-b", out="inside", in_process=True)
+    assert set(seen.read_text().split()) == {str(os.getpid())}
+
+
+def test_a_child_process_gives_the_same_shards_as_writing_in_this_one(run, tmp_path, table):
+    args = ("--pack", "pk-a", "--pack", "pk-b", "--tokens", "40")   # forced rollover: several shards a part
+    _, a_out, a = go(run, tmp_path, table, *args, out="child")
+    _, b_out, b = go(run, tmp_path, table, *args, out="inside", in_process=True)
+    assert without_times(a["parts"]) == without_times(b["parts"]) and a["counts"] == b["counts"]
+    assert sorted(p.name for p in a_out.glob("*.bin")) == sorted(p.name for p in b_out.glob("*.bin")) != []
+    for f in a_out.glob("*.bin"):
+        assert f.read_bytes() == (b_out / f.name).read_bytes()
+
+
+@needs_fork
+def test_a_writer_process_that_dies_fails_its_part_and_the_run_goes_on(run, tmp_path, table, monkeypatch):
+    real = rs.run_writer
+
+    def dying(argv):
+        if "pk-b/part-00000.parquet" in argv[argv.index("--input") + 1].replace("\\", "/"):
+            os._exit(9)   # like the kernel's out-of-memory kill: no result, no exception
+        return real(argv)
+    monkeypatch.setattr(rs, "run_writer", dying)
+    code, out, s = go(run, tmp_path, table, "--pack", "pk-a", "--pack", "pk-b")
+    e = s["parts"]["train/pk-b/part-00000.parquet"]
+    assert code == 1 and e["status"] == "failed" and "writer process died" in e["reason"] and e["peak_rss_mb"] is None
+    assert s["parts"]["train/pk-a/part-00001.parquet"]["status"] == "written" and s["counts"]["written"] == 2
+
+
+def test_the_real_start_method_writes_the_same_shards(run, tmp_path, table, monkeypatch):
+    """The default start method is spawn: a fresh interpreter imports the writer again and gets everything through its arguments."""
+    monkeypatch.setattr(rs, "START_METHOD", "spawn")
+    assert rs.START_METHOD == "spawn" and rs.child_context().get_start_method() == "spawn"
+    _, s_out, s = go(run, tmp_path, table, "--pack", "pk-b", out="spawned")
+    _, i_out, i = go(run, tmp_path, table, "--pack", "pk-b", out="inside", in_process=True)
+    peak = s["parts"]["train/pk-b/part-00000.parquet"]["peak_rss_mb"]
+    assert without_times(s["parts"]) == without_times(i["parts"]) and (peak is None or peak > 0)   # None where there is no /proc or resource
+    assert (s_out / "pk-b-train-000000.bin").read_bytes() == (i_out / "pk-b-train-000000.bin").read_bytes()
+
+
+@pytest.mark.skipif(not Path("/proc/self/status").is_file(), reason="VmHWM is read from /proc (Linux)")
+def test_a_spawned_writers_peak_memory_is_its_own_not_its_parents(monkeypatch):
+    """ru_maxrss is carried over exec, so a spawned child reports at least what its parent peaked at; VmHWM is the child's own."""
+    import numpy as np
+    from concurrent.futures import ProcessPoolExecutor
+    np.ones(1500 * 2 ** 20 // 8)                      # this process peaks 1.5 GB higher, then frees it
+    parent = rs.peak_rss_mb()
+    with ProcessPoolExecutor(max_workers=1, mp_context=rs.mp.get_context("spawn")) as pool:
+        child = pool.submit(rs.peak_rss_mb).result()
+    assert parent > 1500 and 0 < child < parent - 1000
+
+
+# --- several packs at once (--workers) ---------------------------------------------------------------------------------------
+
+TABLE4 = {"packs": {**TABLE["packs"],
+                    "pk-c": {"language": "hi", "script": "Deva", "domain": "indic", "lane": "indic"},
+                    "pk-d": {"language": "en", "script": "Latn", "domain": "math", "lane": "math"}}}
+
+
+@pytest.fixture
+def run4(tmp_path, monkeypatch):
+    """Four packs of two train parts each (three docs a part), and a held-out part."""
+    parts = {("train", f"{pack}/part-0000{k}.parquet"): rows(pack, f"{pack[-1]}{k}_") for pack in ("pk-a", "pk-b", "pk-c", "pk-d") for k in (0, 1)}
+    parts[("heldout", "pk-a/part-00000.parquet")] = rows("pk-a", "h0_")
+    return make_run(tmp_path / "pipeline", monkeypatch, parts)
+
+
+@pytest.fixture
+def table4(tmp_path):
+    path = tmp_path / "pack_table4.json"
+    path.write_text(json.dumps(TABLE4), encoding="utf-8")
+    return path
+
+
+def same_files(a_out, b_out):
+    names = sorted(p.name for p in a_out.iterdir() if not p.name.startswith("shards_summary"))
+    assert names == sorted(p.name for p in b_out.iterdir() if not p.name.startswith("shards_summary"))
+    for name in names:
+        assert (a_out / name).read_bytes() == (b_out / name).read_bytes(), name
+    return names
+
+
+def test_several_packs_at_once_give_the_same_summary_and_files_as_one_at_a_time(run4, tmp_path, table4, monkeypatch):
+    args = ("--tokens", "40")  # forced rollover: several shards a part, so the numbers across a pack's parts are tested too
+    _, seq_out, seq = go(run4, tmp_path, table4, *args, out="seq")
+    monkeypatch.setattr(rs, "START_METHOD", "spawn")   # real processes, started from the worker threads
+    code, par_out, par = go(run4, tmp_path, table4, *args, "--workers", "3", out="par")
+    assert code == 0 and seq["counts"]["written"] == 8 and seq["counts"]["shards"] > 8
+    assert without_times(par["parts"]) == without_times(seq["parts"]) and par["counts"] == seq["counts"]
+    assert list(par["parts"]) == list(seq["parts"])          # the same part order, whichever pack finished first
+    assert len(same_files(seq_out, par_out)) > 30 and par["verified"] is True
+
+
+def test_workers_with_in_process_is_refused_and_so_is_zero(run4, tmp_path, table4):
+    for extra in (("--workers", "2", "--in-process"), ("--workers", "0")):
+        with pytest.raises(SystemExit, match="--workers|--in-process"):
+            go(run4, tmp_path, table4, *extra)
+    assert not (tmp_path / "shards").exists()
+
+
+def test_a_pack_that_fails_stops_no_other_pack(run4, tmp_path, table4, monkeypatch):
+    pq.write_table(pa.Table.from_pylist(rows("pk-b", "x_")), run4 / "final" / "train" / "pk-b" / "part-00000.parquet")  # changed after F2
+    monkeypatch.setattr(rs, "START_METHOD", "spawn")
+    code, out, s = go(run4, tmp_path, table4, "--workers", "4")
+    assert code == 1 and s["parts"]["train/pk-b/part-00000.parquet"]["status"] == "failed"
+    assert {n: e["status"] for n, e in s["parts"].items() if e["pack_id"] != "pk-b" and e["status"] != "not_sharded"} == \
+        {f"train/{p}/part-0000{k}.parquet": "written" for p in ("pk-a", "pk-c", "pk-d") for k in (0, 1)}
+
+
+def test_a_second_run_with_workers_keeps_the_packs_of_the_first_and_ends_as_a_clean_run(run4, tmp_path, table4, monkeypatch):
+    monkeypatch.setattr(rs, "START_METHOD", "spawn")
+    _, clean_out, want = go(run4, tmp_path, table4, "--workers", "2", out="clean")
+    go(run4, tmp_path, table4, "--pack", "pk-a", "--pack", "pk-c", "--workers", "2", out="again")
+    kept = {p.name: p.stat().st_mtime_ns for p in (tmp_path / "again").glob("pk-[ac]-train-*.bin")}
+    code, out, got = go(run4, tmp_path, table4, "--workers", "2", out="again")
+    assert code == 0 and without_times(got["parts"]) == without_times(want["parts"]) and got["counts"] == want["counts"]
+    now = {p.name: p.stat().st_mtime_ns for p in out.glob("pk-[ac]-train-*.bin")}
+    assert len(kept) == 4 and {n: now[n] for n in kept} == kept   # the first run's shards were not written again
+    same_files(clean_out, out)
+
+
+def test_the_run_record_is_copied_once_and_never_half_written(tmp_path):
+    record = tmp_path / "record.json"
+    record.write_text('{"run": 1}\n', encoding="utf-8")
+    out = tmp_path / "shards"
+    out.mkdir()
+    target = out / "cleaning_pipeline.json"
+    rs.shard_writer.publish_pipeline_record(record, target)
+    assert target.read_bytes() == record.read_bytes()
+    before = target.stat().st_mtime_ns
+    rs.shard_writer.publish_pipeline_record(record, target)     # already there: left alone
+    assert target.stat().st_mtime_ns == before and [p.name for p in out.iterdir()] == ["cleaning_pipeline.json"]
+
+
+KILLED_PARENT = """
+import os, sys, time
+sys.path.insert(0, sys.argv[2])
+import run_shards as rs
+from concurrent.futures import ProcessPoolExecutor
+
+def writer(marker, parent):           # stands in for run_writer_in_child: the same call first, then a long part
+    rs.die_with_parent(parent)
+    open(marker + ".started", "w").close()
+    time.sleep(10)
+    open(marker, "w").write("written after the run was killed")
+
+if __name__ == "__main__":
+    with ProcessPoolExecutor(max_workers=1, mp_context=rs.child_context()) as pool:   # as write_one: spawn, one part
+        pool.submit(writer, sys.argv[1], os.getpid()).result()
+"""
+
+
+@pytest.mark.skipif(not sys.platform.startswith("linux"), reason="PR_SET_PDEATHSIG is Linux only")
+def test_a_writer_dies_with_a_killed_run_and_writes_nothing_after(tmp_path):
+    """kill -9 of run_shards.py (or a stopped job) must not leave a writer behind that goes on writing while the run is
+    started again into the same folder."""
+    import signal, subprocess, time
+    script, marker = tmp_path / "killed_parent.py", tmp_path / "marker"
+    script.write_text(KILLED_PARENT, encoding="utf-8")
+    parent = subprocess.Popen([sys.executable, str(script), str(marker), str(Path(rs.__file__).parent)])
+    deadline = time.monotonic() + 120
+    while not Path(str(marker) + ".started").exists():   # the writer is under way
+        assert parent.poll() is None and time.monotonic() < deadline, "the writer did not start"
+        time.sleep(0.2)
+    parent.send_signal(signal.SIGKILL)
+    parent.wait()
+    time.sleep(12)                                        # longer than the writer's part
+    assert not marker.exists()
+

@@ -1,3 +1,4 @@
+import argparse
 import json
 import math
 import sys
@@ -8,7 +9,7 @@ import pytest
 import torch
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
-from alarms import AlarmMonitor, max_vio_and_dead, run_synthetic, synthetic_stream
+from alarms import AlarmMonitor, main, max_vio_and_dead, parse_bound, run_synthetic, synthetic_stream
 
 
 def test_synthetic_3000_steps():
@@ -320,3 +321,81 @@ def test_checkpoint_rejects_unknown_schema_before_changing_state():
         with pytest.raises(ValueError, match="schema"):
             mon.load_state_dict(invalid)
         assert mon.state_dict() == before
+
+
+def test_parse_bound_open_and_closed_sides():
+    assert parse_bound("gpu_alloc_gib::40") == ("gpu_alloc_gib", (None, 40.0))
+    assert parse_bound("model_flops_utilization:0.30:") == ("model_flops_utilization", (0.3, None))
+    assert parse_bound("gpu_temp_c:10:85") == ("gpu_temp_c", (10.0, 85.0))
+
+
+@pytest.mark.parametrize("spec", [
+    "nocolon",
+    "only:one",
+    "name:1:2:3",
+    ":1:2",
+    "name::",
+    "name:abc:1",
+    "name:nan:1",
+    "name:inf:",
+    "name:5:1",
+])
+def test_parse_bound_rejects_bad_specs(spec):
+    with pytest.raises(argparse.ArgumentTypeError):
+        parse_bound(spec)
+
+
+def _jsonl(tmp_path, rows):
+    path = tmp_path / "metrics.jsonl"
+    path.write_text("".join(json.dumps(row) + "\n" for row in rows), encoding="utf-8")
+    return path
+
+
+def _cli(monkeypatch, argv):
+    monkeypatch.setattr(sys, "argv", ["alarms.py", *argv])
+    return main()
+
+
+def _alarms_on_stdout(capsys):
+    return [json.loads(line) for line in capsys.readouterr().out.splitlines() if line.strip()]
+
+
+def test_jsonl_bound_fires_and_default_stays_off(tmp_path, monkeypatch, capsys):
+    path = _jsonl(tmp_path, [{"step": 0, "gpu_alloc_gib": 50.0}])
+    assert _cli(monkeypatch, ["--jsonl", str(path), "--bound", "gpu_alloc_gib::40"]) == 0
+    hit = _alarms_on_stdout(capsys)
+    assert len(hit) == 1
+    assert hit[0]["rule"] == "static_bound"
+    assert hit[0]["metric"] == "gpu_alloc_gib"
+
+    assert _cli(monkeypatch, ["--jsonl", str(path)]) == 0
+    assert _alarms_on_stdout(capsys) == []
+
+
+def test_jsonl_moe_patience_flag_and_default(tmp_path, monkeypatch, capsys):
+    rows = [{"step": s, "expert_load": BAD_LOAD} for s in range(3)]
+    path = _jsonl(tmp_path, rows)
+    assert _cli(monkeypatch, ["--jsonl", str(path), "--moe-patience", "3"]) == 0
+    hit = _alarms_on_stdout(capsys)
+    assert [(a["step"], a["rule"]) for a in hit] == [(2, "moe_routing")]
+
+    assert _cli(monkeypatch, ["--jsonl", str(path)]) == 0
+    assert _alarms_on_stdout(capsys) == []
+
+
+def test_bound_and_moe_patience_require_jsonl(monkeypatch):
+    for argv in (["--moe-patience", "3"], ["--bound", "gpu_alloc_gib::40"], ["--synthetic", "10", "--moe-patience", "3"]):
+        with pytest.raises(SystemExit) as exc:
+            _cli(monkeypatch, argv)
+        assert exc.value.code != 0
+
+
+def test_jsonl_rejects_bad_patience_and_duplicate_bound(tmp_path, monkeypatch):
+    path = _jsonl(tmp_path, [{"step": 0, "gpu_alloc_gib": 1.0}])
+    for argv in (
+        ["--jsonl", str(path), "--moe-patience", "0"],
+        ["--jsonl", str(path), "--bound", "gpu_alloc_gib::40", "--bound", "gpu_alloc_gib:1:9"],
+    ):
+        with pytest.raises(SystemExit) as exc:
+            _cli(monkeypatch, argv)
+        assert exc.value.code != 0

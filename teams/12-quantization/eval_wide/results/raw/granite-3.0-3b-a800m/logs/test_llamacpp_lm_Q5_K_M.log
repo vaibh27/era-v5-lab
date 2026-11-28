@@ -1,0 +1,5 @@
+Error in sitecustomize; set PYTHONVERBOSE for traceback:
+ModuleNotFoundError: No module named 'wrapt'
+granite-3.0-3b-a800m-base-Q5_K_M.gguf: log p(' Par') = -0.975, generation -0.975, off-by-one value -13.633; cache max diff 0.0498
+FAIL 4. easy item answered wrong: [-1.84, -1.84, -7.19, -11.3]
+1 check(s) failed

@@ -1,0 +1,36 @@
+doc_id,read,verdict,diseases,evidence,hex,note
+f1473ebd9af40a9f,full,clean,,,,"header removed correctly; EJS <%= %> placeholders are template content, kept"
+0fd31f58f6817d5e,full,clean,,,,header removed correctly
+d109097eceebfc0f,full,clean,,,,StarCoder name placeholder replaced; no real name; code unchanged
+bb937e91245d322c,full,fix,,,,StarCoder redaction replaced bcrypt with <PASSWORD> upstream; code now calls an undefined name; no real secret
+ba31d5559835e9a6,full,drop,E1,,,"OpenAPI Generator header, ""Do not edit""; drop looks right"
+0227a4e3e2993a31,full,clean,,,,header removed correctly
+1d77bd24d03dee71,full,clean,,,,header removed correctly
+148767a121cb58f1,full,clean,,,,header removed; StarCoder name placeholder replaced
+2b1b0770e4f9881f,full,clean,,,,"header removed; Portuguese ç/ã in Cucumber step strings are real text, kept"
+8177f30c21088b0a,full,clean,,,,header removed correctly
+725ef66906dd2399,full,clean,,,,header removed correctly
+489a7bcb90e92242,full,clean,,,,header removed correctly
+a37f405188118db2,full,clean,,,,header removed correctly
+ea8017f9c94c93db,full,clean,,,,header removed correctly
+660567142bb6d84b,full,clean,,,,header removed correctly
+b55c0a38bd118ca5,full,fix,E4,,,"ASF header (""Licensed to the Apache Software Foundation"") not matched by DA-E4-007, whose pattern needs ""Licensed under the Apache License""; key placeholder replaced fine"
+42c798f145462ba0,full,clean,,,,header removed correctly
+99cdfbe94efa4c0e,full,clean,,,,"header removed; Chinese comments are real text, kept"
+990012a056c7af57,full,clean,,,,header removed correctly
+be867b0f20575539,full,clean,,,,header removed correctly
+796684661fabcfe7,full,clean,,,,header removed correctly
+ff2826310cb46923,full,clean,,,,header removed correctly
+d07d813005033bce,full,clean,,,,header removed correctly
+a9024db4e7da3ebb,full,clean,,,,header removed correctly
+2955de7a227eed56,partial,clean,,,,header removed correctly (461-line file)
+cfa4be64cbad8fd7,full,drop,E1,,,"vendored dependency under node_modules/, dropped by DA-E1-008 build-path check; drop looks right"
+6fe0462debce7705,full,clean,,,,header removed correctly
+33d9b5cf7970302d,full,clean,,,,header removed correctly
+7485ad65c80b4204,full,clean,,,,"only line endings normalised; Chinese comments are real text, kept"
+61571ae8722badc1,full,clean,,,,header removed; StarCoder name placeholder replaced
+7d4f89515d059f55,full,clean,,,,header removed correctly
+40aa2e583092e454,full,clean,,,,header removed correctly
+3d40d9c3493af31e,full,drop,E1,,,"compiled declaration file with sourceMappingURL, dropped by DA-E1-008; drop looks right"
+99d66fd61a623208,full,clean,,,,header removed correctly
+d41eac1cb9a838f9,full,clean,,,,header removed correctly

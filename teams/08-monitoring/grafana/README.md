@@ -19,6 +19,16 @@ A private dashboard that reads training metrics from ClickHouse. Panels:
 
 MFU, GPU and eval panels stay empty until a run that logs those metrics is loaded.
 
+## Public dashboard rules (`public_v1.json`)
+
+`test_public_dashboard.py` enforces the rules in `../docs/dashboard_content_decisions_w4.md` section 1:
+
+- Read-only, IST (`Asia/Kolkata`), and auto-refresh at 30 s or less (`10s` now) so a live run reaches the page within the 60 s target.
+- Public queries read only `metrics_raw`, `metrics_rollup_<N>`, `eval_mini`, `shard_composition` and `run_events`, and never use cost, GPU, MFU, node or host terms.
+- No compute-cost counter: no currency unit on any panel, and no money or GPU-hours in any text.
+- No hardware or machine names or specs anywhere a viewer can read (titles, descriptions, text panels, variable labels) or in a query: accelerator models and vendors, clouds and hosting, VRAM, TFLOPS, host names. Prose that says the page does *not* show the cost or the machines is allowed.
+- Each panel's text is Team 11's approved sentence in `teams/11-release/dashboard/dashboard_text.md`; no placeholder text, no em or en dash, team names only.
+
 ## 1. Start ClickHouse and load the data
 
 Follow `../clickhouse/README.md`: start the container, apply `schema_v1.sql` and `rollups_v1.sql`, then load runs with `load_jsonl.py`.

@@ -1,0 +1,11 @@
+doc_id,read,verdict,diseases,evidence,hex,note
+89c67bd3a81a7be5,full,drop,C1,,,Google Forms request form: field labels with 'Your answer' placeholders; repeated-line removal deleted 7 of the 8 'Your answer' lines and kept the rest; only the two intro paragraphs are prose
+a1af94ef3fabe18d,full,,,,,"No matching doc_id (dropped by clean). Drop looks right: blog index page, 'Subscribe to our Newsletter' and ten post teasers each cut at '[...]'"
+a662b89e92094134,full,drop,C4;C5,,,"Generated spam page: sentences from unrelated pages stitched together (lesson notes, a film synopsis, a French police unit name); only two zero-width spaces removed"
+160ecab0677e3623,full,drop,C3;C1,,,"Tag page: DA-C5-005 removed the 'Tag:' line, leaving one teaser cut at '... Read More' and a post title; the other tag-page teasers in this sample are dropped by DA-C3-001"
+3ec89c5b0288640e,full,,,,,No matching doc_id (dropped by clean). Drop looks right: tag-page teaser cut at '...'
+c03e9526716b2147,full,drop,D4,,,"Synonym-spun SEO page on tax and contract law ('Bodily existence exam', 'Gallery[edit]', title repeated); only 'Menu' removed. D4 is the nearest code for spun text"
+0b9dc4ab4d955c18,full,,,,,No matching doc_id (dropped by clean). Drop looks right: product teaser cut at 'Versatile...'
+efeea9b6598aa2b8,full,fix,C1,,,"'Advertisement | page continues below' kept once (repeated-line removal keeps the first copy and removed the other 5); 'VIDEO', 'Opens a new window' glued to a link name, and the Terms of Use footer joined to the last sentence kept"
+894608686e1fb1fb,full,fix,C1,,,Blog tagline and 'Main menu' kept at the top; only 'Post navigation' removed
+7de7174c8f181f58,full,fix,C1,,,'Tools' and 'Typography' kept at the top and a stray 'our IBM' at the end; only 'Share This' removed; Figures 1 to 6 are missing in the raw too

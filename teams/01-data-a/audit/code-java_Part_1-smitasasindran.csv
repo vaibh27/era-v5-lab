@@ -1,0 +1,26 @@
+doc_id,read,verdict,diseases,evidence,hex,note
+638863748c4257c0,full,clean,,,,
+88b37f769ebb991b,full,clean,,,,
+d88d59bebae7a5d6,full,clean,,,,
+9cb77e447db4ee48,full,clean,,,,"Javadoc HTML (<p>) in comments; normal Java, not a disease"
+fca562d66452b92d,full,clean,,,,
+18451aef9bf14f36,full,fix,C1,"template header (""Author <handle>"", ""Created on <date>"") at post offset 0 survives; only the dataset marker line was removed",,"Template header with the author's handle left at the top; the IDE-template rule DA-C1-005 misses the ""Created on"" wording"
+e1d5bf31a844c500,full,clean,,,,
+1158639fa76e3297,full,clean,,,,"Chinese column comments are natural; generator placeholders (${comments}, $column.comments) are in the source and harmless"
+b8003102c989a4d0,full,clean,,,,"Javadoc HTML (<p>) in comments; normal Java, not a disease"
+2736e7f64ee0aaab,full,clean,,,,"Javadoc HTML (<p>) in comments; normal Java, not a disease"
+8be0d5379d2edc49,full,clean,,,,
+f2c6453e5866df47,full,clean,,,,
+c39b9270b4ba9757,full,clean,,,,
+daa467d0480110ae,full,clean,,,,
+40be3d257374dd3c,full,clean,,,,
+7f5a11069ceef874,full,clean,,,,
+9639bb38f2521938,full,clean,,,,
+03e49e185ce90e6b,full,clean,,,,
+94a23a1922d43613,full,clean,,,,
+407d82827bcd9f2b,full,clean,,,,
+0b88c1632688dba2,full,clean,,,,"Chinese comments next to ASCII code; natural, not look-alike mixing"
+5fc227e0c45569e7,full,clean,,,,
+4e58ce5a9603d8aa,full,clean,,,,
+37124eab71fe111d,full,fix,E4,"second licence block (""///*Copyright 2017 ..."", Apache text) at pre offset 643 survives in post at offset 30; the first block was removed",,"Cleaner removed the first licence block only; the second, behind a ""//Changed by"" comment line, was kept"
+4400b8641e796b8c,full,clean,,,,

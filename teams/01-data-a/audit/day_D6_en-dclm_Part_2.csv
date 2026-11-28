@@ -1,0 +1,11 @@
+doc_id,read,verdict,diseases,evidence,hex,note
+ac9442043a4d4806,full,drop,D1;C3,,,"Traditional Chinese MLB interview translation in the English pack; cleaner removed most lines (2,732 to 673 chars), leaving English questions without answers"
+afc83ec7e700b331,full,fix,C4;C1,,,"Blog page with five channelled-message posts joined; 'Posted by ... at 2:04 PM', art credits, 'Read Online / Download Audio Version / Watch Video Version / Watch Video on Youtube' kept; repeated banner cut to one copy"
+64c909239beadad9,full,fix,C1,,,"'Canada Markets closed' header, related headlines and 'Read the latest financial and business news' footer kept"
+ef987c066d1cdf0f,full,fix,C1,,,Phone masked once but the same business freephone number left unmasked on the next line (offset 54); 'RHI & Finance available' header kept
+90860d3fa1f13864,full,fix,C1,,,"'Cookies on this website', 'Original publication / Journal article / Publication Date' and keyword line kept around the abstract"
+6d42ab66ea6a9d2c,full,fix,C1,,,"Essay-site ads kept ('Place an Order', 'Struggling with your work?', 'Banner ad for Viper plagiarism checker', 'Reference Copied to Clipboard', 'Request Removal'); image file names left"
+f1b8673c7cfd7aac,full,fix,C4;C1,,,"Blog index (tmux, Thunderbird, Kindle, Lilypond, OpenVPN posts joined); repeated-line removal cut lines inside shell/config snippets ('cd /etc/openvpn' 3 to 1); 'Tagged as: , , , ,' kept; IPs and paths missing in the code are already missing in the raw"
+5a7a2f792c27521e,full,fix,C1,,,"BOM removed correctly; cruise marketing nav lines kept ('View all ... below', 'Browse a selection of Azura cruises below')"
+3391ad7aa8aa6e49,full,fix,C1,,,'Enjoying our content? Consider becoming a Member today!' kept at top; repeated title lines removed correctly
+72320b6dece6c7bf,full,fix,C1,,,"'hide cookie message', '73,406 News Articles', 'See also', 'IDG UK Sites' and a related headline kept"

@@ -1,0 +1,18 @@
+{
+  "_comment": "H3 sync check (week-4 To do): the rehearsed 3-pack CUDA config of jobs/2026-11-19-first-training/h3.json with sync_debug on. Measurement only: h3.py removes nothing. Same packs, pairs and sentence threshold 0.7 as the rehearsal (#599), so the counts can be compared. device is cuda, not auto, so a run without a GPU fails instead of falling back to CPU. Paths are relative to the repository root; model_path is LaBSE at revision 836121a0533e5664b21c7aacc5d22951f2b8b25b, staged in ../models/LaBSE.",
+  "inputs": "out/h3_sync_check/clean",
+  "out": "out/h3_sync_check/h3",
+  "cache": "out/h3_sync_check/h3_cache",
+  "model_path": "../models/LaBSE",
+  "device": "cuda",
+  "precision": "auto",
+  "packs": {
+    "ind-sa-fw2": "sa",
+    "ind-hi-fw2": "hi",
+    "en-fineweb-edu": "en"
+  },
+  "pairs": [["sa", "en"], ["sa", "hi"], ["hi", "en"]],
+  "max_docs_per_pack": 0,
+  "max_minutes": 60,
+  "sync_debug": true
+}

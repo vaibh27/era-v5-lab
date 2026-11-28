@@ -1,0 +1,91 @@
+Real-input run of capstone/forget_bpb_kept.py, 26 Nov 2026. Test only: a small stand-in, 3 steps, not a quality result.
+Real: p1536 tokenizer (sha256 e6b93a93...25a64b), raw_table_P32.npz (sha256 e19a6cae...39b0), 45 documents of
+held-out v1 (3 per slice), Team 5 trainer and KAS V2 head, the team's comparison wrapper, its adapter.yaml, Team 7 store.
+Stand-in: model shape (below), synthetic training text and SFT pack. Benchmark rows are made up; none is read.
+Machine: CPU only, Python 3.11.16, torch 2.7.1+cpu. PYTHONPATH=<LAB>/teams/07-infrastructure, run from <LAB>.
+
+## arm config (copied into configs/arms for step 1, then removed)
+# Stand-in shape only (copied into the arms tree for the one training run, then removed).
+inherit: dryrun2.yaml
+model: {n_layer: 2, n_embd: 256, n_head: 4, n_kv_head: 2}
+
+## 1. stand-in run folder
+python teams/05-architecture/harness/train_week2.py --config teams/05-architecture/configs/arms/zz_g10_standin_small.yaml \
+  --runtime teams/05-architecture/configs/runtime.yaml --tokenizer <RUN>/../tokenizer/tokenizer.json --tokenizer-release frozen-p1536 \
+  --byte-table teams/04-ke2/results/tables/p1536-s0/raw_table_P32.npz --train-data <RUN>/inputs/pretrain.jsonl \
+  --heldout-data <RUN>/inputs/heldout_slice.jsonl --heldout-sources <RUN>/inputs/heldout_slice_sources.jsonl \
+  --smoke --smoke-steps 3 --smoke-batch-size 1 --seed 1234 --device cpu \
+  --checkpoint-store <RUN>/store --run-id dryrun2-standin --checkpoint-at-start --checkpoint-interval-s 3600 --out <RUN>/standin
+--- output (selected lines)
+wall 119.91 s, peak 6509260 KB
+
+## 2. three arms, weights kept
+python teams/10-post-training/capstone/dryrun2_dt_compare.py --g5-root <LAB> --run-folder <RUN>/standin \
+  --tokenizer <IN>/tokenizer/tokenizer.json --byte-table <LAB>/teams/04-ke2/results/tables/p1536-s0/raw_table_P32.npz \
+  --heldout <RUN>/inputs/heldout_slice.jsonl --heldout-sources <RUN>/inputs/heldout_slice_sources.jsonl \
+  --packs <RUN>/inputs/pack.jsonl --no-pack-check --slice-arm a4 --steps 3 --batch 2 --marker-lr 1e-2 --dev-rows 8 \
+  --dt-calib-rows 4 --gen-limit 2 --gen-max-new 16 --gen-seconds 3 --max-train-seconds 600 --origin g10_rehearsal \
+  --keep-canary-state-dir <RUN>/keep_canary --keep-weights-dir <RUN>/keep_t7 --keep-weights-arms full,lora,dt \
+  --device cpu --seed 1 --out <RUN>/out
+--- output (selected lines)
+{"step": "pins", "ok": true, "seconds": 1.2}
+{"step": "inputs", "ok": true, "seconds": 0.4}
+{"step": "sft_full", "ok": true, "seconds": 29.9}
+{"step": "sft_lora", "ok": true, "seconds": 20.8}
+{"step": "sft_dt", "ok": true, "seconds": 20.4}
+{"step": "compare", "ok": true, "seconds": 0.0}
+{"ok": true, "steps": 6, "failed_steps": [], "kept_weights": ...}
+wall 73.32 s, peak 2132152 KB
+
+## 3. base store record, then the script in fp32 and bf16
+set -e
+T=<IN>/tokenizer/tokenizer.json; BT=<LAB>/teams/04-ke2/results/tables/p1536-s0/raw_table_P32.npz
+H=<RUN>/inputs/heldout_slice.jsonl; HS=<RUN>/inputs/heldout_slice_sources.jsonl; C=teams/10-post-training/capstone
+echo "== delivered files without checkpoint.pt, then the store record for the base"
+mkdir <RUN>/delivered && cp <RUN>/standin/{manifest.json,summary.json,metrics.jsonl,losses.txt,total_losses.txt} <RUN>/delivered/
+python $C/run_folder_from_store.py --g5-root <LAB> --run-folder <RUN>/delivered --store <RUN>/store --tokenizer $T --byte-table $BT \
+  --heldout-data $H --heldout-sources $HS --device cpu --out <RUN>/from_store
+for D in float32 bfloat16; do
+  echo "== forget_bpb_kept.py $D"
+  /usr/bin/time -f "wall %e s, peak %M KB" python $C/forget_bpb_kept.py --adapter-config <RUN>/out/adapter.yaml --heldout $H \
+    --heldout-sources $HS --base-store-record <RUN>/from_store/G10_FROM_STORE.json \
+    --kept <RUN>/keep_t7/g10-dr2-full --kept <RUN>/keep_t7/g10-dr2-lora --kept <RUN>/keep_t7/g10-dr2-dt \
+    --device cpu --dtype $D --out-dir <RUN>/forget_$D
+done
+--- output (selected lines)
+== delivered files without checkpoint.pt, then the store record for the base
+{"run_id": "dryrun2-standin", "step": 3, "model_hash_g5": "95d2911f6276423567b0ecb349731365c108ad3f73a01354d32dfeb955662acd", "manifest_sha256": "814a277d2baba6fa4d699a1f7db295e7a4ae82ebbef2f529c39a9bcce80f563f", "export": {"step": 3, "probe_bits": "402dba6c00000000"}, "checkpoint_sha256": "1d5cee0f1199b958b8d3c394e7899a01b33e78df1bede2f319145301c3672892", "probe_bits": "compared"}
+== forget_bpb_kept.py float32
+base: bpb_all 1.972726 (float32 (TF32 off)) -> <RUN>/forget_float32/forget_base.json
+g10-dr2-full: bpb_all 1.957704 (float32 (TF32 off)) -> <RUN>/forget_float32/forget_g10-dr2-full.json
+g10-dr2-lora: bpb_all 1.965010 (float32 (TF32 off)) -> <RUN>/forget_float32/forget_g10-dr2-lora.json
+g10-dr2-dt: bpb_all 1.972171 (float32 (TF32 off)) -> <RUN>/forget_float32/forget_g10-dr2-dt.json
+wall 42.07 s, peak 2105696 KB
+== forget_bpb_kept.py bfloat16
+base: bpb_all 1.972735 (bfloat16) -> <RUN>/forget_bfloat16/forget_base.json
+g10-dr2-full: bpb_all 1.957623 (bfloat16) -> <RUN>/forget_bfloat16/forget_g10-dr2-full.json
+g10-dr2-lora: bpb_all 1.964908 (bfloat16) -> <RUN>/forget_bfloat16/forget_g10-dr2-lora.json
+g10-dr2-dt: bpb_all 1.972163 (bfloat16) -> <RUN>/forget_bfloat16/forget_g10-dr2-dt.json
+wall 71.28 s, peak 2008272 KB
+
+## 4. checks
+(script compares the reports with each arm's sft_report.json and with Team 9's reader functions. Team 9's
+--team5-run reader refuses a smoke run, so that one base ID is read from summary.json final_model_sha256)
+--- output
+== fp32: forget_bpb_kept.py against the SFT job's own forgetting numbers
+base           job 1.972725742776  script 1.972725742776  max |diff| over 20 values 0.00e+00
+g10-dr2-full   job 1.957703754104  script 1.957703754104  max |diff| over 20 values 0.00e+00
+g10-dr2-lora   job 1.965010097325  script 1.965010097325  max |diff| over 20 values 0.00e+00
+g10-dr2-dt     job 1.972171425358  script 1.972171425358  max |diff| over 20 values 0.00e+00
+== model_revision as Team 9's reader records it
+base: --team5-run and --run-dir IDs both listed
+full: report = Team 9 reader = sft_report.json ebecf4c25359; probe compared
+lora: report = Team 9 reader = sft_report.json 38a3ae7324cd; probe compared
+dt: report = Team 9 reader = sft_report.json be38c06c40ee; probe compared
+== verdict chain with MADE-UP benchmark rows
+full: forgetting.py exit 0 ['Verdict: No forgetting beyond the limits.']
+lora: forgetting.py exit 0 ['Verdict: No forgetting beyond the limits.']
+dt: forgetting.py exit 0 ['Verdict: No forgetting beyond the limits.']
+base rows against the full arm: 1 refused: the watcher rows belong to model_revision 814a277d2baba6fa4d699a1f7db295e7a4ae82ebbef2f529c39a9bcce80f563f, but
+ALL CHECKS PASSED
+

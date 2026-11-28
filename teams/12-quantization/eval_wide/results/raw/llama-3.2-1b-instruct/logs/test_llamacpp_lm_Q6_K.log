@@ -1,0 +1,4 @@
+Error in sitecustomize; set PYTHONVERBOSE for traceback:
+ModuleNotFoundError: No module named 'wrapt'
+Llama-3.2-1B-Instruct-Q6_K.gguf: log p(' Paris') = -0.380, generation -0.380, off-by-one value -10.316; cache max diff 0.0002
+PASS

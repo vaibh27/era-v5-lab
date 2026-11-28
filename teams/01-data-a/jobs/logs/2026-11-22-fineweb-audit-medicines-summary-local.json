@@ -1,0 +1,178 @@
+{
+ "machine": "AMD Ryzen AI 7 PRO 350 w/ Radeon 860M (CPU), Python 3.12.10, Windows 11, one process",
+ "files": [
+  {
+   "file": "Part_1/part-00000.parquet",
+   "docs": 54004,
+   "chars": 254686776,
+   "rules": {
+    "DA-C1-015": {
+     "replaces": "loop ref",
+     "old_s": 13.636,
+     "new_s": 2.368,
+     "old_fix": 102,
+     "old_drop": 0,
+     "new_fix": 102,
+     "new_drop": 0,
+     "differ": 0,
+     "not_idempotent": 0
+    },
+    "DA-C3-009": {
+     "replaces": "DA-C3-003",
+     "old_s": 0.073,
+     "new_s": 0.085,
+     "old_fix": 0,
+     "old_drop": 296,
+     "new_fix": 150,
+     "new_drop": 132,
+     "differ": 164,
+     "not_idempotent": 0
+    },
+    "DA-C5-008": {
+     "replaces": "DA-C5-002",
+     "old_s": 14.338,
+     "new_s": 15.474,
+     "old_fix": 0,
+     "old_drop": 39,
+     "new_fix": 0,
+     "new_drop": 35,
+     "differ": 4,
+     "not_idempotent": 0
+    },
+    "DA-F1-010": {
+     "replaces": "DA-F1-005",
+     "old_s": 29.136,
+     "new_s": 30.437,
+     "old_fix": 141,
+     "old_drop": 0,
+     "new_fix": 121,
+     "new_drop": 0,
+     "differ": 20,
+     "not_idempotent": 0
+    }
+   },
+   "in_order": {
+    "s": 49.533,
+    "fix": 372,
+    "drop": 166
+   }
+  },
+  {
+   "file": "Part_2/part-00001.parquet",
+   "docs": 17929,
+   "chars": 85181185,
+   "rules": {
+    "DA-C1-015": {
+     "replaces": "loop ref",
+     "old_s": 5.33,
+     "new_s": 0.838,
+     "old_fix": 39,
+     "old_drop": 0,
+     "new_fix": 39,
+     "new_drop": 0,
+     "differ": 0,
+     "not_idempotent": 0
+    },
+    "DA-C3-009": {
+     "replaces": "DA-C3-003",
+     "old_s": 0.018,
+     "new_s": 0.024,
+     "old_fix": 0,
+     "old_drop": 107,
+     "new_fix": 42,
+     "new_drop": 51,
+     "differ": 56,
+     "not_idempotent": 0
+    },
+    "DA-C5-008": {
+     "replaces": "DA-C5-002",
+     "old_s": 5.5,
+     "new_s": 4.975,
+     "old_fix": 0,
+     "old_drop": 17,
+     "new_fix": 0,
+     "new_drop": 14,
+     "differ": 3,
+     "not_idempotent": 0
+    },
+    "DA-F1-010": {
+     "replaces": "DA-F1-005",
+     "old_s": 9.465,
+     "new_s": 9.451,
+     "old_fix": 42,
+     "old_drop": 0,
+     "new_fix": 33,
+     "new_drop": 0,
+     "differ": 9,
+     "not_idempotent": 0
+    }
+   },
+   "in_order": {
+    "s": 15.415,
+    "fix": 113,
+    "drop": 65
+   }
+  },
+  {
+   "file": "pack/en-fineweb-edu.parquet",
+   "docs": 500,
+   "chars": 2442877,
+   "rules": {
+    "DA-C1-015": {
+     "replaces": "loop ref",
+     "old_s": 0.136,
+     "new_s": 0.026,
+     "old_fix": 2,
+     "old_drop": 0,
+     "new_fix": 2,
+     "new_drop": 0,
+     "differ": 0,
+     "not_idempotent": 0
+    },
+    "DA-C3-009": {
+     "replaces": "DA-C3-003",
+     "old_s": 0.001,
+     "new_s": 0.001,
+     "old_fix": 0,
+     "old_drop": 1,
+     "new_fix": 1,
+     "new_drop": 0,
+     "differ": 1,
+     "not_idempotent": 0
+    },
+    "DA-C5-008": {
+     "replaces": "DA-C5-002",
+     "old_s": 0.161,
+     "new_s": 0.131,
+     "old_fix": 0,
+     "old_drop": 0,
+     "new_fix": 0,
+     "new_drop": 0,
+     "differ": 0,
+     "not_idempotent": 0
+    },
+    "DA-F1-010": {
+     "replaces": "DA-F1-005",
+     "old_s": 0.262,
+     "new_s": 0.247,
+     "old_fix": 0,
+     "old_drop": 0,
+     "new_fix": 0,
+     "new_drop": 0,
+     "differ": 0,
+     "not_idempotent": 0
+    }
+   },
+   "in_order": {
+    "s": 0.418,
+    "fix": 3,
+    "drop": 0
+   }
+  }
+ ],
+ "docs": 72433,
+ "chars": 342310838,
+ "wall_s": 210.3,
+ "c1_differ": 0,
+ "not_idempotent": 0
+}

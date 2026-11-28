@@ -70,7 +70,8 @@ class FakeClickHouse:
     def __call__(self, sql, data=None):
         if self.error is not None:
             raise self.error
-        if sql.startswith("CREATE TABLE IF NOT EXISTS eval_lag_checks"):
+        if sql.startswith(("CREATE TABLE IF NOT EXISTS eval_lag_checks",
+                           "ALTER TABLE eval_lag_checks ADD COLUMN IF NOT EXISTS")):
             self.ddl.append(sql)
             return ""
         if sql == "INSERT INTO eval_lag_checks FORMAT JSONEachRow":
@@ -182,6 +183,18 @@ class Run:
                                 "last_step": steps[-1], "lines": len(steps), "seen_ms": ms(self.t + 1)})
 
 
+def loader_down(ch, start_s, end_s, train_run=RUN):
+    """watch_jsonl.py is down from `start_s` to `end_s` (seconds after T0): the batches it would have read then come
+    as one batch at `end_s`, as a restarted watcher reads the whole backlog of the file at once."""
+    a, b = ms(T0 / 1000 + start_s), ms(T0 / 1000 + end_s)
+    hidden = [x for x in ch.batches if x["run_id"] == train_run and a <= x["seen_ms"] < b]
+    if hidden:
+        ch.batches = [x for x in ch.batches if not any(x is h for h in hidden)]
+        ch.batches.append({**hidden[0], "end_offset": hidden[-1]["end_offset"], "last_step": hidden[-1]["last_step"],
+                           "lines": sum(h["lines"] for h in hidden), "seen_ms": b})
+    return ch
+
+
 def monitor(ch, **kw) -> EvalLagMonitor:
     kw.setdefault("interval_s", INTERVAL_S)
     return EvalLagMonitor(ch, **kw)
@@ -238,10 +251,23 @@ def test_a_restore_drops_the_lost_steps_and_the_downtime():
     assert active_lag_ms(first + redo, None, 300_000) == 20_000
 
 
-def test_lag_caps_each_pause():
-    batches = [Batch(0, 1, 10), Batch(20_000, 11, 20), Batch(1_000_000, 21, 30)]
-    assert active_lag_ms(batches, 15, 300_000) == 300_000
-    assert active_lag_ms(batches, None, 300_000) == 320_000
+def test_a_long_gap_counts_by_its_steps():
+    batches = [Batch(0, 1, 10), Batch(20_000, 11, 20), Batch(1_000_000, 21, 30)]  # 2 s per step, then a 980 s stall
+    assert active_lag_ms(batches, None, 300_000) == 40_000  # the stall adds its 10 steps (20 s), not 980 s
+    assert active_lag_ms(batches, 15, 300_000) == 300_000  # no gap of at most 300 s to time a step: capped as before
+    assert active_lag_ms(batches + [Batch(1_020_000, 31, 40)], 15, 300_000) == 40_000  # now it has one: 20 s + 20 s
+
+
+def test_a_backlog_after_a_loader_outage_counts_its_training():
+    normal = [Batch(i * 20_000, i * 10 + 1, i * 10 + 10) for i in range(5)]  # 2 s per step, steps 1..50
+    # watch_jsonl.py down for 400 s: one batch brings 200 steps (400 s of training), never more than the gap.
+    assert active_lag_ms(normal + [Batch(480_000, 51, 250)], 15, 300_000) == 60_000 + 400_000
+    assert active_lag_ms(normal + [Batch(480_000, 51, 450)], 15, 300_000) == 60_000 + 400_000  # capped at the gap
+    # The backlog batch is the one that reached the scored step: its steps after step 60 count (190 x 2 s).
+    late = [Batch(400_000, 1, 250), Batch(420_000, 251, 260)]
+    assert active_lag_ms(late, 60, 300_000) == 20_000 + 380_000
+    assert active_lag_ms(late, 245, 300_000) == 20_000  # 5 steps after it: a normal batch, as before
+    assert active_lag_ms(late, None, 300_000) == 20_000 + 500_000  # no Tier A row: all 250 steps
 
 
 def test_a_restore_keeps_the_lag_built_up_before_its_restore_point():
@@ -254,6 +280,20 @@ def test_a_restore_keeps_the_lag_built_up_before_its_restore_point():
     assert active_lag_ms(before + after_22, 25, 300_000) == 20_000
     assert active_lag_ms(before + after_22, 22, 300_000) == 20_000
     assert active_lag_ms(before + after_22, None, 300_000) == 60_000  # 0..40 s, nothing for the stop, then 20 s
+
+
+def test_slow_steps_still_count_in_full():
+    """A normal 10-step flush longer than --pause-s (slow steps): the step time must come from those gaps too, or
+    every gap is undercounted and a real lag never pages."""
+    rng = random.Random(7)
+    batches, t = [], 0
+    for i in range(30):
+        t += rng.choice((290_000, 410_000, 420_000))
+        batches.append(Batch(t, i * 10 + 1, i * 10 + 10))
+    lag = active_lag_ms(batches, 10, 300_000)
+    assert lag == batches[-1].seen_ms - batches[0].seen_ms  # every gap counts in full
+    # One long gap alone may be the stall itself: it does not time a step, so it counts as --pause-s, as before.
+    assert active_lag_ms([Batch(0, 1, 10), Batch(644_000, 11, 20)], 5, 300_000) == 300_000
 
 
 def test_lag_is_the_same_on_the_batches_the_alarm_reads():
@@ -327,7 +367,11 @@ def test_a_finished_run_goes_quiet_and_its_lag_stops_growing():
     after_end = [c for now, c in results if now > ms(end + 1)]
     assert len({c.lag_ms for c in after_end if c.live}) == 1  # measured in training time, not on the clock
     assert not after_end[-1].live and "not training" in after_end[-1].status(T0 + 10**8)
-    assert max(to_ms(r["checked_at"]) for r in ch.checks) <= ms(end + 1) + LIMIT_MS  # rows stop with the run
+    # Rows go on, marked not live, so panel 31 shows the training data stop while the alarm still checks.
+    live_rows = [r for r in ch.checks if r["live"]]
+    assert max(to_ms(r["checked_at"]) for r in live_rows) <= ms(end + 1) + LIMIT_MS
+    assert len(ch.checks) == len(results) and ch.checks[-1]["live"] == 0 and ch.checks[-1]["lag_s"] == 0
+    assert "not training: newest batch" in ch.checks[-1]["detail"]
 
 
 @pytest.mark.parametrize("resume_run", [RESUME, RUN])
@@ -357,6 +401,73 @@ def test_a_restore_does_not_hide_a_dead_watcher(dies_after_s, pages_before_kill)
     assert LIMIT_MS < page.lag_ms <= LIMIT_MS + BATCH_MS
     assert (now < ms(kill)) == pages_before_kill
     assert now < ms(kill + 300) + LIMIT_MS  # a count started afresh at the restore would page only after this
+
+
+@pytest.mark.parametrize("down_s", [(300, 1_800), (0, 1_500)])  # watch_jsonl.py down a while, or started late
+def test_a_loader_outage_does_not_hide_a_dead_eval_watcher(down_s):
+    def lagging_run():
+        ch = FakeClickHouse()
+        run = Run(ch).train(1, 546, commit_first=True)  # 2,400 s of training
+        run.score(skip=lambda s: s > T0 / 1000 + 300)  # the Tier A watcher dies after step 0
+        return ch, run
+
+    ch, run = lagging_run()
+    up = sweep(monitor(ch, runs={RUN: RUN}), ch, T0, ms(run.t) + 60_000)
+    ch, run = lagging_run()
+    loader_down(ch, *down_s)
+    backlog = [b for b in ch.batches if b["seen_ms"] == T0 + ms(down_s[1])]
+    assert len(backlog) == 1 and backlog[0]["lines"] > 300  # the restarted watch_jsonl.py reads it all at once
+    results = sweep(monitor(ch, runs={RUN: RUN}), ch, T0, ms(run.t) + 60_000)
+    got = pages(results)
+    assert len(got) == 1  # without the step count the backlog added at most 300 s: 1,123 s or 903 s, no page
+    back = T0 + ms(down_s[1])
+    assert back <= got[0][0] <= back + 60_000  # at the check the backlog arrives, or the next one
+    assert abs(max_lag(results) - max_lag(up)) < BATCH_MS  # the same lag as with the loader up
+
+
+def test_a_restart_right_after_the_flush_of_the_commit_adds_no_downtime():
+    """Killed right after the flush of the committed step R: the restarted batch starts at R + 1, so it is not seen
+    as a restore. The downtime must still not count (it counted up to --pause-s, 1,020 s here instead of 780 s)."""
+    def baseline():
+        ch = FakeClickHouse()
+        run = Run(ch, step_s=6.0).train(1, 700, commit_first=True).score()
+        return max_lag(sweep(monitor(ch, runs={RUN: RUN}), ch, T0, ms(run.t) + 60_000))
+
+    ch = FakeClickHouse()
+    run = Run(ch, step_s=6.0).train(1, 100, commit_first=True, killed=True)
+    assert run.commits[-1][0] == 100 and ch.batches[-1]["last_step"] == 100  # committed and flushed, then killed
+    run.pause(300).train(101, 700, RESUME).score()
+    assert [b["first_step"] for b in ch.batches if b["run_id"] == RESUME][0] == 101
+    results = sweep(monitor(ch, runs={RUN: RUN, RESUME: RUN}), ch, T0, ms(run.t) + 60_000)
+    assert pages(results) == []
+    assert max_lag(results) == baseline()
+
+
+def test_an_old_run_gets_no_rows_without_run():
+    """Without --run, a finished run with Tier A rows is still checked; it gets no rows unless this alarm saw it
+    train, so old runs don't add a row every poll forever."""
+    ch = FakeClickHouse()
+    old = Run(ch).train(1, 300, OTHER, commit_first=True).score(eval_run=OTHER)
+    ch.now_ms = ms(old.t) + 10 * LIMIT_MS
+    mon = monitor(ch)
+    checks = mon.check(ch.now_ms)
+    assert [c.run_id for c in checks] == [OTHER] and not checks[0].live
+    assert mon.save(checks, ch.now_ms) == 0 and ch.checks == []
+    named = monitor(ch, runs={OTHER: OTHER})  # named with --run: it gets its row
+    assert named.save(named.check(ch.now_ms), ch.now_ms) == 1
+
+
+def test_rows_go_on_during_a_loader_outage():
+    ch = FakeClickHouse()
+    run = Run(ch).train(1, 1221, commit_first=True).score()
+    loader_down(ch, 1_000, 3_000)  # longer than --live-s: the run looks stopped
+    results = sweep(monitor(ch, runs={RUN: RUN}), ch, T0, ms(run.t))
+    assert len(ch.checks) == len(results)  # every check writes a row: checked_at keeps moving
+    blind = [r for r in ch.checks if not r["live"]]
+    assert blind and all(T0 + ms(1_000) < to_ms(r["checked_at"]) < T0 + ms(3_000) for r in blind)
+    assert len({r["train_seen_at"] for r in blind}) == 1  # train_seen_at stops moving
+    assert all(r["lag_s"] == 0 and r["over_limit"] == 0 and "watch_jsonl.py" in r["detail"] for r in blind)
+    assert pages(results) == []
 
 
 def test_a_batch_of_blank_lines_changes_nothing():
@@ -434,13 +545,13 @@ def test_rows_match_the_table_and_mark_the_page():
     run = Run(ch).train(1, 1221, commit_first=True)
     run.score(skip=lambda s: s > T0 / 1000 + 1_500)
     results = sweep(monitor(ch, runs={RUN: RUN}), ch, T0, ms(run.t))
-    assert len(ch.ddl) == 1 and "ORDER BY (run_id, checked_at)" in ch.ddl[0]
+    assert len(ch.ddl) == 2 and "ORDER BY (run_id, checked_at)" in ch.ddl[0] and "ADD COLUMN" in ch.ddl[1]
     assert ch.checks and all(list(row) == columns for row in ch.checks)
-    assert len(ch.checks) == sum(c.live for _, c in results)
+    assert len(ch.checks) == len(results) and [r["live"] for r in ch.checks] == [int(c.live) for _, c in results]
     assert sum(row["paged"] for row in ch.checks) == len(pages(results)) == 1
     page_row = next(row for row in ch.checks if row["paged"])
     assert page_row["over_limit"] == 1 and page_row["train_runs"] == [RUN] and "behind" in page_row["detail"]
-    assert all(row["detail"] == "" for row in ch.checks if not row["over_limit"])
+    assert all(row["detail"] == "" for row in ch.checks if row["live"] and not row["over_limit"])
 
 
 def test_a_page_row_that_failed_to_save_is_written_next_time():
@@ -577,7 +688,7 @@ def test_cli_once_prints_one_page_and_exits_1(capsys):
     assert {"step", "metric", "rule", "severity", "detail"} <= set(event)
     assert (event["rule"], event["severity"], event["run_id"], event["eval_step"]) == ("eval_lag", "page", RUN, 0)
     assert f"eval_lag {RUN}: training step" in err and err.rstrip().endswith("PAGE")
-    assert len(ch.ddl) == 1 and len(ch.checks) == 1
+    assert len(ch.ddl) == 2 and len(ch.checks) == 1
 
 
 def test_cli_once_without_a_page_exits_0(capsys):
@@ -717,7 +828,8 @@ def test_grafana_panels_read_only_eval_lag_checks_columns():
         for target in p["targets"]:
             sql = target["rawSql"]
             assert target["datasource"] == source
-            assert re.search(r"FROM eval_lag_checks WHERE (paged = 1 AND )?run_id IN \(\$lag_run\)", sql), sql
+            assert re.search(r"FROM eval_lag_checks WHERE ((paged|live) = 1 AND )?run_id IN \(\$lag_run\)", sql), sql
+            assert ("live = 1" in sql) == (p["id"] == 29)  # the lag plot skips the rows of runs not training
             assert ("$__timeFilter(checked_at)" in sql) == (p["id"] != 31)  # the stat looks at the newest row only
             words = set(re.findall(r"\b[a-z][a-z_]*\b", re.sub(r"'[^']*'", "", sql)))
             assert words <= allowed, words - allowed  # a misspelt column fails here, before any Grafana sees it
@@ -812,6 +924,7 @@ def test_live_clickhouse_end_to_end(tmp_path):
         assert sorted(r[2] for r in rows(sql[29, "B"])) == ["600", "600"]
         assert [r[1:5] for r in rows(sql[30, "A"])] == [[run_b, "750", "0", "1482"]]
         assert 0 <= int(rows(sql[31, "A"])[0][0]) < 600
+        assert 20 < int(rows(sql[31, "B"])[0][0]) < 600  # the newest batch: run B, 27 s before now
 
         cli = subprocess.run(
             [sys.executable, "-B", str(ALARMS / "eval_lag.py"), "--once", "--no-write", "--url", LIVE_URL,

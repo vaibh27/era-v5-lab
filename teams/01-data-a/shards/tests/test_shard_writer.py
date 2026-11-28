@@ -116,6 +116,26 @@ def test_rollover_loses_repeats_and_splits_no_doc_and_leaves_out_one_longer_than
     assert [q["first_row"] for q in reports] == [0] + [q["rows_read"] for q in reports[:-1]] and reports[-1]["rows_read"] == len(DOCS)
 
 
+def test_reading_the_part_in_small_batches_gives_the_same_shards(tmp_path, monkeypatch):
+    """The part is read BATCH rows at a time: the row numbers, left-out docs and rollovers must not depend on where the
+    batches end. 17 docs (secret-like, special-string and empty ones among them) with a limit that forces several shards."""
+    mail = "someone.name" + "@" + "gmail.com"
+    docs = [(f"{d}-{k}", text, lang) for k in range(3) for d, text, lang in DOCS]
+    docs[4:4] = [("mail", f"write to {mail} today\n", "en"), ("im", "x = '<|im_start|>user'\n", "code"), ("empty", "", "en")]
+    run, part = run_of(tmp_path / "pipeline", monkeypatch, docs)
+    args = ("--domain", "web", "--any-tokenizer", "--tokens", "60")
+    ms = shards(run, part, tmp_path / "whole", *args)
+    monkeypatch.setattr(sw, "BATCH", 2)
+    small = shards(run, part, tmp_path / "small", *args)
+    assert len(ms) > 2 and [m["shard_id"] for m in ms] == [m["shard_id"] for m in small]
+    names = sorted(p.name for p in (tmp_path / "whole").iterdir())
+    assert names == sorted(p.name for p in (tmp_path / "small").iterdir())
+    for name in names:
+        assert (tmp_path / "whole" / name).read_bytes() == (tmp_path / "small" / name).read_bytes(), name
+    q = json.loads((tmp_path / "whole" / ms[1]["quality_report_uri"]).read_text(encoding="utf-8"))   # the shard whose rows they are in
+    assert q["left_out_docs"]["secret"] == ["mail"] and q["left_out_docs"]["empty"] == ["empty"] and q["left_out_docs"]["special"]
+
+
 def test_the_round_trip_compares_with_the_normalized_text(tmp_path, monkeypatch):
     """A tokenizer with an NFC normalizer: a decomposed é comes back composed, and the doc is kept."""
     spec_ = json.loads(Path(BASE).read_text(encoding="utf-8"))

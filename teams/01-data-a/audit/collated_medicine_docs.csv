@@ -1,0 +1,314 @@
+pack,doc_id,audit,verdict,now,with_cards,output_differs,phone_masks_now,phone_masks_with_cards,rules_with_cards
+ind-te-sangraha-s,f4fbbfb4fced3fd3,day_D3,fix,keep,keep,no,0,0,
+ind-te-sangraha-s,7a7f76d343369290,day_D3,fix,keep,keep,no,0,0,
+ind-te-sangraha-s,63c9fc20d6b0eb40,day_D3,fix,keep,keep,no,0,0,
+ind-te-sangraha-s,af19aa1a64c71111,day_D3,fix,keep,keep,no,0,0,
+ind-te-sangraha-s,27e1bff4db96d0b2,day_D3,fix,keep,keep,no,0,0,
+ind-te-sangraha-s,3ec84d7adeaf07a9,day_D3,fix,keep,keep,no,0,0,
+code-cpp,c5d0947a47aa6f3c,day_D3,fix,fix,fix,no,0,0,DA-B4-009 fix +0
+code-cpp,5a1aafe479d99e5b,day_D3,fix,fix,fix,no,0,0,DA-B4-009 fix +0
+code-cpp,38783d4714af32a5,day_D3,fix,fix,fix,no,0,0,DA-B4-009 fix +0
+code-cpp,4a7dd5edbbd424b3,day_D3,fix,keep,keep,no,0,0,
+code-java,be6d4be4e458d124,day_D3,fix,fix,fix,no,0,0,DA-B4-009 fix +0
+code-js-ts,3a8f6f9b6b188062,day_D3,fix,fix,fix,no,0,0,DA-B3-001 fix -69
+code-python,b51ea6bccd71d209,day_D3,fix,fix,fix,no,0,0,DA-B3-001 fix -57
+code-rust,f3550045b5e8d207,day_D3,fix,fix,fix,no,0,0,DA-B3-001 fix -48
+code-rust,56fa57d7083be296,day_D3,fix,fix,fix,no,0,0,DA-B3-001 fix -89
+code-cpp,40456bdc4432955e,day_D3,fix,drop,drop,no,0,0,DA-E1-005 drop
+code-go,9c743b93f0458461,day_D3,fix,drop,drop,no,0,0,DA-B3-001 fix -115; DA-E1-001 drop
+code-go,545a867b548509dc,day_D3,fix,drop,drop,no,0,0,DA-B3-001 fix -50; DA-E1-001 drop
+code-go,764578ceac3deba5,day_D3,fix,drop,drop,no,0,0,DA-E1-001 drop
+code-go,bcc67b626494a02c,day_D3,fix,drop,drop,no,0,0,DA-B3-001 fix -15; DA-E1-001 drop
+code-go,c85c2a285dfc8ab0,day_D3,fix,drop,drop,no,0,0,DA-B3-001 fix -15; DA-E1-001 drop
+code-go,f2b67dcbdaf9237c,day_D3,fix,drop,drop,no,0,0,DA-B3-001 fix -19; DA-E1-001 drop
+code-go,1662f27536504ddd,day_D3,fix,drop,drop,no,0,0,DA-B3-001 fix -114; DA-E1-001 drop
+code-go,b663ea600ebd6009,day_D3,fix,drop,drop,no,0,0,DA-E1-001 drop
+code-go,aeb863ba677348d2,day_D3,fix,drop,drop,no,0,0,DA-B3-001 fix -144; DA-E1-001 drop
+code-go,3dde1872c474745d,day_D3,fix,drop,drop,no,0,0,DA-E1-001 drop
+code-js-ts,76601a86cf8accee,day_D3,fix,drop,drop,no,0,0,DA-B3-001 fix -135; DA-E1-008 drop
+code-js-ts,be0eb84a4e965db7,day_D3,fix,drop,drop,no,0,0,DA-B3-001 fix -16; DA-E1-008 drop
+code-python,72a5a69f8d64fd2a,day_D3,fix,drop,drop,no,0,0,DA-E1-004 drop
+code-python,879901159d451bb2,day_D3,fix,drop,drop,no,0,0,DA-B3-001 fix -33; DA-E1-004 drop
+code-python,e30aafe28b1c5ed9,day_D3,fix,drop,drop,no,0,0,DA-E1-004 drop
+code-python,0d24d161fdea1c27,day_D3,fix,drop,drop,no,0,0,DA-E1-004 drop
+code-python,f006685e9f42ea08,day_D3,fix,drop,drop,no,0,0,DA-B3-001 fix -38; DA-E1-004 drop
+code-rust,b8fdde6f382aaafd,day_D3,fix,drop,drop,no,0,0,DA-B3-001 fix -79; DA-E1-004 drop
+en-dclm,d7818c10380a5026,day_D3,fix,drop,drop,no,0,0,DA-C3-003 drop
+en-dclm,fadea98410fa8ca2,day_D3,fix,drop,drop,no,0,0,DA-C5-005 drop
+en-dclm,b86c2383830279bb,day_D3,fix,drop,drop,no,0,0,DA-C3-003 drop
+en-dclm,6939b53dba7b7954,day_D3,fix,drop,drop,no,0,0,DA-C3-001 drop
+en-fineweb-edu,e45798a41ffbc9a2,day_D3,fix,drop,drop,no,0,0,DA-C3-003 drop
+en-fineweb-edu,0e8ffd1fb8fb0ad7,day_D3,fix,drop,drop,no,0,0,DA-C3-003 drop
+en-fineweb-edu,dec9f5f7041b27f3,day_D3,fix,drop,drop,no,0,0,DA-C3-003 drop
+en-fineweb-edu,3ad0b20895d54344,day_D3,fix,drop,drop,no,0,0,DA-D4-001 drop
+en-fineweb-edu,7bd3c06c9f78ad8a,day_D3,fix,drop,drop,no,0,0,DA-C3-003 drop
+en-fineweb-edu,e53209fdeb4c5c16,day_D3,fix,drop,drop,no,0,0,DA-C3-003 drop
+en-nemotroncc-synth,4874a9c840d47276,day_D3,fix,drop,drop,no,0,0,DA-D4-001 drop
+en-nemotroncc,5fc6ebc3d8c98c45,day_D3,fix,drop,drop,no,0,0,DA-C3-003 drop
+en-nemotroncc,89a7e46458683bc7,day_D3,fix,drop,drop,no,0,0,DA-C3-003 drop
+en-nemotroncc,d27f5ef67c8b49fb,day_D3,fix,drop,drop,no,0,0,DA-C3-003 drop
+en-nemotroncc,bcebaea7f66d1ea8,day_D3,fix,drop,drop,no,0,0,DA-C3-001 drop
+en-nemotroncc,d711896d88e00074,day_D3,fix,drop,drop,no,0,0,DA-C3-001 drop
+en-nemotroncc,cb464155e945f3e5,day_D3,fix,drop,drop,no,0,0,DA-C3-003 drop
+en-nemotroncc,c64a8520993b7e63,day_D3,fix,drop,drop,no,0,0,DA-C3-001 drop
+en-nemotroncc,54d0a4af6ccec85f,day_D3,fix,drop,drop,no,0,0,DA-C3-003 drop
+en-nemotroncc,8902bb932d2904e4,day_D3,fix,drop,drop,no,0,0,DA-C3-003 drop
+en-nemotroncc,cad4428b2b048d40,day_D3,fix,drop,drop,no,0,0,DA-C3-003 drop
+en-nemotroncc,b3bf0af5595be04d,day_D3,fix,drop,drop,no,0,0,DA-C3-001 drop
+ind-hi-indiccorp,e20f601e84248141,day_D3,fix,keep,keep,no,0,0,
+ind-hi-indiccorp,07ba8d9f599c324d,day_D3,fix,keep,keep,no,0,0,
+ind-te-fw2,1e9a487e649bb5a0,day_D3,fix,drop,drop,no,0,0,DB-C5-006 drop
+ind-te-fw2,485b12ad43a958fe,day_D3,fix,keep,keep,no,0,0,
+ind-te-fw2,0464c3de3f87e31f,day_D3,fix,fix,fix,no,0,0,DB-A6-013 fix +0
+ind-te-fw2,0a1f54bde5070d5e,day_D3,fix,keep,keep,no,0,0,
+ind-te-fw2,a96399aa4ef3b802,day_D3,fix,keep,keep,no,0,0,
+ind-te-sangraha-s,ccbf820e232eaa69,day_D3,fix,drop,drop,no,0,0,DB-D5-001 drop
+ind-te-sangraha-v,969c8ca6ebc8a573,day_D3,fix,keep,keep,no,0,0,
+ind-te-sangraha-v,ca949d32f7bc33dd,day_D3,fix,fix,fix,no,0,0,DB-C6-001 fix +0
+ind-te-sangraha-v,f0d9b745d8e4a6f3,day_D3,fix,keep,keep,no,0,0,
+ind-te-sangraha-v,222b20d27357942b,day_D3,fix,keep,keep,no,0,0,
+ind-te-sangraha-v,40df311496a357ed,day_D3,fix,keep,keep,no,0,0,
+ind-te-sangraha-v,57ca091d4d08cebc,day_D3,fix,keep,keep,no,0,0,
+math-finemath,3a8ffc03c53f9182,day_D3,fix,drop,drop,no,0,0,DA-C3-004 drop
+en-dclm,7e774e95e602476e,#68,,drop,drop,no,0,0,DA-D4-001 drop
+en-dclm,bfa86fe32d00c663,#68,fix,fix,keep,yes,0,0,
+en-dclm,c8c3820547a7ab6f,#68,fix,fix,fix,no,0,0,DA-C2-009 fix -35
+en-dclm,b61794200f81acab,#68,fix,fix,fix,no,0,0,DA-C2-009 fix -175
+en-dclm,8da43001d1c5ea60,#68,fix,fix,fix,no,0,0,DA-C1-006 fix -21
+en-dclm,852d6c991a0ed3ed,#68,fix,fix,fix,no,1,1,DA-F1-007 fix -5
+en-dclm,a9a7821bb3d942d0,#68,fix,fix,fix,yes,0,0,DA-A2-010 fix +0; DA-C2-009 fix -66
+en-dclm,5fed88b562dff56f,#68,fix,fix,fix,no,0,0,DA-C1-006 fix -12
+en-dclm,dff5216e6f15c4dd,#68,fix,fix,fix,no,0,0,DA-C1-006 fix -96; DA-C2-009 fix -32
+en-dclm,7ccb72daa2438a76,#68,fix,fix,fix,no,0,0,DA-C2-009 fix -69
+en-dclm,8bc5cc927d1c4095,#68,fix,fix,fix,no,0,0,DA-A1-004 fix -2
+en-dclm,b3abeb4533becb1d,#68,,drop,drop,no,0,0,DA-C3-003 drop
+en-dclm,c241159e7ee00f17,#68,,drop,drop,no,0,0,DA-C3-003 drop
+en-dclm,c733a2499740aff8,#68,fix,fix,fix,no,0,0,DA-C2-009 fix -281
+en-dclm,b86875f06abe649a,#68,fix,fix,fix,yes,0,0,DA-C2-009 fix -26; DA-B3-012 fix -10
+en-dclm,ad11cf73e258fd95,#68,fix,fix,fix,no,0,0,DA-C2-009 fix -345
+en-dclm,1e811184b12bc962,#68,fix,fix,fix,no,0,0,DA-C1-006 fix -16
+en-dclm,9edbebb5cf7fc415,#68,,drop,drop,no,0,0,DA-C3-003 drop
+en-dclm,06f1063ec1748884,#68,clean,fix,fix,no,0,0,DA-C5-005 fix -11
+en-dclm,e670f86abf48520d,#68,,drop,drop,no,0,0,DA-A1-004 fix -12; DA-C3-003 drop
+en-dclm,beb5d368db86fb5e,#68,clean,fix,fix,no,0,0,DA-C5-005 fix -140
+en-dclm,b8a0a886678197f6,#68,fix,fix,fix,no,1,1,DA-F1-007 fix -5
+en-dclm,28e2db94666d860f,#68,fix,fix,fix,no,0,0,DA-C2-009 fix -128
+en-dclm,0086c20deb34c1ec,#68,,drop,drop,no,0,0,DA-C3-001 drop
+en-dclm,ecbf55aa8452ab45,#68,,drop,drop,no,0,0,DA-C3-001 drop
+en-dclm,ac9442043a4d4806,#68,drop,fix,fix,no,0,0,DA-D3-003 fix -2059
+en-dclm,afc83ec7e700b331,#68,fix,fix,fix,no,0,0,DA-C2-009 fix -156
+en-dclm,64c909239beadad9,#68,fix,fix,fix,no,0,0,DA-C1-006 fix -11
+en-dclm,ef987c066d1cdf0f,#68,fix,fix,keep,yes,1,0,
+en-dclm,90860d3fa1f13864,#68,fix,fix,fix,no,0,0,DA-C1-006 fix -21
+en-dclm,6d42ab66ea6a9d2c,#68,fix,fix,fix,no,0,0,DA-A3-002 fix -4; DA-C2-009 fix -180
+en-dclm,f1b8673c7cfd7aac,#68,fix,fix,keep,yes,0,0,
+en-dclm,5a7a2f792c27521e,#68,fix,fix,fix,no,0,0,DA-A1-004 fix -1
+en-dclm,3391ad7aa8aa6e49,#68,fix,fix,fix,no,0,0,DA-C2-009 fix -51
+en-dclm,72320b6dece6c7bf,#68,fix,fix,fix,no,0,0,DA-C2-009 fix -36
+math-finemath,caec68d5a4dc4373,#71,fix,fix,fix,yes,0,0,DA-C2-007 fix -160; DA-C1-012 fix -426
+math-finemath,6df989a2bcd44389,#71,drop,drop,drop,no,0,0,DA-C3-004 drop
+math-finemath,4376102f99b2fdfd,#71,fix,fix,fix,yes,0,0,DA-C1-001 fix -12; DA-C1-012 fix -79
+math-finemath,1fbf0a290e52e534,#71,clean,fix,fix,no,0,0,DA-A3-001 fix -2; DA-C1-001 fix -62
+math-finemath,1e700ddf3f3e4e0d,#71,clean,fix,fix,no,0,0,DA-C1-001 fix -15
+math-finemath,73670428f7373dee,#71,drop,fix,fix,no,0,0,DA-C1-001 fix -15; DA-C2-007 fix -72
+math-finemath,c87c76a202bf9370,#71,fix,fix,fix,no,0,0,DA-C2-007 fix -155
+math-finemath,94c0014436db12b5,#71,fix,fix,fix,no,0,0,DA-A3-001 fix -2
+math-finemath,4dd13476a6af3f3f,#71,clean,fix,fix,no,0,0,DA-C1-001 fix -12
+math-finemath,b5b886b63aeb9e2e,#71,drop,drop,drop,no,0,0,DA-C3-004 drop
+math-finemath,411aeec06d260b92,#71,fix,fix,fix,no,0,0,DA-C1-001 fix -27
+math-finemath,fd90a7692cbe0dda,#71,fix,fix,fix,yes,0,0,DA-C1-001 fix -12; DA-C1-012 fix -157
+math-finemath,67f407a0ccd09d74,#71,drop,drop,drop,no,0,0,DA-B4-001 fix -63; DA-C3-004 drop
+math-finemath,a878064814cc3108,#71,fix,fix,fix,no,0,0,DA-C1-001 fix -35
+math-finemath,e45925da5672827e,#71,drop,fix,fix,no,0,0,DA-C2-007 fix -85
+math-finemath,21bfa34841bcc936,#71,fix,fix,fix,yes,0,0,DA-C2-007 fix -528
+math-finemath,01cbee543c7751fd,#71,drop,drop,drop,no,0,0,DA-A1-005 fix -4; DA-C7-001 drop
+math-finemath,89dc8e7278ce1f4b,#71,fix,fix,fix,yes,0,0,DA-C1-012 fix -8
+math-finemath,03adce6b428657cc,#71,fix,fix,fix,yes,0,0,DA-C2-007 fix -85; DA-C1-012 fix -209
+math-finemath,b1efb7907a0c8cbb,#71,fix,fix,fix,yes,0,0,DA-C2-007 fix -549; DA-C1-012 fix -119
+math-finemath,11c56a701b6c6f82,#71,clean,fix,fix,no,0,0,DA-C2-007 fix -183
+math-finemath,76718c4a528f2cee,#71,fix,fix,fix,yes,0,0,DA-C1-001 fix -38; DA-A8-001 fix +2; DA-C1-012 fix -112
+math-megamath,32ce96905cc39b34,#71,fix,fix,fix,yes,0,0,DA-C1-012 fix -54; f1_rule.py fix -8
+math-megamath,0ef68457f8488afa,#71,drop,fix,fix,no,0,0,DA-B2-001 fix -328; f1_rule.py fix -483
+math-megamath,4258f5c9fbf14805,#71,drop,fix,fix,yes,0,0,DA-C2-007 fix -2394; f1_rule.py fix -353
+math-megamath,c2014b24148deb41,#71,fix,fix,fix,yes,0,0,DA-A8-001 fix +1; DA-C2-007 fix -5760; f1_rule.py fix -12
+math-megamath,9cb311703c53c1e0,#71,drop,drop,drop,no,0,0,DA-A5-002 fix +25; DA-C7-002 drop
+math-megamath,31c47797e0ec552c,#71,fix,fix,fix,no,0,0,f1_rule.py fix -18
+math-megamath,0cb915d7762c2e45,#71,fix,fix,fix,yes,0,0,DA-C5-006 fix -210; DA-C1-012 fix -53
+math-megamath,32d96679ed59c9d5,#71,fix,drop,drop,no,0,0,DA-B5-001 fix -1980; DA-C7-002 drop
+math-megamath,f079a0d75820b184,#71,fix,drop,drop,no,0,0,DA-C5-006 fix -2845; DA-C7-002 drop
+math-megamath,27c5838098758c5b,#71,fix,fix,fix,no,0,0,DA-C5-006 fix -236; f1_rule.py fix -98
+math-megamath,41f03ba56962c1e9,#71,drop,fix,fix,no,0,0,DA-A5-002 fix +8
+math-megamath,edfafeaa35e38bc9,#71,fix,fix,fix,yes,0,0,DA-C1-012 fix -32; f1_rule.py fix -74
+math-megamath,ca8e91121e85235c,#71,fix,fix,fix,yes,0,0,DA-C1-012 fix -32; f1_rule.py fix -129
+code-go,7e879cd95b5c7cd0,#72,clean,fix,fix,no,0,0,DA-B3-001 fix -19
+code-go,b8b3b8f0ad7b62f4,#72,clean,fix,fix,no,0,0,DA-B3-001 fix -38
+code-go,b8a074079988aee7,#72,clean,fix,fix,no,0,0,DA-E4-010 fix -899
+code-go,0be515fddd3bb1cc,#72,clean,fix,fix,no,0,0,DA-B3-001 fix -12; DA-B4-009 fix +6
+code-go,7643d5cdbac0d774,#72,drop,drop,drop,no,0,0,DA-B3-001 fix -12; DA-E1-001 drop
+code-go,9506fec46784a06e,#72,drop,drop,drop,no,0,0,DA-B3-001 fix -12; DA-E1-001 drop
+code-go,60df5c3650c03b6f,#72,clean,fix,fix,no,0,0,DA-B3-001 fix -22
+code-go,b558d08b6cb0c080,#72,clean,fix,fix,no,0,0,DA-B3-001 fix -27; DA-B4-009 fix +6
+code-go,29550aa7acfc9d14,#72,clean,fix,fix,no,0,0,DA-B3-001 fix -37
+code-go,dabdf7ecc74cd614,#72,fix,fix,fix,no,0,0,DA-A6-001 fix +0; DA-B3-001 fix -138
+code-go,6253f109abf432e9,#72,clean,fix,fix,no,0,0,DA-B3-001 fix -12
+code-go,fe6a2b7719890828,#72,drop,drop,drop,no,0,0,DA-B3-001 fix -45; DA-E1-001 drop
+code-go,38bab2e58fbb58b7,#72,clean,fix,fix,no,0,0,DA-B3-001 fix -44
+code-go,62988a8d81e80587,#72,clean,fix,fix,no,0,0,DA-B3-001 fix -75
+code-go,840e32682cb5796f,#72,clean,fix,fix,no,0,0,DA-B3-001 fix -18
+code-go,52448e7e2524dc1f,#72,clean,fix,fix,no,0,0,DA-B4-009 fix +12
+code-go,de7acbbd2b7eb5b9,#72,clean,fix,fix,no,0,0,DA-B3-001 fix -37
+code-go,909fd046fd24270e,#72,clean,fix,fix,no,0,0,DA-B3-001 fix -17; DA-E4-005 fix -148
+code-go,f1b01f02bddbd27b,#72,clean,fix,fix,no,0,0,DA-B3-001 fix -59
+code-go,4a379ae4228af6e2,#72,fix,fix,fix,no,0,0,DA-B3-001 fix -15
+code-go,95e214af76eb5d16,#72,drop,drop,drop,no,0,0,DA-B3-001 fix -60; DA-E1-001 drop
+code-go,219eea8f3e8b761c,#72,clean,fix,fix,no,0,0,DA-B3-001 fix -36; DA-E4-005 fix -607
+code-go,6a8f3d242166b89c,#72,clean,fix,fix,no,0,0,DA-B3-001 fix -24; DA-E4-005 fix -642
+code-go,88d0c26177f7877c,#72,fix,fix,fix,no,0,0,DA-B3-001 fix -23
+code-go,ab7ed3db0782b0db,#72,clean,fix,fix,no,0,0,DA-B3-001 fix -67
+code-go,b86a73c3741ef72f,#72,drop,drop,drop,no,0,0,DA-B3-001 fix -98; DA-E1-001 drop
+code-go,05809df4f85761c5,#72,fix,fix,fix,no,0,0,DA-B3-001 fix -67; DA-B4-009 fix +0
+code-go,d0b99f0f8a8caaeb,#72,drop,drop,drop,no,0,0,DA-B3-001 fix -39; DA-E1-001 drop
+code-go,2bdc7834dbaa7af2,#72,clean,fix,fix,no,0,0,DA-B3-001 fix -23
+code-go,669781527d1312d4,#72,clean,fix,fix,no,0,0,DA-B3-001 fix -12
+code-go,f74d343a2a297af7,#72,clean,fix,fix,no,0,0,DA-B3-001 fix -39
+code-go,5ae22ba6e5b3f649,#72,clean,fix,fix,no,0,0,DA-E4-005 fix -596
+code-go,4f6637f8cf2fb046,#72,clean,fix,fix,no,0,0,DA-B3-001 fix -15
+code-go,054d516279d01832,#72,clean,fix,fix,no,0,0,DA-B3-001 fix -34
+code-go,dbbb98d4c8762c0c,#72,clean,fix,fix,no,0,0,DA-E4-005 fix -584
+code-go,10ad53caef00b73a,#72,clean,fix,fix,no,0,0,DA-B3-001 fix -53
+code-go,094cf5a40e29487f,#72,clean,fix,fix,no,0,0,DA-B3-001 fix -40
+code-go,a310b1f78ba5bb79,#72,clean,fix,fix,no,0,0,DA-A2-007 fix -121
+code-go,c1818f4f58b9276d,#72,clean,fix,fix,no,0,0,DA-B3-001 fix -57
+code-go,12450bcb472f6610,#72,drop,drop,drop,no,0,0,DA-E1-001 drop
+code-go,8916209d302c2a37,#72,clean,fix,fix,no,0,0,DA-B3-001 fix -33
+code-go,6a2126ac29def402,#72,clean,fix,fix,no,0,0,DA-B3-001 fix -44
+code-go,5c2d4a6b41556a9b,#72,clean,fix,fix,no,0,0,DA-E4-005 fix -760
+code-go,87e58585404b217d,#72,drop,drop,drop,no,0,0,DA-E1-001 drop
+code-go,b331f95eebb05c8f,#72,clean,fix,fix,no,0,0,DA-B3-001 fix -21
+en-nemotroncc-synth,8c0b0e0c559afe0b,#76,fix,fix,fix,yes,0,0,DA-C1-013 fix -23
+en-nemotroncc-synth,b949f7934ece26f6,#76,clean,fix,fix,no,0,0,DA-B4-008 fix +2
+en-nemotroncc-synth,5b4d0f975990e808,#76,fix,drop,keep,yes,0,0,
+en-nemotroncc-synth,c0700a42d38ffcfb,#76,clean,fix,fix,no,0,0,DA-B4-015 fix -53
+en-nemotroncc-synth,b7da3294657a4aa6,#76,clean,fix,fix,no,0,0,DA-B4-008 fix +1
+en-nemotroncc-synth,0297eb260363a338,#76,fix,fix,fix,yes,0,0,DA-C1-013 fix -122
+en-nemotroncc-synth,6edfb805e854f8cd,#76,clean,fix,fix,no,0,0,DA-B4-008 fix +4
+en-nemotroncc-synth,80ec379221b6d231,#76,clean,fix,fix,no,0,0,DA-B4-008 fix +1
+en-nemotroncc-synth,42e3205b05893f8f,#76,clean,fix,fix,no,0,0,DA-B4-008 fix +2
+en-nemotroncc-synth,f8027db45cfbebb2,#76,fix,fix,fix,yes,0,0,DA-B4-015 fix -125
+en-nemotroncc-synth,10070ea935885063,#76,clean,fix,fix,no,0,0,DA-C5-007 fix -17
+en-nemotroncc-synth,b57a2a8fbf16fdc6,#76,fix,fix,fix,yes,0,0,DA-C1-013 fix -47
+en-nemotroncc-synth,9a8d21351d48e7a4,#76,clean,fix,fix,no,0,0,DA-B4-008 fix +2
+en-nemotroncc-synth,a9092dc10e8938a1,#76,fix,fix,keep,yes,0,0,
+en-nemotroncc-synth,1fcdf6476cbe3c6d,#76,clean,fix,fix,no,0,0,DA-B4-015 fix -171
+en-nemotroncc-synth,0f23da54cecc5a58,#76,clean,fix,fix,no,0,0,DA-C5-007 fix -12
+en-nemotroncc-synth,fc10b82da7fb24ac,#76,clean,fix,fix,no,0,0,DA-B4-008 fix +1
+en-nemotroncc-synth,91ab3364ac1512d7,#76,clean,fix,fix,no,0,0,DA-B4-008 fix +1
+en-nemotroncc-synth,a2e0f82c86a5e538,#76,clean,fix,fix,no,0,0,DA-B4-008 fix +1
+en-nemotroncc-synth,acfa25d6c34e5bf5,#76,clean,fix,fix,no,0,0,DA-B4-008 fix +6
+en-nemotroncc-synth,d1f7ebf967426312,#76,fix,fix,keep,yes,0,0,
+en-nemotroncc-synth,add97e507366e20e,#76,clean,fix,fix,no,0,0,DA-B4-008 fix +1
+en-nemotroncc-synth,e2e54ae8ca53fb13,#76,clean,fix,fix,no,0,0,DA-B4-008 fix +1
+en-nemotroncc-synth,2917191a7028177c,#76,clean,fix,fix,no,0,0,DA-B4-008 fix +1
+en-nemotroncc-synth,0f790b3e51447cfd,#76,clean,fix,fix,no,0,0,DA-B4-008 fix +1
+en-nemotroncc-synth,04c8254eec115f84,#76,clean,fix,fix,no,0,0,DA-B4-008 fix +1
+en-nemotroncc-synth,12ce8decc266bfcf,#76,clean,fix,fix,no,0,0,DA-B4-008 fix +1
+en-nemotroncc-synth,eec2c60c12f1d3f5,#76,clean,fix,fix,no,0,0,DA-B4-008 fix +2
+en-nemotroncc-synth,d511dd903a4a067c,#76,clean,fix,fix,no,0,0,DA-B4-015 fix -45
+en-nemotroncc-synth,e46c58b45d4011ce,#76,clean,fix,fix,no,0,0,DA-B4-008 fix +1
+en-nemotroncc-synth,8a6a1d17705d675c,#76,clean,fix,fix,no,0,0,DA-B4-015 fix -92
+en-nemotroncc-synth,c74967ec522fd90c,#76,clean,fix,fix,no,0,0,DA-B4-008 fix +1
+en-nemotroncc-synth,24e830d71e5bc566,#76,fix,fix,keep,yes,1,0,
+en-nemotroncc-synth,063e8bbd4f779a03,#76,clean,fix,fix,no,0,0,DA-B4-008 fix +1
+en-nemotroncc-synth,780f33d558dd9f87,#76,drop,fix,fix,no,0,0,DA-B4-015 fix -104
+en-nemotroncc-synth,9e9afb31ec4eecd5,#76,fix,fix,keep,yes,0,0,
+en-nemotroncc-synth,282a9f774a954f79,#76,clean,fix,fix,no,0,0,DA-B4-008 fix +1
+en-nemotroncc-synth,7523ebd6d772fada,#76,fix,fix,keep,yes,0,0,
+en-nemotroncc-synth,9b60a97bd619362d,#76,clean,fix,fix,no,0,0,DA-C2-010 fix -48
+en-nemotroncc-synth,96a659fe3e369e94,#76,clean,fix,fix,no,0,0,DA-B4-008 fix +1
+en-nemotroncc-synth,7566e41e459e6255,#76,clean,fix,fix,no,0,0,DA-B4-008 fix +1
+en-nemotroncc-synth,dded0be038079859,#76,clean,fix,fix,no,0,0,DA-A1-004 fix -10
+en-nemotroncc-synth,b415a2af9acab8c0,#76,clean,fix,fix,no,0,0,DA-B4-008 fix +1
+en-nemotroncc-synth,79034f4823c0a497,#76,clean,fix,fix,no,0,0,DA-B4-008 fix +1
+en-nemotroncc-synth,b3b84f2e80df609c,#76,fix,fix,keep,yes,0,0,
+en-nemotroncc-synth,055ecf0228699d9e,#76,clean,fix,fix,no,0,0,DA-B4-008 fix +1
+en-nemotroncc-synth,de5b3e2dd5b7fbb0,#76,clean,fix,fix,no,0,0,DA-B4-008 fix +2
+en-nemotroncc-synth,93bf1542853fd276,#76,fix,fix,keep,yes,0,0,
+en-nemotroncc-synth,e8f908a42871e4b6,#76,fix,fix,fix,yes,2,0,DA-A1-004 fix -2
+en-nemotroncc-synth,4bc070c79215632d,#76,fix,fix,keep,yes,1,0,
+en-nemotroncc-synth,1f472835ef145fb9,#76,fix,fix,keep,yes,1,0,
+en-nemotroncc-synth,fa933cc36ed916ff,#76,fix,fix,keep,yes,1,0,
+en-nemotroncc-synth,c27ffe1aed1ee536,#76,fix,fix,keep,yes,1,0,
+en-nemotroncc-synth,17003ddc9fb7a9d6,#76,fix,fix,keep,yes,2,0,
+en-nemotroncc-synth,020037fc56eaceee,#76,fix,fix,keep,yes,1,0,
+en-nemotroncc-synth,364298590b01a61e,#76,fix,fix,keep,yes,1,0,
+en-nemotroncc-synth,452886dff1756ff9,#76,fix,fix,keep,yes,1,0,
+en-nemotroncc-synth,8aecb4bed3222e59,#76,fix,fix,keep,yes,1,0,
+en-nemotroncc-synth,487169495fd63645,#76,fix,fix,fix,no,1,1,DA-F1-009 fix -5
+en-nemotroncc-synth,417036b98dd9380a,#76,fix,fix,keep,yes,1,0,
+en-nemotroncc-synth,1643b537b787cb99,#76,fix,fix,keep,yes,2,0,
+en-nemotroncc-synth,0fdc213d4606fc4f,#76,fix,fix,keep,yes,1,0,
+en-nemotroncc-synth,b00929f7a291d0c8,#76,fix,fix,keep,yes,1,0,
+en-nemotroncc-synth,23111b1b824081cd,#76,fix,fix,fix,no,1,1,DA-F1-009 fix -6
+en-nemotroncc-synth,07c8d8752910472e,#76,fix,fix,keep,yes,1,0,
+en-nemotroncc-synth,53b84b1caa2f39f1,#76,fix,fix,fix,no,2,2,DA-F1-009 fix -10
+en-nemotroncc-synth,d6f8a9fc304391e3,#76,clean,fix,fix,no,1,1,DA-F1-009 fix -5
+en-nemotroncc-synth,9c8ae5f6ab4bbca8,#76,fix,fix,keep,yes,1,0,
+en-nemotroncc-synth,4ee1673075b7d128,#76,fix,fix,keep,yes,1,0,
+en-nemotroncc-synth,ba1bae6cb7f032c5,#76,fix,fix,keep,yes,1,0,
+en-nemotroncc-synth,05d5bae84c860471,#76,fix,fix,keep,yes,1,0,
+en-nemotroncc-synth,6f6a0e1ab208e97b,#76,fix,fix,keep,yes,1,0,
+en-nemotroncc-synth,8988e16c5bbdda86,#76,clean,fix,fix,no,1,1,DA-F1-009 fix -18
+en-nemotroncc-synth,cef3cbc54c914320,#76,fix,fix,fix,no,1,1,DA-F1-009 fix -5
+en-nemotroncc-synth,d6e8da1b50823198,#76,fix,fix,fix,yes,1,2,DA-F1-009 fix -10
+en-nemotroncc-synth,af4fc4c9232d331d,#76,fix,fix,keep,yes,1,0,
+code-js-ts,f1473ebd9af40a9f,#78,clean,fix,fix,no,0,0,DA-B3-001 fix -53
+code-js-ts,0fd31f58f6817d5e,#78,clean,fix,fix,no,0,0,DA-B3-001 fix -60
+code-js-ts,d109097eceebfc0f,#78,clean,fix,fix,no,0,0,DA-B4-009 fix +0
+code-js-ts,bb937e91245d322c,#78,fix,fix,fix,no,0,0,DA-B3-001 fix -48; DA-B4-009 fix +18
+code-js-ts,ba31d5559835e9a6,#78,drop,drop,drop,no,0,0,DA-B3-001 fix -54; DA-E1-008 drop
+code-js-ts,0227a4e3e2993a31,#78,clean,fix,fix,no,0,0,DA-B3-001 fix -12
+code-js-ts,1d77bd24d03dee71,#78,clean,fix,fix,no,0,0,DA-B3-001 fix -47
+code-js-ts,148767a121cb58f1,#78,clean,fix,fix,no,0,0,DA-B3-001 fix -15; DA-B4-009 fix +0
+code-js-ts,2b1b0770e4f9881f,#78,clean,fix,fix,no,0,0,DA-B3-001 fix -25
+code-js-ts,8177f30c21088b0a,#78,clean,fix,fix,no,0,0,DA-B3-001 fix -83
+code-js-ts,725ef66906dd2399,#78,clean,fix,fix,no,0,0,DA-B3-001 fix -12
+code-js-ts,489a7bcb90e92242,#78,clean,fix,fix,no,0,0,DA-B3-001 fix -34
+code-js-ts,a37f405188118db2,#78,clean,fix,fix,no,0,0,DA-B3-001 fix -54
+code-js-ts,ea8017f9c94c93db,#78,clean,fix,fix,no,0,0,DA-B3-001 fix -12
+code-js-ts,660567142bb6d84b,#78,clean,fix,fix,no,0,0,DA-B3-001 fix -64
+code-js-ts,b55c0a38bd118ca5,#78,fix,fix,fix,no,0,0,DA-B3-001 fix -33; DA-B4-009 fix +6
+code-js-ts,42c798f145462ba0,#78,clean,fix,fix,no,0,0,DA-B3-001 fix -24
+code-js-ts,99cdfbe94efa4c0e,#78,clean,fix,fix,no,0,0,DA-B3-001 fix -15
+code-js-ts,990012a056c7af57,#78,clean,fix,fix,no,0,0,DA-B3-001 fix -12
+code-js-ts,be867b0f20575539,#78,clean,fix,fix,no,0,0,DA-B3-001 fix -12
+code-js-ts,796684661fabcfe7,#78,clean,fix,fix,no,0,0,DA-B3-001 fix -12
+code-js-ts,ff2826310cb46923,#78,clean,fix,fix,no,0,0,DA-B3-001 fix -77
+code-js-ts,d07d813005033bce,#78,clean,fix,fix,no,0,0,DA-B3-001 fix -34
+code-js-ts,a9024db4e7da3ebb,#78,clean,fix,fix,no,0,0,DA-B3-001 fix -59
+code-js-ts,2955de7a227eed56,#78,clean,fix,fix,no,0,0,DA-B3-001 fix -26
+code-js-ts,cfa4be64cbad8fd7,#78,drop,drop,drop,no,0,0,DA-E1-008 drop
+code-js-ts,6fe0462debce7705,#78,clean,fix,fix,no,0,0,DA-B3-001 fix -28
+code-js-ts,33d9b5cf7970302d,#78,clean,fix,fix,no,0,0,DA-B3-001 fix -91
+code-js-ts,7485ad65c80b4204,#78,clean,fix,fix,no,0,0,DA-A2-007 fix -172
+code-js-ts,61571ae8722badc1,#78,clean,fix,fix,no,0,0,DA-B3-001 fix -12; DA-B4-009 fix +0
+code-js-ts,7d4f89515d059f55,#78,clean,fix,fix,no,0,0,DA-B3-001 fix -47
+code-js-ts,40aa2e583092e454,#78,clean,fix,fix,no,0,0,DA-B3-001 fix -12
+code-js-ts,3d40d9c3493af31e,#78,drop,drop,drop,no,0,0,DA-E1-008 drop
+code-js-ts,99d66fd61a623208,#78,clean,fix,fix,no,0,0,DA-B3-001 fix -50
+code-js-ts,d41eac1cb9a838f9,#78,clean,fix,fix,no,0,0,DA-B3-001 fix -42
+code-js-ts,17c3309f46b177e9,#78,clean,fix,fix,no,0,0,DA-B4-009 fix +0
+code-js-ts,7a7c8670c3de9a3f,#78,clean,fix,fix,no,0,0,DA-B3-001 fix -15
+code-js-ts,8313153377787efa,#78,clean,fix,fix,no,0,0,DA-B4-009 fix +6
+code-js-ts,cd5ab486546f86e2,#78,clean,fix,fix,no,0,0,DA-B3-001 fix -54
+code-js-ts,7bc68034a3b75e4a,#78,clean,fix,fix,no,0,0,DA-B3-001 fix -51
+code-js-ts,1920549c2bcacd48,#78,clean,fix,fix,no,0,0,DA-B3-001 fix -12
+code-js-ts,2232f4168faea1e8,#78,clean,fix,fix,no,0,0,DA-B3-001 fix -15
+code-js-ts,9284f8854d607462,#78,clean,fix,fix,no,0,0,DA-E4-007 fix -611
+code-js-ts,944d73013d8f4771,#78,clean,fix,fix,no,0,0,DA-B3-001 fix -77
+code-js-ts,2129559a2cd06c3a,#78,drop,drop,drop,no,0,0,DA-E1-008 drop
+sci-finepdfs,c31993065f746189,#79,fix,fix,fix,yes,0,0,DA-C1-007 fix -1129; DA-C1-014 fix -76
+sci-finepdfs,c52dd9e603defa7d,#79,fix,fix,fix,no,0,0,DA-A1-006 fix -6; DA-C8-004 fix +0
+sci-finepdfs,079ce87c3d323ea7,#79,fix,fix,fix,no,0,0,DA-A1-006 fix -14; DA-C8-004 fix +0
+sci-finepdfs,335a56d0e87a73a9,#79,fix,fix,fix,yes,0,0,DA-C2-011 fix -246
+sci-finepdfs,f5332b3e8dc5894a,#79,drop,fix,fix,no,0,0,DA-A1-006 fix -4
+sci-finepdfs,29c7e818ebe025b0,#79,drop,fix,fix,no,0,0,DA-C2-011 fix -237

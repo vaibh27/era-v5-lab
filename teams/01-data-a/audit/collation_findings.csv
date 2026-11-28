@@ -1,0 +1,31 @@
+id,audit,pack,doc_ids,disease,current_rule,in_current_output,what_happens,proposal,collated_medicine,next_step
+F01,#68,en-dclm,a9a7821bb3d942d0,A2,DA-A2-008,yes,cp1252 quotes deleted,#75 DA-A2-009,DA-A2-010,renumbered from #75 DA-A2-009
+F02,#68,en-dclm,f1b8673c7cfd7aac,C2,DA-C2-003,yes,repeated command lines in code cut 3 to 1,#75 DA-C2-005,DA-C2-009 (DA-C2-010 on synth),renumbered from #75 DA-C2-005
+F03,#68,en-dclm,bfa86fe32d00c663,B5,DA-B4-010,yes,number lists cut inside dollar math,#75 DA-B4-014,DA-B4-016,"renumbered from #75 DA-B4-014; sets that start with a letter, minus or bracket are still cut"
+F04,#68,en-dclm,ef987c066d1cdf0f,F1,DA-F1-005,yes,"phone masked on one line, kept on the next",#75 DA-F1-007,DA-F1-007 (DA-F1-009 on synth),a +44 copy of the number is not matched
+F05,#68,en-dclm,b86875f06abe649a,B3,none,yes,<s> and </s> kept,#75 DA-B3-002,DA-B3-012,"renumbered from #75 DA-B3-002; also strips literal and fenced examples, no test for that"
+F06,#68,en-dclm,b3abeb4533becb1d;9edbebb5cf7fc415,wrong drop,DA-C3-003,yes,two complete documents dropped,none for this pack,none,proposal needed; same rule as F15
+F07,#68,en-dclm,ac9442043a4d4806,D1;C3,DA-D3-003,yes,"2,732 to 673 characters; questions left without answers",none,none,decide: drop the document or leave it whole
+F08,#71,math-megamath,f079a0d75820b184;0cb915d7762c2e45;27c5838098758c5b,content removed,DA-C5-006,yes,reference and author lines deleted,none,none,rule now named; proposal needed
+F09,#71,math-finemath,89dc8e7278ce1f4b,content removed,DA-C2-001,yes,repeated formula line cut 5 to 1,#71 DA-C2-007,DA-C2-007,in place of DA-C2-001: decide on adoption
+F10,#71,math-megamath,32d96679ed59c9d5;f079a0d75820b184,wrong drop,DA-C7-002,yes,"labelled fix, now dropped",none,none,decide on DA-C7-002; the audit read an older output
+F11,#71,math-megamath,4258f5c9fbf14805,F1,shared F1,yes,emails written with (at) and (dot) not masked,none,none,proposal needed
+F12,#71,math-finemath;math-megamath,26 documents in #71,C1,DA-C1-001;DA-C2-001,yes (2 checked),site chrome kept; repeated chrome keeps one copy,#71 DA-C1-012,DA-C1-012; DA-C2-007,decide on adoption
+F13,#75 and #76,en-nemotroncc-synth,8aecb4bed3222e59;417036b98dd9380a;d6e8da1b50823198,F1,DA-F1-005,yes,"phone masks now 1,1,1; with #75 2,2,2; with #76 0,0,1",#75 DA-F1-007 and #76 DA-F1-008,DA-F1-009,"merged: phone masks 0,0,2; ruling proposed, the team lead confirms it"
+F14,#76,en-nemotroncc-synth,7523ebd6d772fada,content removed,DA-C2-003,yes,repeated record fields deleted,#76 DA-C2-008,DA-C2-010,merged from #75 DA-C2-005 and #76 DA-C2-008
+F15,#76,en-nemotroncc-synth,5b4d0f975990e808,wrong drop,DA-C3-003,yes,complete article dropped,#76 DA-C3-008 (synth only),DA-C3-008,synth only; same rule as F06
+F16,#76,en-nemotroncc-synth,a9092dc10e8938a1;d1f7ebf967426312;9e9afb31ec4eecd5;b3b84f2e80df609c,content removed,DA-C5-005,yes,Topic heading removed,#76 DA-C5-007,DA-C5-007,decide on adoption
+F17,#76,en-nemotroncc-synth,f8027db45cfbebb2;93bf1542853fd276,content removed,DA-B4-007,yes,whole bullet removed,#76 DA-B4-015,DA-B4-015,policy decision in #76
+F18,#72,code-go,dabdf7ecc74cd614;c95ad16bf96bf0d6,G4,DA-A6-001,yes,Cyrillic letters in test fixtures made Latin,none,none,proposal needed: skip test files
+F19,#72,code-go,4a379ae4228af6e2;88d0c26177f7877c;05809df4f85761c5,E4,DA-E4-005,yes,3-line licence header kept,none,none,decide: widen the rule or accept short headers
+F20,day_D3,code-cpp;code-java;code-js-ts;code-python;code-rust,9 documents in day_D3.md,E4,no E4 rule acts,yes,licence words still at the top,none,none,decide with F19
+F21,day_D3,ind-te-sangraha-s,6 documents in day_D3.md,G4,none,no,visarga swapped for a colon in the older output only,not needed,not needed,closed: the current cleaner leaves all 6 unchanged
+F22,day_D3,14 packs,56 documents in day_D3.md,"dropped, no reason",see collation_docs.csv,"44 yes, 12 no","44 still dropped, rule now named; 12 Indic documents are kept",-,-,a reader gives each of the 44 a verdict
+F23,#78,code-js-ts,b55c0a38bd118ca5,E4,DA-E4-007,yes,Apache Software Foundation header kept,none,none,"proposal needed, with F19 and F20"
+F24,#78,code-js-ts,bb937e91245d322c,-,DA-B4-009,yes,placeholder used as an identifier becomes EXAMPLE_PASSWORD,none,none,decide: report such files as damaged upstream
+F25,#79,sci-finepdfs,335a56d0e87a73a9,C2,DA-C2-004,yes,repeat cut ends inside a paragraph,#79 Medicine 1,DA-C2-011,gold harm test run: 0 of 202; number given to #79 Medicine 1
+F26,#79,sci-finepdfs,c31993065f746189;c52dd9e603defa7d;079ce87c3d323ea7,C1,DA-C1-007,yes (2 checked),licence line and cover page kept,#79 Medicine 2 (part),DA-C1-014 (the licence line),gold harm test run: 0 of 202; cover page and running footers still open
+F27,#79,sci-finepdfs,079ce87c3d323ea7,A1,DA-A1-006,yes,5 soft hyphens kept,none,none,proposal needed
+F28,#68,en-dclm,25 documents in #68,C1,DA-C1-006;DA-C2-003,yes,boilerplate kept,none for this pack,none,proposal needed (asked for on #68)
+F29,#68,en-dclm,dff5216e6f15c4dd;c733a2499740aff8;afc83ec7e700b331;f1b8673c7cfd7aac;ad11cf73e258fd95;7ccb72daa2438a76,C4;A3;C5,none,yes,"joined pages, PDF bullets, one SEO line",none,none,proposal or a recorded decision (asked for on #68)
+F30,#76,en-nemotroncc-synth,8c0b0e0c559afe0b;0297eb260363a338;b57a2a8fbf16fdc6,C1,DA-C1-006;DA-C2-003,yes,site chrome partly kept; repeated chrome keeps one copy,#76 DA-C1-013,DA-C1-013,decide on adoption

@@ -1,0 +1,26 @@
+doc_id,read,verdict,diseases,evidence,hex,note
+7bdfe8559c7f7634,full,fix,C1,,,"DA-C2-003 removed repeated lines in the footnote list ('- Burne p.53' 3 to 1); the notes no longer line up one to one, minor; Boilerplate links at the top 15 lines"
+d8ee293d6c80f4cd,full,fix,C1,,,"DA-C5-005 removed the paper's 'Keywords:' line; harmless, though it is paper metadata, not SEO; Boilerplate at the end starting ""Get the latest version of the Adobe Acrobat reader or Acrobat Reader for Windows with Search and Accessibility"""
+1663f7c872418ada,full,clean,,,,DA-C5-005 removed the article's 'Keywords:' line; harmless
+62caf15bf9fe2370,full,clean,,,,'Skip to Main Content' removed by DA-C1-006; looks right
+78ad531b7e9e702f,full,fix,F1,,,'Skip to Main Content' removed by DA-C1-006; looks right. But two phone numbers of named staff are left unmasked in the contact block at the end (written without separators or in 4-2-4 groups)
+5f7d6fc8766a9c26,full,fix,F1,,,DA-F1-005 masked only part of one phone number (its last digits stay in the text) and left a second phone number in the same sentence unmasked
+fb0ed2914a2b992d,full,clean,,,,"DA-B4-007 deleted the author's own sentence 'The text does not say.' from a Bible commentary (it matches the rewriter meta-comment pattern); small loss, the text still reads fine"
+d7ae4c10a0ead899,full,,C3;C4,,,"No matching doc_id (dropped by clean, DA-C3-003). Drop looks right: blog index of cut-off post teasers ending in '[…]'"
+ab08effd9bc6856e,full,clean,,,,DA-D3-003 removed the Ukrainian shop-title line; the rest is the English book blurb; looks right
+de8a91ad3dc08bd6,full,clean,,,,'Skip to main content' removed by DA-C1-006; looks right
+dbc21a5e05d5a3ad,full,clean,,,,DA-D3-003 removed the Hindi 'read this post in Hindi' link line; looks right
+bca462c24c2c6cda,full,clean,,,,Three email addresses in a mailing-list post masked as <EMAIL> by DA-F1-005; looks right
+3308125832cd159a,full,clean,,,,Mojibake dashes and apostrophes repaired by DA-A3-002; looks right
+d12bfb06102c5fbb,full,,C5,,,"No matching doc_id (dropped by clean, DA-D4-001). Drop looks right: one-line keyword-stuffed essay-mill spam"
+f344f8b2b3bb7d7d,full,clean,,,,DA-C2-003 collapsed the repeated 'No records yet available for this year.' lines; fine
+ecc8a4db292eee8c,full,clean,,,,DA-C2-003 removed the repeated '👉 Read my full review' lines; looks right
+40fb0256c0b2c8fe,full,,,,,"No matching doc_id (dropped by clean, DA-C3-003). Drop looks wrong: complete news article about PFAS; it ends with a curly closing quote after 'worked on.', which the rule does not count as end punctuation, so 'on' read as a dangling word"
+cee849bb50eba073,full,clean,,,,DA-C5-005 removed the abstract's 'Keywords:' line; harmless
+eeadc959d809b46e,full,,C1,,,"No matching doc_id (dropped by clean, DA-C3-003). Drop looks wrong: complete article about the World Water Forum; only the last line 'Share this page on' is boilerplate, and its last word 'on' made the rule read the text as cut off. Remove the share line, keep the article"
+1781746e90858653,full,,,,,"No matching doc_id (dropped by clean, DA-C5-002). Drop looks wrong: SQLite on Raspberry Pi tutorial; a line of query output (rows separated by '|') was taken for a keyword line"
+bdacc614dc1007a6,full,,C1;C3;A3,,,"No matching doc_id (dropped by clean, DA-D4-001). Drop looks wrong: 21k-char anatomy lab write-up; the essay-mill phrase is one inline ad block ('Get your grade or your money back using our Essay Writing Service!'). Remove the ad lines and the cut-off last sentence instead"
+32118f1f0794bd21,full,fix,C1,,,"The 'You May Also Like' heading was removed but the related-article titles after it are still at the end; Remove ""P Therapeutic Strategy for an Aggressive Ovarian Cancer High-Fat Diet Could Help Minimize Damage Caused by Heart Attack M"""
+00bedaaa1c3da5a2,full,clean,,,,DA-D3-003 removed the Russian page-title line; the rest is an English listening transcript; looks right
+0309ba9879105216,full,,C3,,,"No matching doc_id (dropped by clean, DA-C3-003). Drop looks wrong: complete guide to controlling invasive shrubs; only the last line ends in a stray 'A'. Trim the last partial sentence instead"
+c28d662ea8889277,full,fix,C1,,,"DA-F1-005 masked parts of journal DOIs (for example '1399-3054.1998') as <PHONE>; the reference list is now corrupted; Unrelated text at the begining ""- freely available"""

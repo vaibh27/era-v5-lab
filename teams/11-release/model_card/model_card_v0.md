@@ -26,7 +26,39 @@ count of its first full corpus. TSAI decides it.
 
 ### The general text and code
 
-[text: waiting for Data A]
+Data A (the team that cleans training text, removes duplicates and prepares training files) checked English, code,
+maths and science samples.
+
+These samples came from public collections:
+
+- English web text: FineWeb-Edu, the DCLM baseline and Nemotron-CC. The Nemotron-CC samples include web text and text
+  rewritten by a model.
+- Code: StarCoderData, covering C++, Go, Java, JavaScript and TypeScript, Python and Rust.
+- Maths: FineMath and the web part of MegaMath.
+- Science: FinePDFs, text taken from PDF files.
+
+Readers labelled documents with a shared list of data problems. Later audits compared raw and cleaned samples to find
+missed problems and damage caused by cleaning.
+
+The readers found these problems:
+
+- Web text keeps menus, share and follow prompts, comment counters, tags and footers.
+- Some documents end early, stop at a teaser, or join unrelated pages together.
+- Some pages contain keyword lists, links, spam or filler written for search engines.
+- Maths text loses formulas and figures, or flattens formulas into plain text. Some pages contain text written by a
+  model.
+- Science text has broken words, damaged letter pairs, merged table cells and incorrect reading order after extraction
+  from PDFs.
+- Rewritten web text sometimes keeps the rewriting model's own comments instead of only the source content.
+- Code includes repeated licence headers, generated or minified files, and large blocks of embedded data.
+- Some documents contain personal contact details or secrets, such as access keys and passwords.
+
+The audits also found cleaning mistakes, including removal of useful text and technical numbers mistaken for phone
+numbers. Data A added scoped fixes and recorded the remaining findings.
+
+The current corpus-v1 job selects FineWeb-Edu, StarCoderData, the web part of MegaMath and FinePDFs from these
+sources. The DCLM, Nemotron-CC and FineMath packs were audited but are excluded from this job's current input
+selection.
 
 ### The Indian-language and code-adjacent text
 
@@ -75,7 +107,37 @@ Text in Indian languages, in their own scripts, is 8% of every training batch.
 
 ## Data cleaning
 
-[text: waiting for Data A and Data B]
+Data A built and rehearsed a pipeline that cleans text, removes selected duplicates and writes tokenised training
+files. It checks the text against Evaluation's benchmark fingerprints before tokenisation.
+
+Data A optimised cleaning rules and added parallel processing across input files. Checks confirmed that parallel and
+sequential cleaning produced identical outputs on the tested inputs.
+
+Cleaning rules apply to named sources and kinds of text. They repair selected encoding and extraction problems, remove
+recognised boilerplate, and drop documents that meet the rules for exclusion. Other rules mask detected personal
+details and secrets.
+
+Data A tested the rules individually and together on available gold sets: documents that readers had marked clean. The
+tests record changes and drops, including failures and gaps in gold coverage. Passing a harm test does not mean that
+every document is correct or that cleaning found every problem. Cleaning cannot recover formulas or passages already
+missing from the input.
+
+The duplicate check compares exact and near copies, with different rules for prose, maths and code. It protects the
+held-out evaluation split by removing matching training copies. Cross-language duplicate detection remains report-only
+and does not remove documents.
+
+The benchmark check, called F2, uses Evaluation's fixed set of text fingerprints. It drops documents that match the
+check and records the matches. This does not establish that every possible benchmark copy has been found.
+
+The pipeline uses the frozen tokenizer p1536 and writes token IDs into shards, the files that training reads. Each
+shard preserves whole documents and marks where each document ends. A manifest and quality report record its contents
+and processing history. Checks compare decoded tokens with the normalised input and reconcile the shards with the
+pipeline's document records.
+
+The completed end-to-end rehearsal used sample data. Verified corpus-v1 production shards and their final
+training-token count remain pending.
+
+[text: waiting for Data B]
 
 ## Tokenizer
 
@@ -145,13 +207,35 @@ answer choices, and the answer of the model is the choice that it rates most lik
 Each score is in points out of 100. The check of the training text covers both benchmarks. Every file of training
 text is checked against their questions before training reads it.
 
+Each language has a small set of questions, so a small gap between the scores of two languages can come from chance.
+
 ## Limitations and risks
+
+[text: waiting for Evaluation and Release]
+
+## What this card does not claim
 
 [text: waiting for Evaluation and Release]
 
 ## Licence and attribution
 
-[text: waiting for Post-training, Data A and Data B]
+Post-training uses only datasets with permissive commercial licences (MIT, Apache 2.0, CC BY 4.0, CC BY-SA, ODC-By,
+or per-file permissive licences). Datasets from closed models, Llama models, use-restricted licences such as
+OpenRAIL-M, or unknown generators are excluded.
+
+Post-training datasets admitted so far and their credits:
+
+- `nvidia/OpenCodeReasoning-2` (CC BY 4.0): supervised fine-tuning code and reasoning traces.
+- `deepmind/code_contests` (CC BY 4.0): reinforcement learning (RL) code training pool (train split, decontaminated).
+- `nebius/SWE-rebench` (CC BY 4.0, arXiv 2505.20411) and Post-training's `swe-envs/` repositories (MIT or
+  BSD-3-Clause): human issues, patches, and tests.
+
+The full dataset ledger, generator licences, and attribution list stay in
+`teams/10-post-training/licences/licence_table.md` (alongside the Data A, Data B, and MILU CC BY 4.0 credits).
+
+[text: waiting for Data A and Data B]
+
+Evaluation uses the MILU benchmark of AI4Bharat, which is under the CC BY 4.0 licence.
 
 ## Contributors
 
@@ -178,6 +262,18 @@ These teams of the ERA V5 lab do the work. TSAI approves each decision before th
 
 The public lab repository holds the work of every team: https://github.com/theschoolofai/era-v5-lab
 
+## What is released
+
+[text: waiting for Release, after TSAI decides what is released]
+
+## Sources
+
+[text: waiting for Release]
+
+## How to cite
+
+[text: waiting for Release, after TSAI names the model]
+
 ---
 
 ## Review record (remove this section before publishing)
@@ -202,9 +298,10 @@ How to fill it:
 |---|---|---|---|---|
 | Overview | Release | who made the model: yes. What the model is: yes, from the Gate 2 and Gate 3 updates and the launch announcement. The short forms KE2 and token: yes, from the Gate 3 update and the dashboard glossary. The size sentence describes work that is not done (style rule 6), so TSAI approves its wording in this pull request. Before publishing, it changes to the size that TSAI approves | `launch/launch_announcement_v0.md` ([#600](https://github.com/theschoolofai/era-v5-lab/pull/600), [#603](https://github.com/theschoolofai/era-v5-lab/pull/603), [#753](https://github.com/theschoolofai/era-v5-lab/pull/753)). What the model is: `updates/gate2.md` (first model configuration), `updates/gate3.md` (attention and experts, model layout and size, the output head, short forms), `dashboard/glossary.md` (token) | Release: yes (the Release lead wrote this draft); Architecture: yes, and Architecture sent the sentence on the size ([comment on #791](https://github.com/theschoolofai/era-v5-lab/pull/791#issuecomment-7135447264)) |
 | Training data: the Indian-language and code-adjacent text | Data B | yes, with no edit, and the problems in the code-adjacent text, with no edit. One open point waits for TSAI: whether the notebooks and the posts are cleaned before training | `teams/02-data-b/model_card/training_data.md` ([#525](https://github.com/theschoolofai/era-v5-lab/pull/525); the code-adjacent problems: [#782](https://github.com/theschoolofai/era-v5-lab/pull/782), from the Data B lead). Its source table gives the TSAI approval of each number and the source of each problem | Data B: yes for the first part ([comment on #759](https://github.com/theschoolofai/era-v5-lab/pull/759#issuecomment-7108567909)); the code-adjacent problems: no, waiting for the OK |
-| Training data: the general text and code | Data A | no | waiting for Data A | Data A: no |
-| Licence and attribution | Post-training, Data A, Data B | no | waiting for the Post-training text. Facts so far: `teams/10-post-training/licences/licence_table.md`. MILU is under CC BY 4.0, so this section credits its authors ([comment on #770](https://github.com/theschoolofai/era-v5-lab/pull/770#issuecomment-7123142597)) | no |
-| Evaluation | Evaluation | what Evaluation does: yes, from text that TSAI approved. The benchmarks, the table rows and the check of the training text: yes, from the Evaluation lead, with no edit. The scores: no, TSAI approves each score. Before a score from an early step goes in, check with Evaluation, because early scores can be above a random guess without any learning | the Evaluation line of `launch/launch_announcement_v0.md` ([#753](https://github.com/theschoolofai/era-v5-lab/pull/753)); the Eval-Mini panel text in `dashboard/dashboard_text_new_panels.md` and the format in `dashboard/score_text_format.md` ([#760](https://github.com/theschoolofai/era-v5-lab/pull/760)). Benchmarks and table rows: [comment on #770](https://github.com/theschoolofai/era-v5-lab/pull/770#issuecomment-7123142597). Plan: `teams/09-evaluation/eval_schedule.md` | Evaluation: yes ([comment on #770](https://github.com/theschoolofai/era-v5-lab/pull/770#issuecomment-7121407240)); the Evaluation lead sent the benchmark text and confirmed the paste ([comment on #784](https://github.com/theschoolofai/era-v5-lab/pull/784#issuecomment-7129730898)) |
+| Training data: the general text and code | Data A | yes, from the Data A lead, with no edit. Open: "corpus-v1" needs a short explanation at its first use (style rule 10). The edit goes back to Data A | Reading findings: [`teams/01-data-a/spec_v1_1/results/reading/summary.md`](https://github.com/theschoolofai/era-v5-lab/blob/main/teams/01-data-a/spec_v1_1/results/reading/summary.md). Current input selection: [`staged_packs_33.json`](https://github.com/theschoolofai/era-v5-lab/blob/main/teams/01-data-a/jobs/2026-11-19-first-training/staged_packs_33.json). Pipeline and cleaner updates: [#767](https://github.com/theschoolofai/era-v5-lab/pull/767) | Data A: yes ([comment on #811](https://github.com/theschoolofai/era-v5-lab/pull/811#issuecomment-7169583801)) |
+| Data cleaning | Data A, Data B | the Data A part: yes, from the Data A lead, with no edit. The Data B part: no | Cleaner tests and their limits: [`harm_tests.md`](https://github.com/theschoolofai/era-v5-lab/blob/main/teams/01-data-a/spec_v1_1/results/cleaner/harm_tests.md). Pipeline and cleaner updates: [#767](https://github.com/theschoolofai/era-v5-lab/pull/767). Sample rehearsal: [`README.md`](https://github.com/theschoolofai/era-v5-lab/blob/main/teams/01-data-a/jobs/logs/2026-11-19-first-training-rehearsal-38packs/README.md). Duplicate check: [`dedup_design_v1.md`](https://github.com/theschoolofai/era-v5-lab/blob/main/teams/01-data-a/dedup/dedup_design_v1.md). Benchmark check: [`f2/README.md`](https://github.com/theschoolofai/era-v5-lab/blob/main/teams/01-data-a/results/spec_v1/f2/README.md). Shard format: [`shard_format_v1.md`](https://github.com/theschoolofai/era-v5-lab/blob/main/teams/01-data-a/shards/shard_format_v1.md) | Data A: yes ([comment on #811](https://github.com/theschoolofai/era-v5-lab/pull/811#issuecomment-7169583801)); Data B: no |
+| Licence and attribution | Post-training, Data A, Data B | the Post-training text: yes, from the Post-training lead, with two style edits (style rule 10): "RL" is spelled out, and "G10" is "Post-training's". The Data A and Data B text: no. The MILU credit: yes, from the Evaluation lead's note. It names AI4Bharat, the group that made MILU, and no person (style rule 7). TSAI decides whether the credit also cites the MILU paper and links its public page. Open: the Post-training text says that `licence_table.md` holds the MILU credit, but the table has no MILU row yet. Post-training adds the row, or changes the sentence. Open for TSAI: whether the card cites papers outside the lab repository, both the MILU paper and the SWE-rebench arXiv number | the Post-training text: [comment on #811](https://github.com/theschoolofai/era-v5-lab/pull/811#issuecomment-7160236414). Facts so far: `teams/10-post-training/licences/licence_table.md`. MILU is under CC BY 4.0, so this section credits its authors ([comment on #770](https://github.com/theschoolofai/era-v5-lab/pull/770#issuecomment-7123142597)) | Post-training: yes for the text ([comment on #811](https://github.com/theschoolofai/era-v5-lab/pull/811#issuecomment-7160236414)) and for the style edits ([comment on #811](https://github.com/theschoolofai/era-v5-lab/pull/811#issuecomment-7162658478)). Data A: no; Data B: no; Evaluation, for the MILU credit: yes ([comment on #811](https://github.com/theschoolofai/era-v5-lab/pull/811#issuecomment-7182428058)) |
+| Evaluation | Evaluation | what Evaluation does: yes, from text that TSAI approved. The benchmarks, the table rows and the check of the training text: yes, from the Evaluation lead, with no edit. The scores: no, TSAI approves each score. Before a score from an early step goes in, check with Evaluation, because early scores can be above a random guess without any learning. Open: whether MMLU, under the MIT licence in `teams/09-evaluation/benchmarks_v1.md`, needs a credit line too. Evaluation decides | the Evaluation line of `launch/launch_announcement_v0.md` ([#753](https://github.com/theschoolofai/era-v5-lab/pull/753)); the Eval-Mini panel text in `dashboard/dashboard_text_new_panels.md` and the format in `dashboard/score_text_format.md` ([#760](https://github.com/theschoolofai/era-v5-lab/pull/760)). Benchmarks and table rows: [comment on #770](https://github.com/theschoolofai/era-v5-lab/pull/770#issuecomment-7123142597). Plan: `teams/09-evaluation/eval_schedule.md` | Evaluation: yes ([comment on #770](https://github.com/theschoolofai/era-v5-lab/pull/770#issuecomment-7121407240)); the Evaluation lead sent the benchmark text and confirmed the paste ([comment on #784](https://github.com/theschoolofai/era-v5-lab/pull/784#issuecomment-7129730898)). The sentence on the size of the question sets: from the Evaluation lead, with no edit ([comment on #811](https://github.com/theschoolofai/era-v5-lab/pull/811#issuecomment-7182428058)) |
 | Contributors | Release | yes | `launch/launch_announcement_v0.md` ([#600](https://github.com/theschoolofai/era-v5-lab/pull/600), [#603](https://github.com/theschoolofai/era-v5-lab/pull/603)) | yes (the Release lead wrote this draft) |
 | How to find more | Release | yes | the public lab repository | yes (the Release lead wrote this draft) |
 | KE2 | KE2 | the output head: yes, from text that TSAI approved. The dates now have the year, and the text no longer says Gate 3 (style rules 10 and 11). The placeholder on how the lab tested its embedding method is gone: it was wider than the scope in `model_card_outline.md` | `updates/gate3.md` (the output head, short forms; [#701](https://github.com/theschoolofai/era-v5-lab/pull/701)), the KE2 line of `launch/launch_announcement_v0.md` ([#753](https://github.com/theschoolofai/era-v5-lab/pull/753)), the training code: [#717](https://github.com/theschoolofai/era-v5-lab/pull/717), merged 24 Nov | KE2: yes for the text before the date edit ([comment on #791](https://github.com/theschoolofai/era-v5-lab/pull/791#issuecomment-7142627011)); the date edit: no, waiting for the OK |

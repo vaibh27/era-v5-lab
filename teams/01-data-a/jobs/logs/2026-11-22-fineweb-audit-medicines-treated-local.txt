@@ -1,0 +1,46 @@
+audit docs: 35; found in the raw files: 35
+
+DA-C1-015 (new)
+  Part_1 7bdfe8559c7f7634  old -     new fix
+  Part_1 d8ee293d6c80f4cd  old -     new fix
+  Part_1 eeadc959d809b46e  old -     new fix
+  Part_1 bdacc614dc1007a6  old -     new fix
+  Part_1 32118f1f0794bd21  old -     new fix
+  Part_1 c28d662ea8889277  old -     new fix
+
+DA-C3-009 (replaces DA-C3-003)
+  Part_1 d7ae4c10a0ead899  old drop  new drop
+  Part_1 40fb0256c0b2c8fe  old drop  new keep
+  Part_1 eeadc959d809b46e  old drop  new drop
+  Part_1 0309ba9879105216  old drop  new fix
+  Part_2 5716019c1d54b86c  old drop  new fix
+  Part_2 14b97eccfa4af1cd  old drop  new drop
+  Part_2 a2202508fb45a88e  old drop  new drop
+  Part_2 2fee6f5ca1c102bf  old drop  new drop
+  Part_2 312941c93050131c  old drop  new drop
+
+DA-C5-008 (replaces DA-C5-002)
+  Part_1 1781746e90858653  old drop  new keep
+
+DA-F1-010 (replaces DA-F1-005)
+  Part_1 5f7d6fc8766a9c26  old fix   new fix
+  Part_1 bca462c24c2c6cda  old fix   new fix
+  Part_1 c28d662ea8889277  old fix   new keep
+  Part_2 5fbc8b949d34abb0  old fix   new keep
+
+all four in run order (raw text):
+  Part_1 7bdfe8559c7f7634  DA-C1-015 fix
+  Part_1 d8ee293d6c80f4cd  DA-C1-015 fix
+  Part_1 5f7d6fc8766a9c26  DA-F1-010 fix
+  Part_1 d7ae4c10a0ead899  DA-C3-009 drop
+  Part_1 bca462c24c2c6cda  DA-F1-010 fix
+  Part_1 eeadc959d809b46e  DA-C1-015 fix
+  Part_1 bdacc614dc1007a6  DA-C1-015 fix
+  Part_1 32118f1f0794bd21  DA-C1-015 fix
+  Part_1 0309ba9879105216  DA-C3-009 fix
+  Part_1 c28d662ea8889277  DA-C1-015 fix
+  Part_2 5716019c1d54b86c  DA-C3-009 fix
+  Part_2 14b97eccfa4af1cd  DA-C3-009 drop
+  Part_2 a2202508fb45a88e  DA-C3-009 drop
+  Part_2 2fee6f5ca1c102bf  DA-C3-009 drop
+  Part_2 312941c93050131c  DA-C3-009 drop

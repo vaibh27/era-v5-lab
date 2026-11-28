@@ -1,0 +1,11 @@
+doc_id,read,verdict,diseases,evidence,hex,note
+17c3309f46b177e9,full,clean,,,,StarCoder name placeholders replaced; code unchanged
+7a7c8670c3de9a3f,full,clean,,,,header removed correctly
+8313153377787efa,full,clean,,,,StarCoder key placeholder replaced; still a valid string; no real secret
+cd5ab486546f86e2,full,clean,,,,"header removed; Chinese comments are real text, kept"
+7bc68034a3b75e4a,full,clean,,,,header removed correctly
+1920549c2bcacd48,full,clean,,,,header removed correctly
+2232f4168faea1e8,full,clean,,,,header removed correctly
+9284f8854d607462,full,clean,,,,"Apache header (""Licensed under the Apache License"") removed correctly by DA-E4-007"
+944d73013d8f4771,full,clean,,,,header removed correctly
+2129559a2cd06c3a,full,drop,E1,,,vendored antd library under node_modules/; drop looks right

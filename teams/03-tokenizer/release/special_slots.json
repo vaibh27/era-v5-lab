@@ -1,0 +1,3659 @@
+{
+ "_comment": "All special tokens of the frozen tokenizer; made by special_slots.py. tokenizer.json is the source of truth for ids and strings; this file adds meaning, status and users. used_by lists the teams whose formats emit or read the token; G4 (KE2) has a byte row for every id and is not listed.",
+ "tokenizer_sha256": "e6b93a93a60520d7b1af2e9242485f443b5596a1e116b8f8798d83bbad25a64b",
+ "vocab_size": 131072,
+ "special_count": 356,
+ "roles": {
+  "bos": 130725,
+  "eos": 130822,
+  "pad": 130726,
+  "unk": 130727,
+  "chat_turn_end": 130816
+ },
+ "groups": {
+  "core": 19,
+  "base, unused": 92,
+  "free slot (named by G10)": 2,
+  "free slot": 243
+ },
+ "status": {
+  "legacy, do not use": 1,
+  "unused, do not emit": 92,
+  "in use": 16,
+  "named, not emitted": 2,
+  "reserved for G10, string not renamed": 2,
+  "free, owner G10": 57,
+  "free, owner G3": 64,
+  "free, owner TSAI": 122
+ },
+ "tokens": [
+  {
+   "id": 36,
+   "token": "<|end_of_text|>",
+   "name": "legacy_eos",
+   "group": "core",
+   "meaning": "The baseline's old end of text. Not eos: do not use.",
+   "status": "legacy, do not use",
+   "used_by": [],
+   "bytes": 15
+  },
+  {
+   "id": 128512,
+   "token": "<think>",
+   "name": "think",
+   "group": "base, unused",
+   "meaning": "Thinking tag from the base tokenizer. Unused by the chat format (G10 v1); data cleaning strips it.",
+   "status": "unused, do not emit",
+   "used_by": [],
+   "bytes": 7
+  },
+  {
+   "id": 128601,
+   "token": "</think>",
+   "name": "think",
+   "group": "base, unused",
+   "meaning": "Thinking tag from the base tokenizer. Unused by the chat format (G10 v1); data cleaning strips it.",
+   "status": "unused, do not emit",
+   "used_by": [],
+   "bytes": 8
+  },
+  {
+   "id": 129279,
+   "token": "<|response|>",
+   "name": "response",
+   "group": "base, unused",
+   "meaning": "Named special from the base tokenizer (code, data source, vision, reasoning step). Not used by any team's format today; kept because ids never move.",
+   "status": "unused, do not emit",
+   "used_by": [],
+   "bytes": 12
+  },
+  {
+   "id": 129411,
+   "token": "<|context|>",
+   "name": "context",
+   "group": "base, unused",
+   "meaning": "Named special from the base tokenizer (code, data source, vision, reasoning step). Not used by any team's format today; kept because ids never move.",
+   "status": "unused, do not emit",
+   "used_by": [],
+   "bytes": 11
+  },
+  {
+   "id": 129994,
+   "token": "<|im_start|>",
+   "name": "im_start",
+   "group": "core",
+   "meaning": "Start of a chat turn; the role (system, user, assistant, tool) follows as plain text.",
+   "status": "in use",
+   "used_by": [
+    "G10",
+    "G12",
+    "G9"
+   ],
+   "bytes": 12
+  },
+  {
+   "id": 130173,
+   "token": "<|newline|>",
+   "name": "newline",
+   "group": "base, unused",
+   "meaning": "Named special from the base tokenizer (code, data source, vision, reasoning step). Not used by any team's format today; kept because ids never move.",
+   "status": "unused, do not emit",
+   "used_by": [],
+   "bytes": 11
+  },
+  {
+   "id": 130174,
+   "token": "<tool_call>",
+   "name": "tool_call",
+   "group": "base, unused",
+   "meaning": "Tool tag from the base tokenizer. Unused: tool calls use <|tool_call|> and <|/tool_call|>.",
+   "status": "unused, do not emit",
+   "used_by": [],
+   "bytes": 11
+  },
+  {
+   "id": 130226,
+   "token": "</tool_call>",
+   "name": "tool_call",
+   "group": "base, unused",
+   "meaning": "Tool tag from the base tokenizer. Unused: tool calls use <|tool_call|> and <|/tool_call|>.",
+   "status": "unused, do not emit",
+   "used_by": [],
+   "bytes": 12
+  },
+  {
+   "id": 130725,
+   "token": "<|begin_of_text|>",
+   "name": "bos",
+   "group": "core",
+   "meaning": "Begin of text, named for loaders. Not added: add_bos_token is false and shards have no bos.",
+   "status": "named, not emitted",
+   "used_by": [
+    "G5",
+    "G12"
+   ],
+   "bytes": 17
+  },
+  {
+   "id": 130726,
+   "token": "<|pad|>",
+   "name": "pad",
+   "group": "core",
+   "meaning": "Padding. Never in shards; trainers mask it out of the loss.",
+   "status": "in use",
+   "used_by": [
+    "G5",
+    "G9",
+    "G12"
+   ],
+   "bytes": 7
+  },
+  {
+   "id": 130727,
+   "token": "<|unk|>",
+   "name": "unk",
+   "group": "core",
+   "meaning": "Unknown, named for loaders. Byte-level BPE never emits it.",
+   "status": "named, not emitted",
+   "used_by": [
+    "G12"
+   ],
+   "bytes": 7
+  },
+  {
+   "id": 130728,
+   "token": "<|sep|>",
+   "name": "sep",
+   "group": "base, unused",
+   "meaning": "Named special from the base tokenizer (code, data source, vision, reasoning step). Not used by any team's format today; kept because ids never move.",
+   "status": "unused, do not emit",
+   "used_by": [],
+   "bytes": 7
+  },
+  {
+   "id": 130729,
+   "token": "<|cls|>",
+   "name": "cls",
+   "group": "base, unused",
+   "meaning": "Named special from the base tokenizer (code, data source, vision, reasoning step). Not used by any team's format today; kept because ids never move.",
+   "status": "unused, do not emit",
+   "used_by": [],
+   "bytes": 7
+  },
+  {
+   "id": 130730,
+   "token": "<|mask|>",
+   "name": "mask",
+   "group": "base, unused",
+   "meaning": "Named special from the base tokenizer (code, data source, vision, reasoning step). Not used by any team's format today; kept because ids never move.",
+   "status": "unused, do not emit",
+   "used_by": [],
+   "bytes": 8
+  },
+  {
+   "id": 130731,
+   "token": "<|paragraph|>",
+   "name": "paragraph",
+   "group": "base, unused",
+   "meaning": "Named special from the base tokenizer (code, data source, vision, reasoning step). Not used by any team's format today; kept because ids never move.",
+   "status": "unused, do not emit",
+   "used_by": [],
+   "bytes": 13
+  },
+  {
+   "id": 130732,
+   "token": "<|document|>",
+   "name": "document",
+   "group": "base, unused",
+   "meaning": "Named special from the base tokenizer (code, data source, vision, reasoning step). Not used by any team's format today; kept because ids never move.",
+   "status": "unused, do not emit",
+   "used_by": [],
+   "bytes": 12
+  },
+  {
+   "id": 130733,
+   "token": "<|system|>",
+   "name": "system",
+   "group": "base, unused",
+   "meaning": "Role marker from the base tokenizer. Unused: ChatML writes the role as plain text after im_start.",
+   "status": "unused, do not emit",
+   "used_by": [],
+   "bytes": 10
+  },
+  {
+   "id": 130734,
+   "token": "<|user|>",
+   "name": "user",
+   "group": "base, unused",
+   "meaning": "Role marker from the base tokenizer. Unused: ChatML writes the role as plain text after im_start.",
+   "status": "unused, do not emit",
+   "used_by": [],
+   "bytes": 8
+  },
+  {
+   "id": 130735,
+   "token": "<|assistant|>",
+   "name": "assistant",
+   "group": "base, unused",
+   "meaning": "Role marker from the base tokenizer. Unused: ChatML writes the role as plain text after im_start.",
+   "status": "unused, do not emit",
+   "used_by": [],
+   "bytes": 13
+  },
+  {
+   "id": 130736,
+   "token": "<|tool|>",
+   "name": "tool",
+   "group": "base, unused",
+   "meaning": "Role marker from the base tokenizer. Unused: ChatML writes the role as plain text after im_start.",
+   "status": "unused, do not emit",
+   "used_by": [],
+   "bytes": 8
+  },
+  {
+   "id": 130737,
+   "token": "<|function|>",
+   "name": "function",
+   "group": "base, unused",
+   "meaning": "Named special from the base tokenizer (code, data source, vision, reasoning step). Not used by any team's format today; kept because ids never move.",
+   "status": "unused, do not emit",
+   "used_by": [],
+   "bytes": 12
+  },
+  {
+   "id": 130738,
+   "token": "<|instruction|>",
+   "name": "instruction",
+   "group": "base, unused",
+   "meaning": "Named special from the base tokenizer (code, data source, vision, reasoning step). Not used by any team's format today; kept because ids never move.",
+   "status": "unused, do not emit",
+   "used_by": [],
+   "bytes": 15
+  },
+  {
+   "id": 130739,
+   "token": "<|turn|>",
+   "name": "turn",
+   "group": "base, unused",
+   "meaning": "Named special from the base tokenizer (code, data source, vision, reasoning step). Not used by any team's format today; kept because ids never move.",
+   "status": "unused, do not emit",
+   "used_by": [],
+   "bytes": 8
+  },
+  {
+   "id": 130740,
+   "token": "<|end_turn|>",
+   "name": "end_turn",
+   "group": "base, unused",
+   "meaning": "End of turn from the base tokenizer. Unused: turns end with im_end.",
+   "status": "unused, do not emit",
+   "used_by": [],
+   "bytes": 12
+  },
+  {
+   "id": 130741,
+   "token": "<|code_begin|>",
+   "name": "code_begin",
+   "group": "base, unused",
+   "meaning": "Named special from the base tokenizer (code, data source, vision, reasoning step). Not used by any team's format today; kept because ids never move.",
+   "status": "unused, do not emit",
+   "used_by": [],
+   "bytes": 14
+  },
+  {
+   "id": 130742,
+   "token": "<|code_end|>",
+   "name": "code_end",
+   "group": "base, unused",
+   "meaning": "Named special from the base tokenizer (code, data source, vision, reasoning step). Not used by any team's format today; kept because ids never move.",
+   "status": "unused, do not emit",
+   "used_by": [],
+   "bytes": 12
+  },
+  {
+   "id": 130743,
+   "token": "<|output_begin|>",
+   "name": "output_begin",
+   "group": "base, unused",
+   "meaning": "Named special from the base tokenizer (code, data source, vision, reasoning step). Not used by any team's format today; kept because ids never move.",
+   "status": "unused, do not emit",
+   "used_by": [],
+   "bytes": 16
+  },
+  {
+   "id": 130744,
+   "token": "<|output_end|>",
+   "name": "output_end",
+   "group": "base, unused",
+   "meaning": "Named special from the base tokenizer (code, data source, vision, reasoning step). Not used by any team's format today; kept because ids never move.",
+   "status": "unused, do not emit",
+   "used_by": [],
+   "bytes": 14
+  },
+  {
+   "id": 130745,
+   "token": "<|error|>",
+   "name": "error",
+   "group": "base, unused",
+   "meaning": "Named special from the base tokenizer (code, data source, vision, reasoning step). Not used by any team's format today; kept because ids never move.",
+   "status": "unused, do not emit",
+   "used_by": [],
+   "bytes": 9
+  },
+  {
+   "id": 130746,
+   "token": "<|stdin|>",
+   "name": "stdin",
+   "group": "base, unused",
+   "meaning": "Named special from the base tokenizer (code, data source, vision, reasoning step). Not used by any team's format today; kept because ids never move.",
+   "status": "unused, do not emit",
+   "used_by": [],
+   "bytes": 9
+  },
+  {
+   "id": 130747,
+   "token": "<|stdout|>",
+   "name": "stdout",
+   "group": "base, unused",
+   "meaning": "Named special from the base tokenizer (code, data source, vision, reasoning step). Not used by any team's format today; kept because ids never move.",
+   "status": "unused, do not emit",
+   "used_by": [],
+   "bytes": 10
+  },
+  {
+   "id": 130748,
+   "token": "<|stderr|>",
+   "name": "stderr",
+   "group": "base, unused",
+   "meaning": "Named special from the base tokenizer (code, data source, vision, reasoning step). Not used by any team's format today; kept because ids never move.",
+   "status": "unused, do not emit",
+   "used_by": [],
+   "bytes": 10
+  },
+  {
+   "id": 130749,
+   "token": "<|file_begin|>",
+   "name": "file_begin",
+   "group": "base, unused",
+   "meaning": "Named special from the base tokenizer (code, data source, vision, reasoning step). Not used by any team's format today; kept because ids never move.",
+   "status": "unused, do not emit",
+   "used_by": [],
+   "bytes": 14
+  },
+  {
+   "id": 130750,
+   "token": "<|file_end|>",
+   "name": "file_end",
+   "group": "base, unused",
+   "meaning": "Named special from the base tokenizer (code, data source, vision, reasoning step). Not used by any team's format today; kept because ids never move.",
+   "status": "unused, do not emit",
+   "used_by": [],
+   "bytes": 12
+  },
+  {
+   "id": 130751,
+   "token": "<|lang:python|>",
+   "name": "lang:python",
+   "group": "base, unused",
+   "meaning": "Named special from the base tokenizer (code, data source, vision, reasoning step). Not used by any team's format today; kept because ids never move.",
+   "status": "unused, do not emit",
+   "used_by": [],
+   "bytes": 15
+  },
+  {
+   "id": 130752,
+   "token": "<|lang:javascript|>",
+   "name": "lang:javascript",
+   "group": "base, unused",
+   "meaning": "Named special from the base tokenizer (code, data source, vision, reasoning step). Not used by any team's format today; kept because ids never move.",
+   "status": "unused, do not emit",
+   "used_by": [],
+   "bytes": 19
+  },
+  {
+   "id": 130753,
+   "token": "<|lang:typescript|>",
+   "name": "lang:typescript",
+   "group": "base, unused",
+   "meaning": "Named special from the base tokenizer (code, data source, vision, reasoning step). Not used by any team's format today; kept because ids never move.",
+   "status": "unused, do not emit",
+   "used_by": [],
+   "bytes": 19
+  },
+  {
+   "id": 130754,
+   "token": "<|lang:java|>",
+   "name": "lang:java",
+   "group": "base, unused",
+   "meaning": "Named special from the base tokenizer (code, data source, vision, reasoning step). Not used by any team's format today; kept because ids never move.",
+   "status": "unused, do not emit",
+   "used_by": [],
+   "bytes": 13
+  },
+  {
+   "id": 130755,
+   "token": "<|lang:cpp|>",
+   "name": "lang:cpp",
+   "group": "base, unused",
+   "meaning": "Named special from the base tokenizer (code, data source, vision, reasoning step). Not used by any team's format today; kept because ids never move.",
+   "status": "unused, do not emit",
+   "used_by": [],
+   "bytes": 12
+  },
+  {
+   "id": 130756,
+   "token": "<|lang:c|>",
+   "name": "lang:c",
+   "group": "base, unused",
+   "meaning": "Named special from the base tokenizer (code, data source, vision, reasoning step). Not used by any team's format today; kept because ids never move.",
+   "status": "unused, do not emit",
+   "used_by": [],
+   "bytes": 10
+  },
+  {
+   "id": 130757,
+   "token": "<|lang:rust|>",
+   "name": "lang:rust",
+   "group": "base, unused",
+   "meaning": "Named special from the base tokenizer (code, data source, vision, reasoning step). Not used by any team's format today; kept because ids never move.",
+   "status": "unused, do not emit",
+   "used_by": [],
+   "bytes": 13
+  },
+  {
+   "id": 130758,
+   "token": "<|lang:go|>",
+   "name": "lang:go",
+   "group": "base, unused",
+   "meaning": "Named special from the base tokenizer (code, data source, vision, reasoning step). Not used by any team's format today; kept because ids never move.",
+   "status": "unused, do not emit",
+   "used_by": [],
+   "bytes": 11
+  },
+  {
+   "id": 130759,
+   "token": "<|lang:ruby|>",
+   "name": "lang:ruby",
+   "group": "base, unused",
+   "meaning": "Named special from the base tokenizer (code, data source, vision, reasoning step). Not used by any team's format today; kept because ids never move.",
+   "status": "unused, do not emit",
+   "used_by": [],
+   "bytes": 13
+  },
+  {
+   "id": 130760,
+   "token": "<|lang:php|>",
+   "name": "lang:php",
+   "group": "base, unused",
+   "meaning": "Named special from the base tokenizer (code, data source, vision, reasoning step). Not used by any team's format today; kept because ids never move.",
+   "status": "unused, do not emit",
+   "used_by": [],
+   "bytes": 12
+  },
+  {
+   "id": 130761,
+   "token": "<|lang:swift|>",
+   "name": "lang:swift",
+   "group": "base, unused",
+   "meaning": "Named special from the base tokenizer (code, data source, vision, reasoning step). Not used by any team's format today; kept because ids never move.",
+   "status": "unused, do not emit",
+   "used_by": [],
+   "bytes": 14
+  },
+  {
+   "id": 130762,
+   "token": "<|lang:kotlin|>",
+   "name": "lang:kotlin",
+   "group": "base, unused",
+   "meaning": "Named special from the base tokenizer (code, data source, vision, reasoning step). Not used by any team's format today; kept because ids never move.",
+   "status": "unused, do not emit",
+   "used_by": [],
+   "bytes": 15
+  },
+  {
+   "id": 130763,
+   "token": "<|lang:scala|>",
+   "name": "lang:scala",
+   "group": "base, unused",
+   "meaning": "Named special from the base tokenizer (code, data source, vision, reasoning step). Not used by any team's format today; kept because ids never move.",
+   "status": "unused, do not emit",
+   "used_by": [],
+   "bytes": 14
+  },
+  {
+   "id": 130764,
+   "token": "<|lang:r|>",
+   "name": "lang:r",
+   "group": "base, unused",
+   "meaning": "Named special from the base tokenizer (code, data source, vision, reasoning step). Not used by any team's format today; kept because ids never move.",
+   "status": "unused, do not emit",
+   "used_by": [],
+   "bytes": 10
+  },
+  {
+   "id": 130765,
+   "token": "<|lang:julia|>",
+   "name": "lang:julia",
+   "group": "base, unused",
+   "meaning": "Named special from the base tokenizer (code, data source, vision, reasoning step). Not used by any team's format today; kept because ids never move.",
+   "status": "unused, do not emit",
+   "used_by": [],
+   "bytes": 14
+  },
+  {
+   "id": 130766,
+   "token": "<|lang:sql|>",
+   "name": "lang:sql",
+   "group": "base, unused",
+   "meaning": "Named special from the base tokenizer (code, data source, vision, reasoning step). Not used by any team's format today; kept because ids never move.",
+   "status": "unused, do not emit",
+   "used_by": [],
+   "bytes": 12
+  },
+  {
+   "id": 130767,
+   "token": "<|lang:html|>",
+   "name": "lang:html",
+   "group": "base, unused",
+   "meaning": "Named special from the base tokenizer (code, data source, vision, reasoning step). Not used by any team's format today; kept because ids never move.",
+   "status": "unused, do not emit",
+   "used_by": [],
+   "bytes": 13
+  },
+  {
+   "id": 130768,
+   "token": "<|lang:css|>",
+   "name": "lang:css",
+   "group": "base, unused",
+   "meaning": "Named special from the base tokenizer (code, data source, vision, reasoning step). Not used by any team's format today; kept because ids never move.",
+   "status": "unused, do not emit",
+   "used_by": [],
+   "bytes": 12
+  },
+  {
+   "id": 130769,
+   "token": "<|lang:bash|>",
+   "name": "lang:bash",
+   "group": "base, unused",
+   "meaning": "Named special from the base tokenizer (code, data source, vision, reasoning step). Not used by any team's format today; kept because ids never move.",
+   "status": "unused, do not emit",
+   "used_by": [],
+   "bytes": 13
+  },
+  {
+   "id": 130770,
+   "token": "<|lang:shell|>",
+   "name": "lang:shell",
+   "group": "base, unused",
+   "meaning": "Named special from the base tokenizer (code, data source, vision, reasoning step). Not used by any team's format today; kept because ids never move.",
+   "status": "unused, do not emit",
+   "used_by": [],
+   "bytes": 14
+  },
+  {
+   "id": 130771,
+   "token": "<|json_begin|>",
+   "name": "json_begin",
+   "group": "base, unused",
+   "meaning": "Named special from the base tokenizer (code, data source, vision, reasoning step). Not used by any team's format today; kept because ids never move.",
+   "status": "unused, do not emit",
+   "used_by": [],
+   "bytes": 14
+  },
+  {
+   "id": 130772,
+   "token": "<|json_end|>",
+   "name": "json_end",
+   "group": "base, unused",
+   "meaning": "Named special from the base tokenizer (code, data source, vision, reasoning step). Not used by any team's format today; kept because ids never move.",
+   "status": "unused, do not emit",
+   "used_by": [],
+   "bytes": 12
+  },
+  {
+   "id": 130773,
+   "token": "<|tool_call|>",
+   "name": "tool_call",
+   "group": "core",
+   "meaning": "Start of a JSON tool call.",
+   "status": "in use",
+   "used_by": [
+    "G10",
+    "G12",
+    "G9"
+   ],
+   "bytes": 13
+  },
+  {
+   "id": 130774,
+   "token": "<|tool_result|>",
+   "name": "tool_result",
+   "group": "core",
+   "meaning": "Start of a tool's output (untrusted).",
+   "status": "in use",
+   "used_by": [
+    "G10",
+    "G12",
+    "G9"
+   ],
+   "bytes": 15
+  },
+  {
+   "id": 130775,
+   "token": "<|function_call|>",
+   "name": "function_call",
+   "group": "base, unused",
+   "meaning": "Named special from the base tokenizer (code, data source, vision, reasoning step). Not used by any team's format today; kept because ids never move.",
+   "status": "unused, do not emit",
+   "used_by": [],
+   "bytes": 17
+  },
+  {
+   "id": 130776,
+   "token": "<|function_result|>",
+   "name": "function_result",
+   "group": "base, unused",
+   "meaning": "Named special from the base tokenizer (code, data source, vision, reasoning step). Not used by any team's format today; kept because ids never move.",
+   "status": "unused, do not emit",
+   "used_by": [],
+   "bytes": 19
+  },
+  {
+   "id": 130777,
+   "token": "<|api_request|>",
+   "name": "api_request",
+   "group": "base, unused",
+   "meaning": "Named special from the base tokenizer (code, data source, vision, reasoning step). Not used by any team's format today; kept because ids never move.",
+   "status": "unused, do not emit",
+   "used_by": [],
+   "bytes": 15
+  },
+  {
+   "id": 130778,
+   "token": "<|api_response|>",
+   "name": "api_response",
+   "group": "base, unused",
+   "meaning": "Named special from the base tokenizer (code, data source, vision, reasoning step). Not used by any team's format today; kept because ids never move.",
+   "status": "unused, do not emit",
+   "used_by": [],
+   "bytes": 16
+  },
+  {
+   "id": 130779,
+   "token": "<|schema|>",
+   "name": "schema",
+   "group": "base, unused",
+   "meaning": "Named special from the base tokenizer (code, data source, vision, reasoning step). Not used by any team's format today; kept because ids never move.",
+   "status": "unused, do not emit",
+   "used_by": [],
+   "bytes": 10
+  },
+  {
+   "id": 130780,
+   "token": "<|arguments|>",
+   "name": "arguments",
+   "group": "base, unused",
+   "meaning": "Named special from the base tokenizer (code, data source, vision, reasoning step). Not used by any team's format today; kept because ids never move.",
+   "status": "unused, do not emit",
+   "used_by": [],
+   "bytes": 13
+  },
+  {
+   "id": 130781,
+   "token": "<|source:wikipedia|>",
+   "name": "source:wikipedia",
+   "group": "base, unused",
+   "meaning": "Named special from the base tokenizer (code, data source, vision, reasoning step). Not used by any team's format today; kept because ids never move.",
+   "status": "unused, do not emit",
+   "used_by": [],
+   "bytes": 20
+  },
+  {
+   "id": 130782,
+   "token": "<|source:github|>",
+   "name": "source:github",
+   "group": "base, unused",
+   "meaning": "Named special from the base tokenizer (code, data source, vision, reasoning step). Not used by any team's format today; kept because ids never move.",
+   "status": "unused, do not emit",
+   "used_by": [],
+   "bytes": 17
+  },
+  {
+   "id": 130783,
+   "token": "<|source:arxiv|>",
+   "name": "source:arxiv",
+   "group": "base, unused",
+   "meaning": "Named special from the base tokenizer (code, data source, vision, reasoning step). Not used by any team's format today; kept because ids never move.",
+   "status": "unused, do not emit",
+   "used_by": [],
+   "bytes": 16
+  },
+  {
+   "id": 130784,
+   "token": "<|source:web|>",
+   "name": "source:web",
+   "group": "base, unused",
+   "meaning": "Named special from the base tokenizer (code, data source, vision, reasoning step). Not used by any team's format today; kept because ids never move.",
+   "status": "unused, do not emit",
+   "used_by": [],
+   "bytes": 14
+  },
+  {
+   "id": 130785,
+   "token": "<|source:book|>",
+   "name": "source:book",
+   "group": "base, unused",
+   "meaning": "Named special from the base tokenizer (code, data source, vision, reasoning step). Not used by any team's format today; kept because ids never move.",
+   "status": "unused, do not emit",
+   "used_by": [],
+   "bytes": 15
+  },
+  {
+   "id": 130786,
+   "token": "<|source:code|>",
+   "name": "source:code",
+   "group": "base, unused",
+   "meaning": "Named special from the base tokenizer (code, data source, vision, reasoning step). Not used by any team's format today; kept because ids never move.",
+   "status": "unused, do not emit",
+   "used_by": [],
+   "bytes": 15
+  },
+  {
+   "id": 130787,
+   "token": "<|source:docs|>",
+   "name": "source:docs",
+   "group": "base, unused",
+   "meaning": "Named special from the base tokenizer (code, data source, vision, reasoning step). Not used by any team's format today; kept because ids never move.",
+   "status": "unused, do not emit",
+   "used_by": [],
+   "bytes": 15
+  },
+  {
+   "id": 130788,
+   "token": "<|source:news|>",
+   "name": "source:news",
+   "group": "base, unused",
+   "meaning": "Named special from the base tokenizer (code, data source, vision, reasoning step). Not used by any team's format today; kept because ids never move.",
+   "status": "unused, do not emit",
+   "used_by": [],
+   "bytes": 15
+  },
+  {
+   "id": 130789,
+   "token": "<|source:social|>",
+   "name": "source:social",
+   "group": "base, unused",
+   "meaning": "Named special from the base tokenizer (code, data source, vision, reasoning step). Not used by any team's format today; kept because ids never move.",
+   "status": "unused, do not emit",
+   "used_by": [],
+   "bytes": 17
+  },
+  {
+   "id": 130790,
+   "token": "<|source:other|>",
+   "name": "source:other",
+   "group": "base, unused",
+   "meaning": "Named special from the base tokenizer (code, data source, vision, reasoning step). Not used by any team's format today; kept because ids never move.",
+   "status": "unused, do not emit",
+   "used_by": [],
+   "bytes": 16
+  },
+  {
+   "id": 130791,
+   "token": "<|think_begin|>",
+   "name": "think_begin",
+   "group": "base, unused",
+   "meaning": "Thinking marker from the base tokenizer. Unused: reasoning uses <|think|> and <|/think|>.",
+   "status": "unused, do not emit",
+   "used_by": [],
+   "bytes": 15
+  },
+  {
+   "id": 130792,
+   "token": "<|think_end|>",
+   "name": "think_end",
+   "group": "base, unused",
+   "meaning": "Thinking marker from the base tokenizer. Unused: reasoning uses <|think|> and <|/think|>.",
+   "status": "unused, do not emit",
+   "used_by": [],
+   "bytes": 13
+  },
+  {
+   "id": 130793,
+   "token": "<|step|>",
+   "name": "step",
+   "group": "base, unused",
+   "meaning": "Named special from the base tokenizer (code, data source, vision, reasoning step). Not used by any team's format today; kept because ids never move.",
+   "status": "unused, do not emit",
+   "used_by": [],
+   "bytes": 8
+  },
+  {
+   "id": 130794,
+   "token": "<|plan|>",
+   "name": "plan",
+   "group": "base, unused",
+   "meaning": "Named special from the base tokenizer (code, data source, vision, reasoning step). Not used by any team's format today; kept because ids never move.",
+   "status": "unused, do not emit",
+   "used_by": [],
+   "bytes": 8
+  },
+  {
+   "id": 130795,
+   "token": "<|reflect|>",
+   "name": "reflect",
+   "group": "base, unused",
+   "meaning": "Named special from the base tokenizer (code, data source, vision, reasoning step). Not used by any team's format today; kept because ids never move.",
+   "status": "unused, do not emit",
+   "used_by": [],
+   "bytes": 11
+  },
+  {
+   "id": 130796,
+   "token": "<|verify|>",
+   "name": "verify",
+   "group": "base, unused",
+   "meaning": "Named special from the base tokenizer (code, data source, vision, reasoning step). Not used by any team's format today; kept because ids never move.",
+   "status": "unused, do not emit",
+   "used_by": [],
+   "bytes": 10
+  },
+  {
+   "id": 130797,
+   "token": "<|conclude|>",
+   "name": "conclude",
+   "group": "base, unused",
+   "meaning": "Named special from the base tokenizer (code, data source, vision, reasoning step). Not used by any team's format today; kept because ids never move.",
+   "status": "unused, do not emit",
+   "used_by": [],
+   "bytes": 12
+  },
+  {
+   "id": 130798,
+   "token": "<|reason|>",
+   "name": "reason",
+   "group": "base, unused",
+   "meaning": "Named special from the base tokenizer (code, data source, vision, reasoning step). Not used by any team's format today; kept because ids never move.",
+   "status": "unused, do not emit",
+   "used_by": [],
+   "bytes": 10
+  },
+  {
+   "id": 130799,
+   "token": "<|analyze|>",
+   "name": "analyze",
+   "group": "base, unused",
+   "meaning": "Named special from the base tokenizer (code, data source, vision, reasoning step). Not used by any team's format today; kept because ids never move.",
+   "status": "unused, do not emit",
+   "used_by": [],
+   "bytes": 11
+  },
+  {
+   "id": 130800,
+   "token": "<|synthesize|>",
+   "name": "synthesize",
+   "group": "base, unused",
+   "meaning": "Named special from the base tokenizer (code, data source, vision, reasoning step). Not used by any team's format today; kept because ids never move.",
+   "status": "unused, do not emit",
+   "used_by": [],
+   "bytes": 14
+  },
+  {
+   "id": 130801,
+   "token": "<|fim_prefix|>",
+   "name": "fim_prefix",
+   "group": "core",
+   "meaning": "Fill-in-the-middle: the code before the gap.",
+   "status": "in use",
+   "used_by": [
+    "G10",
+    "G9"
+   ],
+   "bytes": 14
+  },
+  {
+   "id": 130802,
+   "token": "<|fim_middle|>",
+   "name": "fim_middle",
+   "group": "core",
+   "meaning": "Fill-in-the-middle: the gap to write.",
+   "status": "in use",
+   "used_by": [
+    "G10",
+    "G9"
+   ],
+   "bytes": 14
+  },
+  {
+   "id": 130803,
+   "token": "<|fim_suffix|>",
+   "name": "fim_suffix",
+   "group": "core",
+   "meaning": "Fill-in-the-middle: the code after the gap.",
+   "status": "in use",
+   "used_by": [
+    "G10",
+    "G9"
+   ],
+   "bytes": 14
+  },
+  {
+   "id": 130804,
+   "token": "<|fim_pad|>",
+   "name": "fim_pad",
+   "group": "core",
+   "meaning": "Fill-in-the-middle padding for batched infilling.",
+   "status": "in use",
+   "used_by": [
+    "G10",
+    "G9"
+   ],
+   "bytes": 11
+  },
+  {
+   "id": 130805,
+   "token": "<|vision_start|>",
+   "name": "vision_start",
+   "group": "base, unused",
+   "meaning": "Named special from the base tokenizer (code, data source, vision, reasoning step). Not used by any team's format today; kept because ids never move.",
+   "status": "unused, do not emit",
+   "used_by": [],
+   "bytes": 16
+  },
+  {
+   "id": 130806,
+   "token": "<|vision_end|>",
+   "name": "vision_end",
+   "group": "base, unused",
+   "meaning": "Named special from the base tokenizer (code, data source, vision, reasoning step). Not used by any team's format today; kept because ids never move.",
+   "status": "unused, do not emit",
+   "used_by": [],
+   "bytes": 14
+  },
+  {
+   "id": 130807,
+   "token": "<|vision_pad|>",
+   "name": "vision_pad",
+   "group": "base, unused",
+   "meaning": "Named special from the base tokenizer (code, data source, vision, reasoning step). Not used by any team's format today; kept because ids never move.",
+   "status": "unused, do not emit",
+   "used_by": [],
+   "bytes": 14
+  },
+  {
+   "id": 130808,
+   "token": "<|image_pad|>",
+   "name": "image_pad",
+   "group": "base, unused",
+   "meaning": "Named special from the base tokenizer (code, data source, vision, reasoning step). Not used by any team's format today; kept because ids never move.",
+   "status": "unused, do not emit",
+   "used_by": [],
+   "bytes": 13
+  },
+  {
+   "id": 130809,
+   "token": "<|video_pad|>",
+   "name": "video_pad",
+   "group": "base, unused",
+   "meaning": "Named special from the base tokenizer (code, data source, vision, reasoning step). Not used by any team's format today; kept because ids never move.",
+   "status": "unused, do not emit",
+   "used_by": [],
+   "bytes": 13
+  },
+  {
+   "id": 130810,
+   "token": "<|object_ref_start|>",
+   "name": "object_ref_start",
+   "group": "base, unused",
+   "meaning": "Named special from the base tokenizer (code, data source, vision, reasoning step). Not used by any team's format today; kept because ids never move.",
+   "status": "unused, do not emit",
+   "used_by": [],
+   "bytes": 20
+  },
+  {
+   "id": 130811,
+   "token": "<|object_ref_end|>",
+   "name": "object_ref_end",
+   "group": "base, unused",
+   "meaning": "Named special from the base tokenizer (code, data source, vision, reasoning step). Not used by any team's format today; kept because ids never move.",
+   "status": "unused, do not emit",
+   "used_by": [],
+   "bytes": 18
+  },
+  {
+   "id": 130812,
+   "token": "<|box_start|>",
+   "name": "box_start",
+   "group": "base, unused",
+   "meaning": "Named special from the base tokenizer (code, data source, vision, reasoning step). Not used by any team's format today; kept because ids never move.",
+   "status": "unused, do not emit",
+   "used_by": [],
+   "bytes": 13
+  },
+  {
+   "id": 130813,
+   "token": "<|box_end|>",
+   "name": "box_end",
+   "group": "base, unused",
+   "meaning": "Named special from the base tokenizer (code, data source, vision, reasoning step). Not used by any team's format today; kept because ids never move.",
+   "status": "unused, do not emit",
+   "used_by": [],
+   "bytes": 11
+  },
+  {
+   "id": 130814,
+   "token": "<|quad_start|>",
+   "name": "quad_start",
+   "group": "base, unused",
+   "meaning": "Named special from the base tokenizer (code, data source, vision, reasoning step). Not used by any team's format today; kept because ids never move.",
+   "status": "unused, do not emit",
+   "used_by": [],
+   "bytes": 14
+  },
+  {
+   "id": 130815,
+   "token": "<|quad_end|>",
+   "name": "quad_end",
+   "group": "base, unused",
+   "meaning": "Named special from the base tokenizer (code, data source, vision, reasoning step). Not used by any team's format today; kept because ids never move.",
+   "status": "unused, do not emit",
+   "used_by": [],
+   "bytes": 12
+  },
+  {
+   "id": 130816,
+   "token": "<|im_end|>",
+   "name": "im_end",
+   "group": "core",
+   "meaning": "End of a chat turn. Generation also stops on it (generation_config.json).",
+   "status": "in use",
+   "used_by": [
+    "G10",
+    "G12",
+    "G9"
+   ],
+   "bytes": 10
+  },
+  {
+   "id": 130817,
+   "token": "<|file_sep|>",
+   "name": "file_sep",
+   "group": "core",
+   "meaning": "Boundary between files of a repository.",
+   "status": "in use",
+   "used_by": [
+    "G10"
+   ],
+   "bytes": 12
+  },
+  {
+   "id": 130818,
+   "token": "<|repo_name|>",
+   "name": "repo_name",
+   "group": "core",
+   "meaning": "Repository name anchor.",
+   "status": "in use",
+   "used_by": [
+    "G10"
+   ],
+   "bytes": 13
+  },
+  {
+   "id": 130819,
+   "token": "<tool_response>",
+   "name": "tool_response",
+   "group": "base, unused",
+   "meaning": "Tool tag from the base tokenizer. Unused: tool output uses <|tool_result|> and <|/tool_result|>.",
+   "status": "unused, do not emit",
+   "used_by": [],
+   "bytes": 15
+  },
+  {
+   "id": 130820,
+   "token": "</tool_response>",
+   "name": "tool_response",
+   "group": "base, unused",
+   "meaning": "Tool tag from the base tokenizer. Unused: tool output uses <|tool_result|> and <|/tool_result|>.",
+   "status": "unused, do not emit",
+   "used_by": [],
+   "bytes": 16
+  },
+  {
+   "id": 130821,
+   "token": "<|EOT|>",
+   "name": "EOT",
+   "group": "base, unused",
+   "meaning": "End of turn from the base tokenizer. Unused: turns end with im_end.",
+   "status": "unused, do not emit",
+   "used_by": [],
+   "bytes": 7
+  },
+  {
+   "id": 130822,
+   "token": "<|endoftext|>",
+   "name": "eos",
+   "group": "core",
+   "meaning": "End of document. Data A's shard writer ends every document with it; generation stops on it.",
+   "status": "in use",
+   "used_by": [
+    "G1",
+    "G2",
+    "G5",
+    "G9",
+    "G10",
+    "G12"
+   ],
+   "bytes": 13
+  },
+  {
+   "id": 130823,
+   "token": "<|think|>",
+   "name": "think",
+   "group": "core",
+   "meaning": "Start of a reasoning trace.",
+   "status": "in use",
+   "used_by": [
+    "G10",
+    "G12",
+    "G9"
+   ],
+   "bytes": 9
+  },
+  {
+   "id": 130824,
+   "token": "<|/think|>",
+   "name": "think_end",
+   "group": "core",
+   "meaning": "End of a reasoning trace.",
+   "status": "in use",
+   "used_by": [
+    "G10",
+    "G12",
+    "G9"
+   ],
+   "bytes": 10
+  },
+  {
+   "id": 130825,
+   "token": "<|/tool_call|>",
+   "name": "tool_call_end",
+   "group": "core",
+   "meaning": "End of a JSON tool call.",
+   "status": "in use",
+   "used_by": [
+    "G10",
+    "G12",
+    "G9"
+   ],
+   "bytes": 14
+  },
+  {
+   "id": 130826,
+   "token": "<|/tool_result|>",
+   "name": "tool_result_end",
+   "group": "core",
+   "meaning": "End of a tool's output.",
+   "status": "in use",
+   "used_by": [
+    "G10",
+    "G12",
+    "G9"
+   ],
+   "bytes": 16
+  },
+  {
+   "id": 130827,
+   "token": "<|g10_slot_05|>",
+   "name": "subagent_call",
+   "group": "free slot (named by G10)",
+   "meaning": "G10's sub-agent call marker (special_tokens_v1.md). The frozen string is still <|g10_slot_05|>; a rename would change the frozen sha, so G10 uses the id with this string.",
+   "status": "reserved for G10, string not renamed",
+   "used_by": [
+    "G10"
+   ],
+   "bytes": 15
+  },
+  {
+   "id": 130828,
+   "token": "<|g10_slot_06|>",
+   "name": "subagent_return",
+   "group": "free slot (named by G10)",
+   "meaning": "G10's sub-agent return marker. The frozen string is still <|g10_slot_06|>.",
+   "status": "reserved for G10, string not renamed",
+   "used_by": [
+    "G10"
+   ],
+   "bytes": 15
+  },
+  {
+   "id": 130829,
+   "token": "<|g10_slot_07|>",
+   "name": "g10_slot_07",
+   "group": "free slot",
+   "meaning": "Free slot for G10 (post-training markers).",
+   "status": "free, owner G10",
+   "used_by": [],
+   "bytes": 15
+  },
+  {
+   "id": 130830,
+   "token": "<|g10_slot_08|>",
+   "name": "g10_slot_08",
+   "group": "free slot",
+   "meaning": "Free slot for G10 (post-training markers).",
+   "status": "free, owner G10",
+   "used_by": [],
+   "bytes": 15
+  },
+  {
+   "id": 130831,
+   "token": "<|g10_slot_09|>",
+   "name": "g10_slot_09",
+   "group": "free slot",
+   "meaning": "Free slot for G10 (post-training markers).",
+   "status": "free, owner G10",
+   "used_by": [],
+   "bytes": 15
+  },
+  {
+   "id": 130832,
+   "token": "<|g10_slot_10|>",
+   "name": "g10_slot_10",
+   "group": "free slot",
+   "meaning": "Free slot for G10 (post-training markers).",
+   "status": "free, owner G10",
+   "used_by": [],
+   "bytes": 15
+  },
+  {
+   "id": 130833,
+   "token": "<|g10_slot_11|>",
+   "name": "g10_slot_11",
+   "group": "free slot",
+   "meaning": "Free slot for G10 (post-training markers).",
+   "status": "free, owner G10",
+   "used_by": [],
+   "bytes": 15
+  },
+  {
+   "id": 130834,
+   "token": "<|g10_slot_12|>",
+   "name": "g10_slot_12",
+   "group": "free slot",
+   "meaning": "Free slot for G10 (post-training markers).",
+   "status": "free, owner G10",
+   "used_by": [],
+   "bytes": 15
+  },
+  {
+   "id": 130835,
+   "token": "<|g10_slot_13|>",
+   "name": "g10_slot_13",
+   "group": "free slot",
+   "meaning": "Free slot for G10 (post-training markers).",
+   "status": "free, owner G10",
+   "used_by": [],
+   "bytes": 15
+  },
+  {
+   "id": 130836,
+   "token": "<|g10_slot_14|>",
+   "name": "g10_slot_14",
+   "group": "free slot",
+   "meaning": "Free slot for G10 (post-training markers).",
+   "status": "free, owner G10",
+   "used_by": [],
+   "bytes": 15
+  },
+  {
+   "id": 130837,
+   "token": "<|g10_slot_15|>",
+   "name": "g10_slot_15",
+   "group": "free slot",
+   "meaning": "Free slot for G10 (post-training markers).",
+   "status": "free, owner G10",
+   "used_by": [],
+   "bytes": 15
+  },
+  {
+   "id": 130838,
+   "token": "<|g10_slot_16|>",
+   "name": "g10_slot_16",
+   "group": "free slot",
+   "meaning": "Free slot for G10 (post-training markers).",
+   "status": "free, owner G10",
+   "used_by": [],
+   "bytes": 15
+  },
+  {
+   "id": 130839,
+   "token": "<|g10_slot_17|>",
+   "name": "g10_slot_17",
+   "group": "free slot",
+   "meaning": "Free slot for G10 (post-training markers).",
+   "status": "free, owner G10",
+   "used_by": [],
+   "bytes": 15
+  },
+  {
+   "id": 130840,
+   "token": "<|g10_slot_18|>",
+   "name": "g10_slot_18",
+   "group": "free slot",
+   "meaning": "Free slot for G10 (post-training markers).",
+   "status": "free, owner G10",
+   "used_by": [],
+   "bytes": 15
+  },
+  {
+   "id": 130841,
+   "token": "<|g10_slot_19|>",
+   "name": "g10_slot_19",
+   "group": "free slot",
+   "meaning": "Free slot for G10 (post-training markers).",
+   "status": "free, owner G10",
+   "used_by": [],
+   "bytes": 15
+  },
+  {
+   "id": 130842,
+   "token": "<|g10_slot_20|>",
+   "name": "g10_slot_20",
+   "group": "free slot",
+   "meaning": "Free slot for G10 (post-training markers).",
+   "status": "free, owner G10",
+   "used_by": [],
+   "bytes": 15
+  },
+  {
+   "id": 130843,
+   "token": "<|g10_slot_21|>",
+   "name": "g10_slot_21",
+   "group": "free slot",
+   "meaning": "Free slot for G10 (post-training markers).",
+   "status": "free, owner G10",
+   "used_by": [],
+   "bytes": 15
+  },
+  {
+   "id": 130844,
+   "token": "<|g10_slot_22|>",
+   "name": "g10_slot_22",
+   "group": "free slot",
+   "meaning": "Free slot for G10 (post-training markers).",
+   "status": "free, owner G10",
+   "used_by": [],
+   "bytes": 15
+  },
+  {
+   "id": 130845,
+   "token": "<|g10_slot_23|>",
+   "name": "g10_slot_23",
+   "group": "free slot",
+   "meaning": "Free slot for G10 (post-training markers).",
+   "status": "free, owner G10",
+   "used_by": [],
+   "bytes": 15
+  },
+  {
+   "id": 130846,
+   "token": "<|g10_slot_24|>",
+   "name": "g10_slot_24",
+   "group": "free slot",
+   "meaning": "Free slot for G10 (post-training markers).",
+   "status": "free, owner G10",
+   "used_by": [],
+   "bytes": 15
+  },
+  {
+   "id": 130847,
+   "token": "<|g10_slot_25|>",
+   "name": "g10_slot_25",
+   "group": "free slot",
+   "meaning": "Free slot for G10 (post-training markers).",
+   "status": "free, owner G10",
+   "used_by": [],
+   "bytes": 15
+  },
+  {
+   "id": 130848,
+   "token": "<|g10_slot_26|>",
+   "name": "g10_slot_26",
+   "group": "free slot",
+   "meaning": "Free slot for G10 (post-training markers).",
+   "status": "free, owner G10",
+   "used_by": [],
+   "bytes": 15
+  },
+  {
+   "id": 130849,
+   "token": "<|g10_slot_27|>",
+   "name": "g10_slot_27",
+   "group": "free slot",
+   "meaning": "Free slot for G10 (post-training markers).",
+   "status": "free, owner G10",
+   "used_by": [],
+   "bytes": 15
+  },
+  {
+   "id": 130850,
+   "token": "<|g10_slot_28|>",
+   "name": "g10_slot_28",
+   "group": "free slot",
+   "meaning": "Free slot for G10 (post-training markers).",
+   "status": "free, owner G10",
+   "used_by": [],
+   "bytes": 15
+  },
+  {
+   "id": 130851,
+   "token": "<|g10_slot_29|>",
+   "name": "g10_slot_29",
+   "group": "free slot",
+   "meaning": "Free slot for G10 (post-training markers).",
+   "status": "free, owner G10",
+   "used_by": [],
+   "bytes": 15
+  },
+  {
+   "id": 130852,
+   "token": "<|g10_slot_30|>",
+   "name": "g10_slot_30",
+   "group": "free slot",
+   "meaning": "Free slot for G10 (post-training markers).",
+   "status": "free, owner G10",
+   "used_by": [],
+   "bytes": 15
+  },
+  {
+   "id": 130853,
+   "token": "<|g10_slot_31|>",
+   "name": "g10_slot_31",
+   "group": "free slot",
+   "meaning": "Free slot for G10 (post-training markers).",
+   "status": "free, owner G10",
+   "used_by": [],
+   "bytes": 15
+  },
+  {
+   "id": 130854,
+   "token": "<|g10_slot_32|>",
+   "name": "g10_slot_32",
+   "group": "free slot",
+   "meaning": "Free slot for G10 (post-training markers).",
+   "status": "free, owner G10",
+   "used_by": [],
+   "bytes": 15
+  },
+  {
+   "id": 130855,
+   "token": "<|g10_slot_33|>",
+   "name": "g10_slot_33",
+   "group": "free slot",
+   "meaning": "Free slot for G10 (post-training markers).",
+   "status": "free, owner G10",
+   "used_by": [],
+   "bytes": 15
+  },
+  {
+   "id": 130856,
+   "token": "<|g10_slot_34|>",
+   "name": "g10_slot_34",
+   "group": "free slot",
+   "meaning": "Free slot for G10 (post-training markers).",
+   "status": "free, owner G10",
+   "used_by": [],
+   "bytes": 15
+  },
+  {
+   "id": 130857,
+   "token": "<|g10_slot_35|>",
+   "name": "g10_slot_35",
+   "group": "free slot",
+   "meaning": "Free slot for G10 (post-training markers).",
+   "status": "free, owner G10",
+   "used_by": [],
+   "bytes": 15
+  },
+  {
+   "id": 130858,
+   "token": "<|g10_slot_36|>",
+   "name": "g10_slot_36",
+   "group": "free slot",
+   "meaning": "Free slot for G10 (post-training markers).",
+   "status": "free, owner G10",
+   "used_by": [],
+   "bytes": 15
+  },
+  {
+   "id": 130859,
+   "token": "<|g10_slot_37|>",
+   "name": "g10_slot_37",
+   "group": "free slot",
+   "meaning": "Free slot for G10 (post-training markers).",
+   "status": "free, owner G10",
+   "used_by": [],
+   "bytes": 15
+  },
+  {
+   "id": 130860,
+   "token": "<|g10_slot_38|>",
+   "name": "g10_slot_38",
+   "group": "free slot",
+   "meaning": "Free slot for G10 (post-training markers).",
+   "status": "free, owner G10",
+   "used_by": [],
+   "bytes": 15
+  },
+  {
+   "id": 130861,
+   "token": "<|g10_slot_39|>",
+   "name": "g10_slot_39",
+   "group": "free slot",
+   "meaning": "Free slot for G10 (post-training markers).",
+   "status": "free, owner G10",
+   "used_by": [],
+   "bytes": 15
+  },
+  {
+   "id": 130862,
+   "token": "<|g10_slot_40|>",
+   "name": "g10_slot_40",
+   "group": "free slot",
+   "meaning": "Free slot for G10 (post-training markers).",
+   "status": "free, owner G10",
+   "used_by": [],
+   "bytes": 15
+  },
+  {
+   "id": 130863,
+   "token": "<|g10_slot_41|>",
+   "name": "g10_slot_41",
+   "group": "free slot",
+   "meaning": "Free slot for G10 (post-training markers).",
+   "status": "free, owner G10",
+   "used_by": [],
+   "bytes": 15
+  },
+  {
+   "id": 130864,
+   "token": "<|g10_slot_42|>",
+   "name": "g10_slot_42",
+   "group": "free slot",
+   "meaning": "Free slot for G10 (post-training markers).",
+   "status": "free, owner G10",
+   "used_by": [],
+   "bytes": 15
+  },
+  {
+   "id": 130865,
+   "token": "<|g10_slot_43|>",
+   "name": "g10_slot_43",
+   "group": "free slot",
+   "meaning": "Free slot for G10 (post-training markers).",
+   "status": "free, owner G10",
+   "used_by": [],
+   "bytes": 15
+  },
+  {
+   "id": 130866,
+   "token": "<|g10_slot_44|>",
+   "name": "g10_slot_44",
+   "group": "free slot",
+   "meaning": "Free slot for G10 (post-training markers).",
+   "status": "free, owner G10",
+   "used_by": [],
+   "bytes": 15
+  },
+  {
+   "id": 130867,
+   "token": "<|g10_slot_45|>",
+   "name": "g10_slot_45",
+   "group": "free slot",
+   "meaning": "Free slot for G10 (post-training markers).",
+   "status": "free, owner G10",
+   "used_by": [],
+   "bytes": 15
+  },
+  {
+   "id": 130868,
+   "token": "<|g10_slot_46|>",
+   "name": "g10_slot_46",
+   "group": "free slot",
+   "meaning": "Free slot for G10 (post-training markers).",
+   "status": "free, owner G10",
+   "used_by": [],
+   "bytes": 15
+  },
+  {
+   "id": 130869,
+   "token": "<|g10_slot_47|>",
+   "name": "g10_slot_47",
+   "group": "free slot",
+   "meaning": "Free slot for G10 (post-training markers).",
+   "status": "free, owner G10",
+   "used_by": [],
+   "bytes": 15
+  },
+  {
+   "id": 130870,
+   "token": "<|g10_slot_48|>",
+   "name": "g10_slot_48",
+   "group": "free slot",
+   "meaning": "Free slot for G10 (post-training markers).",
+   "status": "free, owner G10",
+   "used_by": [],
+   "bytes": 15
+  },
+  {
+   "id": 130871,
+   "token": "<|g10_slot_49|>",
+   "name": "g10_slot_49",
+   "group": "free slot",
+   "meaning": "Free slot for G10 (post-training markers).",
+   "status": "free, owner G10",
+   "used_by": [],
+   "bytes": 15
+  },
+  {
+   "id": 130872,
+   "token": "<|g10_slot_50|>",
+   "name": "g10_slot_50",
+   "group": "free slot",
+   "meaning": "Free slot for G10 (post-training markers).",
+   "status": "free, owner G10",
+   "used_by": [],
+   "bytes": 15
+  },
+  {
+   "id": 130873,
+   "token": "<|g10_slot_51|>",
+   "name": "g10_slot_51",
+   "group": "free slot",
+   "meaning": "Free slot for G10 (post-training markers).",
+   "status": "free, owner G10",
+   "used_by": [],
+   "bytes": 15
+  },
+  {
+   "id": 130874,
+   "token": "<|g10_slot_52|>",
+   "name": "g10_slot_52",
+   "group": "free slot",
+   "meaning": "Free slot for G10 (post-training markers).",
+   "status": "free, owner G10",
+   "used_by": [],
+   "bytes": 15
+  },
+  {
+   "id": 130875,
+   "token": "<|g10_slot_53|>",
+   "name": "g10_slot_53",
+   "group": "free slot",
+   "meaning": "Free slot for G10 (post-training markers).",
+   "status": "free, owner G10",
+   "used_by": [],
+   "bytes": 15
+  },
+  {
+   "id": 130876,
+   "token": "<|g10_slot_54|>",
+   "name": "g10_slot_54",
+   "group": "free slot",
+   "meaning": "Free slot for G10 (post-training markers).",
+   "status": "free, owner G10",
+   "used_by": [],
+   "bytes": 15
+  },
+  {
+   "id": 130877,
+   "token": "<|g10_slot_55|>",
+   "name": "g10_slot_55",
+   "group": "free slot",
+   "meaning": "Free slot for G10 (post-training markers).",
+   "status": "free, owner G10",
+   "used_by": [],
+   "bytes": 15
+  },
+  {
+   "id": 130878,
+   "token": "<|g10_slot_56|>",
+   "name": "g10_slot_56",
+   "group": "free slot",
+   "meaning": "Free slot for G10 (post-training markers).",
+   "status": "free, owner G10",
+   "used_by": [],
+   "bytes": 15
+  },
+  {
+   "id": 130879,
+   "token": "<|g10_slot_57|>",
+   "name": "g10_slot_57",
+   "group": "free slot",
+   "meaning": "Free slot for G10 (post-training markers).",
+   "status": "free, owner G10",
+   "used_by": [],
+   "bytes": 15
+  },
+  {
+   "id": 130880,
+   "token": "<|g10_slot_58|>",
+   "name": "g10_slot_58",
+   "group": "free slot",
+   "meaning": "Free slot for G10 (post-training markers).",
+   "status": "free, owner G10",
+   "used_by": [],
+   "bytes": 15
+  },
+  {
+   "id": 130881,
+   "token": "<|g10_slot_59|>",
+   "name": "g10_slot_59",
+   "group": "free slot",
+   "meaning": "Free slot for G10 (post-training markers).",
+   "status": "free, owner G10",
+   "used_by": [],
+   "bytes": 15
+  },
+  {
+   "id": 130882,
+   "token": "<|g10_slot_60|>",
+   "name": "g10_slot_60",
+   "group": "free slot",
+   "meaning": "Free slot for G10 (post-training markers).",
+   "status": "free, owner G10",
+   "used_by": [],
+   "bytes": 15
+  },
+  {
+   "id": 130883,
+   "token": "<|g10_slot_61|>",
+   "name": "g10_slot_61",
+   "group": "free slot",
+   "meaning": "Free slot for G10 (post-training markers).",
+   "status": "free, owner G10",
+   "used_by": [],
+   "bytes": 15
+  },
+  {
+   "id": 130884,
+   "token": "<|g10_slot_62|>",
+   "name": "g10_slot_62",
+   "group": "free slot",
+   "meaning": "Free slot for G10 (post-training markers).",
+   "status": "free, owner G10",
+   "used_by": [],
+   "bytes": 15
+  },
+  {
+   "id": 130885,
+   "token": "<|g10_slot_63|>",
+   "name": "g10_slot_63",
+   "group": "free slot",
+   "meaning": "Free slot for G10 (post-training markers).",
+   "status": "free, owner G10",
+   "used_by": [],
+   "bytes": 15
+  },
+  {
+   "id": 130886,
+   "token": "<|lang_slot_00|>",
+   "name": "lang_slot_00",
+   "group": "free slot",
+   "meaning": "Free slot for language or script tags.",
+   "status": "free, owner G3",
+   "used_by": [],
+   "bytes": 16
+  },
+  {
+   "id": 130887,
+   "token": "<|lang_slot_01|>",
+   "name": "lang_slot_01",
+   "group": "free slot",
+   "meaning": "Free slot for language or script tags.",
+   "status": "free, owner G3",
+   "used_by": [],
+   "bytes": 16
+  },
+  {
+   "id": 130888,
+   "token": "<|lang_slot_02|>",
+   "name": "lang_slot_02",
+   "group": "free slot",
+   "meaning": "Free slot for language or script tags.",
+   "status": "free, owner G3",
+   "used_by": [],
+   "bytes": 16
+  },
+  {
+   "id": 130889,
+   "token": "<|lang_slot_03|>",
+   "name": "lang_slot_03",
+   "group": "free slot",
+   "meaning": "Free slot for language or script tags.",
+   "status": "free, owner G3",
+   "used_by": [],
+   "bytes": 16
+  },
+  {
+   "id": 130890,
+   "token": "<|lang_slot_04|>",
+   "name": "lang_slot_04",
+   "group": "free slot",
+   "meaning": "Free slot for language or script tags.",
+   "status": "free, owner G3",
+   "used_by": [],
+   "bytes": 16
+  },
+  {
+   "id": 130891,
+   "token": "<|lang_slot_05|>",
+   "name": "lang_slot_05",
+   "group": "free slot",
+   "meaning": "Free slot for language or script tags.",
+   "status": "free, owner G3",
+   "used_by": [],
+   "bytes": 16
+  },
+  {
+   "id": 130892,
+   "token": "<|lang_slot_06|>",
+   "name": "lang_slot_06",
+   "group": "free slot",
+   "meaning": "Free slot for language or script tags.",
+   "status": "free, owner G3",
+   "used_by": [],
+   "bytes": 16
+  },
+  {
+   "id": 130893,
+   "token": "<|lang_slot_07|>",
+   "name": "lang_slot_07",
+   "group": "free slot",
+   "meaning": "Free slot for language or script tags.",
+   "status": "free, owner G3",
+   "used_by": [],
+   "bytes": 16
+  },
+  {
+   "id": 130894,
+   "token": "<|lang_slot_08|>",
+   "name": "lang_slot_08",
+   "group": "free slot",
+   "meaning": "Free slot for language or script tags.",
+   "status": "free, owner G3",
+   "used_by": [],
+   "bytes": 16
+  },
+  {
+   "id": 130895,
+   "token": "<|lang_slot_09|>",
+   "name": "lang_slot_09",
+   "group": "free slot",
+   "meaning": "Free slot for language or script tags.",
+   "status": "free, owner G3",
+   "used_by": [],
+   "bytes": 16
+  },
+  {
+   "id": 130896,
+   "token": "<|lang_slot_10|>",
+   "name": "lang_slot_10",
+   "group": "free slot",
+   "meaning": "Free slot for language or script tags.",
+   "status": "free, owner G3",
+   "used_by": [],
+   "bytes": 16
+  },
+  {
+   "id": 130897,
+   "token": "<|lang_slot_11|>",
+   "name": "lang_slot_11",
+   "group": "free slot",
+   "meaning": "Free slot for language or script tags.",
+   "status": "free, owner G3",
+   "used_by": [],
+   "bytes": 16
+  },
+  {
+   "id": 130898,
+   "token": "<|lang_slot_12|>",
+   "name": "lang_slot_12",
+   "group": "free slot",
+   "meaning": "Free slot for language or script tags.",
+   "status": "free, owner G3",
+   "used_by": [],
+   "bytes": 16
+  },
+  {
+   "id": 130899,
+   "token": "<|lang_slot_13|>",
+   "name": "lang_slot_13",
+   "group": "free slot",
+   "meaning": "Free slot for language or script tags.",
+   "status": "free, owner G3",
+   "used_by": [],
+   "bytes": 16
+  },
+  {
+   "id": 130900,
+   "token": "<|lang_slot_14|>",
+   "name": "lang_slot_14",
+   "group": "free slot",
+   "meaning": "Free slot for language or script tags.",
+   "status": "free, owner G3",
+   "used_by": [],
+   "bytes": 16
+  },
+  {
+   "id": 130901,
+   "token": "<|lang_slot_15|>",
+   "name": "lang_slot_15",
+   "group": "free slot",
+   "meaning": "Free slot for language or script tags.",
+   "status": "free, owner G3",
+   "used_by": [],
+   "bytes": 16
+  },
+  {
+   "id": 130902,
+   "token": "<|lang_slot_16|>",
+   "name": "lang_slot_16",
+   "group": "free slot",
+   "meaning": "Free slot for language or script tags.",
+   "status": "free, owner G3",
+   "used_by": [],
+   "bytes": 16
+  },
+  {
+   "id": 130903,
+   "token": "<|lang_slot_17|>",
+   "name": "lang_slot_17",
+   "group": "free slot",
+   "meaning": "Free slot for language or script tags.",
+   "status": "free, owner G3",
+   "used_by": [],
+   "bytes": 16
+  },
+  {
+   "id": 130904,
+   "token": "<|lang_slot_18|>",
+   "name": "lang_slot_18",
+   "group": "free slot",
+   "meaning": "Free slot for language or script tags.",
+   "status": "free, owner G3",
+   "used_by": [],
+   "bytes": 16
+  },
+  {
+   "id": 130905,
+   "token": "<|lang_slot_19|>",
+   "name": "lang_slot_19",
+   "group": "free slot",
+   "meaning": "Free slot for language or script tags.",
+   "status": "free, owner G3",
+   "used_by": [],
+   "bytes": 16
+  },
+  {
+   "id": 130906,
+   "token": "<|lang_slot_20|>",
+   "name": "lang_slot_20",
+   "group": "free slot",
+   "meaning": "Free slot for language or script tags.",
+   "status": "free, owner G3",
+   "used_by": [],
+   "bytes": 16
+  },
+  {
+   "id": 130907,
+   "token": "<|lang_slot_21|>",
+   "name": "lang_slot_21",
+   "group": "free slot",
+   "meaning": "Free slot for language or script tags.",
+   "status": "free, owner G3",
+   "used_by": [],
+   "bytes": 16
+  },
+  {
+   "id": 130908,
+   "token": "<|lang_slot_22|>",
+   "name": "lang_slot_22",
+   "group": "free slot",
+   "meaning": "Free slot for language or script tags.",
+   "status": "free, owner G3",
+   "used_by": [],
+   "bytes": 16
+  },
+  {
+   "id": 130909,
+   "token": "<|lang_slot_23|>",
+   "name": "lang_slot_23",
+   "group": "free slot",
+   "meaning": "Free slot for language or script tags.",
+   "status": "free, owner G3",
+   "used_by": [],
+   "bytes": 16
+  },
+  {
+   "id": 130910,
+   "token": "<|lang_slot_24|>",
+   "name": "lang_slot_24",
+   "group": "free slot",
+   "meaning": "Free slot for language or script tags.",
+   "status": "free, owner G3",
+   "used_by": [],
+   "bytes": 16
+  },
+  {
+   "id": 130911,
+   "token": "<|lang_slot_25|>",
+   "name": "lang_slot_25",
+   "group": "free slot",
+   "meaning": "Free slot for language or script tags.",
+   "status": "free, owner G3",
+   "used_by": [],
+   "bytes": 16
+  },
+  {
+   "id": 130912,
+   "token": "<|lang_slot_26|>",
+   "name": "lang_slot_26",
+   "group": "free slot",
+   "meaning": "Free slot for language or script tags.",
+   "status": "free, owner G3",
+   "used_by": [],
+   "bytes": 16
+  },
+  {
+   "id": 130913,
+   "token": "<|lang_slot_27|>",
+   "name": "lang_slot_27",
+   "group": "free slot",
+   "meaning": "Free slot for language or script tags.",
+   "status": "free, owner G3",
+   "used_by": [],
+   "bytes": 16
+  },
+  {
+   "id": 130914,
+   "token": "<|lang_slot_28|>",
+   "name": "lang_slot_28",
+   "group": "free slot",
+   "meaning": "Free slot for language or script tags.",
+   "status": "free, owner G3",
+   "used_by": [],
+   "bytes": 16
+  },
+  {
+   "id": 130915,
+   "token": "<|lang_slot_29|>",
+   "name": "lang_slot_29",
+   "group": "free slot",
+   "meaning": "Free slot for language or script tags.",
+   "status": "free, owner G3",
+   "used_by": [],
+   "bytes": 16
+  },
+  {
+   "id": 130916,
+   "token": "<|lang_slot_30|>",
+   "name": "lang_slot_30",
+   "group": "free slot",
+   "meaning": "Free slot for language or script tags.",
+   "status": "free, owner G3",
+   "used_by": [],
+   "bytes": 16
+  },
+  {
+   "id": 130917,
+   "token": "<|lang_slot_31|>",
+   "name": "lang_slot_31",
+   "group": "free slot",
+   "meaning": "Free slot for language or script tags.",
+   "status": "free, owner G3",
+   "used_by": [],
+   "bytes": 16
+  },
+  {
+   "id": 130918,
+   "token": "<|ctrl_slot_00|>",
+   "name": "ctrl_slot_00",
+   "group": "free slot",
+   "meaning": "Free slot for data, eval or training control.",
+   "status": "free, owner G3",
+   "used_by": [],
+   "bytes": 16
+  },
+  {
+   "id": 130919,
+   "token": "<|ctrl_slot_01|>",
+   "name": "ctrl_slot_01",
+   "group": "free slot",
+   "meaning": "Free slot for data, eval or training control.",
+   "status": "free, owner G3",
+   "used_by": [],
+   "bytes": 16
+  },
+  {
+   "id": 130920,
+   "token": "<|ctrl_slot_02|>",
+   "name": "ctrl_slot_02",
+   "group": "free slot",
+   "meaning": "Free slot for data, eval or training control.",
+   "status": "free, owner G3",
+   "used_by": [],
+   "bytes": 16
+  },
+  {
+   "id": 130921,
+   "token": "<|ctrl_slot_03|>",
+   "name": "ctrl_slot_03",
+   "group": "free slot",
+   "meaning": "Free slot for data, eval or training control.",
+   "status": "free, owner G3",
+   "used_by": [],
+   "bytes": 16
+  },
+  {
+   "id": 130922,
+   "token": "<|ctrl_slot_04|>",
+   "name": "ctrl_slot_04",
+   "group": "free slot",
+   "meaning": "Free slot for data, eval or training control.",
+   "status": "free, owner G3",
+   "used_by": [],
+   "bytes": 16
+  },
+  {
+   "id": 130923,
+   "token": "<|ctrl_slot_05|>",
+   "name": "ctrl_slot_05",
+   "group": "free slot",
+   "meaning": "Free slot for data, eval or training control.",
+   "status": "free, owner G3",
+   "used_by": [],
+   "bytes": 16
+  },
+  {
+   "id": 130924,
+   "token": "<|ctrl_slot_06|>",
+   "name": "ctrl_slot_06",
+   "group": "free slot",
+   "meaning": "Free slot for data, eval or training control.",
+   "status": "free, owner G3",
+   "used_by": [],
+   "bytes": 16
+  },
+  {
+   "id": 130925,
+   "token": "<|ctrl_slot_07|>",
+   "name": "ctrl_slot_07",
+   "group": "free slot",
+   "meaning": "Free slot for data, eval or training control.",
+   "status": "free, owner G3",
+   "used_by": [],
+   "bytes": 16
+  },
+  {
+   "id": 130926,
+   "token": "<|ctrl_slot_08|>",
+   "name": "ctrl_slot_08",
+   "group": "free slot",
+   "meaning": "Free slot for data, eval or training control.",
+   "status": "free, owner G3",
+   "used_by": [],
+   "bytes": 16
+  },
+  {
+   "id": 130927,
+   "token": "<|ctrl_slot_09|>",
+   "name": "ctrl_slot_09",
+   "group": "free slot",
+   "meaning": "Free slot for data, eval or training control.",
+   "status": "free, owner G3",
+   "used_by": [],
+   "bytes": 16
+  },
+  {
+   "id": 130928,
+   "token": "<|ctrl_slot_10|>",
+   "name": "ctrl_slot_10",
+   "group": "free slot",
+   "meaning": "Free slot for data, eval or training control.",
+   "status": "free, owner G3",
+   "used_by": [],
+   "bytes": 16
+  },
+  {
+   "id": 130929,
+   "token": "<|ctrl_slot_11|>",
+   "name": "ctrl_slot_11",
+   "group": "free slot",
+   "meaning": "Free slot for data, eval or training control.",
+   "status": "free, owner G3",
+   "used_by": [],
+   "bytes": 16
+  },
+  {
+   "id": 130930,
+   "token": "<|ctrl_slot_12|>",
+   "name": "ctrl_slot_12",
+   "group": "free slot",
+   "meaning": "Free slot for data, eval or training control.",
+   "status": "free, owner G3",
+   "used_by": [],
+   "bytes": 16
+  },
+  {
+   "id": 130931,
+   "token": "<|ctrl_slot_13|>",
+   "name": "ctrl_slot_13",
+   "group": "free slot",
+   "meaning": "Free slot for data, eval or training control.",
+   "status": "free, owner G3",
+   "used_by": [],
+   "bytes": 16
+  },
+  {
+   "id": 130932,
+   "token": "<|ctrl_slot_14|>",
+   "name": "ctrl_slot_14",
+   "group": "free slot",
+   "meaning": "Free slot for data, eval or training control.",
+   "status": "free, owner G3",
+   "used_by": [],
+   "bytes": 16
+  },
+  {
+   "id": 130933,
+   "token": "<|ctrl_slot_15|>",
+   "name": "ctrl_slot_15",
+   "group": "free slot",
+   "meaning": "Free slot for data, eval or training control.",
+   "status": "free, owner G3",
+   "used_by": [],
+   "bytes": 16
+  },
+  {
+   "id": 130934,
+   "token": "<|ctrl_slot_16|>",
+   "name": "ctrl_slot_16",
+   "group": "free slot",
+   "meaning": "Free slot for data, eval or training control.",
+   "status": "free, owner G3",
+   "used_by": [],
+   "bytes": 16
+  },
+  {
+   "id": 130935,
+   "token": "<|ctrl_slot_17|>",
+   "name": "ctrl_slot_17",
+   "group": "free slot",
+   "meaning": "Free slot for data, eval or training control.",
+   "status": "free, owner G3",
+   "used_by": [],
+   "bytes": 16
+  },
+  {
+   "id": 130936,
+   "token": "<|ctrl_slot_18|>",
+   "name": "ctrl_slot_18",
+   "group": "free slot",
+   "meaning": "Free slot for data, eval or training control.",
+   "status": "free, owner G3",
+   "used_by": [],
+   "bytes": 16
+  },
+  {
+   "id": 130937,
+   "token": "<|ctrl_slot_19|>",
+   "name": "ctrl_slot_19",
+   "group": "free slot",
+   "meaning": "Free slot for data, eval or training control.",
+   "status": "free, owner G3",
+   "used_by": [],
+   "bytes": 16
+  },
+  {
+   "id": 130938,
+   "token": "<|ctrl_slot_20|>",
+   "name": "ctrl_slot_20",
+   "group": "free slot",
+   "meaning": "Free slot for data, eval or training control.",
+   "status": "free, owner G3",
+   "used_by": [],
+   "bytes": 16
+  },
+  {
+   "id": 130939,
+   "token": "<|ctrl_slot_21|>",
+   "name": "ctrl_slot_21",
+   "group": "free slot",
+   "meaning": "Free slot for data, eval or training control.",
+   "status": "free, owner G3",
+   "used_by": [],
+   "bytes": 16
+  },
+  {
+   "id": 130940,
+   "token": "<|ctrl_slot_22|>",
+   "name": "ctrl_slot_22",
+   "group": "free slot",
+   "meaning": "Free slot for data, eval or training control.",
+   "status": "free, owner G3",
+   "used_by": [],
+   "bytes": 16
+  },
+  {
+   "id": 130941,
+   "token": "<|ctrl_slot_23|>",
+   "name": "ctrl_slot_23",
+   "group": "free slot",
+   "meaning": "Free slot for data, eval or training control.",
+   "status": "free, owner G3",
+   "used_by": [],
+   "bytes": 16
+  },
+  {
+   "id": 130942,
+   "token": "<|ctrl_slot_24|>",
+   "name": "ctrl_slot_24",
+   "group": "free slot",
+   "meaning": "Free slot for data, eval or training control.",
+   "status": "free, owner G3",
+   "used_by": [],
+   "bytes": 16
+  },
+  {
+   "id": 130943,
+   "token": "<|ctrl_slot_25|>",
+   "name": "ctrl_slot_25",
+   "group": "free slot",
+   "meaning": "Free slot for data, eval or training control.",
+   "status": "free, owner G3",
+   "used_by": [],
+   "bytes": 16
+  },
+  {
+   "id": 130944,
+   "token": "<|ctrl_slot_26|>",
+   "name": "ctrl_slot_26",
+   "group": "free slot",
+   "meaning": "Free slot for data, eval or training control.",
+   "status": "free, owner G3",
+   "used_by": [],
+   "bytes": 16
+  },
+  {
+   "id": 130945,
+   "token": "<|ctrl_slot_27|>",
+   "name": "ctrl_slot_27",
+   "group": "free slot",
+   "meaning": "Free slot for data, eval or training control.",
+   "status": "free, owner G3",
+   "used_by": [],
+   "bytes": 16
+  },
+  {
+   "id": 130946,
+   "token": "<|ctrl_slot_28|>",
+   "name": "ctrl_slot_28",
+   "group": "free slot",
+   "meaning": "Free slot for data, eval or training control.",
+   "status": "free, owner G3",
+   "used_by": [],
+   "bytes": 16
+  },
+  {
+   "id": 130947,
+   "token": "<|ctrl_slot_29|>",
+   "name": "ctrl_slot_29",
+   "group": "free slot",
+   "meaning": "Free slot for data, eval or training control.",
+   "status": "free, owner G3",
+   "used_by": [],
+   "bytes": 16
+  },
+  {
+   "id": 130948,
+   "token": "<|ctrl_slot_30|>",
+   "name": "ctrl_slot_30",
+   "group": "free slot",
+   "meaning": "Free slot for data, eval or training control.",
+   "status": "free, owner G3",
+   "used_by": [],
+   "bytes": 16
+  },
+  {
+   "id": 130949,
+   "token": "<|ctrl_slot_31|>",
+   "name": "ctrl_slot_31",
+   "group": "free slot",
+   "meaning": "Free slot for data, eval or training control.",
+   "status": "free, owner G3",
+   "used_by": [],
+   "bytes": 16
+  },
+  {
+   "id": 130950,
+   "token": "<|reserved_128|>",
+   "name": "reserved_128",
+   "group": "free slot",
+   "meaning": "Free slot, unassigned.",
+   "status": "free, owner TSAI",
+   "used_by": [],
+   "bytes": 16
+  },
+  {
+   "id": 130951,
+   "token": "<|reserved_129|>",
+   "name": "reserved_129",
+   "group": "free slot",
+   "meaning": "Free slot, unassigned.",
+   "status": "free, owner TSAI",
+   "used_by": [],
+   "bytes": 16
+  },
+  {
+   "id": 130952,
+   "token": "<|reserved_130|>",
+   "name": "reserved_130",
+   "group": "free slot",
+   "meaning": "Free slot, unassigned.",
+   "status": "free, owner TSAI",
+   "used_by": [],
+   "bytes": 16
+  },
+  {
+   "id": 130953,
+   "token": "<|reserved_131|>",
+   "name": "reserved_131",
+   "group": "free slot",
+   "meaning": "Free slot, unassigned.",
+   "status": "free, owner TSAI",
+   "used_by": [],
+   "bytes": 16
+  },
+  {
+   "id": 130954,
+   "token": "<|reserved_132|>",
+   "name": "reserved_132",
+   "group": "free slot",
+   "meaning": "Free slot, unassigned.",
+   "status": "free, owner TSAI",
+   "used_by": [],
+   "bytes": 16
+  },
+  {
+   "id": 130955,
+   "token": "<|reserved_133|>",
+   "name": "reserved_133",
+   "group": "free slot",
+   "meaning": "Free slot, unassigned.",
+   "status": "free, owner TSAI",
+   "used_by": [],
+   "bytes": 16
+  },
+  {
+   "id": 130956,
+   "token": "<|reserved_134|>",
+   "name": "reserved_134",
+   "group": "free slot",
+   "meaning": "Free slot, unassigned.",
+   "status": "free, owner TSAI",
+   "used_by": [],
+   "bytes": 16
+  },
+  {
+   "id": 130957,
+   "token": "<|reserved_135|>",
+   "name": "reserved_135",
+   "group": "free slot",
+   "meaning": "Free slot, unassigned.",
+   "status": "free, owner TSAI",
+   "used_by": [],
+   "bytes": 16
+  },
+  {
+   "id": 130958,
+   "token": "<|reserved_136|>",
+   "name": "reserved_136",
+   "group": "free slot",
+   "meaning": "Free slot, unassigned.",
+   "status": "free, owner TSAI",
+   "used_by": [],
+   "bytes": 16
+  },
+  {
+   "id": 130959,
+   "token": "<|reserved_137|>",
+   "name": "reserved_137",
+   "group": "free slot",
+   "meaning": "Free slot, unassigned.",
+   "status": "free, owner TSAI",
+   "used_by": [],
+   "bytes": 16
+  },
+  {
+   "id": 130960,
+   "token": "<|reserved_138|>",
+   "name": "reserved_138",
+   "group": "free slot",
+   "meaning": "Free slot, unassigned.",
+   "status": "free, owner TSAI",
+   "used_by": [],
+   "bytes": 16
+  },
+  {
+   "id": 130961,
+   "token": "<|reserved_139|>",
+   "name": "reserved_139",
+   "group": "free slot",
+   "meaning": "Free slot, unassigned.",
+   "status": "free, owner TSAI",
+   "used_by": [],
+   "bytes": 16
+  },
+  {
+   "id": 130962,
+   "token": "<|reserved_140|>",
+   "name": "reserved_140",
+   "group": "free slot",
+   "meaning": "Free slot, unassigned.",
+   "status": "free, owner TSAI",
+   "used_by": [],
+   "bytes": 16
+  },
+  {
+   "id": 130963,
+   "token": "<|reserved_141|>",
+   "name": "reserved_141",
+   "group": "free slot",
+   "meaning": "Free slot, unassigned.",
+   "status": "free, owner TSAI",
+   "used_by": [],
+   "bytes": 16
+  },
+  {
+   "id": 130964,
+   "token": "<|reserved_142|>",
+   "name": "reserved_142",
+   "group": "free slot",
+   "meaning": "Free slot, unassigned.",
+   "status": "free, owner TSAI",
+   "used_by": [],
+   "bytes": 16
+  },
+  {
+   "id": 130965,
+   "token": "<|reserved_143|>",
+   "name": "reserved_143",
+   "group": "free slot",
+   "meaning": "Free slot, unassigned.",
+   "status": "free, owner TSAI",
+   "used_by": [],
+   "bytes": 16
+  },
+  {
+   "id": 130966,
+   "token": "<|reserved_144|>",
+   "name": "reserved_144",
+   "group": "free slot",
+   "meaning": "Free slot, unassigned.",
+   "status": "free, owner TSAI",
+   "used_by": [],
+   "bytes": 16
+  },
+  {
+   "id": 130967,
+   "token": "<|reserved_145|>",
+   "name": "reserved_145",
+   "group": "free slot",
+   "meaning": "Free slot, unassigned.",
+   "status": "free, owner TSAI",
+   "used_by": [],
+   "bytes": 16
+  },
+  {
+   "id": 130968,
+   "token": "<|reserved_146|>",
+   "name": "reserved_146",
+   "group": "free slot",
+   "meaning": "Free slot, unassigned.",
+   "status": "free, owner TSAI",
+   "used_by": [],
+   "bytes": 16
+  },
+  {
+   "id": 130969,
+   "token": "<|reserved_147|>",
+   "name": "reserved_147",
+   "group": "free slot",
+   "meaning": "Free slot, unassigned.",
+   "status": "free, owner TSAI",
+   "used_by": [],
+   "bytes": 16
+  },
+  {
+   "id": 130970,
+   "token": "<|reserved_148|>",
+   "name": "reserved_148",
+   "group": "free slot",
+   "meaning": "Free slot, unassigned.",
+   "status": "free, owner TSAI",
+   "used_by": [],
+   "bytes": 16
+  },
+  {
+   "id": 130971,
+   "token": "<|reserved_149|>",
+   "name": "reserved_149",
+   "group": "free slot",
+   "meaning": "Free slot, unassigned.",
+   "status": "free, owner TSAI",
+   "used_by": [],
+   "bytes": 16
+  },
+  {
+   "id": 130972,
+   "token": "<|reserved_150|>",
+   "name": "reserved_150",
+   "group": "free slot",
+   "meaning": "Free slot, unassigned.",
+   "status": "free, owner TSAI",
+   "used_by": [],
+   "bytes": 16
+  },
+  {
+   "id": 130973,
+   "token": "<|reserved_151|>",
+   "name": "reserved_151",
+   "group": "free slot",
+   "meaning": "Free slot, unassigned.",
+   "status": "free, owner TSAI",
+   "used_by": [],
+   "bytes": 16
+  },
+  {
+   "id": 130974,
+   "token": "<|reserved_152|>",
+   "name": "reserved_152",
+   "group": "free slot",
+   "meaning": "Free slot, unassigned.",
+   "status": "free, owner TSAI",
+   "used_by": [],
+   "bytes": 16
+  },
+  {
+   "id": 130975,
+   "token": "<|reserved_153|>",
+   "name": "reserved_153",
+   "group": "free slot",
+   "meaning": "Free slot, unassigned.",
+   "status": "free, owner TSAI",
+   "used_by": [],
+   "bytes": 16
+  },
+  {
+   "id": 130976,
+   "token": "<|reserved_154|>",
+   "name": "reserved_154",
+   "group": "free slot",
+   "meaning": "Free slot, unassigned.",
+   "status": "free, owner TSAI",
+   "used_by": [],
+   "bytes": 16
+  },
+  {
+   "id": 130977,
+   "token": "<|reserved_155|>",
+   "name": "reserved_155",
+   "group": "free slot",
+   "meaning": "Free slot, unassigned.",
+   "status": "free, owner TSAI",
+   "used_by": [],
+   "bytes": 16
+  },
+  {
+   "id": 130978,
+   "token": "<|reserved_156|>",
+   "name": "reserved_156",
+   "group": "free slot",
+   "meaning": "Free slot, unassigned.",
+   "status": "free, owner TSAI",
+   "used_by": [],
+   "bytes": 16
+  },
+  {
+   "id": 130979,
+   "token": "<|reserved_157|>",
+   "name": "reserved_157",
+   "group": "free slot",
+   "meaning": "Free slot, unassigned.",
+   "status": "free, owner TSAI",
+   "used_by": [],
+   "bytes": 16
+  },
+  {
+   "id": 130980,
+   "token": "<|reserved_158|>",
+   "name": "reserved_158",
+   "group": "free slot",
+   "meaning": "Free slot, unassigned.",
+   "status": "free, owner TSAI",
+   "used_by": [],
+   "bytes": 16
+  },
+  {
+   "id": 130981,
+   "token": "<|reserved_159|>",
+   "name": "reserved_159",
+   "group": "free slot",
+   "meaning": "Free slot, unassigned.",
+   "status": "free, owner TSAI",
+   "used_by": [],
+   "bytes": 16
+  },
+  {
+   "id": 130982,
+   "token": "<|reserved_160|>",
+   "name": "reserved_160",
+   "group": "free slot",
+   "meaning": "Free slot, unassigned.",
+   "status": "free, owner TSAI",
+   "used_by": [],
+   "bytes": 16
+  },
+  {
+   "id": 130983,
+   "token": "<|reserved_161|>",
+   "name": "reserved_161",
+   "group": "free slot",
+   "meaning": "Free slot, unassigned.",
+   "status": "free, owner TSAI",
+   "used_by": [],
+   "bytes": 16
+  },
+  {
+   "id": 130984,
+   "token": "<|reserved_162|>",
+   "name": "reserved_162",
+   "group": "free slot",
+   "meaning": "Free slot, unassigned.",
+   "status": "free, owner TSAI",
+   "used_by": [],
+   "bytes": 16
+  },
+  {
+   "id": 130985,
+   "token": "<|reserved_163|>",
+   "name": "reserved_163",
+   "group": "free slot",
+   "meaning": "Free slot, unassigned.",
+   "status": "free, owner TSAI",
+   "used_by": [],
+   "bytes": 16
+  },
+  {
+   "id": 130986,
+   "token": "<|reserved_164|>",
+   "name": "reserved_164",
+   "group": "free slot",
+   "meaning": "Free slot, unassigned.",
+   "status": "free, owner TSAI",
+   "used_by": [],
+   "bytes": 16
+  },
+  {
+   "id": 130987,
+   "token": "<|reserved_165|>",
+   "name": "reserved_165",
+   "group": "free slot",
+   "meaning": "Free slot, unassigned.",
+   "status": "free, owner TSAI",
+   "used_by": [],
+   "bytes": 16
+  },
+  {
+   "id": 130988,
+   "token": "<|reserved_166|>",
+   "name": "reserved_166",
+   "group": "free slot",
+   "meaning": "Free slot, unassigned.",
+   "status": "free, owner TSAI",
+   "used_by": [],
+   "bytes": 16
+  },
+  {
+   "id": 130989,
+   "token": "<|reserved_167|>",
+   "name": "reserved_167",
+   "group": "free slot",
+   "meaning": "Free slot, unassigned.",
+   "status": "free, owner TSAI",
+   "used_by": [],
+   "bytes": 16
+  },
+  {
+   "id": 130990,
+   "token": "<|reserved_168|>",
+   "name": "reserved_168",
+   "group": "free slot",
+   "meaning": "Free slot, unassigned.",
+   "status": "free, owner TSAI",
+   "used_by": [],
+   "bytes": 16
+  },
+  {
+   "id": 130991,
+   "token": "<|reserved_169|>",
+   "name": "reserved_169",
+   "group": "free slot",
+   "meaning": "Free slot, unassigned.",
+   "status": "free, owner TSAI",
+   "used_by": [],
+   "bytes": 16
+  },
+  {
+   "id": 130992,
+   "token": "<|reserved_170|>",
+   "name": "reserved_170",
+   "group": "free slot",
+   "meaning": "Free slot, unassigned.",
+   "status": "free, owner TSAI",
+   "used_by": [],
+   "bytes": 16
+  },
+  {
+   "id": 130993,
+   "token": "<|reserved_171|>",
+   "name": "reserved_171",
+   "group": "free slot",
+   "meaning": "Free slot, unassigned.",
+   "status": "free, owner TSAI",
+   "used_by": [],
+   "bytes": 16
+  },
+  {
+   "id": 130994,
+   "token": "<|reserved_172|>",
+   "name": "reserved_172",
+   "group": "free slot",
+   "meaning": "Free slot, unassigned.",
+   "status": "free, owner TSAI",
+   "used_by": [],
+   "bytes": 16
+  },
+  {
+   "id": 130995,
+   "token": "<|reserved_173|>",
+   "name": "reserved_173",
+   "group": "free slot",
+   "meaning": "Free slot, unassigned.",
+   "status": "free, owner TSAI",
+   "used_by": [],
+   "bytes": 16
+  },
+  {
+   "id": 130996,
+   "token": "<|reserved_174|>",
+   "name": "reserved_174",
+   "group": "free slot",
+   "meaning": "Free slot, unassigned.",
+   "status": "free, owner TSAI",
+   "used_by": [],
+   "bytes": 16
+  },
+  {
+   "id": 130997,
+   "token": "<|reserved_175|>",
+   "name": "reserved_175",
+   "group": "free slot",
+   "meaning": "Free slot, unassigned.",
+   "status": "free, owner TSAI",
+   "used_by": [],
+   "bytes": 16
+  },
+  {
+   "id": 130998,
+   "token": "<|reserved_176|>",
+   "name": "reserved_176",
+   "group": "free slot",
+   "meaning": "Free slot, unassigned.",
+   "status": "free, owner TSAI",
+   "used_by": [],
+   "bytes": 16
+  },
+  {
+   "id": 130999,
+   "token": "<|reserved_177|>",
+   "name": "reserved_177",
+   "group": "free slot",
+   "meaning": "Free slot, unassigned.",
+   "status": "free, owner TSAI",
+   "used_by": [],
+   "bytes": 16
+  },
+  {
+   "id": 131000,
+   "token": "<|reserved_178|>",
+   "name": "reserved_178",
+   "group": "free slot",
+   "meaning": "Free slot, unassigned.",
+   "status": "free, owner TSAI",
+   "used_by": [],
+   "bytes": 16
+  },
+  {
+   "id": 131001,
+   "token": "<|reserved_179|>",
+   "name": "reserved_179",
+   "group": "free slot",
+   "meaning": "Free slot, unassigned.",
+   "status": "free, owner TSAI",
+   "used_by": [],
+   "bytes": 16
+  },
+  {
+   "id": 131002,
+   "token": "<|reserved_180|>",
+   "name": "reserved_180",
+   "group": "free slot",
+   "meaning": "Free slot, unassigned.",
+   "status": "free, owner TSAI",
+   "used_by": [],
+   "bytes": 16
+  },
+  {
+   "id": 131003,
+   "token": "<|reserved_181|>",
+   "name": "reserved_181",
+   "group": "free slot",
+   "meaning": "Free slot, unassigned.",
+   "status": "free, owner TSAI",
+   "used_by": [],
+   "bytes": 16
+  },
+  {
+   "id": 131004,
+   "token": "<|reserved_182|>",
+   "name": "reserved_182",
+   "group": "free slot",
+   "meaning": "Free slot, unassigned.",
+   "status": "free, owner TSAI",
+   "used_by": [],
+   "bytes": 16
+  },
+  {
+   "id": 131005,
+   "token": "<|reserved_183|>",
+   "name": "reserved_183",
+   "group": "free slot",
+   "meaning": "Free slot, unassigned.",
+   "status": "free, owner TSAI",
+   "used_by": [],
+   "bytes": 16
+  },
+  {
+   "id": 131006,
+   "token": "<|reserved_184|>",
+   "name": "reserved_184",
+   "group": "free slot",
+   "meaning": "Free slot, unassigned.",
+   "status": "free, owner TSAI",
+   "used_by": [],
+   "bytes": 16
+  },
+  {
+   "id": 131007,
+   "token": "<|reserved_185|>",
+   "name": "reserved_185",
+   "group": "free slot",
+   "meaning": "Free slot, unassigned.",
+   "status": "free, owner TSAI",
+   "used_by": [],
+   "bytes": 16
+  },
+  {
+   "id": 131008,
+   "token": "<|reserved_186|>",
+   "name": "reserved_186",
+   "group": "free slot",
+   "meaning": "Free slot, unassigned.",
+   "status": "free, owner TSAI",
+   "used_by": [],
+   "bytes": 16
+  },
+  {
+   "id": 131009,
+   "token": "<|reserved_187|>",
+   "name": "reserved_187",
+   "group": "free slot",
+   "meaning": "Free slot, unassigned.",
+   "status": "free, owner TSAI",
+   "used_by": [],
+   "bytes": 16
+  },
+  {
+   "id": 131010,
+   "token": "<|reserved_188|>",
+   "name": "reserved_188",
+   "group": "free slot",
+   "meaning": "Free slot, unassigned.",
+   "status": "free, owner TSAI",
+   "used_by": [],
+   "bytes": 16
+  },
+  {
+   "id": 131011,
+   "token": "<|reserved_189|>",
+   "name": "reserved_189",
+   "group": "free slot",
+   "meaning": "Free slot, unassigned.",
+   "status": "free, owner TSAI",
+   "used_by": [],
+   "bytes": 16
+  },
+  {
+   "id": 131012,
+   "token": "<|reserved_190|>",
+   "name": "reserved_190",
+   "group": "free slot",
+   "meaning": "Free slot, unassigned.",
+   "status": "free, owner TSAI",
+   "used_by": [],
+   "bytes": 16
+  },
+  {
+   "id": 131013,
+   "token": "<|reserved_191|>",
+   "name": "reserved_191",
+   "group": "free slot",
+   "meaning": "Free slot, unassigned.",
+   "status": "free, owner TSAI",
+   "used_by": [],
+   "bytes": 16
+  },
+  {
+   "id": 131014,
+   "token": "<|reserved_192|>",
+   "name": "reserved_192",
+   "group": "free slot",
+   "meaning": "Free slot, unassigned.",
+   "status": "free, owner TSAI",
+   "used_by": [],
+   "bytes": 16
+  },
+  {
+   "id": 131015,
+   "token": "<|reserved_193|>",
+   "name": "reserved_193",
+   "group": "free slot",
+   "meaning": "Free slot, unassigned.",
+   "status": "free, owner TSAI",
+   "used_by": [],
+   "bytes": 16
+  },
+  {
+   "id": 131016,
+   "token": "<|reserved_194|>",
+   "name": "reserved_194",
+   "group": "free slot",
+   "meaning": "Free slot, unassigned.",
+   "status": "free, owner TSAI",
+   "used_by": [],
+   "bytes": 16
+  },
+  {
+   "id": 131017,
+   "token": "<|reserved_195|>",
+   "name": "reserved_195",
+   "group": "free slot",
+   "meaning": "Free slot, unassigned.",
+   "status": "free, owner TSAI",
+   "used_by": [],
+   "bytes": 16
+  },
+  {
+   "id": 131018,
+   "token": "<|reserved_196|>",
+   "name": "reserved_196",
+   "group": "free slot",
+   "meaning": "Free slot, unassigned.",
+   "status": "free, owner TSAI",
+   "used_by": [],
+   "bytes": 16
+  },
+  {
+   "id": 131019,
+   "token": "<|reserved_197|>",
+   "name": "reserved_197",
+   "group": "free slot",
+   "meaning": "Free slot, unassigned.",
+   "status": "free, owner TSAI",
+   "used_by": [],
+   "bytes": 16
+  },
+  {
+   "id": 131020,
+   "token": "<|reserved_198|>",
+   "name": "reserved_198",
+   "group": "free slot",
+   "meaning": "Free slot, unassigned.",
+   "status": "free, owner TSAI",
+   "used_by": [],
+   "bytes": 16
+  },
+  {
+   "id": 131021,
+   "token": "<|reserved_199|>",
+   "name": "reserved_199",
+   "group": "free slot",
+   "meaning": "Free slot, unassigned.",
+   "status": "free, owner TSAI",
+   "used_by": [],
+   "bytes": 16
+  },
+  {
+   "id": 131022,
+   "token": "<|reserved_200|>",
+   "name": "reserved_200",
+   "group": "free slot",
+   "meaning": "Free slot, unassigned.",
+   "status": "free, owner TSAI",
+   "used_by": [],
+   "bytes": 16
+  },
+  {
+   "id": 131023,
+   "token": "<|reserved_201|>",
+   "name": "reserved_201",
+   "group": "free slot",
+   "meaning": "Free slot, unassigned.",
+   "status": "free, owner TSAI",
+   "used_by": [],
+   "bytes": 16
+  },
+  {
+   "id": 131024,
+   "token": "<|reserved_202|>",
+   "name": "reserved_202",
+   "group": "free slot",
+   "meaning": "Free slot, unassigned.",
+   "status": "free, owner TSAI",
+   "used_by": [],
+   "bytes": 16
+  },
+  {
+   "id": 131025,
+   "token": "<|reserved_203|>",
+   "name": "reserved_203",
+   "group": "free slot",
+   "meaning": "Free slot, unassigned.",
+   "status": "free, owner TSAI",
+   "used_by": [],
+   "bytes": 16
+  },
+  {
+   "id": 131026,
+   "token": "<|reserved_204|>",
+   "name": "reserved_204",
+   "group": "free slot",
+   "meaning": "Free slot, unassigned.",
+   "status": "free, owner TSAI",
+   "used_by": [],
+   "bytes": 16
+  },
+  {
+   "id": 131027,
+   "token": "<|reserved_205|>",
+   "name": "reserved_205",
+   "group": "free slot",
+   "meaning": "Free slot, unassigned.",
+   "status": "free, owner TSAI",
+   "used_by": [],
+   "bytes": 16
+  },
+  {
+   "id": 131028,
+   "token": "<|reserved_206|>",
+   "name": "reserved_206",
+   "group": "free slot",
+   "meaning": "Free slot, unassigned.",
+   "status": "free, owner TSAI",
+   "used_by": [],
+   "bytes": 16
+  },
+  {
+   "id": 131029,
+   "token": "<|reserved_207|>",
+   "name": "reserved_207",
+   "group": "free slot",
+   "meaning": "Free slot, unassigned.",
+   "status": "free, owner TSAI",
+   "used_by": [],
+   "bytes": 16
+  },
+  {
+   "id": 131030,
+   "token": "<|reserved_208|>",
+   "name": "reserved_208",
+   "group": "free slot",
+   "meaning": "Free slot, unassigned.",
+   "status": "free, owner TSAI",
+   "used_by": [],
+   "bytes": 16
+  },
+  {
+   "id": 131031,
+   "token": "<|reserved_209|>",
+   "name": "reserved_209",
+   "group": "free slot",
+   "meaning": "Free slot, unassigned.",
+   "status": "free, owner TSAI",
+   "used_by": [],
+   "bytes": 16
+  },
+  {
+   "id": 131032,
+   "token": "<|reserved_210|>",
+   "name": "reserved_210",
+   "group": "free slot",
+   "meaning": "Free slot, unassigned.",
+   "status": "free, owner TSAI",
+   "used_by": [],
+   "bytes": 16
+  },
+  {
+   "id": 131033,
+   "token": "<|reserved_211|>",
+   "name": "reserved_211",
+   "group": "free slot",
+   "meaning": "Free slot, unassigned.",
+   "status": "free, owner TSAI",
+   "used_by": [],
+   "bytes": 16
+  },
+  {
+   "id": 131034,
+   "token": "<|reserved_212|>",
+   "name": "reserved_212",
+   "group": "free slot",
+   "meaning": "Free slot, unassigned.",
+   "status": "free, owner TSAI",
+   "used_by": [],
+   "bytes": 16
+  },
+  {
+   "id": 131035,
+   "token": "<|reserved_213|>",
+   "name": "reserved_213",
+   "group": "free slot",
+   "meaning": "Free slot, unassigned.",
+   "status": "free, owner TSAI",
+   "used_by": [],
+   "bytes": 16
+  },
+  {
+   "id": 131036,
+   "token": "<|reserved_214|>",
+   "name": "reserved_214",
+   "group": "free slot",
+   "meaning": "Free slot, unassigned.",
+   "status": "free, owner TSAI",
+   "used_by": [],
+   "bytes": 16
+  },
+  {
+   "id": 131037,
+   "token": "<|reserved_215|>",
+   "name": "reserved_215",
+   "group": "free slot",
+   "meaning": "Free slot, unassigned.",
+   "status": "free, owner TSAI",
+   "used_by": [],
+   "bytes": 16
+  },
+  {
+   "id": 131038,
+   "token": "<|reserved_216|>",
+   "name": "reserved_216",
+   "group": "free slot",
+   "meaning": "Free slot, unassigned.",
+   "status": "free, owner TSAI",
+   "used_by": [],
+   "bytes": 16
+  },
+  {
+   "id": 131039,
+   "token": "<|reserved_217|>",
+   "name": "reserved_217",
+   "group": "free slot",
+   "meaning": "Free slot, unassigned.",
+   "status": "free, owner TSAI",
+   "used_by": [],
+   "bytes": 16
+  },
+  {
+   "id": 131040,
+   "token": "<|reserved_218|>",
+   "name": "reserved_218",
+   "group": "free slot",
+   "meaning": "Free slot, unassigned.",
+   "status": "free, owner TSAI",
+   "used_by": [],
+   "bytes": 16
+  },
+  {
+   "id": 131041,
+   "token": "<|reserved_219|>",
+   "name": "reserved_219",
+   "group": "free slot",
+   "meaning": "Free slot, unassigned.",
+   "status": "free, owner TSAI",
+   "used_by": [],
+   "bytes": 16
+  },
+  {
+   "id": 131042,
+   "token": "<|reserved_220|>",
+   "name": "reserved_220",
+   "group": "free slot",
+   "meaning": "Free slot, unassigned.",
+   "status": "free, owner TSAI",
+   "used_by": [],
+   "bytes": 16
+  },
+  {
+   "id": 131043,
+   "token": "<|reserved_221|>",
+   "name": "reserved_221",
+   "group": "free slot",
+   "meaning": "Free slot, unassigned.",
+   "status": "free, owner TSAI",
+   "used_by": [],
+   "bytes": 16
+  },
+  {
+   "id": 131044,
+   "token": "<|reserved_222|>",
+   "name": "reserved_222",
+   "group": "free slot",
+   "meaning": "Free slot, unassigned.",
+   "status": "free, owner TSAI",
+   "used_by": [],
+   "bytes": 16
+  },
+  {
+   "id": 131045,
+   "token": "<|reserved_223|>",
+   "name": "reserved_223",
+   "group": "free slot",
+   "meaning": "Free slot, unassigned.",
+   "status": "free, owner TSAI",
+   "used_by": [],
+   "bytes": 16
+  },
+  {
+   "id": 131046,
+   "token": "<|reserved_224|>",
+   "name": "reserved_224",
+   "group": "free slot",
+   "meaning": "Free slot, unassigned.",
+   "status": "free, owner TSAI",
+   "used_by": [],
+   "bytes": 16
+  },
+  {
+   "id": 131047,
+   "token": "<|reserved_225|>",
+   "name": "reserved_225",
+   "group": "free slot",
+   "meaning": "Free slot, unassigned.",
+   "status": "free, owner TSAI",
+   "used_by": [],
+   "bytes": 16
+  },
+  {
+   "id": 131048,
+   "token": "<|reserved_226|>",
+   "name": "reserved_226",
+   "group": "free slot",
+   "meaning": "Free slot, unassigned.",
+   "status": "free, owner TSAI",
+   "used_by": [],
+   "bytes": 16
+  },
+  {
+   "id": 131049,
+   "token": "<|reserved_227|>",
+   "name": "reserved_227",
+   "group": "free slot",
+   "meaning": "Free slot, unassigned.",
+   "status": "free, owner TSAI",
+   "used_by": [],
+   "bytes": 16
+  },
+  {
+   "id": 131050,
+   "token": "<|reserved_228|>",
+   "name": "reserved_228",
+   "group": "free slot",
+   "meaning": "Free slot, unassigned.",
+   "status": "free, owner TSAI",
+   "used_by": [],
+   "bytes": 16
+  },
+  {
+   "id": 131051,
+   "token": "<|reserved_229|>",
+   "name": "reserved_229",
+   "group": "free slot",
+   "meaning": "Free slot, unassigned.",
+   "status": "free, owner TSAI",
+   "used_by": [],
+   "bytes": 16
+  },
+  {
+   "id": 131052,
+   "token": "<|reserved_230|>",
+   "name": "reserved_230",
+   "group": "free slot",
+   "meaning": "Free slot, unassigned.",
+   "status": "free, owner TSAI",
+   "used_by": [],
+   "bytes": 16
+  },
+  {
+   "id": 131053,
+   "token": "<|reserved_231|>",
+   "name": "reserved_231",
+   "group": "free slot",
+   "meaning": "Free slot, unassigned.",
+   "status": "free, owner TSAI",
+   "used_by": [],
+   "bytes": 16
+  },
+  {
+   "id": 131054,
+   "token": "<|reserved_232|>",
+   "name": "reserved_232",
+   "group": "free slot",
+   "meaning": "Free slot, unassigned.",
+   "status": "free, owner TSAI",
+   "used_by": [],
+   "bytes": 16
+  },
+  {
+   "id": 131055,
+   "token": "<|reserved_233|>",
+   "name": "reserved_233",
+   "group": "free slot",
+   "meaning": "Free slot, unassigned.",
+   "status": "free, owner TSAI",
+   "used_by": [],
+   "bytes": 16
+  },
+  {
+   "id": 131056,
+   "token": "<|reserved_234|>",
+   "name": "reserved_234",
+   "group": "free slot",
+   "meaning": "Free slot, unassigned.",
+   "status": "free, owner TSAI",
+   "used_by": [],
+   "bytes": 16
+  },
+  {
+   "id": 131057,
+   "token": "<|reserved_235|>",
+   "name": "reserved_235",
+   "group": "free slot",
+   "meaning": "Free slot, unassigned.",
+   "status": "free, owner TSAI",
+   "used_by": [],
+   "bytes": 16
+  },
+  {
+   "id": 131058,
+   "token": "<|reserved_236|>",
+   "name": "reserved_236",
+   "group": "free slot",
+   "meaning": "Free slot, unassigned.",
+   "status": "free, owner TSAI",
+   "used_by": [],
+   "bytes": 16
+  },
+  {
+   "id": 131059,
+   "token": "<|reserved_237|>",
+   "name": "reserved_237",
+   "group": "free slot",
+   "meaning": "Free slot, unassigned.",
+   "status": "free, owner TSAI",
+   "used_by": [],
+   "bytes": 16
+  },
+  {
+   "id": 131060,
+   "token": "<|reserved_238|>",
+   "name": "reserved_238",
+   "group": "free slot",
+   "meaning": "Free slot, unassigned.",
+   "status": "free, owner TSAI",
+   "used_by": [],
+   "bytes": 16
+  },
+  {
+   "id": 131061,
+   "token": "<|reserved_239|>",
+   "name": "reserved_239",
+   "group": "free slot",
+   "meaning": "Free slot, unassigned.",
+   "status": "free, owner TSAI",
+   "used_by": [],
+   "bytes": 16
+  },
+  {
+   "id": 131062,
+   "token": "<|reserved_240|>",
+   "name": "reserved_240",
+   "group": "free slot",
+   "meaning": "Free slot, unassigned.",
+   "status": "free, owner TSAI",
+   "used_by": [],
+   "bytes": 16
+  },
+  {
+   "id": 131063,
+   "token": "<|reserved_241|>",
+   "name": "reserved_241",
+   "group": "free slot",
+   "meaning": "Free slot, unassigned.",
+   "status": "free, owner TSAI",
+   "used_by": [],
+   "bytes": 16
+  },
+  {
+   "id": 131064,
+   "token": "<|reserved_242|>",
+   "name": "reserved_242",
+   "group": "free slot",
+   "meaning": "Free slot, unassigned.",
+   "status": "free, owner TSAI",
+   "used_by": [],
+   "bytes": 16
+  },
+  {
+   "id": 131065,
+   "token": "<|reserved_243|>",
+   "name": "reserved_243",
+   "group": "free slot",
+   "meaning": "Free slot, unassigned.",
+   "status": "free, owner TSAI",
+   "used_by": [],
+   "bytes": 16
+  },
+  {
+   "id": 131066,
+   "token": "<|reserved_244|>",
+   "name": "reserved_244",
+   "group": "free slot",
+   "meaning": "Free slot, unassigned.",
+   "status": "free, owner TSAI",
+   "used_by": [],
+   "bytes": 16
+  },
+  {
+   "id": 131067,
+   "token": "<|reserved_245|>",
+   "name": "reserved_245",
+   "group": "free slot",
+   "meaning": "Free slot, unassigned.",
+   "status": "free, owner TSAI",
+   "used_by": [],
+   "bytes": 16
+  },
+  {
+   "id": 131068,
+   "token": "<|reserved_246|>",
+   "name": "reserved_246",
+   "group": "free slot",
+   "meaning": "Free slot, unassigned.",
+   "status": "free, owner TSAI",
+   "used_by": [],
+   "bytes": 16
+  },
+  {
+   "id": 131069,
+   "token": "<|reserved_247|>",
+   "name": "reserved_247",
+   "group": "free slot",
+   "meaning": "Free slot, unassigned.",
+   "status": "free, owner TSAI",
+   "used_by": [],
+   "bytes": 16
+  },
+  {
+   "id": 131070,
+   "token": "<|reserved_248|>",
+   "name": "reserved_248",
+   "group": "free slot",
+   "meaning": "Free slot, unassigned.",
+   "status": "free, owner TSAI",
+   "used_by": [],
+   "bytes": 16
+  },
+  {
+   "id": 131071,
+   "token": "<|reserved_249|>",
+   "name": "reserved_249",
+   "group": "free slot",
+   "meaning": "Free slot, unassigned.",
+   "status": "free, owner TSAI",
+   "used_by": [],
+   "bytes": 16
+  }
+ ]
+}

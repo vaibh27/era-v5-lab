@@ -1,0 +1,11 @@
+doc_id,read,verdict,diseases,evidence,hex,note
+faf96e91934eee82,full,clean,,,,
+0ca1c89345d0a56f,full,clean,,,,
+69e0e79eefcb8655,full,clean,,,,
+24852455a7586b63,full,clean,,,,"Javadoc HTML (<br>) in comments; normal Java, not a disease"
+f91f21122082f36c,full,clean,,,,
+be77187d3e80ad8a,full,clean,,,,
+e62c4b5928396580,full,clean,,,,
+699e92cd2f4cee3a,full,clean,,,,
+f5af76f477baf13e,full,clean,,,,"Chinese comments next to ASCII code; natural, not look-alike mixing"
+48201e5363f9a960,full,clean,,,,

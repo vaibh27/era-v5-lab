@@ -1,0 +1,323 @@
+{
+  "status": "complete",
+  "config": {
+    "inputs": "out/tokenizer_sample_v0_clean",
+    "out": "out/h3_full",
+    "cache": "out/h3_cache",
+    "packs": {
+      "ind-sa-fw2": "sa",
+      "ind-hi-*": "hi",
+      "ind-or-fw2": "or",
+      "en-fineweb-edu": "en",
+      "en-dclm": "en",
+      "en-nemotroncc": "en"
+    },
+    "pairs": [
+      [
+        "sa",
+        "en"
+      ],
+      [
+        "sa",
+        "hi"
+      ],
+      [
+        "hi",
+        "en"
+      ],
+      [
+        "or",
+        "en"
+      ]
+    ],
+    "model_path": "../models/LaBSE",
+    "device": "cuda",
+    "precision": "auto",
+    "batch_size": 64,
+    "max_seq_length": 128,
+    "min_chars": 200,
+    "min_sentences": 3,
+    "sentence_min_chars": 20,
+    "head_sentences": 4,
+    "max_sentences": 16,
+    "top_k": 3,
+    "doc_floor": 0.5,
+    "mutual": true,
+    "max_length_ratio": 4.0,
+    "sentence_threshold": {
+      "sa-en": 0.55,
+      "sa-hi": 0.55
+    },
+    "coverage_threshold": 0.6,
+    "report_floor": 0.3,
+    "max_verify": 60000,
+    "url_group_max": 20,
+    "block": 512,
+    "pair_batch": 1024,
+    "max_docs_per_pack": 0,
+    "max_minutes": 110,
+    "max_output_mb": 50,
+    "sync_debug": false
+  },
+  "device": "cuda",
+  "precision": "fp16",
+  "model": {
+    "path": "../models/LaBSE",
+    "name": "LaBSE",
+    "device": "cuda",
+    "dtype": "torch.float16",
+    "max_seq_length": 128,
+    "dim": 768,
+    "config_sha256": "b6bd83d561db8d2ccb7f44dafcd945e39bea16dc2819072ffb10adb45608b029",
+    "weights": {
+      "2_Dense/model.safetensors": {
+        "bytes": 2362528,
+        "sha256": "f866c945fa2147ce4940c8ead0b4b20af4217e0f4664bd35f41c2a0967c4fe77"
+      },
+      "2_Dense/pytorch_model.bin": {
+        "bytes": 2363431,
+        "sha256": "06fb85120e40adf0ab188c4f0cc7684f702cb2023532947d1b85f325b0a3645c"
+      },
+      "model.safetensors": {
+        "bytes": 1883734344,
+        "sha256": "77d8e1f2dbab6eb5d3c261ce9d3dbf1e3c69e02938c95f934f94f42c22dfa31f"
+      },
+      "pytorch_model.bin": {
+        "bytes": 1883785969,
+        "sha256": "c9e7daf739f87c2168a6d1baffdae5782eceb03eb6de61950284a925234c6865"
+      }
+    },
+    "sentence_transformers": "6.3.0"
+  },
+  "inputs": {
+    "root": "out/tokenizer_sample_v0_clean",
+    "parts_found": 86,
+    "parts_selected": 23,
+    "parts": [
+      "train/en-dclm/part-00000.parquet",
+      "train/en-dclm/part-00001.parquet",
+      "train/en-fineweb-edu/part-00000.parquet",
+      "train/en-fineweb-edu/part-00001.parquet",
+      "train/en-nemotroncc/part-00000.parquet",
+      "train/en-nemotroncc/part-00001.parquet",
+      "train/ind-hi-fw2/part-00000.parquet",
+      "train/ind-hi-hplt/part-00000.parquet",
+      "train/ind-hi-indiccorp/part-00000.parquet",
+      "train/ind-hi-sangraha-s/part-00000.parquet",
+      "train/ind-hi-sangraha-v/part-00000.parquet",
+      "train/ind-or-fw2/part-00000.parquet",
+      "train/ind-sa-fw2/part-00000.parquet",
+      "heldout/en-dclm/part-00000.parquet",
+      "heldout/en-fineweb-edu/part-00000.parquet",
+      "heldout/en-nemotroncc/part-00000.parquet",
+      "heldout/ind-hi-fw2/part-00000.parquet",
+      "heldout/ind-hi-hplt/part-00000.parquet",
+      "heldout/ind-hi-indiccorp/part-00000.parquet",
+      "heldout/ind-hi-sangraha-s/part-00000.parquet",
+      "heldout/ind-hi-sangraha-v/part-00000.parquet",
+      "heldout/ind-or-fw2/part-00000.parquet",
+      "heldout/ind-sa-fw2/part-00000.parquet"
+    ]
+  },
+  "documents": {
+    "en-dclm": {
+      "lang": "en",
+      "rows_in_parts": 60802,
+      "read": 60802,
+      "too_short": 328,
+      "encoded": 60474
+    },
+    "en-fineweb-edu": {
+      "lang": "en",
+      "rows_in_parts": 72100,
+      "read": 72100,
+      "too_short": 2,
+      "encoded": 72098
+    },
+    "en-nemotroncc": {
+      "lang": "en",
+      "rows_in_parts": 89183,
+      "read": 89183,
+      "too_short": 4280,
+      "encoded": 84903
+    },
+    "ind-hi-fw2": {
+      "lang": "hi",
+      "rows_in_parts": 13932,
+      "read": 13932,
+      "too_short": 164,
+      "encoded": 13768
+    },
+    "ind-hi-hplt": {
+      "lang": "hi",
+      "rows_in_parts": 8515,
+      "read": 8515,
+      "too_short": 37,
+      "encoded": 8478
+    },
+    "ind-hi-indiccorp": {
+      "lang": "hi",
+      "rows_in_parts": 110755,
+      "read": 110755,
+      "too_short": 65167,
+      "encoded": 45588
+    },
+    "ind-hi-sangraha-s": {
+      "lang": "hi",
+      "rows_in_parts": 7542,
+      "read": 7542,
+      "too_short": 1200,
+      "encoded": 6342
+    },
+    "ind-hi-sangraha-v": {
+      "lang": "hi",
+      "rows_in_parts": 14614,
+      "read": 14614,
+      "too_short": 44,
+      "encoded": 14570
+    },
+    "ind-or-fw2": {
+      "lang": "or",
+      "rows_in_parts": 34012,
+      "read": 34012,
+      "too_short": 399,
+      "encoded": 33613
+    },
+    "ind-sa-fw2": {
+      "lang": "sa",
+      "rows_in_parts": 5721,
+      "read": 5721,
+      "too_short": 28,
+      "encoded": 5693
+    }
+  },
+  "documents_compared": 345527,
+  "url": {
+    "groups_with_2_or_more": 87,
+    "groups_over_url_group_max": 0,
+    "pairs": 0
+  },
+  "retrieved": {
+    "sa-en": {
+      "documents_a": 5693,
+      "documents_b": 217475,
+      "pairs_in_top_k": 663416,
+      "kept": 3063
+    },
+    "sa-hi": {
+      "documents_a": 5693,
+      "documents_b": 88746,
+      "pairs_in_top_k": 279018,
+      "kept": 3667
+    },
+    "hi-en": {
+      "documents_a": 88746,
+      "documents_b": 217475,
+      "pairs_in_top_k": 868230,
+      "kept": 47933
+    },
+    "or-en": {
+      "documents_a": 33613,
+      "documents_b": 217475,
+      "pairs_in_top_k": 726794,
+      "kept": 21859
+    }
+  },
+  "candidates": 76522,
+  "rejected_length_ratio": 26114,
+  "not_verified_over_max_verify": 0,
+  "verified": 50408,
+  "listed": 138,
+  "qualifying": 5,
+  "qualifying_heldout_train": 0,
+  "qualifying_by_language_pair": {
+    "en-hi": 1,
+    "en-sa": 1,
+    "hi-sa": 3
+  },
+  "rule": {
+    "h3": "aligned sentences / sentences of the shorter document >= 0.6; a sentence pair aligns when each is the other's best match with cosine >= the language pair's sentence threshold",
+    "sentence_threshold": {
+      "sa-en": 0.55,
+      "sa-hi": 0.55,
+      "hi-en": 0.7,
+      "or-en": 0.7
+    },
+    "thresholds": "provisional: set by E5's sweep and hand review"
+  },
+  "counts": {
+    "rows_scanned": 417176,
+    "cached_parts": 23,
+    "encoded_sentences": 827257
+  },
+  "stages_seconds": {
+    "load_model": 48.797,
+    "read": 101.185,
+    "cache": 5.364,
+    "url": 0.369,
+    "retrieve": 17.694,
+    "verify_read": 11.348,
+    "verify": 598.965
+  },
+  "rates": {
+    "heads_per_second": null,
+    "sentences_per_second": 1381.1
+  },
+  "estimate_all_documents": {
+    "documents_encoded": {
+      "en": 217475,
+      "hi": 88746,
+      "or": 33613,
+      "sa": 5693
+    },
+    "documents_full": {
+      "en": 217475,
+      "hi": 88746,
+      "or": 33613,
+      "sa": 5693
+    },
+    "seconds": {
+      "load_model": 48.8,
+      "read": 101.2,
+      "encode": null,
+      "retrieve": 17.7,
+      "verify": 610.3
+    },
+    "minutes_total": 13.0,
+    "every_stage_measured": false,
+    "suggested_max_time_minutes": 20,
+    "basis": "this run's rates; read scales with rows, encode with documents, retrieve with the product of the two languages' documents, verify with the smaller language's documents (at most max_verify)"
+  },
+  "wall_seconds": 784.5,
+  "peak_rss_mb": 3669.7,
+  "versions": {
+    "python": "3.12.3",
+    "numpy": "2.4.3",
+    "pyarrow": "23.0.1",
+    "torch": "2.13.0+cu130",
+    "platform": "Linux-6.18.58.1-microsoft-standard-WSL2-x86_64-with-glibc2.39"
+  },
+  "outputs": {
+    "h3_docs.parquet": {
+      "bytes": 8461317,
+      "sha256": "da5570d7a84aeb6b8d7809901d14e56b68ab6a9b9293489d6b5f72994176f0e6"
+    },
+    "h3_candidates.csv": {
+      "bytes": 27418,
+      "sha256": "9095f070b89af23b5005a95bd36188663b02e07956280ed5112ee3be9e9f26e5"
+    },
+    "h3_matches.csv": {
+      "bytes": 1067,
+      "sha256": "fdbe39e9c1445089ba79745e6ac037b6f7619affcf2ddcf5addc99ff69c64bfd"
+    },
+    "h3_by_pack.csv": {
+      "bytes": 1263,
+      "sha256": "398e2faa8d5bb1f4c2439bfe33032237dbf16bdd8795ea2e9798cfc9b37a7601"
+    },
+    "h3_histogram.csv": {
+      "bytes": 2098,
+      "sha256": "08661aa511e7143a4510a1e05af776f62438f826dbd5c1e4be6cc631fb504b67"
+    }
+  },
+  "output_mb": 8.1
+}

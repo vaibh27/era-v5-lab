@@ -8,6 +8,10 @@
 #   2. probe file (capstone/make_probe_file.py, Team 5's loader and loss) that origin g5_delivery requires
 #   3. router bias reach (capstone/router_bias_reach.py), a report for Team 9 and the lead; a failure here never stops the job
 #   4. the lead's wrapper capstone/dryrun2_dt_compare.py, unchanged, with every argument after `--` passed through
+#   5. each arm's own report: router bias unchanged, im_end at turn ends and mid-reply ($WORK/arm_checks.json)
+#   6. with --keep-weights-dir: held-out bits per byte of the base and every kept arm in Team 9's dtype
+#      (capstone/forget_bpb_kept.py, <out>/forget/forget_*.json), the half of the forgetting verdict that needs this GPU,
+#      adapter config and run folder. Report only: a failure here is logged and does not change the job's exit code
 # Steps 1 and 2 run on the GPU (--device cuda) so Team 7 compares the probe bits on the device class that saved them.
 #
 #   G5=<lab checkout> T5_OUT=<Team 5's out/dryrun2-1234> STORE=/shared/ckpt TOKENIZER=<tokenizer_p1536.json> \
@@ -76,5 +80,26 @@ print(json.dumps({"arm_checks": {a: {"router_bias_unchanged": v["router_bias_unc
                                      for f in ("mean_logprob", "mid_logprob")]} for a, v in arms.items()}}))
 sys.exit(1 if bad or not arms else 0)
 PYEOF
+# 6. held-out bits per byte for the base and the kept arms (forgetting verdict); never changes the exit code
+KEEP=""; KEEP_ARMS="dt"; prev=""
+for x in "$@"; do
+  [ "$prev" = "--keep-weights-dir" ] && KEEP="$x"
+  [ "$prev" = "--keep-weights-arms" ] && KEEP_ARMS="$x"
+  prev="$x"
+done
+if [ -n "$KEEP" ]; then
+  KEPT=()
+  for arm in ${KEEP_ARMS//,/ }; do
+    if [ -f "$KEEP/g10-dr2-$arm/latest.json" ]; then KEPT+=(--kept "$KEEP/g10-dr2-$arm"); fi
+  done
+  if [ "${#KEPT[@]}" -eq 0 ] || [ ! -f "$OUT/adapter.yaml" ]; then
+    log "forgetting bits per byte skipped: no kept arm folder under $KEEP, or no $OUT/adapter.yaml"
+  else
+    log "forgetting bits per byte: base and kept arms -> $OUT/forget"
+    "$PY" "$C/forget_bpb_kept.py" --adapter-config "$OUT/adapter.yaml" --heldout "$HELDOUT" \
+      --heldout-sources "$HELDOUT_SOURCES" "${KEPT[@]}" --device "$DEVICE" --dtype auto --out-dir "$OUT/forget" \
+      || log "forget_bpb_kept failed (report only; run it again from $OUT/adapter.yaml and the kept folders)"
+  fi
+fi
 log "done: wrapper exit $RC, arm checks in $WORK/arm_checks.json"
 exit $RC

@@ -181,3 +181,17 @@ def test_convert_nemotron_row_matches_template():
                                      "function": {"name": "get_weather", "arguments": {"unit": "c", "city": "Pune"}}}]},
                     {"role": "tool", "content": "24C"}], tools=[WEATHER])
     assert served == trained
+
+
+def test_team3_release_tokenizer_config_chat_template_parity():
+    # Team 3 (#686) embeds G10's chat_template.jinja into teams/03-tokenizer/release/tokenizer_config.json.
+    cfg_path = TEAM.parents[1] / "teams" / "03-tokenizer" / "release" / "tokenizer_config.json"
+    cfg = json.loads(cfg_path.read_text(encoding="utf-8"))
+    t3_source = cfg.get("chat_template")
+    assert isinstance(t3_source, str) and t3_source, "chat_template missing from Team 3 tokenizer_config.json"
+    assert t3_source.encode("utf-8") == TEMPLATE_PATH.read_bytes()
+    t3_tpl = _compile(t3_source)
+    for name, msgs in TRANSCRIPTS.items():
+        rendered = t3_tpl.render(messages=msgs, effort="4k", add_generation_prompt=False)
+        assert rendered == train(msgs, effort="4k"), f"Team 3 chat_template mismatch on {name}"
+

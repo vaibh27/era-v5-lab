@@ -25,7 +25,7 @@ What changes from C3:
 | `tokenizer.json` | Not in the repo: at 6.6 MB it is over the 5 MB pr-guard limit. Download it (below) and put it here. `.gitignore` keeps it out of commits. |
 | `tokenizer_config.json`, `special_tokens_map.json` | Name the bos / eos / pad / unk roles, so `AutoTokenizer.from_pretrained` loads the same way for every team. Nothing is added when encoding. The roles are unchanged from C3. Since 20 Nov `tokenizer_config.json` also embeds G10's chat template (`chat_template.jinja` sha256 `b00137fe…`, byte-identical to `teams/12-quantization/tokenizer/chat_template.jinja`), so servers no longer need `--chat-template` (chat_format_check finding 5). |
 | `generation_config.json` | `eos_token_id: [130816, 130822]`: generation stops at `<\|im_end\|>` (end of a chat turn) or `<\|endoftext\|>` (chat_format_check finding 2). |
-| `SPECIAL_TOKENS.md` | The special-token roles and why (#407), on the p1536 sha. |
+| `SPECIAL_TOKENS.md`, `special_slots.json` | All 356 special tokens: id, string, meaning, status and users, with the roles (#407). The JSON is the machine-readable copy, made and tested by `special_slots.py` (`../results/special_tokens_test.md`). |
 | `SHA256SUMS` | sha256 of `tokenizer.json` and of every repo file needed to check or rebuild it. |
 | `verify_release.py` | Checks a downloaded copy (below). |
 | `archive/c3-sample-v0/` | The previous freeze (C3, #340, #465), with its own README, SHA256SUMS and verify script. |

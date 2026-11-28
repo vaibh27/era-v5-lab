@@ -1,0 +1,26 @@
+doc_id,read,verdict,diseases,evidence,hex,note
+2de480b756202a35,full,,,,,No matching doc_id (dropped by clean). Drop looks right: tag-page teaser ('soy: 25/26 of 26') with one sentence cut at 'cattlemore...'
+9c44f72ec4df21b1,full,,,,,"No matching doc_id (dropped by clean). Drop acceptable: complete QR-code how-to, but reworded SEO text with garbled sentences ('The scan ought to should be effective'); DA-C3-003 dropped it only because the trailing 'Similar Posts' teaser ends in 'of'"
+31a84973c3fcc8e1,full,fix,F1,,,"'2011 World Road Champion' masked as '<ADDRESS> Champion' (false positive, DA-F1-005); hard line breaks inside sentences come from the source"
+f33336c5d7f85e26,full,drop,D4,,,"Synonym-spun article ('acid take a look at', 'Nicely, all info simply cannot be transmitted'); only 'Post navigation' removed. D4 is the nearest code for spun text"
+3017f40b726f46c0,full,,,,,"No matching doc_id (dropped by clean). Drop looks right: category-page teaser, a byline and one sentence cut at '...'"
+20ad3e8b8d483443,full,fix,C1;C2,,,"wikiHow page: four 'Ad' lines and the 'Give us 3 minutes of knowledge!' survey kept; repeated-line removal deleted 2 of its 3 'Can you tell us about' lines, leaving topics followed by bare Yes / No; the survey is glued to the next tip ('File Sharing washing your transfer-printed shirt')"
+3f36c030787d25db,full,,,,,"No matching doc_id (dropped by clean). Drop looks right: three-paragraph fragment of a homework-help page that starts mid-derivation, has no equations and ends at 'is given by,'"
+4060d06f0967ec8c,full,fix,C3,,,Name-meaning Q&A page: starts mid-question (' is the meaning of ...') and ends with a question that has no answer; the LRM after the Arabic word was removed correctly (DA-A1-004)
+c23e30e935ce9d9e,full,fix,C2,,,"Forum thread archive: repeated-line removal deleted 7 repeated poster-name lines (two posters) and 2 quoted lines, so those posts now run on under the previous poster's name and time; the other posters' repeated names are kept"
+ed270db9f5a0f98b,full,fix,C1;C3,,,"Breadcrumb 'Home > FAQ > ...' kept, only 'Menu' removed; ends at 'with the following message' (the message was an image)"
+d39a4f217e8d3458,full,,,,,No matching doc_id (dropped by clean). Drop looks right: journal summary teaser cut at '... Read more'
+e56468c434c7e978,full,clean,,,,Two zero-width spaces removed correctly (DA-A1-004); text intact
+1514638d2b7fe79f,full,fix,C1,,,"Dictionary-site page: 'Look at other dictionaries:' and 7 related-entry teasers ending '... Wikipedia' kept after the entry; wiki ':*' list markup left; only the 'Contents' heading removed, its list kept"
+a12d77a8e0df9c60,full,,,,,"No matching doc_id (dropped by clean). Drop looks wrong: complete news article on a health-care survey; only its last sentence is cut ('levels of'), so DA-C3-003 drops it. Trim the last sentence rather than drop"
+4563eda666a0a106,full,fix,C1;C4,,,'Search' nav line kept at the top; three reader comments run on after the post with no boundary; soft hyphens inside a place name removed correctly (DA-A1-004)
+dacbd552a79cd2fc,full,,,,,No matching doc_id (dropped by clean). Drop looks right: a book's table of contents (chapter titles and authors) cut at '...'
+e03f3ea9ecbc3fe0,full,fix,C1,,,"Call-to-action header 'Call: <PHONE>' kept: the business number is masked, but the line itself is boilerplate"
+0f1474fb6f74523d,full,fix,C1,,,"Newsletter promo ('Sorry to interrupt, but you should really... ...Join the ZME newsletter') and an image credit kept; only 'ADVERTISEMENT' removed"
+997b41f7cea802f9,full,,,,,"No matching doc_id (dropped by clean). Drop looks wrong: complete farm-news article; its last line asks readers to apply, with the link already gone ('apply at '), so DA-C3-003 drops it. Trim that line rather than drop"
+e22a01614b73e12a,full,fix,C1,,,'Latest News & Press' header kept; press-release footer ('For more information visit:  and follow on Twitter') kept; zero-width space removed correctly (DA-A1-004)
+d805a3e754918810,full,fix,F1,,,"Chainsaw model numbers '380 3450 3750' masked as <PHONE> (false positive, DA-F1-005); short forum reply"
+c6785eaf7537f5d4,full,fix,C1;C4,,,"Monthly archive page: 'Month: June 2014' header kept and three blog posts (World Cup, water cannons, police cameras) joined with no boundary; only 'Menu' removed"
+a31c50d7d58df9c4,full,fix,C1,,,'2 Comments on ...' and both comments kept after the post; title glued to the subtitle ('Why farming?Standing your ground'); only 'Menu' removed
+49c77d0a48d5e7c0,full,clean,,,,Two zero-width spaces removed correctly (DA-A1-004); class list intact
+a2107c90198d2ddb,full,,,,,No matching doc_id (dropped by clean). Drop looks right: category-page teaser cut mid-sentence ('understanding of')

@@ -531,6 +531,56 @@ def test_dt_report_keeps_mask_integrity_and_fails_invalid_deletion_summary(tmp_p
         assert result["ok"] is False and "deletion integrity" in result["error"]
 
 
+def test_a_failed_final_save_fails_the_step_marks_the_state_to_keep_and_still_reports(tmp_path, monkeypatch):
+    import train
+
+    a = _full_args(tmp_path)
+    a.rl_tasks = tmp_path / "tasks.jsonl"
+    a.rl_tasks.write_text("")
+    a.keep_weights_dir = tmp_path / "keep_t7"
+    rl = tmp_path / "rl"
+    rl.mkdir()
+    (rl / "evals.jsonl").write_text("".join(json.dumps({
+        "name": "heldout", "step": step, "pass": 0.5, "problems": 2, "k": 4, "reasons": {}
+    }) + "\n" for step in (0, 3)))
+    (rl / "metrics.jsonl").write_text(json.dumps({"groups_used": 4}) + "\n")
+    (tmp_path / "literal_sample.jsonl").write_text("".join(json.dumps({
+        "eval_index": index, "pass": 1, "literal": 0}) + "\n" for index in (0, 1)))
+    summary = {"status": "COMPLETE", "steps": 3, "heldout_change": {"diff": 0.0, "ci_low": 0.0}, "heldout_curve": [[0, 0.5], [3, 0.5]],
+               "objective": {"steps_with_optimizer_update": 3}}
+    monkeypatch.setattr(job, "install_detector", lambda *args: None)
+    monkeypatch.setattr(train, "train", lambda cfg: summary)
+
+    def broken(*args, **kwargs):
+        raise OSError("no space left on device")
+
+    monkeypatch.setattr(job, "keep_final_weights", broken)
+    result = job.rl_step(a, tmp_path, None, None, 1234.0, 64)
+    assert result["ok"] is False and "no space left on device" in result["keep_weights_error"]
+    assert a.keep_rl_state is True
+    assert "kept_weights" not in result and result["heldout_change"] == {"diff": 0.0, "ci_low": 0.0}
+    monkeypatch.setattr(job, "keep_final_weights", lambda *args: {"step": 3})
+    result = job.rl_step(a, tmp_path, None, None, 1234.0, 64)
+    assert result["kept_weights"] == {"step": 3} and a.keep_rl_state is False
+
+
+@pytest.mark.parametrize("unsaved", [True, False])
+def test_main_leaves_rl_state_only_while_the_final_weights_are_unsaved(tmp_path, monkeypatch, unsaved):
+    def finished_run(a, out):
+        (out / "rl").mkdir()
+        (out / "rl" / "summary.json").write_text(json.dumps({"status": "COMPLETE"}))
+        (out / "rl_state").mkdir()
+        (out / "_work").mkdir()
+        a.keep_rl_state = unsaved
+        return int(unsaved)
+
+    monkeypatch.setattr(job, "run", finished_run)
+    argv = ["--g5-root", "g", "--run-folder", "r", "--tokenizer", "t", "--byte-table", "b", "--rl-tasks", "cc.jsonl",
+            "--train-pool", "tp", "--heldout-pool", "hp", "--device", "cpu", "--out", str(tmp_path / "o")]
+    assert job.main(argv) == int(unsaved)
+    assert (tmp_path / "o" / "rl_state").is_dir() is unsaved and not (tmp_path / "o" / "_work").exists()
+
+
 def test_head_checkpoint_is_off_unless_the_job_asks(tmp_path):
     """Job RLM2: the checkpointed head chunks cost update time, so the config carries head_checkpoint only with
     --head-checkpoint."""

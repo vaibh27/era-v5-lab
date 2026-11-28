@@ -1,0 +1,87 @@
+pack,what,documents
+en-dclm,docs,61367
+en-dclm,dropped_now,1155
+en-dclm,dropped_with_cards,1153
+en-dclm,recovered,2
+en-dclm,newly_dropped,0
+en-dclm,output_changed,232
+en-dclm,second_run_changes,36
+en-dclm,of_them_also_now,36
+en-dclm,DA-A2-010 differs from the rule it replaces,144
+en-dclm,DA-C2-009 differs from the rule it replaces,65
+en-dclm,DA-B3-012 changes,2
+en-dclm,DA-B4-016 differs from the rule it replaces,13
+en-dclm,DA-F1-007 differs from the rule it replaces,15
+en-fineweb-edu,docs,71933
+en-fineweb-edu,dropped_now,559
+en-fineweb-edu,dropped_with_cards,559
+en-fineweb-edu,recovered,0
+en-fineweb-edu,newly_dropped,0
+en-fineweb-edu,output_changed,13
+en-fineweb-edu,second_run_changes,3
+en-fineweb-edu,of_them_also_now,3
+en-fineweb-edu,DA-A2-010 differs from the rule it replaces,0
+en-fineweb-edu,DA-C2-009 differs from the rule it replaces,1
+en-fineweb-edu,DA-B3-012 changes,0
+en-fineweb-edu,DA-B4-016 differs from the rule it replaces,0
+en-fineweb-edu,DA-F1-007 differs from the rule it replaces,12
+en-nemotroncc,docs,91820
+en-nemotroncc,dropped_now,3552
+en-nemotroncc,dropped_with_cards,3552
+en-nemotroncc,recovered,0
+en-nemotroncc,newly_dropped,0
+en-nemotroncc,output_changed,35
+en-nemotroncc,second_run_changes,39
+en-nemotroncc,of_them_also_now,39
+en-nemotroncc,DA-A2-010 differs from the rule it replaces,1
+en-nemotroncc,DA-C2-009 differs from the rule it replaces,21
+en-nemotroncc,DA-B3-012 changes,0
+en-nemotroncc,DA-B4-016 differs from the rule it replaces,3
+en-nemotroncc,DA-F1-007 differs from the rule it replaces,11
+en-nemotroncc-synth,docs,197119
+en-nemotroncc-synth,dropped_now,218
+en-nemotroncc-synth,dropped_with_cards,161
+en-nemotroncc-synth,recovered,57
+en-nemotroncc-synth,newly_dropped,0
+en-nemotroncc-synth,output_changed,626
+en-nemotroncc-synth,second_run_changes,4
+en-nemotroncc-synth,of_them_also_now,4
+en-nemotroncc-synth,DA-A2-010 differs from the rule it replaces,0
+en-nemotroncc-synth,DA-C3-008 differs from the rule it replaces,57
+en-nemotroncc-synth,DA-C1-013 differs from the rule it replaces,50
+en-nemotroncc-synth,DA-C2-010 differs from the rule it replaces,119
+en-nemotroncc-synth,DA-C5-007 differs from the rule it replaces,272
+en-nemotroncc-synth,DA-B4-015 differs from the rule it replaces,87
+en-nemotroncc-synth,DA-B3-012 changes,0
+en-nemotroncc-synth,DA-B4-016 differs from the rule it replaces,3
+en-nemotroncc-synth,DA-F1-009 differs from the rule it replaces,42
+math-finemath,docs,29122
+math-finemath,dropped_now,2609
+math-finemath,dropped_with_cards,2611
+math-finemath,recovered,1
+math-finemath,newly_dropped,3
+math-finemath,output_changed,1433
+math-finemath,second_run_changes,90
+math-finemath,of_them_also_now,75
+math-finemath,DA-C1-012 changes,1219
+math-finemath,DA-C2-007 differs from the rule it replaces,294
+math-megamath,docs,17647
+math-megamath,dropped_now,2550
+math-megamath,dropped_with_cards,2550
+math-megamath,recovered,0
+math-megamath,newly_dropped,0
+math-megamath,output_changed,1503
+math-megamath,second_run_changes,10
+math-megamath,of_them_also_now,8
+math-megamath,DA-C1-012 changes,295
+math-megamath,DA-C2-007 differs from the rule it replaces,1241
+sci-finepdfs,docs,6011
+sci-finepdfs,dropped_now,166
+sci-finepdfs,dropped_with_cards,166
+sci-finepdfs,recovered,0
+sci-finepdfs,newly_dropped,0
+sci-finepdfs,output_changed,5
+sci-finepdfs,second_run_changes,7
+sci-finepdfs,of_them_also_now,6
+sci-finepdfs,DA-C1-014 changes,2
+sci-finepdfs,DA-C2-011 differs from the rule it replaces,4

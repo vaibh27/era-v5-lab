@@ -1,0 +1,230 @@
+{
+  "status": "complete",
+  "config": {
+    "inputs": "out/h3_sync_check/clean",
+    "out": "out/h3_sync_check/h3",
+    "cache": "out/h3_sync_check/h3_cache",
+    "packs": {
+      "ind-sa-fw2": "sa",
+      "ind-hi-fw2": "hi",
+      "en-fineweb-edu": "en"
+    },
+    "pairs": [
+      [
+        "sa",
+        "en"
+      ],
+      [
+        "sa",
+        "hi"
+      ],
+      [
+        "hi",
+        "en"
+      ]
+    ],
+    "model_path": "../models/LaBSE",
+    "device": "cuda",
+    "precision": "auto",
+    "batch_size": 64,
+    "max_seq_length": 128,
+    "min_chars": 200,
+    "min_sentences": 3,
+    "sentence_min_chars": 20,
+    "head_sentences": 4,
+    "max_sentences": 16,
+    "top_k": 3,
+    "doc_floor": 0.5,
+    "mutual": true,
+    "max_length_ratio": 4.0,
+    "sentence_threshold": 0.7,
+    "coverage_threshold": 0.6,
+    "report_floor": 0.3,
+    "max_verify": 10000,
+    "url_group_max": 20,
+    "block": 512,
+    "pair_batch": 1024,
+    "max_docs_per_pack": 0,
+    "max_minutes": 60,
+    "max_output_mb": 50,
+    "sync_debug": true
+  },
+  "device": "cuda",
+  "precision": "fp16",
+  "model": {
+    "path": "../models/LaBSE",
+    "name": "LaBSE",
+    "device": "cuda",
+    "dtype": "torch.float16",
+    "max_seq_length": 128,
+    "dim": 768,
+    "config_sha256": "b6bd83d561db8d2ccb7f44dafcd945e39bea16dc2819072ffb10adb45608b029",
+    "weights": {
+      "2_Dense/model.safetensors": {
+        "bytes": 2362528,
+        "sha256": "f866c945fa2147ce4940c8ead0b4b20af4217e0f4664bd35f41c2a0967c4fe77"
+      },
+      "model.safetensors": {
+        "bytes": 1883734344,
+        "sha256": "77d8e1f2dbab6eb5d3c261ce9d3dbf1e3c69e02938c95f934f94f42c22dfa31f"
+      }
+    },
+    "sentence_transformers": "6.3.0"
+  },
+  "inputs": {
+    "root": "out/h3_sync_check/clean",
+    "parts_found": 7,
+    "parts_selected": 7,
+    "parts": [
+      "train/en-fineweb-edu/part-00000.parquet",
+      "train/en-fineweb-edu/part-00001.parquet",
+      "train/ind-hi-fw2/part-00000.parquet",
+      "train/ind-sa-fw2/part-00000.parquet",
+      "heldout/en-fineweb-edu/part-00000.parquet",
+      "heldout/ind-hi-fw2/part-00000.parquet",
+      "heldout/ind-sa-fw2/part-00000.parquet"
+    ]
+  },
+  "documents": {
+    "en-fineweb-edu": {
+      "lang": "en",
+      "rows_in_parts": 72106,
+      "read": 72106,
+      "too_short": 2,
+      "encoded": 72104
+    },
+    "ind-hi-fw2": {
+      "lang": "hi",
+      "rows_in_parts": 14257,
+      "read": 14257,
+      "too_short": 173,
+      "encoded": 14084
+    },
+    "ind-sa-fw2": {
+      "lang": "sa",
+      "rows_in_parts": 5722,
+      "read": 5722,
+      "too_short": 28,
+      "encoded": 5694
+    }
+  },
+  "documents_compared": 91882,
+  "url": {
+    "groups_with_2_or_more": 34,
+    "groups_over_url_group_max": 0,
+    "pairs": 0
+  },
+  "retrieved": {
+    "sa-en": {
+      "documents_a": 5694,
+      "documents_b": 72104,
+      "pairs_in_top_k": 229006,
+      "kept": 1853
+    },
+    "sa-hi": {
+      "documents_a": 5694,
+      "documents_b": 14084,
+      "pairs_in_top_k": 56762,
+      "kept": 2015
+    },
+    "hi-en": {
+      "documents_a": 14084,
+      "documents_b": 72104,
+      "pairs_in_top_k": 247628,
+      "kept": 8537
+    }
+  },
+  "candidates": 12405,
+  "rejected_length_ratio": 3002,
+  "not_verified_over_max_verify": 0,
+  "verified": 9403,
+  "listed": 3,
+  "qualifying": 1,
+  "qualifying_heldout_train": 0,
+  "qualifying_by_language_pair": {
+    "en-hi": 1
+  },
+  "rule": {
+    "h3": "aligned sentences / sentences of the shorter document >= 0.6; a sentence pair aligns when each is the other's best match with cosine >= the language pair's sentence threshold",
+    "sentence_threshold": {
+      "sa-en": 0.7,
+      "sa-hi": 0.7,
+      "hi-en": 0.7
+    },
+    "thresholds": "provisional: set by E5's sweep and hand review"
+  },
+  "counts": {
+    "rows_scanned": 92085,
+    "encoded_heads": 91882,
+    "encoded_sentences": 170935
+  },
+  "stages_seconds": {
+    "load_model": 6.842,
+    "read": 19.564,
+    "cache": 0.161,
+    "encode": 28.374,
+    "url": 0.013,
+    "retrieve": 0.544,
+    "verify_read": 1.565,
+    "verify": 36.977
+  },
+  "rates": {
+    "heads_per_second": 3238.2,
+    "sentences_per_second": 4622.7
+  },
+  "estimate_all_documents": {
+    "documents_encoded": {
+      "en": 72104,
+      "hi": 14084,
+      "sa": 5694
+    },
+    "documents_full": {
+      "en": 72104,
+      "hi": 14084,
+      "sa": 5694
+    },
+    "seconds": {
+      "load_model": 6.8,
+      "read": 19.6,
+      "encode": 28.4,
+      "retrieve": 0.5,
+      "verify": 38.5
+    },
+    "minutes_total": 1.6,
+    "every_stage_measured": true,
+    "suggested_max_time_minutes": 3,
+    "basis": "this run's rates; read scales with rows, encode with documents, retrieve with the product of the two languages' documents, verify with the smaller language's documents (at most max_verify)"
+  },
+  "wall_seconds": 94.2,
+  "peak_rss_mb": 2975.8,
+  "versions": {
+    "python": "3.12.3",
+    "numpy": "2.4.3",
+    "pyarrow": "23.0.1",
+    "torch": "2.13.0+cu130",
+    "platform": "Linux-6.8.0-138-generic-x86_64-with-glibc2.39"
+  },
+  "outputs": {
+    "h3_docs.parquet": {
+      "bytes": 2496883,
+      "sha256": "b4c8bc8ad88c6bdc952aaf487c2d88c4c1bc4b58c727bc81df1cfa5f35149121"
+    },
+    "h3_candidates.csv": {
+      "bytes": 826,
+      "sha256": "9bff332556a471fef9da63f0433d5a69d56cd04c8cc8c412c4481d558a14d7ed"
+    },
+    "h3_matches.csv": {
+      "bytes": 324,
+      "sha256": "ce20542df3de255a20221bb72bb7a284679dae9221d37ea0c7a23ab66de90a44"
+    },
+    "h3_by_pack.csv": {
+      "bytes": 203,
+      "sha256": "562e7bf6d7ff1cf174cb59f5a5364793c5bae04a229360ecf360fe81cbcf6ea5"
+    },
+    "h3_histogram.csv": {
+      "bytes": 2019,
+      "sha256": "32d757448fef2560562f05f152a62e301ad6bbc575e1395881c27c6febbd531f"
+    }
+  },
+  "output_mb": 2.38
+}

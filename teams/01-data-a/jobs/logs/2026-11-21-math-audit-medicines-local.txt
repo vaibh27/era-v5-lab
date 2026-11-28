@@ -1,0 +1,40 @@
+rules loaded: 0.25 s after start
+
+math-finemath Part_1/part-00000.parquet: 29,122 docs, 146.8 M chars, read 0.85 s
+  rule            before s   after s  speedup  docs/s after  changed  differ  not idem
+  DA-C1-012           6.13      1.67     3.7x        17,465    1,512       0         0
+  DA-C2-007           2.79      2.58     1.1x        11,305    3,104       0         0
+  both, in order                4.60                  6,336    4,267
+
+math-finemath Heldout/part-00000.parquet: 312 docs, 1.4 M chars, read 0.08 s
+  rule            before s   after s  speedup  docs/s after  changed  differ  not idem
+  DA-C1-012           0.06      0.02     3.6x        18,605        9       0         0
+  DA-C2-007           0.03      0.02     1.3x        14,667       24       0         0
+  both, in order                0.07                  4,467       31
+
+math-megamath Part_1/part-00000.parquet: 17,647 docs, 148.2 M chars, read 0.18 s
+  rule            before s   after s  speedup  docs/s after  changed  differ  not idem
+  DA-C1-012           6.01      1.60     3.8x        11,051      346       0         0
+  DA-C2-007           2.47      2.48     1.0x         7,116    1,619       0         0
+  both, in order                4.07                  4,334    1,929
+
+math-megamath Heldout/part-00000.parquet: 169 docs, 1.1 M chars, read 0.02 s
+  rule            before s   after s  speedup  docs/s after  changed  differ  not idem
+  DA-C1-012           0.05      0.01     3.9x        14,366        7       0         0
+  DA-C2-007           0.02      0.01     1.7x        15,025       16       0         0
+  both, in order                0.06                  2,840       23
+
+math-finemath Maths-parquet-files/math-finemath.parquet: 500 docs, 2.6 M chars, read 0.01 s
+  rule            before s   after s  speedup  docs/s after  changed  differ  not idem
+  DA-C1-012           0.11      0.03     3.6x        16,932       20       0         0
+  DA-C2-007           0.05      0.05     1.0x        10,244       55       0         0
+  both, in order                0.07                  6,728       67
+
+math-megamath Maths-parquet-files/math-megamath.parquet: 500 docs, 3.3 M chars, read 0.01 s
+  rule            before s   after s  speedup  docs/s after  changed  differ  not idem
+  DA-C1-012           0.13      0.03     3.8x        14,351       38       0         0
+  DA-C2-007           0.06      0.05     1.2x        10,983       41       0         0
+  both, in order                0.07                  7,000       76
+
+ALL: 48,250 docs, 303.4 M chars; wall time 42.9 s from start; docs that differ from the frozen copies: 0; docs a second run changes: 0
+results: 2026-11-21-math-audit-medicines-summary-local.json

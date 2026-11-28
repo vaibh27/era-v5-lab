@@ -1,0 +1,5 @@
+Error in sitecustomize; set PYTHONVERBOSE for traceback:
+ModuleNotFoundError: No module named 'wrapt'
+llama_kv_cache_iswa: using full-size SWA cache (ref: https://github.com/ggml-org/llama.cpp/pull/13194#issuecomment-2868343055)
+gemma-2-2b-Q5_K_M.gguf: log p(' Paris') = -0.437, generation -0.437, off-by-one value -8.932; cache max diff 0.0000; guard prompt 'The capital of France is the city of' (EVAL_GUARD_CONTEXT)
+PASS

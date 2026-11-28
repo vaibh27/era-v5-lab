@@ -1,0 +1,2697 @@
+{
+ "tokenizer_sha256": "e6b93a93a60520d7b1af2e9242485f443b5596a1e116b8f8798d83bbad25a64b",
+ "outside_tokenizer": "tiktoken o200k_base (200,019 ids)",
+ "word_rule": "maximal runs of non-whitespace (str.split())",
+ "subject_rule": "a document joins the subject whose keywords (lower case, whole words, lists in SUBJECT) are densest, if that density is at least 8 per 1,000 words and at least 1.5 times the next subject's",
+ "subject_keywords": {
+  "medicine": [
+   "cancer",
+   "chronic",
+   "clinical",
+   "diagnosis",
+   "disease",
+   "diseases",
+   "dosage",
+   "dose",
+   "doses",
+   "drug",
+   "drugs",
+   "hospital",
+   "infection",
+   "medical",
+   "medicine",
+   "mortality",
+   "patient",
+   "patients",
+   "pharmacological",
+   "physician",
+   "placebo",
+   "prognosis",
+   "surgery",
+   "surgical",
+   "symptom",
+   "symptoms",
+   "syndrome",
+   "therapy",
+   "treatment",
+   "tumor"
+  ],
+  "biology": [
+   "bacteria",
+   "bacterial",
+   "biodiversity",
+   "cell",
+   "cells",
+   "chromosome",
+   "dna",
+   "ecology",
+   "enzyme",
+   "enzymes",
+   "evolution",
+   "gene",
+   "genes",
+   "genetic",
+   "genome",
+   "membrane",
+   "metabolism",
+   "mitochondria",
+   "mutation",
+   "organism",
+   "organisms",
+   "photosynthesis",
+   "protein",
+   "proteins",
+   "rna",
+   "species",
+   "tissue"
+  ],
+  "chemistry": [
+   "acid",
+   "acids",
+   "atom",
+   "atoms",
+   "bond",
+   "bonds",
+   "catalyst",
+   "chemical",
+   "chemistry",
+   "compound",
+   "compounds",
+   "electron",
+   "electrons",
+   "ion",
+   "ions",
+   "isotope",
+   "molar",
+   "molecule",
+   "molecules",
+   "oxidation",
+   "polymer",
+   "reaction",
+   "reactions",
+   "reagent",
+   "solution",
+   "solvent",
+   "spectroscopy",
+   "synthesis"
+  ]
+ },
+ "subject_docs_scanned": {
+  "sci-finepdfs": 6063,
+  "en-fineweb-edu": 6732,
+  "en-dclm": 6608,
+  "en-nemotroncc": 6954
+ },
+ "packs": {
+  "cadj-commits": {
+   "docs": 826,
+   "bytes": 1549806,
+   "words": 156194,
+   "p1536_tokens": 379598,
+   "o200k_tokens": 368967,
+   "p1536_tokens_per_word": 2.43,
+   "o200k_tokens_per_word": 2.362,
+   "p1536_bytes_per_token": 4.083,
+   "o200k_bytes_per_token": 4.2,
+   "p1536_vs_o200k_tokens": 0.0288,
+   "lossless_p1536": "826/826",
+   "lossless_o200k": "826/826"
+  },
+  "cadj-notebooks": {
+   "docs": 169,
+   "bytes": 1379992,
+   "words": 151557,
+   "p1536_tokens": 371305,
+   "o200k_tokens": 363705,
+   "p1536_tokens_per_word": 2.45,
+   "o200k_tokens_per_word": 2.4,
+   "p1536_bytes_per_token": 3.717,
+   "o200k_bytes_per_token": 3.794,
+   "p1536_vs_o200k_tokens": 0.0209,
+   "lossless_p1536": "169/169",
+   "lossless_o200k": "169/169"
+  },
+  "cadj-stackexchange": {
+   "docs": 409,
+   "bytes": 1371886,
+   "words": 191279,
+   "p1536_tokens": 356717,
+   "o200k_tokens": 350305,
+   "p1536_tokens_per_word": 1.865,
+   "o200k_tokens_per_word": 1.831,
+   "p1536_bytes_per_token": 3.846,
+   "o200k_bytes_per_token": 3.916,
+   "p1536_vs_o200k_tokens": 0.0183,
+   "lossless_p1536": "409/409",
+   "lossless_o200k": "409/409"
+  },
+  "code-cpp": {
+   "docs": 613,
+   "bytes": 3814681,
+   "words": 346089,
+   "p1536_tokens": 1123283,
+   "o200k_tokens": 1077874,
+   "p1536_tokens_per_word": 3.246,
+   "o200k_tokens_per_word": 3.114,
+   "p1536_bytes_per_token": 3.396,
+   "o200k_bytes_per_token": 3.539,
+   "p1536_vs_o200k_tokens": 0.0421,
+   "lossless_p1536": "613/613",
+   "lossless_o200k": "613/613"
+  },
+  "code-go": {
+   "docs": 872,
+   "bytes": 3544872,
+   "words": 387897,
+   "p1536_tokens": 1063374,
+   "o200k_tokens": 1029922,
+   "p1536_tokens_per_word": 2.741,
+   "o200k_tokens_per_word": 2.655,
+   "p1536_bytes_per_token": 3.334,
+   "o200k_bytes_per_token": 3.442,
+   "p1536_vs_o200k_tokens": 0.0325,
+   "lossless_p1536": "872/872",
+   "lossless_o200k": "872/872"
+  },
+  "code-java": {
+   "docs": 847,
+   "bytes": 3359568,
+   "words": 285060,
+   "p1536_tokens": 798293,
+   "o200k_tokens": 763536,
+   "p1536_tokens_per_word": 2.8,
+   "o200k_tokens_per_word": 2.679,
+   "p1536_bytes_per_token": 4.208,
+   "o200k_bytes_per_token": 4.4,
+   "p1536_vs_o200k_tokens": 0.0455,
+   "lossless_p1536": "847/847",
+   "lossless_o200k": "847/847"
+  },
+  "code-js-ts": {
+   "docs": 1234,
+   "bytes": 3731529,
+   "words": 345422,
+   "p1536_tokens": 966815,
+   "o200k_tokens": 927853,
+   "p1536_tokens_per_word": 2.799,
+   "o200k_tokens_per_word": 2.686,
+   "p1536_bytes_per_token": 3.86,
+   "o200k_bytes_per_token": 4.022,
+   "p1536_vs_o200k_tokens": 0.042,
+   "lossless_p1536": "1234/1234",
+   "lossless_o200k": "1234/1234"
+  },
+  "code-python": {
+   "docs": 718,
+   "bytes": 3385804,
+   "words": 289676,
+   "p1536_tokens": 856670,
+   "o200k_tokens": 836983,
+   "p1536_tokens_per_word": 2.957,
+   "o200k_tokens_per_word": 2.889,
+   "p1536_bytes_per_token": 3.952,
+   "o200k_bytes_per_token": 4.045,
+   "p1536_vs_o200k_tokens": 0.0235,
+   "lossless_p1536": "718/718",
+   "lossless_o200k": "718/718"
+  },
+  "code-rust": {
+   "docs": 612,
+   "bytes": 3958724,
+   "words": 361240,
+   "p1536_tokens": 1031533,
+   "o200k_tokens": 995599,
+   "p1536_tokens_per_word": 2.856,
+   "o200k_tokens_per_word": 2.756,
+   "p1536_bytes_per_token": 3.838,
+   "o200k_bytes_per_token": 3.976,
+   "p1536_vs_o200k_tokens": 0.0361,
+   "lossless_p1536": "612/612",
+   "lossless_o200k": "612/612"
+  },
+  "en-dclm": {
+   "docs": 608,
+   "bytes": 3264636,
+   "words": 554894,
+   "p1536_tokens": 711705,
+   "o200k_tokens": 705120,
+   "p1536_tokens_per_word": 1.283,
+   "o200k_tokens_per_word": 1.271,
+   "p1536_bytes_per_token": 4.587,
+   "o200k_bytes_per_token": 4.63,
+   "p1536_vs_o200k_tokens": 0.0093,
+   "lossless_p1536": "608/608",
+   "lossless_o200k": "608/608"
+  },
+  "en-fineweb-edu": {
+   "docs": 732,
+   "bytes": 3466386,
+   "words": 561674,
+   "p1536_tokens": 726389,
+   "o200k_tokens": 719496,
+   "p1536_tokens_per_word": 1.293,
+   "o200k_tokens_per_word": 1.281,
+   "p1536_bytes_per_token": 4.772,
+   "o200k_bytes_per_token": 4.818,
+   "p1536_vs_o200k_tokens": 0.0096,
+   "lossless_p1536": "732/732",
+   "lossless_o200k": "732/732"
+  },
+  "en-nemotroncc-synth": {
+   "docs": 1975,
+   "bytes": 3308100,
+   "words": 505095,
+   "p1536_tokens": 660773,
+   "o200k_tokens": 654353,
+   "p1536_tokens_per_word": 1.308,
+   "o200k_tokens_per_word": 1.296,
+   "p1536_bytes_per_token": 5.006,
+   "o200k_bytes_per_token": 5.056,
+   "p1536_vs_o200k_tokens": 0.0098,
+   "lossless_p1536": "1975/1975",
+   "lossless_o200k": "1975/1975"
+  },
+  "en-nemotroncc": {
+   "docs": 954,
+   "bytes": 3927226,
+   "words": 655128,
+   "p1536_tokens": 829403,
+   "o200k_tokens": 821624,
+   "p1536_tokens_per_word": 1.266,
+   "o200k_tokens_per_word": 1.254,
+   "p1536_bytes_per_token": 4.735,
+   "o200k_bytes_per_token": 4.78,
+   "p1536_vs_o200k_tokens": 0.0095,
+   "lossless_p1536": "954/954",
+   "lossless_o200k": "954/954"
+  },
+  "ind-bn-fw2": {
+   "docs": 112,
+   "bytes": 780940,
+   "words": 45269,
+   "p1536_tokens": 91503,
+   "o200k_tokens": 105417,
+   "p1536_tokens_per_word": 2.021,
+   "o200k_tokens_per_word": 2.329,
+   "p1536_bytes_per_token": 8.535,
+   "o200k_bytes_per_token": 7.408,
+   "p1536_vs_o200k_tokens": -0.132,
+   "lossless_p1536": "112/112",
+   "lossless_o200k": "112/112"
+  },
+  "ind-bn-sangraha-v": {
+   "docs": 102,
+   "bytes": 823190,
+   "words": 49440,
+   "p1536_tokens": 100619,
+   "o200k_tokens": 115301,
+   "p1536_tokens_per_word": 2.035,
+   "o200k_tokens_per_word": 2.332,
+   "p1536_bytes_per_token": 8.181,
+   "o200k_bytes_per_token": 7.139,
+   "p1536_vs_o200k_tokens": -0.1273,
+   "lossless_p1536": "102/102",
+   "lossless_o200k": "102/102"
+  },
+  "ind-gu-fw2": {
+   "docs": 239,
+   "bytes": 1348910,
+   "words": 88910,
+   "p1536_tokens": 165881,
+   "o200k_tokens": 194796,
+   "p1536_tokens_per_word": 1.866,
+   "o200k_tokens_per_word": 2.191,
+   "p1536_bytes_per_token": 8.132,
+   "o200k_bytes_per_token": 6.925,
+   "p1536_vs_o200k_tokens": -0.1484,
+   "lossless_p1536": "239/239",
+   "lossless_o200k": "239/239"
+  },
+  "ind-hi-fw2": {
+   "docs": 132,
+   "bytes": 754534,
+   "words": 58787,
+   "p1536_tokens": 88070,
+   "o200k_tokens": 92948,
+   "p1536_tokens_per_word": 1.498,
+   "o200k_tokens_per_word": 1.581,
+   "p1536_bytes_per_token": 8.567,
+   "o200k_bytes_per_token": 8.118,
+   "p1536_vs_o200k_tokens": -0.0525,
+   "lossless_p1536": "132/132",
+   "lossless_o200k": "132/132"
+  },
+  "ind-hi-hplt": {
+   "docs": 95,
+   "bytes": 777572,
+   "words": 60528,
+   "p1536_tokens": 92566,
+   "o200k_tokens": 98048,
+   "p1536_tokens_per_word": 1.529,
+   "o200k_tokens_per_word": 1.62,
+   "p1536_bytes_per_token": 8.4,
+   "o200k_bytes_per_token": 7.931,
+   "p1536_vs_o200k_tokens": -0.0559,
+   "lossless_p1536": "95/95",
+   "lossless_o200k": "95/95"
+  },
+  "ind-hi-indiccorp": {
+   "docs": 1094,
+   "bytes": 787772,
+   "words": 60883,
+   "p1536_tokens": 90325,
+   "o200k_tokens": 95932,
+   "p1536_tokens_per_word": 1.484,
+   "o200k_tokens_per_word": 1.576,
+   "p1536_bytes_per_token": 8.722,
+   "o200k_bytes_per_token": 8.212,
+   "p1536_vs_o200k_tokens": -0.0584,
+   "lossless_p1536": "1094/1094",
+   "lossless_o200k": "1094/1094"
+  },
+  "ind-hi-sangraha-s": {
+   "docs": 88,
+   "bytes": 778667,
+   "words": 59339,
+   "p1536_tokens": 98334,
+   "o200k_tokens": 104103,
+   "p1536_tokens_per_word": 1.657,
+   "o200k_tokens_per_word": 1.754,
+   "p1536_bytes_per_token": 7.919,
+   "o200k_bytes_per_token": 7.48,
+   "p1536_vs_o200k_tokens": -0.0554,
+   "lossless_p1536": "88/88",
+   "lossless_o200k": "88/88"
+  },
+  "ind-hi-sangraha-v": {
+   "docs": 122,
+   "bytes": 606388,
+   "words": 45958,
+   "p1536_tokens": 69620,
+   "o200k_tokens": 73945,
+   "p1536_tokens_per_word": 1.515,
+   "o200k_tokens_per_word": 1.609,
+   "p1536_bytes_per_token": 8.71,
+   "o200k_bytes_per_token": 8.201,
+   "p1536_vs_o200k_tokens": -0.0585,
+   "lossless_p1536": "122/122",
+   "lossless_o200k": "122/122"
+  },
+  "ind-kn-fw2": {
+   "docs": 82,
+   "bytes": 479062,
+   "words": 22187,
+   "p1536_tokens": 49730,
+   "o200k_tokens": 66366,
+   "p1536_tokens_per_word": 2.241,
+   "o200k_tokens_per_word": 2.991,
+   "p1536_bytes_per_token": 9.633,
+   "o200k_bytes_per_token": 7.218,
+   "p1536_vs_o200k_tokens": -0.2507,
+   "lossless_p1536": "82/82",
+   "lossless_o200k": "82/82"
+  },
+  "ind-kn-sangraha-s": {
+   "docs": 53,
+   "bytes": 423013,
+   "words": 18584,
+   "p1536_tokens": 49366,
+   "o200k_tokens": 63415,
+   "p1536_tokens_per_word": 2.656,
+   "o200k_tokens_per_word": 3.412,
+   "p1536_bytes_per_token": 8.569,
+   "o200k_bytes_per_token": 6.671,
+   "p1536_vs_o200k_tokens": -0.2215,
+   "lossless_p1536": "53/53",
+   "lossless_o200k": "53/53"
+  },
+  "ind-kn-sangraha-v": {
+   "docs": 89,
+   "bytes": 430674,
+   "words": 20059,
+   "p1536_tokens": 45877,
+   "o200k_tokens": 60743,
+   "p1536_tokens_per_word": 2.287,
+   "o200k_tokens_per_word": 3.028,
+   "p1536_bytes_per_token": 9.388,
+   "o200k_bytes_per_token": 7.09,
+   "p1536_vs_o200k_tokens": -0.2447,
+   "lossless_p1536": "89/89",
+   "lossless_o200k": "89/89"
+  },
+  "ind-ml-fw2": {
+   "docs": 185,
+   "bytes": 1174302,
+   "words": 45072,
+   "p1536_tokens": 115371,
+   "o200k_tokens": 148797,
+   "p1536_tokens_per_word": 2.56,
+   "o200k_tokens_per_word": 3.301,
+   "p1536_bytes_per_token": 10.178,
+   "o200k_bytes_per_token": 7.892,
+   "p1536_vs_o200k_tokens": -0.2246,
+   "lossless_p1536": "185/185",
+   "lossless_o200k": "185/185"
+  },
+  "ind-mr-fw2": {
+   "docs": 95,
+   "bytes": 491167,
+   "words": 27386,
+   "p1536_tokens": 51938,
+   "o200k_tokens": 68280,
+   "p1536_tokens_per_word": 1.897,
+   "o200k_tokens_per_word": 2.493,
+   "p1536_bytes_per_token": 9.457,
+   "o200k_bytes_per_token": 7.193,
+   "p1536_vs_o200k_tokens": -0.2393,
+   "lossless_p1536": "95/95",
+   "lossless_o200k": "95/95"
+  },
+  "ind-mr-sangraha-v": {
+   "docs": 127,
+   "bytes": 740318,
+   "words": 40804,
+   "p1536_tokens": 77876,
+   "o200k_tokens": 102967,
+   "p1536_tokens_per_word": 1.909,
+   "o200k_tokens_per_word": 2.523,
+   "p1536_bytes_per_token": 9.506,
+   "o200k_bytes_per_token": 7.19,
+   "p1536_vs_o200k_tokens": -0.2437,
+   "lossless_p1536": "127/127",
+   "lossless_o200k": "127/127"
+  },
+  "ind-or-fw2": {
+   "docs": 328,
+   "bytes": 1265224,
+   "words": 72340,
+   "p1536_tokens": 141044,
+   "o200k_tokens": 467299,
+   "p1536_tokens_per_word": 1.95,
+   "o200k_tokens_per_word": 6.46,
+   "p1536_bytes_per_token": 8.97,
+   "o200k_bytes_per_token": 2.708,
+   "p1536_vs_o200k_tokens": -0.6982,
+   "lossless_p1536": "328/328",
+   "lossless_o200k": "328/328"
+  },
+  "ind-sa-fw2": {
+   "docs": 55,
+   "bytes": 766547,
+   "words": 36748,
+   "p1536_tokens": 126934,
+   "o200k_tokens": 136972,
+   "p1536_tokens_per_word": 3.454,
+   "o200k_tokens_per_word": 3.727,
+   "p1536_bytes_per_token": 6.039,
+   "o200k_bytes_per_token": 5.596,
+   "p1536_vs_o200k_tokens": -0.0733,
+   "lossless_p1536": "55/55",
+   "lossless_o200k": "55/55"
+  },
+  "ind-ta-fw2": {
+   "docs": 58,
+   "bytes": 373897,
+   "words": 15370,
+   "p1536_tokens": 35819,
+   "o200k_tokens": 47887,
+   "p1536_tokens_per_word": 2.33,
+   "o200k_tokens_per_word": 3.116,
+   "p1536_bytes_per_token": 10.439,
+   "o200k_bytes_per_token": 7.808,
+   "p1536_vs_o200k_tokens": -0.252,
+   "lossless_p1536": "58/58",
+   "lossless_o200k": "58/58"
+  },
+  "ind-ta-sangraha-s": {
+   "docs": 36,
+   "bytes": 590351,
+   "words": 24271,
+   "p1536_tokens": 59543,
+   "o200k_tokens": 78386,
+   "p1536_tokens_per_word": 2.453,
+   "o200k_tokens_per_word": 3.23,
+   "p1536_bytes_per_token": 9.915,
+   "o200k_bytes_per_token": 7.531,
+   "p1536_vs_o200k_tokens": -0.2404,
+   "lossless_p1536": "36/36",
+   "lossless_o200k": "36/36"
+  },
+  "ind-ta-sangraha-v": {
+   "docs": 65,
+   "bytes": 424191,
+   "words": 17889,
+   "p1536_tokens": 41229,
+   "o200k_tokens": 54686,
+   "p1536_tokens_per_word": 2.305,
+   "o200k_tokens_per_word": 3.057,
+   "p1536_bytes_per_token": 10.289,
+   "o200k_bytes_per_token": 7.757,
+   "p1536_vs_o200k_tokens": -0.2461,
+   "lossless_p1536": "65/65",
+   "lossless_o200k": "65/65"
+  },
+  "ind-te-fw2": {
+   "docs": 59,
+   "bytes": 382539,
+   "words": 18578,
+   "p1536_tokens": 42678,
+   "o200k_tokens": 55809,
+   "p1536_tokens_per_word": 2.297,
+   "o200k_tokens_per_word": 3.004,
+   "p1536_bytes_per_token": 8.963,
+   "o200k_bytes_per_token": 6.854,
+   "p1536_vs_o200k_tokens": -0.2353,
+   "lossless_p1536": "59/59",
+   "lossless_o200k": "59/59"
+  },
+  "ind-te-sangraha-s": {
+   "docs": 47,
+   "bytes": 280086,
+   "words": 14018,
+   "p1536_tokens": 34558,
+   "o200k_tokens": 44003,
+   "p1536_tokens_per_word": 2.465,
+   "o200k_tokens_per_word": 3.139,
+   "p1536_bytes_per_token": 8.105,
+   "o200k_bytes_per_token": 6.365,
+   "p1536_vs_o200k_tokens": -0.2146,
+   "lossless_p1536": "47/47",
+   "lossless_o200k": "47/47"
+  },
+  "ind-te-sangraha-v": {
+   "docs": 83,
+   "bytes": 405811,
+   "words": 19250,
+   "p1536_tokens": 46816,
+   "o200k_tokens": 60496,
+   "p1536_tokens_per_word": 2.432,
+   "o200k_tokens_per_word": 3.143,
+   "p1536_bytes_per_token": 8.668,
+   "o200k_bytes_per_token": 6.708,
+   "p1536_vs_o200k_tokens": -0.2261,
+   "lossless_p1536": "83/83",
+   "lossless_o200k": "83/83"
+  },
+  "math-finemath": {
+   "docs": 312,
+   "bytes": 1483525,
+   "words": 249070,
+   "p1536_tokens": 433375,
+   "o200k_tokens": 413732,
+   "p1536_tokens_per_word": 1.74,
+   "o200k_tokens_per_word": 1.661,
+   "p1536_bytes_per_token": 3.423,
+   "o200k_bytes_per_token": 3.586,
+   "p1536_vs_o200k_tokens": 0.0475,
+   "lossless_p1536": "312/312",
+   "lossless_o200k": "312/312"
+  },
+  "math-megamath": {
+   "docs": 169,
+   "bytes": 1139759,
+   "words": 188240,
+   "p1536_tokens": 278116,
+   "o200k_tokens": 274134,
+   "p1536_tokens_per_word": 1.477,
+   "o200k_tokens_per_word": 1.456,
+   "p1536_bytes_per_token": 4.098,
+   "o200k_bytes_per_token": 4.158,
+   "p1536_vs_o200k_tokens": 0.0145,
+   "lossless_p1536": "169/169",
+   "lossless_o200k": "169/169"
+  },
+  "sci-finepdfs": {
+   "docs": 63,
+   "bytes": 851970,
+   "words": 137261,
+   "p1536_tokens": 201501,
+   "o200k_tokens": 198743,
+   "p1536_tokens_per_word": 1.468,
+   "o200k_tokens_per_word": 1.448,
+   "p1536_bytes_per_token": 4.228,
+   "o200k_bytes_per_token": 4.287,
+   "p1536_vs_o200k_tokens": 0.0139,
+   "lossless_p1536": "63/63",
+   "lossless_o200k": "63/63"
+  }
+ },
+ "groups": {
+  "Hi": {
+   "docs": 3621,
+   "bytes": 2000019,
+   "words": 158691,
+   "p1536_tokens": 235702,
+   "o200k_tokens": 248720,
+   "p1536_tokens_per_word": 1.485,
+   "o200k_tokens_per_word": 1.567,
+   "p1536_bytes_per_token": 8.485,
+   "o200k_bytes_per_token": 8.041,
+   "p1536_vs_o200k_tokens": -0.0523,
+   "lossless_p1536": "3621/3621",
+   "lossless_o200k": "3621/3621",
+   "most_split": [
+    {
+     "word": "मैन्युफैक्चरिंग",
+     "pieces": 7,
+     "count": 3,
+     "split": "म·ैन·्य·ुफ·ैक·्चर·िंग"
+    },
+    {
+     "word": "ट्राइग्लिसराइड",
+     "pieces": 7,
+     "count": 2,
+     "split": "ट्र·ाइ·ग·्ल·िस·र·ाइड"
+    },
+    {
+     "word": "हाइपोएलर्जेनिक",
+     "pieces": 7,
+     "count": 2,
+     "split": "ह·ाइ·पो·एल·र्ज·ेन·िक"
+    },
+    {
+     "word": "लाउडस्पीकर",
+     "pieces": 6,
+     "count": 7,
+     "split": "ल·ाउ·ड·स्प·ी·कर"
+    },
+    {
+     "word": "एन्क्रिप्शन",
+     "pieces": 6,
+     "count": 4,
+     "split": "ए·न्क·क·्र·िप·्शन"
+    },
+    {
+     "word": "तीव्रसम्पीड़न",
+     "pieces": 6,
+     "count": 4,
+     "split": "तीव्र·सम·्प·ी·ड़·न"
+    },
+    {
+     "word": "तुप्परीहल्ल",
+     "pieces": 6,
+     "count": 4,
+     "split": "त·ुप·्प·री·ह·ल्ल"
+    },
+    {
+     "word": "हाइड्रोइलेक्ट्रिक",
+     "pieces": 6,
+     "count": 4,
+     "split": "ह·ाइड·्रो·इ·लेक्ट्र·िक"
+    },
+    {
+     "word": "न्यूरोलॉजिस्ट",
+     "pieces": 6,
+     "count": 3,
+     "split": "न्य·ूर·ोल·ॉ·ज·िस्ट"
+    },
+    {
+     "word": "मैनुफैक्चरिंग",
+     "pieces": 6,
+     "count": 3,
+     "split": "म·ैन·ुफ·ैक·्चर·िंग"
+    },
+    {
+     "word": "एंटीसेप्टिक",
+     "pieces": 6,
+     "count": 2,
+     "split": "ए·ंटी·से·प·्ट·िक"
+    },
+    {
+     "word": "ऑटोबायोग्राफ",
+     "pieces": 6,
+     "count": 2,
+     "split": "ऑ·ट·ोब·ाय·ोग्र·ाफ"
+    },
+    {
+     "word": "कन्फ्यूशियस",
+     "pieces": 6,
+     "count": 2,
+     "split": "क·न्फ·्यू·श·िय·स"
+    },
+    {
+     "word": "कार्बोहाइड्रेट",
+     "pieces": 6,
+     "count": 2,
+     "split": "कार·्ब·ोह·ाइड·्र·ेट"
+    },
+    {
+     "word": "कैलीफोर्निय",
+     "pieces": 6,
+     "count": 2,
+     "split": "कै·ली·फ·ो·र्न·िय"
+    },
+    {
+     "word": "गोरबामटिहान",
+     "pieces": 6,
+     "count": 2,
+     "split": "गोर·ब·ाम·ट·िह·ान"
+    },
+    {
+     "word": "चूनापत्थर",
+     "pieces": 6,
+     "count": 2,
+     "split": "च·ून·ाप·त·्थ·र"
+    },
+    {
+     "word": "थ्रोम्बोलिसिस",
+     "pieces": 6,
+     "count": 2,
+     "split": "थ·्रो·म्ब·ोल·िस·िस"
+    },
+    {
+     "word": "प्रिस्क्रिप्शन",
+     "pieces": 6,
+     "count": 2,
+     "split": "प्र·िस·्क·्र·िप·्शन"
+    },
+    {
+     "word": "मुजफ्फरनगर",
+     "pieces": 6,
+     "count": 2,
+     "split": "मु·ज·फ·्फ·र·नगर"
+    }
+   ]
+  },
+  "Mr": {
+   "docs": 2876,
+   "bytes": 2004523,
+   "words": 113152,
+   "p1536_tokens": 213122,
+   "o200k_tokens": 280091,
+   "p1536_tokens_per_word": 1.884,
+   "o200k_tokens_per_word": 2.475,
+   "p1536_bytes_per_token": 9.406,
+   "o200k_bytes_per_token": 7.157,
+   "p1536_vs_o200k_tokens": -0.2391,
+   "lossless_p1536": "2876/2876",
+   "lossless_o200k": "2876/2876",
+   "most_split": [
+    {
+     "word": "बुद्धीप्रामाण्यवाद्यांन",
+     "pieces": 9,
+     "count": 2,
+     "split": "बुद्ध·ी·प्र·ाम·ाण·्य·वाद·्यां·न"
+    },
+    {
+     "word": "ब्रॉडबॅण्डच्य",
+     "pieces": 8,
+     "count": 2,
+     "split": "ब्र·ॉ·ड·ब·ॅ·ण्ड·च·्य"
+    },
+    {
+     "word": "बुद्धीप्रामाण्यवाद",
+     "pieces": 7,
+     "count": 5,
+     "split": "बुद्ध·ी·प्र·ाम·ाण·्य·वाद"
+    },
+    {
+     "word": "होमोसेक्शुअलिट",
+     "pieces": 7,
+     "count": 3,
+     "split": "हो·मो·से·क·्श·ुअल·िट"
+    },
+    {
+     "word": "अंडरग्रेजुएट",
+     "pieces": 7,
+     "count": 2,
+     "split": "अ·ंड·र·ग्र·ेज·ुए·ट"
+    },
+    {
+     "word": "आर्टीफिशीअल",
+     "pieces": 7,
+     "count": 2,
+     "split": "आर्ट·ी·फ·िश·ी·अ·ल"
+    },
+    {
+     "word": "इन्फ्रास्ट्रक्चर",
+     "pieces": 7,
+     "count": 2,
+     "split": "इ·न्फ·्र·ास·्ट्र·क·्चर"
+    },
+    {
+     "word": "उर्ध्वश्रेणीकरण",
+     "pieces": 7,
+     "count": 2,
+     "split": "उ·र्ध·्व·श्र·े·णी·करण"
+    },
+    {
+     "word": "कर्मसंन्यासापेक्ष",
+     "pieces": 7,
+     "count": 2,
+     "split": "कर्म·सं·न·्यास·ाप·े·क्ष"
+    },
+    {
+     "word": "ढवळाढवळीमुळ",
+     "pieces": 7,
+     "count": 2,
+     "split": "ढ·वळ·ाढ·व·ळी·म·ुळ"
+    },
+    {
+     "word": "ब्रॉडबॅण्डच",
+     "pieces": 7,
+     "count": 2,
+     "split": "ब्र·ॉ·ड·ब·ॅ·ण्ड·च"
+    },
+    {
+     "word": "मनुस्मृतिविहित",
+     "pieces": 7,
+     "count": 2,
+     "split": "मन·ुस·्म·ृत·िव·िह·ित"
+    },
+    {
+     "word": "लिव्हरपूलसाठ",
+     "pieces": 7,
+     "count": 2,
+     "split": "ल·िव्ह·र·प·ूल·स·ाठ"
+    },
+    {
+     "word": "संमिश्रणामुळ",
+     "pieces": 7,
+     "count": 2,
+     "split": "सं·म·िश·्र·ण·ाम·ुळ"
+    },
+    {
+     "word": "संमेलनाच्यानिमित्तान",
+     "pieces": 7,
+     "count": 2,
+     "split": "सं·मेल·न·ाच·्यान·िमित्त·ान"
+    },
+    {
+     "word": "सुधीरभाऊंनाच",
+     "pieces": 7,
+     "count": 2,
+     "split": "सुध·ीर·भ·ाऊ·ं·न·ाच"
+    },
+    {
+     "word": "ग्लॅशियरच्य",
+     "pieces": 6,
+     "count": 5,
+     "split": "ग्ल·ॅ·श·ियर·च·्य"
+    },
+    {
+     "word": "फ्युनिक्युलर",
+     "pieces": 6,
+     "count": 4,
+     "split": "फ·्य·ुनिक·्य·ुल·र"
+    },
+    {
+     "word": "वाङ्मयजगत",
+     "pieces": 6,
+     "count": 4,
+     "split": "व·ाङ·्म·य·ज·गत"
+    },
+    {
+     "word": "तेंडुलकरच्य",
+     "pieces": 6,
+     "count": 3,
+     "split": "त·ेंड·ुल·कर·च·्य"
+    }
+   ]
+  },
+  "Bn": {
+   "docs": 3309,
+   "bytes": 1998057,
+   "words": 116378,
+   "p1536_tokens": 230505,
+   "o200k_tokens": 265644,
+   "p1536_tokens_per_word": 1.981,
+   "o200k_tokens_per_word": 2.283,
+   "p1536_bytes_per_token": 8.668,
+   "o200k_bytes_per_token": 7.522,
+   "p1536_vs_o200k_tokens": -0.1323,
+   "lossless_p1536": "3309/3309",
+   "lossless_o200k": "3309/3309",
+   "most_split": [
+    {
+     "word": "প্রতিদ্বন্দ্বিতায",
+     "pieces": 7,
+     "count": 6,
+     "split": "প্রত·িদ·্ব·ন্দ·্ব·িত·ায"
+    },
+    {
+     "word": "ল্যাবরেটরিত",
+     "pieces": 7,
+     "count": 4,
+     "split": "ল·্য·াব·র·েট·র·িত"
+    },
+    {
+     "word": "আইনশৃঙ্খলাবাহিনীর",
+     "pieces": 7,
+     "count": 3,
+     "split": "আইন·শ·ৃ·ঙ্খ·ল·াবাহ·িনীর"
+    },
+    {
+     "word": "গার্লফ্রেন্ডের",
+     "pieces": 7,
+     "count": 3,
+     "split": "গ·ার·্ল·ফ·্র·েন্ড·ের"
+    },
+    {
+     "word": "জিসিএইচকিউ",
+     "pieces": 7,
+     "count": 3,
+     "split": "জ·িস·িএ·ই·চ·ক·িউ"
+    },
+    {
+     "word": "الْأَرْض",
+     "pieces": 7,
+     "count": 2,
+     "split": "ال·ْ·أ·َ·ر·ْ·ض"
+    },
+    {
+     "word": "আনফরচুনেটল",
+     "pieces": 7,
+     "count": 2,
+     "split": "আন·ফ·র·চ·ুন·েট·ল"
+    },
+    {
+     "word": "ইউনিভাসিির্টর",
+     "pieces": 7,
+     "count": 2,
+     "split": "ইউন·িভ·াস·ি·ির·্ট·র"
+    },
+    {
+     "word": "ইনস্টিটিউটগুলোতেও",
+     "pieces": 7,
+     "count": 2,
+     "split": "ইন·স্ট·িট·িউট·গুলো·ত·েও"
+    },
+    {
+     "word": "জ্যোতিষশাস্ত্রের",
+     "pieces": 7,
+     "count": 2,
+     "split": "জ্য·োত·িষ·শ·াস্ত·্র·ের"
+    },
+    {
+     "word": "প্রামাণ্যচলচ্চিত্র",
+     "pieces": 7,
+     "count": 2,
+     "split": "প্র·াম·াণ·্য·চল·চ্চ·িত্র"
+    },
+    {
+     "word": "ব্রাহ্মণবাড়িয়ার",
+     "pieces": 7,
+     "count": 2,
+     "split": "ব্র·াহ·্ম·ণ·ব·াড়·িয়ার"
+    },
+    {
+     "word": "রাণীশংকৈল",
+     "pieces": 7,
+     "count": 2,
+     "split": "র·াণ·ী·শ·ং·কৈ·ল"
+    },
+    {
+     "word": "শ্লীলতাহানির",
+     "pieces": 7,
+     "count": 2,
+     "split": "শ·্ল·ীল·ত·াহ·ান·ির"
+    },
+    {
+     "word": "করোনাভাইরাস",
+     "pieces": 6,
+     "count": 11,
+     "split": "কর·োন·াভ·াই·র·াস"
+    },
+    {
+     "word": "বন্দ্যোপাধ্যায",
+     "pieces": 6,
+     "count": 8,
+     "split": "বন্দ·্য·োপ·াধ·্য·ায"
+    },
+    {
+     "word": "যন্ত্রকৌশল",
+     "pieces": 6,
+     "count": 8,
+     "split": "য·ন্ত্র·ক·ৌ·শ·ল"
+    },
+    {
+     "word": "করোনাভাইরাসের",
+     "pieces": 6,
+     "count": 6,
+     "split": "কর·োন·াভ·াই·র·াসের"
+    },
+    {
+     "word": "ময়নাতদন্তের",
+     "pieces": 6,
+     "count": 6,
+     "split": "ম·়ন·াত·দ·ন্ত·ের"
+    },
+    {
+     "word": "স্বল্পদৈর্ঘ্য",
+     "pieces": 6,
+     "count": 6,
+     "split": "স্ব·ল্প·দ·ৈ·র্ঘ·্য"
+    }
+   ]
+  },
+  "As": {
+   "docs": 3471,
+   "bytes": 1996813,
+   "words": 118174,
+   "p1536_tokens": 237619,
+   "o200k_tokens": 312956,
+   "p1536_tokens_per_word": 2.011,
+   "o200k_tokens_per_word": 2.648,
+   "p1536_bytes_per_token": 8.403,
+   "o200k_bytes_per_token": 6.38,
+   "p1536_vs_o200k_tokens": -0.2407,
+   "lossless_p1536": "3471/3471",
+   "lossless_o200k": "3471/3471",
+   "most_split": [
+    {
+     "word": "চেম্পিয়নশ্বিপত",
+     "pieces": 8,
+     "count": 2,
+     "split": "চ·েম·্প·িয়ন·শ·্ব·িপ·ত"
+    },
+    {
+     "word": "এনকেফেলাইটিছৰ",
+     "pieces": 7,
+     "count": 3,
+     "split": "এন·ক·েফ·েল·াইট·িছ·ৰ"
+    },
+    {
+     "word": "ইব্ৰাহিমপট্ট",
+     "pieces": 7,
+     "count": 2,
+     "split": "ই·ব·্ৰ·াহ·িম·প·ট্ট"
+    },
+    {
+     "word": "চিআৰপিএফৰ",
+     "pieces": 7,
+     "count": 2,
+     "split": "চ·িআ·ৰ·প·িএ·ফ·ৰ"
+    },
+    {
+     "word": "ডেল্টামেথ্ৰিন",
+     "pieces": 7,
+     "count": 2,
+     "split": "ড·েল·্ট·াম·েথ·্ৰ·িন"
+    },
+    {
+     "word": "তিৰুচিৰাপল্লীৰ",
+     "pieces": 7,
+     "count": 2,
+     "split": "ত·িৰ·ুচ·িৰ·াপ·ল্ল·ীৰ"
+    },
+    {
+     "word": "ব্ৰাহ্মমুহুৰ্ত",
+     "pieces": 7,
+     "count": 2,
+     "split": "ব্ৰ·াহ·্ম·ম·ুহ·ুৰ·্ত"
+    },
+    {
+     "word": "যিৰূচালেমৰ",
+     "pieces": 7,
+     "count": 2,
+     "split": "য·িৰ·ূ·চ·াল·েম·ৰ"
+    },
+    {
+     "word": "আন্তঃৰাষ্ট্ৰীয",
+     "pieces": 6,
+     "count": 19,
+     "split": "আন্ত·ঃ·ৰ·াষ্ট·্ৰী·য"
+    },
+    {
+     "word": "প্ৰধানমন্ত্ৰীগৰাকীয",
+     "pieces": 6,
+     "count": 14,
+     "split": "প্ৰধান·ম·ন্ত্ৰ·ীগ·ৰাকী·য"
+    },
+    {
+     "word": "এথলেটিকচ",
+     "pieces": 6,
+     "count": 9,
+     "split": "এ·থ·ল·েট·িক·চ"
+    },
+    {
+     "word": "ফটাঢোলৰ",
+     "pieces": 6,
+     "count": 7,
+     "split": "ফ·ট·াঢ·ঢ·োল·ৰ"
+    },
+    {
+     "word": "ডিষ্ট্ৰীবিউটৰ",
+     "pieces": 6,
+     "count": 5,
+     "split": "ড·িষ্ট·্ৰ·ীব·িউট·ৰ"
+    },
+    {
+     "word": "নিৰাপত্তাৰক্ষীৰ",
+     "pieces": 6,
+     "count": 5,
+     "split": "নিৰ·াপ·ত্ত·াৰ·ক্ষ·ীৰ"
+    },
+    {
+     "word": "হৰ্ষবৰ্দ্ধন",
+     "pieces": 6,
+     "count": 5,
+     "split": "হৰ·্ষ·বৰ·্দ·্ধ·ন"
+    },
+    {
+     "word": "ভাস্কৰজ্যোত",
+     "pieces": 6,
+     "count": 4,
+     "split": "ভাস·্ক·ৰ·জ·্য·োত"
+    },
+    {
+     "word": "মেথাম্ফেটামিন",
+     "pieces": 6,
+     "count": 4,
+     "split": "মেথ·থ·াম·্ফ·েট·ামিন"
+    },
+    {
+     "word": "আল্ট্ৰাচাউণ্ড",
+     "pieces": 6,
+     "count": 3,
+     "split": "আল·্ট·্ৰ·াচ·াউ·ণ্ড"
+    },
+    {
+     "word": "ইণ্টাৰনেচনেল",
+     "pieces": 6,
+     "count": 3,
+     "split": "ই·ণ্ট·াৰ·ন·েচন·েল"
+    },
+    {
+     "word": "ইনফেনট্ৰিৰ",
+     "pieces": 6,
+     "count": 3,
+     "split": "ইন·ফ·েন·ট·্ৰ·িৰ"
+    }
+   ]
+  },
+  "Ta": {
+   "docs": 3463,
+   "bytes": 2004779,
+   "words": 83300,
+   "p1536_tokens": 189947,
+   "o200k_tokens": 256119,
+   "p1536_tokens_per_word": 2.28,
+   "o200k_tokens_per_word": 3.075,
+   "p1536_bytes_per_token": 10.554,
+   "o200k_bytes_per_token": 7.828,
+   "p1536_vs_o200k_tokens": -0.2584,
+   "lossless_p1536": "3463/3463",
+   "lossless_o200k": "3463/3463",
+   "most_split": [
+    {
+     "word": "ஆஆஆஆஆஆஆஆஆஆ",
+     "pieces": 10,
+     "count": 3,
+     "split": "ஆ·ஆ·ஆ·ஆ·ஆ·ஆ·ஆ·ஆ·ஆ·ஆ"
+    },
+    {
+     "word": "வலயக்கல்விப்பணிப்பாளர",
+     "pieces": 9,
+     "count": 2,
+     "split": "வல·ய·க்க·ல்வ·ிப்ப·ண·ிப்ப·ாள·ர"
+    },
+    {
+     "word": "ஆஆஆஆஆஆஆஆ",
+     "pieces": 8,
+     "count": 3,
+     "split": "ஆ·ஆ·ஆ·ஆ·ஆ·ஆ·ஆ·ஆ"
+    },
+    {
+     "word": "மூர்ஷிதாபாத்திற்குத",
+     "pieces": 8,
+     "count": 2,
+     "split": "மூ·ர·்ஷ·ித·ாப·ாத்த·ிற்க·ுத"
+    },
+    {
+     "word": "மைத்திரிபாலமேலும",
+     "pieces": 8,
+     "count": 2,
+     "split": "ம·ைத்த·ிர·ிப·ால·மே·ல·ும"
+    },
+    {
+     "word": "ஆஆஆஆஆஆஆ",
+     "pieces": 7,
+     "count": 3,
+     "split": "ஆ·ஆ·ஆ·ஆ·ஆ·ஆ·ஆ"
+    },
+    {
+     "word": "மாற்றுமருத்துவமுறைகள",
+     "pieces": 7,
+     "count": 3,
+     "split": "மாற்ற·ும·ர·ுத்துவ·ம·ுற·ைகள"
+    },
+    {
+     "word": "விழிப்புஉணர்வுப",
+     "pieces": 7,
+     "count": 3,
+     "split": "விழ·ிப்ப·ுஉ·உ·ண·ர்வ·ுப"
+    },
+    {
+     "word": "அவலோகிதேஷ்வரர",
+     "pieces": 7,
+     "count": 2,
+     "split": "அவ·ல·ோக·ித·ேஷ·்வர·ர"
+    },
+    {
+     "word": "ஆஸ்திரேலியாவின",
+     "pieces": 7,
+     "count": 2,
+     "split": "ஆ·ஸ்த·ிர·ேல·ிய·ாவ·ின"
+    },
+    {
+     "word": "உடைமையுரிமைகளின",
+     "pieces": 7,
+     "count": 2,
+     "split": "உட·ைம·ைய·ுர·ிம·ைகள·ின"
+    },
+    {
+     "word": "ஓலைச்சுவடிகளைச",
+     "pieces": 7,
+     "count": 2,
+     "split": "ஓ·லை·ச்ச·ுவ·ட·ிகளை·ச"
+    },
+    {
+     "word": "சண்முகசுந்தரம",
+     "pieces": 7,
+     "count": 2,
+     "split": "ச·ண்ம·ுக·ச·ுந்த·ர·ம"
+    },
+    {
+     "word": "சநதேகத்திற்கிடமாக",
+     "pieces": 7,
+     "count": 2,
+     "split": "ச·ந·தே·க·த்திற்க·ிட·மாக"
+    },
+    {
+     "word": "சென்ரிமீற்றர",
+     "pieces": 7,
+     "count": 2,
+     "split": "செ·ன·்ர·ிம·ீ·ற்ற·ர"
+    },
+    {
+     "word": "திருடப்பட்டிருப்பதாகவும",
+     "pieces": 7,
+     "count": 2,
+     "split": "திர·ுட·ப்பட்ட·ிருப்ப·தாக·வ·ும"
+    },
+    {
+     "word": "தில்லைவாழந்தணர்கள",
+     "pieces": 7,
+     "count": 2,
+     "split": "த·ில்ல·ைவ·ாழ·ந்த·ண·ர்கள"
+    },
+    {
+     "word": "பலவீனமடைகின்றன",
+     "pieces": 7,
+     "count": 2,
+     "split": "பல·வ·ீன·ம·ட·ைக·ின்றன"
+    },
+    {
+     "word": "புலம்பெயர்வோரையும",
+     "pieces": 7,
+     "count": 2,
+     "split": "புல·ம்ப·ெய·ர்வ·ோர·ைய·ும"
+    },
+    {
+     "word": "மகாபரிநிர்வாண",
+     "pieces": 7,
+     "count": 2,
+     "split": "மக·ாப·ர·ிந·ிர·்வ·ாண"
+    }
+   ]
+  },
+  "Te": {
+   "docs": 3207,
+   "bytes": 2000969,
+   "words": 96459,
+   "p1536_tokens": 225714,
+   "o200k_tokens": 296535,
+   "p1536_tokens_per_word": 2.34,
+   "o200k_tokens_per_word": 3.074,
+   "p1536_bytes_per_token": 8.865,
+   "o200k_bytes_per_token": 6.748,
+   "p1536_vs_o200k_tokens": -0.2388,
+   "lossless_p1536": "3207/3207",
+   "lossless_o200k": "3207/3207",
+   "most_split": [
+    {
+     "word": "కార్బోహైడ్రేట్ల",
+     "pieces": 8,
+     "count": 2,
+     "split": "కార·్బ·ోహ·ై·డ·్ర·ేట·్ల"
+    },
+    {
+     "word": "సంజీవరాయశర్మ",
+     "pieces": 7,
+     "count": 9,
+     "split": "సంజ·జ·ీవ·ర·ాయ·శ·ర్మ"
+    },
+    {
+     "word": "కాందీశీకుల",
+     "pieces": 7,
+     "count": 4,
+     "split": "క·ాంద·ద·ీ·శ·ీక·ుల"
+    },
+    {
+     "word": "అవిద్యుద్వాహక",
+     "pieces": 7,
+     "count": 3,
+     "split": "అవ·ిద·్య·ుద·్వ·ాహ·క"
+    },
+    {
+     "word": "మూత్రపిండాలక",
+     "pieces": 7,
+     "count": 3,
+     "split": "మూత·త·్ర·ప·ిండ·ాల·క"
+    },
+    {
+     "word": "మూత్రపిండాలల",
+     "pieces": 7,
+     "count": 3,
+     "split": "మూత·త·్ర·ప·ిండ·ాల·ల"
+    },
+    {
+     "word": "శకుంతలాదేవ",
+     "pieces": 7,
+     "count": 3,
+     "split": "శ·క·ుంత·త·ల·ాద·ేవ"
+    },
+    {
+     "word": "సీఎస్ఐఆర",
+     "pieces": 7,
+     "count": 3,
+     "split": "స·ీఎ·స·్ఐ·ఐ·ఆ·ర"
+    },
+    {
+     "word": "అనువాదఉపకరణాల",
+     "pieces": 7,
+     "count": 2,
+     "split": "అనువ·ాద·ఉ·ప·క·రణ·ాల"
+    },
+    {
+     "word": "క్రిష్ణాచార్యులవార",
+     "pieces": 7,
+     "count": 2,
+     "split": "క్ర·ిష·్ణ·ాచ·ార్య·ుల·వార"
+    },
+    {
+     "word": "పుచ్చుకొనవలెనన",
+     "pieces": 7,
+     "count": 2,
+     "split": "ప·ుచ్చ·ుకొ·నవ·ల·ెన·న"
+    },
+    {
+     "word": "ప్రిస్క్రిప్షన",
+     "pieces": 7,
+     "count": 2,
+     "split": "ప్ర·ిస·్క·్ర·ిప·్ష·న"
+    },
+    {
+     "word": "లబ్ధిదారులక",
+     "pieces": 7,
+     "count": 2,
+     "split": "ల·బ·్ధ·ిద·ార·ుల·క"
+    },
+    {
+     "word": "శస్త్రచికిత్సల",
+     "pieces": 7,
+     "count": 2,
+     "split": "శ·స్త·్ర·చ·ిక·ిత్స·ల"
+    },
+    {
+     "word": "సరైందికాదన్నార",
+     "pieces": 7,
+     "count": 2,
+     "split": "సర·ై·ంద·ిక·ాద·న్న·ార"
+    },
+    {
+     "word": "మూత్రపిండాల",
+     "pieces": 6,
+     "count": 18,
+     "split": "మూత·త·్ర·ప·ిండ·ాల"
+    },
+    {
+     "word": "నెట్ఫ్లిక్స్ల",
+     "pieces": 6,
+     "count": 15,
+     "split": "నెట·్ఫ·్ల·ిక·్స·్ల"
+    },
+    {
+     "word": "టిఆర్ఎస",
+     "pieces": 6,
+     "count": 11,
+     "split": "ట·ిఆ·ఆ·ర్ఎ·ఎ·స"
+    },
+    {
+     "word": "మైక్రోసాఫ్ట",
+     "pieces": 6,
+     "count": 9,
+     "split": "మ·ైక·్రో·స·ాఫ·్ట"
+    },
+    {
+     "word": "LakshmiKataksham",
+     "pieces": 6,
+     "count": 7,
+     "split": "Lak·shmi·Kat·ak·sh·am"
+    }
+   ]
+  },
+  "Kn": {
+   "docs": 3582,
+   "bytes": 1997670,
+   "words": 91785,
+   "p1536_tokens": 215762,
+   "o200k_tokens": 284441,
+   "p1536_tokens_per_word": 2.351,
+   "o200k_tokens_per_word": 3.099,
+   "p1536_bytes_per_token": 9.259,
+   "o200k_bytes_per_token": 7.023,
+   "p1536_vs_o200k_tokens": -0.2415,
+   "lossless_p1536": "3582/3582",
+   "lossless_o200k": "3582/3582",
+   "most_split": [
+    {
+     "word": "ಉರಿಲಿಂಗಪೆದ್ದಿಗಳರಸ",
+     "pieces": 10,
+     "count": 2,
+     "split": "ಉ·ರ·ಿಲ·ಿಂಗ·ಪ·ೆ·ದ್ದ·ಿಗಳ·ರ·ಸ"
+    },
+    {
+     "word": "ಚಾಂಪಿಯನ್ಶಿಪ್ನಲ್ಲ",
+     "pieces": 9,
+     "count": 5,
+     "split": "ಚ·ಾಂ·ಪ·ಿಯ·ನ·್ಶ·ಿಪ·್ನ·ಲ್ಲ"
+    },
+    {
+     "word": "ಡಯಾಸ್ಪೊರಾವನ್ನ",
+     "pieces": 8,
+     "count": 11,
+     "split": "ಡ·ಯ·ಾಸ·್ಪ·ೊ·ರ·ಾವ·ನ್ನ"
+    },
+    {
+     "word": "ಡಯಾಸ್ಪೊರಾಕ್ಕ",
+     "pieces": 8,
+     "count": 7,
+     "split": "ಡ·ಯ·ಾಸ·್ಪ·ೊ·ರ·ಾಕ·್ಕ"
+    },
+    {
+     "word": "ಡಯಾಸ್ಪೊರಿಗರಲ್ಲ",
+     "pieces": 8,
+     "count": 3,
+     "split": "ಡ·ಯ·ಾಸ·್ಪ·ೊ·ರ·ಿಗರ·ಲ್ಲ"
+    },
+    {
+     "word": "ಡಯಾಸ್ಪೊರಿಗರಿಗ",
+     "pieces": 8,
+     "count": 3,
+     "split": "ಡ·ಯ·ಾಸ·್ಪ·ೊ·ರ·ಿಗರ·ಿಗ"
+    },
+    {
+     "word": "ಚಾಂಪಿಯನ್ಶಿಪ್ಗ",
+     "pieces": 8,
+     "count": 2,
+     "split": "ಚ·ಾಂ·ಪ·ಿಯ·ನ·್ಶ·ಿಪ·್ಗ"
+    },
+    {
+     "word": "ಪಿಳ್ಳೈಲೋಕಾಚಾರ್ಯರ",
+     "pieces": 8,
+     "count": 2,
+     "split": "ಪ·ಿಳ·್ಳ·ೈಲ·ೋಕ·ಾಚಾರ·್ಯ·ರ"
+    },
+    {
+     "word": "ಪ್ಯರಬೊಲಾಯಿಡ",
+     "pieces": 8,
+     "count": 2,
+     "split": "ಪ·್ಯ·ರ·ಬ·ೊ·ಲ·ಾಯ·ಿಡ"
+    },
+    {
+     "word": "ಶ್ವೇತದ್ವೀಪವಾಸಿಗಳ",
+     "pieces": 8,
+     "count": 2,
+     "split": "ಶ·್ವ·ೇತ·ದ·್ವ·ೀಪ·ವಾಸ·ಿಗಳ"
+    },
+    {
+     "word": "ಡಯಾಸ್ಪೊರಿಗರ",
+     "pieces": 7,
+     "count": 18,
+     "split": "ಡ·ಯ·ಾಸ·್ಪ·ೊ·ರ·ಿಗರ"
+    },
+    {
+     "word": "ಒಬೆಲಿಸ್ಕ್ಗಳನ್ನ",
+     "pieces": 7,
+     "count": 7,
+     "split": "ಒ·ಬೆ·ಲ·ಿಸ·್ಕ·್ಗಳ·ನ್ನ"
+    },
+    {
+     "word": "ಡಯಾಸ್ಪೊರಾದಲ್ಲ",
+     "pieces": 7,
+     "count": 7,
+     "split": "ಡ·ಯ·ಾಸ·್ಪ·ೊ·ರಾದ·ಲ್ಲ"
+    },
+    {
+     "word": "ಡಯಾಸ್ಪೊರವನ್ನ",
+     "pieces": 7,
+     "count": 4,
+     "split": "ಡ·ಯ·ಾಸ·್ಪ·ೊ·ರವ·ನ್ನ"
+    },
+    {
+     "word": "ತಹಶಿಲ್ದಾರರ",
+     "pieces": 7,
+     "count": 3,
+     "split": "ತ·ಹ·ಶ·ಿಲ·್ದ·ಾರ·ರ"
+    },
+    {
+     "word": "ಸುಗಮಸಂಗೀತದ",
+     "pieces": 7,
+     "count": 3,
+     "split": "ಸು·ಗ·ಮ·ಸ·ಂಗ·ೀತ·ದ"
+    },
+    {
+     "word": "ಒನಿಕೋಮಿಕೋಸಿಸ",
+     "pieces": 7,
+     "count": 2,
+     "split": "ಒ·ನ·ಿಕ·ೋಮ·ಿಕ·ೋಸ·ಿಸ"
+    },
+    {
+     "word": "ಒಲಿಗೋಫ್ರಕ್ಟೋಸ",
+     "pieces": 7,
+     "count": 2,
+     "split": "ಒಲ·ಿಗ·ೋ·ಫ·್ರ·ಕ್ಟ·ೋಸ"
+    },
+    {
+     "word": "ಗ್ಯಾಲ್ವನೀಕರಿಸಿದ",
+     "pieces": 7,
+     "count": 2,
+     "split": "ಗ·್ಯ·ಾಲ·್ವ·ನ·ೀಕರ·ಿಸಿದ"
+    },
+    {
+     "word": "ಚಂಡಮಾರುತದಿಂದಾಗ",
+     "pieces": 7,
+     "count": 2,
+     "split": "ಚ·ಂಡ·ಮ·ಾರು·ತ·ದಿಂದ·ಾಗ"
+    }
+   ]
+  },
+  "Ml": {
+   "docs": 2756,
+   "bytes": 2027482,
+   "words": 75946,
+   "p1536_tokens": 198858,
+   "o200k_tokens": 257876,
+   "p1536_tokens_per_word": 2.618,
+   "o200k_tokens_per_word": 3.396,
+   "p1536_bytes_per_token": 10.196,
+   "o200k_bytes_per_token": 7.862,
+   "p1536_vs_o200k_tokens": -0.2289,
+   "lossless_p1536": "2756/2756",
+   "lossless_o200k": "2756/2756",
+   "most_split": [
+    {
+     "word": "കൃഷ്ണന്കുട്ടിപൊതുവാളാശാന",
+     "pieces": 11,
+     "count": 2,
+     "split": "കൃഷ്ണ·ന·്ക·ുട്ട·ിപ·ൊ·ത·ുവ·ാള·ാശ·ാന"
+    },
+    {
+     "word": "കൃഷ്ണന്കുട്ടിപൊതുവാളിന്റ",
+     "pieces": 10,
+     "count": 3,
+     "split": "കൃഷ്ണ·ന·്ക·ുട്ട·ിപ·ൊ·ത·ുവ·ാള·ിന്റ"
+    },
+    {
+     "word": "മല്സ്യത്തൊഴിലാളികളുട",
+     "pieces": 9,
+     "count": 6,
+     "split": "മല·്സ·്യ·ത്ത·ൊഴ·ില·ാള·ികള·ുട"
+    },
+    {
+     "word": "കൃഷ്ണന്കുട്ടിപൊതുവാള",
+     "pieces": 9,
+     "count": 3,
+     "split": "കൃഷ്ണ·ന·്ക·ുട്ട·ിപ·ൊ·ത·ുവ·ാള"
+    },
+    {
+     "word": "ഡബ്ല്യുഎച്ച്ഒ",
+     "pieces": 8,
+     "count": 5,
+     "split": "ഡ·ബ്ല·്യ·ുഎ·എ·ച്ച·്ഒ·ഒ"
+    },
+    {
+     "word": "മധ്യതിരുവിതാംകൂറില",
+     "pieces": 8,
+     "count": 3,
+     "split": "മധ്യ·തിര·ുവ·ിത·ാം·ക·ൂറ·ില"
+    },
+    {
+     "word": "ഹയര്സെക്കന്ഡറ",
+     "pieces": 8,
+     "count": 3,
+     "split": "ഹ·യ·ര·്സ·െക്ക·ന·്ഡ·റ"
+    },
+    {
+     "word": "ശീഖ്രസ്ഖലന",
+     "pieces": 8,
+     "count": 2,
+     "split": "ശ·ീ·ഖ·്ര·സ·്ഖ·ല·ന"
+    },
+    {
+     "word": "കെഎസ്ആർടിസ",
+     "pieces": 7,
+     "count": 6,
+     "split": "കെ·എ·സ·്ആ·ർ·ട·ിസ"
+    },
+    {
+     "word": "ശ്വേതാമേനോന",
+     "pieces": 7,
+     "count": 5,
+     "split": "ശ·്വ·േത·ാമ·േന·ോ·ന"
+    },
+    {
+     "word": "ഉൽസ്സവത്തിൻറ",
+     "pieces": 7,
+     "count": 4,
+     "split": "ഉ·ൽ·സ്സ·വ·ത്ത·ിൻ·റ"
+    },
+    {
+     "word": "കഴുകിക്കളയാവുന്നതാണ",
+     "pieces": 7,
+     "count": 4,
+     "split": "കഴ·ുക·ിക്ക·ളയ·ാവ·ുന്നത·ാണ"
+    },
+    {
+     "word": "പാമ്പിൻകുഞ്ഞുങ്ങള",
+     "pieces": 7,
+     "count": 3,
+     "split": "പ·ാമ്പ·ിൻ·ക·ുഞ്ഞ·ുങ്ങ·ള"
+    },
+    {
+     "word": "ഹയർസെക്കണ്ടറ",
+     "pieces": 7,
+     "count": 3,
+     "split": "ഹ·യ·ർ·സ·െക്ക·ണ്ട·റ"
+    },
+    {
+     "word": "അരികുവത്കരിക്കപ്പെട്ട",
+     "pieces": 7,
+     "count": 2,
+     "split": "അര·ിക·ുവ·ത·്ക·രിക്ക·പ്പെട്ട"
+    },
+    {
+     "word": "ഐക്യദാര്ഢ്യ",
+     "pieces": 7,
+     "count": 2,
+     "split": "ഐ·ക്യ·ദ·ാര·്ഢ·ഢ·്യ"
+    },
+    {
+     "word": "കൃത്രിമശ്വസനയന്ത്ര",
+     "pieces": 7,
+     "count": 2,
+     "split": "കൃത·്ര·ിമ·ശ·്വസ·നയ·ന്ത്ര"
+    },
+    {
+     "word": "കേജ്രിവാളിനെതിര",
+     "pieces": 7,
+     "count": 2,
+     "split": "ക·േജ·്ര·ിവ·ാള·ിനെ·തിര"
+    },
+    {
+     "word": "കൊണ്ടിരിക്കുന്നതിനിടെയാണ",
+     "pieces": 7,
+     "count": 2,
+     "split": "കൊണ്ട·ിര·ിക്കുന്നത·ിന·ിട·െയ·ാണ"
+    },
+    {
+     "word": "ദക്ഷിണാര്ദ്ധഗോളത്തില",
+     "pieces": 7,
+     "count": 2,
+     "split": "ദ·ക്ഷിണ·ാര·്ദ്ധ·ഗ·ോള·ത്തില"
+    }
+   ]
+  },
+  "Gu": {
+   "docs": 3618,
+   "bytes": 2001435,
+   "words": 133167,
+   "p1536_tokens": 250030,
+   "o200k_tokens": 292239,
+   "p1536_tokens_per_word": 1.878,
+   "o200k_tokens_per_word": 2.195,
+   "p1536_bytes_per_token": 8.005,
+   "o200k_bytes_per_token": 6.849,
+   "p1536_vs_o200k_tokens": -0.1444,
+   "lossless_p1536": "3618/3618",
+   "lossless_o200k": "3618/3618",
+   "most_split": [
+    {
+     "word": "મેન્યુફેક્ચરિંગ",
+     "pieces": 9,
+     "count": 3,
+     "split": "મ·ેન·્યુ·ફ·ે·ક્ચ·ચ·ર·િંગ"
+    },
+    {
+     "word": "એંટરટેઇનમેંટ",
+     "pieces": 8,
+     "count": 3,
+     "split": "એ·ંટ·ર·ટ·ેઇ·ન·મે·ંટ"
+    },
+    {
+     "word": "મૃદુલાબહેનન",
+     "pieces": 8,
+     "count": 3,
+     "split": "મ·ૃ·દ·ુલ·ાબ·હ·ેન·ન"
+    },
+    {
+     "word": "ડબ્લ્યૂએચઓન",
+     "pieces": 8,
+     "count": 2,
+     "split": "ડ·બ·્લ·્યૂ·એ·ચ·ઓ·ન"
+    },
+    {
+     "word": "બોર્ગુઈગ્નનન",
+     "pieces": 8,
+     "count": 2,
+     "split": "બ·ોર્ગ·ગ·ુ·ઈ·ગ્ન·ન·ન"
+    },
+    {
+     "word": "સંઘેડાઉતારવચન",
+     "pieces": 8,
+     "count": 2,
+     "split": "સંઘ·ેડ·ાઉ·ત·ાર·વ·ચ·ન"
+    },
+    {
+     "word": "કુમુદસુન્દર",
+     "pieces": 7,
+     "count": 8,
+     "split": "ક·ુમ·ુ·દ·સુ·ન્દ·ર"
+    },
+    {
+     "word": "મૃદુલાબહેન",
+     "pieces": 7,
+     "count": 6,
+     "split": "મ·ૃ·દ·ુલ·ાબ·હ·ેન"
+    },
+    {
+     "word": "માઈક્રોફિક્શનન",
+     "pieces": 7,
+     "count": 5,
+     "split": "માઈ·ઈ·ક્ર·ોફ·િક·્શન·ન"
+    },
+    {
+     "word": "મુરલીધરનન",
+     "pieces": 7,
+     "count": 4,
+     "split": "મુ·ર·લી·ધ·ર·ન·ન"
+    },
+    {
+     "word": "અદ્વૈતાગ્નિન",
+     "pieces": 7,
+     "count": 2,
+     "split": "અદ·્વ·ૈ·ત·ાગ·્ન·િન"
+    },
+    {
+     "word": "કુમુદસુંદર",
+     "pieces": 7,
+     "count": 2,
+     "split": "ક·ુમ·ુ·દ·સ·ું·દર"
+    },
+    {
+     "word": "કૌશલ્યવર્ધન",
+     "pieces": 7,
+     "count": 2,
+     "split": "કૌ·શ·લ·્ય·વ·ર્ધ·ન"
+    },
+    {
+     "word": "દુર્ઘટનાગ્રસ્ત",
+     "pieces": 7,
+     "count": 2,
+     "split": "દુ·ર્ઘ·ઘ·ટન·ાગ·્ર·સ્ત"
+    },
+    {
+     "word": "પદાધિકારીશ્રીઓન",
+     "pieces": 7,
+     "count": 2,
+     "split": "પદ·ાધ·િક·ારી·શ્ર·ીઓ·ન"
+    },
+    {
+     "word": "પૉર્ટુગિઝન",
+     "pieces": 7,
+     "count": 2,
+     "split": "પ·ૉ·ર્ટ·ુ·ગ·િઝ·ન"
+    },
+    {
+     "word": "સ્વેચ્છાપૂર્વક",
+     "pieces": 7,
+     "count": 2,
+     "split": "સ્વ·ેચ·્છ·ાપ·ૂ·ર્વ·ક"
+    },
+    {
+     "word": "માઈક્રોફિક્શન",
+     "pieces": 6,
+     "count": 21,
+     "split": "માઈ·ઈ·ક્ર·ોફ·િક·્શન"
+    },
+    {
+     "word": "છેતરપિંડીન",
+     "pieces": 6,
+     "count": 6,
+     "split": "છે·તર·પ·િં·ડી·ન"
+    },
+    {
+     "word": "મેન્ગ્રોવ",
+     "pieces": 6,
+     "count": 6,
+     "split": "મે·ન્ગ·ગ·્ર·ો·વ"
+    }
+   ]
+  },
+  "Pa": {
+   "docs": 3755,
+   "bytes": 1997265,
+   "words": 157008,
+   "p1536_tokens": 255969,
+   "o200k_tokens": 406866,
+   "p1536_tokens_per_word": 1.63,
+   "o200k_tokens_per_word": 2.591,
+   "p1536_bytes_per_token": 7.803,
+   "o200k_bytes_per_token": 4.909,
+   "p1536_vs_o200k_tokens": -0.3709,
+   "lossless_p1536": "3755/3755",
+   "lossless_o200k": "3755/3755",
+   "most_split": [
+    {
+     "word": "ਐਥਰੋਸਕਲੇਰੋਸਿਸ",
+     "pieces": 8,
+     "count": 2,
+     "split": "ਐ·ਥ·ਰੋ·ਸਕ·ਲੇ·ਰੋ·ਸ·ਿਸ"
+    },
+    {
+     "word": "timਪਟੀਮਾਈਜ਼ੇਸ਼ਨ",
+     "pieces": 7,
+     "count": 3,
+     "split": "tim·ਪ·ਟੀ·ਮ·ਾਈ·਼·ੇਸ਼ਨ"
+    },
+    {
+     "word": "ਅਟੈਚਮੇੰਟ",
+     "pieces": 7,
+     "count": 2,
+     "split": "ਅ·ਟ·ੈ·ਚ·ਮੇ·ੰ·ਟ"
+    },
+    {
+     "word": "ਐਂਟੀਆਕਸੀਡੈਂਟ",
+     "pieces": 7,
+     "count": 2,
+     "split": "ਐਂ·ਟ·ੀਆ·ਕ·ਸੀ·ਡ·ੈਂਟ"
+    },
+    {
+     "word": "ਨਿਮਿੳਲਰ",
+     "pieces": 7,
+     "count": 2,
+     "split": "ਨ·ਿਮ·ਿ·ੳ·ੳ·ਲ·ਰ"
+    },
+    {
+     "word": "ਬਰੁਸੇਲੋਸਿਸ",
+     "pieces": 6,
+     "count": 9,
+     "split": "ਬਰ·ੁ·ਸੇ·ਲੋ·ਸ·ਿਸ"
+    },
+    {
+     "word": "ਮਾਛੀਵਾੜ",
+     "pieces": 6,
+     "count": 8,
+     "split": "ਮ·ਾਛ·ਛ·ੀ·ਵਾ·ੜ"
+    },
+    {
+     "word": "ਇੰਸਟੀਚਿਊਟ",
+     "pieces": 6,
+     "count": 7,
+     "split": "ਇੰ·ਸ·ਟੀ·ਚ·ਿਊ·ਟ"
+    },
+    {
+     "word": "ਪਲਾਸਟਿਕਾਈਜ਼ਰ",
+     "pieces": 6,
+     "count": 7,
+     "split": "ਪਲ·ਾਸ·ਟ·ਿਕ·ਾਈ·਼ਰ"
+    },
+    {
+     "word": "ਗਿੱਦੜਬਾਹ",
+     "pieces": 6,
+     "count": 4,
+     "split": "ਗ·ਿੱ·ਦ·ੜ·ਬ·ਾਹ"
+    },
+    {
+     "word": "ਪਲੇਟਫਾਰਮ",
+     "pieces": 6,
+     "count": 4,
+     "split": "ਪ·ਲੇ·ਟ·ਫ·ਾਰ·ਮ"
+    },
+    {
+     "word": "ਲੌਕਡਾਊਨ",
+     "pieces": 6,
+     "count": 4,
+     "split": "ਲ·ੌ·ਕ·ਡ·ਾਊ·ਨ"
+    },
+    {
+     "word": "ਉਬਰਸਗਗੇਸਟ",
+     "pieces": 6,
+     "count": 3,
+     "split": "ਉ·ਬਰ·ਸ·ਗ·ਗੇ·ਸਟ"
+    },
+    {
+     "word": "ਕਾਰਬੋਹਾਈਡਰੇਟ",
+     "pieces": 6,
+     "count": 3,
+     "split": "ਕਾਰ·ਬ·ੋਹ·ਾਈ·ਡ·ਰੇਟ"
+    },
+    {
+     "word": "ਗ੍ਰੈਜੁਏਸ਼ਨ",
+     "pieces": 6,
+     "count": 3,
+     "split": "ਗ੍ਰ·ੈ·ਜ·ੁ·ਏ·਼ਨ"
+    },
+    {
+     "word": "ਡਿਸਟ੍ਰੀਬਿਊਸ਼ਨ",
+     "pieces": 6,
+     "count": 3,
+     "split": "ਡ·ਿਸਟ·੍ਰੀ·ਬ·ਿਊ·਼ਨ"
+    },
+    {
+     "word": "ਮਨੋਵਿਗਿਆਨਕ",
+     "pieces": 6,
+     "count": 3,
+     "split": "ਮਨ·ੋ·ਵ·ਿਗ·ਿਆਨ·ਕ"
+    },
+    {
+     "word": "ਅੈਫੀਲੀੲੇਟ",
+     "pieces": 6,
+     "count": 2,
+     "split": "ਅ·ੈ·ਫੀ·ਲੀ·ੲ·ੇਟ"
+    },
+    {
+     "word": "ਕਲੋਰੀਨੇਟਿਡ",
+     "pieces": 6,
+     "count": 2,
+     "split": "ਕਲ·ੋ·ਰੀ·ਨੇ·ਟ·ਿਡ"
+    },
+    {
+     "word": "ਕੈਲੀਫੋਰਨੀਆ",
+     "pieces": 6,
+     "count": 2,
+     "split": "ਕੈ·ਲੀ·ਫ·ੋ·ਰਨ·ੀਆ"
+    }
+   ]
+  },
+  "Or": {
+   "docs": 2559,
+   "bytes": 1998246,
+   "words": 114292,
+   "p1536_tokens": 223727,
+   "o200k_tokens": 736039,
+   "p1536_tokens_per_word": 1.958,
+   "o200k_tokens_per_word": 6.44,
+   "p1536_bytes_per_token": 8.932,
+   "o200k_bytes_per_token": 2.715,
+   "p1536_vs_o200k_tokens": -0.696,
+   "lossless_p1536": "2559/2559",
+   "lossless_o200k": "2559/2559",
+   "most_split": [
+    {
+     "word": "କେଆଇଓସିଏଲର",
+     "pieces": 9,
+     "count": 2,
+     "split": "କ·େଆ·ଆ·ଇଓ·ଓ·ସ·ିଏ·ଲ·ର"
+    },
+    {
+     "word": "ନିଦେ୍ର୍ଦଶକମାନଙ୍କ",
+     "pieces": 8,
+     "count": 2,
+     "split": "ନ·ିଦ·େ·୍ର·୍ଦ·ଶ·କ·ମାନଙ୍କ"
+    },
+    {
+     "word": "ନିଦେ୍ର୍ଦଶକ",
+     "pieces": 7,
+     "count": 7,
+     "split": "ନ·ିଦ·େ·୍ର·୍ଦ·ଶ·କ"
+    },
+    {
+     "word": "ଉଗ୍ରପନ୍ଥୀମାନ",
+     "pieces": 7,
+     "count": 3,
+     "split": "ଉ·ଗ୍ର·ପ·ନ·୍ଥ·ୀ·ମାନ"
+    },
+    {
+     "word": "ଚତୁର୍ଦ୍ଧାମୂରତ",
+     "pieces": 7,
+     "count": 3,
+     "split": "ଚ·ତ·ୁର·୍ଦ୍ଧ·ାମ·ୂର·ତ"
+    },
+    {
+     "word": "ଚତୁର୍ଦ୍ଧାମୂର୍ତ୍ତିଙ୍କ",
+     "pieces": 7,
+     "count": 3,
+     "split": "ଚ·ତ·ୁର·୍ଦ୍ଧ·ାମ·ୂର୍ତ୍ତ·ିଙ୍କ"
+    },
+    {
+     "word": "ନୃତ୍ୟଶିଳ୍ପୀମାନ",
+     "pieces": 7,
+     "count": 3,
+     "split": "ନ·ୃତ·୍ୟ·ଶ·ିଳ୍ପ·ୀ·ମାନ"
+    },
+    {
+     "word": "ଏଫ୍ଆଇଆର",
+     "pieces": 7,
+     "count": 2,
+     "split": "ଏ·ଫ·୍ଆ·ଆ·ଇଆ·ଆ·ର"
+    },
+    {
+     "word": "ଏଫ୍ଆଇଆର୍ଟ",
+     "pieces": 7,
+     "count": 2,
+     "split": "ଏ·ଫ·୍ଆ·ଆ·ଇଆ·ଆ·ର୍ଟ"
+    },
+    {
+     "word": "ଏଫ୍ଆଇଏଚ",
+     "pieces": 7,
+     "count": 2,
+     "split": "ଏ·ଫ·୍ଆ·ଆ·ଇଏ·ଏ·ଚ"
+    },
+    {
+     "word": "ଚାମ୍ପିଅନସିପର",
+     "pieces": 7,
+     "count": 2,
+     "split": "ଚ·ାମ୍ପ·ିଅ·ନ·ସ·ିପ·ର"
+    },
+    {
+     "word": "ଦତ୍ତମହାପାତ୍ରଙ୍କ",
+     "pieces": 7,
+     "count": 2,
+     "split": "ଦ·ତ୍ତ·ମ·ହ·ାପ·ାତ୍ର·ଙ୍କ"
+    },
+    {
+     "word": "ନୀଳାଦ୍ରିପ୍ରସାଦ",
+     "pieces": 7,
+     "count": 2,
+     "split": "ନ·ୀଳ·ାଦ·୍ର·ିପ୍ର·ସ·ାଦ"
+    },
+    {
+     "word": "ପୃଷ୍ଠଭୂମିର",
+     "pieces": 7,
+     "count": 2,
+     "split": "ପ·ୃଷ·୍ଠ·ଭ·ୂ·ମ·ିର"
+    },
+    {
+     "word": "ସେଫାଲୋସ୍ପୋରିନ",
+     "pieces": 7,
+     "count": 2,
+     "split": "ସେଫ·ଫ·ାଲ·ୋ·ସ୍ପ·ୋର·ିନ"
+    },
+    {
+     "word": "ହଲଦିଆପଦର",
+     "pieces": 7,
+     "count": 2,
+     "split": "ହ·ଲ·ଦ·ିଆ·ପ·ଦ·ର"
+    },
+    {
+     "word": "ଚତୁର୍ଦ୍ଧାମୂର୍ତ୍ତ",
+     "pieces": 6,
+     "count": 8,
+     "split": "ଚ·ତ·ୁର·୍ଦ୍ଧ·ାମ·ୂର୍ତ୍ତ"
+    },
+    {
+     "word": "ମାତୃଭାଷାର",
+     "pieces": 6,
+     "count": 7,
+     "split": "ମ·ାତ·ୃ·ଭ·ାଷ·ାର"
+    },
+    {
+     "word": "ବ୍ୟାଡମିଣ୍ଟନ",
+     "pieces": 6,
+     "count": 6,
+     "split": "ବ୍ୟ·ାଡ·ମ·ିଣ·୍ଟ·ନ"
+    },
+    {
+     "word": "ତାଜମହଲର",
+     "pieces": 6,
+     "count": 5,
+     "split": "ତ·ାଜ·ମ·ହ·ଲ·ର"
+    }
+   ]
+  },
+  "Sa": {
+   "docs": 5963,
+   "bytes": 90000469,
+   "words": 3838909,
+   "p1536_tokens": 14667751,
+   "o200k_tokens": 15726612,
+   "p1536_tokens_per_word": 3.821,
+   "o200k_tokens_per_word": 4.097,
+   "p1536_bytes_per_token": 6.136,
+   "o200k_bytes_per_token": 5.723,
+   "p1536_vs_o200k_tokens": -0.0673,
+   "lossless_p1536": "5963/5963",
+   "lossless_o200k": "5963/5963",
+   "most_split": [
+    {
+     "word": "𑒏𑓂𑒭𑒹𑒧𑒧𑒫𑒰𑒣𑓂𑒢𑒼𑒞",
+     "pieces": 53,
+     "count": 2,
+     "split": "␠·𑒏·𑒏·𑒏·𑒏·𑓂·𑓂·𑓂·𑓂·𑒭·𑒭·𑒭·𑒭·𑒹·𑒹·𑒹·𑒹·𑒧·𑒧·𑒧·𑒧·𑒧·𑒧·𑒧·𑒧·𑒫·𑒫·𑒫·𑒫·𑒰·𑒰·𑒰·𑒰·𑒣·𑒣·𑒣·𑒣·𑓂·𑓂·𑓂·𑓂·𑒢·𑒢·𑒢·𑒢·𑒼·𑒼·𑒼·𑒼·𑒞·𑒞·𑒞·𑒞"
+    },
+    {
+     "word": "𑒞𑒞𑓂𑒣𑓂𑒩𑒮𑒰𑒠𑒹𑒢",
+     "pieces": 45,
+     "count": 2,
+     "split": "␠·𑒞·𑒞·𑒞·𑒞·𑒞·𑒞·𑒞·𑒞·𑓂·𑓂·𑓂·𑓂·𑒣·𑒣·𑒣·𑒣·𑓂·𑓂·𑓂·𑓂·𑒩·𑒩·𑒩·𑒩·𑒮·𑒮·𑒮·𑒮·𑒰·𑒰·𑒰·𑒰·𑒠·𑒠·𑒠·𑒠·𑒹·𑒹·𑒹·𑒹·𑒢·𑒢·𑒢·𑒢"
+    },
+    {
+     "word": "शि॑ताम॒तऽउ॑त्साद॒तोऽङ्गा॑दङ्गा॒दव॑त्तान",
+     "pieces": 30,
+     "count": 8,
+     "split": "श·ि·॑·त·ाम·॒·त·ऽ·उ·॑·त·्स·ाद·॒·तो·ऽ·ङ·्ग·ा·॑·द·ङ·्ग·ा·॒·द·व·॑·त्त·ान"
+    },
+    {
+     "word": "मे॒ष्य᳕धस्ता॒द्धन्वो॑राश्वि॒नाव॒धोरा॑म",
+     "pieces": 28,
+     "count": 4,
+     "split": "मे·॒·ष·्य·᳕·᳕·᳕·ध·स्त·ा·॒·द्ध·न्व·ो·॑·र·ाश·्व·ि·॒·न·ाव·॒·ध·ो·रा·॑·म"
+    },
+    {
+     "word": "ताऽअ॒स्मभ्य॑मय॒क्ष्माऽअ॑नमी॒वाऽअना॑गस",
+     "pieces": 28,
+     "count": 3,
+     "split": "त·ाऽ·ऽ·अ·॒·स्म·भ·्य·॑·म·य·॒·क्ष्म·ाऽ·ऽ·अ·॑·न·मी·॒·व·ाऽ·ऽ·अ·ना·॑·ग·स"
+    },
+    {
+     "word": "रक्षोऽव॑धूता॒ऽअरा॑त॒योऽदि॑त्या॒स्त्वग॑स",
+     "pieces": 27,
+     "count": 3,
+     "split": "र·क्ष·ो·ऽ·व·॑·ध·ू·ता·॒·ऽ·अ·रा·॑·त·॒·यो·ऽ·दि·॑·त्या·॒·स्त·्व·ग·॑·स"
+    },
+    {
+     "word": "पक्ष्मा॑ण्यवा॒र्या᳖ऽइ॒क्षवो॑ऽवा॒र्या᳖ण",
+     "pieces": 26,
+     "count": 5,
+     "split": "पक्ष·्मा·॑·ण्य·वा·॒·र·्या·᳖·᳖·᳖·ऽ·इ·॒·क्ष·वो·॑·ऽ·वा·॒·र·्या·᳖·᳖·᳖·ण"
+    },
+    {
+     "word": "सो᳖ऽमृत॒त्त्वम॑शी॒यायु॑र्दा॒त्रऽए॑ध",
+     "pieces": 25,
+     "count": 5,
+     "split": "सो·᳖·᳖·᳖·ऽ·म·ृत·॒·त्त्व·म·॑·शी·॒·य·ाय·ु·॑·र्द·ा·॒·त्र·ऽ·ए·॑·ध"
+    },
+    {
+     "word": "गो॒जाऽऋ॑त॒जाऽअ॑द्रि॒जाऽऋ॒त",
+     "pieces": 25,
+     "count": 3,
+     "split": "गो·॒·ज·ाऽ·ऽ·ऋ·ऋ·॑·त·॒·ज·ाऽ·ऽ·अ·॑·द्र·ि·॒·ज·ाऽ·ऽ·ऋ·ऋ·॒·त"
+    },
+    {
+     "word": "ध्रु॒वत॒मोऽच्यु॑तानामच्युत॒क्षित्त॑मऽए॒ष",
+     "pieces": 25,
+     "count": 3,
+     "split": "ध·्र·ु·॒·वत·॒·मो·ऽ·च·्यु·॑·तान·ाम·च·्य·ुत·॒·क्षित·्त·॑·म·ऽ·ए·॒·ष"
+    },
+    {
+     "word": "तनू॒नपा॑तमू॒तिभि॒र्जेता॑र॒मप॑राजितम",
+     "pieces": 25,
+     "count": 2,
+     "split": "तन·ू·॒·न·पा·॑·तम·ू·॒·त·िभ·ि·॒·र्ज·े·ता·॑·र·॒·म·प·॑·राज·ित·म"
+    },
+    {
+     "word": "प॑थि॒रक्ष॑यऽऐलबृ॒दाऽआ॑यु॒र्युध",
+     "pieces": 25,
+     "count": 2,
+     "split": "प·॑·थ·ि·॒·र·क्ष·॑·य·ऽ·ऐ·लब·ृ·॒·द·ाऽ·ऽ·आ·॑·य·ु·॒·र·्य·ुध"
+    },
+    {
+     "word": "व॑ऽऊ॒र्मिर्ह॑वि॒ष्य᳖ऽइन्द्रि॒यावा॑न",
+     "pieces": 25,
+     "count": 2,
+     "split": "व·॑·ऽ·ऊ·॒·र्म·िर्ह·ह·॑·वि·॒·ष·्य·᳖·᳖·᳖·ऽ·इ·न्द्र·ि·॒·य·ावा·॑·न"
+    },
+    {
+     "word": "संयौ॑मी॒दम॒ग्नेरि॒दम॒ग्नीषोम॑योरि॒ष",
+     "pieces": 24,
+     "count": 4,
+     "split": "संय·ौ·॑·मी·॒·दम·॒·ग·्न·ेर·ि·॒·दम·॒·ग·्नी·ष·ोम·॑·य·ोर·ि·॒·ष"
+    },
+    {
+     "word": "पु॑री॒ष्य᳖मङ्गिर॒स्वदच्छे॑मो॒ऽग्न",
+     "pieces": 24,
+     "count": 3,
+     "split": "पु·॑·री·॒·ष·्य·᳖·᳖·᳖·म·ङ·्ग·िर·॒·स्व·द·च्छ·े·॑·मो·॒·ऽ·ग·्न"
+    },
+    {
+     "word": "अ॒यꣳसोऽअ॒ग्निर्यस्मि॒न्त्सोम॒मिन्द्र",
+     "pieces": 24,
+     "count": 2,
+     "split": "अ·॒·य·ꣳ·ꣳ·ꣳ·सो·ऽ·अ·॒·ग·्न·िर·्य·स्म·ि·॒·न्त·्स·ोम·॒·म·िन्द·्र"
+    },
+    {
+     "word": "गोशृङ्गाप्यनदीगिरिवल्मीकतडागमृत्समायुक्त",
+     "pieces": 24,
+     "count": 2,
+     "split": "गो·श·ृ·ङ·्ग·ाप·्य·न·दी·ग·िर·िव·ल·्म·ीक·त·ड·ाग·म·ृत·्स·म·ाय·ुक्त"
+    },
+    {
+     "word": "नष्टवान्𝐁𝐞𝐢𝐫U𝐭",
+     "pieces": 24,
+     "count": 2,
+     "split": "नष्ट·वान·्·𝐁·𝐁·𝐁·𝐁·𝐞·𝐞·𝐞·𝐞·𝐢·𝐢·𝐢·𝐢·𝐫·𝐫·𝐫·𝐫·U·𝐭·𝐭·𝐭·𝐭"
+    },
+    {
+     "word": "पि॒तरो॑ऽसृज्य॒न्तादि॑ति॒रधि॑पत्न्यासीत",
+     "pieces": 24,
+     "count": 2,
+     "split": "प·ि·॒·त·रो·॑·ऽ·स·ृ·ज·्य·॒·न्त·ादि·॑·ति·॒·र·धि·॑·प·त्न·्यास·ीत"
+    },
+    {
+     "word": "प॒थिभि॒र्मधु॑मत्तमै॒र्नरा॒शꣳसे॑न",
+     "pieces": 24,
+     "count": 2,
+     "split": "प·॒·थ·िभ·ि·॒·र्म·ध·ु·॑·म·त्त·मै·॒·र्न·रा·॒·श·ꣳ·ꣳ·ꣳ·से·॑·न"
+    }
+   ]
+  },
+  "medicine": {
+   "docs": 600,
+   "bytes": 10760166,
+   "words": 1614343,
+   "p1536_tokens": 2438763,
+   "o200k_tokens": 2400828,
+   "p1536_tokens_per_word": 1.511,
+   "o200k_tokens_per_word": 1.487,
+   "p1536_bytes_per_token": 4.412,
+   "o200k_bytes_per_token": 4.482,
+   "p1536_vs_o200k_tokens": 0.0158,
+   "lossless_p1536": "600/600",
+   "lossless_o200k": "600/600",
+   "most_split": [
+    {
+     "word": "ENCEPHALOMYELITIS",
+     "pieces": 9,
+     "count": 2,
+     "split": "EN·CE·PH·AL·OM·Y·EL·IT·IS"
+    },
+    {
+     "word": "МАЙБУТНЄ",
+     "pieces": 9,
+     "count": 2,
+     "split": "М·А·Й·Й·Б·У·Т·Н·Є"
+    },
+    {
+     "word": "dehydroepiandrosterone",
+     "pieces": 8,
+     "count": 5,
+     "split": "de·hyd·ro·ep·i·andro·ster·one"
+    },
+    {
+     "word": "leucoencephalomyelitis",
+     "pieces": 8,
+     "count": 3,
+     "split": "le·u·co·ence·phal·omy·el·itis"
+    },
+    {
+     "word": "ANTIRETROVIRAL",
+     "pieces": 8,
+     "count": 2,
+     "split": "AN·T·IRE·T·RO·V·IR·AL"
+    },
+    {
+     "word": "ArqNeuropsiquiatr",
+     "pieces": 8,
+     "count": 2,
+     "split": "Ar·q·Ne·uro·ps·iqu·i·atr"
+    },
+    {
+     "word": "Dehydroepiandrosterone",
+     "pieces": 8,
+     "count": 2,
+     "split": "De·hyd·ro·ep·i·andro·ster·one"
+    },
+    {
+     "word": "Khongphatthanyothin",
+     "pieces": 8,
+     "count": 2,
+     "split": "Kh·ong·ph·at·th·any·oth·in"
+    },
+    {
+     "word": "Wanitphakdeedeecha",
+     "pieces": 8,
+     "count": 2,
+     "split": "W·anit·ph·ak·de·ed·ee·cha"
+    },
+    {
+     "word": "asthenozoospermia",
+     "pieces": 7,
+     "count": 11,
+     "split": "ast·hen·o·zo·os·perm·ia"
+    },
+    {
+     "word": "tetrahydrocurcumin",
+     "pieces": 7,
+     "count": 10,
+     "split": "tet·ra·hyd·ro·cur·c·umin"
+    },
+    {
+     "word": "Antihyperuricemics",
+     "pieces": 7,
+     "count": 9,
+     "split": "Ant·ih·yper·ur·ic·em·ics"
+    },
+    {
+     "word": "onabotulinumtoxinA",
+     "pieces": 7,
+     "count": 7,
+     "split": "on·abot·ulin·um·to·xin·A"
+    },
+    {
+     "word": "Löwenströmska",
+     "pieces": 7,
+     "count": 6,
+     "split": "L·ö·wen·str·ö·ms·ka"
+    },
+    {
+     "word": "abobotulinumtoxinA",
+     "pieces": 7,
+     "count": 6,
+     "split": "ab·obot·ulin·um·to·xin·A"
+    },
+    {
+     "word": "NEURODEVELOPMENTAL",
+     "pieces": 7,
+     "count": 5,
+     "split": "NE·U·RO·DE·VELOP·MENT·AL"
+    },
+    {
+     "word": "incobotulinumtoxinA",
+     "pieces": 7,
+     "count": 4,
+     "split": "inc·obot·ulin·um·to·xin·A"
+    },
+    {
+     "word": "совершенствование",
+     "pieces": 7,
+     "count": 4,
+     "split": "сов·ер·ш·ен·ств·ован·ие"
+    },
+    {
+     "word": "AbobotulinumtoxinA",
+     "pieces": 7,
+     "count": 3,
+     "split": "Ab·obot·ulin·um·to·xin·A"
+    },
+    {
+     "word": "IncobotulinumtoxinA",
+     "pieces": 7,
+     "count": 3,
+     "split": "Inc·obot·ulin·um·to·xin·A"
+    }
+   ]
+  },
+  "biology": {
+   "docs": 600,
+   "bytes": 6721093,
+   "words": 1013380,
+   "p1536_tokens": 1616356,
+   "o200k_tokens": 1584602,
+   "p1536_tokens_per_word": 1.595,
+   "o200k_tokens_per_word": 1.564,
+   "p1536_bytes_per_token": 4.158,
+   "o200k_bytes_per_token": 4.242,
+   "p1536_vs_o200k_tokens": 0.02,
+   "lossless_p1536": "600/600",
+   "lossless_o200k": "600/600",
+   "most_split": [
+    {
+     "word": "palmitoyloleoylphosphatidylcholine",
+     "pieces": 13,
+     "count": 2,
+     "split": "pal·mit·oy·lo·le·oy·l·ph·osph·atid·yl·ch·oline"
+    },
+    {
+     "word": "TETRAALKYLPHOSPHONIUM",
+     "pieces": 11,
+     "count": 2,
+     "split": "T·ET·RA·ALK·Y·LP·H·OS·PH·ON·IUM"
+    },
+    {
+     "word": "dipalmitoylphosphatidylcholine",
+     "pieces": 11,
+     "count": 2,
+     "split": "dip·al·mit·oy·l·ph·osph·atid·yl·ch·oline"
+    },
+    {
+     "word": "PHOSPHOGLUCOMUTASE",
+     "pieces": 9,
+     "count": 4,
+     "split": "PH·OS·PH·O·GL·U·COM·UT·ASE"
+    },
+    {
+     "word": "DULCEACUÍCOLAS",
+     "pieces": 8,
+     "count": 2,
+     "split": "D·UL·CE·AC·U·Í·COL·AS"
+    },
+    {
+     "word": "ORGANOPHOSPHOROUS",
+     "pieces": 8,
+     "count": 2,
+     "split": "OR·GAN·OP·H·OS·PH·OR·OUS"
+    },
+    {
+     "word": "PYROPHOSPHORYLASE",
+     "pieces": 8,
+     "count": 2,
+     "split": "PY·RO·PH·OS·PH·ORY·L·ASE"
+    },
+    {
+     "word": "tetraalkylphosphonium",
+     "pieces": 8,
+     "count": 2,
+     "split": "tet·ra·alk·yl·ph·osph·on·ium"
+    },
+    {
+     "word": "tetrahydroxystilbene",
+     "pieces": 8,
+     "count": 2,
+     "split": "tet·ra·hyd·rox·yst·il·b·ene"
+    },
+    {
+     "word": "Schizosaccharomyces",
+     "pieces": 7,
+     "count": 18,
+     "split": "Sch·iz·os·ac·char·omy·ces"
+    },
+    {
+     "word": "KLAUSNITZER",
+     "pieces": 7,
+     "count": 9,
+     "split": "K·LA·US·N·IT·Z·ER"
+    },
+    {
+     "word": "amyloliquefaciens",
+     "pieces": 7,
+     "count": 8,
+     "split": "am·yl·ol·iqu·ef·aci·ens"
+    },
+    {
+     "word": "ACRYLONITRILE",
+     "pieces": 7,
+     "count": 4,
+     "split": "A·CR·YL·ON·IT·R·ILE"
+    },
+    {
+     "word": "ARYLOXIRANES",
+     "pieces": 7,
+     "count": 4,
+     "split": "AR·Y·LO·X·IR·AN·ES"
+    },
+    {
+     "word": "CHEIRANTHIFOLIA",
+     "pieces": 7,
+     "count": 4,
+     "split": "CHE·IR·ANT·H·IF·OL·IA"
+    },
+    {
+     "word": "PHYLOGEOGRAPHIC",
+     "pieces": 7,
+     "count": 4,
+     "split": "PH·Y·LOG·E·OGR·APH·IC"
+    },
+    {
+     "word": "ELECTROPHORESIS",
+     "pieces": 7,
+     "count": 3,
+     "split": "E·LECT·RO·PH·O·RES·IS"
+    },
+    {
+     "word": "Kudryavtsev",
+     "pieces": 7,
+     "count": 3,
+     "split": "K·ud·ry·av·t·se·v"
+    },
+    {
+     "word": "anhydrotetracycline",
+     "pieces": 7,
+     "count": 3,
+     "split": "an·hyd·rot·etr·acy·cl·ine"
+    },
+    {
+     "word": "sialophosphoprotein",
+     "pieces": 7,
+     "count": 3,
+     "split": "s·ial·oph·osph·op·rote·in"
+    }
+   ]
+  },
+  "chemistry": {
+   "docs": 440,
+   "bytes": 5304153,
+   "words": 833334,
+   "p1536_tokens": 1384903,
+   "o200k_tokens": 1354729,
+   "p1536_tokens_per_word": 1.662,
+   "o200k_tokens_per_word": 1.626,
+   "p1536_bytes_per_token": 3.83,
+   "o200k_bytes_per_token": 3.915,
+   "p1536_vs_o200k_tokens": 0.0223,
+   "lossless_p1536": "440/440",
+   "lossless_o200k": "440/440",
+   "most_split": [
+    {
+     "word": "玻璃容器及防漏桶",
+     "pieces": 12,
+     "count": 5,
+     "split": "␠·玻·玻·璃·璃·容·器·及·防·漏·桶·桶"
+    },
+    {
+     "word": "hexahydrohydroxyphthalimidine",
+     "pieces": 10,
+     "count": 2,
+     "split": "hex·ah·ydro·hyd·ro·xy·ph·th·alim·idine"
+    },
+    {
+     "word": "cyclohexanecarboxylic",
+     "pieces": 9,
+     "count": 3,
+     "split": "cycl·o·hex·an·ec·ar·box·y·lic"
+    },
+    {
+     "word": "diethyldithiocarbamate",
+     "pieces": 9,
+     "count": 2,
+     "split": "di·eth·y·ld·ithi·oc·arb·am·ate"
+    },
+    {
+     "word": "回收有機廢液",
+     "pieces": 9,
+     "count": 2,
+     "split": "回·回·收·有·機·廢·廢·液·液"
+    },
+    {
+     "word": "diphenylcyclopropenone",
+     "pieces": 8,
+     "count": 19,
+     "split": "dip·hen·yl·cycl·op·rop·en·one"
+    },
+    {
+     "word": "PAŘÍZKOVÁ",
+     "pieces": 8,
+     "count": 5,
+     "split": "PA·Ř·Ř·Í·Z·K·OV·Á"
+    },
+    {
+     "word": "polyvinylpyrrolidone",
+     "pieces": 8,
+     "count": 3,
+     "split": "poly·vin·yl·p·yr·rol·id·one"
+    },
+    {
+     "word": "강의계획",
+     "pieces": 8,
+     "count": 3,
+     "split": "강·강·의·계·계·획·획·획"
+    },
+    {
+     "word": "Diphenylcyclopropenone",
+     "pieces": 8,
+     "count": 2,
+     "split": "Dip·hen·yl·cycl·op·rop·en·one"
+    },
+    {
+     "word": "butylbiscyclopropenone",
+     "pieces": 8,
+     "count": 2,
+     "split": "but·yl·bis·cycl·op·rop·en·one"
+    },
+    {
+     "word": "dimethylchlorosulfonium",
+     "pieces": 8,
+     "count": 2,
+     "split": "dim·ethyl·ch·lor·os·ul·fon·ium"
+    },
+    {
+     "word": "hexahydrophthalimide",
+     "pieces": 7,
+     "count": 28,
+     "split": "hex·ah·yd·roph·th·alim·ide"
+    },
+    {
+     "word": "cyclohexylcarbinol",
+     "pieces": 7,
+     "count": 11,
+     "split": "cycl·o·hex·yl·car·bin·ol"
+    },
+    {
+     "word": "BAKOSURTANAL",
+     "pieces": 7,
+     "count": 8,
+     "split": "B·AK·OS·UR·T·AN·AL"
+    },
+    {
+     "word": "phenylcyclopropenone",
+     "pieces": 7,
+     "count": 7,
+     "split": "phen·yl·cycl·op·rop·en·one"
+    },
+    {
+     "word": "polyethyleneglycol",
+     "pieces": 7,
+     "count": 4,
+     "split": "poly·eth·y·len·eg·ly·col"
+    },
+    {
+     "word": "Betriebsverfassungsgesetz",
+     "pieces": 7,
+     "count": 3,
+     "split": "Betr·iebs·ver·fass·ung·sges·etz"
+    },
+    {
+     "word": "PADANGSIDEMPUAN",
+     "pieces": 7,
+     "count": 3,
+     "split": "P·AD·ANG·SID·EM·PU·AN"
+    },
+    {
+     "word": "betahydroxybutyrate",
+     "pieces": 7,
+     "count": 3,
+     "split": "bet·ah·ydro·xy·but·yr·ate"
+    }
+   ]
+  }
+ },
+ "encoder_tokens_per_second_one_core": {
+  "p1536": 392958,
+  "o200k": 1716336
+ },
+ "inputs": {
+  "sample_SHA256SUMS": "0b7da76396a7078b07a5e5f96a4ced88279e77205c164a35f284f387b0546faa",
+  "heldout_manifest": "ec34c6b1a89702b9d3d67e385e29efb7eb908da6da74f5ca5e8d3c711db4bf21"
+ },
+ "environment": {
+  "python": "3.11.5",
+  "tokenizers": "0.23.3",
+  "tiktoken": "0.14.0",
+  "platform": "macOS-26.3-arm64-arm-64bit",
+  "script_sha256": "3deab0d1f333e4cc48d4a9e698c1304c57ded3a812dd7d228f7a2e7fbf8a90ab"
+ },
+ "seconds": 119
+}

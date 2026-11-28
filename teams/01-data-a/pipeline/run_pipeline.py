@@ -71,7 +71,8 @@ apply, f2, survivor_loss and ledger always run. f2 takes "script" (default teams
 documents in flight). shards takes "tokenizer" (required: G3's frozen tokenizer.json, p1536), "dataset_version" (required: the
 corpus release written into every shard manifest, e.g. "corpus-v1" for the first training shards or "sample"; with
 "any_tokenizer" it is "test" and may be left out), and optionally "script" (default
-teams/01-data-a/shards/run_shards.py), "out" (default <run>/shards), "tokens", "packs" (only these packs), "pack_table" and
+teams/01-data-a/shards/run_shards.py), "out" (default <run>/shards), "tokens", "packs" (only these packs), "pack_table", "workers" (packs written at the same time, default 1: each pack's parts stay in
+order, each part has a process of its own; about 1 to 4 GB each) and
 "any_tokenizer" (tests only). apply takes "link" (default true: untouched parts are hard-linked, not copied) and "workers"
 (default 4: parts checked and written at once, one row group in memory each). ledger takes "raw"
 (optional: the raw parts the cleaner read; with it the ledger says keep / fix / drop per document, mode B, else the
@@ -675,6 +676,9 @@ class Run:
         packs = spec.get("packs", [])
         if not isinstance(packs, list) or not all(isinstance(p, str) for p in packs):
             raise Stop("config: stages.shards.packs must be a list of pack ids")
+        workers = spec.get("workers")
+        if workers is not None and (not isinstance(workers, int) or isinstance(workers, bool) or workers < 1):
+            raise Stop(f"config: stages.shards.workers is {workers!r}, expected a whole number >= 1")
         if spec.get("pack_table") and not path(spec["pack_table"]).is_file():
             raise Stop(f"config: stages.shards.pack_table {spec['pack_table']} not found")
         version = spec.get("dataset_version")
@@ -1118,6 +1122,8 @@ class Run:
         args = ["--input", self.output("f2"), "--manifest", self.manifest_path, "--tokenizer", path(spec["tokenizer"]), "--out", out]
         if spec.get("tokens"):
             args += ["--tokens", spec["tokens"]]
+        if spec.get("workers"):
+            args += ["--workers", spec["workers"]]
         for pack in spec.get("packs", []):
             args += ["--pack", pack]
         if spec.get("pack_table"):

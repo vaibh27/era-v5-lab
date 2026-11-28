@@ -120,7 +120,12 @@ Python loop runs over rows, documents, sentences, tokens or pairs.
   time 77 min
 - Encoder: `Encoder.encode` and `SentenceTransformer.encode` on the same 587 head texts, one after the other: 18.0 s and
   20.7 s; the unit vectors differ by at most 1.5e-08
-- Sync check: TODO on CUDA. MPS has no sync debug mode; run with `"sync_debug": true` on CUDA.
+- Sync check: CUDA (A100 80GB, torch 2.13.0+cu130, fp16), `"sync_debug": true`, the three packs of the rehearsal, 91,882
+  documents, 94.2 s (`jobs/2026-11-21-h3-sync-check/`; MPS has no sync debug mode). 17 warnings come from `h3.py` and
+  `h3_align.py`, all copies of a stage result to the host (`cross_topk`: 5 per language pair; end of verify: 2), none in a
+  loop. 2,671 more come from `transformers` (`masking_utils.py:369`), one per encoder batch of the verify stage. The
+  document-head encoding runs before the switch and is not checked, and torch's sync debug mode does not detect every
+  sync.
 - No Python loops over tokens, documents, sentences or pairs: yes. Loops remain over parts, record batches, encoder chunks
   of 2,048 texts and batches of `batch_size`, retrieval row blocks, pair batches, the configured packs and language
   pairs, the distinct sizes of URL groups and the distinct non-ASCII digits in numbers.

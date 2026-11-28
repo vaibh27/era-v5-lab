@@ -1,0 +1,1928 @@
+{
+ "word_rule": "maximal runs of non-whitespace (str.split()); no word segmentation for Zh, Ja",
+ "flores": {
+  "Hi": {
+   "file": "devtest/hin_Deva.devtest",
+   "sha256": "5f5fd39acadca29fb044a0398e81869e48f37de979df086f2fad4a7d1fd2d015",
+   "sentences": 1012
+  },
+  "Mr": {
+   "file": "devtest/mar_Deva.devtest",
+   "sha256": "63d0d1bfdcfa7f8a1538c87cab65b0e5e010515529ed286b1f8b2a51cc62b99f",
+   "sentences": 1012
+  },
+  "Bn": {
+   "file": "devtest/ben_Beng.devtest",
+   "sha256": "6699aa77b4c93d520971868cd5ff06a1e3b5ddfde852da13337f5194bc23086f",
+   "sentences": 1012
+  },
+  "As": {
+   "file": "devtest/asm_Beng.devtest",
+   "sha256": "8735ea696166646f44cb82a835cb85b98d4966abb26a3e190d1d95cef3c42046",
+   "sentences": 1012
+  },
+  "Ta": {
+   "file": "devtest/tam_Taml.devtest",
+   "sha256": "a18b26bf278e458f085c70173d6789d6108cb2e3346c81a1bd0f8aceb4ea30e4",
+   "sentences": 1012
+  },
+  "Te": {
+   "file": "devtest/tel_Telu.devtest",
+   "sha256": "2dc641b4fb69347efe4b0c0f2063372c643f20c664b41a1f4421b69ba2a06420",
+   "sentences": 1012
+  },
+  "Kn": {
+   "file": "devtest/kan_Knda.devtest",
+   "sha256": "58e8ed5ef79cfd9994e7d4010d22b5ce72c3559f0c8e988fbde11fa58a720cd8",
+   "sentences": 1012
+  },
+  "Ml": {
+   "file": "devtest/mal_Mlym.devtest",
+   "sha256": "fe08cf95fc451a0c462224539a7070695b7bf0b36d586679d33ae871e7b7dfb6",
+   "sentences": 1012
+  },
+  "Gu": {
+   "file": "devtest/guj_Gujr.devtest",
+   "sha256": "ad44e4626fc491639e6739e5fba0ea8de5688f4fc40588ccb308d728c29e9f49",
+   "sentences": 1012
+  },
+  "Pa": {
+   "file": "devtest/pan_Guru.devtest",
+   "sha256": "68f00ed7ef54ede7b757a5f10b25bf48d7f08e1f98080f44c7912a1428ee131f",
+   "sentences": 1012
+  },
+  "Or": {
+   "file": "devtest/ory_Orya.devtest",
+   "sha256": "884a1527a1f24bc324d1735b9af485cb23a23c43ccd818158457fabeafd6478f",
+   "sentences": 1012
+  },
+  "Sa": {
+   "file": "devtest/san_Deva.devtest",
+   "sha256": "d9e01af9ae56b17c7270eb0df777ca9c185823352d5fa9000636dbcb18939bbc",
+   "sentences": 1012
+  },
+  "En": {
+   "file": "devtest/eng_Latn.devtest",
+   "sha256": "612e9fbe87997617c0fa8fa8929654a4f49b728d96738112c2b86ef6a1d78d88",
+   "sentences": 1012
+  },
+  "Fr": {
+   "file": "devtest/fra_Latn.devtest",
+   "sha256": "82f5b000db419ef9254eea7857cce82943b361090942f17ed696e3dce2944f42",
+   "sentences": 1012
+  },
+  "De": {
+   "file": "devtest/deu_Latn.devtest",
+   "sha256": "9a1bfa90d153fedb7ff80047f4a63d493998888eddb056e8a28e24592f26e5f2",
+   "sentences": 1012
+  },
+  "Es": {
+   "file": "devtest/spa_Latn.devtest",
+   "sha256": "40fcb836b49b0a461a14c00b8bce1f03113f8d2668132af424e74b2421d18ce9",
+   "sentences": 1012
+  },
+  "Ru": {
+   "file": "devtest/rus_Cyrl.devtest",
+   "sha256": "cdc706ed862d1d35d8d67cfda0b396766646885434958b18291aa760ff1bb59e",
+   "sentences": 1012
+  },
+  "Zh": {
+   "file": "devtest/zho_Hans.devtest",
+   "sha256": "b30158b1b76f7cee08530d8127a9769f4512597c7eefe97ae1ccf630d5b6e7fd",
+   "sentences": 1012
+  },
+  "Ja": {
+   "file": "devtest/jpn_Jpan.devtest",
+   "sha256": "36b8e392ae9404a20e8448c731d16d957ac1b94588d97fb691128ae706b63606",
+   "sentences": 1012
+  },
+  "Ko": {
+   "file": "devtest/kor_Hang.devtest",
+   "sha256": "540972696230a56e888f1fbd04b7000135c436351f5e467f99ce67fdccd8df0f",
+   "sentences": 1012
+  }
+ },
+ "tokenizers": {
+  "p1536 (frozen)": {
+   "meta": {
+    "sha256": "e6b93a93a60520d7b1af2e9242485f443b5596a1e116b8f8798d83bbad25a64b",
+    "vocab": 131072
+   },
+   "langs": {
+    "Hi": {
+     "tokens": 39955,
+     "words": 25643,
+     "bytes": 337094,
+     "tokens_per_word": 1.5581,
+     "bytes_per_token": 8.437,
+     "lossless": 1.0
+    },
+    "Mr": {
+     "tokens": 37720,
+     "words": 19046,
+     "bytes": 355712,
+     "tokens_per_word": 1.9805,
+     "bytes_per_token": 9.43,
+     "lossless": 1.0
+    },
+    "Bn": {
+     "tokens": 40124,
+     "words": 19506,
+     "bytes": 344682,
+     "tokens_per_word": 2.057,
+     "bytes_per_token": 8.59,
+     "lossless": 1.0
+    },
+    "As": {
+     "tokens": 40679,
+     "words": 19289,
+     "bytes": 335076,
+     "tokens_per_word": 2.1089,
+     "bytes_per_token": 8.237,
+     "lossless": 1.0
+    },
+    "Ta": {
+     "tokens": 39575,
+     "words": 16775,
+     "bytes": 421641,
+     "tokens_per_word": 2.3592,
+     "bytes_per_token": 10.654,
+     "lossless": 1.0
+    },
+    "Te": {
+     "tokens": 39535,
+     "words": 16938,
+     "bytes": 353711,
+     "tokens_per_word": 2.3341,
+     "bytes_per_token": 8.947,
+     "lossless": 1.0
+    },
+    "Kn": {
+     "tokens": 40190,
+     "words": 16100,
+     "bytes": 375480,
+     "tokens_per_word": 2.4963,
+     "bytes_per_token": 9.343,
+     "lossless": 1.0
+    },
+    "Ml": {
+     "tokens": 41908,
+     "words": 14930,
+     "bytes": 411753,
+     "tokens_per_word": 2.807,
+     "bytes_per_token": 9.825,
+     "lossless": 1.0
+    },
+    "Gu": {
+     "tokens": 41268,
+     "words": 20886,
+     "bytes": 331068,
+     "tokens_per_word": 1.9759,
+     "bytes_per_token": 8.022,
+     "lossless": 1.0
+    },
+    "Pa": {
+     "tokens": 44591,
+     "words": 25906,
+     "bytes": 344172,
+     "tokens_per_word": 1.7213,
+     "bytes_per_token": 7.718,
+     "lossless": 1.0
+    },
+    "Or": {
+     "tokens": 41689,
+     "words": 19620,
+     "bytes": 361459,
+     "tokens_per_word": 2.1248,
+     "bytes_per_token": 8.67,
+     "lossless": 1.0
+    },
+    "Sa": {
+     "tokens": 51968,
+     "words": 16975,
+     "bytes": 346824,
+     "tokens_per_word": 3.0614,
+     "bytes_per_token": 6.674,
+     "lossless": 1.0
+    },
+    "En": {
+     "tokens": 27099,
+     "words": 21901,
+     "bytes": 132096,
+     "tokens_per_word": 1.2373,
+     "bytes_per_token": 4.875,
+     "lossless": 1.0
+    },
+    "Fr": {
+     "tokens": 40396,
+     "words": 25618,
+     "bytes": 164026,
+     "tokens_per_word": 1.5769,
+     "bytes_per_token": 4.06,
+     "lossless": 1.0
+    },
+    "De": {
+     "tokens": 39858,
+     "words": 21760,
+     "bytes": 156358,
+     "tokens_per_word": 1.8317,
+     "bytes_per_token": 3.923,
+     "lossless": 1.0
+    },
+    "Es": {
+     "tokens": 39126,
+     "words": 26081,
+     "bytes": 159943,
+     "tokens_per_word": 1.5002,
+     "bytes_per_token": 4.088,
+     "lossless": 1.0
+    },
+    "Ru": {
+     "tokens": 61725,
+     "words": 19655,
+     "bytes": 260342,
+     "tokens_per_word": 3.1404,
+     "bytes_per_token": 4.218,
+     "lossless": 1.0
+    },
+    "Zh": {
+     "tokens": 44375,
+     "words": 2069,
+     "bytes": 120806,
+     "tokens_per_word": 21.4476,
+     "bytes_per_token": 2.722,
+     "lossless": 1.0
+    },
+    "Ja": {
+     "tokens": 53768,
+     "words": 1081,
+     "bytes": 167109,
+     "tokens_per_word": 49.7391,
+     "bytes_per_token": 3.108,
+     "lossless": 1.0
+    },
+    "Ko": {
+     "tokens": 62455,
+     "words": 15430,
+     "bytes": 157799,
+     "tokens_per_word": 4.0476,
+     "bytes_per_token": 2.527,
+     "lossless": 1.0
+    }
+   },
+   "indic_mean_tokens_per_word": 2.1385
+  },
+  "BrahmicTokenizer-131K (base)": {
+   "meta": {
+    "sha256": "01d968a7970b029c071b29f060abf6104b66168dedf2ff3b1a0290a545739fff",
+    "vocab": 131072
+   },
+   "langs": {
+    "Hi": {
+     "tokens": 42284,
+     "words": 25643,
+     "bytes": 337094,
+     "tokens_per_word": 1.6489,
+     "bytes_per_token": 7.972,
+     "lossless": 1.0
+    },
+    "Mr": {
+     "tokens": 48933,
+     "words": 19046,
+     "bytes": 355712,
+     "tokens_per_word": 2.5692,
+     "bytes_per_token": 7.269,
+     "lossless": 1.0
+    },
+    "Bn": {
+     "tokens": 45531,
+     "words": 19506,
+     "bytes": 344682,
+     "tokens_per_word": 2.3342,
+     "bytes_per_token": 7.57,
+     "lossless": 1.0
+    },
+    "As": {
+     "tokens": 53252,
+     "words": 19289,
+     "bytes": 335076,
+     "tokens_per_word": 2.7607,
+     "bytes_per_token": 6.292,
+     "lossless": 1.0
+    },
+    "Ta": {
+     "tokens": 52651,
+     "words": 16775,
+     "bytes": 421641,
+     "tokens_per_word": 3.1387,
+     "bytes_per_token": 8.008,
+     "lossless": 1.0
+    },
+    "Te": {
+     "tokens": 51508,
+     "words": 16938,
+     "bytes": 353711,
+     "tokens_per_word": 3.041,
+     "bytes_per_token": 6.867,
+     "lossless": 1.0
+    },
+    "Kn": {
+     "tokens": 52480,
+     "words": 16100,
+     "bytes": 375480,
+     "tokens_per_word": 3.2596,
+     "bytes_per_token": 7.155,
+     "lossless": 1.0
+    },
+    "Ml": {
+     "tokens": 52253,
+     "words": 14930,
+     "bytes": 411753,
+     "tokens_per_word": 3.4999,
+     "bytes_per_token": 7.88,
+     "lossless": 1.0
+    },
+    "Gu": {
+     "tokens": 47835,
+     "words": 20886,
+     "bytes": 331068,
+     "tokens_per_word": 2.2903,
+     "bytes_per_token": 6.921,
+     "lossless": 1.0
+    },
+    "Pa": {
+     "tokens": 67186,
+     "words": 25906,
+     "bytes": 344172,
+     "tokens_per_word": 2.5935,
+     "bytes_per_token": 5.123,
+     "lossless": 1.0
+    },
+    "Or": {
+     "tokens": 81332,
+     "words": 19620,
+     "bytes": 361459,
+     "tokens_per_word": 4.1454,
+     "bytes_per_token": 4.444,
+     "lossless": 1.0
+    },
+    "Sa": {
+     "tokens": 56092,
+     "words": 16975,
+     "bytes": 346824,
+     "tokens_per_word": 3.3044,
+     "bytes_per_token": 6.183,
+     "lossless": 1.0
+    },
+    "En": {
+     "tokens": 27143,
+     "words": 21901,
+     "bytes": 132096,
+     "tokens_per_word": 1.2393,
+     "bytes_per_token": 4.867,
+     "lossless": 1.0
+    },
+    "Fr": {
+     "tokens": 37704,
+     "words": 25618,
+     "bytes": 164026,
+     "tokens_per_word": 1.4718,
+     "bytes_per_token": 4.35,
+     "lossless": 1.0
+    },
+    "De": {
+     "tokens": 36338,
+     "words": 21760,
+     "bytes": 156358,
+     "tokens_per_word": 1.6699,
+     "bytes_per_token": 4.303,
+     "lossless": 1.0
+    },
+    "Es": {
+     "tokens": 36280,
+     "words": 26081,
+     "bytes": 159943,
+     "tokens_per_word": 1.3911,
+     "bytes_per_token": 4.409,
+     "lossless": 1.0
+    },
+    "Ru": {
+     "tokens": 245223,
+     "words": 19655,
+     "bytes": 260342,
+     "tokens_per_word": 12.4764,
+     "bytes_per_token": 1.062,
+     "lossless": 1.0
+    },
+    "Zh": {
+     "tokens": 77460,
+     "words": 2069,
+     "bytes": 120806,
+     "tokens_per_word": 37.4384,
+     "bytes_per_token": 1.56,
+     "lossless": 1.0
+    },
+    "Ja": {
+     "tokens": 110936,
+     "words": 1081,
+     "bytes": 167109,
+     "tokens_per_word": 102.6235,
+     "bytes_per_token": 1.506,
+     "lossless": 1.0
+    },
+    "Ko": {
+     "tokens": 95955,
+     "words": 15430,
+     "bytes": 157799,
+     "tokens_per_word": 6.2187,
+     "bytes_per_token": 1.645,
+     "lossless": 1.0
+    }
+   },
+   "indic_mean_tokens_per_word": 2.8438
+  },
+  "o200k_base": {
+   "meta": {
+    "source": "tiktoken",
+    "vocab": 200019
+   },
+   "langs": {
+    "Hi": {
+     "tokens": 42292,
+     "words": 25643,
+     "bytes": 337094,
+     "tokens_per_word": 1.6493,
+     "bytes_per_token": 7.971,
+     "lossless": 1.0
+    },
+    "Mr": {
+     "tokens": 48965,
+     "words": 19046,
+     "bytes": 355712,
+     "tokens_per_word": 2.5709,
+     "bytes_per_token": 7.265,
+     "lossless": 1.0
+    },
+    "Bn": {
+     "tokens": 45592,
+     "words": 19506,
+     "bytes": 344682,
+     "tokens_per_word": 2.3373,
+     "bytes_per_token": 7.56,
+     "lossless": 1.0
+    },
+    "As": {
+     "tokens": 53440,
+     "words": 19289,
+     "bytes": 335076,
+     "tokens_per_word": 2.7705,
+     "bytes_per_token": 6.27,
+     "lossless": 1.0
+    },
+    "Ta": {
+     "tokens": 53199,
+     "words": 16775,
+     "bytes": 421641,
+     "tokens_per_word": 3.1713,
+     "bytes_per_token": 7.926,
+     "lossless": 1.0
+    },
+    "Te": {
+     "tokens": 51863,
+     "words": 16938,
+     "bytes": 353711,
+     "tokens_per_word": 3.0619,
+     "bytes_per_token": 6.82,
+     "lossless": 1.0
+    },
+    "Kn": {
+     "tokens": 52975,
+     "words": 16100,
+     "bytes": 375480,
+     "tokens_per_word": 3.2904,
+     "bytes_per_token": 7.088,
+     "lossless": 1.0
+    },
+    "Ml": {
+     "tokens": 52584,
+     "words": 14930,
+     "bytes": 411753,
+     "tokens_per_word": 3.522,
+     "bytes_per_token": 7.83,
+     "lossless": 1.0
+    },
+    "Gu": {
+     "tokens": 48135,
+     "words": 20886,
+     "bytes": 331068,
+     "tokens_per_word": 2.3047,
+     "bytes_per_token": 6.878,
+     "lossless": 1.0
+    },
+    "Pa": {
+     "tokens": 70345,
+     "words": 25906,
+     "bytes": 344172,
+     "tokens_per_word": 2.7154,
+     "bytes_per_token": 4.893,
+     "lossless": 1.0
+    },
+    "Or": {
+     "tokens": 133961,
+     "words": 19620,
+     "bytes": 361459,
+     "tokens_per_word": 6.8278,
+     "bytes_per_token": 2.698,
+     "lossless": 1.0
+    },
+    "Sa": {
+     "tokens": 56143,
+     "words": 16975,
+     "bytes": 346824,
+     "tokens_per_word": 3.3074,
+     "bytes_per_token": 6.178,
+     "lossless": 1.0
+    },
+    "En": {
+     "tokens": 26873,
+     "words": 21901,
+     "bytes": 132096,
+     "tokens_per_word": 1.227,
+     "bytes_per_token": 4.916,
+     "lossless": 1.0
+    },
+    "Fr": {
+     "tokens": 36808,
+     "words": 25618,
+     "bytes": 164026,
+     "tokens_per_word": 1.4368,
+     "bytes_per_token": 4.456,
+     "lossless": 1.0
+    },
+    "De": {
+     "tokens": 35224,
+     "words": 21760,
+     "bytes": 156358,
+     "tokens_per_word": 1.6187,
+     "bytes_per_token": 4.439,
+     "lossless": 1.0
+    },
+    "Es": {
+     "tokens": 35415,
+     "words": 26081,
+     "bytes": 159943,
+     "tokens_per_word": 1.3579,
+     "bytes_per_token": 4.516,
+     "lossless": 1.0
+    },
+    "Ru": {
+     "tokens": 38188,
+     "words": 19655,
+     "bytes": 260342,
+     "tokens_per_word": 1.9429,
+     "bytes_per_token": 6.817,
+     "lossless": 1.0
+    },
+    "Zh": {
+     "tokens": 33555,
+     "words": 2069,
+     "bytes": 120806,
+     "tokens_per_word": 16.218,
+     "bytes_per_token": 3.6,
+     "lossless": 1.0
+    },
+    "Ja": {
+     "tokens": 44559,
+     "words": 1081,
+     "bytes": 167109,
+     "tokens_per_word": 41.2202,
+     "bytes_per_token": 3.75,
+     "lossless": 1.0
+    },
+    "Ko": {
+     "tokens": 39566,
+     "words": 15430,
+     "bytes": 157799,
+     "tokens_per_word": 2.5642,
+     "bytes_per_token": 3.988,
+     "lossless": 1.0
+    }
+   },
+   "indic_mean_tokens_per_word": 3.111
+  },
+  "Sarvam-1": {
+   "meta": {
+    "hub": "sarvamai/sarvam-1",
+    "revision": "e9607337286ddf496d4a2562b194e489dcf3feea",
+    "sha256": "bb5115a36ddb956a4ee0fd534e9870dd69157835622aec9c53062896f883c072",
+    "vocab": 68096
+   },
+   "langs": {
+    "Hi": {
+     "tokens": 35954,
+     "words": 25643,
+     "bytes": 337094,
+     "tokens_per_word": 1.4021,
+     "bytes_per_token": 9.376,
+     "lossless": 0.9951
+    },
+    "Mr": {
+     "tokens": 33849,
+     "words": 19046,
+     "bytes": 355712,
+     "tokens_per_word": 1.7772,
+     "bytes_per_token": 10.509,
+     "lossless": 0.996
+    },
+    "Bn": {
+     "tokens": 40283,
+     "words": 19506,
+     "bytes": 344682,
+     "tokens_per_word": 2.0652,
+     "bytes_per_token": 8.557,
+     "lossless": 1.0
+    },
+    "As": {
+     "tokens": 91817,
+     "words": 19289,
+     "bytes": 335076,
+     "tokens_per_word": 4.7601,
+     "bytes_per_token": 3.649,
+     "lossless": 1.0
+    },
+    "Ta": {
+     "tokens": 36390,
+     "words": 16775,
+     "bytes": 421641,
+     "tokens_per_word": 2.1693,
+     "bytes_per_token": 11.587,
+     "lossless": 1.0
+    },
+    "Te": {
+     "tokens": 36250,
+     "words": 16938,
+     "bytes": 353711,
+     "tokens_per_word": 2.1402,
+     "bytes_per_token": 9.758,
+     "lossless": 0.9891
+    },
+    "Kn": {
+     "tokens": 38265,
+     "words": 16100,
+     "bytes": 375480,
+     "tokens_per_word": 2.3767,
+     "bytes_per_token": 9.813,
+     "lossless": 0.9872
+    },
+    "Ml": {
+     "tokens": 42626,
+     "words": 14930,
+     "bytes": 411753,
+     "tokens_per_word": 2.8551,
+     "bytes_per_token": 9.66,
+     "lossless": 1.0
+    },
+    "Gu": {
+     "tokens": 37791,
+     "words": 20886,
+     "bytes": 331068,
+     "tokens_per_word": 1.8094,
+     "bytes_per_token": 8.76,
+     "lossless": 1.0
+    },
+    "Pa": {
+     "tokens": 43590,
+     "words": 25906,
+     "bytes": 344172,
+     "tokens_per_word": 1.6826,
+     "bytes_per_token": 7.896,
+     "lossless": 1.0
+    },
+    "Or": {
+     "tokens": 46015,
+     "words": 19620,
+     "bytes": 361459,
+     "tokens_per_word": 2.3453,
+     "bytes_per_token": 7.855,
+     "lossless": 1.0
+    },
+    "Sa": {
+     "tokens": 50530,
+     "words": 16975,
+     "bytes": 346824,
+     "tokens_per_word": 2.9767,
+     "bytes_per_token": 6.864,
+     "lossless": 0.999
+    },
+    "En": {
+     "tokens": 31422,
+     "words": 21901,
+     "bytes": 132096,
+     "tokens_per_word": 1.4347,
+     "bytes_per_token": 4.204,
+     "lossless": 1.0
+    },
+    "Fr": {
+     "tokens": 67803,
+     "words": 25618,
+     "bytes": 164026,
+     "tokens_per_word": 2.6467,
+     "bytes_per_token": 2.419,
+     "lossless": 1.0
+    },
+    "De": {
+     "tokens": 68441,
+     "words": 21760,
+     "bytes": 156358,
+     "tokens_per_word": 3.1453,
+     "bytes_per_token": 2.285,
+     "lossless": 1.0
+    },
+    "Es": {
+     "tokens": 65666,
+     "words": 26081,
+     "bytes": 159943,
+     "tokens_per_word": 2.5178,
+     "bytes_per_token": 2.436,
+     "lossless": 0.998
+    },
+    "Ru": {
+     "tokens": 260157,
+     "words": 19655,
+     "bytes": 260342,
+     "tokens_per_word": 13.2362,
+     "bytes_per_token": 1.001,
+     "lossless": 1.0
+    },
+    "Zh": {
+     "tokens": 119905,
+     "words": 2069,
+     "bytes": 120806,
+     "tokens_per_word": 57.9531,
+     "bytes_per_token": 1.008,
+     "lossless": 1.0
+    },
+    "Ja": {
+     "tokens": 167800,
+     "words": 1081,
+     "bytes": 167109,
+     "tokens_per_word": 155.2266,
+     "bytes_per_token": 0.996,
+     "lossless": 1.0
+    },
+    "Ko": {
+     "tokens": 157266,
+     "words": 15430,
+     "bytes": 157799,
+     "tokens_per_word": 10.1922,
+     "bytes_per_token": 1.003,
+     "lossless": 1.0
+    }
+   },
+   "indic_mean_tokens_per_word": 2.3076
+  },
+  "Sarvam-M": {
+   "meta": {
+    "hub": "sarvamai/sarvam-m",
+    "revision": "01534a53c46f2788e392dbb3d994e0fa8f04d3fd",
+    "sha256": "86150969e5647911369bbf28086fdad5fa5134f887e1a03a4e94030ad8e5468a",
+    "vocab": 131072
+   },
+   "langs": {
+    "Hi": {
+     "tokens": 50001,
+     "words": 25643,
+     "bytes": 337094,
+     "tokens_per_word": 1.9499,
+     "bytes_per_token": 6.742,
+     "lossless": 1.0
+    },
+    "Mr": {
+     "tokens": 59811,
+     "words": 19046,
+     "bytes": 355712,
+     "tokens_per_word": 3.1403,
+     "bytes_per_token": 5.947,
+     "lossless": 1.0
+    },
+    "Bn": {
+     "tokens": 57089,
+     "words": 19506,
+     "bytes": 344682,
+     "tokens_per_word": 2.9267,
+     "bytes_per_token": 6.038,
+     "lossless": 1.0
+    },
+    "As": {
+     "tokens": 91316,
+     "words": 19289,
+     "bytes": 335076,
+     "tokens_per_word": 4.7341,
+     "bytes_per_token": 3.669,
+     "lossless": 1.0
+    },
+    "Ta": {
+     "tokens": 60618,
+     "words": 16775,
+     "bytes": 421641,
+     "tokens_per_word": 3.6136,
+     "bytes_per_token": 6.956,
+     "lossless": 1.0
+    },
+    "Te": {
+     "tokens": 62907,
+     "words": 16938,
+     "bytes": 353711,
+     "tokens_per_word": 3.714,
+     "bytes_per_token": 5.623,
+     "lossless": 1.0
+    },
+    "Kn": {
+     "tokens": 61494,
+     "words": 16100,
+     "bytes": 375480,
+     "tokens_per_word": 3.8195,
+     "bytes_per_token": 6.106,
+     "lossless": 1.0
+    },
+    "Ml": {
+     "tokens": 71316,
+     "words": 14930,
+     "bytes": 411753,
+     "tokens_per_word": 4.7767,
+     "bytes_per_token": 5.774,
+     "lossless": 1.0
+    },
+    "Gu": {
+     "tokens": 75785,
+     "words": 20886,
+     "bytes": 331068,
+     "tokens_per_word": 3.6285,
+     "bytes_per_token": 4.369,
+     "lossless": 1.0
+    },
+    "Pa": {
+     "tokens": 82569,
+     "words": 25906,
+     "bytes": 344172,
+     "tokens_per_word": 3.1873,
+     "bytes_per_token": 4.168,
+     "lossless": 1.0
+    },
+    "Or": {
+     "tokens": 358040,
+     "words": 19620,
+     "bytes": 361459,
+     "tokens_per_word": 18.2487,
+     "bytes_per_token": 1.01,
+     "lossless": 1.0
+    },
+    "Sa": {
+     "tokens": 63642,
+     "words": 16975,
+     "bytes": 346824,
+     "tokens_per_word": 3.7492,
+     "bytes_per_token": 5.45,
+     "lossless": 1.0
+    },
+    "En": {
+     "tokens": 27827,
+     "words": 21901,
+     "bytes": 132096,
+     "tokens_per_word": 1.2706,
+     "bytes_per_token": 4.747,
+     "lossless": 1.0
+    },
+    "Fr": {
+     "tokens": 36748,
+     "words": 25618,
+     "bytes": 164026,
+     "tokens_per_word": 1.4345,
+     "bytes_per_token": 4.464,
+     "lossless": 1.0
+    },
+    "De": {
+     "tokens": 36297,
+     "words": 21760,
+     "bytes": 156358,
+     "tokens_per_word": 1.6681,
+     "bytes_per_token": 4.308,
+     "lossless": 1.0
+    },
+    "Es": {
+     "tokens": 36657,
+     "words": 26081,
+     "bytes": 159943,
+     "tokens_per_word": 1.4055,
+     "bytes_per_token": 4.363,
+     "lossless": 1.0
+    },
+    "Ru": {
+     "tokens": 41857,
+     "words": 19655,
+     "bytes": 260342,
+     "tokens_per_word": 2.1296,
+     "bytes_per_token": 6.22,
+     "lossless": 1.0
+    },
+    "Zh": {
+     "tokens": 39046,
+     "words": 2069,
+     "bytes": 120806,
+     "tokens_per_word": 18.8719,
+     "bytes_per_token": 3.094,
+     "lossless": 1.0
+    },
+    "Ja": {
+     "tokens": 43666,
+     "words": 1081,
+     "bytes": 167109,
+     "tokens_per_word": 40.3941,
+     "bytes_per_token": 3.827,
+     "lossless": 1.0
+    },
+    "Ko": {
+     "tokens": 35558,
+     "words": 15430,
+     "bytes": 157799,
+     "tokens_per_word": 2.3045,
+     "bytes_per_token": 4.438,
+     "lossless": 1.0
+    }
+   },
+   "indic_mean_tokens_per_word": 4.8854
+  },
+  "Krutrim-2": {
+   "meta": {
+    "hub": "krutrim-ai-labs/Krutrim-2-instruct",
+    "revision": "b2f4411404153b4afe4b8c721bd5ca5dc3481b89",
+    "sha256": "b0240ce510f08e6c2041724e9043e33be9d251d1e4a4d94eb68cd47b954b61d2",
+    "vocab": 131072
+   },
+   "langs": {
+    "Hi": {
+     "tokens": 50001,
+     "words": 25643,
+     "bytes": 337094,
+     "tokens_per_word": 1.9499,
+     "bytes_per_token": 6.742,
+     "lossless": 1.0
+    },
+    "Mr": {
+     "tokens": 59811,
+     "words": 19046,
+     "bytes": 355712,
+     "tokens_per_word": 3.1403,
+     "bytes_per_token": 5.947,
+     "lossless": 1.0
+    },
+    "Bn": {
+     "tokens": 57089,
+     "words": 19506,
+     "bytes": 344682,
+     "tokens_per_word": 2.9267,
+     "bytes_per_token": 6.038,
+     "lossless": 1.0
+    },
+    "As": {
+     "tokens": 91316,
+     "words": 19289,
+     "bytes": 335076,
+     "tokens_per_word": 4.7341,
+     "bytes_per_token": 3.669,
+     "lossless": 1.0
+    },
+    "Ta": {
+     "tokens": 60618,
+     "words": 16775,
+     "bytes": 421641,
+     "tokens_per_word": 3.6136,
+     "bytes_per_token": 6.956,
+     "lossless": 1.0
+    },
+    "Te": {
+     "tokens": 62907,
+     "words": 16938,
+     "bytes": 353711,
+     "tokens_per_word": 3.714,
+     "bytes_per_token": 5.623,
+     "lossless": 1.0
+    },
+    "Kn": {
+     "tokens": 61494,
+     "words": 16100,
+     "bytes": 375480,
+     "tokens_per_word": 3.8195,
+     "bytes_per_token": 6.106,
+     "lossless": 1.0
+    },
+    "Ml": {
+     "tokens": 71316,
+     "words": 14930,
+     "bytes": 411753,
+     "tokens_per_word": 4.7767,
+     "bytes_per_token": 5.774,
+     "lossless": 1.0
+    },
+    "Gu": {
+     "tokens": 75785,
+     "words": 20886,
+     "bytes": 331068,
+     "tokens_per_word": 3.6285,
+     "bytes_per_token": 4.369,
+     "lossless": 1.0
+    },
+    "Pa": {
+     "tokens": 82569,
+     "words": 25906,
+     "bytes": 344172,
+     "tokens_per_word": 3.1873,
+     "bytes_per_token": 4.168,
+     "lossless": 1.0
+    },
+    "Or": {
+     "tokens": 358040,
+     "words": 19620,
+     "bytes": 361459,
+     "tokens_per_word": 18.2487,
+     "bytes_per_token": 1.01,
+     "lossless": 1.0
+    },
+    "Sa": {
+     "tokens": 63642,
+     "words": 16975,
+     "bytes": 346824,
+     "tokens_per_word": 3.7492,
+     "bytes_per_token": 5.45,
+     "lossless": 1.0
+    },
+    "En": {
+     "tokens": 27827,
+     "words": 21901,
+     "bytes": 132096,
+     "tokens_per_word": 1.2706,
+     "bytes_per_token": 4.747,
+     "lossless": 1.0
+    },
+    "Fr": {
+     "tokens": 36748,
+     "words": 25618,
+     "bytes": 164026,
+     "tokens_per_word": 1.4345,
+     "bytes_per_token": 4.464,
+     "lossless": 1.0
+    },
+    "De": {
+     "tokens": 36297,
+     "words": 21760,
+     "bytes": 156358,
+     "tokens_per_word": 1.6681,
+     "bytes_per_token": 4.308,
+     "lossless": 1.0
+    },
+    "Es": {
+     "tokens": 36657,
+     "words": 26081,
+     "bytes": 159943,
+     "tokens_per_word": 1.4055,
+     "bytes_per_token": 4.363,
+     "lossless": 1.0
+    },
+    "Ru": {
+     "tokens": 41857,
+     "words": 19655,
+     "bytes": 260342,
+     "tokens_per_word": 2.1296,
+     "bytes_per_token": 6.22,
+     "lossless": 1.0
+    },
+    "Zh": {
+     "tokens": 39046,
+     "words": 2069,
+     "bytes": 120806,
+     "tokens_per_word": 18.8719,
+     "bytes_per_token": 3.094,
+     "lossless": 1.0
+    },
+    "Ja": {
+     "tokens": 43666,
+     "words": 1081,
+     "bytes": 167109,
+     "tokens_per_word": 40.3941,
+     "bytes_per_token": 3.827,
+     "lossless": 1.0
+    },
+    "Ko": {
+     "tokens": 35558,
+     "words": 15430,
+     "bytes": 157799,
+     "tokens_per_word": 2.3045,
+     "bytes_per_token": 4.438,
+     "lossless": 1.0
+    }
+   },
+   "indic_mean_tokens_per_word": 4.8854
+  },
+  "IndicBERTv2": {
+   "meta": {
+    "hub": "ai4bharat/IndicBERTv2-MLM-only",
+    "revision": "8598f13fe52443bc3fc054fcd665944560145b5c",
+    "sha256": "6af22a5c4bc890322c365fcb77dd77c06cbb9b088ffa50db1892d5220313c495",
+    "vocab": 250000
+   },
+   "langs": {
+    "Hi": {
+     "tokens": 31715,
+     "words": 25643,
+     "bytes": 337094,
+     "tokens_per_word": 1.2368,
+     "bytes_per_token": 10.629,
+     "lossless": 0.003
+    },
+    "Mr": {
+     "tokens": 28370,
+     "words": 19046,
+     "bytes": 355712,
+     "tokens_per_word": 1.4896,
+     "bytes_per_token": 12.538,
+     "lossless": 0.0
+    },
+    "Bn": {
+     "tokens": 27482,
+     "words": 19506,
+     "bytes": 344682,
+     "tokens_per_word": 1.4089,
+     "bytes_per_token": 12.542,
+     "lossless": 0.0
+    },
+    "As": {
+     "tokens": 30766,
+     "words": 19289,
+     "bytes": 335076,
+     "tokens_per_word": 1.595,
+     "bytes_per_token": 10.891,
+     "lossless": 0.0
+    },
+    "Ta": {
+     "tokens": 28439,
+     "words": 16775,
+     "bytes": 421641,
+     "tokens_per_word": 1.6953,
+     "bytes_per_token": 14.826,
+     "lossless": 0.0
+    },
+    "Te": {
+     "tokens": 28783,
+     "words": 16938,
+     "bytes": 353711,
+     "tokens_per_word": 1.6993,
+     "bytes_per_token": 12.289,
+     "lossless": 0.0
+    },
+    "Kn": {
+     "tokens": 29723,
+     "words": 16100,
+     "bytes": 375480,
+     "tokens_per_word": 1.8461,
+     "bytes_per_token": 12.633,
+     "lossless": 0.0
+    },
+    "Ml": {
+     "tokens": 29883,
+     "words": 14930,
+     "bytes": 411753,
+     "tokens_per_word": 2.0015,
+     "bytes_per_token": 13.779,
+     "lossless": 0.0
+    },
+    "Gu": {
+     "tokens": 31654,
+     "words": 20886,
+     "bytes": 331068,
+     "tokens_per_word": 1.5156,
+     "bytes_per_token": 10.459,
+     "lossless": 0.0
+    },
+    "Pa": {
+     "tokens": 34651,
+     "words": 25906,
+     "bytes": 344172,
+     "tokens_per_word": 1.3376,
+     "bytes_per_token": 9.933,
+     "lossless": 0.0
+    },
+    "Or": {
+     "tokens": 31383,
+     "words": 19620,
+     "bytes": 361459,
+     "tokens_per_word": 1.5995,
+     "bytes_per_token": 11.518,
+     "lossless": 0.001
+    },
+    "Sa": {
+     "tokens": 35093,
+     "words": 16975,
+     "bytes": 346824,
+     "tokens_per_word": 2.0673,
+     "bytes_per_token": 9.883,
+     "lossless": 0.0
+    },
+    "En": {
+     "tokens": 27078,
+     "words": 21901,
+     "bytes": 132096,
+     "tokens_per_word": 1.2364,
+     "bytes_per_token": 4.878,
+     "lossless": 0.0
+    },
+    "Fr": {
+     "tokens": 54160,
+     "words": 25618,
+     "bytes": 164026,
+     "tokens_per_word": 2.1141,
+     "bytes_per_token": 3.029,
+     "lossless": 0.0
+    },
+    "De": {
+     "tokens": 56772,
+     "words": 21760,
+     "bytes": 156358,
+     "tokens_per_word": 2.609,
+     "bytes_per_token": 2.754,
+     "lossless": 0.0
+    },
+    "Es": {
+     "tokens": 53596,
+     "words": 26081,
+     "bytes": 159943,
+     "tokens_per_word": 2.055,
+     "bytes_per_token": 2.984,
+     "lossless": 0.0
+    },
+    "Ru": {
+     "tokens": 122313,
+     "words": 19655,
+     "bytes": 260342,
+     "tokens_per_word": 6.223,
+     "bytes_per_token": 2.128,
+     "lossless": 0.0
+    },
+    "Zh": {
+     "tokens": 17164,
+     "words": 2069,
+     "bytes": 120806,
+     "tokens_per_word": 8.2958,
+     "bytes_per_token": 7.038,
+     "lossless": 0.0
+    },
+    "Ja": {
+     "tokens": 28366,
+     "words": 1081,
+     "bytes": 167109,
+     "tokens_per_word": 26.2405,
+     "bytes_per_token": 5.891,
+     "lossless": 0.0
+    },
+    "Ko": {
+     "tokens": 28969,
+     "words": 15430,
+     "bytes": 157799,
+     "tokens_per_word": 1.8774,
+     "bytes_per_token": 5.447,
+     "lossless": 0.0
+    }
+   },
+   "indic_mean_tokens_per_word": 1.5841
+  },
+  "MuRIL": {
+   "meta": {
+    "hub": "google/muril-base-cased",
+    "revision": "afd9f36c7923d54e97903922ff1b260d091d202f",
+    "sha256": "b96cc938b4009d063a605930cb82aef2c91ee52a94e94e6fcb78510d4ee5310b",
+    "note": "WordPiece vocab.txt, BertWordPieceTokenizer(lowercase=False)",
+    "vocab": 197258
+   },
+   "langs": {
+    "Hi": {
+     "tokens": 31981,
+     "words": 25643,
+     "bytes": 337094,
+     "tokens_per_word": 1.2472,
+     "bytes_per_token": 10.54,
+     "lossless": 0.4684
+    },
+    "Mr": {
+     "tokens": 29332,
+     "words": 19046,
+     "bytes": 355712,
+     "tokens_per_word": 1.5401,
+     "bytes_per_token": 12.127,
+     "lossless": 0.5524
+    },
+    "Bn": {
+     "tokens": 27928,
+     "words": 19506,
+     "bytes": 344682,
+     "tokens_per_word": 1.4318,
+     "bytes_per_token": 12.342,
+     "lossless": 0.0089
+    },
+    "As": {
+     "tokens": 34075,
+     "words": 19289,
+     "bytes": 335076,
+     "tokens_per_word": 1.7666,
+     "bytes_per_token": 9.833,
+     "lossless": 0.0534
+    },
+    "Ta": {
+     "tokens": 29208,
+     "words": 16775,
+     "bytes": 421641,
+     "tokens_per_word": 1.7412,
+     "bytes_per_token": 14.436,
+     "lossless": 0.6966
+    },
+    "Te": {
+     "tokens": 33183,
+     "words": 16938,
+     "bytes": 353711,
+     "tokens_per_word": 1.9591,
+     "bytes_per_token": 10.659,
+     "lossless": 0.5998
+    },
+    "Kn": {
+     "tokens": 29405,
+     "words": 16100,
+     "bytes": 375480,
+     "tokens_per_word": 1.8264,
+     "bytes_per_token": 12.769,
+     "lossless": 0.5672
+    },
+    "Ml": {
+     "tokens": 32663,
+     "words": 14930,
+     "bytes": 411753,
+     "tokens_per_word": 2.1877,
+     "bytes_per_token": 12.606,
+     "lossless": 0.6838
+    },
+    "Gu": {
+     "tokens": 32767,
+     "words": 20886,
+     "bytes": 331068,
+     "tokens_per_word": 1.5688,
+     "bytes_per_token": 10.104,
+     "lossless": 0.6462
+    },
+    "Pa": {
+     "tokens": 37337,
+     "words": 25906,
+     "bytes": 344172,
+     "tokens_per_word": 1.4412,
+     "bytes_per_token": 9.218,
+     "lossless": 0.002
+    },
+    "Or": {
+     "tokens": 33482,
+     "words": 19620,
+     "bytes": 361459,
+     "tokens_per_word": 1.7065,
+     "bytes_per_token": 10.796,
+     "lossless": 0.0623
+    },
+    "Sa": {
+     "tokens": 33086,
+     "words": 16975,
+     "bytes": 346824,
+     "tokens_per_word": 1.9491,
+     "bytes_per_token": 10.483,
+     "lossless": 0.1374
+    },
+    "En": {
+     "tokens": 27581,
+     "words": 21901,
+     "bytes": 132096,
+     "tokens_per_word": 1.2593,
+     "bytes_per_token": 4.789,
+     "lossless": 0.5978
+    },
+    "Fr": {
+     "tokens": 54391,
+     "words": 25618,
+     "bytes": 164026,
+     "tokens_per_word": 2.1232,
+     "bytes_per_token": 3.016,
+     "lossless": 0.1789
+    },
+    "De": {
+     "tokens": 55771,
+     "words": 21760,
+     "bytes": 156358,
+     "tokens_per_word": 2.563,
+     "bytes_per_token": 2.804,
+     "lossless": 0.497
+    },
+    "Es": {
+     "tokens": 54711,
+     "words": 26081,
+     "bytes": 159943,
+     "tokens_per_word": 2.0977,
+     "bytes_per_token": 2.923,
+     "lossless": 0.753
+    },
+    "Ru": {
+     "tokens": 79703,
+     "words": 19655,
+     "bytes": 260342,
+     "tokens_per_word": 4.0551,
+     "bytes_per_token": 3.266,
+     "lossless": 0.001
+    },
+    "Zh": {
+     "tokens": 40258,
+     "words": 2069,
+     "bytes": 120806,
+     "tokens_per_word": 19.4577,
+     "bytes_per_token": 3.001,
+     "lossless": 0.0
+    },
+    "Ja": {
+     "tokens": 32064,
+     "words": 1081,
+     "bytes": 167109,
+     "tokens_per_word": 29.6614,
+     "bytes_per_token": 5.212,
+     "lossless": 0.0
+    },
+    "Ko": {
+     "tokens": 18843,
+     "words": 15430,
+     "bytes": 157799,
+     "tokens_per_word": 1.2212,
+     "bytes_per_token": 8.374,
+     "lossless": 0.0
+    }
+   },
+   "indic_mean_tokens_per_word": 1.6742
+  },
+  "Qwen2.5": {
+   "meta": {
+    "hub": "Qwen/Qwen2.5-7B",
+    "revision": "d149729398750b98c0af14eb82c78cfe92750796",
+    "sha256": "c0382117ea329cdf097041132f6d735924b697924d6f6fc3945713e96ce87539",
+    "vocab": 151665
+   },
+   "langs": {
+    "Hi": {
+     "tokens": 121973,
+     "words": 25643,
+     "bytes": 337094,
+     "tokens_per_word": 4.7566,
+     "bytes_per_token": 2.764,
+     "lossless": 1.0
+    },
+    "Mr": {
+     "tokens": 127661,
+     "words": 19046,
+     "bytes": 355712,
+     "tokens_per_word": 6.7028,
+     "bytes_per_token": 2.786,
+     "lossless": 1.0
+    },
+    "Bn": {
+     "tokens": 138814,
+     "words": 19506,
+     "bytes": 344682,
+     "tokens_per_word": 7.1165,
+     "bytes_per_token": 2.483,
+     "lossless": 1.0
+    },
+    "As": {
+     "tokens": 148770,
+     "words": 19289,
+     "bytes": 335076,
+     "tokens_per_word": 7.7127,
+     "bytes_per_token": 2.252,
+     "lossless": 1.0
+    },
+    "Ta": {
+     "tokens": 168828,
+     "words": 16775,
+     "bytes": 421641,
+     "tokens_per_word": 10.0643,
+     "bytes_per_token": 2.497,
+     "lossless": 1.0
+    },
+    "Te": {
+     "tokens": 193195,
+     "words": 16938,
+     "bytes": 353711,
+     "tokens_per_word": 11.406,
+     "bytes_per_token": 1.831,
+     "lossless": 1.0
+    },
+    "Kn": {
+     "tokens": 191209,
+     "words": 16100,
+     "bytes": 375480,
+     "tokens_per_word": 11.8763,
+     "bytes_per_token": 1.964,
+     "lossless": 1.0
+    },
+    "Ml": {
+     "tokens": 199583,
+     "words": 14930,
+     "bytes": 411753,
+     "tokens_per_word": 13.3679,
+     "bytes_per_token": 2.063,
+     "lossless": 1.0
+    },
+    "Gu": {
+     "tokens": 186119,
+     "words": 20886,
+     "bytes": 331068,
+     "tokens_per_word": 8.9112,
+     "bytes_per_token": 1.779,
+     "lossless": 1.0
+    },
+    "Pa": {
+     "tokens": 200987,
+     "words": 25906,
+     "bytes": 344172,
+     "tokens_per_word": 7.7583,
+     "bytes_per_token": 1.712,
+     "lossless": 1.0
+    },
+    "Or": {
+     "tokens": 267893,
+     "words": 19620,
+     "bytes": 361459,
+     "tokens_per_word": 13.6541,
+     "bytes_per_token": 1.349,
+     "lossless": 1.0
+    },
+    "Sa": {
+     "tokens": 124603,
+     "words": 16975,
+     "bytes": 346824,
+     "tokens_per_word": 7.3404,
+     "bytes_per_token": 2.783,
+     "lossless": 1.0
+    },
+    "En": {
+     "tokens": 27621,
+     "words": 21901,
+     "bytes": 132096,
+     "tokens_per_word": 1.2612,
+     "bytes_per_token": 4.782,
+     "lossless": 1.0
+    },
+    "Fr": {
+     "tokens": 43694,
+     "words": 25618,
+     "bytes": 164026,
+     "tokens_per_word": 1.7056,
+     "bytes_per_token": 3.754,
+     "lossless": 1.0
+    },
+    "De": {
+     "tokens": 43058,
+     "words": 21760,
+     "bytes": 156358,
+     "tokens_per_word": 1.9788,
+     "bytes_per_token": 3.631,
+     "lossless": 1.0
+    },
+    "Es": {
+     "tokens": 42051,
+     "words": 26081,
+     "bytes": 159943,
+     "tokens_per_word": 1.6123,
+     "bytes_per_token": 3.804,
+     "lossless": 1.0
+    },
+    "Ru": {
+     "tokens": 48471,
+     "words": 19655,
+     "bytes": 260342,
+     "tokens_per_word": 2.4661,
+     "bytes_per_token": 5.371,
+     "lossless": 1.0
+    },
+    "Zh": {
+     "tokens": 27704,
+     "words": 2069,
+     "bytes": 120806,
+     "tokens_per_word": 13.39,
+     "bytes_per_token": 4.361,
+     "lossless": 1.0
+    },
+    "Ja": {
+     "tokens": 38743,
+     "words": 1081,
+     "bytes": 167109,
+     "tokens_per_word": 35.84,
+     "bytes_per_token": 4.313,
+     "lossless": 1.0
+    },
+    "Ko": {
+     "tokens": 45020,
+     "words": 15430,
+     "bytes": 157799,
+     "tokens_per_word": 2.9177,
+     "bytes_per_token": 3.505,
+     "lossless": 1.0
+    }
+   },
+   "indic_mean_tokens_per_word": 9.3933
+  }
+ },
+ "p1536_loses": [
+  {
+   "lang": "Hi",
+   "p1536_tokens": 39955,
+   "better": [
+    {
+     "tokenizer": "Sarvam-1",
+     "tokens": 35954,
+     "fewer": 0.1001
+    }
+   ]
+  },
+  {
+   "lang": "Mr",
+   "p1536_tokens": 37720,
+   "better": [
+    {
+     "tokenizer": "Sarvam-1",
+     "tokens": 33849,
+     "fewer": 0.1026
+    }
+   ]
+  },
+  {
+   "lang": "Ta",
+   "p1536_tokens": 39575,
+   "better": [
+    {
+     "tokenizer": "Sarvam-1",
+     "tokens": 36390,
+     "fewer": 0.0805
+    }
+   ]
+  },
+  {
+   "lang": "Te",
+   "p1536_tokens": 39535,
+   "better": [
+    {
+     "tokenizer": "Sarvam-1",
+     "tokens": 36250,
+     "fewer": 0.0831
+    }
+   ]
+  },
+  {
+   "lang": "Kn",
+   "p1536_tokens": 40190,
+   "better": [
+    {
+     "tokenizer": "Sarvam-1",
+     "tokens": 38265,
+     "fewer": 0.0479
+    }
+   ]
+  },
+  {
+   "lang": "Gu",
+   "p1536_tokens": 41268,
+   "better": [
+    {
+     "tokenizer": "Sarvam-1",
+     "tokens": 37791,
+     "fewer": 0.0843
+    }
+   ]
+  },
+  {
+   "lang": "Pa",
+   "p1536_tokens": 44591,
+   "better": [
+    {
+     "tokenizer": "Sarvam-1",
+     "tokens": 43590,
+     "fewer": 0.0224
+    }
+   ]
+  },
+  {
+   "lang": "Sa",
+   "p1536_tokens": 51968,
+   "better": [
+    {
+     "tokenizer": "Sarvam-1",
+     "tokens": 50530,
+     "fewer": 0.0277
+    }
+   ]
+  },
+  {
+   "lang": "En",
+   "p1536_tokens": 27099,
+   "better": [
+    {
+     "tokenizer": "o200k_base",
+     "tokens": 26873,
+     "fewer": 0.0083
+    }
+   ]
+  },
+  {
+   "lang": "Fr",
+   "p1536_tokens": 40396,
+   "better": [
+    {
+     "tokenizer": "Krutrim-2",
+     "tokens": 36748,
+     "fewer": 0.0903
+    },
+    {
+     "tokenizer": "Sarvam-M",
+     "tokens": 36748,
+     "fewer": 0.0903
+    },
+    {
+     "tokenizer": "o200k_base",
+     "tokens": 36808,
+     "fewer": 0.0888
+    },
+    {
+     "tokenizer": "BrahmicTokenizer-131K (base)",
+     "tokens": 37704,
+     "fewer": 0.0666
+    }
+   ]
+  },
+  {
+   "lang": "De",
+   "p1536_tokens": 39858,
+   "better": [
+    {
+     "tokenizer": "o200k_base",
+     "tokens": 35224,
+     "fewer": 0.1163
+    },
+    {
+     "tokenizer": "Krutrim-2",
+     "tokens": 36297,
+     "fewer": 0.0893
+    },
+    {
+     "tokenizer": "Sarvam-M",
+     "tokens": 36297,
+     "fewer": 0.0893
+    },
+    {
+     "tokenizer": "BrahmicTokenizer-131K (base)",
+     "tokens": 36338,
+     "fewer": 0.0883
+    }
+   ]
+  },
+  {
+   "lang": "Es",
+   "p1536_tokens": 39126,
+   "better": [
+    {
+     "tokenizer": "o200k_base",
+     "tokens": 35415,
+     "fewer": 0.0948
+    },
+    {
+     "tokenizer": "BrahmicTokenizer-131K (base)",
+     "tokens": 36280,
+     "fewer": 0.0727
+    },
+    {
+     "tokenizer": "Krutrim-2",
+     "tokens": 36657,
+     "fewer": 0.0631
+    },
+    {
+     "tokenizer": "Sarvam-M",
+     "tokens": 36657,
+     "fewer": 0.0631
+    }
+   ]
+  },
+  {
+   "lang": "Ru",
+   "p1536_tokens": 61725,
+   "better": [
+    {
+     "tokenizer": "o200k_base",
+     "tokens": 38188,
+     "fewer": 0.3813
+    },
+    {
+     "tokenizer": "Krutrim-2",
+     "tokens": 41857,
+     "fewer": 0.3219
+    },
+    {
+     "tokenizer": "Sarvam-M",
+     "tokens": 41857,
+     "fewer": 0.3219
+    },
+    {
+     "tokenizer": "Qwen2.5",
+     "tokens": 48471,
+     "fewer": 0.2147
+    }
+   ]
+  },
+  {
+   "lang": "Zh",
+   "p1536_tokens": 44375,
+   "better": [
+    {
+     "tokenizer": "Qwen2.5",
+     "tokens": 27704,
+     "fewer": 0.3757
+    },
+    {
+     "tokenizer": "o200k_base",
+     "tokens": 33555,
+     "fewer": 0.2438
+    },
+    {
+     "tokenizer": "Krutrim-2",
+     "tokens": 39046,
+     "fewer": 0.1201
+    },
+    {
+     "tokenizer": "Sarvam-M",
+     "tokens": 39046,
+     "fewer": 0.1201
+    }
+   ]
+  },
+  {
+   "lang": "Ja",
+   "p1536_tokens": 53768,
+   "better": [
+    {
+     "tokenizer": "Qwen2.5",
+     "tokens": 38743,
+     "fewer": 0.2794
+    },
+    {
+     "tokenizer": "Krutrim-2",
+     "tokens": 43666,
+     "fewer": 0.1879
+    },
+    {
+     "tokenizer": "Sarvam-M",
+     "tokens": 43666,
+     "fewer": 0.1879
+    },
+    {
+     "tokenizer": "o200k_base",
+     "tokens": 44559,
+     "fewer": 0.1713
+    }
+   ]
+  },
+  {
+   "lang": "Ko",
+   "p1536_tokens": 62455,
+   "better": [
+    {
+     "tokenizer": "Krutrim-2",
+     "tokens": 35558,
+     "fewer": 0.4307
+    },
+    {
+     "tokenizer": "Sarvam-M",
+     "tokens": 35558,
+     "fewer": 0.4307
+    },
+    {
+     "tokenizer": "o200k_base",
+     "tokens": 39566,
+     "fewer": 0.3665
+    },
+    {
+     "tokenizer": "Qwen2.5",
+     "tokens": 45020,
+     "fewer": 0.2792
+    }
+   ]
+  }
+ ],
+ "environment": {
+  "python": "3.11.5",
+  "script_sha256": "77dbc58a3a8516cb9eaf142dcc3fcc068ca0e2ea06359a2cd5e79fb9c580bc78"
+ }
+}

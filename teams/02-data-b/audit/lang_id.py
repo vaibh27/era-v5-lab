@@ -48,6 +48,10 @@ VERDICTS = ("short", "other_script", "agree", "mislabelled", "uncertain", "short
 def load_config(path=HERE / "lang_label_config.json"):
     cfg = json.loads(Path(path).read_text(encoding="utf-8"))
     cfg["_dir"] = str(Path(path).resolve().parent)
+    for spec in cfg.get("markers", {}).values():  # v3: a long word list can live in a file, one word per line
+        if "words_file" in spec:
+            lines = (Path(cfg["_dir"]) / spec["words_file"]).read_text(encoding="utf-8").splitlines()
+            spec["words"] = spec.get("words", []) + [w.strip() for w in lines if w.strip() and not w.startswith("#")]
     return cfg
 
 

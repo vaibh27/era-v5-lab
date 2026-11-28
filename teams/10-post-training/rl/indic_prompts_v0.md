@@ -1,6 +1,6 @@
 # Indic prompts with checkable answers, v0
 
-Week 3 and 4, member E (gmrammohan15). Status on 24 Nov: the families and the generator are ready, and 6 person-written templates are in (4 Hindi, 2 Tamil). All are `eligibility: eval` until a Team 2 reader signs off (section 5).
+Week 3 and 4, member E (gmrammohan15). Status on 27 Nov: the families and the generator are ready, and all 6 person-written templates (4 Hindi, 2 Tamil) are signed off by Team 2 readers on `#781` and set to `eligibility: train` (`riteshverma` for Hindi, `truesrini` for Tamil; section 5).
 
 ## 1. What this is
 
@@ -69,10 +69,13 @@ Kept out of v0, because one exact answer is not possible or not safe:
 | Verifier, 6 seed tasks, tests, `indic/<task_id>` in `reward.py` | done: PR #88 (correct = 1 and wrong = 0 for every task; 59 tests) |
 | Generator and template lint | done: PR #89 (41 tests; about 50,000 checked items per second on one CPU core) |
 | Templates written by people | **in progress**. Hindi, gmrammohan15 (24 Nov): `hi_f1_left`, `hi_f1_change`, `hi_f6_minutes`, `hi_f3_weekday`. Tamil, ranjani-cse (#149): `ta_appalam_sub`, `ta_pen_mult`. Telugu: a Telugu-speaking author is asked for 2 templates (the mechanics of `te_f1_change` and `te_f6_minutes` are ready). All pass `generate.py --check` |
-| Team 2 check | **open**. Batch 1 (the 4 Hindi templates, 5 items each) goes to Data B through the G10 lead; shankarpandala assigns a native reader within a day (21 Nov). Request to Team 2 (Data B) readers, by language, from `teams/02-data-b/readers.md`: Hindi mittalutkarsh; Tamil truesrini; Telugu shankarpandala; Bengali aneeshads; Kannada keshavamurali. Each reader checks the wording of the seed task in their language and of each template, and five generated items. When they agree, their handle goes in `team2_reviewer` and the link to their reply goes here |
+| Team 2 check | **done for all 6 current templates** (theschoolofai/era-v5-lab#781). Hindi: `hi_f1_left` (26 Nov) and `hi_f1_change`, `hi_f6_minutes`, `hi_f3_weekday` (27 Nov) all OK'd by `riteshverma` and set to `eligibility: train`. Tamil: `ta_appalam_sub` and `ta_pen_mult` OK'd by `truesrini` on #781 (26 Nov) and set to `eligibility: train`. Batch 1 (the 4 Hindi templates, 5 items each) went to Data B through the G10 lead; shankarpandala assigned native readers. Request to Team 2 (Data B) readers, by language, from `teams/02-data-b/readers.md`: Hindi mittalutkarsh; Tamil truesrini; Telugu shankarpandala; Bengali aneeshads; Kannada keshavamurali. Each reader checks the wording of the seed task in their language and of each template, and five generated items. When they agree, their handle goes in `team2_reviewer` and the link to their reply goes here |
 | Decontamination of the training prompts | runs on each template's generated file before it is used (section 6) |
 
-Team 2 replies (handle, language, what was checked, link) will be listed here as they come in.
+Team 2 replies (handle, language, what was checked, link):
+
+- riteshverma, Hindi, 26 Nov ([#781 comment](https://github.com/theschoolofai/era-v5-lab/issues/781#issuecomment-7198426174)) and 27 Nov (#781): read the 4 Hindi templates as of saitej123/era-v5-lab#158 and their 20 items; every answer and planted wrong answer right. `OK hi_f1_left` (26 Nov), then checked saitej123/era-v5-lab#175 and replied `OK hi_f1_change`, `OK hi_f6_minutes`, `OK hi_f3_weekday` (27 Nov). All 4 Hindi templates are now `eligibility: train` with `team2_reviewer: riteshverma`. mittalutkarsh (in `readers.md`) left Data B and rjvim did not reply, so shankarpandala asked riteshverma.
+- truesrini, Tamil, 26 Nov (#781): `OK ta_appalam_sub`, `OK ta_pen_mult`; both set to `eligibility: train` with `team2_reviewer: truesrini`.
 
 ## 6. Decontamination
 
@@ -80,6 +83,7 @@ Team 2 replies (handle, language, what was checked, link) will be listed here as
 - **Generated items.** The generator's output file works with the Team 9 tools as written. Run `decontam_check.py <items.jsonl> --id-field id --text-field prompt` with the full set, and `canary_scan.py` with the same fields. A trial on 600 items from the test fixture templates (not training templates) gave 0 flagged and 0 canary hits. Every template's output is checked the same way before training, and the counts and the input sha256 are added here. No prompt text goes into the repository, only ids, counts and hashes.
 - **Hindi templates, batch 1 (24 Nov).** 200 items from each of `hi_f1_left`, `hi_f1_change`, `hi_f6_minutes` and `hi_f3_weekday` (`--per-template 200 --seed 1234`, 800 items, input sha256 `b1540f8bc3e0d2ed98b6621505b8091b412ddccb5d23172e950e2d9592444510`), checked with `decontam_check.py` and `canary_scan.py` as on lab main `5b07c354` (fingerprints v2, full set, the same `set_sha256`): 0 flagged, 0 canary hits (4 canaries).
 - **Hindi wording fixes (24 Nov, after the first read in theschoolofai/era-v5-lab#781).** All six templates, 200 items each (`--per-template 200 --seed 1234`, 1,200 items, input sha256 `2174a8cdafb34f24050fb4ffe63564954dfcc1cf831dc9ffbd68375898d03cfd`), the same tools as on lab main `31c98e35`: 0 flagged, 0 canary hits (4 canaries).
+- **Hindi reader fixes (27 Nov, riteshverma's sentences on #781).** All six templates, 200 items each (`--per-template 200 --seed 1234`, 1,200 items, 200 of them `train`, input sha256 `6e5b5d27ff311c40ff51b5a744a8509764beec5d8dc1a954b9ea3d216ddd9fd1`), the same tools as on lab main `8fd731c2`: 0 flagged, 0 canary hits (4 canaries).
 
 ## 7. Questions for TSAI and the lead
 
@@ -87,4 +91,4 @@ Team 2 replies (handle, language, what was checked, link) will be listed here as
    - *TSAI ruling (21 Nov 2026):* **Proceed** with programmatic value fills on human-written templates (same pattern as the rest of the lab's data rule), **conditional on Team 2's reader sign-off actually completing before admission**. AI-written seed tasks remain `eligibility: eval` only.
 2. **Should the Indic share of RL data v1 be fixed per language, or follow the native Indic share in `teams/02-data-b/native_indic_share_v1.md`?**
    - *Team 10 lead recommendation (20 Nov 2026, `saitej123`):* **Follow Team 2's `native_indic_share_v1.md` proportions** with a small per-language floor so every covered language has verifiable RL signal. Awaits TSAI confirmation at Gate 3.
-3. **Current template status (24 Nov 2026):** `rl/indic/templates/indic_templates.yaml` holds 6 person-written templates (4 Hindi, 2 Tamil) and 0 Team 2 reader sign-offs, so 0 are training-eligible yet. Per TSAI's 3 Nov data rule, training templates are not model-generated and await Team 2 review before entering RL training.
+3. **Current template status (27 Nov 2026):** `rl/indic/templates/indic_templates.yaml` holds 6 person-written templates (4 Hindi, 2 Tamil). All 6 are Team 2 signed off on `#781` and set to `eligibility: train` (`riteshverma` for the 4 Hindi templates; `truesrini` for the 2 Tamil templates), with `0 flagged, 0 canary hits` across `1,200` generated items. Per TSAI's 3 Nov data rule, training templates are not model-generated and only signed-off templates enter RL training.

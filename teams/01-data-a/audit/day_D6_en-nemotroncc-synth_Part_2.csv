@@ -1,0 +1,49 @@
+doc_id,read,verdict,diseases,evidence,hex,note
+d511dd903a4a067c,full,clean,,,,
+e46c58b45d4011ce,full,clean,,,,
+8a6a1d17705d675c,full,clean,,,,
+c74967ec522fd90c,full,clean,,,,
+24e830d71e5bc566,full,fix,,,,Confirmed false-positive phone masking by DA-F1-005. A 12-bit binary illustration is incorrectly replaced by <PHONE>. Additional partial phone-context review of raw versus supplied post; 1 observed mask(s).
+063e8bbd4f779a03,full,clean,,,,
+780f33d558dd9f87,full,drop,,,,Reviewer recommends dropping this low-information synthetic task summary: it describes a request for a webinar email while the necessary webinar content is missing. DA-B4-007 removes one meta line but retains the task summary. Quality-policy decision pending; no unsupported disease code assigned.
+9e9afb31ec4eecd5,full,fix,,,,DA-C5-005 removes Topic: Japanese Used Cars at raw offset 0. This is a single subject heading; the rule does not distinguish it from a tag/keyword list.
+282a9f774a954f79,full,clean,,,,
+7523ebd6d772fada,full,fix,,,,"DA-C2-003 removes repeated Cost, Element, Range and Cool-Down fields across different spell records, including the field near raw offset 400. These repetitions express independent record values; preserve structured records rather than deduplicating lines globally."
+9b60a97bd619362d,full,clean,,,,
+96a659fe3e369e94,full,clean,,,,
+7566e41e459e6255,full,clean,,,,
+dded0be038079859,full,clean,,,,
+b415a2af9acab8c0,full,clean,,,,
+79034f4823c0a497,full,clean,,,,
+b3b84f2e80df609c,full,fix,,,,DA-C5-005 removes the single Topic heading at raw offset 0 describing governments and banks during financial globalization. Preserve informative subject headings.
+055ecf0228699d9e,full,clean,,,,
+de5b3e2dd5b7fbb0,full,clean,,,,
+93bf1542853fd276,full,fix,,,,"Potential content loss: DA-B4-007 deletes the complete final bullet under Extended family relationships because it contains a source-availability caveat, leaving a heading without its explanation. Review at sentence/clause level before changing the medicine."
+e8f908a42871e4b6,partial,fix,,,,Confirmed false-positive phone masking by DA-F1-005. Sandpaper grit sequences 80-120-180 and 100-150-220 are incorrectly replaced by two <PHONE> tokens. Partial phone-context review of raw versus supplied post; 2 observed mask(s).
+4bc070c79215632d,partial,fix,,,,Incorrect masking under the F1 keep-organisations/public-contact policy: WNCCEIB organisation contact. Partial phone-context review of raw versus supplied post; 1 observed mask(s).
+1f472835ef145fb9,partial,fix,,,,Confirmed false-positive phone masking by DA-F1-005. A Nintendo 3DS friend code (FC) is incorrectly replaced by <PHONE>; it is not a telephone number. Partial phone-context review of raw versus supplied post; 1 observed mask(s).
+fa933cc36ed916ff,partial,fix,,,,Incorrect masking under the F1 keep-organisations/public-contact policy: Gee & Missler Heating & Air Conditioning business contact. Partial phone-context review of raw versus supplied post; 1 observed mask(s).
+c27ffe1aed1ee536,partial,fix,,,,Incorrect masking under the F1 keep-organisations/public-contact policy: school assessment director official inquiry contact. Partial phone-context review of raw versus supplied post; 1 observed mask(s).
+17003ddc9fb7a9d6,partial,fix,,,,"Incorrect masking under the F1 keep-organisations/public-contact policy: Catholic Charities and City-County Youth Bureau contacts (two masks; the second source number is incomplete, which is not a reason to relabel it private). Partial phone-context review of raw versus supplied post; 2 observed mask(s)."
+020037fc56eaceee,partial,fix,,,,"Confirmed false-positive phone masking by DA-F1-005. The first three octets of broadcast address 255.255.255.254 are replaced, leaving <PHONE>.254. Partial phone-context review of raw versus supplied post; 1 observed mask(s)."
+364298590b01a61e,partial,fix,,,,Incorrect masking under the F1 keep-organisations/public-contact policy: Burraja cultural-program contact. Partial phone-context review of raw versus supplied post; 1 observed mask(s).
+452886dff1756ff9,partial,fix,,,,Incorrect masking under the F1 keep-organisations/public-contact policy: university tournament sponsorship contact. Partial phone-context review of raw versus supplied post; 1 observed mask(s).
+8aecb4bed3222e59,partial,fix,,,,Incorrect masking under the F1 keep-organisations/public-contact policy: public voter-registration status service; repeated occurrences are treated inconsistently. Partial phone-context review of raw versus supplied post; 1 observed mask(s).
+487169495fd63645,partial,fix,,,,REVIEW REQUIRED; not a confirmed false positive. Named volunteer coordinator in an institutional setting; public versus personal line is not established. Retain existing masking until resolved. Partial phone-context review of raw versus supplied post; 1 observed mask(s).
+417036b98dd9380a,partial,fix,,,,Incorrect masking under the F1 keep-organisations/public-contact policy: museum-program registration/waitlist; repeated occurrences are treated inconsistently. Partial phone-context review of raw versus supplied post; 1 observed mask(s).
+1643b537b787cb99,partial,fix,,,,"Confirmed false-positive phone masking by DA-F1-005. Two subnet-mask examples lose their first three octets, leaving <PHONE>.0. Preserve numeric examples; the questionable 225-prefixed source example is a separate factual issue. Partial phone-context review of raw versus supplied post; 2 observed mask(s)."
+0fdc213d4606fc4f,partial,fix,,,,Incorrect masking under the F1 keep-organisations/public-contact policy: Penn LPS Online course registration. Partial phone-context review of raw versus supplied post; 1 observed mask(s).
+b00929f7a291d0c8,partial,fix,,,,Incorrect masking under the F1 keep-organisations/public-contact policy: Education Director booking contact with extension. Partial phone-context review of raw versus supplied post; 1 observed mask(s).
+23111b1b824081cd,partial,fix,,,,REVIEW REQUIRED; not a confirmed false positive. Unattributed number above a health article; organisation ownership is not established. Retain existing masking until resolved. Partial phone-context review of raw versus supplied post; 1 observed mask(s).
+07c8d8752910472e,partial,fix,,,,Incorrect masking under the F1 keep-organisations/public-contact policy: Get Trainee training-provider contact. Partial phone-context review of raw versus supplied post; 1 observed mask(s).
+53b84b1caa2f39f1,partial,fix,,,,REVIEW REQUIRED; not a confirmed false positive. Two named church-program contacts; personal versus institutional ownership is not established. Retain existing masking until resolved. Partial phone-context review of raw versus supplied post; 2 observed mask(s).
+d6f8a9fc304391e3,partial,clean,,,,"Direct personal contact: the observed phone mask appears appropriate. Other occurrences/formats were not certified; this is a masking-review control, not a full-document clearance. Partial phone-context review of raw versus supplied post; 1 observed mask(s)."
+9c8ae5f6ab4bbca8,partial,fix,,,,Incorrect masking under the F1 keep-organisations/public-contact policy: Paleorama workshop registration. Partial phone-context review of raw versus supplied post; 1 observed mask(s).
+4ee1673075b7d128,partial,fix,,,,"Confirmed false-positive phone masking by DA-F1-005. The phone regex crosses two adjacent IP test values in shell code, consuming the end of one and start of the next. Preserve the original code, including intentionally invalid IP test cases. Partial phone-context review of raw versus supplied post; 1 observed mask(s)."
+ba1bae6cb7f032c5,partial,fix,,,,"Incorrect masking under the F1 keep-organisations/public-contact policy: historical phone-number/phoneword explanation (PE6-5000), with no private person identified. Partial phone-context review of raw versus supplied post; 1 observed mask(s)."
+05d5bae84c860471,partial,fix,,,,"Confirmed false-positive phone masking by DA-F1-005. The last three octets of illustrative IP address 162.69.239.132 are replaced, leaving 162.<PHONE>. Partial phone-context review of raw versus supplied post; 1 observed mask(s)."
+6f6a0e1ab208e97b,partial,fix,,,,"Confirmed false-positive phone masking by DA-F1-005. The last three octets of a server IP address are incorrectly replaced, leaving 139.<PHONE>. Partial phone-context review of raw versus supplied post; 1 observed mask(s)."
+8988e16c5bbdda86,partial,clean,,,,Personal-record listing: the observed phone mask appears appropriate. Whole-document drop eligibility and other privacy fields were not reviewed; this is not a full-document clearance. Partial phone-context review of raw versus supplied post; 1 observed mask(s).
+cef3cbc54c914320,partial,fix,,,,REVIEW REQUIRED; not a confirmed false positive. Event-registration number with no organisation identified. Retain existing masking until resolved. Partial phone-context review of raw versus supplied post; 1 observed mask(s).
+d6e8da1b50823198,partial,fix,,,,REVIEW REQUIRED; not a confirmed false positive. Advertised professional contact for a named practitioner; sole-practitioner policy needs confirmation. Retain existing masking until resolved. Partial phone-context review of raw versus supplied post; 1 observed mask(s).
+af4fc4c9232d331d,partial,fix,,,,"Confirmed false-positive phone masking by DA-F1-005. A subnet mask is partially replaced, leaving <PHONE>.0. Partial phone-context review of raw versus supplied post; 1 observed mask(s)."

@@ -4,65 +4,126 @@ Reader: Jeevan (oddjoker91)
 Issue: #527
 Source: Issue #527 · TSAI 16 Nov p1536 shards · Random(5) · 25 fw2 + 25 sangraha-v
 
+C6 is a custom label for repeated punctuation. C6-only observations are recorded as notes on OK rows. Counts are by unique document.
 | doc_id | shard | verdict | code | offset | note |
 |---|---|---|---|---|---|
-| 6db951b250c657d3 | ind-te-fw2-train-000000 | finding | C1 | 7740 | C1 summary: At offset 7740 - An author sign-off containing the name, date, and location appears after “సశేషం” (to be continued). Remove only if the corpus excludes author metadata. C6 summary: At offsets 997 and 3833 (“..”), and 393 - Review and standardize inconsistent pause punctuation or ellipses. |
-| 2e8ed66048ff2823 | ind-te-fw2-train-000000 | finding | C1 | 2794 | C1 summary: At offsets 2794, 2807, 2817, 2831, 2845, and 2855 - Unrelated site navigation labels appear at the end of the article. C6 summary: At offsets 2810 and 2848 - Standardize pause punctuation or ellipses (“...”) |
-| 9a240fe902c930f8 | ind-te-fw2-train-000000 | finding | C3 | 3926 | C3 summary: At offset 3926 - A paragraph ends abruptly in the middle of a sentence, and the next paragraph starts on a different topic, suggesting missing text. C6 summary: At offsets 41, 649, 1479, 1616, 1773, 2613, and 5566 (“..”), 292, 482, 583, 633, 1518, and 1546 (“…”), 987 (“….”), and 4779 (“. .”) - Standardize pause punctuation or ellipses. |
+| 6db951b250c657d3 | ind-te-fw2-train-000000 | ok |  |  | C6, repeated punctuation |
+| 2e8ed66048ff2823 | ind-te-fw2-train-000000 | finding | C1 | 2794 | Site navigation at the end |
+| 2e8ed66048ff2823 | ind-te-fw2-train-000000 | finding | C6 | 2810 | Repeated pause punctuation |
+| 9a240fe902c930f8 | ind-te-fw2-train-000000 | finding | C3 | 3926 | Paragraph cuts off mid-sentence |
+| 9a240fe902c930f8 | ind-te-fw2-train-000000 | finding | C6 | 41 | Repeated pause punctuation |
 | 04e317555ce5c808 | ind-te-fw2-train-000000 | ok |  |  |  |
-| dd61b40b6eddafdb | ind-te-fw2-train-000000 | finding | C1 | 0 | C1 summary: At offsets 0 - Unrelated news headlines, section tags, and a source-brand opinion label appear in the article. C6 summary: At offsets 73 and 143 (“...”), 173 (“....”), and 446, 474, and 884 (“..”) - Standardize pause punctuation or ellipses. |
-| 6d520fc2cc81d278 | ind-te-fw2-train-000000 | ok |  |  | C6 summary: At offset 616 - Standardize pause punctuation or ellipses (“..”). |
-| 133a01d2c0f144f1 | ind-te-fw2-train-000000 | finding | C1 | 0 | C1 summary: At offsets 0 and 1296 - Advertisement labels appear at the beginning and in the middle of the article. C6 summary: At offsets 141 and 637 - Standardize pause punctuation or ellipses (“..”). D4 summary: At offsets 2131 - Bad translation causes confusing sentences, unclear meanings, and incorrect subjects. D5 summary: At offsets 1026 and 1425 - Unnatural word order and incorrect tense make the sentences sound like literal translations from English. |
+| dd61b40b6eddafdb | ind-te-fw2-train-000000 | finding | C1 | 0 | Unrelated headlines before the article |
+| dd61b40b6eddafdb | ind-te-fw2-train-000000 | finding | C6 | 73 | Repeated pause punctuation |
+| 6d520fc2cc81d278 | ind-te-fw2-train-000000 | ok |  |  | C6, repeated punctuation |
+| 133a01d2c0f144f1 | ind-te-fw2-train-000000 | finding | C1 | 0 | Advertisement labels |
+| 133a01d2c0f144f1 | ind-te-fw2-train-000000 | finding | D4 | 2131 | Incorrect subject in translation |
+| 133a01d2c0f144f1 | ind-te-fw2-train-000000 | finding | D5 | 1026 | Unnatural word order |
+| 133a01d2c0f144f1 | ind-te-fw2-train-000000 | finding | C6 | 141 | Repeated pause punctuation |
 | ef06f22675401506 | ind-te-fw2-train-000000 | ok |  |  |  |
-| 912a9287102b2de5 | ind-te-fw2-train-000000 | ok |  |  | C6 summary: standardize pause punctuation or ellipses (“..”) at offsets 100, 336, 1568, 1963, 2147, and 2461. |
+| 912a9287102b2de5 | ind-te-fw2-train-000000 | ok |  |  | C6, repeated punctuation |
 | b9beb41c56ac8be1 | ind-te-fw2-train-000000 | ok |  |  |  |
-| 7688f142b2cfc3f9 | ind-te-fw2-train-000000 | finding | C1 | 0 | C1 summary: At offset 0 - A "Trending on OneIndia" section with unrelated news headlines appears before the main article. C6 summary: At offsets 47, 62, 135, 240, and 1187 (“..”), and 297 (“...”) - Standardize pause punctuation or ellipses. |
-| 138a2baebd2fde8e | ind-te-fw2-train-000000 | finding | C1 | 0 | C1 summary: At offsets 0 and 1476 - Unrelated news headlines, section tags, and a "READ MORE" link appear before and within the article. C6 summary: At offsets 67, 139, 285, 321, and 1472 (“...”), and 226, 379, 434, 502, 523, 540, 625, 894, 1414, 1454, and 1516 (“..”) - Standardize pause punctuation or ellipses. D4 summary: At offsets 1555, 2154, 2837, and 3565 - Bad translation causes inconsistent character names, confusing descriptions of the boon and Mohini, and broken sentence structure. |
+| 7688f142b2cfc3f9 | ind-te-fw2-train-000000 | finding | C1 | 0 | Unrelated trending headlines |
+| 7688f142b2cfc3f9 | ind-te-fw2-train-000000 | finding | C6 | 47 | Repeated pause punctuation |
+| 138a2baebd2fde8e | ind-te-fw2-train-000000 | finding | C1 | 0 | Unrelated headlines |
+| 138a2baebd2fde8e | ind-te-fw2-train-000000 | finding | C1 | 1476 | Unrelated reading link |
+| 138a2baebd2fde8e | ind-te-fw2-train-000000 | finding | D4 | 1555 | Confusing translated phrasing |
+| 138a2baebd2fde8e | ind-te-fw2-train-000000 | finding | C6 | 67 | Repeated pause punctuation |
 | be7520bfbaf77890 | ind-te-fw2-train-000000 | ok |  |  |  |
-| b69b432b731f3faa | ind-te-fw2-train-000000 | ok |  |  | C6 summary: At offsets 421, 622, 3445, 3534, 3618, 3786, 5780, 6317, and 6898 - Standardize pause punctuation or ellipses (“..”). |
-| b05798a9c9aee8f5 | ind-te-fw2-train-000000 | finding | D4 | 1468 | D4 summary: At offset 1468 - Unclear wording and incorrect translation, including “ఈ ఫోన్లో” without clear context and “మొబైల్ రేట్” instead of “మొబైల్ డేటా,” make parts of the article confusing. |
-| 516e603f171aaecf | ind-te-fw2-train-000000 | ok |  |  | C6 summary: standardize pause punctuation or ellipses (“..” at offset 1037, “…” at offset 1090). |
-| 54f348bd08251e89 | ind-te-fw2-train-000000 | ok |  |  | C6 summary: At offsets 473 and 848 (“….”), and 1309 (“…..”) - Standardize pause punctuation or ellipses. |
-| cbaf18c51fbe9ae0 | ind-te-fw2-train-000000 | ok |  |  | C6 summary: At offsets 453, 493, 1137, and 1442 - Standardize pause punctuation or ellipses (“..”). |
-| 485dc3ea73684beb | ind-te-fw2-train-000000 | finding | C1 | 451 | C1 summary: At offsets 451, 946, and 1444 - Unwanted "Read more" links appear after the article previews. C6 summary: At offsets 451, 946, and 1444 - Standardize pause punctuation or ellipses (“…”). |
-| ed48ce72f8d3a867 | ind-te-fw2-train-000000 | finding | B4 | 13 | B4 summary: At offset 13 - An unwanted quotation mark appears after the name in all nine headings. D4 summary: At offset 1438 and in other passages - Unnatural wording and confusing sentence structures suggest bad translation. C6 summary: At offset 651 - Standardize pause punctuation or ellipses (“. .”). |
-| 3702535665a80144 | ind-te-fw2-train-000000 | finding | D5 | 1715 | D5 summary: At offsets 1715 and 2298 - Unnatural wording, heavy passive sentences, and literal English-style phrasing make parts of the health article difficult to read. C6 summary: At offset 2808 - Standardize pause punctuation or ellipses (“…”). |
+| b69b432b731f3faa | ind-te-fw2-train-000000 | ok |  |  | C6, repeated punctuation |
+| b05798a9c9aee8f5 | ind-te-fw2-train-000000 | finding | D4 | 1468 | Incorrect mobile-data wording |
+| 516e603f171aaecf | ind-te-fw2-train-000000 | ok |  |  | C6, repeated punctuation |
+| 54f348bd08251e89 | ind-te-fw2-train-000000 | ok |  |  | C6, repeated punctuation |
+| cbaf18c51fbe9ae0 | ind-te-fw2-train-000000 | ok |  |  | C6, repeated punctuation |
+| 485dc3ea73684beb | ind-te-fw2-train-000000 | finding | C1 | 451 | Reading prompts after previews |
+| 485dc3ea73684beb | ind-te-fw2-train-000000 | finding | C6 | 451 | Repeated pause punctuation |
+| ed48ce72f8d3a867 | ind-te-fw2-train-000000 | finding | B4 | 13 | Stray punctuation in repeated headings |
+| ed48ce72f8d3a867 | ind-te-fw2-train-000000 | finding | D4 | 1438 | Confusing translated phrasing |
+| ed48ce72f8d3a867 | ind-te-fw2-train-000000 | finding | C6 | 651 | Repeated pause punctuation |
+| 3702535665a80144 | ind-te-fw2-train-000000 | finding | D5 | 1715 | Unnatural literal phrasing |
+| 3702535665a80144 | ind-te-fw2-train-000000 | finding | C6 | 2808 | Repeated pause punctuation |
 | 6c2395abce5ffdd8 | ind-te-fw2-train-000000 | ok |  |  |  |
-| bbd7063f9afefafa | ind-te-fw2-train-000000 | ok |  |  | C6 summary: standardize pause punctuation or ellipses (“...” at offset 1263, “…” at offset 1540, “..” at offsets 2647 and 2774). |
-| 252e08a461fd0786 | ind-te-fw2-train-000000 | finding | B4 | 1050 | B4 at offset 1050 - Stray vertical bar glued to a word; editor or markup residue |
-| 2feafe4e03ddfeeb | ind-te-fw2-train-000000 | finding | F3 | 0 | F3 summary: At offset 0 - Commercial content promoting an adult sexual product may be unsuitable for the intended training dataset. C1 summary: At offset 2518 - Seller FAQ content about OEM services, free samples, deposits, and quality control appears after the product description. |
-| 2916174b86946c9f | ind-te-sangraha-v-train-000000 | finding | C1 | 2745 | C1 summary: At offset 2745 - Unwanted website promotional footer listing news categories and encouraging readers to visit News18 appears after the article. C6 summary: At offsets 397, 503, 966, 1321, 1823, 2536, 2592, and 2711 - Standardize inconsistent pause punctuation (“. .”) appearing throughout the article. |
-| c0bed69b5e318691 | ind-te-sangraha-v-train-000000 | finding | G1 | 2294 | G1 summary: At offset 2294 - An unwanted virama (“్”) appears before “ఛల్” in the movie title “్ఛల్ మోహన్ రంగ”, creating a malformed Telugu word.  C6 summary: At offsets 77, 290, 798, 1335, 1507, 1665, 1859, 2612, 2685, 2714, 3321, and 3333 (“. .”), and 1437 (“. . .”) - Standardize inconsistent pause punctuation or ellipses throughout the text. |
+| bbd7063f9afefafa | ind-te-fw2-train-000000 | ok |  |  | C6, repeated punctuation |
+| 252e08a461fd0786 | ind-te-fw2-train-000000 | finding | B4 | 1050 | Stray markup separator |
+| 2feafe4e03ddfeeb | ind-te-fw2-train-000000 | finding | C1 | 2518 | Seller FAQ after product description |
+| 2916174b86946c9f | ind-te-sangraha-v-train-000000 | finding | C1 | 2745 | Promotional footer |
+| 2916174b86946c9f | ind-te-sangraha-v-train-000000 | finding | C6 | 397 | Repeated pause punctuation |
+| c0bed69b5e318691 | ind-te-sangraha-v-train-000000 | finding | G1 | 2294 | Stray virama already in the original |
+| c0bed69b5e318691 | ind-te-sangraha-v-train-000000 | finding | C6 | 77 | Repeated pause punctuation |
 | 3257ef02557d8182 | ind-te-sangraha-v-train-000000 | ok |  |  |  |
-| dcab7aed06124aa5 | ind-te-sangraha-v-train-000000 | ok |  |  | C6 summary: At offsets 255, 490, 1567, 1866, 2453, 2565, 2754, and 3013 - Standardize inconsistent pause punctuation or ellipses (“. . .”) throughout the article. |
-| 9cf64aa853f92a6e | ind-te-sangraha-v-train-000000 | finding | C1 | 0 | C1 summary: At offset 0 - The document consists entirely of entertainment news headlines and teaser links, with no main article content. This appears to be unwanted website navigation or related-news material. C6 summary: At offsets 117, 303, 368, 425, and 852 (“. !”), offsets 179, 737, 763, 925, 1238, 1294, and 1593 (“. .”), and offsets 475, 625, 986, 1016, and 1082 (“...”) - Standardize inconsistent pause and ending punctuation. |
-| 93e7eecff9220b7a | ind-te-sangraha-v-train-000000 | finding | C1 | 0 | C1 summary: At offset 0 - Three unrelated hashtag-prefixed news headlines appear before the main article about India's drone incident near Doklam. These are unwanted related-news links. C6 summary: At offsets 244, 883, and 2025 - Standardize inconsistent pause punctuation or ellipses (“. .”). |
-| 17c932407b5c257e | ind-te-sangraha-v-train-000000 | ok |  |  | C6 summary: At offsets 302, 418, and 463 - Standardize inconsistent pause punctuation or ellipses (“. .”) throughout the article. |
-| 596ab620a2d7c8aa | ind-te-sangraha-v-train-000000 | finding | C3 | 10 | C3 summary: At offsets 10 and 3871 - The text begins in the middle of an argument with “చెప్పలేం.” and ends abruptly at “ఇంద్రగణాన్ని అక్షరక్రమంగా మార్చటానికి ఆరు”, leaving the discussion incomplete. B5 summary: At offset 635 and around offset 1956 - Unwanted formatting characters, including “**” and “\|”, appear within the text. C6 summary: At offset 1031 - Standardize pause punctuation or ellipses (“...”). |
-| 770fa57ad4aadee6 | ind-te-sangraha-v-train-000000 | finding | B4 | 63 | B4 summary: At offsets 63, 87, 112, 152, 175, 1184, 1205, 1650, 1679, 2216, 2249, 2636, and 2666 - Literal “\n” sequences appear instead of actual line breaks, leaving unwanted formatting characters in the text. C4 summary: At offset 2638 - An unrelated headline about gold prices appears after the tiger news article. C3 summary: At offset 2668 - The document ends with an unrelated, incomplete sentence fragment, “ఆ సమయంలో చాలెంజింగ్గా పనిచేశాం..”. C6 summary: At offsets 1677 and 2698 (“..”), and 2367 (“...”) - Standardize inconsistent pause punctuation or ellipses. |
-| e793a49a9267b311 | ind-te-sangraha-v-train-000000 | ok |  |  | C6 summary: At offsets 32 and 1361 (“....”), and 458 and 868 (“.... .”) - Standardize inconsistent pause punctuation or ellipses in the article's title and section headings. |
-| 79743ecf6eccfdd2 | ind-te-sangraha-v-train-000000 | finding | C3 | 4123 | C3 summary: At offset 4123 - The document ends abruptly at “క్షణకాలములో జీవితమును”, leaving the final sentence incomplete. The truncation is already present in the original document. C6 summary: At offset 1028 - Review the spaced hyphens (“- - -”) used as pause punctuation for standardization. |
+| dcab7aed06124aa5 | ind-te-sangraha-v-train-000000 | ok |  |  | C6, repeated punctuation |
+| 9cf64aa853f92a6e | ind-te-sangraha-v-train-000000 | finding | C1 | 0 | Headline and teaser feed |
+| 9cf64aa853f92a6e | ind-te-sangraha-v-train-000000 | finding | C6 | 179 | Repeated pause punctuation |
+| 93e7eecff9220b7a | ind-te-sangraha-v-train-000000 | finding | C1 | 0 | Unrelated teaser headlines |
+| 93e7eecff9220b7a | ind-te-sangraha-v-train-000000 | finding | C6 | 244 | Repeated pause punctuation |
+| 17c932407b5c257e | ind-te-sangraha-v-train-000000 | ok |  |  | C6, repeated punctuation |
+| 596ab620a2d7c8aa | ind-te-sangraha-v-train-000000 | finding | C3 | 10 | Opens mid-discussion |
+| 596ab620a2d7c8aa | ind-te-sangraha-v-train-000000 | finding | C3 | 3871 | Ends mid-sentence |
+| 596ab620a2d7c8aa | ind-te-sangraha-v-train-000000 | finding | B5 | 635 | Stray formatting marks |
+| 596ab620a2d7c8aa | ind-te-sangraha-v-train-000000 | finding | C6 | 1031 | Repeated pause punctuation |
+| 770fa57ad4aadee6 | ind-te-sangraha-v-train-000000 | finding | B4 | 63 | Literal line-break escapes |
+| 770fa57ad4aadee6 | ind-te-sangraha-v-train-000000 | finding | C4 | 2638 | Unrelated headline appended |
+| 770fa57ad4aadee6 | ind-te-sangraha-v-train-000000 | finding | C3 | 2668 | Incomplete trailing sentence |
+| 770fa57ad4aadee6 | ind-te-sangraha-v-train-000000 | finding | C6 | 1677 | Repeated pause punctuation |
+| e793a49a9267b311 | ind-te-sangraha-v-train-000000 | ok |  |  | C6, repeated punctuation |
+| 79743ecf6eccfdd2 | ind-te-sangraha-v-train-000000 | finding | C3 | 4123 | Ends mid-sentence in the original |
 | 145c59b38def4091 | ind-te-sangraha-v-train-000000 | ok |  |  |  |
-| 7b0ea297aaf7605a | ind-te-sangraha-v-train-000000 | ok |  |  | C6 summary: standardize pause punctuation or ellipses (“...”) at offsets 86 and 1131. |
-| f0faf4a857fc5ab1 | ind-te-sangraha-v-train-000000 | finding | B4 | 78 | C1 summary: At offsets 3512 - Unwanted website navigation, publication metadata, and reader comments appear before and after the main book review. B4 summary: At offset 78 and throughout the document - Literal “\n” sequences appear in place of line breaks and require formatting cleanup if present in the stored source. C5 summary: At offset 3264 - A long list of concatenated website tags and keywords appears after the book review. C6 summary: At offsets 646, 721, 1016, 1663, 1670, 2747, 2863, 3674, and 3878 (“...”), offset 2439 (“......”), offsets 2600 and 3018 (“....”), and offset 3631 (“..”) - Review and standardize inconsistent pause punctuation or ellipses throughout the document. |
-| cc4a51e251da7c74 | ind-te-sangraha-v-train-000000 | ok |  |  | C6 summary: At offsets 481 and 1329 (“....”) - Standardize inconsistent pause punctuation or ellipses in the section headings. |
-| 1a8aad935b986ed5 | ind-te-sangraha-v-train-000000 | finding | C2 | 74 | C2 summary: At offset 74 - The same article title is repeated at the beginning of the document. B4 summary: At offset 72 and throughout the document - Literal “\n” sequences appear instead of line breaks and may require formatting cleanup. C6 summary: At offsets 53 and 127 (“....”) - Standardize inconsistent pause punctuation or ellipses in the repeated article title. D4 summary: At offsets 262, 366, and 1008 - Unnatural wording, an incorrect screen-size expression (“1080 అంగుళాల”), and inconsistent brand-name spellings suggest poor translation and text-quality problems. |
-| 9bfa09cffb8a3546 | ind-te-sangraha-v-train-000000 | finding | D4 | 267 | D4 summary: At offsets 267, 563, 733, and 1343 - Poor translation causes scrambled product model numbers, confusing quoted statements, incorrect acceleration figures, and unnatural technical descriptions throughout the article. |
-| 276b212905eecf58 | ind-te-sangraha-v-train-000000 | ok |  |  | C6 summary: At offsets 412, 865, 881, 999, 1057, 1213, and 1458 - Standardize inconsistent pause punctuation or ellipses (“. .”) throughout the article. |
-| 70034570861ccce2 | ind-te-sangraha-v-train-000000 | ok |  |  | C6 summary: At offset 76 (“. . .”), and offsets 485 and 1767 (“. .”) - Standardize inconsistent pause punctuation or ellipses throughout the article. |
-| fba15c72e9506685 | ind-te-sangraha-v-train-000000 | finding | C1 | 1050 | C1 summary: At offset 1050 - An unwanted running book header “-ఆంధ్రభారత కవితా విమర్శనము” appears in the middle of a sentence, splitting a Telugu word and interrupting the text. C6 summary: At offset 1878 - Standardize pause punctuation or ellipses (“. .”). B5 summary: At “చుచు__అనఁగా” - Double underscores appear between Telugu words, possibly representing damaged punctuation or leftover formatting. Broken Markdown is not confirmed. |
-| 5297d8d67962ff10 | ind-te-sangraha-v-train-000000 | finding | C4 | 0 | C4 summary: At offsets 0, 1380, 1960, and 2157 - Multiple separate food-related news snippets about millet recipes, festival foods, cuisine rankings, prison menus, and celebrity events are joined without clear document boundaries. C1 summary: At offsets 149, 307, 1650, 1809, and 2577 - English topic labels such as “Holi 2023,” “sankranti 2023,” and “Food Facts” appear before news snippets. These may be intentional headline prefixes rather than unwanted boilerplate. lC6 summary: At offsets 200, 663, 717, 901, 1029, 1060, 1253, 1298, 1340, 1470, 1513, 1610, 1645, 1804, 1870, 1956, and 2797 (“. .”), and offset 770 (“. . .”) - Standardize inconsistent pause punctuation or ellipses throughout the text. |
+| 7b0ea297aaf7605a | ind-te-sangraha-v-train-000000 | ok |  |  | C6, repeated punctuation |
+| f0faf4a857fc5ab1 | ind-te-sangraha-v-train-000000 | finding | B4 | 78 | Literal line-break escapes |
+| f0faf4a857fc5ab1 | ind-te-sangraha-v-train-000000 | finding | C1 | 80 | Site navigation before review |
+| f0faf4a857fc5ab1 | ind-te-sangraha-v-train-000000 | finding | C1 | 3512 | Reader comments after review |
+| f0faf4a857fc5ab1 | ind-te-sangraha-v-train-000000 | finding | C5 | 3264 | Concatenated tags |
+| f0faf4a857fc5ab1 | ind-te-sangraha-v-train-000000 | finding | C6 | 646 | Repeated pause punctuation |
+| cc4a51e251da7c74 | ind-te-sangraha-v-train-000000 | ok |  |  | C6, repeated punctuation |
+| 1a8aad935b986ed5 | ind-te-sangraha-v-train-000000 | finding | C2 | 74 | Repeated article title |
+| 1a8aad935b986ed5 | ind-te-sangraha-v-train-000000 | finding | B4 | 72 | Literal line-break escape |
+| 1a8aad935b986ed5 | ind-te-sangraha-v-train-000000 | finding | D4 | 366 | Incorrect screen-size wording |
+| 1a8aad935b986ed5 | ind-te-sangraha-v-train-000000 | finding | C6 | 53 | Repeated pause punctuation |
+| 9bfa09cffb8a3546 | ind-te-sangraha-v-train-000000 | finding | D4 | 267 | Scrambled model and performance wording |
+| 276b212905eecf58 | ind-te-sangraha-v-train-000000 | ok |  |  | C6, repeated punctuation |
+| 70034570861ccce2 | ind-te-sangraha-v-train-000000 | ok |  |  | C6, repeated punctuation |
+| fba15c72e9506685 | ind-te-sangraha-v-train-000000 | finding | C1 | 1050 | Running header interrupts sentence |
+| fba15c72e9506685 | ind-te-sangraha-v-train-000000 | finding | C6 | 1878 | Repeated pause punctuation |
+| 5297d8d67962ff10 | ind-te-sangraha-v-train-000000 | finding | C4 | 0 | Several separate food stories joined |
+| 5297d8d67962ff10 | ind-te-sangraha-v-train-000000 | finding | C6 | 200 | Repeated pause punctuation |
 | dd3256761b753929 | ind-te-sangraha-v-train-000000 | ok |  |  |  |
-| 53100bd4993c00e0 | ind-te-sangraha-v-train-000000 | ok |  |  | C6 summary: At offsets 182, 487, 508, 1017, 1475, 1803, 2456, and 2614 - Standardize inconsistent pause punctuation or ellipses (“..”) throughout the article. |
-| 3d2c104293639b06 | ind-te-sangraha-v-train-000000 | ok |  |  | C6 summary: At offsets 1002 and 1045 - Standardize pause punctuation or ellipses (“. .”). |
-| 8dd1db4e115077a8 | ind-te-sangraha-v-train-000000 | ok |  |  | C6 summary: At offset 962 - Standardize pause punctuation or ellipses (“....”). |
+| 53100bd4993c00e0 | ind-te-sangraha-v-train-000000 | ok |  |  | C6, repeated punctuation |
+| 3d2c104293639b06 | ind-te-sangraha-v-train-000000 | ok |  |  | C6, repeated punctuation |
+| 8dd1db4e115077a8 | ind-te-sangraha-v-train-000000 | ok |  |  | C6, repeated punctuation |
 
 Documents read: 50/50
-OK: 25
-Documents with a finding: 25
-Codes found: C1, C3, D4, B4, D5, F3, G1, C2, C4
+OK: 26
+Documents with a finding: 24
+Codes found: B4, B5, C1, C2, C3, C4, C5, C6, D4, D5, G1
 Confirmed cleaning-introduced G1–G4 findings: 0
 The G1 word break in doc 27 is present in the original.
-Problems cleaning missed: 11
+In doc 20, cleaning removed a detached Telugu sign at offset 4739 from an already malformed fragment.
+Documents with leftover boilerplate (C1): 12
 
 Only reviewed rows are exported. Full document text and private backups must stay out of Git.
+
+## Final notes
+
+The notes use short paraphrases. Each finding has its own row, code, offset, and note. A repeated document ID counts once in the document totals. C6-only observations are notes on OK rows.
+
+### Documents with multiple findings
+
+- **Doc 2** (`2e8ed66048ff2823`) appears on **2 rows**. C1 at offset 2794 — Site navigation at the end; C6 at offset 2810 — Repeated pause punctuation.
+- **Doc 3** (`9a240fe902c930f8`) appears on **2 rows**. C3 at offset 3926 — Paragraph cuts off mid-sentence; C6 at offset 41 — Repeated pause punctuation.
+- **Doc 5** (`dd61b40b6eddafdb`) appears on **2 rows**. C1 at offset 0 — Unrelated headlines before the article; C6 at offset 73 — Repeated pause punctuation.
+- **Doc 7** (`133a01d2c0f144f1`) appears on **4 rows**. C1 at offset 0 — Advertisement labels; D4 at offset 2131 — Incorrect subject in translation; D5 at offset 1026 — Unnatural word order; C6 at offset 141 — Repeated pause punctuation.
+- **Doc 11** (`7688f142b2cfc3f9`) appears on **2 rows**. C1 at offset 0 — Unrelated trending headlines; C6 at offset 47 — Repeated pause punctuation.
+- **Doc 12** (`138a2baebd2fde8e`) appears on **4 rows**. C1 at offset 0 — Unrelated headlines; C1 at offset 1476 — Unrelated reading link; D4 at offset 1555 — Confusing translated phrasing; C6 at offset 67 — Repeated pause punctuation.
+- **Doc 19** (`485dc3ea73684beb`) appears on **2 rows**. C1 at offset 451 — Reading prompts after previews; C6 at offset 451 — Repeated pause punctuation.
+- **Doc 20** (`ed48ce72f8d3a867`) appears on **3 rows**. B4 at offset 13 — Stray punctuation in repeated headings; D4 at offset 1438 — Confusing translated phrasing; C6 at offset 651 — Repeated pause punctuation.
+- **Doc 21** (`3702535665a80144`) appears on **2 rows**. D5 at offset 1715 — Unnatural literal phrasing; C6 at offset 2808 — Repeated pause punctuation.
+- **Doc 26** (`2916174b86946c9f`) appears on **2 rows**. C1 at offset 2745 — Promotional footer; C6 at offset 397 — Repeated pause punctuation.
+- **Doc 27** (`c0bed69b5e318691`) appears on **2 rows**. G1 at offset 2294 — Stray virama already in the original; C6 at offset 77 — Repeated pause punctuation.
+- **Doc 30** (`9cf64aa853f92a6e`) appears on **2 rows**. C1 at offset 0 — Headline and teaser feed; C6 at offset 179 — Repeated pause punctuation.
+- **Doc 31** (`93e7eecff9220b7a`) appears on **2 rows**. C1 at offset 0 — Unrelated teaser headlines; C6 at offset 244 — Repeated pause punctuation.
+- **Doc 33** (`596ab620a2d7c8aa`) appears on **4 rows**. C3 at offset 10 — Opens mid-discussion; C3 at offset 3871 — Ends mid-sentence; B5 at offset 635 — Stray formatting marks; C6 at offset 1031 — Repeated pause punctuation.
+- **Doc 34** (`770fa57ad4aadee6`) appears on **4 rows**. B4 at offset 63 — Literal line-break escapes; C4 at offset 2638 — Unrelated headline appended; C3 at offset 2668 — Incomplete trailing sentence; C6 at offset 1677 — Repeated pause punctuation.
+- **Doc 39** (`f0faf4a857fc5ab1`) appears on **5 rows**. B4 at offset 78 — Literal line-break escapes; C1 at offset 80 — Site navigation before review; C1 at offset 3512 — Reader comments after review; C5 at offset 3264 — Concatenated tags; C6 at offset 646 — Repeated pause punctuation.
+- **Doc 41** (`1a8aad935b986ed5`) appears on **4 rows**. C2 at offset 74 — Repeated article title; B4 at offset 72 — Literal line-break escape; D4 at offset 366 — Incorrect screen-size wording; C6 at offset 53 — Repeated pause punctuation.
+- **Doc 45** (`fba15c72e9506685`) appears on **2 rows**. C1 at offset 1050 — Running header interrupts sentence; C6 at offset 1878 — Repeated pause punctuation.
+- **Doc 46** (`5297d8d67962ff10`) appears on **2 rows**. C4 at offset 0 — Several separate food stories joined; C6 at offset 200 — Repeated pause punctuation.

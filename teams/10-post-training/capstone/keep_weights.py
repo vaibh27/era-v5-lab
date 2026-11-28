@@ -110,6 +110,15 @@ def check_reader_config(run_dir, reader_spec: dict) -> dict:
     return rec
 
 
+def model_spec_of(doc: dict) -> dict:
+    """The model map in a reader's JSON, read as Team 9's scorer reads --model-config (lm_eval_lab.load_model_config):
+    a run's manifest.json holds it at config.model; otherwise the document's `model`, or the document itself."""
+    spec = doc["config"]["model"] if "config" in doc else doc.get("model", doc)
+    if not isinstance(spec, dict):
+        raise TypeError(f"the model config is a {type(spec).__name__}, not a map")
+    return spec
+
+
 def save_run_folder(model, remote_root, run_id: str, step: int, probe_fn, tokens: int = 0, seed: int = 0) -> dict:
     """Write `model` (plain weights, state_dict keys as they are) as <remote_root>/<run_id>/ and return where it is.
 
@@ -168,10 +177,14 @@ def main(argv=None) -> int:
     sub = ap.add_subparsers(dest="cmd", required=True)
     c = sub.add_parser("check", help="exit 1 unless --model-spec (a JSON of the resolved `model` config) matches")
     c.add_argument("--run-dir", required=True)
-    c.add_argument("--model-spec", required=True, help="JSON file: the reader's resolved config['model'] (or {'model': ...})")
+    c.add_argument("--model-spec", required=True,
+                   help="JSON file: the run's manifest.json, the reader's resolved config['model'], or {'model': ...}")
     a = ap.parse_args(argv)
-    spec = json.loads(Path(a.model_spec).read_text(encoding="utf-8"))
-    spec = spec.get("model", spec)
+    try:
+        spec = model_spec_of(json.loads(Path(a.model_spec).read_text(encoding="utf-8")))
+    except (OSError, ValueError, KeyError, TypeError, AttributeError) as e:
+        print(f"REFUSED: {a.model_spec}: no model config could be read: {type(e).__name__}: {e}")
+        return 1
     try:
         rec = check_reader_config(a.run_dir, spec)
     except ValueError as e:

@@ -445,7 +445,7 @@ def shard_config(tmp_path, tsai_outputs, config, monkeypatch):
     tokenizer.write_text("{}", encoding="utf-8")
     return write_config(tmp_path / "pipeline.json", tsai_outputs,
                         shards={"script": str(FAKE_SHARDS), "tokenizer": str(tokenizer), "packs": ["code-go"], "tokens": 100,
-                                "dataset_version": "sample"})
+                                "workers": 3, "dataset_version": "sample"})
 
 
 def test_shards_run_after_f2_and_are_recorded(tmp_path, shard_config):
@@ -461,6 +461,7 @@ def test_shards_run_after_f2_and_are_recorded(tmp_path, shard_config):
     assert json.loads((run / "pipeline_manifest.json").read_text(encoding="utf-8"))["stages"][-1]["stage"] == "shards"
     assert json.loads((run / "shards" / "args.json").read_text(encoding="utf-8"))["packs"] == ["code-go"]
     assert json.loads((run / "shards" / "args.json").read_text(encoding="utf-8"))["tokens"] == 100
+    assert json.loads((run / "shards" / "args.json").read_text(encoding="utf-8"))["workers"] == 3
     assert json.loads((run / "shards" / "args.json").read_text(encoding="utf-8"))["dataset_version"] == "sample"
     assert (run / "logs" / "shards.log").is_file() and s["digest"] and s["code_sha256"]
 
@@ -513,6 +514,8 @@ def test_no_clean_job_summary_means_no_shard_stage(tmp_path, shard_config, tsai_
 
 @pytest.mark.parametrize("change, message", [({"tokenizer": "/no/such/tokenizer.json"}, "stages.shards.tokenizer"),
                                              ({"tokens": 0}, "stages.shards.tokens"), ({"packs": "code-go"}, "stages.shards.packs"),
+                                             ({"workers": 0}, "stages.shards.workers"), ({"workers": "4"}, "stages.shards.workers"),
+                                             ({"workers": True}, "stages.shards.workers"),
                                              ({"script": "/no/such/run_shards.py"}, "shards script"),
                                              ({"dataset_version": None}, "dataset_version is None: name the corpus release"),
                                              ({"dataset_version": ""}, "dataset_version is '': name the corpus release"),

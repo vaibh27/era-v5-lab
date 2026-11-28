@@ -1,6 +1,6 @@
 # Global SDPA attention (follow-up to #536)
 
-**Status:** code, CPU and CUDA tests done; dry run 2 A/B on the current `dryrun2.yaml` done on one A100-80GB (1.05x, 1.5 GB less peak).
+**Status:** code, CPU and CUDA tests done. The 20-step table below is a speed check on synthetic tokens (about 1.05x, 1.5 GB less peak). It is not the held-out dry run 2 comparison.
 **Default:** unchanged (eager). Switching dry run 2 is a Team 5/TSAI call; the `dryrun2_sdpa` arm is ready.
 **Scope:** WO2 is the G5 trainer that dry run 2 runs. The G6 perfkit default stays eager (perfkit supports `attn_impl: sdpa` as an option).
 
@@ -9,7 +9,7 @@
 - `model.attn_impl` accepts `eager` (default, unchanged) or `sdpa`.
 - With `sdpa`, global layers call `F.scaled_dot_product_attention(q, k, v, is_causal=True, enable_gqa=...)` on the shared K/V heads. No `T x T` score matrix is materialised and K/V are not copied per query head.
 - Backend: Flash. Profiled on A100 with no backend forced, under the trainer's deterministic settings: the attention kernels are Flash, not the math fallback, and Flash alone serves the call (GQA, causal, bf16, head dim 64).
-- Local layers (window, sinks) always use the eager path. Config v1 has no local layers, so every layer uses SDPA there.
+- Local layers (window, sinks) always use the eager path. Config v1 does not set `attn_impl` to sdpa.
 - No new parameters or state: checkpoints load in either mode.
 - Arm `configs/arms/dryrun2_sdpa.yaml` is `dryrun2.yaml` plus `model.attn_impl: sdpa`, for the A/B.
 
@@ -26,7 +26,7 @@ Official Gate 2 A/B by TSAI (#536 at `91e00cd`, T2 Muon arm, seed 1234, bf16, st
 | eager | 2,088.1 ms | 1.000x | 11.12 GiB |
 | SDPA | 1,902.3 ms | 1.098x | 9.56 GiB |
 
-Dry run 2 A/B on the current `dryrun2.yaml` (class main `eef1834d`: KAS V2 head, Muon lr 0.006, router default; the same G5 code as `g6/dev`). One A100-80GB on Modal, torch 2.14.1+cu130, both arms in the same container, 20 timed steps after 3 warm-up, synthetic tokens (same model and batch shape as dry run 2):
+Speed check on the dry run 2 shape (class main `eef1834d`: KAS V2 head, Muon lr 0.006, router default; the same G5 code as `g6/dev`). One A100-80GB on Modal, torch 2.14.1+cu130, both arms in the same container, 20 timed steps after 3 warm-up, synthetic tokens (same model and batch shape as dry run 2). This table is not the held-out comparison.
 
 | variant | median step | baseline / variant | peak allocation | first step |
 | :--- | ---: | ---: | ---: | ---: |

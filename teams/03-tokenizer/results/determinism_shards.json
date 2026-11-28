@@ -1,0 +1,372 @@
+{
+ "tokenizer_sha256": "e6b93a93a60520d7b1af2e9242485f443b5596a1e116b8f8798d83bbad25a64b",
+ "inputs": {
+  "en-fineweb-edu": {
+   "sample_part": "train/en-fineweb-edu/part-00000.parquet",
+   "sha256": "53cbbf7a77b84e46108836c889e6cb83e6fcdc048c316fbf699586a7fef1dbe2",
+   "rows": 2000
+  },
+  "code-python": {
+   "sample_part": "train/code-python/part-00000.parquet",
+   "sha256": "8d9575b43cfb9cf3647e63e91d026eb8ed40f3981b698da33b83d09e6326641d",
+   "rows": 2000
+  },
+  "code-cpp": {
+   "sample_part": "train/code-cpp/part-00000.parquet",
+   "sha256": "5d638fd78dc7a661e1f287199984de8d4e1c7fee5e9ce21dfa5b5fb97a00a971",
+   "rows": 2000
+  },
+  "math-finemath": {
+   "sample_part": "train/math-finemath/part-00000.parquet",
+   "sha256": "a5dbb4da6d0c2e890901aecb10b5c2bd71378d8e66e5975adc0d7d98592f51b2",
+   "rows": 2000
+  },
+  "sci-finepdfs": {
+   "sample_part": "train/sci-finepdfs/part-00000.parquet",
+   "sha256": "87dd59b9268bf5784e8f60e40a829ccfb6c6b62d28e6c88ddb4770782af0eb69",
+   "rows": 2000
+  },
+  "ind-hi-fw2": {
+   "sample_part": "train/ind-hi-fw2/part-00000.parquet",
+   "sha256": "28f77743e293573f70554bdc8f3d3b29764f5e5154ed53ee4fb61c951604c4e3",
+   "rows": 2000
+  },
+  "ind-ta-fw2": {
+   "sample_part": "train/ind-ta-fw2/part-00000.parquet",
+   "sha256": "1eb97539bd7f328e3f6c54d9b297216e3934cc473566c10659d9537437f2af74",
+   "rows": 2000
+  },
+  "ind-bn-fw2": {
+   "sample_part": "train/ind-bn-fw2/part-00000.parquet",
+   "sha256": "fda2605fd302c5bee7ad3c780e11460a7ccdfc60d4a1467854c1dee974d633e9",
+   "rows": 2000
+  },
+  "ind-sa-fw2": {
+   "sample_part": "train/ind-sa-fw2/part-00000.parquet",
+   "sha256": "1238fde5e67f36130972e3aa0df015450d6352e979dcbc0a852f9133fb17e0ee",
+   "rows": 2000
+  },
+  "ind-ml-fw2": {
+   "sample_part": "train/ind-ml-fw2/part-00000.parquet",
+   "sha256": "ad1c7c7021864d45eeaa9f6524467c35db853c5be0593067d9b52b98914bdfe6",
+   "rows": 2000
+  }
+ },
+ "settings": {
+  "A": {
+   "RAYON_NUM_THREADS": "1",
+   "PYTHONHASHSEED": "1",
+   "TOKENIZERS_PARALLELISM": "false"
+  },
+  "B": {
+   "PYTHONHASHSEED": "2",
+   "TOKENIZERS_PARALLELISM": "true"
+  }
+ },
+ "packs": {
+  "en-fineweb-edu": {
+   "shards": 1,
+   "docs": 1997,
+   "tokens": 1928034,
+   "left_out": {
+    "secret": 3
+   },
+   "files_compared": 7,
+   "differ_A_vs_B": {},
+   "differ_B_vs_rebuilt": {},
+   "bin_sha256": {
+    "en-fineweb-edu-train-000000.bin": "b81c5932ca98b6abc3d4f75b79078cd3e8d1d1563f1b37ce8d0badb187365884"
+   },
+   "manifest_tokenizer_sha256": [
+    "e6b93a93a60520d7b1af2e9242485f443b5596a1e116b8f8798d83bbad25a64b"
+   ],
+   "manifest_eos": [
+    130822
+   ],
+   "seconds": {
+    "A": 6.64,
+    "B": 4.18
+   },
+   "tokens_per_second_1_thread": 290510
+  },
+  "code-python": {
+   "shards": 2,
+   "docs": 1999,
+   "tokens": 2314031,
+   "left_out": {
+    "special": 1
+   },
+   "files_compared": 13,
+   "differ_A_vs_B": {},
+   "differ_B_vs_rebuilt": {},
+   "bin_sha256": {
+    "code-python-train-000000.bin": "adc08e2d583650d08f216b99bd743cbdf09e5e91b2ace53ec89268f1bfb90898",
+    "code-python-train-000001.bin": "4826006bbeece233c5bc5895634edf3904e8b76387b6a3a119a05571d01f7ce8"
+   },
+   "manifest_tokenizer_sha256": [
+    "e6b93a93a60520d7b1af2e9242485f443b5596a1e116b8f8798d83bbad25a64b"
+   ],
+   "manifest_eos": [
+    130822
+   ],
+   "seconds": {
+    "A": 5.77,
+    "B": 3.77
+   },
+   "tokens_per_second_1_thread": 401253
+  },
+  "code-cpp": {
+   "shards": 2,
+   "docs": 2000,
+   "tokens": 3773919,
+   "left_out": {},
+   "files_compared": 13,
+   "differ_A_vs_B": {},
+   "differ_B_vs_rebuilt": {},
+   "bin_sha256": {
+    "code-cpp-train-000000.bin": "249ef91abc3d8b6ad94157eb43b09b4881007612fed43d541d29b249f5075a6d",
+    "code-cpp-train-000001.bin": "005e88a90443b07fdffdf0c62052f820a38c6df334d71340995f4cb891930a44"
+   },
+   "manifest_tokenizer_sha256": [
+    "e6b93a93a60520d7b1af2e9242485f443b5596a1e116b8f8798d83bbad25a64b"
+   ],
+   "manifest_eos": [
+    130822
+   ],
+   "seconds": {
+    "A": 7.51,
+    "B": 4.68
+   },
+   "tokens_per_second_1_thread": 502629
+  },
+  "math-finemath": {
+   "shards": 2,
+   "docs": 1976,
+   "tokens": 3260153,
+   "left_out": {
+    "secret": 24
+   },
+   "files_compared": 13,
+   "differ_A_vs_B": {},
+   "differ_B_vs_rebuilt": {},
+   "bin_sha256": {
+    "math-finemath-train-000000.bin": "57dd1a4f19e9281bcf72f623d448860929fcdcab41f2bbe8c1fc36f19345879c",
+    "math-finemath-train-000001.bin": "c2a9c2afb4308183314be2720613281b358b9dfaa17101c75baa131416639bd0"
+   },
+   "manifest_tokenizer_sha256": [
+    "e6b93a93a60520d7b1af2e9242485f443b5596a1e116b8f8798d83bbad25a64b"
+   ],
+   "manifest_eos": [
+    130822
+   ],
+   "seconds": {
+    "A": 7.02,
+    "B": 4.66
+   },
+   "tokens_per_second_1_thread": 464487
+  },
+  "sci-finepdfs": {
+   "shards": 8,
+   "docs": 1998,
+   "tokens": 14136534,
+   "left_out": {
+    "secret": 2
+   },
+   "files_compared": 49,
+   "differ_A_vs_B": {},
+   "differ_B_vs_rebuilt": {},
+   "bin_sha256": {
+    "sci-finepdfs-train-000000.bin": "4211a1a7cea3cca83e9de033ce30d4f159ba3b14cd11b8f29294849d49956ea7",
+    "sci-finepdfs-train-000001.bin": "79cf82a578adec42a5609c5ec43f92bb05c22b992bf89d8f34f0b9635df9d47d",
+    "sci-finepdfs-train-000002.bin": "7eca4eb24d8b890e1d256ca502048a6002c5e6458bf61bec3ec6c2d13a80e32e",
+    "sci-finepdfs-train-000003.bin": "29b4205120ea8b1a6347d2d57ca13289b938808542b99ade09bb1255e338aefb",
+    "sci-finepdfs-train-000004.bin": "dae0c72de875d93c91f8e335c4031ef12fe0e770608c0387285aaff7c814dc9d",
+    "sci-finepdfs-train-000005.bin": "f5894fbf99b66454e245e9751db2a5d69123d9e0c7798a67bbd92229b99bb736",
+    "sci-finepdfs-train-000006.bin": "96500b6863556ab2b44b533932928e31f150bed5b8388f647559f8eb06f0deb9",
+    "sci-finepdfs-train-000007.bin": "a351e0b6fc0076f7b6e04a22431c3d7930a89a888b5f1bcfa2db56e7ef371974"
+   },
+   "manifest_tokenizer_sha256": [
+    "e6b93a93a60520d7b1af2e9242485f443b5596a1e116b8f8798d83bbad25a64b"
+   ],
+   "manifest_eos": [
+    130822
+   ],
+   "seconds": {
+    "A": 26.94,
+    "B": 16.98
+   },
+   "tokens_per_second_1_thread": 524780
+  },
+  "ind-hi-fw2": {
+   "shards": 1,
+   "docs": 2000,
+   "tokens": 1385709,
+   "left_out": {},
+   "files_compared": 7,
+   "differ_A_vs_B": {},
+   "differ_B_vs_rebuilt": {},
+   "bin_sha256": {
+    "ind-hi-fw2-train-000000.bin": "d0f8e1600ae3451e2058c58adbfa198e149f07a9a2effed480a8bc43f42007c5"
+   },
+   "manifest_tokenizer_sha256": [
+    "e6b93a93a60520d7b1af2e9242485f443b5596a1e116b8f8798d83bbad25a64b"
+   ],
+   "manifest_eos": [
+    130822
+   ],
+   "seconds": {
+    "A": 5.25,
+    "B": 3.49
+   },
+   "tokens_per_second_1_thread": 264145
+  },
+  "ind-ta-fw2": {
+   "shards": 1,
+   "docs": 2000,
+   "tokens": 1281731,
+   "left_out": {},
+   "files_compared": 7,
+   "differ_A_vs_B": {},
+   "differ_B_vs_rebuilt": {},
+   "bin_sha256": {
+    "ind-ta-fw2-train-000000.bin": "128b8c1230780274d5855c095b94a151def8b6bbb66045788ca4ba42d69976e5"
+   },
+   "manifest_tokenizer_sha256": [
+    "e6b93a93a60520d7b1af2e9242485f443b5596a1e116b8f8798d83bbad25a64b"
+   ],
+   "manifest_eos": [
+    130822
+   ],
+   "seconds": {
+    "A": 5.35,
+    "B": 3.65
+   },
+   "tokens_per_second_1_thread": 239664
+  },
+  "ind-bn-fw2": {
+   "shards": 1,
+   "docs": 2000,
+   "tokens": 1447195,
+   "left_out": {},
+   "files_compared": 7,
+   "differ_A_vs_B": {},
+   "differ_B_vs_rebuilt": {},
+   "bin_sha256": {
+    "ind-bn-fw2-train-000000.bin": "f083954d80fc0fcf9196778e6bc9964f034d4f07a14922b2b0f37b9cded6948e"
+   },
+   "manifest_tokenizer_sha256": [
+    "e6b93a93a60520d7b1af2e9242485f443b5596a1e116b8f8798d83bbad25a64b"
+   ],
+   "manifest_eos": [
+    130822
+   ],
+   "seconds": {
+    "A": 5.21,
+    "B": 3.61
+   },
+   "tokens_per_second_1_thread": 277789
+  },
+  "ind-sa-fw2": {
+   "shards": 3,
+   "docs": 2000,
+   "tokens": 5064313,
+   "left_out": {},
+   "files_compared": 19,
+   "differ_A_vs_B": {},
+   "differ_B_vs_rebuilt": {},
+   "bin_sha256": {
+    "ind-sa-fw2-train-000000.bin": "ec10189f0701eee3bca0a2fec4017b0ff33e4a0183516ebbd787bd343597edf3",
+    "ind-sa-fw2-train-000001.bin": "b527ab0abccbc62ee12eb7c245b70f8b2c3830eb5b98697c369e1c4d936b99c0",
+    "ind-sa-fw2-train-000002.bin": "f2fc7a9c2409df1a0a4f15474d52eb75ad86aefcae90e68766b412b3342f5a84"
+   },
+   "manifest_tokenizer_sha256": [
+    "e6b93a93a60520d7b1af2e9242485f443b5596a1e116b8f8798d83bbad25a64b"
+   ],
+   "manifest_eos": [
+    130822
+   ],
+   "seconds": {
+    "A": 11.04,
+    "B": 6.8
+   },
+   "tokens_per_second_1_thread": 458552
+  },
+  "ind-ml-fw2": {
+   "shards": 1,
+   "docs": 2000,
+   "tokens": 1434326,
+   "left_out": {},
+   "files_compared": 7,
+   "differ_A_vs_B": {},
+   "differ_B_vs_rebuilt": {},
+   "bin_sha256": {
+    "ind-ml-fw2-train-000000.bin": "04b5c9adb0a3681a35d1398f19ffbd202b85fad3bd2f0f3cf76e89e9ba362018"
+   },
+   "manifest_tokenizer_sha256": [
+    "e6b93a93a60520d7b1af2e9242485f443b5596a1e116b8f8798d83bbad25a64b"
+   ],
+   "manifest_eos": [
+    130822
+   ],
+   "seconds": {
+    "A": 5.86,
+    "B": 3.93
+   },
+   "tokens_per_second_1_thread": 244871
+  }
+ },
+ "problems": [],
+ "refusals": {
+  "p1536 plus one trailing newline (same JSON)": {
+   "sha256": "9c6406275969ff89e213fd16b70d540b76b2873700eaca5cf5c038c6db88a846",
+   "exit": 1,
+   "shards_written": 0,
+   "message": "tokenizer.json: sha256 9c6406275969ff89e213fd16b70d540b76b2873700eaca5cf5c038c6db88a846, not the frozen p1536 e6b93a93a60520d7b1af2e9242485f443b5596a1e116b8f879"
+  },
+  "C3 sample-v0": {
+   "sha256": "15468e66457b43af79f695cbe585c0d03e3cfe7a4a5d04d189dd3c6b9f02ddc3",
+   "exit": 1,
+   "shards_written": 0,
+   "message": "tokenizer.json: sha256 15468e66457b43af79f695cbe585c0d03e3cfe7a4a5d04d189dd3c6b9f02ddc3, not the frozen p1536 e6b93a93a60520d7b1af2e9242485f443b5596a1e116b8f879"
+  }
+ },
+ "structural_identity_ids": [
+  "A: release/tokenizer.json (Kaggle sohiyiy/p1536-sample-v0)",
+  "B: rebuild_cand.py --cand p1536 out/p1536/tokenizer.json (16 Nov job)",
+  "--- token string -> id ---",
+  "  |A| 131,072   |B| 131,072",
+  "  same string in both:        131,072",
+  "  same string AND same id:    131,072",
+  "  same string, different id:  0",
+  "--- ids whose string differs: 0 ---",
+  "--- pipeline pieces ---",
+  "  normalizer     identical: True",
+  "  pre_tokenizer  identical: True",
+  "  decoder        identical: True",
+  "  post_processor identical: True",
+  "--- encode check ---",
+  "  en      10 tokens   identical ids: True",
+  "  hi      14 tokens   identical ids: True",
+  "  bn       9 tokens   identical ids: True",
+  "  ta      10 tokens   identical ids: True",
+  "  te       7 tokens   identical ids: True",
+  "  or      12 tokens   identical ids: True",
+  "  code    17 tokens   identical ids: True",
+  "  mixed    7 tokens   identical ids: True",
+  "  all samples identical: True"
+ ],
+ "roundtrip_shards": {
+  "exit": 0,
+  "report": "determinism_shards_roundtrip.md",
+  "summary": "**Result: PASS.** 19,970 documents drawn from 22 shards in 5 domains (up to 1,000,000 per domain, seed 4); 0 failures."
+ },
+ "environment": {
+  "python": "3.11.5",
+  "platform": "macOS-26.3-arm64-arm-64bit",
+  "cores": 10,
+  "script_sha256": "da61123a6644aa18be6104e12234cb05c261e8a10ba3780ecf1534b2aaefb681",
+  "shard_writer_sha256": "368b21df727a97d1ab07b3e19d915d00c5357d9b19a00f106171c508d153371e"
+ },
+ "result": "PASS",
+ "seconds": 241
+}

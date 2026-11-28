@@ -122,3 +122,8 @@ generates past the end of the turn.
   is stripped. The check compares stripped text.
 - **Our checkpoint:** waits for the dry-run-1 checkpoint (G7) and `export_hf.py` (Member D). Then the same notebook
   runs with `MODEL` set to the export and `FORMAT_HINT = "off"`.
+
+## KV-cache quantization
+
+fp8 and TurboQuant KV-cache measurements (vLLM 0.33.0 and an emulation, with sarvam-1 as a proxy) are in
+[`kv_cache/`](kv_cache/).

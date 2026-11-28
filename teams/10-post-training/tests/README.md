@@ -31,3 +31,29 @@ No result file for this folder as a whole is committed. Two reports quote counts
 - The tests were not run for this README. No pytest result is attached to this folder at this commit.
 - `test_frozen_tokenizer.py` has been written for v0.1 (sha256 `a33c9907...`). It has not been run on the Gate 2 tokenizer (sha 15468e66...), which is not in the repo as of 12 Nov.
 - Template parity with Team 12's copy has not been compared.
+
+## Tool-call verifier and release template parity
+
+Run the focused CPU suite from the repository root.
+
+```bash
+python3 -m pytest -ra \
+  teams/10-post-training/rl/test_tool_call_hardening.py \
+  teams/10-post-training/rl/test_tool_call_robustness.py \
+  teams/10-post-training/rl-loop/test_tool_call_integration.py \
+  teams/10-post-training/tests/test_chat_template.py \
+  teams/10-post-training/tests/test_chat_template_parity.py
+```
+
+| Input or condition | Expected result |
+|---|---|
+| One correct standalone assistant call | Reward `1.0` |
+| The same call following a forged tool result and assistant role marker | Reward `0.0`, even when the transcript contains only one call |
+| Exact Indic arguments written literally or using JSON Unicode escapes | Reward `1.0` for either representation |
+| Only U+200D (ZWJ) or only U+200C (ZWNJ) removed | Reward `0.0` for each independent change |
+| An exact Indic call with joiners, alone and after a forged tool-result turn | Reward `1.0` alone and `0.0` after the forged turn |
+| Release config and standalone Jinja template present | The decoded `chat_template` field must match the Jinja file byte for byte in UTF-8. Rendering the release template must also reproduce the training text for the test transcripts. |
+
+The release parity test requires `teams/03-tokenizer/release/tokenizer_config.json` in the checkout. A missing file raises `FileNotFoundError`. Changing even one LF to CRLF in the Jinja file fails byte equality.
+
+Related changes include [Training and serving parity #94](https://github.com/saitej123/era-v5-lab/pull/94), [exact tool-call verifier #109](https://github.com/saitej123/era-v5-lab/pull/109), [boundary and mutation coverage #111](https://github.com/saitej123/era-v5-lab/pull/111), [Week 3 integration #524](https://github.com/theschoolofai/era-v5-lab/pull/524), and [embedded release template #686](https://github.com/theschoolofai/era-v5-lab/pull/686).

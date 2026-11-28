@@ -19,6 +19,7 @@ ap.add_argument("--tokenizer", type=Path, required=True)
 ap.add_argument("--out", type=Path, required=True)
 ap.add_argument("--pack", action="append", default=[])
 ap.add_argument("--tokens", type=int)
+ap.add_argument("--workers", type=int, default=1)
 ap.add_argument("--pack-table", type=Path)
 ap.add_argument("--any-tokenizer", action="store_true")
 ap.add_argument("--dataset-version")
@@ -52,7 +53,7 @@ for f in sorted(a.input.glob("*/*/*.parquet")):
         counts["shards"] += 1
         counts["truncated"] += cut
 manifest = json.loads(a.manifest.read_text(encoding="utf-8"))
-(a.out / "args.json").write_text(json.dumps({"tokens": a.tokens, "packs": a.pack, "any_tokenizer": a.any_tokenizer, "dataset_version": a.dataset_version,
+(a.out / "args.json").write_text(json.dumps({"tokens": a.tokens, "packs": a.pack, "any_tokenizer": a.any_tokenizer, "dataset_version": a.dataset_version, "workers": a.workers,
                                              "pack_table": str(a.pack_table)}), encoding="utf-8")
 (a.out / "shards_summary.json").write_text(json.dumps({
     "run_id": "another-run" if os.environ.get("FAKE_SHARDS_BAD_RUN") else manifest["run_id"],

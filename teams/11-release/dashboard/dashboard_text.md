@@ -13,3 +13,4 @@ One plain sentence for each panel on the public dashboard. The panel names match
 | Mixture-of-Experts Load Balance | This panel shows how evenly the model spreads tokens across its routed experts, comparing the busiest expert with the average in the least balanced layer. |
 | Training Pace: Tokens per Second | This panel shows how many tokens the run processes each second. |
 | Training Pace: Step Time | This panel shows how long each training step takes. |
+| Dataset and Shard Composition | This panel shows each pack of text by subject and language, with its token count and the share of its documents that cleaning removed. |

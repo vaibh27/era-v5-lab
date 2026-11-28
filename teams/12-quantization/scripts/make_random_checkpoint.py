@@ -57,16 +57,32 @@ def main():
     ap.add_argument('--seed', type=int, default=0)
     ap.add_argument('--std', type=float, default=0.1, help='every matrix is drawn from N(0, std). With the default '
                     'initialisation the attention is close to uniform, and a wrong RoPE layout would change nothing')
+    # dry run 2 shape (configs/arms/dryrun2.yaml): --head-mode kas_v2 --bias-gamma 0.001 --router-bias-std 0.01
+    ap.add_argument('--head-mode', choices=('dense', 'kas_v2'), default='dense',
+                    help='kas_v2: G5 #717 codec input + KAS head (W_out, beta, unigram bias, rank-64 correction)')
+    ap.add_argument('--bias-gamma', type=float, default=0.0, help='moe.bias_gamma (loss-free balancer step size)')
+    ap.add_argument('--router-bias-std', type=float, default=0.0,
+                    help='fill every layer\'s router_bias buffer from N(0, std), as a trained run with bias_gamma > 0 has')
+    ap.add_argument('--unigram-std', type=float, default=1.0, help='kas_v2: head.unigram drawn from N(0, std)')
     a = ap.parse_args()
     rows, lengths = byte_table(a.tokenizer, a.pos_dim)
     model = dict(vocab_size=len(rows), n_embd=a.d_model, n_layer=a.n_layer, n_head=a.n_head, n_kv_head=a.n_kv_head,
                  block_size=a.seq_len, ke_max_pos=a.pos_dim, rope_theta=10000.0, rotary_fraction=1.0, norm_eps=1e-5,
-                 mtp=False, moe=dict(num_experts=a.n_expert, num_shared=a.n_shared, top_k=a.top_k, ffn_hidden=a.d_ff, bias=False))
+                 mtp=False, moe=dict(num_experts=a.n_expert, num_shared=a.n_shared, top_k=a.top_k, ffn_hidden=a.d_ff,
+                                     bias=False, **({'bias_gamma': a.bias_gamma} if a.bias_gamma else {})),
+                 **({'head_mode': 'kas_v2'} if a.head_mode == 'kas_v2' else {}))
     torch.manual_seed(a.seed)
     net = LanguageModel(model, rows, lengths)
     with torch.no_grad():
         for key, p in net.named_parameters():
-            p.uniform_(0.5, 1.5) if p.ndim == 1 else p.normal_(std=a.std)   # ndim 1: the norm weights
+            if key == 'head.unigram':
+                p.normal_(std=a.unigram_std)    # a per-token bias that matters when it is dropped
+            else:
+                p.uniform_(0.5, 1.5) if p.ndim == 1 else p.normal_(std=a.std)   # ndim 1: norm weights, KAS beta
+        if a.router_bias_std:
+            for key, b in net.named_buffers():
+                if key.endswith('.router_bias'):
+                    b.normal_(std=a.router_bias_std)
     a.out.mkdir(parents=True, exist_ok=True)
     torch.save({'model': net.state_dict(), 'step': 0}, a.out / 'checkpoint.pt')
     (a.out / 'manifest.json').write_text(json.dumps(

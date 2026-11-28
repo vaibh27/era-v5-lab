@@ -910,9 +910,199 @@
         }
       ],
       "type": "trend"
+    },
+    {
+      "id": 32,
+      "type": "row",
+      "title": "Dataset Composition",
+      "collapsed": false,
+      "gridPos": {
+        "h": 1,
+        "w": 24,
+        "x": 0,
+        "y": 43
+      },
+      "panels": []
+    },
+    {
+      "id": 31,
+      "type": "table",
+      "title": "Dataset and Shard Composition",
+      "description": "This panel shows each pack of text by subject and language, with its token count and the share of its documents that cleaning removed.",
+      "datasource": {
+        "type": "grafana-clickhouse-datasource",
+        "uid": "${ds}"
+      },
+      "gridPos": {
+        "h": 16,
+        "w": 24,
+        "x": 0,
+        "y": 44
+      },
+      "fieldConfig": {
+        "defaults": {},
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "dataset_version"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "Dataset version"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "stage"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "Stage"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "pack_id"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "Pack"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "domain"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "Subject"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "language"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "Language code"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "docs_in"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "Documents in"
+              },
+              {
+                "id": "unit",
+                "value": "short"
+              },
+              {
+                "id": "decimals",
+                "value": 1
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "docs_after_clean"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "Documents after cleaning"
+              },
+              {
+                "id": "unit",
+                "value": "short"
+              },
+              {
+                "id": "decimals",
+                "value": 1
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "token_count"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "Tokens"
+              },
+              {
+                "id": "unit",
+                "value": "short"
+              },
+              {
+                "id": "decimals",
+                "value": 1
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "drop_rate_pct"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "Drop rate (cleaning)"
+              },
+              {
+                "id": "unit",
+                "value": "percent"
+              },
+              {
+                "id": "decimals",
+                "value": 2
+              }
+            ]
+          }
+        ]
+      },
+      "options": {
+        "showHeader": true
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "grafana-clickhouse-datasource",
+            "uid": "${ds}"
+          },
+          "editorType": "sql",
+          "format": 1,
+          "queryType": "table",
+          "rawSql": "SELECT dataset_version, stage, pack_id, domain, language, docs_in, docs_kept AS docs_after_clean, token_count, drop_rate_pct FROM shard_composition FINAL WHERE dataset_version = ${dataset_version:singlequote} ORDER BY stage, pack_id",
+          "refId": "A"
+        }
+      ]
     }
   ],
-  "refresh": "",
+  "refresh": "10s",
   "schemaVersion": 39,
   "tags": [
     "era-v5",
@@ -978,6 +1168,22 @@
         ],
         "query": "10,100,1000,10000",
         "type": "custom"
+      },
+      {
+        "name": "dataset_version",
+        "label": "dataset_version",
+        "type": "query",
+        "datasource": {
+          "type": "grafana-clickhouse-datasource",
+          "uid": "${ds}"
+        },
+        "definition": "SELECT DISTINCT dataset_version FROM shard_composition ORDER BY dataset_version",
+        "query": "SELECT DISTINCT dataset_version FROM shard_composition ORDER BY dataset_version",
+        "current": {},
+        "multi": false,
+        "includeAll": false,
+        "refresh": 2,
+        "sort": 1
       }
     ]
   },

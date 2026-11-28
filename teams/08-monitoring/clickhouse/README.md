@@ -258,3 +258,43 @@ The tests cover each event kind, that host / job / path fields never reach a row
 keys, Team 07's CPU restart drill (`teams/07-infrastructure/results/restart_cpu_rotation_03.txt`: 4 kills, 4
 restarts), real `alarms.py --jsonl` output, and, when ClickHouse is running, a double load checked with panel 32's
 and panel 33's own SQL.
+
+
+## 10. Public dataset composition from Team 01
+
+`adapt_team1_composition.py` combines the same pipeline run's `ledger_summary.json`,
+`shards_summary.json`, and pack metadata. It emits one train row per pack, with
+tokens summed across shards. `docs_in` is raw train documents,
+`docs_after_clean` (stored as `docs_kept`) is the count after cleaning, and
+`drop_rate_pct` is the share removed by cleaning
+only; later deduplication, decontamination and shard exclusions are not included
+in that rate. Held-out parts are not sharded and are not shown. The dataset
+version is displayed in the panel; it identifies the dataset, not proof that a
+particular training run consumed it.
+The panel shows one dataset version at a time, chosen with the
+`dataset_version` selector; rehearsal rows must never be loaded into public
+ClickHouse under a production label. `token_count` comes from shards after
+deduplication and F2 filtering, so it can cover fewer documents than
+`docs_after_clean`.
+
+Rehearsal dry run from the repository root (38 packs, sample-v0, not production):
+
+```bash
+python teams/08-monitoring/clickhouse/adapt_team1_composition.py \
+  --ledger teams/01-data-a/jobs/logs/2026-11-19-first-training-rehearsal-38packs/inventory-run/summaries/ledger_summary.json \
+  --shards teams/01-data-a/jobs/logs/2026-11-19-first-training-rehearsal-38packs/inventory-run/summaries/shards_summary.json \
+  --metadata teams/01-data-a/jobs/logs/2026-11-19-first-training-rehearsal-38packs/config/pack_table_job_shaped.json \
+  --reconcile teams/01-data-a/jobs/logs/2026-11-19-first-training-rehearsal-38packs/inventory-run/summaries/reconcile_summary.json \
+  --dataset-version first-training-v1-rehearsal --dry-run
+```
+
+Remove `--dry-run` to insert into the configured ClickHouse. For production,
+use the completed corpus-v1 run's own ledger summary, shard summary, and
+generated pack metadata together, and pass `--dataset-version corpus-v1`.
+Always pass the production run's reconciliation summary with `--reconcile`.
+The adapter checks that the reconciliation counts match the ledger and shard
+summary; matching counts alone do not establish that the files are from the
+same run. Never relabel the rehearsal as corpus-v1. Only normalized public
+fields are inserted. The table uses `FINAL` to select the latest loaded row
+per dataset, stage, and pack.
+Public counts and rates need TSAI approval: confirm with TSAI before loading the corpus-v1 rows.

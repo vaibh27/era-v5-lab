@@ -206,6 +206,20 @@ class RouterBiasTests(unittest.TestCase):
         self.assertAlmostEqual(r['router_bias']['max_abs'], 0.5); self.assertIn('routing differs', r['router_bias']['warning'])
         self.assertFalse(r['verify']['passed'])   # a bias of 0.5 changes the experts, so A1 sees it, and it did not stop the export
         self.assertTrue((self.dir / 'hf' / 'model.safetensors').exists()); self.assertIn('WARNING', out.getvalue())
+        self.assertTrue(r['verify_zero_router_bias']['passed'])   # with the bias zeroed in G5 too, the wiring is exact
+
+    def test_flag_still_stops_on_a_wiring_error(self):
+        real = export_hf.convert_state
+
+        def broken(*args, **kw):
+            s = real(*args, **kw); s['lm_head.weight'] = s['lm_head.weight'] * 1.01; return s
+        export_hf.convert_state = broken
+        try:
+            with self.assertRaises(SystemExit) as c, contextlib.redirect_stdout(io.StringIO()):
+                export_hf.export(self.run_folder(bias=0.5), self.dir / 'hf', dtype='fp32', n_verify=4, tol=1e-4, drop_router_bias=True)
+            self.assertEqual(c.exception.code, 1)
+        finally:
+            export_hf.convert_state = real
 
     def test_nonzero_bias_with_gamma_zero_never_routed_so_it_is_dropped(self):
         r = self.export(self.run_folder(gamma=0.0, bias=0.5))
@@ -293,6 +307,192 @@ class KasExportTests(unittest.TestCase):
         self.assertEqual(tuple(t['lm_head.weight'].shape), (131072, 32)); self.assertEqual(tuple(t['model.embed_tokens.weight'].shape), (131072, 32))
         self.assertNotIn('lm_head.bias', t)
 
+
+
+class ErnieTargetTests(unittest.TestCase):
+    """--target ernie4_5_moe: Ernie4_5_MoeForCausalLM routes as G5 does (selection-only bias), so the router_bias is kept."""
+    def setUp(self):
+        self.tmp = tempfile.TemporaryDirectory(); self.dir = Path(self.tmp.name)
+
+    def tearDown(self):
+        self.tmp.cleanup()
+
+    def run_folder(self, m, bias=None, seed=0):
+        """bias: value given to expert 1 of every layer's router_bias (G5 #748)."""
+        model = random_model(m, seed)
+        state = model.state_dict()
+        if bias is not None:
+            for k in [k for k in state if k.endswith('.router_bias')]:
+                state[k][1] = bias
+        folder = self.dir / 'run'; folder.mkdir(exist_ok=True)
+        torch.save({'model': state, 'step': 3}, folder / 'checkpoint.pt')
+        (folder / 'manifest.json').write_text(json.dumps({'config': {'model': m}}), encoding='utf-8')
+        model.load_state_dict(state)
+        return folder, model.eval()
+
+    def export(self, folder, **kw):
+        kw = dict(dict(dtype='fp32', n_verify=4, tol=1e-4, target='ernie4_5_moe'), **kw)
+        return quiet_export(folder, self.dir / 'hf', **kw)
+
+    def test_default_block_matches_g5(self):
+        r = self.export(self.run_folder(spec(norm_eps=1e-6, rope_theta=50000.0))[0])   # not ERNIE's defaults
+        self.assertTrue(r['verify']['passed'], r['verify']); self.assertEqual(r['target'], 'ernie4_5_moe')
+        cfg = json.loads((self.dir / 'hf/config.json').read_text())
+        self.assertEqual(cfg['architectures'], ['Ernie4_5_MoeForCausalLM'])
+        self.assertEqual((cfg['rms_norm_eps'], cfg['rope_theta']), (1e-6, 50000.0))
+        self.assertEqual((cfg['moe_intermediate_size'], cfg['moe_num_shared_experts'], cfg['moe_k']), (48, 1, 2))
+        self.assertEqual(cfg['intermediate_size'] // cfg['num_key_value_heads'], 48)   # llama.cpp's shared-expert width
+        self.assertFalse(cfg['use_bias'])
+
+    def test_active_router_bias_is_kept_and_a1_passes(self):
+        r = self.export(self.run_folder(spec(moe=dict(bias_gamma=0.001)), bias=0.5)[0])
+        self.assertTrue(r['verify']['passed'], r['verify'])
+        self.assertTrue(r['router_bias']['active']); self.assertIn('kept', r['router_bias']['action'])
+        self.assertNotIn('warning', r['router_bias'])
+        self.assertFalse(any(k.endswith('.router_bias') for k in r['dropped']))
+        from safetensors.torch import load_file
+        t = load_file(str(self.dir / 'hf' / 'model.safetensors'))
+        self.assertEqual(tuple(t['model.layers.0.mlp.moe_statics.e_score_correction_bias'].shape), (1, 4))
+        self.assertEqual(t['model.layers.1.mlp.moe_statics.e_score_correction_bias'][0, 1].item(), 0.5)
+
+    def test_without_the_router_bias_a1_fails(self):
+        """A1 sees routing: the same export with the bias written as zeros stops (bias 0.5 moves experts)."""
+        folder, _ = self.run_folder(spec(moe=dict(bias_gamma=0.001)), bias=0.5)
+        keep = export_hf.convert_state_ernie
+        export_hf.convert_state_ernie = lambda state, spec, router_bias, head_bias: keep(state, spec, False, head_bias)
+        try:
+            with self.assertRaises(SystemExit) as c:
+                self.export(folder)
+        finally:
+            export_hf.convert_state_ernie = keep
+        self.assertEqual(c.exception.code, 1)   # A1's exit, not a refusal
+        self.assertFalse((self.dir / 'hf').exists())
+
+    def test_bias_g5_never_reads_is_written_as_zeros(self):
+        for gamma in (0.0, None):
+            m = spec(moe={} if gamma is None else dict(bias_gamma=gamma))
+            r = self.export(self.run_folder(m, bias=0.5)[0])
+            self.assertTrue(r['verify']['passed'], r['verify']); self.assertIn('written as zeros', r['router_bias']['action'])
+            from safetensors.torch import load_file
+            t = load_file(str(self.dir / 'hf' / 'model.safetensors'))
+            self.assertEqual(t['model.layers.0.mlp.moe_statics.e_score_correction_bias'].abs().max().item(), 0.0)
+
+    def test_drop_router_bias_is_refused(self):
+        with self.assertRaises(SystemExit) as c:
+            self.export(self.run_folder(spec())[0], drop_router_bias=True)
+        self.assertIn('selection bias', str(c.exception)); self.assertFalse((self.dir / 'hf').exists())
+
+    def test_shared_experts_merge_and_none(self):
+        r = self.export(self.run_folder(spec(moe=dict(num_shared=3)))[0])
+        self.assertTrue(r['verify']['passed'], r['verify'])
+        cfg = json.loads((self.dir / 'hf/config.json').read_text())
+        self.assertEqual(cfg['intermediate_size'] // cfg['num_key_value_heads'], 144)
+        self.assertTrue(self.export(self.run_folder(spec(moe=dict(num_shared=0)))[0])['verify']['passed'])
+
+    def test_mqa_and_mtp_head_dropped(self):
+        r = self.export(self.run_folder(spec(n_kv_head=1, mtp=True))[0])
+        self.assertTrue(r['verify']['passed'], r['verify']); self.assertIn('mtp_head.weight', r['dropped'])
+
+    def test_bf16_keeps_the_router_float32_and_reloads_from_disk(self):
+        from safetensors.torch import load_file
+        from transformers import AutoModelForCausalLM
+        folder, model = self.run_folder(spec(moe=dict(bias_gamma=0.001)), bias=0.003)
+        quiet_export(folder, self.dir / 'hf', target='ernie4_5_moe')
+        t = load_file(str(self.dir / 'hf' / 'model.safetensors'))
+        self.assertEqual(t['model.layers.0.mlp.gate.weight'].dtype, torch.float32)
+        self.assertEqual(t['model.layers.0.mlp.moe_statics.e_score_correction_bias'].dtype, torch.float32)
+        self.assertEqual(t['model.layers.0.mlp.experts.0.up_proj.weight'].dtype, torch.bfloat16)
+        self.assertEqual(t['model.layers.1.mlp.moe_statics.e_score_correction_bias'][0, 1].item(), torch.tensor(0.003).item())
+        hf = AutoModelForCausalLM.from_pretrained(self.dir / 'hf', dtype=torch.float32).eval()
+        ids = torch.randint(0, 300, (1, 16), generator=torch.Generator().manual_seed(1))
+        with torch.no_grad():
+            diff = (model(ids, torch.ones_like(ids, dtype=torch.bool)) - hf(input_ids=ids).logits).abs().max().item()
+        self.assertLess(diff, 0.5); self.assertGreater(diff, 0.0)   # bf16 rounding, not a wiring error
+
+    def test_tokenizer_ids_and_the_command_line(self):
+        tok = self.dir / 'tokenizer.json'
+        tok.write_text(json.dumps({'model': {'type': 'BPE', 'vocab': {f't{i}': i for i in range(290)}, 'merges': []},
+                                   'added_tokens': [{'id': 297, 'content': '<|begin_of_text|>'}, {'id': 298, 'content': '<|endoftext|>'},
+                                                    {'id': 299, 'content': '<|pad|>'}]}), encoding='utf-8')
+        folder, _ = self.run_folder(spec(moe=dict(bias_gamma=0.001)), bias=0.5)
+        argv = ['export_hf.py', '--checkpoint', str(folder), '--out', str(self.dir / 'hf'), '--tokenizer', str(tok), '--dtype', 'fp32',
+                '--verify', '2', '--verify-tol', '1e-4', '--target', 'ernie4_5_moe']
+        keep = sys.argv
+        sys.argv = argv
+        try:
+            with contextlib.redirect_stdout(io.StringIO()):
+                export_hf.main()
+        finally:
+            sys.argv = keep
+        cfg = json.loads((self.dir / 'hf/config.json').read_text())
+        self.assertEqual((cfg['architectures'], cfg['bos_token_id'], cfg['eos_token_id'], cfg['pad_token_id']),
+                         (['Ernie4_5_MoeForCausalLM'], 297, 298, 299))
+        r = json.loads((self.dir / 'hf/export_report.json').read_text())
+        self.assertEqual(r['target'], 'ernie4_5_moe'); self.assertTrue(r['verify']['passed']); self.assertIn('kept', r['router_bias']['action'])
+        self.assertTrue((self.dir / 'hf/tokenizer.json').exists())
+
+    def test_fp32_folder_reloads_exactly(self):
+        from transformers import AutoModelForCausalLM
+        folder, model = self.run_folder(spec(moe=dict(bias_gamma=0.001)), bias=0.5)
+        self.export(folder, n_verify=0)
+        hf = AutoModelForCausalLM.from_pretrained(self.dir / 'hf', dtype=torch.float32).eval()
+        ids = torch.randint(0, 300, (2, 24), generator=torch.Generator().manual_seed(2))
+        with torch.no_grad():
+            a, b = model(ids, torch.ones_like(ids, dtype=torch.bool)), hf(input_ids=ids).logits
+        self.assertLess((a - b).abs().max().item(), 1e-4); self.assertTrue(torch.equal(a.argmax(-1), b.argmax(-1)))
+
+
+class ErnieKasTests(unittest.TestCase):
+    """--target ernie4_5_moe on a small random kas_v2 model (p1536 vocabulary size): the unigram goes to lm_head.bias."""
+    @classmethod
+    def setUpClass(cls):
+        cls.m = spec(vocab_size=131072, head_mode='kas_v2', moe=dict(bias_gamma=0.001))
+        cls.model = random_model(cls.m)
+        with torch.no_grad():
+            for k, v in cls.model.state_dict().items():
+                if k.endswith('.router_bias'):
+                    v[1] = 0.5
+
+    def setUp(self):
+        self.tmp = tempfile.TemporaryDirectory(); self.dir = Path(self.tmp.name)
+        run = self.dir / 'run'; run.mkdir()
+        torch.save({'model': self.model.state_dict(), 'step': 3}, run / 'checkpoint.pt')
+        (run / 'manifest.json').write_text(json.dumps({'config': {'model': self.m}}), encoding='utf-8')
+        self.run = run
+
+    def tearDown(self):
+        self.tmp.cleanup()
+
+    def test_head_bias_and_router_bias_kept_exact(self):
+        r = quiet_export(self.run, self.dir / 'hf', dtype='fp32', n_verify=2, tol=1e-4, target='ernie4_5_moe')
+        self.assertTrue(r['verify']['passed'], r['verify'])            # against full G5: both biases live
+        self.assertNotIn('head_bias_effect', r['verify'])
+        self.assertIn('kept as lm_head.bias', r['kas_v2']['head_bias']['action']); self.assertIn('kept', r['router_bias']['action'])
+        self.assertTrue(json.loads((self.dir / 'hf/config.json').read_text())['use_bias'])
+        from safetensors.torch import load_file
+        t = load_file(str(self.dir / 'hf' / 'model.safetensors'))
+        self.assertTrue(torch.equal(t['lm_head.bias'], self.model.state_dict()['head.unigram'].float()))
+        zero = [k for k in t if k.endswith('_proj.bias')]
+        self.assertTrue(zero); self.assertTrue(all(t[k].abs().max().item() == 0 for k in zero))
+        self.assertNotIn('head.unigram', r['dropped']); self.assertIn('head.W_out', r['dropped'])   # kept, not dropped
+
+    def test_bf16_keeps_the_head_bias_float32(self):
+        quiet_export(self.run, self.dir / 'hf', target='ernie4_5_moe')
+        from safetensors.torch import load_file
+        t = load_file(str(self.dir / 'hf' / 'model.safetensors'))
+        self.assertEqual(t['lm_head.bias'].dtype, torch.float32); self.assertEqual(t['lm_head.weight'].dtype, torch.bfloat16)
+        self.assertTrue(torch.equal(t['lm_head.bias'], self.model.state_dict()['head.unigram'].float()))
+
+    def test_drop_head_bias_gives_the_folder_without_biases(self):
+        r = quiet_export(self.run, self.dir / 'hf', dtype='fp32', n_verify=2, tol=1e-4, target='ernie4_5_moe', drop_head_bias=True)
+        self.assertTrue(r['verify']['passed'], r['verify'])            # against G5 minus the unigram; routing still exact
+        self.assertGreater(r['kas_v2']['head_bias']['effect']['max_abs_logit_diff'], 0)
+        self.assertEqual(r['kas_v2']['head_bias']['action'], 'dropped with --drop-head-bias'); self.assertIn('head.unigram', r['dropped'])
+        self.assertFalse(json.loads((self.dir / 'hf/config.json').read_text())['use_bias'])
+        from safetensors.torch import load_file
+        t = load_file(str(self.dir / 'hf' / 'model.safetensors'))
+        self.assertFalse([k for k in t if k.endswith('.bias')])
+        self.assertIn('model.layers.0.mlp.moe_statics.e_score_correction_bias', t)
 
 if __name__ == '__main__':
     unittest.main(verbosity=1)

@@ -1,0 +1,6 @@
+"pack_id_a","split_a","part_a","row_in_part_a","doc_id_a","pack_id_b","split_b","part_b","row_in_part_b","doc_id_b","lang_a","lang_b","coverage"
+"ind-hi-sangraha-v","train","ind-hi-sangraha-v/part-00000.parquet",7729,"195f6c2b9b0f4d6a","ind-sa-fw2","train","ind-sa-fw2/part-00000.parquet",3306,"4ec2ceade713a1f1","hi","sa",0.866667
+"en-fineweb-edu","train","en-fineweb-edu/part-00000.parquet",34470,"dd2c3567674dc17b","ind-sa-fw2","train","ind-sa-fw2/part-00000.parquet",3893,"ee6a93fb630656b7","en","sa",0.6875
+"en-fineweb-edu","train","en-fineweb-edu/part-00000.parquet",6645,"36c5f61fd14d329a","ind-hi-sangraha-s","train","ind-hi-sangraha-s/part-00000.parquet",3807,"3f353e94fa1b0384","en","hi",0.666667
+"ind-hi-indiccorp","train","ind-hi-indiccorp/part-00000.parquet",104727,"3e01fb83d16e2d00","ind-sa-fw2","train","ind-sa-fw2/part-00000.parquet",3086,"db99ddb21877ca2d","hi","sa",0.666667
+"ind-hi-fw2","train","ind-hi-fw2/part-00000.parquet",8692,"3b2abee57275b89d","ind-sa-fw2","train","ind-sa-fw2/part-00000.parquet",1350,"aeceedd0de3088ec","hi","sa",0.666667

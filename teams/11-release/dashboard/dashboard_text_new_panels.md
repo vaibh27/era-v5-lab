@@ -18,7 +18,6 @@ this file. When Monitoring adds a panel to `public_v1.json`, the same pull reque
 
 | Panel | Sentence |
 |---|---|
-| Dataset and Shard Composition | This panel shows each pack of text by subject and language, with its token count and the share of its documents that cleaning removed. |
 | Eval-Mini Scores Alongside Training Loss | This panel shows the model's scores on a small set of benchmark questions at each checkpoint, next to the training loss. |
 | Open Infrastructure Health | This panel counts the restarts of the training run, the alarms that fired and the checkpoints that the run saved. |
 | What This Shows and What It Doesn't | This panel explains what the dashboard shows and what it does not show. |
@@ -64,7 +63,7 @@ How to fill it:
 
 | Panel | Source | Lead OK |
 |---|---|---|
-| Dataset and Shard Composition | Monitoring list, section 2.3 (Data A) | Monitoring: no; Data A: no |
+| Dataset and Shard Composition: public since [#817](https://github.com/theschoolofai/era-v5-lab/pull/817). Its row moved to `dashboard_text.md`. The drop rate is the share of documents that the cleaning stage removed, before duplicate removal and the benchmark check. Its counts and rates need TSAI approval before the corpus v1 data loads (style rule 5; [Release comment on #817](https://github.com/theschoolofai/era-v5-lab/pull/817#issuecomment-7165996094)). The token count comes from the final training files, after duplicate removal and the benchmark check. So it comes from a later stage than the document counts. The column shows language codes, such as te, which the glossary explains. Monitoring kept the codes, because some rows are programming languages ([comment on #817](https://github.com/theschoolofai/era-v5-lab/pull/817#issuecomment-7167224544)) | Monitoring list, section 2.3 (Data A). The definition of the drop rate: the Data A lead ([comment on #760](https://github.com/theschoolofai/era-v5-lab/pull/760#issuecomment-7166677181)) | Monitoring: built the panel in #817, OK on the sentence: no; Data A: yes ([comment on #760](https://github.com/theschoolofai/era-v5-lab/pull/760#issuecomment-7166677181)); Release: yes ([comment on #817](https://github.com/theschoolofai/era-v5-lab/pull/817#issuecomment-7165996094)) |
 | Eval-Mini Scores Alongside Training Loss | Monitoring list, section 2.4 (Evaluation) | Monitoring: no; Evaluation: no |
 | Training Pace: public as two panels since [#779](https://github.com/theschoolofai/era-v5-lab/pull/779), "Training Pace: Tokens per Second" and "Training Pace: Step Time". Their rows moved to `dashboard_text.md`. If a later run logs one value for each GPU, the sentence needs a change | Monitoring list, sections 2.1 and 2.2 (Architecture, Performance). Architecture sent this sentence: the run does not log context length ([comment on #760](https://github.com/theschoolofai/era-v5-lab/pull/760#issuecomment-7109890552)) | Monitoring: built the two panels in #779, OK on the sentences: no; Architecture: yes; Performance: no; Release: yes ([comment on #779](https://github.com/theschoolofai/era-v5-lab/pull/779#issuecomment-7127285302)) |
 | Open Infrastructure Health | Monitoring list, section 3 | Monitoring: no |

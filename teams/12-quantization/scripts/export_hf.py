@@ -32,9 +32,27 @@ the head becomes lm_head.weight = beta[L_v] * (positions_v @ W_out.T) + tok_u @ 
 The head also has an output bias (head.unigram, one value per token) that GraniteMoeShared cannot carry: the export
 stops unless --drop-head-bias is given, which exports without it and records its statistics and measured effect.
 
+--target ernie4_5_moe writes `Ernie4_5_MoeForCausalLM` instead (Baidu's ERNIE 4.5 MoE; transformers, llama.cpp
+`ernie4_5-moe`, vLLM). Its router routes the way G5's does: softmax scores, a selection-only bias added to them to pick
+the top-k (`mlp.moe_statics.e_score_correction_bias`), and the unbiased scores of the picked experts, renormalized, as
+the gates. So an active router_bias is kept, not refused (it is written as zeros when bias_gamma is 0, since G5 then
+never reads it), and --drop-router-bias does not apply. RoPE rotates adjacent pairs, as G5 does, so 9.4 is not done.
+The rest is as above: 9.1, 9.3, 9.6 (one shared MLP of width S*h), and `head_dim ** -0.5` is ERNIE's own scaling.
+A kas_v2 head bias goes to lm_head.bias: the model is written with use_bias=True, which gives every other linear layer
+a bias too, written as zeros. That folder is exact in transformers (4.57.x loads it strictly; 5.x loads it exactly but
+lists the zero per-expert biases as unexpected keys, since its fused experts have no bias). llama.cpp's converter cannot
+read it (the expert biases break its expert merge), and llama.cpp, Ollama and vLLM have no output bias for this
+architecture, so for them export with --drop-head-bias (use_bias=False, no biases; the router bias stays exact).
+The weights are in the original per-expert layout that transformers 4.57.x builds, llama.cpp's converter and vLLM read,
+and transformers 5.x converts on load. The router weight and bias, and lm_head.bias, stay float32 at any --dtype: as
+transformers keeps the router (`_keep_in_fp32_modules_strict`), since a bf16 bias could change which experts are
+picked, and the unigram prior would move by up to 0.03 in bf16. llama.cpp's converter reads an ERNIE tokenizer as
+SentencePiece; tokenizer/gguf_roundtrip.convert() (used by convert_frozen.py) switches it to the BPE vocabulary step
+that the Granite converter already uses, besides forcing the pre-tokenizer.
+
 --verify N runs test A1 of section 12: N random prompts through G5's model and through `transformers`'
-GraniteMoeSharedForCausalLM loaded from the export, both fp32 on CPU. It exits 1 unless the largest logit
-difference is below --verify-tol and the top-1 token is the same at every position.
+GraniteMoeSharedForCausalLM (or Ernie4_5_MoeForCausalLM) loaded from the export, both fp32 on CPU. It exits 1 unless
+the largest logit difference is below --verify-tol and the top-1 token is the same at every position.
 
 Writes config.json, generation_config.json, model.safetensors (--dtype, default bf16) and export_report.json. With
 --tokenizer it also copies tokenizer.json and writes tokenizer_config.json (--bos / --eos), so the folder loads with
@@ -49,6 +67,9 @@ REPO_ROOT = Path(__file__).resolve().parents[3]
 HARNESS = REPO_ROOT / 'teams/05-architecture/harness'
 SPEC_KEYS = ('n_head', 'rope_theta', 'norm_eps')          # not readable from tensor shapes
 UNSUPPORTED = 'see teams/12-quantization/docs/unsupported_parts.md, section 10'
+GRANITE, ERNIE = 'granite_moe_shared', 'ernie4_5_moe'
+TARGETS = (GRANITE, ERNIE)
+ERNIE_FP32 = ('.mlp.gate.weight', '.mlp.moe_statics.e_score_correction_bias', 'lm_head.bias')   # kept float32 at any --dtype
 
 
 def load_reference(ref, state: dict) -> None:
@@ -285,21 +306,81 @@ def hf_config(spec: dict, bos_id, eos_id, pad_id, dtype: str):
         architectures=['GraniteMoeSharedForCausalLM'])
 
 
-def verify(state: dict, spec: dict, config, new_state: dict, n_prompts: int, tol: float, seed: int = 0) -> dict:  # state may hold router_bias
-    """Test A1: G5's LanguageModel against transformers' GraniteMoeSharedForCausalLM, fp32, random prompts."""
+def convert_state_ernie(state: dict, spec: dict, router_bias: bool, head_bias: bool) -> dict:
+    """G5 state_dict -> Ernie4_5_MoeForCausalLM state_dict (fp32) in the original ERNIE 4.5 layout: one module per expert,
+    the selection bias in mlp.moe_statics.e_score_correction_bias [1, E]. No q/k reordering (ERNIE's RoPE rotates
+    adjacent pairs, as G5's does). router_bias: write G5's bias (it routes); otherwise zeros. head_bias: use_bias=True,
+    so lm_head.bias = head.unigram and every other linear layer gets a zero bias."""
     import torch
-    from transformers import GraniteMoeSharedForCausalLM
+    f = lambda k: state[k].float()
+    W, b = fold_kas_head(state) if is_kas(state) else (f('head.weight'), None)
+    out = {'model.embed_tokens.weight': fold_ke2(state, spec['n_embd']), 'model.norm.weight': f('norm.weight'), 'lm_head.weight': W}
+    E, S = spec['moe']['num_experts'], spec['moe']['num_shared']
+    for i in range(spec['n_layer']):
+        g, h = f'blocks.{i}.', f'model.layers.{i}.'
+        out[h + 'input_layernorm.weight'] = f(g + 'n1.weight')
+        out[h + 'post_attention_layernorm.weight'] = f(g + 'n2.weight')
+        for a, p in (('q', 'q_proj'), ('k', 'k_proj'), ('v', 'v_proj'), ('o', 'o_proj')):
+            out[f'{h}self_attn.{p}.weight'] = f(f'{g}attn.{a}.weight')
+        out[h + 'mlp.gate.weight'] = f(g + 'moe.router.weight')
+        rb = state.get(g + 'moe.router_bias')
+        out[h + 'mlp.moe_statics.e_score_correction_bias'] = (rb.float().clone() if router_bias and rb is not None
+                                                              else torch.zeros(E))[None]
+        for e in range(E):
+            for part in ('gate', 'up', 'down'):
+                out[f'{h}mlp.experts.{e}.{part}_proj.weight'] = f(f'{g}moe.experts.{e}.{part}.weight')
+        if S:  # 9.6: stack gate rows, stack up rows, concatenate down columns
+            for part, dim in (('gate', 0), ('up', 0), ('down', 1)):
+                out[f'{h}mlp.shared_experts.{part}_proj.weight'] = torch.cat([f(f'{g}moe.shared.{s}.{part}.weight') for s in range(S)], dim=dim)
+    if head_bias:
+        out['lm_head.bias'] = b
+        for k in [k for k in out if k.endswith('_proj.weight')]:
+            out[k[:-len('weight')] + 'bias'] = torch.zeros(out[k].shape[0])
+    return out
+
+
+def hf_config_ernie(spec: dict, bos_id, eos_id, pad_id, dtype: str, use_bias: bool):
+    from transformers import Ernie4_5_MoeConfig
+    E, S, h = spec['moe']['num_experts'], spec['moe']['num_shared'], spec['moe']['ffn_hidden']
+    # Every layer is MoE, so intermediate_size sizes no dense MLP. transformers and vLLM size the shared MLP as
+    # moe_intermediate_size * moe_num_shared_experts; llama.cpp's converter (b11669, conversion/ernie.py) writes it as
+    # intermediate_size // num_key_value_heads (Baidu's config convention). This value gives S*h to all three.
+    return Ernie4_5_MoeConfig(
+        vocab_size=spec['vocab_size'], hidden_size=spec['n_embd'], num_hidden_layers=spec['n_layer'],
+        num_attention_heads=spec['n_head'], num_key_value_heads=spec['n_kv_head'], head_dim=spec['n_embd'] // spec['n_head'],
+        intermediate_size=max(S, 1) * h * spec['n_kv_head'], hidden_act='silu', rms_norm_eps=spec['norm_eps'], rope_theta=spec['rope_theta'],
+        max_position_embeddings=spec['block_size'] or 2048, use_bias=use_bias, tie_word_embeddings=False,
+        moe_num_experts=E, moe_k=spec['moe']['top_k'], moe_intermediate_size=h, moe_num_shared_experts=S,
+        moe_layer_start_index=0, moe_layer_end_index=spec['n_layer'] - 1, moe_layer_interval=1, moe_norm_min=1e-12,
+        use_cache=True, bos_token_id=bos_id, eos_token_id=eos_id, pad_token_id=pad_id, torch_dtype=dtype,
+        architectures=['Ernie4_5_MoeForCausalLM'])
+
+
+def target_model(target: str, config):
+    """An empty transformers model of the target architecture (its state_dict gives the key list and shapes)."""
+    if target == ERNIE:
+        from transformers import Ernie4_5_MoeForCausalLM as cls
+    else:
+        from transformers import GraniteMoeSharedForCausalLM as cls
+    return cls(config)
+
+
+def verify(state: dict, spec: dict, config, new_state: dict, n_prompts: int, tol: float, seed: int = 0,
+           target: str = GRANITE) -> dict:  # state may hold router_bias
+    """Test A1: G5's LanguageModel against transformers' GraniteMoeSharedForCausalLM (or Ernie4_5_MoeForCausalLM), fp32,
+    random prompts. With the KAS head bias left out, A1 compares against G5 minus head.unigram and measures the bias apart."""
+    import torch
     sys.path.insert(0, str(HARNESS))
     from week2.model import LanguageModel
     ref = LanguageModel(dict(spec, mtp='mtp_head.weight' in state), state['embedding.rows'].numpy(),
                         state['embedding.lengths'].numpy()).eval()
     load_reference(ref, state)
-    hf = GraniteMoeSharedForCausalLM(config).float().eval()
+    hf = target_model(target, config).float().eval()
     hf.load_state_dict(new_state, strict=True)
     T = min(spec['block_size'] or 64, 64)
     gen = torch.Generator().manual_seed(seed)
     worst, same, total = 0.0, 0, 0
-    kas = is_kas(state)
+    kas = is_kas(state) and 'lm_head.bias' not in new_state
     eff = dict(same_top1=0, max_abs_logit_diff=0.0, kl_nats_sum=0.0)
     with torch.no_grad():
         for _ in range(n_prompts):
@@ -336,15 +417,21 @@ def token_id(tokenizer_json: Path, token: str):
 
 def export(checkpoint: Path, out: Path, spec_path: Path | None = None, tokenizer: Path | None = None,
            bos: str = '<|begin_of_text|>', eos: str = '<|endoftext|>', pad: str = '<|pad|>', dtype: str = 'bf16',
-           n_verify: int = 0, tol: float = 1e-3, drop_router_bias: bool = False, drop_head_bias: bool = False) -> dict:
+           n_verify: int = 0, tol: float = 1e-3, drop_router_bias: bool = False, drop_head_bias: bool = False,
+           target: str = GRANITE) -> dict:
     import torch
     from safetensors.torch import save_file
-    from transformers import GraniteMoeSharedForCausalLM
+    if target not in TARGETS:
+        sys.exit(f'unknown --target {target!r}: one of {", ".join(TARGETS)}')
+    ernie = target == ERNIE
+    if ernie and drop_router_bias:
+        sys.exit('--drop-router-bias is for --target granite_moe_shared: Ernie4_5_MoeForCausalLM has a selection bias, so the '
+                 'router_bias is exported as it is')
     weights, found_spec = find_checkpoint(Path(checkpoint))
     state = load_state(weights)
     spec = resolve_spec(state, load_spec(spec_path or found_spec))
     rb = router_bias_report(state, spec)
-    if rb['active'] and not drop_router_bias:
+    if rb['active'] and not drop_router_bias and not ernie:
         sys.exit(f'refusing: {rb["layer"]} is not zero (largest absolute value {rb["max_abs"]:.3g}, bias_gamma {rb["bias_gamma"]}). '
                  f'The router_bias picks the experts in G5, and GraniteMoeShared (Hugging Face and llama.cpp) has no selection bias, '
                  f'so the exported model would route differently from the checkpoint. --drop-router-bias exports anyway; '
@@ -353,7 +440,7 @@ def export(checkpoint: Path, out: Path, spec_path: Path | None = None, tokenizer
     if is_kas(state):
         u = state['head.unigram'].float()
         kas_bias = dict(max_abs=float(u.abs().max()), std=float(u.std()), mean=float(u.mean()), min=float(u.min()), max=float(u.max()))
-        if kas_bias['max_abs'] > 0 and not drop_head_bias:
+        if kas_bias['max_abs'] > 0 and not drop_head_bias and not ernie:
             sys.exit(f'refusing: the KAS V2 head has an output bias (head.unigram, one value per token, largest absolute value '
                      f'{kas_bias["max_abs"]:.3g}, std {kas_bias["std"]:.3g}), and GraniteMoeShared (Hugging Face and llama.cpp) has no lm_head bias. '
                      f'The exported model would score every token without its log prior. --drop-head-bias exports anyway and records '
@@ -368,48 +455,81 @@ def export(checkpoint: Path, out: Path, spec_path: Path | None = None, tokenizer
             if ids[name] is None:
                 sys.exit(f'{tokenizer}: no special token {dict(bos=bos, eos=eos)[name]!r} (set --{name})')
     torch_dtype = dict(bf16=torch.bfloat16, fp32=torch.float32)[dtype]
-    config = hf_config(spec, ids['bos'], ids['eos'], ids['pad'], dict(bf16='bfloat16', fp32='float32')[dtype])
-    new_state = convert_state(state, spec)
+    keep_head_bias = ernie and kas_bias is not None and kas_bias['max_abs'] > 0 and not drop_head_bias
+    if ernie:
+        config = hf_config_ernie(spec, ids['bos'], ids['eos'], ids['pad'], dict(bf16='bfloat16', fp32='float32')[dtype], keep_head_bias)
+        new_state = convert_state_ernie(state, spec, router_bias=rb['active'], head_bias=keep_head_bias)
+    else:
+        config = hf_config(spec, ids['bos'], ids['eos'], ids['pad'], dict(bf16='bfloat16', fp32='float32')[dtype])
+        new_state = convert_state(state, spec)
     # the target key list and shapes come from transformers itself; both must match before anything is written
-    want = {k: tuple(v.shape) for k, v in GraniteMoeSharedForCausalLM(config).state_dict().items()}
+    want = {k: tuple(v.shape) for k, v in target_model(target, config).state_dict().items()}
     have = {k: tuple(v.shape) for k, v in new_state.items()}
     if want != have:
         diff = sorted(set(want) ^ set(have)) or [f'{k}: {have[k]} != {want[k]}' for k in want if have[k] != want[k]]
-        sys.exit(f'export does not match transformers\' GraniteMoeSharedForCausalLM: {diff[:5]}')
-    report = dict(checkpoint=str(weights), checkpoint_sha256=file_sha256(weights), spec=spec, dtype=dtype,
+        arch = config.architectures[0]
+        hint = (' (this export writes the per-expert layout of transformers 4.57.x; 5.x builds fused experts but loads the '
+                'written folder)' if ernie else '')
+        sys.exit(f'export does not match transformers\' {arch}: {diff[:5]}{hint}')
+    report = dict(target=target, checkpoint=str(weights), checkpoint_sha256=file_sha256(weights), spec=spec, dtype=dtype,
                   parameters=sum(v.numel() for v in new_state.values()),
-                  dropped=sorted(k for k in state if k == 'mtp_head.weight' or k.startswith(('embedding.', 'codec.')) or k.endswith('.router_bias') or (kas_bias is not None and k.startswith('head.'))),
+                  dropped=sorted(k for k in state if k == 'mtp_head.weight' or k.startswith(('embedding.', 'codec.'))
+                                 or (k.endswith('.router_bias') and not (ernie and rb['active']))
+                                 or (kas_bias is not None and k.startswith('head.') and not (keep_head_bias and k == 'head.unigram'))),
                   token_ids=ids)
+    if ernie:
+        rb_action = ('kept: mlp.moe_statics.e_score_correction_bias, selection only, as in G5' if rb['active']
+                     else 'absent from the checkpoint: e_score_correction_bias written as zeros' if not rb['present']
+                     else 'all zero: e_score_correction_bias written as zeros' if rb['max_abs'] == 0
+                     else 'bias_gamma is 0 or not set, so it never picked an expert: e_score_correction_bias written as zeros')
+    else:
+        rb_action = ('absent from the checkpoint' if not rb['present'] else 'dropped with --drop-router-bias' if rb['active']
+                     else 'dropped: all zero' if rb['max_abs'] == 0 else 'dropped: bias_gamma is 0 or not set, so it never picked an expert')
     report['router_bias'] = dict(
-        rb, action=('absent from the checkpoint' if not rb['present'] else 'dropped with --drop-router-bias' if rb['active']
-                    else 'dropped: all zero' if rb['max_abs'] == 0 else 'dropped: bias_gamma is 0 or not set, so it never picked an expert'),
+        rb, action=rb_action,
         **({'warning': f'routing differs from the checkpoint: {rb["layer"]} has max |router_bias| {rb["max_abs"]:.3g} (bias_gamma '
                        f'{rb["bias_gamma"]}), which GraniteMoeShared cannot represent. Read A1 and A3 with that in mind.'}
-           if rb['active'] else {}))
-    if rb['active']: print('WARNING:', report['router_bias']['warning'], flush=True)
+           if rb['active'] and not ernie else {}))
+    if rb['active'] and not ernie: print('WARNING:', report['router_bias']['warning'], flush=True)
     if kas_bias is not None:
+        if keep_head_bias:
+            head_bias = dict(kas_bias, action='kept as lm_head.bias (use_bias=True; the other linear layers get zero biases)',
+                             note='exact in transformers; llama.cpp\'s converter cannot read this folder, and llama.cpp, Ollama '
+                                  'and vLLM have no output bias for ernie4_5_moe: for them export with --drop-head-bias')
+        else:
+            head_bias = dict(kas_bias, action='dropped with --drop-head-bias' if kas_bias['max_abs'] > 0 else 'all zero, dropped',
+                             **({'warning': 'the export has no unigram output bias: logits differ from the checkpoint by head.unigram '
+                                            '(see verify.head_bias_effect)'} if kas_bias['max_abs'] > 0 else {}))
         report['kas_v2'] = dict(folded='input codec x projection -> embed_tokens [V, d]; head -> lm_head.weight [V, d] in id order',
-                                head_bias=dict(kas_bias, action='dropped with --drop-head-bias' if kas_bias['max_abs'] > 0 else 'all zero, dropped',
-                                               **({'warning': 'the export has no unigram output bias: logits differ from the checkpoint by head.unigram '
-                                                              '(see verify.head_bias_effect)'} if kas_bias['max_abs'] > 0 else {})))
-        if kas_bias['max_abs'] > 0: print('WARNING:', report['kas_v2']['head_bias']['warning'], flush=True)
+                                head_bias=head_bias)
+        if 'warning' in head_bias: print('WARNING:', head_bias['warning'], flush=True)
     if n_verify:
-        report['verify'] = verify(state, spec, config, new_state, n_verify, tol)
+        report['verify'] = verify(state, spec, config, new_state, n_verify, tol, target=target)
         if kas_bias is not None and 'head_bias_effect' in report['verify']:
             report['kas_v2']['head_bias']['effect'] = report['verify']['head_bias_effect']
         v = report['verify']
         print(f'A1: max logit difference {v["max_abs_logit_diff"]:.3g} (limit {tol:g}), same top-1 on '
               f'{v["same_top1"]}/{v["positions"]} positions: {"PASS" if v["passed"] else "FAIL"}', flush=True)
-        if not v['passed'] and not rb['active']:   # with --drop-router-bias a difference is expected and is in the report
+        if not v['passed'] and not (rb['active'] and not ernie):   # with --drop-router-bias a difference is expected and is in the report
             sys.exit(1)
+        if rb['active'] and not ernie:
+            # A1 on G5 with its router_bias set to zero, as the export routes: this tests the wiring alone, so it must pass
+            zeroed = {k: torch.zeros_like(t) if k.endswith('.router_bias') else t for k, t in state.items()}
+            w = report['verify_zero_router_bias'] = verify(zeroed, spec, config, new_state, n_verify, tol, target=target)
+            w.pop('head_bias_effect', None)
+            print(f'A1 with router_bias zeroed: max logit difference {w["max_abs_logit_diff"]:.3g} (limit {tol:g}), same top-1 on '
+                  f'{w["same_top1"]}/{w["positions"]} positions: {"PASS" if w["passed"] else "FAIL"}', flush=True)
+            if not w['passed']:
+                sys.exit(1)
     out = Path(out)
     out.mkdir(parents=True, exist_ok=True)
     config.save_pretrained(out)
     (out / 'generation_config.json').write_text(json.dumps(
         {k: v for k, v in dict(bos_token_id=ids['bos'], eos_token_id=ids['eos'], pad_token_id=ids['pad']).items()
          if v is not None}, indent=2) + '\n', encoding='utf-8')
-    save_file({k: v.to(torch_dtype).contiguous() for k, v in new_state.items()}, str(out / 'model.safetensors'),
-              metadata={'format': 'pt'})
+    keep32 = ERNIE_FP32 if ernie else ()
+    save_file({k: v.to(torch.float32 if k.endswith(keep32) else torch_dtype).contiguous() for k, v in new_state.items()},
+              str(out / 'model.safetensors'), metadata={'format': 'pt'})
     if tokenizer:
         shutil.copyfile(tokenizer, out / 'tokenizer.json')
         # nothing is added when encoding (as in teams/03-tokenizer/release/tokenizer_config.json)
@@ -439,9 +559,13 @@ def main():
     ap.add_argument('--drop-router-bias', action='store_true', help='export a checkpoint whose router_bias is not zero, '
                     'although the exported model routes differently (recorded in export_report.json)')
     ap.add_argument('--drop-head-bias', action='store_true', help='export a KAS V2 checkpoint without its output bias (head.unigram), '
-                    'which GraniteMoeShared cannot carry; the bias statistics and effect go to export_report.json')
+                    'which GraniteMoeShared cannot carry; the bias statistics and effect go to export_report.json. With '
+                    '--target ernie4_5_moe: the folder for llama.cpp, Ollama and vLLM (no biases)')
+    ap.add_argument('--target', choices=TARGETS, default=GRANITE, help='architecture to write (default granite_moe_shared); '
+                    'ernie4_5_moe keeps the router bias, and the KAS head bias unless --drop-head-bias')
     a = ap.parse_args()
-    export(a.checkpoint, a.out, a.spec, a.tokenizer, a.bos, a.eos, a.pad, a.dtype, a.verify, a.verify_tol, a.drop_router_bias, a.drop_head_bias)
+    export(a.checkpoint, a.out, a.spec, a.tokenizer, a.bos, a.eos, a.pad, a.dtype, a.verify, a.verify_tol, a.drop_router_bias,
+           a.drop_head_bias, a.target)
 
 
 if __name__ == '__main__':

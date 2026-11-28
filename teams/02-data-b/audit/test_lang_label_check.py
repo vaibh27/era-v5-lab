@@ -2,6 +2,7 @@
 """Unit tests of lang_id.py and lang_label_check.py, on made-up text only. No IndicLID model is needed: a stub
 labels each paragraph. Run: python -m unittest test_lang_label_check (from teams/02-data-b/audit)."""
 import csv
+import json
 import tempfile
 import unittest
 import unicodedata
@@ -195,6 +196,37 @@ class ConfigTest(unittest.TestCase):
     def test_mapped_labels_are_known_languages(self):
         for lab, lang in CFG["lid_label_to_lang"].items():
             self.assertIn(lang, CFG["lang_script"], lab)
+
+
+class SanskritWordsFileTest(unittest.TestCase):
+    """v3 (#675): the Sanskrit markers from grammar tables, read from markers.sa.words_file."""
+
+    def test_words_file_is_loaded_next_to_the_inline_words(self):
+        raw = json.loads((Path(lang_id.HERE) / "lang_label_config.json").read_text(encoding="utf-8"))
+        words = set(CFG["markers"]["sa"]["words"])
+        self.assertTrue(set(raw["markers"]["sa"]["words"]) <= words)
+        self.assertIn("आसीत्", words)
+        self.assertGreater(len(words), 1000)
+
+    def test_every_form_is_one_word_in_nfc(self):
+        for w in CFG["markers"]["sa"]["words"]:
+            self.assertEqual(lang_id.WORD.findall(w), [w], w)
+            self.assertEqual(unicodedata.normalize("NFC", w), w, w)
+
+    def test_file_matches_the_tables_and_the_filter(self):
+        import sa_marker_build as smb  # noqa: PLC0415
+        rows = list(csv.DictReader(open(Path(lang_id.HERE) / "sa_marker_words.csv", encoding="utf-8")))
+        self.assertEqual([r["form"] for r in rows], [unicodedata.normalize("NFC", f) for f, _, _ in smb.build()])
+        for r in rows:
+            self.assertEqual(r["decision"], smb.decide(r["form"], int(r["docs_hi_mr"])), r["form"])
+        kept = [r["form"] for r in rows if r["decision"] == "kept"]
+        lines = (Path(lang_id.HERE) / "sa_marker_words.txt").read_text(encoding="utf-8").splitlines()
+        self.assertEqual([w for w in lines if not w.startswith("#")], kept)
+
+    def test_grammar_words_give_verse_a_sanskrit_vote(self):
+        verse = "तदा सः राजा उवाच। मया दृष्ट्वा गत्वा आसीत्।"  # prose markers: only सः
+        langs = ["sa", "hi", "mr", "ne", "kok"]
+        self.assertEqual(lang_id.marker_vote(lang_id.markers(verse, langs, CFG), CFG), "sa")
 
 
 if __name__ == "__main__":

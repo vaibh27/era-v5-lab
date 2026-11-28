@@ -63,14 +63,20 @@ def main():
         delta = {"full": 0.0482, "lora": 0.0315, "dt": 0.0194}[arm]
         eval_nll = {"full": 1.782, "lora": 1.845, "dt": 1.862}[arm]
         fmt_val = {"full": 0.88, "lora": 0.82, "dt": 0.78}[arm]
+        base_bpb = 2.0561  # dryrun2-1234 step 1,221 heldout_v1 val/bpb (mocked preflight reference)
         rep = {
             "log": [{"step": i + 1, "loss": round(2.5 - (i * 0.02), 4)} for i in range(args.steps)],
             "train_seconds": 2.4,
-            "before": {"eval_loss": {"nll_per_target": 2.650}, "forgetting": {"val/bpb": 1.0981}},
+            "before": {"eval_loss": {"nll_per_target": 2.650}, "forgetting": {"val/bpb": base_bpb}},
             "after": {
                 "eval_loss": {"nll_per_target": eval_nll},
-                "forgetting": {"val/bpb": round(1.0981 + delta, 4)},
+                "forgetting": {"val/bpb": round(base_bpb + delta, 4)},
                 "generation": {"format_validity": fmt_val, "closed_im_end": 0.92, "hit_budget": 0.0, "mean_gen_tokens": 45.0},
+            },
+            "router_bias_unchanged": {"pass": True},
+            "im_end_at_targets": {
+                "before": {"mean_logprob": -18.79, "mid_logprob": -18.79},
+                "after": {"mean_logprob": -1.20, "mid_logprob": -8.50},
             },
             "method": {  # the key and block shape sft_g5.py writes (dt/mask.py band_stats / deletion_stats keys)
                 "method": "dt", "targets": "g5_gate",
@@ -117,6 +123,7 @@ def main():
         "--heldout", str(TEAM10.parent / "05-architecture" / "heldout_v1"),
         "--packs", str(TEAM10 / "results" / "swe_e2e.md"),
         "--steps", str(args.steps),
+        "--marker-lr", "1e-2",
         "--device", device_val,
         "--out", str(out),
     ]

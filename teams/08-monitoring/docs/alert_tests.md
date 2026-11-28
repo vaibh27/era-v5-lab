@@ -32,6 +32,16 @@ records the time to alert. Add one row per rule you test, plus a short "How to r
 | @sohamniyogi | `spike_score` (page) after a checkpoint restore | synthetic 300-step stream, `MetricsWriter` + `AlarmMonitor`; checkpoint at 200, crash at 207, resume with `load_state_dict()` | 201 | 201 (jsonl: 210) | 0 (jsonl: 9) | 0.021 | 0.768 | PASS |
 | @pratik-2025 | `step_continuity` (page) | synthetic 200-step stream, `MetricsWriter` + `ContinuityMonitor` (new rule, `continuity_rules.py`) | 185 | 186 (jsonl: 190) | 1 (jsonl: 5) | 0.011 | 1.620 | PASS |
 | @pratik-2025 | `loader_stall` (warn) | synthetic 200-step stream, `MetricsWriter` + `ContinuityMonitor` (new rule), 1.0 s for 20 steps | 120 | 139 (jsonl: 140) | 19 (jsonl: 20) | 0.007 | 30.300 | PASS |
+| @nikshrimali | `moe_routing` (warn) | mock `metrics.jsonl` via `MetricsWriter`, monitor B: expert 0 of 8 to 0.0 at once, `moe_patience=10` | 200 | n/a (jsonl: 210) | n/a (jsonl: 10) | n/a | 0.476 | PASS |
+| @nikshrimali | `static_bound` (warn) | mock `metrics.jsonl` via `MetricsWriter`, monitor B: expert 0 of 8 to 0.0 at once, `bounds={"dead_experts_count": (None, 0.5)}` | 200 | n/a (jsonl: 200) | n/a (jsonl: 0) | n/a | 0.439 | PASS |
+| @nikshrimali | `moe_routing` (warn) | mock `metrics.jsonl` via `MetricsWriter`, monitor B: expert 0 of 8 collapses to 0.0 over steps 200-249, `moe_patience=10` | 200 | n/a (jsonl: 260) | n/a (jsonl: 60) | n/a | 0.479 | PASS |
+| @nikshrimali | `moe_routing` (warn) | mock `metrics.jsonl` via `MetricsWriter`, monitor A: expert 0 of 8 collapses to 0.0 over steps 200-249, default `AlarmMonitor()` | 200 | n/a (jsonl: 1250) | n/a (jsonl: 1050) | n/a | 0.480 | PASS |
+| @nikshrimali | `static_bound` (warn) | mock `metrics.jsonl` via `MetricsWriter`, monitor B: expert 0 of 8 collapses over steps 200-249, `dead_experts_count` hi 0.5 | 200 | n/a (jsonl: 250) | n/a (jsonl: 50) | n/a | 0.565 | PASS |
+| @nikshrimali | `static_bound` (warn) | mock `metrics.jsonl` via `MetricsWriter`, monitor B: `gpu_memory_used` 60 to 80 GiB over steps 300-499, OOM at 499, hi 76 GiB | 300 | n/a (jsonl: 460) | n/a (jsonl: 160) | n/a | 0.581 | PASS |
+| @nikshrimali | `static_bound` (warn) | mock `metrics.jsonl` via `MetricsWriter`, monitor B: `gpu_memory_used` jumps to 80 GiB at step 205, process dies at 206, hi 76 GiB | 205 | never | never | n/a | n/a | MISS (finding) |
+| @nikshrimali | `static_bound` (warn) | mock `metrics.jsonl` via `MetricsWriter`, monitor B: speed and MFU fall 30% over steps 300-449, `model_flops_utilization` lo 0.30 | 300 | n/a (jsonl: 410) | n/a (jsonl: 110) | n/a | 0.631 | PASS |
+| @nikshrimali | `throughput_drop` (warn) | mock `metrics.jsonl` via `MetricsWriter`, monitor A: speed and MFU fall 30% over steps 300-449, default `tps_patience=100` | 300 | n/a (jsonl: 480) | n/a (jsonl: 180) | n/a | 0.370 | PASS |
+| @nikshrimali | `throughput_drop` (warn) | mock `metrics.jsonl` via `MetricsWriter`, monitor A: speed and MFU fall 30% over steps 300-599, default `tps_patience=100` | 300 | never | never | n/a | n/a | MISS (finding) |
 
 ## @raghavTayal: `non_finite` and `spike_score` (Issue #19)
 
@@ -294,4 +304,39 @@ at 136). Flushing `metrics.jsonl` when a checkpoint is saved keeps every row. De
 ```bash
 python -m pytest teams/08-monitoring/alarms/test_alert_injection_pratik.py -q   # 9 tests
 python teams/08-monitoring/alarms/test_alert_injection_pratik.py                 # prints the two table rows
+```
+
+## @nikshrimali: dead experts, GPU memory and speed / MFU (Issue #26, G8 core)
+
+**Setup.** [`alarms/test_alert_injection_nikshrimali.py`](../alarms/test_alert_injection_nikshrimali.py) writes a
+mock `metrics.jsonl` from a pytest fixture: a seeded synthetic stream (seed 26) sent through `MetricsWriter`
+(`flush_every = 10`), so the file has the writer's derived fields (`dead_experts_count`, `expert_load_imbalance`,
+`gpu_memory_used` in bytes). Two monitors read the file after every write, as `alarms.py --jsonl` does. Monitor A is
+`AlarmMonitor()`, what the CLI runs. Monitor B has `moe_patience=10` and `static_bound` on `gpu_memory_used` (hi 76
+GiB), `model_flops_utilization` (lo 0.30) and `dead_experts_count` (hi 0.5). Only the file path is measured, so the
+in-harness columns are "n/a". The expert tests pass at 8, 16 and 64 experts with the same alarm steps.
+
+**Faults.** Expert 0 drops to 0.0 at step 200. Expert 0 collapses from a fair share to 0.0 over steps 200-249. GPU
+memory climbs from 60 to 80 GiB over steps 300-499, and the process dies of OOM. GPU memory jumps to 80 GiB at step 205,
+and the process dies at 206. Speed and MFU fall 30% over 150 steps, and over 300 steps.
+
+**Results.** Every fault fires its rule on monitor B except the sudden OOM. A clean 1,300-step stream fires nothing
+on either monitor.
+
+**Findings.** Details are in [`alarms/core_nikshrimali.md`](../alarms/core_nikshrimali.md).
+1. Dry run 1 wrote none of `expert_load`, `dead_experts_count`, `expert_load_imbalance`, `gpu_memory_used` or
+   `model_flops_utilization`, so these alarms could not fire in that run.
+2. `alarms.py --jsonl` has no `bounds`, so it never alarms on memory or MFU, and a dead expert waits 999 steps.
+3. The writer marks a collapsing expert dead at step 245. `moe_routing` waits for the exact zero at 249, plus its
+   patience. `expert_load_imbalance` stays below 1.35 with one of 8 experts dead.
+4. A sudden OOM leaves no row: rows 201-205 die in the writer's buffer, and nothing fires. A slow climb fires 39 steps
+   before the OOM. The file has no rank field, so it shows only the writing process's memory.
+5. A 30% slowdown spread over 300 steps never fires `throughput_drop`: the trailing mean follows the decline down.
+6. `static_bound` on a noisy MFU near 0.30 fires 3 to 7 times as the noise crosses and re-crosses the line.
+
+**How to reproduce.**
+
+```bash
+python -m pytest teams/08-monitoring/alarms/test_alert_injection_nikshrimali.py -q   # 17 tests
+python teams/08-monitoring/alarms/test_alert_injection_nikshrimali.py                 # prints the ten table rows
 ```

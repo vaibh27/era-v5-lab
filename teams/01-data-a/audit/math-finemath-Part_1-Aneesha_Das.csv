@@ -1,0 +1,23 @@
+doc_id,read,verdict,diseases,evidence,hex,note
+caec68d5a4dc4373,full,fix,C1;B2,,,"Removed 'Homework Helper' badge 10 of 11 times; other badges left: 'Gold Member' x20, '2022 Award' x7, 'Staff Emeritus', 'Last edited:' x6; BBCode '[ ATTACH ...]315357[/ATTACH]' left"
+6df989a2bcd44389,full,drop,C1;C3,,,"No matching doc_id; drop OK: Course Hero preview, equations lost their symbols in extraction (u x + v y + w z = 0), paywall and testimonial text"
+4376102f99b2fdfd,full,fix,C1,,,Removed 'posted by .'; jiskha footer left: 'Answer This Question / First Name: School Subject: Answer: / Related Questions / More Related Questions / Post a New Question'
+1fbf0a290e52e534,full,clean,,,,"Fixed mojibake (salesman's) and removed breadcrumb; source flattens exponents (x2 = 4, X4 > 3000, (x - 50)2) and Q4 statement 1 lost its expression"
+1e700ddf3f3e4e0d,full,clean,,,,Removed 'posted by on .' correctly
+73670428f7373dee,full,drop,C5;C1,,,"Forum tag-search results page: 25 thread titles with replies/views/last post, no worked math; cleaner only removed the tag line and 4 of 5 'by Subhotosh Khan'"
+c87c76a202bf9370,full,fix,C1,,,Removed a repeated sentence inside a quote (harmless); forum signature left: 'Don't integrate - balloontegrate! / Balloon Calculus; standard integrals... / Balloon Calculus Drawing with LaTeX and Asymptote!'
+94c0014436db12b5,full,fix,A3,,,Fixed 1 mojibake (don't) but 'đź™‚' (broken emoji) left in Peter's comment at post offset 9633
+4dd13476a6af3f3f,full,clean,,,,Removed 'posted by .' correctly; source flattens exponents in the question (e−3x + 5e4x)
+b5b886b63aeb9e2e,full,drop,C1;C3,,,"No matching doc_id; drop looks right: Course Hero paywall preview, formulas garbled in extraction (parenleftBig), cut off after page 5"
+411aeec06d260b92,full,fix,C1,,,"Removed copyright footer; game UI left ('It's Player 1's turn...', 'Player 1: RED', 'Number of players:', 'Congratulations...'), plus Twitter testimonials with t.co links and 'For Students: / For All:'"
+fd90a7692cbe0dda,full,fix,C1,,,"Removed 'Open in App'; BYJU'S UI left: 'You visited us 1 times! Enjoying our articles? Unlock Full Access!', 'Suggest Corrections 545', 'Join BYJU'S Learning Program' x2, 'Related Videos ... Watch in App'"
+67f407a0ccd09d74,full,drop,C1;C3,,,"No matching doc_id; drop OK: Course Hero preview with paywall text and '{[ promptMessage ]}' template junk, cut off mid-question; the worked finance solutions themselves were usable"
+a878064814cc3108,full,fix,C1,,,Removed 'posted by .' and 'More Similar Questions'; the 'Similar Questions' list of 10 linked questions is left (items 4 and 5 identical)
+e45925da5672827e,full,drop,C1;C5;A4,,,"Worksheet catalogue page with little math: 'View worksheet' x6, 'View Math Article' x2, one 'Standard: MATH 1' left (5 of 6 removed); 2 U+FFFD at post offsets 257 and 280 ('is � of 32', '� of a day')"
+21bfa34841bcc936,full,fix,C2,,,"Removed repeated Figure 4.5/4.6 captions, but 'Figure 4.4 Small-scale eddies...', 'NEGATIVE (CLOCKWISE) VORTICITY...' and 'fricton with coastal boundary...' still appear twice; OCR errors remain (Uorticity, thai, vorlicity, (low for flow), ends 'Norff Po;e')"
+01cbee543c7751fd,partial,drop,C5;C4;C1,,,"SEO spam: sentences scraped from many sites stitched together ('Male or Female ?', 'Sign-up, for QS LEAP Services!', gazebo plans, ends 'D.K. Metcalf Womens Jersey'); cleaner only removed 2 ZWSP; read start, middle and end of 31k chars"
+89dc8e7278ce1f4b,full,fix,C1,,,"Over-cleaning: repeated-line rule deleted the formula line 'P(E) = n(E)/ n(S)' from 4 of 5 worked solutions (Q12-Q15), so steps now jump from n(E) to the answer; stray 'darkmode' at end"
+03adce6b428657cc,full,fix,C1,,,"Removed 5 of 6 'Quick Reference:' labels; other page text still there: 'Previous Challenge:...' x3, 'Code Missing:...' x3, 'Message Log' x6, 'Canvas (your drawing will display here)' x3"
+b1efb7907a0c8cbb,full,fix,C1,,,Removed 9 of 10 'Please Log in or Create an account to join the conversation.' lines; one left after the first post; footer 'Moderators: snowgoer540 / Time to create page: 0.111 seconds' left
+11c56a701b6c6f82,full,clean,,,,"Removed a repeated paragraph inside a quote; harmless, original post keeps it"
+76718c4a528f2cee,full,fix,C1,,,"Removed 'Wiki User' x2 and 'Related questions'; answers.com UI left: '0', 'Updated: 9/19/2023', '13y ago' x2, 'Earn +20 pts', 'Submit', 'Still have questions?', 'Continue Learning about Math & Arithmetic'; low value, some related answers do not match their questions"

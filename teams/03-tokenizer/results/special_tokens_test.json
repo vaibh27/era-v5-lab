@@ -1,0 +1,146 @@
+{
+ "tokenizer_sha256": "e6b93a93a60520d7b1af2e9242485f443b5596a1e116b8f8798d83bbad25a64b",
+ "special_slots_json_sha256": "595c7ea6085d456b00a60306e3033393b96165b7410a12e78f92bd21a5cee236",
+ "result": "PASS",
+ "problems": [],
+ "checks": {
+  "one_id_each": {
+   "tokens": 356,
+   "not_one_id": [],
+   "not_one_id_in_context": []
+  },
+  "plain_text": {
+   "files": {
+    "dev/As.txt": {
+     "sha256": "6060b60d0164f29e7390e51e62cf84ec4ad95ef825d9d964642f4a544944c230",
+     "bytes": 2000286,
+     "tokens": 238381,
+     "special_ids": 0,
+     "literal_marker_strings": 0
+    },
+    "dev/Bn.txt": {
+     "sha256": "828be2d10b09421756653f280658f9e5877c2fe3f50b4cc3138c5fd4644b54fc",
+     "bytes": 2001376,
+     "tokens": 231232,
+     "special_ids": 0,
+     "literal_marker_strings": 0
+    },
+    "dev/Code.txt": {
+     "sha256": "3a2e8ff6d799e807b99552812f007cac6dd2c9545aebe0b782b43145ee50a6d1",
+     "bytes": 2999814,
+     "tokens": 707414,
+     "special_ids": 0,
+     "literal_marker_strings": 0
+    },
+    "dev/En.txt": {
+     "sha256": "b44df078154499b4bf17ec38d50ea136e87f479786b01ebe05ef96eb24a526d3",
+     "bytes": 5001468,
+     "tokens": 1077077,
+     "special_ids": 0,
+     "literal_marker_strings": 0
+    },
+    "dev/Gu.txt": {
+     "sha256": "87f5bd1ad359ca46688436e10bb8fd05168b21ae329d0dc36e281e47e481a618",
+     "bytes": 2005065,
+     "tokens": 250971,
+     "special_ids": 0,
+     "literal_marker_strings": 0
+    },
+    "dev/Hi.txt": {
+     "sha256": "fdcef2982b72e0fe723912666459d1b85d670d1f60dc667982c5988e1d1a7b9b",
+     "bytes": 2003640,
+     "tokens": 236682,
+     "special_ids": 0,
+     "literal_marker_strings": 0
+    },
+    "dev/Kn.txt": {
+     "sha256": "cd757d8c88a3341e4c8eaac27cd25d1aebade7cc40d1af13176ed7f8d6705062",
+     "bytes": 2001254,
+     "tokens": 216652,
+     "special_ids": 0,
+     "literal_marker_strings": 0
+    },
+    "dev/Ml.txt": {
+     "sha256": "d436400d5efc2068056ac14cdb00eafe43fd867e685837546a7bb3fed6872225",
+     "bytes": 2030238,
+     "tokens": 199508,
+     "special_ids": 0,
+     "literal_marker_strings": 0
+    },
+    "dev/Mr.txt": {
+     "sha256": "66a567ce58feb71b1deca25232d7e688045d08558e0949fffc3fb861b61e430b",
+     "bytes": 2007403,
+     "tokens": 213839,
+     "special_ids": 0,
+     "literal_marker_strings": 0
+    },
+    "dev/Or.txt": {
+     "sha256": "3ca261ae7541a3e1f8bfd2735972edc0c151e9e4b7e0b7ed5ad968e0dd46c011",
+     "bytes": 2000805,
+     "tokens": 224274,
+     "special_ids": 0,
+     "literal_marker_strings": 0
+    },
+    "dev/Pa.txt": {
+     "sha256": "2e50c225be42ff388f88e5bae2b8cb2217d61f6d736d289b33246b40b255e99d",
+     "bytes": 2001026,
+     "tokens": 257056,
+     "special_ids": 0,
+     "literal_marker_strings": 0
+    },
+    "dev/Ta.txt": {
+     "sha256": "6093418072d6383d959676c77f3bd872aeb1928e7b96c26055b45a83847a59de",
+     "bytes": 2008244,
+     "tokens": 190816,
+     "special_ids": 0,
+     "literal_marker_strings": 0
+    },
+    "dev/Te.txt": {
+     "sha256": "942f5ae7f86a1ce7a2791beb6eb090fb5fca6af2182f996740f949825e709706",
+     "bytes": 2004194,
+     "tokens": 226566,
+     "special_ids": 0,
+     "literal_marker_strings": 0
+    }
+   },
+   "tokens": 4270468,
+   "special_ids": 0
+  },
+  "look_alikes": {
+   "strings": 16,
+   "made_special_ids": {}
+  },
+  "literal_markers": {
+   "ids": [
+    130822,
+    129994
+   ],
+   "expected": [
+    130822,
+    129994
+   ],
+   "note": "tokenizers matches added tokens in raw text; shard_writer.py leaves out a doc with a special id inside, render.py rejects markers in content"
+  },
+  "g10_v1": {
+   "spec_sha256": "5c62c0a2d16b7949807804900930c376d69f1398f8f9b18a7a94ef25cd8a7ac2",
+   "markers": 17,
+   "match": 15,
+   "differ": [
+    {
+     "id": 130827,
+     "name": "subagent_call",
+     "g10_string": "<|subagent_call|>",
+     "frozen_string": "<|g10_slot_05|>",
+     "match": false
+    },
+    {
+     "id": 130828,
+     "name": "subagent_return",
+     "g10_string": "<|subagent_return|>",
+     "frozen_string": "<|g10_slot_06|>",
+     "match": false
+    }
+   ]
+  }
+ }
+}

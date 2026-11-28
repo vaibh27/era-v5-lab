@@ -1,0 +1,29 @@
+doc_id,read,verdict,diseases,evidence,hex,note
+8c0b0e0c559afe0b,full,fix,C1,,,Residual boilerplate: DA-C1-006 removes Share this but leaves Like this at post offset 998. Extend the scoped site-chrome medicine; preserve article text.
+b949f7934ece26f6,full,clean,,,,
+5b4d0f975990e808,full,fix,,,,Incorrect whole-document drop by DA-C3-003: the final complete answer ends with depending on whom you side with. A terminal preposition alone is not proof of truncation. Restore the article; investigate a context-aware rule replacement.
+c0700a42d38ffcfb,full,clean,,,,
+b7da3294657a4aa6,full,clean,,,,
+0297eb260363a338,full,fix,C1,,,"Residual site chrome: Click to enlarge at post offset 1810 and advertisement/byline furniture at post offset 1920. DA-C2-003 removes repeated copies but leaves one; add scoped C1 removal, not broader repeat deletion."
+6edfb805e854f8cd,full,clean,,,,
+80ec379221b6d231,full,clean,,,,
+42e3205b05893f8f,full,clean,,,,
+f8027db45cfbebb2,full,fix,,,,"Potential content loss: DA-B4-007 deletes the complete Cost Difference bullet because it also contains a source-availability caveat. Preserve the factual stainless-steel comparison; review sentence-level removal. Raw 976 chars, post 794 chars."
+10070ea935885063,full,clean,,,,
+b57a2a8fbf16fdc6,full,fix,C1,,,Residual comment metadata: username/relative timestamp at post offset 412 remains after DA-C1-006 removes Loading. Remove only presentation metadata if approved; preserve substantive user comments.
+9a8d21351d48e7a4,full,clean,,,,
+a9092dc10e8938a1,full,fix,,,,"Replay-confirmed Topic heading removal by DA-C5-005, also present in three other audited documents. The rule deletes every Topic/Topics-prefixed line without testing for a keyword list. Review as a false-positive removal, not C5 spam in the source."
+1fcdf6476cbe3c6d,full,clean,,,,Resolved question: DA-B4-007 removes an appended Q&A whose answer explicitly says the requested wage is not provided. This matches the intended rewriter-meta cleanup; not counted as confirmed harmful removal.
+0f23da54cecc5a58,full,clean,,,,
+fc10b82da7fb24ac,full,clean,,,,
+91ab3364ac1512d7,full,clean,,,,
+a2e0f82c86a5e538,full,clean,,,,
+acfa25d6c34e5bf5,full,clean,,,,
+d1f7ebf967426312,full,fix,,,,DA-C5-005 removes the valid Topic heading Text Analysis of Political Speech. Proposed update: preserve single-topic titles; remove only evidenced tag/keyword-list boilerplate.
+add97e507366e20e,full,clean,,,,
+e2e54ae8ca53fb13,full,clean,,,,
+2917191a7028177c,full,clean,,,,
+0f790b3e51447cfd,full,clean,,,,
+04c8254eec115f84,full,clean,,,,
+12ce8decc266bfcf,full,clean,,,,
+eec2c60c12f1d3f5,full,clean,,,,

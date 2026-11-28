@@ -1,0 +1,11 @@
+audit docs: 35; in the cleaned files: 32
+
+DA-C1-012 (C1): 26 audit docs labelled C1, 23 in the cleaned files (3 dropped by the cleaner); the rule changes 12 of them
+  changed: caec68d5a4dc4373, 4376102f99b2fdfd, fd90a7692cbe0dda, 89dc8e7278ce1f4b, 03adce6b428657cc, b1efb7907a0c8cbb, 76718c4a528f2cee, 32ce96905cc39b34, 0cb915d7762c2e45, f079a0d75820b184, edfafeaa35e38bc9, ca8e91121e85235c
+  not changed: 73670428f7373dee, c87c76a202bf9370, 411aeec06d260b92, a878064814cc3108, e45925da5672827e, 01cbee543c7751fd, 0ef68457f8488afa, 4258f5c9fbf14805, c2014b24148deb41, 31c47797e0ec552c, 32d96679ed59c9d5
+  also changes 0 audit docs not labelled C1: -
+
+DA-C2-007 (C2): 6 audit docs labelled C2, 6 in the cleaned files (0 dropped by the cleaner); the rule changes 3 of them
+  changed: 21bfa34841bcc936, 4258f5c9fbf14805, c2014b24148deb41
+  not changed: 0ef68457f8488afa, 32d96679ed59c9d5, 41f03ba56962c1e9
+  also changes 0 audit docs not labelled C2: -
