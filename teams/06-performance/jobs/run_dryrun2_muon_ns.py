@@ -60,6 +60,7 @@ DRYRUN2_T2_OVERRIDES = [
     "model.ke_max_pos=32",
     "model.reversible=false",
     "model.vocab_size=131072",
+    "model.ce_impl=chunked",
     "run.batch_size=8",
     "run.dtype=bf16",
     "run.seed=1234",
