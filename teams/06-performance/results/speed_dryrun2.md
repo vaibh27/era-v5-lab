@@ -152,6 +152,51 @@ Class main changed `dryrun2.yaml` after the runs above: KAS V2 output head (#717
 - The dry run 2 step on the same GPU type doubled with the new config (687 -> 1378 ms base). The KAS V2 head is the likely cause; worth a profile for Team 5.
 - CUDA: SDPA tests pass; full suite passes apart from one Team 9 loader test whose script was not uploaded (passes on CPU; the driver now uploads it).
 
+## Muon Newton-Schulz cost (W5 Design Task 5)
+
+**Owner:** Adinath Auti (adinathauti)  
+**GPU:** NVIDIA A100-SXM4-40GB · torch 2.5.1+cu124  
+**Branch:** `g6/w5-muon-ns-cost` @ `58829b2`  
+**Method:** `perfkit.bench --modes clean,layer --level 3`, 20 timed steps + 5 warmup, synthetic tokens.
+NS region: `opt:opt.muon.ns` at profiler level 3 (summed over all 8 blocks in the layer pass).
+Step time and tokens/s from clean mode. Chunked CE (`model.ce_impl=chunked`) used to avoid
+materialising the 8 GB fp32 logit tensor at V=131,072 on 40 GB; does not affect NS cost.
+KAS V2 head excluded: no matching perfkit key; its matrices are outside `blocks.*` and not
+covered by the current Muon rule.
+
+| impl | step ms | tok/s | opt.muon ms | muon %step | NS ms | NS %step | NS %Muon | NS calls/step |
+|------|--------:|------:|------------:|-----------:|------:|---------:|---------:|--------------:|
+| loop | 584.1 | 28,050 | 174.4 | 29.4% | 162.8 | **27.5%** | **93.3%** | 296 |
+| batched | 439.2 | 37,307 | 25.7 | 5.8% | 19.3 | **4.3%** | **75.0%** | 4 |
+
+Step speedup loop → batched: **1.330x**  
+NS time speedup loop → batched: **8.444x**
+
+Spread: loop 1.9% (p10 581 ms, p90 592 ms), batched 0.7% (p10 438 ms, p90 441 ms).
+
+Reading:
+
+- With the loop impl, NS orthogonalization is **27.5% of total step time** and **93.3% of all
+  Muon time** — the dominant optimizer cost by a large margin.
+- The loop runs **296 NS chains/step** (one per 2D weight matrix across all 8 blocks × 17 experts).
+  SDPA at 73 ms is the next largest single region (12.3% of step).
+- The batched impl groups those 296 matrices into **4 shape classes** (the four distinct 2D weight
+  shapes in T2: 512×512 attn Q/O, 128×512 attn KV, 768×512 expert gate/up, 512×768 expert down)
+  and runs one bmm NS chain per class — **4 chains vs 296**, an 8.4x NS speedup.
+- The batched impl cuts the full step from 584 ms to 439 ms (**1.33x speedup**) with no model or
+  numeric change. `opt:opt.muon` drops from 174 ms to 26 ms; fwd and bwd are unchanged (157/256 ms).
+- GPU utilisation rises from 84% (loop, clean) to 100% (batched, clean): the loop's sequential
+  small GEMMs starve the GPU; batching fills it.
+- Next step: zero-gradient expert skip (Soma's tip from G10). An expert with zero routed tokens
+  has an all-zero gradient; NS on stale momentum still applies a full-size update. Skipping NS
+  for zero-gradient experts removes that spurious update and cuts NS calls further.
+
+Reproduce:
+```
+modal run teams/06-performance/jobs/modal_muon_ns.py --smoke   # smoke (3 steps)
+modal run teams/06-performance/jobs/modal_muon_ns.py           # full run (20 steps)
+```
+
 ## Recommendation for the main run
 
 1. `model.attn_impl: sdpa`, `run.compile: true`, step caches (always on), `run.micro_batch_size: 2` on 24 GB cards: about 2x the dry run 2 step on A100, same model and data. Each changes the numeric trace except the caches, so it needs TSAI's agreement before the main run.
