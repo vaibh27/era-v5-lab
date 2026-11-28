@@ -5,13 +5,14 @@ Owner: Adinath Auti (adinathauti)
 
 Measures the Newton-Schulz (NS) share of step time and compares loop vs batched impl on the
 dry run 2 config (T2: 8 layers, d 512, 16 experts top-2, batch 8×2048, Muon + AdamW, bf16).
-Also runs a second batch size (B=16×2048) to show how NS share scales.
+Also runs a second batch size (B=16×2048) and two seeds to show NS share scales and is stable.
 
-Runs perfkit.bench --modes clean,layer --level 3 for each config × impl combination:
+Runs perfkit.bench --modes clean,layer --level 3 for each seed × config × impl combination:
   case A: optim.muon_impl=loop    (reference: one NS chain per matrix)
   case B: optim.muon_impl=batched (same-shape matrices stacked; one NS chain per shape group)
 
 Output fields (per case):
+  seed, config, impl, batch_size, block_size
   step_ms_clean, tokens_per_s          — from clean mode (no profiler overhead)
   positions_per_s                      — B×T / step_s (all sequence positions)
   scored_tokens_per_s                  — same as positions on synthetic (no padding)
@@ -22,13 +23,13 @@ Output fields (per case):
 
 Outputs:
   out/result_muon_ns.json              comparison summary (all cases + speedups)
-  out/muon_ns_{loop,batched}_{cfg}.json  perfkit bench record per case
+  out/muon_ns_{loop,batched}_{cfg}_s{seed}.json  perfkit bench record per case
 
 Usage from teams/06-performance/:
   # CPU smoke (exit 0 required before filing PR):
   python -B jobs/run_dryrun2_muon_ns.py --smoke-cpu
 
-  # GPU run (Modal A100-40GB or equivalent, synthetic tokens):
+  # GPU run (Modal A100-40GB or equivalent, synthetic tokens, 2 seeds):
   python -B jobs/run_dryrun2_muon_ns.py --out out --synthetic
 """
 from __future__ import annotations
@@ -92,6 +93,9 @@ CONFIGS = [
     ("B8T2048",  8,  2048, DRYRUN2_T2_OVERRIDES),
     ("B16T2048", 16, 2048, DRYRUN2_T2_B16_OVERRIDES),
 ]
+
+# Default seeds for the full run (≥2 seeds required by Lab 5 brief).
+DEFAULT_SEEDS = [1234, 4321]
 
 # Bytes per token for each dtype (used in bytes_per_s calculation).
 DTYPE_BYTES = {"fp32": 4, "bf16": 2, "fp16": 2}
@@ -202,6 +206,10 @@ def _rates(step_ms_clean: float, batch_size: int, block_size: int,
     }
 
 
+def _avg(vals: List[float]) -> float:
+    return round(sum(vals) / len(vals), 3) if vals else 0.0
+
+
 def main() -> int:
     ap = argparse.ArgumentParser(description="G6 W5 Design Task 5: Muon NS cost on dryrun2 config")
     ap.add_argument("--out", default="out", help="Output directory")
@@ -215,14 +223,16 @@ def main() -> int:
                     help="Tiny CPU smoke check; exit 0 required before PR")
     ap.add_argument("--batch", default="all",
                     help="Which batch configs to run: 'all', 'B8T2048', 'B16T2048'")
+    ap.add_argument("--seeds", default=",".join(str(s) for s in DEFAULT_SEEDS),
+                    help="Comma-separated seed list (default: '1234,4321')")
     args, extra = ap.parse_known_args()
 
     out_dir = Path(args.out).resolve()
     out_dir.mkdir(parents=True, exist_ok=True)
 
     if args.smoke_cpu:
-        # Smoke: single tiny CPU config, batch_size=2, block_size=32 (tiny_cpu defaults)
         run_configs = [("smoke", 2, 32, list(SMOKE_OVERRIDES))]
+        seeds = [1234]  # smoke: single seed only
         base_cfg = "configs/tiny_cpu.yaml"
         warmup, steps = 2, 5
         modes = "clean,layer"
@@ -233,93 +243,117 @@ def main() -> int:
             for label, bs, blk, cfg in CONFIGS
             if args.batch == "all" or args.batch == label
         ]
+        seeds = [int(s.strip()) for s in args.seeds.split(",") if s.strip()]
         base_cfg = "configs/base.yaml"
         warmup, steps = args.warmup, args.steps
         modes = args.modes
         level = args.level
 
     all_rows: List[dict] = []
+    # by_config_raw[cfg_label][seed] = {"speedup": ..., "ns_speedup": ...}
+    by_config_raw: Dict[str, Dict[int, dict]] = {}
+
+    for seed in seeds:
+        for cfg_label, batch_size, block_size, cfg_overrides in run_configs:
+            # Substitute the seed into the overrides for this run.
+            overrides = [
+                x if not x.startswith("run.seed=") else f"run.seed={seed}"
+                for x in cfg_overrides
+            ]
+            if not args.smoke_cpu and args.synthetic:
+                overrides.append("data.source=synthetic")
+
+            config_rows: List[dict] = []
+            impls = [
+                ("loop",    f"muon_ns_loop_{cfg_label}_s{seed}"),
+                ("batched", f"muon_ns_batched_{cfg_label}_s{seed}"),
+            ]
+
+            for impl, tag in impls:
+                for ext in (".json", ".md", ".jsonl"):
+                    p = out_dir / f"{tag}{ext}"
+                    if p.exists():
+                        p.unlink()
+
+                cmd = _bench_cmd(tag, impl, base_cfg, modes, level, warmup, steps,
+                                 overrides, out_dir, extra)
+                print(f"\n[muon_ns] seed={seed} config={cfg_label} impl={impl}", flush=True)
+                print(f"[muon_ns] cmd: {' '.join(cmd)}", flush=True)
+                rc, log, wall = _run_bench(cmd)
+                print(log, flush=True)
+                if rc != 0:
+                    print(f"[muon_ns] FAILED seed={seed} config={cfg_label} impl={impl} "
+                          f"(exit={rc})", file=sys.stderr)
+                    return rc
+
+                rec_path = out_dir / f"{tag}.json"
+                rec = json.loads(rec_path.read_text(encoding="utf-8")) if rec_path.exists() else {}
+                print(f"[muon_ns] seed={seed} config={cfg_label} impl={impl} done  "
+                      f"wall={wall:.1f}s", flush=True)
+
+                step_ms_clean, tps = _clean_toks(rec)
+                step_ms_layer, ns_ms, ns_pct = _ns_share(rec)
+                muon_ms, muon_pct = _muon_share(rec)
+                ns_of_muon_pct = 100.0 * ns_ms / muon_ms if muon_ms > 0 else 0.0
+                ns_calls = (rec.get("layer", {}).get("regions", {})
+                            .get("opt:opt.muon.ns", {}).get("calls_per_step", 0))
+                peak_mem = _peak_mem_gb(rec)
+                rates = _rates(step_ms_clean, batch_size, block_size)
+
+                row = {
+                    "seed": seed,
+                    "config": cfg_label,
+                    "impl": impl,
+                    "batch_size": batch_size,
+                    "block_size": block_size,
+                    "step_ms_clean": round(step_ms_clean, 2),
+                    "tokens_per_s": round(tps, 0),
+                    "positions_per_s": rates["positions_per_s"],
+                    "scored_tokens_per_s": rates["scored_tokens_per_s"],
+                    "bytes_per_s": rates["bytes_per_s"],
+                    "peak_mem_gb": round(peak_mem, 2),
+                    "step_ms_layer": round(step_ms_layer, 2),
+                    "opt_muon_ms": round(muon_ms, 2),
+                    "opt_muon_pct": round(muon_pct, 2),
+                    "opt_muon_ns_ms": round(ns_ms, 2),
+                    "opt_muon_ns_pct_of_step": round(ns_pct, 2),
+                    "opt_muon_ns_pct_of_muon": round(ns_of_muon_pct, 2),
+                    "ns_calls_per_step": ns_calls,
+                }
+                config_rows.append(row)
+                all_rows.append(row)
+
+            # Per-seed speedup for this config.
+            if len(config_rows) == 2:
+                loop_ms = config_rows[0]["step_ms_clean"] or 1.0
+                bat_ms  = config_rows[1]["step_ms_clean"] or 1.0
+                loop_ns = config_rows[0]["opt_muon_ns_ms"]
+                bat_ns  = config_rows[1]["opt_muon_ns_ms"]
+                seed_sp = {
+                    "speedup_loop_to_batched":    round(loop_ms / bat_ms, 3) if bat_ms > 0 else None,
+                    "ns_speedup_loop_to_batched": round(loop_ns / bat_ns, 3) if bat_ns > 0 else None,
+                }
+                by_config_raw.setdefault(cfg_label, {})[seed] = seed_sp
+
+    # Aggregate: average speedups across seeds per config.
     by_config: Dict[str, dict] = {}
+    for cfg_label, seed_data in by_config_raw.items():
+        speeds    = [v["speedup_loop_to_batched"]    for v in seed_data.values() if v.get("speedup_loop_to_batched")]
+        ns_speeds = [v["ns_speedup_loop_to_batched"] for v in seed_data.values() if v.get("ns_speedup_loop_to_batched")]
+        by_config[cfg_label] = {
+            "speedup_loop_to_batched":    _avg(speeds),
+            "ns_speedup_loop_to_batched": _avg(ns_speeds),
+            "per_seed": {str(s): v for s, v in seed_data.items()},
+        }
 
-    for cfg_label, batch_size, block_size, cfg_overrides in run_configs:
-        overrides = list(cfg_overrides)
-        if not args.smoke_cpu and args.synthetic:
-            overrides.append("data.source=synthetic")
-
-        config_rows: List[dict] = []
-        impls = [("loop", f"muon_ns_loop_{cfg_label}"),
-                 ("batched", f"muon_ns_batched_{cfg_label}")]
-
-        for impl, tag in impls:
-            for ext in (".json", ".md", ".jsonl"):
-                p = out_dir / f"{tag}{ext}"
-                if p.exists():
-                    p.unlink()
-
-            cmd = _bench_cmd(tag, impl, base_cfg, modes, level, warmup, steps,
-                             overrides, out_dir, extra)
-            print(f"\n[muon_ns] config={cfg_label} impl={impl}", flush=True)
-            print(f"[muon_ns] cmd: {' '.join(cmd)}", flush=True)
-            rc, log, wall = _run_bench(cmd)
-            print(log, flush=True)
-            if rc != 0:
-                print(f"[muon_ns] FAILED config={cfg_label} impl={impl} (exit={rc})",
-                      file=sys.stderr)
-                return rc
-
-            rec_path = out_dir / f"{tag}.json"
-            rec = json.loads(rec_path.read_text(encoding="utf-8")) if rec_path.exists() else {}
-            print(f"[muon_ns] config={cfg_label} impl={impl} done  wall={wall:.1f}s", flush=True)
-
-            step_ms_clean, tps = _clean_toks(rec)
-            step_ms_layer, ns_ms, ns_pct = _ns_share(rec)
-            muon_ms, muon_pct = _muon_share(rec)
-            ns_of_muon_pct = 100.0 * ns_ms / muon_ms if muon_ms > 0 else 0.0
-            ns_calls = (rec.get("layer", {}).get("regions", {})
-                        .get("opt:opt.muon.ns", {}).get("calls_per_step", 0))
-            peak_mem = _peak_mem_gb(rec)
-            rates = _rates(step_ms_clean, batch_size, block_size)
-
-            row = {
-                "config": cfg_label,
-                "impl": impl,
-                "batch_size": batch_size,
-                "block_size": block_size,
-                "step_ms_clean": round(step_ms_clean, 2),
-                "tokens_per_s": round(tps, 0),
-                "positions_per_s": rates["positions_per_s"],
-                "scored_tokens_per_s": rates["scored_tokens_per_s"],
-                "bytes_per_s": rates["bytes_per_s"],
-                "peak_mem_gb": round(peak_mem, 2),
-                "step_ms_layer": round(step_ms_layer, 2),
-                "opt_muon_ms": round(muon_ms, 2),
-                "opt_muon_pct": round(muon_pct, 2),
-                "opt_muon_ns_ms": round(ns_ms, 2),
-                "opt_muon_ns_pct_of_step": round(ns_pct, 2),
-                "opt_muon_ns_pct_of_muon": round(ns_of_muon_pct, 2),
-                "ns_calls_per_step": ns_calls,
-            }
-            config_rows.append(row)
-            all_rows.append(row)
-
-        # Per-config speedups
-        if len(config_rows) == 2:
-            loop_ms = config_rows[0]["step_ms_clean"] or 1.0
-            bat_ms = config_rows[1]["step_ms_clean"] or 1.0
-            loop_ns = config_rows[0]["opt_muon_ns_ms"]
-            bat_ns = config_rows[1]["opt_muon_ns_ms"]
-            by_config[cfg_label] = {
-                "speedup_loop_to_batched": round(loop_ms / bat_ms, 3) if bat_ms > 0 else None,
-                "ns_speedup_loop_to_batched": round(loop_ns / bat_ns, 3) if bat_ns > 0 else None,
-            }
-
-    # Top-level speedup = B8T2048 for backward compat with existing consumers.
+    # Backward compat: top-level speedup = B8T2048 averaged.
     primary = by_config.get("B8T2048") or (list(by_config.values())[0] if by_config else {})
 
     summary = {
         "job": "dryrun2_muon_ns",
         "owner": "Adinath Auti (adinathauti)",
         "config": "dryrun2 T2 (8L d512, 16+1 experts, B8×2048 + B16×2048, bf16, Muon)",
+        "seeds": seeds,
         "note": (
             "NS region is opt:opt.muon.ns at level 3. step_ms, positions/s, bytes/s from clean mode. "
             "NS share from layer mode (step_ms_recorder_off when available). "
@@ -330,7 +364,7 @@ def main() -> int:
         ),
         "cases": all_rows,
         "by_config": by_config,
-        # Backward compat: top-level speedup = B8T2048 (the original single-config result).
+        # Backward compat: top-level speedup = B8T2048 averaged across seeds.
         "speedup_loop_to_batched": primary.get("speedup_loop_to_batched"),
         "ns_speedup_loop_to_batched": primary.get("ns_speedup_loop_to_batched"),
     }
@@ -339,28 +373,39 @@ def main() -> int:
     result_path.write_text(json.dumps(summary, indent=2), encoding="utf-8")
     print(f"\n[muon_ns] wrote summary -> {result_path}", flush=True)
 
-    # Print table
+    # Print table (grouped by seed for readability).
     print("\n=== Muon Newton-Schulz cost: loop vs batched ===")
-    hdr = (f"{'config':<12} {'impl':<10} {'step_ms':>8} {'tok/s':>8} {'pos/s':>8} "
-           f"{'bytes/s':>9} {'mem_gb':>7} {'ns_ms':>7} {'ns%step':>8} "
-           f"{'ns%muon':>8} {'ns_calls':>9}")
+    hdr = (f"{'seed':>6} {'config':<12} {'impl':<10} {'step_ms':>8} {'tok/s':>8} "
+           f"{'pos/s':>8} {'bytes/s':>9} {'mem_gb':>7} {'ns_ms':>7} "
+           f"{'ns%step':>8} {'ns%muon':>8} {'ns_calls':>9}")
     sep = "-" * len(hdr)
     print(hdr)
     print(sep)
+    prev_seed = None
     for r in all_rows:
+        if r["seed"] != prev_seed:
+            if prev_seed is not None:
+                print()
+            prev_seed = r["seed"]
         bps_str = f"{r['bytes_per_s'] / 1e6:.0f}M" if r["bytes_per_s"] > 0 else "0"
         print(
-            f"{r['config']:<12} {r['impl']:<10} {r['step_ms_clean']:>8.1f} "
-            f"{r['tokens_per_s']:>8.0f} {r['positions_per_s']:>8.0f} "
-            f"{bps_str:>9} {r['peak_mem_gb']:>7.1f} "
-            f"{r['opt_muon_ns_ms']:>7.2f} {r['opt_muon_ns_pct_of_step']:>8.1f} "
-            f"{r['opt_muon_ns_pct_of_muon']:>8.1f} {r['ns_calls_per_step']:>9}"
+            f"{r['seed']:>6} {r['config']:<12} {r['impl']:<10} "
+            f"{r['step_ms_clean']:>8.1f} {r['tokens_per_s']:>8.0f} "
+            f"{r['positions_per_s']:>8.0f} {bps_str:>9} "
+            f"{r['peak_mem_gb']:>7.1f} {r['opt_muon_ns_ms']:>7.2f} "
+            f"{r['opt_muon_ns_pct_of_step']:>8.1f} {r['opt_muon_ns_pct_of_muon']:>8.1f} "
+            f"{r['ns_calls_per_step']:>9}"
         )
     print(sep)
     for cfg_label, sp in by_config.items():
+        per_seed_str = "  ".join(
+            f"s{s}: {v.get('speedup_loop_to_batched')}x / NS {v.get('ns_speedup_loop_to_batched')}x"
+            for s, v in sp.get("per_seed", {}).items()
+        )
         print(
-            f"{cfg_label}: step speedup loop->batched: {sp['speedup_loop_to_batched']}x  "
-            f"NS speedup: {sp['ns_speedup_loop_to_batched']}x"
+            f"{cfg_label}: step {sp['speedup_loop_to_batched']}x  "
+            f"NS {sp['ns_speedup_loop_to_batched']}x  "
+            f"(avg)  [{per_seed_str}]"
         )
 
     return 0

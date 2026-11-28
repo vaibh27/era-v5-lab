@@ -33,7 +33,8 @@ image = (
 
 
 @app.function(image=image, gpu="A100-40GB", timeout=1800)
-def bench(steps: int = 20, warmup: int = 5, smoke: bool = False) -> dict:
+def bench(steps: int = 20, warmup: int = 5, smoke: bool = False,
+          seeds: str = "1234,4321") -> dict:
     import subprocess, json as _json, os
     from pathlib import Path as P
 
@@ -60,9 +61,9 @@ def bench(steps: int = 20, warmup: int = 5, smoke: bool = False) -> dict:
     perf_dir = repo_dir / "teams" / "06-performance"
 
     if smoke:
-        extra = ["--steps", "3", "--warmup", "1"]
+        extra = ["--steps", "3", "--warmup", "1", "--seeds", "1234"]
     else:
-        extra = ["--steps", str(steps), "--warmup", str(warmup)]
+        extra = ["--steps", str(steps), "--warmup", str(warmup), "--seeds", seeds]
 
     cmd = [
         sys.executable, "-B",
@@ -95,11 +96,12 @@ def main(
     warmup: int = 5,
     gpu: str = "A100-40GB",
     out: str = "result_muon_ns.json",
+    seeds: str = "1234,4321",
 ):
     # Allow GPU override at call time without editing the file.
     fn = bench.with_options(gpu=gpu) if gpu != "A100-40GB" else bench
 
-    result = fn.remote(steps=steps, warmup=warmup, smoke=smoke)
+    result = fn.remote(steps=steps, warmup=warmup, smoke=smoke, seeds=seeds)
 
     out_path = Path(out)
     out_path.write_text(json.dumps(result, indent=2))
