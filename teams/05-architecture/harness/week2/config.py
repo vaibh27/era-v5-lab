@@ -174,6 +174,8 @@ def load_runtime(arm_path, runtime_path=None):
             "attn_gate_input",
             "attn_gate_bias",
             "attn_gate_init",
+            "norm_impl",
+            "swiglu_impl",
             "head_mode",
             "kas_prior",
         ],
@@ -276,8 +278,10 @@ def load_runtime(arm_path, runtime_path=None):
         "attn_gate_input",
         "attn_gate_bias",
         "attn_gate_init",
-            "head_mode",
-            "kas_prior",
+        "norm_impl",
+        "swiglu_impl",
+        "head_mode",
+        "kas_prior",
     ]:
         if key in src:
             model[key] = (
@@ -389,8 +393,9 @@ def validate(c):
         errors.append(
             "Only explicit bias-free expert implementation is supported; pending/bias=true must not be ignored"
         )
-    if e.get("dispatch") != "loop":
-        errors.append("Only loop dispatch is supported")
+    # loop: the dense every-expert path; grouped_mm: routed experts only (changes the numeric trace).
+    if e.get("dispatch") not in ("loop", "grouped_mm"):
+        errors.append("Only loop or grouped_mm dispatch is supported")
     gamma = e.get("bias_gamma")
     if type(gamma) not in (int, float) or isinstance(gamma, bool) or not math.isfinite(gamma) or gamma < 0:
         errors.append("bias_gamma must be 0 or a positive finite number")
@@ -451,6 +456,11 @@ def validate(c):
     # sdpa changes the numeric trace (fused softmax, bf16 scores); local layers stay eager.
     if m.get("attn_impl") not in ("eager", "sdpa"):
         errors.append("attn_impl must be eager or sdpa")
+    # Kernel choices; both change the numeric trace slightly (fp32 math, fewer roundings).
+    if m.get("norm_impl", "torch") not in ("torch", "fused"):
+        errors.append("norm_impl must be torch or fused")
+    if m.get("swiglu_impl", "torch") not in ("torch", "triton"):
+        errors.append("swiglu_impl must be torch or triton")
     if "tie_embeddings" in m or ("head_mode" in m and m["head_mode"] != "kas_v2"):
         errors.append("Output head must be legacy dense untied or explicit kas_v2; tying is unsupported")
     if "kas_prior" in m and (m.get("head_mode") != "kas_v2" or not isinstance(m["kas_prior"], dict)):
@@ -540,8 +550,9 @@ def validate(c):
         errors.append("Unsupported scoring boundary policy")
     if r.get("dtype") not in ["fp32", "bf16"]:
         errors.append("Unsupported precision")
-    if r.get("compile") is not False:
-        errors.append("Compiled backend not verified")
+    # compile: true runs each block through torch.compile (inductor); it changes the numeric trace.
+    if type(r.get("compile")) is not bool:
+        errors.append("run.compile must be true or false")
     if not number(r.get("grad_clip")) or r["grad_clip"] <= 0:
         errors.append("Invalid gradient clip")
     if not number(r.get("max_time_min")) or r["max_time_min"] <= 0:

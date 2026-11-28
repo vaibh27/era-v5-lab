@@ -8,6 +8,7 @@ import math
 import torch
 from torch import nn
 from torch.nn import functional as F
+from .swiglu_triton import swiglu
 
 
 def codec(rows, lengths):
@@ -71,12 +72,16 @@ class KE2(nn.Module):
 
 
 class RMSNorm(nn.Module):
-    def __init__(self, width, eps):
+    def __init__(self, width, eps, fused=False):
         super().__init__()
         self.weight = nn.Parameter(torch.ones(width))
         self.eps = eps
+        self.fused = fused
 
     def forward(self, x):
+        if self.fused:
+            # Same fp32 math in torch's fused kernel (norm_impl: fused); one launch instead of five.
+            return F.rms_norm(x.float(), (x.shape[-1],), self.weight, self.eps).to(x.dtype)
         return (
             x.float()
             * torch.rsqrt(x.float().square().mean(-1, keepdim=True) + self.eps)
@@ -98,6 +103,7 @@ class GQA(nn.Module):
         self.o = nn.Linear(w, w, bias=False)
         self.theta = m["rope_theta"]
         self.rotary_dim = 2 * math.floor(m.get("rotary_fraction", 1.0) * self.d / 2)
+        self._rotary_cache = {}
         pattern = m.get("attn_pattern", ["G"] * m["n_layer"])
         self.local = pattern[layer_index] == "L"
         # SDPA covers causal global layers only; local layers keep the eager window and sink.
@@ -124,24 +130,39 @@ class GQA(nn.Module):
             elif m["attn_gate_init"] != "linear_default":
                 raise ValueError("Invalid gate initialization")
 
-    def rotary(self, x):
-        # One window per document; position offset zero for each independent window.
+    def rotary_angles(self, t, device):
+        """cos and sin of the RoPE angles for positions 0..t-1, built once per length and device.
+
+        Same ops as computing them per call, so the values are bit-identical. Inference-mode
+        tensors cannot enter autograd, so they are cached separately. Under torch.compile the
+        cache is skipped: Dynamo cannot trace the inference-mode query, and inductor folds the
+        angles into the graph anyway.
+        """
+        if torch.compiler.is_compiling():
+            return self.rotary_values(t, device)
+        key = (t, device, torch.is_inference_mode_enabled())
+        cache = self._rotary_cache
+        if key not in cache:
+            cache[key] = self.rotary_values(t, device)
+        return cache[key]
+
+    def rotary_values(self, t, device):
         inv = self.theta ** (
-            -torch.arange(0, self.rotary_dim, 2, device=x.device).float()
+            -torch.arange(0, self.rotary_dim, 2, device=device).float()
             / self.rotary_dim
         )
-        angle = (
-            torch.arange(x.shape[-2], device=x.device).float()[:, None] * inv[None, :]
-        )
+        angle = torch.arange(t, device=device).float()[:, None] * inv[None, :]
+        return angle.cos(), angle.sin()
+
+    def rotary(self, x):
+        # One window per document; position offset zero for each independent window.
+        cos, sin = self.rotary_angles(x.shape[-2], x.device)
         a, b = (
             x.float()[..., : self.rotary_dim : 2],
             x.float()[..., 1 : self.rotary_dim : 2],
         )
         rotated = (
-            torch.stack(
-                (a * angle.cos() - b * angle.sin(), a * angle.sin() + b * angle.cos()),
-                -1,
-            )
+            torch.stack((a * cos - b * sin, a * sin + b * cos), -1)
             .flatten(-2)
             .to(x.dtype)
         )
@@ -193,15 +214,38 @@ class GQA(nn.Module):
         return a @ v
 
 
+def silu_mul(g, u, triton):
+    """SiLU(g) * u; with swiglu_impl: triton one CUDA kernel each way (fp32 math, one rounding)."""
+    return swiglu(g, u) if triton else F.silu(g) * u
+
+
 class SwiGLU(nn.Module):
-    def __init__(self, w, h, bias=False):
+    def __init__(self, w, h, bias=False, triton=False):
         super().__init__()
         self.gate = nn.Linear(w, h, bias=bias)
         self.up = nn.Linear(w, h, bias=bias)
         self.down = nn.Linear(h, w, bias=bias)
+        self.triton = triton
 
     def forward(self, x):
-        return self.down(F.silu(self.gate(x)) * self.up(x))
+        return self.down(silu_mul(self.gate(x), self.up(x), self.triton))
+
+
+class _StackedWeights(torch.autograd.Function):
+    """Hand back a cached [E, ...] stack of expert weights; route its gradient to each weight.
+
+    Backward is the one of torch.stack(weights).to(dtype): cast the gradient back to the
+    weights' dtype and unbind it, so parameter gradients are bit-identical.
+    """
+
+    @staticmethod
+    def forward(ctx, stacked, *weights):
+        ctx.weight_dtype = weights[0].dtype
+        return stacked
+
+    @staticmethod
+    def backward(ctx, grad):
+        return (None, *grad.to(ctx.weight_dtype).unbind(0))
 
 
 class MoE(nn.Module):
@@ -211,6 +255,7 @@ class MoE(nn.Module):
         h = m["moe"]["ffn_hidden"]
         cfg = m["moe"]
         self.topk = cfg["top_k"]
+        self.triton = m.get("swiglu_impl", "torch") == "triton"
         self.expert_load = None
         self.balance_gamma = float(cfg.get("bias_gamma") or 0.0)
         self._balance_load = None
@@ -222,8 +267,35 @@ class MoE(nn.Module):
             SwiGLU(w, h, cfg["bias"]) for _ in range(cfg["num_experts"])
         )
         self.shared = nn.ModuleList(
-            SwiGLU(w, h, cfg["bias"]) for _ in range(cfg["num_shared"])
+            SwiGLU(w, h, cfg["bias"], self.triton) for _ in range(cfg["num_shared"])
         )
+        self._stack_cache = {}
+        # "loop" is the config name of the dense path below; "grouped_mm" runs only the routed experts.
+        self.dispatch = cfg.get("dispatch", "loop")
+
+    def stacked(self, name, dtype):
+        """[E, out, in] expert weights in dtype, stacked and cast once per weight update.
+
+        The dense path used to stack and cast all expert weights in every call (every layer,
+        every microbatch). The cache key holds each weight's version counter, which every
+        in-place update (optimizer step, load_state_dict) bumps, so a changed weight rebuilds it.
+        """
+        weights = [getattr(e, name).weight for e in self.experts]
+        if torch.compiler.is_compiling():
+            # Dynamo cannot trace the cache key (inference-mode query, data pointers); inductor
+            # fuses the stack and cast into the graph instead.
+            return torch.stack(weights).to(dtype)
+        key = (
+            dtype,
+            torch.is_inference_mode_enabled(),
+            tuple((w._version, w.data_ptr()) for w in weights),
+        )
+        cached = self._stack_cache.get(name)
+        if cached is None or cached[0] != key:
+            with torch.no_grad():
+                cached = (key, torch.stack(weights).to(dtype))
+            self._stack_cache[name] = cached
+        return _StackedWeights.apply(cached[1], *weights)
 
     def _load_from_state_dict(self, state_dict, prefix, local_metadata, strict, missing_keys, unexpected_keys, error_msgs):
         # A checkpoint from before this buffer has no router_bias. Zeros are the
@@ -257,25 +329,53 @@ class MoE(nn.Module):
             selected.scatter_(-1, choice, True)
             self.expert_load.add_((selected & active[:, None]).sum(dim=0))
         gates = gates / gates.sum(-1, keepdim=True)
-        output = torch.zeros_like(flat)
-        # Execution-only fast path (TSAI): every expert runs on every token in one batched product, then each
-        # token keeps only its selected experts with their normalised gates. Same value as the loop below,
-        # with no data-dependent shapes and no host synchronisation. Padding rows get gate 0.
-        gate_dense = torch.zeros_like(scores).scatter(-1, choice, gates) * active[:, None]
-        Wg = torch.stack([e.gate.weight for e in self.experts])   # [E, h, w]
-        Wu = torch.stack([e.up.weight for e in self.experts])
-        Wd = torch.stack([e.down.weight for e in self.experts])   # [E, w, h]
         dt = flat.dtype
         if torch.is_autocast_enabled():
             dt = torch.get_autocast_dtype("cuda")
+        Wg = self.stacked("gate", dt)   # [E, h, w]
+        Wu = self.stacked("up", dt)
+        Wd = self.stacked("down", dt)   # [E, w, h]
         xe = flat.to(dt)
-        hg = torch.einsum("td,ehd->teh", xe, Wg.to(dt))
-        hu = torch.einsum("td,ehd->teh", xe, Wu.to(dt))
-        y = torch.einsum("teh,edh->ted", F.silu(hg) * hu, Wd.to(dt))
-        output = torch.einsum("te,ted->td", gate_dense.float(), y.float()).to(flat.dtype)
+        if self.dispatch == "grouped_mm":
+            output = self.grouped_experts(xe, active, choice, gates, Wg, Wu, Wd)
+            output = output.to(flat.dtype)
+        else:
+            # Execution-only fast path (TSAI): every expert runs on every token in one batched product, then each
+            # token keeps only its selected experts with their normalised gates. Same value as the loop below,
+            # with no data-dependent shapes and no host synchronisation. Padding rows get gate 0.
+            gate_dense = torch.zeros_like(scores).scatter(-1, choice, gates) * active[:, None]
+            hg = torch.einsum("td,ehd->teh", xe, Wg)
+            hu = torch.einsum("td,ehd->teh", xe, Wu)
+            y = torch.einsum("teh,edh->ted", silu_mul(hg, hu, self.triton), Wd)
+            output = torch.einsum("te,ted->td", gate_dense.float(), y.float()).to(flat.dtype)
         for expert in self.shared:
             output = output + expert(flat) * active[:, None]
         return output.reshape(shape)
+
+    def grouped_experts(self, xe, active, choice, gates, Wg, Wu, Wd):
+        """Run each token only through its top-k experts: one grouped GEMM per projection.
+
+        All N x top_k routes are kept, padding tokens included with gate 0, so the row count is
+        fixed: no capacity readback, no padding to the busiest expert and no host synchronisation.
+        Idle experts get exact zero gradients, as on the dense path. Returns fp32 [N, d].
+        """
+        if xe.is_cuda and xe.dtype != torch.bfloat16:
+            raise ValueError("grouped_mm dispatch needs bf16 autocast on CUDA (torch grouped GEMM)")
+        n_experts = Wg.shape[0]
+        routes = choice.flatten()                                    # [N * k], token-major
+        order = routes.argsort(stable=True)                          # routes grouped by expert
+        offsets = torch.searchsorted(
+            routes[order], torch.arange(n_experts, device=routes.device), right=True
+        ).to(torch.int32)                                            # end row of each expert's group
+        packed = xe[order // self.topk]
+        hg = F.grouped_mm(packed, Wg.transpose(-2, -1), offs=offsets)
+        hu = F.grouped_mm(packed, Wu.transpose(-2, -1), offs=offsets)
+        y = F.grouped_mm(F.silu(hg) * hu, Wd.transpose(-2, -1), offs=offsets)
+        weight = (gates * active[:, None]).flatten()[order]
+        # Back to (token, slot) order with a permutation copy, then sum the k slots in fp32.
+        weighted = y.float() * weight[:, None]
+        unsorted = torch.empty_like(weighted).index_copy(0, order, weighted)
+        return unsorted.view(-1, self.topk, unsorted.shape[-1]).sum(1)
 
     def apply_balance_update(self):
         load = self._balance_load
@@ -289,8 +389,9 @@ class MoE(nn.Module):
 class Block(nn.Module):
     def __init__(self, m, layer_index=0):
         super().__init__()
-        self.n1 = RMSNorm(m["n_embd"], m["norm_eps"])
-        self.n2 = RMSNorm(m["n_embd"], m["norm_eps"])
+        fused = m.get("norm_impl", "torch") == "fused"
+        self.n1 = RMSNorm(m["n_embd"], m["norm_eps"], fused)
+        self.n2 = RMSNorm(m["n_embd"], m["norm_eps"], fused)
         self.attn = GQA(m, layer_index)
         self.moe = MoE(m)
 
@@ -315,7 +416,7 @@ class LanguageModel(nn.Module):
         else:
             self.embedding = KE2(rows, lengths, m["n_embd"])
         self.blocks = nn.ModuleList(Block(m, i) for i in range(m["n_layer"]))
-        self.norm = RMSNorm(m["n_embd"], m["norm_eps"])
+        self.norm = RMSNorm(m["n_embd"], m["norm_eps"], m.get("norm_impl", "torch") == "fused")
         self.mtp_head = (
             nn.Linear(m["n_embd"], m["vocab_size"], bias=False) if m["mtp"] else None
         )
