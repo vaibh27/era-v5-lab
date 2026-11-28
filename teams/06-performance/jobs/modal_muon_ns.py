@@ -106,16 +106,25 @@ def main(
     print(f"\n[modal] wrote {out_path}")
 
     # Summary table.
-    print(f"\n{'impl':<10} {'step_ms':>9} {'tok/s':>9} "
-          f"{'NS_ms':>8} {'NS%step':>8} {'NS%muon':>8} {'calls':>7}")
-    print("-" * 65)
+    hdr = (f"{'config':<12} {'impl':<10} {'step_ms':>8} {'tok/s':>8} {'pos/s':>8} "
+           f"{'bytes/s':>9} {'mem_gb':>7} {'NS_ms':>8} {'NS%step':>8} "
+           f"{'NS%muon':>8} {'calls':>7}")
+    sep = "-" * len(hdr)
+    print(f"\n{hdr}")
+    print(sep)
     for c in result["cases"]:
+        bps_str = f"{c.get('bytes_per_s', 0) / 1e6:.0f}M"
         print(
-            f"{c['impl']:<10} {c['step_ms_clean']:>9.1f} {c['tokens_per_s']:>9.0f} "
+            f"{c.get('config', '?'):<12} {c['impl']:<10} "
+            f"{c['step_ms_clean']:>8.1f} {c['tokens_per_s']:>8.0f} "
+            f"{c.get('positions_per_s', 0):>8.0f} {bps_str:>9} "
+            f"{c.get('peak_mem_gb', 0):>7.1f} "
             f"{c['opt_muon_ns_ms']:>8.2f} {c['opt_muon_ns_pct_of_step']:>7.1f}% "
             f"{c['opt_muon_ns_pct_of_muon']:>7.1f}% {c['ns_calls_per_step']:>7}"
         )
-    print("-" * 65)
-    sp  = result.get("speedup_loop_to_batched")
-    nsp = result.get("ns_speedup_loop_to_batched")
-    print(f"step speedup loop->batched: {sp}x   NS speedup: {nsp}x")
+    print(sep)
+    for cfg_label, sp in result.get("by_config", {}).items():
+        print(
+            f"{cfg_label}: step {sp.get('speedup_loop_to_batched')}x   "
+            f"NS {sp.get('ns_speedup_loop_to_batched')}x"
+        )
