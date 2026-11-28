@@ -126,9 +126,9 @@ def test_optimizer_ownership_and_norm_gains(embedding, muon_impl):
     assert not muon & adamw
     assert muon | adamw == {id(p) for p in model.parameters() if p.requires_grad}
     for name, p in model.named_parameters():
-        expected = muon if name.startswith("blocks.") and p.ndim == 2 else adamw
+        expected = muon if p.ndim == 2 else adamw
         assert id(p) in expected, name
-    assert id(model.head.weight) in adamw
+    assert id(model.head.weight) in muon
     norms = [m for m in model.modules() if isinstance(m, torch.nn.LayerNorm)]
     assert norms and all(m.weight.requires_grad and id(m.weight) in adamw for m in norms)
     adamw_optimizer = optimizers["opt.adamw"]
@@ -418,22 +418,22 @@ def test_polar_muon_adamw_is_one_optimizer_and_matches_reference():
     assert isinstance(combined, MuonAdamW)
     muon_group = next(group for group in combined.param_groups if group["kind"] == "muon")
     muon_ids = {id(p) for p in muon_group["params"]}
-    expected_muon = {id(model.blocks[0].linear.weight)}
+    expected_muon = {id(p) for p in model.parameters() if p.ndim == 2}
     assert muon_ids == expected_muon
-    assert id(model.embedding.weight) not in muon_ids
-    assert id(model.head.weight) not in muon_ids
+    assert id(model.embedding.weight) in muon_ids
+    assert id(model.head.weight) in muon_ids
+    assert muon_group["weight_decay"] == 0.0
     assert id(model.norm.weight) not in muon_ids
 
     torch.manual_seed(31)
     refs = {}
-    ref_momentum = ref_second = None
     for i, param in enumerate(model.parameters()):
         grad = torch.linspace(-0.2, 0.3, param.numel()).reshape_as(param) + i * 0.01
         param.grad = grad.clone()
         if id(param) in muon_ids:
             refs[id(param)], ref_momentum, ref_second = _reference_polar_muon_step(
-                param.detach().clone(), grad, ref_momentum, ref_second,
-                muon_lr, weight_decay)
+                param.detach().clone(), grad, None, None,
+                muon_lr, 0.0)
         else:
             decay = weight_decay if param.ndim >= 2 else 0.0
             ref_param = torch.nn.Parameter(param.detach().clone())
@@ -741,3 +741,251 @@ def test_real_tokenizer_ke_model_takes_optimizer_step(tokenizer):
     assert model.embedding.proj.weight.grad is not None
     assert not torch.equal(model.embedding.proj.weight, before)
     assert all(torch.isfinite(parameter).all() for parameter in model.parameters())
+
+
+# ---- default Polar Muon checkpoint contract (CPU, no tokenizer or training run) ----
+
+def _polar_checkpoint_config():
+    from pathlib import Path
+    from models.config import load_config
+
+    ocfg = copy.deepcopy(load_config(Path(__file__).resolve().parents[1] / "configs/base.yaml")["optim"])
+    assert ocfg["name"] == "polar_muon_adamw", "The default must not silently become plain AdamW"
+    return ocfg
+
+
+def _polar_checkpoint_model():
+    # Real model parameters include rectangular attention/FFN/router matrices,
+    # embedding/head parameters, norm gains and biases. No tokenizer is loaded.
+    return GPT(ModelConfig(
+        vocab_size=17, block_size=4, n_layer=1, n_head=2, n_embd=8,
+        ffn="moe", moe=dict(num_experts=2, top_k=1, num_shared=1),
+    )).cpu()
+
+
+def _polar_checkpoint_grads(model, step):
+    # Local generator: construction/reconstruction must not affect continuation.
+    generator = torch.Generator(device="cpu").manual_seed(813 + step)
+    for index, param in enumerate(model.parameters()):
+        if step >= 2 and (index + step) % 5 == 0:
+            param.grad = None
+        elif step >= 2 and (index + step) % 7 == 0:
+            param.grad = torch.zeros_like(param)
+        else:
+            param.grad = torch.randn(param.shape, generator=generator, dtype=param.dtype) * .03
+
+
+def _assert_optimizer_checkpoint_equal(actual, expected):
+    if isinstance(expected, torch.Tensor):
+        assert isinstance(actual, torch.Tensor)
+        assert actual.dtype == expected.dtype
+        assert actual.device == expected.device
+        torch.testing.assert_close(actual, expected, rtol=0, atol=0)
+    elif isinstance(expected, dict):
+        assert actual.keys() == expected.keys()
+        for key in expected:
+            _assert_optimizer_checkpoint_equal(actual[key], expected[key])
+    elif isinstance(expected, (list, tuple)):
+        assert type(actual) is type(expected)
+        assert len(actual) == len(expected)
+        for got, want in zip(actual, expected):
+            _assert_optimizer_checkpoint_equal(got, want)
+    else:
+        assert actual == expected
+
+
+def test_polar_default_config_selects_muon_not_plain_adamw():
+    ocfg = _polar_checkpoint_config()
+    model = _polar_checkpoint_model()
+    wrapped = build_optimizer(model, ocfg)
+    assert len(wrapped.named) == 1
+    region, combined = wrapped.named[0]
+    assert region == "opt.polar_muon_adamw"
+    assert isinstance(combined, MuonAdamW)
+    assert not isinstance(combined, torch.optim.AdamW)
+    assert {group["kind"] for group in combined.param_groups} == {"muon", "adamw"}
+    assert all(group["impl"] == ocfg["muon_impl"] for group in combined.param_groups
+               if group["kind"] == "muon")
+    assert all(group["impl"] == ocfg["adamw_impl"] for group in combined.param_groups
+               if group["kind"] == "adamw")
+    owned = [id(p) for group in combined.param_groups for p in group["params"]]
+    assert len(owned) == len(set(owned))
+    assert set(owned) == {id(p) for p in model.parameters() if p.requires_grad}
+
+
+@pytest.mark.parametrize("muon_impl,adamw_impl", [("batched", "foreach"), ("loop", "loop")])
+def test_polar_checkpoint_restores_buffers_and_exact_continuation(tmp_path, muon_impl, adamw_impl):
+    ocfg = _polar_checkpoint_config()
+    ocfg.update(muon_impl=muon_impl, adamw_impl=adamw_impl)
+    # Nontrivial schedule state must survive as part of the parameter groups.
+    torch.manual_seed(812)
+    live_model = _polar_checkpoint_model()
+    live = build_optimizer(live_model, ocfg)
+    for step in range(3):
+        live.zero_grad()
+        live.set_lr(step, 8, schedule="cosine", warmup_steps=1, min_lr_ratio=.2)
+        _polar_checkpoint_grads(live_model, step)
+        live.step()
+
+    name, combined = live.named[0]
+    muon_states, adamw_states = [], []
+    for group in combined.param_groups:
+        for param in group["params"]:
+            state = combined.state[param]
+            if group["kind"] == "muon":
+                assert set(state) == {"momentum_buffer", "second_momentum_buffer"}
+                assert state["momentum_buffer"].shape == param.shape
+                rows, cols = param.shape
+                expected = (rows, 1) if rows >= cols else (1, cols)
+                assert state["second_momentum_buffer"].shape == expected
+                assert torch.count_nonzero(state["momentum_buffer"]) > 0
+                assert torch.count_nonzero(state["second_momentum_buffer"]) > 0
+                muon_states.append(state)
+            else:
+                assert {"step", "exp_avg", "exp_avg_sq"} <= state.keys()
+                assert state["step"] > 0
+                assert torch.count_nonzero(state["exp_avg"]) > 0
+                assert torch.count_nonzero(state["exp_avg_sq"]) > 0
+                adamw_states.append(state)
+    assert muon_states and adamw_states
+
+    snapshot = copy.deepcopy({"model": live_model.state_dict(), "optimizer": live.state_dict()})
+    path = tmp_path / "polar_optimizer.pt"
+    torch.save(snapshot, path)
+    restored = torch.load(path, map_location="cpu", weights_only=True)
+
+    resumed_model = _polar_checkpoint_model()
+    resumed_model.load_state_dict(restored["model"])
+    resumed = build_optimizer(resumed_model, ocfg)
+    resumed.load_state_dict(copy.deepcopy(restored["optimizer"]))
+    assert isinstance(resumed.named[0][1], MuonAdamW)
+    assert resumed.named[0][0] == name
+    _assert_optimizer_checkpoint_equal(resumed.state_dict(), snapshot["optimizer"])
+    _assert_optimizer_checkpoint_equal(resumed_model.state_dict(), snapshot["model"])
+
+    # Loaded buffers must be independent of the uninterrupted optimizer's buffers.
+    resumed_combined = resumed.named[0][1]
+    for live_group, resumed_group in zip(combined.param_groups, resumed_combined.param_groups):
+        for live_param, resumed_param in zip(live_group["params"], resumed_group["params"]):
+            for key, value in combined.state[live_param].items():
+                if isinstance(value, torch.Tensor):
+                    assert value.data_ptr() != resumed_combined.state[resumed_param][key].data_ptr()
+
+    for step in range(3, 7):
+        for model, optimizer in ((live_model, live), (resumed_model, resumed)):
+            optimizer.zero_grad()
+            optimizer.set_lr(step, 8, schedule="cosine", warmup_steps=1, min_lr_ratio=.2)
+            _polar_checkpoint_grads(model, step)
+            optimizer.step()
+        _assert_optimizer_checkpoint_equal(resumed_model.state_dict(), live_model.state_dict())
+        _assert_optimizer_checkpoint_equal(resumed.state_dict(), live.state_dict())
+
+    # Continuing live training must not mutate the checkpoint retained in memory.
+    _assert_optimizer_checkpoint_equal(restored, snapshot)
+
+
+def test_polar_checkpoint_rejects_plain_adamw_in_both_directions():
+    model = _polar_checkpoint_model()
+    ocfg = _polar_checkpoint_config()
+    hybrid = build_optimizer(model, ocfg)
+    plain = build_optimizer(model, {**ocfg, "name": "adamw"})
+    hybrid_before = copy.deepcopy(hybrid.state_dict())
+    plain_before = copy.deepcopy(plain.state_dict())
+    with pytest.raises(ValueError, match="optimizer state names differ"):
+        plain.load_state_dict(hybrid_before)
+    with pytest.raises(ValueError, match="optimizer state names differ"):
+        hybrid.load_state_dict(plain_before)
+    _assert_optimizer_checkpoint_equal(hybrid.state_dict(), hybrid_before)
+    _assert_optimizer_checkpoint_equal(plain.state_dict(), plain_before)
+
+
+@pytest.mark.parametrize("mutation", ["missing", "unexpected", "renamed"])
+def test_polar_checkpoint_rejects_wrong_optimizer_names(mutation):
+    optimizer = build_optimizer(_polar_checkpoint_model(), _polar_checkpoint_config())
+    original = copy.deepcopy(optimizer.state_dict())
+    malformed = copy.deepcopy(original)
+    if mutation == "missing":
+        malformed.clear()
+    elif mutation == "unexpected":
+        malformed["opt.unexpected"] = copy.deepcopy(malformed["opt.polar_muon_adamw"])
+    else:
+        malformed["opt.adamw"] = malformed.pop("opt.polar_muon_adamw")
+    with pytest.raises(ValueError, match="optimizer state names differ"):
+        optimizer.load_state_dict(malformed)
+    _assert_optimizer_checkpoint_equal(optimizer.state_dict(), original)
+
+
+@pytest.mark.parametrize("name", ["muon", "polar_muon_adamw"])
+@pytest.mark.parametrize("muon_impl", ["loop", "batched"])
+def test_hybrid_shape_ownership_zero_muon_decay_and_frozen_parameters(name, muon_impl):
+    class ShapeModel(nn.Module):
+        def __init__(self):
+            super().__init__()
+            # Names intentionally do not follow blocks.*.weight conventions.
+            self.projection = nn.Parameter(torch.randn(3, 2))
+            self.router = nn.Linear(3, 2)
+            self.embedding = nn.Embedding(5, 3)
+            self.head = nn.Linear(3, 5, bias=False)
+            self.head.weight = self.embedding.weight
+            self.norm = nn.LayerNorm(3)
+            self.scalar = nn.Parameter(torch.tensor(1.0))
+            self.frozen_matrix = nn.Parameter(torch.randn(2, 2), requires_grad=False)
+            self.frozen_gain = nn.Parameter(torch.ones(2), requires_grad=False)
+            # Retain a nonmatrix decay group to prove AdamW decay is independent.
+            self.tensor = nn.Parameter(torch.randn(2, 2, 2))
+
+    torch.manual_seed(917)
+    model = ShapeModel()
+    ocfg = dict(name=name, muon_impl=muon_impl, adamw_impl="foreach",
+                lr=.001, muon_lr=.02, weight_decay=.17)
+    optimizer = build_optimizer(model, ocfg)
+    groups = [(group.get("kind", "muon" if region == "opt.muon" else "adamw"), group)
+              for region, inner in optimizer.named for group in inner.param_groups]
+    assigned = [id(p) for _, group in groups for p in group["params"]]
+    assert len(assigned) == len(set(assigned))
+    assert set(assigned) == {id(p) for p in model.parameters() if p.requires_grad}
+    for kind, group in groups:
+        for p in group["params"]:
+            assert kind == ("muon" if p.ndim == 2 else "adamw")
+            assert group["weight_decay"] == (0.0 if kind == "muon" or p.ndim < 2 else .17)
+    assert assigned.count(id(model.embedding.weight)) == 1
+
+    # A nonzero AdamW decay setting must not alter any Muon update or buffer.
+    control = copy.deepcopy(model)
+    no_decay = build_optimizer(control, {**ocfg, "weight_decay": 0.0})
+    frozen_before = {n: p.detach().clone() for n, p in model.named_parameters() if not p.requires_grad}
+    for step in range(3):
+        for live, reference in zip(model.parameters(), control.parameters()):
+            grad = torch.full_like(live, .01 * (step + 1)) if live.requires_grad else None
+            live.grad = grad
+            reference.grad = None if grad is None else grad.clone()
+        optimizer.step()
+        no_decay.step()
+        for (n, live), reference in zip(model.named_parameters(), control.parameters()):
+            if live.ndim == 2 or not live.requires_grad:
+                torch.testing.assert_close(live, reference, rtol=0, atol=0)
+            if n in frozen_before:
+                torch.testing.assert_close(live, frozen_before[n], rtol=0, atol=0)
+        for (_, inner), (_, ref_inner) in zip(optimizer.named, no_decay.named):
+            for group, ref_group in zip(inner.param_groups, ref_inner.param_groups):
+                if group.get("kind", "muon" if isinstance(inner, Muon) else "adamw") == "muon":
+                    for p, ref_p in zip(group["params"], ref_group["params"]):
+                        _assert_optimizer_checkpoint_equal(inner.state[p], ref_inner.state[ref_p])
+    assert not torch.equal(model.tensor, control.tensor)
+
+
+@pytest.mark.parametrize("muon_impl,adamw_impl", [("batched", "foreach"), ("loop", "loop")])
+def test_polar_checkpoint_before_first_step_and_idle_parameters(tmp_path, muon_impl, adamw_impl):
+    ocfg = {**_polar_checkpoint_config(), "muon_impl": muon_impl, "adamw_impl": adamw_impl}
+    model = _polar_checkpoint_model()
+    optimizer = build_optimizer(model, ocfg)
+    path = tmp_path / "cold_optimizer.pt"
+    torch.save(optimizer.state_dict(), path)
+    resumed = build_optimizer(model, ocfg)
+    resumed.load_state_dict(torch.load(path, weights_only=True))
+    _assert_optimizer_checkpoint_equal(resumed.state_dict(), optimizer.state_dict())
+    # None gradients neither create state nor apply an update, including idle experts.
+    before = copy.deepcopy(model.state_dict())
+    resumed.step()
+    assert not resumed.named[0][1].state
+    _assert_optimizer_checkpoint_equal(model.state_dict(), before)

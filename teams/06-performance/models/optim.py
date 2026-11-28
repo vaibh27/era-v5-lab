@@ -3,8 +3,9 @@
   build_optimizer(model, ocfg) -> Optimizers: zero_grad(), step(scaler=None), unscale(scaler), flops(), set_lr(...),
   state_dict(), load_state_dict(), and .named = [(region name, torch optimizer)]. ocfg = cfg["optim"].
 
-Muon takes the 2D block weights (routers included); AdamW takes the embedding parameters (KE projection too), head,
-norm gains and biases. Weight decay applies to AdamW matrices only. A parameter with grad=None is skipped.
+The hybrid builders assign every trainable 2D parameter to Muon (including embeddings, projections, routers and
+the head), with zero Muon weight decay. AdamW takes the remaining trainable parameters; biases and norm gains
+have zero decay. The pure AdamW option retains its matrix-only decay policy. A parameter with grad=None is skipped.
 muon: momentum 0.95 nesterov, NS5 (3.4445, -4.7750, 2.0315) in bf16 (fp32 without bf16), scaled by
 max(1, rows / cols) ** 0.5. muon_impl loop | batched (same-shaped matrices stacked); adamw_impl loop | foreach.
 flops(): Newton-Schulz FLOPs per step, sum of 5 * (4 m^2 n + 2 m^3), m <= n.
@@ -417,7 +418,7 @@ class Optimizers:
 
 
 def build_optimizer(model, ocfg: dict):
-    """Optimizers for cfg["optim"]: 2D block weights to Muon, the rest to AdamW (everything to AdamW for adamw)."""
+    """Optimizers for cfg["optim"]: all trainable 2D tensors to Muon with zero decay, the rest to AdamW."""
     named_params = [(n, p) for n, p in model.named_parameters() if p.requires_grad]
     params = [p for _, p in named_params]
     fused = params[0].is_cuda
@@ -441,9 +442,8 @@ def build_optimizer(model, ocfg: dict):
         adamw_impl = ocfg.get("adamw_impl", "loop")
         if adamw_impl not in ("loop", "foreach"):
             raise ValueError(f"optim.adamw_impl={adamw_impl!r}: loop | foreach")
-        # 2D block weights go to Muon; embeddings, head, norms and biases to AdamW
-        muon_params = [p for n, p in named_params
-                       if p.dim() == 2 and n.startswith("blocks.") and n.endswith(".weight")]
+        # Group by shape, independent of module names; named_parameters deduplicates tied weights.
+        muon_params = [p for _, p in named_params if p.dim() == 2]
         muon_ids = {id(p) for p in muon_params}
         adamw_params = [(n, p) for n, p in named_params if id(p) not in muon_ids]
         groups = []
@@ -451,7 +451,7 @@ def build_optimizer(model, ocfg: dict):
             groups.append({
                 "params": muon_params, "kind": "muon", "lr": ocfg["muon_lr"],
                 "momentum": 0.95, "beta2": 0.95, "ns_steps": 5,
-                "weight_decay": ocfg["weight_decay"], "impl": ocfg.get("muon_impl", "loop"),
+                "weight_decay": 0.0, "impl": ocfg.get("muon_impl", "loop"),
             })
         decay, no_decay = [], []
         for name, p in adamw_params:
@@ -465,16 +465,16 @@ def build_optimizer(model, ocfg: dict):
                            "betas": (0.9, 0.95), "eps": 1e-8, "weight_decay": 0.0, "impl": adamw_impl})
         return Optimizers([("opt.polar_muon_adamw", MuonAdamW(groups))])
     if ocfg["name"] == "muon":
-        if "muon_params" in ocfg and ocfg["muon_params"] != "hidden":
-            raise ValueError("Remove optim.muon_params: embeddings and head must use AdamW")
+        if "muon_params" in ocfg:
+            raise ValueError("Remove optim.muon_params: every trainable 2D parameter must use Muon")
 
         def use_muon(name, p):
-            return p.dim() == 2 and name.startswith("blocks.") and name.endswith(".weight")
+            return p.dim() == 2
         two_d = [p for n, p in named_params if use_muon(n, p)]
         rest = [(n, p) for n, p in named_params if not use_muon(n, p)]
         named = []
         if two_d:
-            named.append(("opt.muon", Muon(two_d, lr=ocfg["muon_lr"], weight_decay=ocfg["weight_decay"],
+            named.append(("opt.muon", Muon(two_d, lr=ocfg["muon_lr"], weight_decay=0.0,
                                             impl=ocfg.get("muon_impl", "loop"))))
         if rest:
             named.append(("opt.adamw", adamw(rest)))
